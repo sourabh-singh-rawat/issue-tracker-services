@@ -21,13 +21,14 @@ const auth = getAuth(app);
 const googleAuthProvider = new GoogleAuthProvider();
 const continueWithGoogle = async () => {
     const userCredential = await signInWithPopup(auth, googleAuthProvider);
-    console.log("User signed in using google");
+    console.log("User signed in using google popup");
 
     // Store user info in database
     const { user } = userCredential;
+    const { uid, email, displayName } = user;
     await fetch("http://localhost:4000/users", {
         method: "POST",
-        body: JSON.stringify(user),
+        body: JSON.stringify({ uid, email, displayName }),
         headers: {
             "Content-Type": "application/json",
         },
