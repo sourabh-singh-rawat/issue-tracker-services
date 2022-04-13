@@ -22,3 +22,5 @@ body {
 #root {
     display: flex;
 }
+
+a {text-decoration: none;}

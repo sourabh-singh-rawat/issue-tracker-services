@@ -1,11 +1,19 @@
-import { AppContainer, PageTitle } from "../../App.styles";
+import { useState } from "react";
+import DashboardButton from "../../components/dashboard-button/dashboard-button.component";
+
+// MUI Styles
+import { Grid } from "@mui/material";
+import AppBarContainer from "../../components/appbar-container/appbar-container.component";
 
 const Dashboard = () => {
-    return (
-        <AppContainer>
-            <PageTitle>DASHBOARD</PageTitle>
-        </AppContainer>
-    );
+  return (
+    <>
+      <AppBarContainer element={<DashboardButton />}>Dashboard</AppBarContainer>
+      <Grid container>
+        <Grid item></Grid>
+      </Grid>
+    </>
+  );
 };
 
 export default Dashboard;
