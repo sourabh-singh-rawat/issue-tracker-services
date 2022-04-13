@@ -1,27 +1,28 @@
 import { continueWithGoogle } from "../../utils/firebase";
-import { SignUpContainer } from "./signup.styles";
-import Button from "../../components/button/button.component";
+import { Button, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 
 const SignUp = () => {
-    const continueWithGoogleHandler = async () => {
-        const userCredential = await continueWithGoogle();
+  const continueWithGoogleHandler = async () => {
+    const userCredential = await continueWithGoogle();
 
-        // Store userCredential into context or redux store
-        // TODO
-    };
+    // Store userCredential into context or redux store
+    // TODO
+  };
 
-    return (
-        <SignUpContainer>
-            <h1>Sign Up Page</h1>
-            <p>
-                Create an account & help your organization track issues
-                efficiently.
-            </p>
-            <Button onClick={continueWithGoogleHandler}>
-                Continue with Google
-            </Button>
-        </SignUpContainer>
-    );
+  return (
+    <Box>
+      <Typography variant="h4" fontWeight="bold">
+        Sign Up Page
+      </Typography>
+      <Typography variant="body1">
+        Create an account & help your organization track issues efficiently.
+      </Typography>
+      <Button variant="contained" onClick={continueWithGoogleHandler}>
+        Continue with Google
+      </Button>
+    </Box>
+  );
 };
 
 export default SignUp;
