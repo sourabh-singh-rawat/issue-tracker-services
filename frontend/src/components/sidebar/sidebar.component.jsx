@@ -28,7 +28,7 @@ const Sidebar = () => {
       <Box>
         <Drawer anchor="left" variant="permanent" sx={drawerStyles}>
           <Toolbar></Toolbar>
-          <List>
+          <List disablePadding>
             <Link to="/">
               <ListItem button>
                 <ListItemText primary="Dashboard" />

@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 
 const ProjectMembers = () => {
-    const { projectId } = useParams();
+  const { id } = useParams();
 
-    return (
-        <div>
-            <h1>{projectId} members</h1>
-        </div>
-    );
+  return (
+    <div>
+      <h1>{id} members</h1>
+    </div>
+  );
 };
 
 export default ProjectMembers;
