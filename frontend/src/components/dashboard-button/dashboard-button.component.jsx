@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, MenuItem, Button } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const DashboardButton = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -9,7 +10,9 @@ const DashboardButton = () => {
 
   return (
     <div style={{ marginLeft: "auto" }}>
-      <Button onClick={handleClick}>Create</Button>
+      <Button onClick={handleClick} endIcon={<ExpandMoreIcon />}>
+        Create
+      </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleClose}>Project</MenuItem>
         <MenuItem onClick={handleClose}>Team</MenuItem>

@@ -10,19 +10,6 @@ import Sidebar from "./components/sidebar/sidebar.component";
 import ProjectIssues from "./components/project-issues/project-issues.component";
 import ProjectMembers from "./components/project-members/project-members.component";
 
-// Theme
-import { createTheme } from "@mui/material";
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#00bcd4",
-    },
-    secondary: {
-      main: "#f50057",
-    },
-  },
-});
-
 const NoComponent = () => {
   return <h1>404</h1>;
 };
@@ -31,18 +18,13 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Sidebar />}>
-        <Route index element={<Dashboard />}></Route>
-        <Route path="/projects" element={<Projects />}></Route>
-        <Route
-          path="/projects/:projectId/issues"
-          element={<ProjectIssues />}
-        ></Route>
-        <Route
-          path="/projects/:projectId/members"
-          element={<ProjectMembers />}
-        ></Route>
-        <Route path="/teams" element={<Teams />}></Route>
-        <Route path="/issues/*" element={<Issues />}></Route>
+        <Route index element={<Dashboard />} />
+        <Route path="projects" element={<Projects />} />
+        <Route path="projects/:id/issues" element={<ProjectIssues />} />
+        <Route path="projects/:id/members" element={<ProjectMembers />} />
+        <Route path="teams" element={<Teams />} />
+        <Route path="issues/" element={<Issues />}></Route>
+        <Route path="issues/:id" element={<Issues />} />
       </Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/signin" element={<SignIn />}></Route>
