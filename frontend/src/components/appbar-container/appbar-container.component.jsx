@@ -1,4 +1,3 @@
-import { drawerWidth } from "../sidebar/sidebar.component";
 import { AppBar, Typography, Toolbar } from "@mui/material";
 
 const AppBarContainer = (props) => {
