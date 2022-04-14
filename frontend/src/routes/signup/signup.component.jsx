@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { setCurrentUser } from "../../redux/user/user.action";
+import { connect } from "react-redux";
 
 // Authentication
 import { continueWithGoogle } from "../../utils/firebase.utils";
@@ -15,15 +17,9 @@ import {
   Typography,
 } from "@mui/material";
 
-// Auth helper functions
-const continueWithGoogleHandler = async () => {
-  await continueWithGoogle();
+const SignUp = (props) => {
+  const { dispatch } = props;
 
-  // Store userCredential into context or redux store
-  // TODO
-};
-
-const SignUp = () => {
   // Storing user information from form into state
   const [formFields, setFormFields] = useState({
     name: "",
@@ -46,6 +42,29 @@ const SignUp = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
+  // Auth helper functions
+  const continueWithGoogleHandler = async () => {
+    const userCredential = await continueWithGoogle();
+    const {
+      user: {
+        uid,
+        displayName,
+        email,
+        metadata: { creationTime, lastSignInTime },
+      },
+    } = userCredential;
+    // Store userCredential into redux store
+    // TODO
+    dispatch(
+      setCurrentUser({
+        uid,
+        displayName,
+        email,
+        metadata: { creationTime, lastSignInTime },
+      })
+    );
+  };
+
   // Form  Component
   return (
     <Container component="main" maxWidth="xs">
@@ -60,6 +79,7 @@ const SignUp = () => {
 
         <Typography variant="body1" paddingBottom="1em">
           Create an account & help your organization track issues efficiently.
+          <Link to="/">Dashboard</Link>
         </Typography>
       </Box>
 
@@ -138,4 +158,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default connect()(SignUp);

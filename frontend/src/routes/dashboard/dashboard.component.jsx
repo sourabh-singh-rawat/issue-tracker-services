@@ -1,4 +1,5 @@
 import DashboardButton from "../../components/dashboard-button/dashboard-button.component";
+import { connect } from "react-redux";
 
 // MUI Styles
 import { Grid } from "@mui/material";
@@ -15,4 +16,11 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(Dashboard);
