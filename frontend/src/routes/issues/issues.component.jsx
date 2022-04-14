@@ -5,11 +5,27 @@ import AppBarContainer from "../../components/appbar-container/appbar-container.
 import TabPanel from "../../components/tabpanel/tabpanel.component";
 
 const Detailed = () => {
-  return "Detailed view for issues";
+  return (
+    <div>
+      <p>TODO: Detailed view for issues</p>
+      <p>TODO: Detailed view for issues</p>
+      <p>TODO: Detailed view for issues</p>
+      <p>TODO: Detailed view for issues</p>
+      <p>TODO: Detailed view for issues</p>
+    </div>
+  );
 };
 
 const IssueBoard = () => {
-  return "TODO: Need to create a kanban board view for issues";
+  return (
+    <div>
+      <p>TODO: Need to create a kanban board view for issues</p>
+      <p>TODO: Need to create a kanban board view for issues</p>
+      <p>TODO: Need to create a kanban board view for issues</p>
+      <p>TODO: Need to create a kanban board view for issues</p>
+      <p>TODO: Need to create a kanban board view for issues</p>
+    </div>
+  );
 };
 
 const Issues = (props) => {
@@ -20,7 +36,6 @@ const Issues = (props) => {
     selectedTab can only have 0 or 1 value
     When the user go to /issues/board preselect board 1
   */
-
   const [selectedTab, setSelectedTab] = useState(id === "board" ? 1 : 0);
   const handleChange = (event, newValue) => {
     const mapIndexToTab = {
