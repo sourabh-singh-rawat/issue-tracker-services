@@ -1,22 +1,12 @@
 // MUI Styles
-import { Box, Grid, Button, Toolbar, Typography } from "@mui/material";
+import { Box, Grid, Toolbar, Typography } from "@mui/material";
 import AppBarContainer from "../../components/appbar-container/appbar-container.component";
-import AddIcon from "@mui/icons-material/Add";
-
-const CreateProjectButton = () => {
-  return (
-    <Button color="primary" startIcon={<AddIcon />} sx={{ marginLeft: "auto" }}>
-      Create
-    </Button>
-  );
-};
+import CreateProject from "../../components/create-project/create-project.component";
 
 const Projects = (props) => {
   return (
     <Box>
-      <AppBarContainer element={<CreateProjectButton />}>
-        Projects
-      </AppBarContainer>
+      <AppBarContainer element={<CreateProject />}>Projects</AppBarContainer>
       <Toolbar sx={{ borderBottom: "3px solid #f4f4f4" }}>
         <Typography>All Projects</Typography>
       </Toolbar>
