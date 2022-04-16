@@ -3,28 +3,51 @@ const pool = require("../db");
 const userRouter = express.Router();
 
 userRouter.post("/users", (req, res) => {
-  const { displayName, email, uid } = req.body;
+  const { uid, displayName, email } = req.body;
 
-  // Check if the user already exists
-  // Add user to users_table if they already don't exist
-  pool.query("SELECT * FROM users WHERE uid=$1", [uid], (error, result) => {
-    if (error) {
-      return console.log("Error checking if user exists", error);
-    }
-    console.log("Adding user to the database");
+  // Create users table (if not exists)
+  pool.query(
+    `CREATE TABLE IF NOT EXISTS users (
+      id SERIAL ,
+      uid VARCHAR(255), 
+      display_name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      PRIMARY KEY (id, uid)
+    )`,
+    (error, result) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Error creating table");
+      }
 
-    if (result.rowCount === 0) {
-      // no user found so we can add them to database
-      pool.query(
-        "INSERT INTO users (name, email, uid) VALUES ($1, $2, $3) RETURNING *",
-        [displayName, email, uid],
-        (error, result) => {
-          if (error) return console.log("Error adding user to database", error);
-          console.log("User added to database");
+      // Check if user already exists
+      pool.query("SELECT * FROM users WHERE uid=$1", [uid], (error, result) => {
+        if (error) {
+          return console.log("Error checking if user exists", error);
         }
-      );
+
+        if (result.rows.length > 0) {
+          console.log("User already exists in the database", result.rows);
+        }
+
+        if (result.rows.length === 0) {
+          // Add user to users table
+          pool.query(
+            `INSERT INTO users (uid, display_name, email)
+            VALUES ($1, $2, $3)`,
+            [uid, displayName, email],
+            (error, result) => {
+              if (error) {
+                return console.log("Error adding user to users table", error);
+              }
+              console.log("User added to to users table");
+              return res.status(200).send("User added to users table");
+            }
+          );
+        }
+      });
     }
-  });
+  );
 });
 
 module.exports = userRouter;
