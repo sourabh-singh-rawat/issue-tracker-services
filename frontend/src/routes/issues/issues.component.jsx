@@ -7,11 +7,12 @@ import TabPanel from "../../components/tabpanel/tabpanel.component";
 const Detailed = () => {
   return (
     <div>
-      <p>TODO: Detailed view for issues</p>
-      <p>TODO: Detailed view for issues</p>
-      <p>TODO: Detailed view for issues</p>
-      <p>TODO: Detailed view for issues</p>
-      <p>TODO: Detailed view for issues</p>
+      <span>TODO: Detailed view for issues</span>
+      <span>TODO: Detailed view for issues</span>
+      <span>TODO: Detailed view for issues</span>
+      <span>TODO: Detailed view for issues</span>
+      <span>TODO: Detailed view for issues</span>
+      <span>TODO: Detailed view for issues</span>
     </div>
   );
 };
@@ -19,11 +20,12 @@ const Detailed = () => {
 const IssueBoard = () => {
   return (
     <div>
-      <p>TODO: Need to create a kanban board view for issues</p>
-      <p>TODO: Need to create a kanban board view for issues</p>
-      <p>TODO: Need to create a kanban board view for issues</p>
-      <p>TODO: Need to create a kanban board view for issues</p>
-      <p>TODO: Need to create a kanban board view for issues</p>
+      <span>TODO: Need to create a kanban board view for issues</span>
+      <span>TODO: Need to create a kanban board view for issues</span>
+      <span>TODO: Need to create a kanban board view for issues</span>
+      <span>TODO: Need to create a kanban board view for issues</span>
+      <span>TODO: Need to create a kanban board view for issues</span>
+      <span>TODO: Need to create a kanban board view for issues</span>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { AppBar, Typography, Toolbar } from "@mui/material";
+import { Box, AppBar, Typography, Toolbar } from "@mui/material";
 
 const AppBarContainer = (props) => {
   const { children, element } = props;
@@ -10,15 +10,16 @@ const AppBarContainer = (props) => {
   };
 
   return (
-    <AppBar position="static" sx={appBarStyles}>
-      <Toolbar>
-        <Typography variant="h5" component="div">
-          {children}
-        </Typography>
-
-        {element}
-      </Toolbar>
-    </AppBar>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" sx={appBarStyles}>
+        <Toolbar>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+            {children}
+          </Typography>
+          {element}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 
