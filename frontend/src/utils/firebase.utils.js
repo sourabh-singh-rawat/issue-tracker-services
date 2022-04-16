@@ -1,5 +1,12 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDm_H6GkkUh5DuXCwyMHmZLrIeLWn3iaE0",
@@ -15,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
-// Sign up new users using email and password
+// TODO: Authenticated user
 
 // Continue with Google
 const googleAuthProvider = new GoogleAuthProvider();
@@ -28,13 +35,36 @@ export const continueWithGoogle = async () => {
   return userCredential;
 };
 
+// Sign up new users using email and password
+export const signUpWithEmailAndPassword = async (
+  displayName,
+  email,
+  password
+) => {
+  return createUserWithEmailAndPassword(auth, email, password).then(
+    async (userCredential) => {
+      console.log("User signed up using email and password");
+
+      // setting displayName to the user's name
+      await updateProfile(userCredential.user, { displayName });
+      await storeUserInfoInDatabase(userCredential);
+      return userCredential;
+    }
+  );
+};
+
 // Storing user information in the database
 export const storeUserInfoInDatabase = async (userCredential) => {
   const { user } = userCredential;
-  const { uid, email, displayName } = user;
+  const { uid, displayName, email } = user;
+
   await fetch("http://localhost:4000/users", {
     method: "POST",
-    body: JSON.stringify({ uid, email, displayName }),
+    body: JSON.stringify({
+      uid,
+      email,
+      displayName,
+    }),
     headers: {
       "Content-Type": "application/json",
     },

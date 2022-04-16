@@ -2,8 +2,8 @@ import { USER_ACTION_TYPES } from "./user.types";
 
 const INITIAL_STATE = {
   uid: undefined,
-  email: undefined,
   displayName: undefined,
+  email: undefined,
   metadata: {
     creationTime: undefined,
     lastSignInTime: undefined,
@@ -13,17 +13,28 @@ const INITIAL_STATE = {
 export const userReducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
 
-  if (type === USER_ACTION_TYPES.SET_USER) {
-    const { uid, email, displayName, metadata } = payload;
+  switch (type) {
+    case USER_ACTION_TYPES.SET_USER:
+      const { user } = payload;
+      const {
+        uid,
+        email,
+        displayName,
+        metadata: { creationTime, lastSignInTime },
+      } = user;
 
-    return {
-      ...state,
-      uid,
-      email,
-      displayName,
-      metadata,
-    };
+      return {
+        ...state,
+        uid,
+        displayName,
+        email,
+        metadata: {
+          creationTime,
+          lastSignInTime,
+        },
+      };
+
+    default:
+      return state;
   }
-
-  return { ...state };
 };

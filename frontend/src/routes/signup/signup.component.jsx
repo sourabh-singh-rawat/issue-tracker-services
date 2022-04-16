@@ -4,7 +4,10 @@ import { setCurrentUser } from "../../redux/user/user.action";
 import { connect } from "react-redux";
 
 // Authentication
-import { continueWithGoogle } from "../../utils/firebase.utils";
+import {
+  continueWithGoogle,
+  signUpWithEmailAndPassword,
+} from "../../utils/firebase.utils";
 
 // MUI Styles
 import {
@@ -27,42 +30,33 @@ const SignUp = (props) => {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TODO: Signup user using firebase
-    // TODO: Store user info inside database
-    console.log(formFields);
+    // TODO: Sanitization
+    const { name, email, password } = formFields;
+    const userCredential = await signUpWithEmailAndPassword(
+      name,
+      email,
+      password
+    );
+
+    if (userCredential) {
+      dispatch(setCurrentUser(userCredential));
+    }
   };
 
   // Every time user writes something in TextFields update state
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // store value in state
     setFormFields({ ...formFields, [name]: value });
   };
 
-  // Auth helper functions
   const continueWithGoogleHandler = async () => {
     const userCredential = await continueWithGoogle();
-    const {
-      user: {
-        uid,
-        displayName,
-        email,
-        metadata: { creationTime, lastSignInTime },
-      },
-    } = userCredential;
+
     // Store userCredential into redux store
-    // TODO
-    dispatch(
-      setCurrentUser({
-        uid,
-        displayName,
-        email,
-        metadata: { creationTime, lastSignInTime },
-      })
-    );
+    dispatch(setCurrentUser(userCredential));
   };
 
   // Form  Component
