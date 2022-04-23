@@ -58,7 +58,7 @@ export const storeUserInfoInDatabase = async (userCredential) => {
   const { user } = userCredential;
   const { uid, displayName, email } = user;
 
-  await fetch("http://localhost:4000/users", {
+  await fetch("http://localhost:4000/api/users", {
     method: "POST",
     body: JSON.stringify({
       uid,
