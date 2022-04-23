@@ -3,6 +3,13 @@ const pool = require("../db");
 const userRouter = express.Router();
 
 userRouter.post("/users", (req, res) => {
+  // description: Add a user
+  // response:
+  //   status:
+  //     200: Success
+  //     500: Error
+  //   data:
+  //     string: "User added to users table"
   const { uid, displayName, email } = req.body;
 
   // Create users table (if not exists)
@@ -12,7 +19,7 @@ userRouter.post("/users", (req, res) => {
       uid VARCHAR(255), 
       display_name VARCHAR(255) NOT NULL,
       email VARCHAR(255) UNIQUE NOT NULL,
-      PRIMARY KEY (id, uid)
+      PRIMARY KEY (uid)
     )`,
     (error, result) => {
       if (error) {
