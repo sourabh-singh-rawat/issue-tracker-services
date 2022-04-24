@@ -38,8 +38,9 @@ router.post("/projects", (req, res) => {
       description TEXT NOT NULL,
       owner_uid VARCHAR(255) NOT NULL,
       owner_email VARCHAR(255) NOT NULL,
-      start_date DATE NOT NULL,
-      end_date DATE NOT NULL,
+      start_date DATE,
+      end_date DATE,
+      number_of_issues INTEGER,
       PRIMARY KEY (id),
       FOREIGN KEY (owner_uid) REFERENCES users(uid)
     )`,

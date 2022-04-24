@@ -20,7 +20,9 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Sidebar />}>
         <Route index element={<Dashboard />} />
-        <Route path="projects" element={<Projects />} />
+        <Route path="projects" element={<Projects />}>
+          <Route path="new" element={<ProjectMembers />} />
+        </Route>
         <Route path="projects/:id/issues" element={<ProjectIssues />} />
         <Route path="projects/:id/members" element={<ProjectMembers />} />
         <Route path="teams" element={<Teams />} />

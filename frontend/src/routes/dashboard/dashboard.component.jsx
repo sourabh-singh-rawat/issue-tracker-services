@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 // MUI Styles
 import { Grid } from "@mui/material";
-import AppBarContainer from "../../components/appbar-container/appbar-container.component";
+import AppBarContainer from "../../components/appbar/appbar.component";
 
 const Dashboard = () => {
   return (
