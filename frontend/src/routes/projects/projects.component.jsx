@@ -3,8 +3,9 @@ import { DataGrid } from "@mui/x-data-grid";
 
 // MUI Styles
 import { Box, Grid, Toolbar, Typography } from "@mui/material";
-import AppBarContainer from "../../components/appbar-container/appbar-container.component";
-import CreateProject from "../../components/create-project/create-project.component";
+import AppBarContainer from "../../components/appbar/appbar.component";
+import ModalWindow from "../../components/modal-window/modal-window.component";
+import ProjectForm from "../../components/project-form/project-form.component";
 
 const Projects = (props) => {
   const [rows, setRows] = useState([]);
@@ -34,8 +35,10 @@ const Projects = (props) => {
       headerName: "End Date",
       width: 200,
     },
+    { field: "issues", headerName: "Issues" },
   ];
 
+  // fetch data after the component is mounted
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetch("http://localhost:4000/api/projects", {
@@ -46,14 +49,23 @@ const Projects = (props) => {
       });
 
       const data = await result.json();
+
       setRows(data);
     };
     fetchData();
-  });
+  }, []);
 
   return (
     <Box>
-      <AppBarContainer element={<CreateProject />}>Projects</AppBarContainer>
+      <AppBarContainer
+        element={
+          <ModalWindow>
+            <ProjectForm />
+          </ModalWindow>
+        }
+      >
+        Projects
+      </AppBarContainer>
       <Toolbar sx={{ borderBottom: "3px solid #f4f4f4" }}>
         <Typography>All Projects</Typography>
       </Toolbar>
@@ -64,8 +76,8 @@ const Projects = (props) => {
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
-            sx={{ border: "none" }}
             disableSelectionOnClick
+            sx={{ border: "none" }}
           ></DataGrid>
         </Grid>
       </Grid>

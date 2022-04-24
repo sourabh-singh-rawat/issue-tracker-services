@@ -1,11 +1,9 @@
 import { Box, Typography } from "@mui/material";
 
-const TabPanel = (props) => {
-  const { children, selectedTab, index, ...other } = props;
-
+const TabPanel = ({ children, selectedTab, index, ...otherProps }) => {
   // Conditionally Rendering the TabPanel i.e. when index matches the selectedTab
   return (
-    <div {...other}>
+    <div {...otherProps}>
       {selectedTab === index && (
         <Box sx={{ p: 3 }}>
           <Typography>{children}</Typography>

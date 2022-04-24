@@ -1,19 +1,20 @@
-import { Box, Button, Grid } from "@mui/material";
-import AppBarContainer from "../../components/appbar-container/appbar-container.component";
-import AddIcon from "@mui/icons-material/Add";
-
-const CreateTeamButton = () => {
-  return (
-    <Button color="primary" startIcon={<AddIcon />} sx={{ marginLeft: "auto" }}>
-      Create
-    </Button>
-  );
-};
+import { Box, Grid } from "@mui/material";
+import AppBarContainer from "../../components/appbar/appbar.component";
+import ModalWindow from "../../components/modal-window/modal-window.component";
+import TeamForm from "../../components/team-form/team-form.component";
 
 const Teams = () => {
   return (
     <Box>
-      <AppBarContainer element={<CreateTeamButton />}>Teams</AppBarContainer>
+      <AppBarContainer
+        element={
+          <ModalWindow>
+            <TeamForm />
+          </ModalWindow>
+        }
+      >
+        Teams
+      </AppBarContainer>
       <Grid container>
         <Grid item></Grid>
       </Grid>

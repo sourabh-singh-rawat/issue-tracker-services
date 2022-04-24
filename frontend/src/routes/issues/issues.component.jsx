@@ -1,32 +1,32 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, Tab, Tabs } from "@mui/material";
-import AppBarContainer from "../../components/appbar-container/appbar-container.component";
+import AppBarContainer from "../../components/appbar/appbar.component";
 import TabPanel from "../../components/tabpanel/tabpanel.component";
 
 const Detailed = () => {
   return (
-    <div>
+    <Fragment>
       <span>TODO: Detailed view for issues</span>
       <span>TODO: Detailed view for issues</span>
       <span>TODO: Detailed view for issues</span>
       <span>TODO: Detailed view for issues</span>
       <span>TODO: Detailed view for issues</span>
       <span>TODO: Detailed view for issues</span>
-    </div>
+    </Fragment>
   );
 };
 
 const IssueBoard = () => {
   return (
-    <div>
+    <Fragment>
       <span>TODO: Need to create a kanban board view for issues</span>
       <span>TODO: Need to create a kanban board view for issues</span>
       <span>TODO: Need to create a kanban board view for issues</span>
       <span>TODO: Need to create a kanban board view for issues</span>
       <span>TODO: Need to create a kanban board view for issues</span>
       <span>TODO: Need to create a kanban board view for issues</span>
-    </div>
+    </Fragment>
   );
 };
 
@@ -49,7 +49,7 @@ const Issues = (props) => {
   };
 
   return (
-    <>
+    <Fragment>
       <AppBarContainer>Issues</AppBarContainer>
       <Box>
         <Box position="static" sx={{ borderBottom: "3px solid #f4f4f4" }}>
@@ -70,7 +70,7 @@ const Issues = (props) => {
           <Grid item></Grid>
         </Grid>
       </Box>
-    </>
+    </Fragment>
   );
 };
 
