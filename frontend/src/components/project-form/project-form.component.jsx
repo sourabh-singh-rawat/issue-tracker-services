@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Grid, Box, Button, TextField, Typography } from "@mui/material";
 import { connect } from "react-redux";
 
-const ProjectForm = ({ uid, email }) => {
+const ProjectForm = ({ uid, email = "Unassigned" }) => {
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
@@ -40,7 +40,7 @@ const ProjectForm = ({ uid, email }) => {
             Create Project
           </Typography>
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12} sm={12}>
           <TextField
             name="name"
             label="Project Name"
@@ -50,17 +50,17 @@ const ProjectForm = ({ uid, email }) => {
             fullWidth
           />
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12} sm={12}>
           <TextField
-            label="description"
             name="description"
+            label="Description"
             rows={4}
             onChange={handleChange}
             multiline
             fullWidth
           />
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12} sm={12}>
           <TextField
             name="email"
             label="Owner"

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
 
 // MUI Styles
 import { Box, Grid, Toolbar, Typography } from "@mui/material";
@@ -12,30 +13,48 @@ const Projects = (props) => {
   const columns = [
     {
       field: "id",
-      headerName: "ID",
-      width: 90,
+      headerName: "Id",
+      width: 50,
     },
     {
       field: "name",
       headerName: "Name",
-      width: 250,
+      flex: 0.2,
+      renderCell: (params) => {
+        return <Link to={`${params.row.id}/issues`}>{params.row.name}</Link>;
+      },
     },
     {
       field: "owner_email",
       headerName: "Owner",
-      width: 250,
+      flex: 0.2,
     },
+    { field: "status", headerName: "Status" },
+    { field: "issues", headerName: "Issues" },
     {
       field: "start_date",
+      flex: 0.1,
       headerName: "Start Date",
-      width: 200,
+      renderCell: (params) => {
+        return new Date(params.value).toLocaleDateString("en-gb", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+      },
     },
     {
       field: "end_date",
+      flex: 0.1,
       headerName: "End Date",
-      width: 200,
+      renderCell: (params) => {
+        return new Date(params.value).toLocaleDateString("en-gb", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+      },
     },
-    { field: "issues", headerName: "Issues" },
   ];
 
   // fetch data after the component is mounted

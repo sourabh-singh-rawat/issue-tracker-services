@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Grid, Box, Button, Modal } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 
 const style = {
   position: "absolute",
@@ -20,20 +19,18 @@ const ModalWindow = ({ children }) => {
 
   return (
     <Box>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleOpen}>
+      <Button color="primary" variant="contained" onClick={handleOpen}>
         Create
       </Button>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          {children}
-          <Grid container paddingTop={"0.5em"}>
-            <Grid item xs={12}>
-              <Button variant="outlined" onClick={handleClose} fullWidth>
-                Cancel
-              </Button>
-            </Grid>
+        <Grid container sx={style} xs={11} sm={8} md={6} lg={5}>
+          <Grid item>{children}</Grid>
+          <Grid item xs={12} paddingTop={"0.5em"}>
+            <Button variant="outlined" onClick={handleClose} fullWidth>
+              Cancel
+            </Button>
           </Grid>
-        </Box>
+        </Grid>
       </Modal>
     </Box>
   );
