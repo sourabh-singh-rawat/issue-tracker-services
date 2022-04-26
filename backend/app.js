@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-
+const PORT = 4000;
 const app = express();
 
 app.use(express.json());
@@ -18,6 +18,6 @@ const projectRouter = require("./routes/projects");
 app.use("/api", userRouter);
 app.use("/api", projectRouter);
 
-app.listen(4000, () => {
+app.listen(PORT, () => {
   console.log("Server is running at port 4000");
 });

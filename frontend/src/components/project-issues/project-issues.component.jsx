@@ -1,11 +1,14 @@
 import { useParams } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 const ProjectIssues = () => {
-  const { id } = useParams();
+  const { id, type } = useParams();
 
   return (
     <div>
-      <h1>{id} issues</h1>
+      <Typography variant="body2">
+        There are currently no issues in the project
+      </Typography>
     </div>
   );
 };

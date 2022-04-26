@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 const ProjectMembers = () => {
   const { id } = useParams();
 
   return (
     <div>
-      <h1>{id} members</h1>
+      <Typography variant="body2">All the members of the project</Typography>
     </div>
   );
 };
