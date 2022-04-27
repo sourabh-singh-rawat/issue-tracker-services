@@ -55,7 +55,14 @@ router.post("/projects", (req, res) => {
   //     500: Error
   //   data:
   //     string: "Project added to projects table"
-  const { name, description, uid, email, startDate, endDate } = req.body;
+  const {
+    projectName,
+    projectDescription,
+    projectOwnerUID,
+    projectOwnerEmail,
+    startDate,
+    endDate,
+  } = req.body;
   // Create projects table if not exits
   pool.query(
     `CREATE TABLE IF NOT EXISTS projects (
@@ -80,7 +87,14 @@ router.post("/projects", (req, res) => {
       pool.query(
         `INSERT INTO projects (name, description, owner_uid, owner_email, start_date, end_date)
         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [name, description, uid, email, startDate, endDate],
+        [
+          projectName,
+          projectDescription,
+          projectOwnerUID,
+          projectOwnerEmail,
+          startDate,
+          endDate,
+        ],
         (error, result) => {
           if (error) {
             return console.log("Error adding project to projects table", error);
