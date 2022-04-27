@@ -1,37 +1,18 @@
 import { Fragment, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Grid, Tab, Tabs } from "@mui/material";
+
 import AppBarContainer from "../../components/appbar/appbar.component";
 import TabPanel from "../../components/tabpanel/tabpanel.component";
+import ModalWindow from "../../components/modal-window/modal-window.component";
+import IssueForm from "../../components/issue-form/issue-form.component";
 
 const Detailed = () => {
-  return (
-    <Fragment>
-      <Typography variant="body2">TODO: Detailed view for issues</Typography>
-      <Typography variant="body2">TODO: Detailed view for issues</Typography>
-      <Typography variant="body2">TODO: Detailed view for issues</Typography>
-      <Typography variant="body2">TODO: Detailed view for issues</Typography>
-    </Fragment>
-  );
+  return "detailed";
 };
 
 const IssueBoard = () => {
-  return (
-    <Fragment>
-      <Typography variant="body2">
-        TODO: Need to create a kanban board view for issues
-      </Typography>
-      <Typography variant="body2">
-        TODO: Need to create a kanban board view for issues
-      </Typography>
-      <Typography variant="body2">
-        TODO: Need to create a kanban board view for issues
-      </Typography>
-      <Typography variant="body2">
-        TODO: Need to create a kanban board view for issues
-      </Typography>
-    </Fragment>
-  );
+  return "board";
 };
 
 const Issues = (props) => {
@@ -73,7 +54,15 @@ const Issues = (props) => {
 
   return (
     <Fragment>
-      <AppBarContainer>Issues</AppBarContainer>
+      <AppBarContainer
+        element={
+          <ModalWindow>
+            <IssueForm />
+          </ModalWindow>
+        }
+      >
+        Issues
+      </AppBarContainer>
       <Box>
         <Box position="static" sx={{ borderBottom: "3px solid #f4f4f4" }}>
           <Tabs value={selectedTab} onChange={handleChange}>

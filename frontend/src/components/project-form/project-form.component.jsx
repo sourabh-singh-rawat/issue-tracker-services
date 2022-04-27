@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 
 const ProjectForm = ({ uid, email = "Unassigned" }) => {
   const [formFields, setFormFields] = useState({
-    name: "",
-    description: "",
-    uid,
-    email,
+    projectName: "",
+    projectDescription: "",
+    projectOwnerUID: uid,
+    projectOwnerEmail: email,
     startDate: null,
     endDate: null,
   });
@@ -42,7 +42,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="name"
+            name="projectName"
             label="Project Name"
             variant="outlined"
             onChange={handleChange}
@@ -52,7 +52,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="description"
+            name="projectDescription"
             label="Description"
             rows={4}
             onChange={handleChange}
@@ -62,7 +62,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="email"
+            name="projectOwnerEmail"
             label="Owner"
             variant="outlined"
             value={email}

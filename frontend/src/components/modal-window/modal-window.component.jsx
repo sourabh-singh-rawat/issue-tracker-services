@@ -5,11 +5,14 @@ const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
+  width: "400px",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  overflow: "scroll",
+  height: "100%",
 };
 
 const ModalWindow = ({ children }) => {
@@ -23,7 +26,7 @@ const ModalWindow = ({ children }) => {
         Create
       </Button>
       <Modal open={open} onClose={handleClose}>
-        <Grid container sx={style} xs={11} sm={8} md={6} lg={5}>
+        <Grid container sx={style}>
           <Grid item>{children}</Grid>
           <Grid item xs={12} paddingTop={"0.5em"}>
             <Button variant="outlined" onClick={handleClose} fullWidth>
