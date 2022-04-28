@@ -24,15 +24,18 @@ const IssueForm = ({ email }) => {
     issueStatus: "",
     dueDate: "",
   });
-  const [projects, setProjects] = useState([{ id: -1, name: "Unassigned" }]);
+  const [projectNames, setProjectNames] = useState([]);
 
   useEffect(() => {
     // TODO: Move this to redux in future
     const fetchData = async () => {
       const response = await fetch("http://127.0.0.1:4000/api/projects");
       const data = await response.json();
+      const projectNamesArr = data.map(
+        (project) => project.name + " " + project.id
+      );
 
-      setProjects(data);
+      setProjectNames(projectNamesArr);
     };
 
     fetchData();
@@ -89,23 +92,22 @@ const IssueForm = ({ email }) => {
         <Grid item xs={12} sm={12}>
           <Autocomplete
             disablePortal
-            options={projects}
-            getOptionLabel={(option) => option.name}
+            options={projectNames}
             onChange={(e, selectedOption) => {
               setFormFields({
                 ...formFields,
-                projectName: selectedOption.name,
+                projectName: selectedOption,
               });
             }}
-            renderInput={(params) => {
-              return <TextField {...params} label="Project Name" />;
-            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Project Name" />
+            )}
             fullWidth
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            nfme="issueReporter"
+            name="issueReporter"
             label="Reporter"
             value={email}
             variant="outlined"
