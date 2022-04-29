@@ -1,15 +1,12 @@
 import { Fragment, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Grid, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 
 import AppBarContainer from "../../components/appbar/appbar.component";
 import TabPanel from "../../components/tabpanel/tabpanel.component";
 import ModalWindow from "../../components/modal-window/modal-window.component";
 import IssueForm from "../../components/issue-form/issue-form.component";
-
-const Detailed = () => {
-  return "detailed";
-};
+import IssueDetailed from "../../components/issue-detailed/issue-detailed.component";
 
 const IssueBoard = () => {
   return "board";
@@ -18,12 +15,8 @@ const IssueBoard = () => {
 const Issues = (props) => {
   const navigate = useNavigate();
   const { view } = useParams();
-
-  /*
-    selectedTab can only have 0 or 1 value
-    When the user go to /issues/board preselect board 1
-  */
   const [selectedTab, setSelectedTab] = useState(view === "board" ? 1 : 0);
+
   const handleChange = (event, newValue) => {
     const mapIndexToTab = {
       0: "/issues/detailed",
@@ -38,7 +31,7 @@ const Issues = (props) => {
       case "detailed":
         return (
           <TabPanel selectedTab={selectedTab} index={0}>
-            <Detailed />
+            <IssueDetailed />
           </TabPanel>
         );
       case "board":
@@ -70,12 +63,7 @@ const Issues = (props) => {
             <Tab label="Board" />
           </Tabs>
         </Box>
-        {renderTabPanel()}
-      </Box>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Grid container spacing={2}>
-          <Grid item></Grid>
-        </Grid>
+        <Box>{renderTabPanel()}</Box>
       </Box>
     </Fragment>
   );

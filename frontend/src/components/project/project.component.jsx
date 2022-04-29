@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Box, Typography, Tabs, Tab } from "@mui/material";
 import AppBarContainer from "../appbar/appbar.component";
 import TabPanel from "../tabpanel/tabpanel.component";
-import ProjectIssues from "../project-issues/project-issues.component";
 import ProjectMembers from "../project-members/project-members.component";
+import IssueDetailed from "../issue-detailed/issue-detailed.component";
 
 const mapTypeToIndex = {
   issues: 0,
@@ -12,15 +12,15 @@ const mapTypeToIndex = {
 };
 
 const Project = () => {
-  const { id, type } = useParams();
+  const { projectId, type } = useParams();
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(mapTypeToIndex[type]);
   const [project, setProject] = useState({});
 
   const handleChange = (event, newValue) => {
     const mapIndexToTab = {
-      0: `/projects/${id}/issues`,
-      1: `/projects/${id}/members`,
+      0: `/projects/${projectId}/issues`,
+      1: `/projects/${projectId}/members`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -32,7 +32,7 @@ const Project = () => {
       case "issues":
         return (
           <TabPanel selectedTab={selectedTab} index={0}>
-            <ProjectIssues></ProjectIssues>
+            <IssueDetailed projectId={projectId} />
           </TabPanel>
         );
       case "members":
@@ -48,12 +48,14 @@ const Project = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`http://localhost:4000/api/projects/${id}`);
+      const response = await fetch(
+        `http://localhost:4000/api/projects/${projectId}`
+      );
       const data = await response.json();
       setProject(data);
     };
     fetchData();
-  }, [id]);
+  }, [projectId]);
 
   const { name, description } = project;
 

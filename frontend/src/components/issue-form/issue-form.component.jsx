@@ -18,7 +18,8 @@ const IssueForm = ({ email }) => {
     issueName: "",
     issueDescription: "",
     projectName: "",
-    issueReporter: "",
+    projectId: "",
+    issueReporter: email,
     issueAssignee: "",
     issuePriority: "",
     issueStatus: "",
@@ -32,7 +33,7 @@ const IssueForm = ({ email }) => {
       const response = await fetch("http://127.0.0.1:4000/api/projects");
       const data = await response.json();
       const projectNamesArr = data.map(
-        (project) => project.name + " " + project.id
+        (project) => `${project.name} #${project.id}`
       );
 
       setProjectNames(projectNamesArr);
@@ -51,7 +52,6 @@ const IssueForm = ({ email }) => {
     console.log(formFields);
 
     // TODO: Add validation
-
     await fetch("http://localhost:4000/api/issues", {
       method: "POST",
       headers: {
@@ -94,10 +94,15 @@ const IssueForm = ({ email }) => {
             disablePortal
             options={projectNames}
             onChange={(e, selectedOption) => {
-              setFormFields({
-                ...formFields,
-                projectName: selectedOption,
-              });
+              if (selectedOption) {
+                const name = selectedOption.split("#")[0];
+                const id = selectedOption.split("#")[1];
+                setFormFields({
+                  ...formFields,
+                  projectName: name,
+                  projectId: id,
+                });
+              }
             }}
             renderInput={(params) => (
               <TextField {...params} label="Project Name" />
@@ -106,19 +111,21 @@ const IssueForm = ({ email }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            name="issueReporter"
-            label="Reporter"
-            value={email}
-            variant="outlined"
-            onChange={handleChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            autoFocus={true}
-            fullWidth
-            disabled
-          />
+          <FormControl fullWidth>
+            <InputLabel>Reporter</InputLabel>
+            <Select
+              name="issueReporter"
+              label="Reporter"
+              value={email}
+              onChange={handleChange}
+              defaultValue=""
+            >
+              {/* project memebers */}
+              <MenuItem value={"Sourabh Singh Rawat"}>
+                Sourabh Singh Rawat
+              </MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
