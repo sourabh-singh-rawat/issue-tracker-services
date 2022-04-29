@@ -13,9 +13,11 @@ app.options("*", cors());
 
 // Routers
 const userRouter = require("./routes/users");
+const issueRouter = require("./routes/issues");
 const projectRouter = require("./routes/projects");
 
 app.use("/api", userRouter);
+app.use("/api", issueRouter);
 app.use("/api", projectRouter);
 
 app.listen(PORT, () => {
