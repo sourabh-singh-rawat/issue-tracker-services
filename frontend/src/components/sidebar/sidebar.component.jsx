@@ -44,7 +44,7 @@ const Sidebar = () => {
                 <ListItemText primary="Teams" />
               </ListItem>
             </Link>
-            <Link to="/issues/detailed">
+            <Link to="/issues">
               <ListItem button>
                 <ListItemText primary="Issues"></ListItemText>
               </ListItem>

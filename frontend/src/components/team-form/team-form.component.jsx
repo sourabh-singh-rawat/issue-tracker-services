@@ -1,4 +1,4 @@
-import { Grid, Box, Typography } from "@mui/material";
+import { Grid, Box, Typography, TextField } from "@mui/material";
 
 const TeamForm = () => {
   const handleSubmit = () => {};
@@ -11,7 +11,9 @@ const TeamForm = () => {
             Create Team
           </Typography>
         </Grid>
-        <Grid item sm={12}></Grid>
+        <Grid item sm={12}>
+          <TextField name="teamName" label="Name" variant="outlined" />
+        </Grid>
       </Grid>
     </Box>
   );
