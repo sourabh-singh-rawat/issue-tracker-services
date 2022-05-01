@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { Box, Tab, Tabs } from "@mui/material";
 
 import AppBarContainer from "../../components/appbar/appbar.component";
@@ -8,41 +8,18 @@ import ModalWindow from "../../components/modal-window/modal-window.component";
 import IssueForm from "../../components/issue-form/issue-form.component";
 import IssueDetailed from "../../components/issue-detailed/issue-detailed.component";
 
-const IssueBoard = () => {
-  return "board";
-};
-
 const Issues = (props) => {
   const navigate = useNavigate();
-  const { view } = useParams();
-  const [selectedTab, setSelectedTab] = useState(view === "board" ? 1 : 0);
+  const { board } = useParams();
+  const [selectedTab, setSelectedTab] = useState(board ? 1 : 0);
 
   const handleChange = (event, newValue) => {
     const mapIndexToTab = {
-      0: "/issues/detailed",
+      0: "/issues",
       1: "/issues/board",
     };
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
-  };
-
-  const renderTabPanel = () => {
-    switch (view) {
-      case "detailed":
-        return (
-          <TabPanel selectedTab={selectedTab} index={0}>
-            <IssueDetailed />
-          </TabPanel>
-        );
-      case "board":
-        return (
-          <TabPanel selectedTab={selectedTab} index={1}>
-            <IssueBoard />
-          </TabPanel>
-        );
-      default:
-        return <p>No item to display</p>;
-    }
   };
 
   return (
@@ -63,7 +40,14 @@ const Issues = (props) => {
             <Tab label="Board" />
           </Tabs>
         </Box>
-        <Box>{renderTabPanel()}</Box>
+        <Box>
+          <TabPanel selectedTab={selectedTab} index={0}>
+            <IssueDetailed />
+          </TabPanel>
+          <TabPanel selectedTab={selectedTab} index={1}>
+            <Outlet />
+          </TabPanel>
+        </Box>
       </Box>
     </Fragment>
   );

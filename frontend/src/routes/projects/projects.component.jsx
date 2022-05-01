@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 
 // MUI Styles
 import { Box, Grid, Toolbar, Typography } from "@mui/material";
@@ -9,6 +9,7 @@ import ModalWindow from "../../components/modal-window/modal-window.component";
 import ProjectForm from "../../components/project-form/project-form.component";
 
 const Projects = (props) => {
+  const { projectId } = useParams();
   const [rows, setRows] = useState([]);
   const columns = [
     {
@@ -21,7 +22,7 @@ const Projects = (props) => {
       headerName: "Name",
       flex: 0.2,
       renderCell: (params) => {
-        return <Link to={`${params.row.id}/issues`}>{params.row.name}</Link>;
+        return <Link to={`${params.row.id}`}>{params.row.name}</Link>;
       },
     },
     {
@@ -74,7 +75,9 @@ const Projects = (props) => {
     fetchData();
   }, []);
 
-  return (
+  return projectId ? (
+    <Outlet />
+  ) : (
     <Box>
       <AppBarContainer
         element={

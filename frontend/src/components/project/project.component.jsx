@@ -1,49 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { Grid, Box, Typography, Tabs, Tab } from "@mui/material";
 import AppBarContainer from "../appbar/appbar.component";
 import TabPanel from "../tabpanel/tabpanel.component";
-import ProjectMembers from "../project-members/project-members.component";
 import IssueDetailed from "../issue-detailed/issue-detailed.component";
 
-const mapTypeToIndex = {
-  issues: 0,
-  members: 1,
-};
-
 const Project = () => {
-  const { projectId, type } = useParams();
+  const { projectId, members } = useParams();
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState(mapTypeToIndex[type]);
+  const [selectedTab, setSelectedTab] = useState(members ? 1 : 0);
   const [project, setProject] = useState({});
 
   const handleChange = (event, newValue) => {
     const mapIndexToTab = {
-      0: `/projects/${projectId}/issues`,
+      0: `/projects/${projectId}`,
       1: `/projects/${projectId}/members`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
-  };
-
-  const renderTabPanel = () => {
-    switch (type) {
-      case "issues":
-        return (
-          <TabPanel selectedTab={selectedTab} index={0}>
-            <IssueDetailed projectId={projectId} />
-          </TabPanel>
-        );
-      case "members":
-        return (
-          <TabPanel selectedTab={selectedTab} index={1}>
-            <ProjectMembers></ProjectMembers>
-          </TabPanel>
-        );
-      default:
-        return <p>Nothing to render</p>;
-    }
   };
 
   useEffect(() => {
@@ -74,7 +49,13 @@ const Project = () => {
             <Tab label="Members" />
           </Tabs>
         </Box>
-        {renderTabPanel()}
+
+        <TabPanel selectedTab={selectedTab} index={0}>
+          <IssueDetailed projectId={projectId} />
+        </TabPanel>
+        <TabPanel selectedTab={selectedTab} index={1}>
+          <Outlet />
+        </TabPanel>
       </Grid>
     </Grid>
   );
