@@ -47,7 +47,7 @@ router.get("/projects", (req, res) => {
   });
 });
 
-router.post("/projects", (req, res) => {
+router.post("/projects/create", (req, res) => {
   // description: Add a project
   // response:
   //   status:

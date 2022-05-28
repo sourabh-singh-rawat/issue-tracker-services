@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { Grid, Toolbar, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link, Outlet, useParams } from "react-router-dom";
-
-// MUI Styles
-import { Box, Grid, Toolbar, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import AppBarContainer from "../../components/appbar/appbar.component";
-import ModalWindow from "../../components/modal-window/modal-window.component";
-import ProjectForm from "../../components/project-form/project-form.component";
 
 const Projects = (props) => {
-  const { projectId } = useParams();
   const [rows, setRows] = useState([]);
   const columns = [
     {
@@ -58,7 +54,6 @@ const Projects = (props) => {
     },
   ];
 
-  // fetch data after the component is mounted
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetch("http://localhost:4000/api/projects", {
@@ -75,17 +70,9 @@ const Projects = (props) => {
     fetchData();
   }, []);
 
-  return projectId ? (
-    <Outlet />
-  ) : (
+  return (
     <Box>
-      <AppBarContainer
-        element={
-          <ModalWindow>
-            <ProjectForm />
-          </ModalWindow>
-        }
-      >
+      <AppBarContainer element={<Link to="/projects/create">Create</Link>}>
         Projects
       </AppBarContainer>
       <Toolbar sx={{ borderBottom: "3px solid #f4f4f4" }}>

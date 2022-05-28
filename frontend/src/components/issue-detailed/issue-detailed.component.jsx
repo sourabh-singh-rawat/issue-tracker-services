@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box } from "@mui/system";
 import { Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const IssueDetailed = ({ projectId = "" }) => {
   const [rows, setRows] = useState([]);
@@ -15,6 +16,9 @@ const IssueDetailed = ({ projectId = "" }) => {
       field: "issuename",
       headerName: "Name",
       width: 300,
+      renderCell: (params) => {
+        return <Link to={`${params.row.issueid}`}>{params.row.issuename}</Link>;
+      },
     },
     {
       field: "projectid",

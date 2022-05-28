@@ -1,18 +1,11 @@
 import { Box, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 import AppBarContainer from "../../components/appbar/appbar.component";
-import ModalWindow from "../../components/modal-window/modal-window.component";
-import TeamForm from "../../components/team-form/team-form.component";
 
 const Teams = () => {
   return (
     <Box>
-      <AppBarContainer
-        element={
-          <ModalWindow>
-            <TeamForm />
-          </ModalWindow>
-        }
-      >
+      <AppBarContainer element={<Link to="/teams/create">Create</Link>}>
         Teams
       </AppBarContainer>
       <Grid container>
