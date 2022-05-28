@@ -52,7 +52,7 @@ const IssueForm = ({ email }) => {
     console.log(formFields);
 
     // TODO: Add validation
-    await fetch("http://localhost:4000/api/issues", {
+    await fetch("http://localhost:4000/api/issues/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

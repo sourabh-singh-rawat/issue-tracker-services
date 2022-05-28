@@ -2,9 +2,27 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db");
 
+router.get("/issues/:issueId", (req, res) => {
+  const { issueId } = req.params;
+
+  if (issueId) {
+    pool.query(
+      "SELECT * FROM issues WHERE issueid = $1",
+      [issueId],
+      (error, result) => {
+        if (error) {
+          return res.status(500).send("Cannot fetch issue");
+        }
+        res.send(result.rows[0]);
+      }
+    );
+  }
+});
+
 router.get("/issues", (req, res) => {
   // check query parameters
   const { project_id } = req.query;
+
   if (project_id) {
     return pool.query(
       "SELECT * FROM issues WHERE projectid = $1",
@@ -13,7 +31,7 @@ router.get("/issues", (req, res) => {
         if (error) {
           return res
             .status(500)
-            .send("Cannot fetch project with id " + project_id);
+            .send("Cannot fetch issues from project with id " + project_id);
         }
         res.send(result.rows);
       }
@@ -28,7 +46,7 @@ router.get("/issues", (req, res) => {
   });
 });
 
-router.post("/issues", (req, res) => {
+router.post("/issues/create", (req, res) => {
   const {
     issueName,
     issueDescription,
