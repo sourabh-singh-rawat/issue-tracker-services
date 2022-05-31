@@ -8,13 +8,14 @@ import IssueDetailed from "../issue-detailed/issue-detailed.component";
 const Project = () => {
   const { projectId, members } = useParams();
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState(members ? 1 : 0);
   const [project, setProject] = useState({});
+  const { name, description } = project;
+  const [selectedTab, setSelectedTab] = useState(members ? 1 : 0);
 
   const handleChange = (event, newValue) => {
     const mapIndexToTab = {
-      0: `/projects/${projectId}`,
-      1: `/projects/${projectId}/members`,
+      0: `/project/${projectId}`,
+      1: `/project/${projectId}/members`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -24,15 +25,13 @@ const Project = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `http://localhost:4000/api/projects/${projectId}`
+        `http://localhost:4000/api/projects/${projectId}?tab=issues`
       );
       const data = await response.json();
       setProject(data);
     };
     fetchData();
   }, [projectId]);
-
-  const { name, description } = project;
 
   return (
     <Grid container>

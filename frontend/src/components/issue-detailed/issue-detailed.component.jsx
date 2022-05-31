@@ -17,7 +17,11 @@ const IssueDetailed = ({ projectId = "" }) => {
       headerName: "Name",
       width: 300,
       renderCell: (params) => {
-        return <Link to={`${params.row.issueid}`}>{params.row.issuename}</Link>;
+        return (
+          <Link to={`/issue/${params.row.issueid}`}>
+            {params.row.issuename}
+          </Link>
+        );
       },
     },
     {

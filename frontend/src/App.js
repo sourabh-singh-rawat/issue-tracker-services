@@ -24,27 +24,32 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Sidebar />}>
         <Route index element={<Dashboard />} />
-        <Route path="projects">
-          <Route index element={<Projects />} />
-          <Route path="create" element={<ProjectForm />}></Route>
+        {/* list routes */}
+        <Route path="projects" element={<Projects />} />
+        <Route path="teams" element={<Teams />} />
+        <Route path="issues" element={<Issues />}>
+          <Route path=":board" element={<IssuesBoard />} />
+        </Route>
+        {/* project route */}
+        <Route path="project">
+          <Route path="create" element={<ProjectForm />} />
           <Route path=":projectId" element={<Project />}>
-            <Route path=":members" element={<ProjectMembers />}></Route>
+            <Route path="members" element={<ProjectMembers />} />
           </Route>
         </Route>
-        <Route path="teams">
-          <Route index element={<Teams />}></Route>
-          <Route path="create" element={<h1>Team Form</h1>}></Route>
+        {/* team route */}
+        <Route path="team">
+          <Route path="create" element={<h1>Team Form</h1>} />
         </Route>
-        <Route path="issues">
-          <Route index element={<Issues />} />
-          <Route path="create" element={<IssueForm />}></Route>
-          <Route path=":issueId" element={<Issue />}></Route>
-          <Route path=":board" element={<IssuesBoard />}></Route>
+        {/* issue route */}
+        <Route path="issue">
+          <Route path="create" element={<IssueForm />} />
+          <Route path=":issueId" element={<Issue />} />
         </Route>
       </Route>
-      <Route path="/signup" element={<SignUp />}></Route>
-      <Route path="/signin" element={<SignIn />}></Route>
-      <Route path="*" element={<NoComponent />}></Route>
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="*" element={<NoComponent />} />
     </Routes>
   );
 };

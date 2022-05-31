@@ -10,17 +10,24 @@ const Issue = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `http://localhost:4000/api/issues/${issueId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      if (issueId != "board") {
+        try {
+          const response = await fetch(
+            `http://localhost:4000/api/issues/${issueId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          setState(data);
+        } catch (err) {
+          console.log("cannot fetch data from server");
         }
-      );
-      const data = await response.json();
-      setState(data);
+      }
     };
 
     fetchData();
