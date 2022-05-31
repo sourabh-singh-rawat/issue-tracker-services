@@ -11,6 +11,7 @@ router.get("/projects/:projectId", (req, res) => {
     [projectId],
     (error, result) => {
       if (error) res.status(500).send("Cannot find project in database");
+
       if (result.rows.length === 0)
         return res.status(500).send("Cannot find project in database");
       const {

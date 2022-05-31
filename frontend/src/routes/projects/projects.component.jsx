@@ -16,22 +16,22 @@ const Projects = (props) => {
     {
       field: "name",
       headerName: "Name",
-      flex: 0.2,
+      width: 350,
       renderCell: (params) => {
-        return <Link to={`${params.row.id}`}>{params.row.name}</Link>;
+        return <Link to={`/project/${params.row.id}`}>{params.row.name}</Link>;
       },
     },
     {
       field: "owner_email",
       headerName: "Owner",
-      flex: 0.2,
+      width: 250,
     },
     { field: "status", headerName: "Status" },
     { field: "issues", headerName: "Issues" },
     {
       field: "start_date",
-      flex: 0.1,
       headerName: "Start Date",
+      width: 150,
       renderCell: (params) => {
         return new Date(params.value).toLocaleDateString("en-gb", {
           year: "numeric",
@@ -42,7 +42,7 @@ const Projects = (props) => {
     },
     {
       field: "end_date",
-      flex: 0.1,
+      width: 150,
       headerName: "End Date",
       renderCell: (params) => {
         return new Date(params.value).toLocaleDateString("en-gb", {
@@ -72,7 +72,7 @@ const Projects = (props) => {
 
   return (
     <Box>
-      <AppBarContainer element={<Link to="/projects/create">Create</Link>}>
+      <AppBarContainer element={<Link to="/project/create">Create</Link>}>
         Projects
       </AppBarContainer>
       <Toolbar sx={{ borderBottom: "3px solid #f4f4f4" }}>
