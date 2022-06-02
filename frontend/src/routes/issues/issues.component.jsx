@@ -1,44 +1,41 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams, Link, Outlet } from "react-router-dom";
 
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box } from "@mui/material";
 import AppBarContainer from "../../components/appbar/appbar.component";
-import TabPanel from "../../components/tabpanel/tabpanel.component";
-import IssueDetailed from "../../components/issue-detailed/issue-detailed.component";
+import StyledTab from "../../components/styled-tab/styled-tab.component";
+import StyledTabs from "../../components/styled-tabs/styled-tabs.component";
 
 const Issues = (props) => {
   const navigate = useNavigate();
   const { board } = useParams();
-  const [selectedTab, setSelectedTab] = useState(board ? 1 : 0);
+  const [selectedTab, setSelectedTab] = useState(board ? 2 : 1);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (e, newValue) => {
     const mapIndexToTab = {
-      0: "/issues",
-      1: "/issues/board",
+      1: "/issues",
+      2: "/issues/board",
     };
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
   };
 
+  useEffect(() => {
+    setSelectedTab(board ? 2 : 1);
+  }, [board]);
   return (
     <Fragment>
-      <AppBarContainer element={<Link to="/issues/create">Create</Link>}>
+      <AppBarContainer element={<Link to="/issue/create">Create issue</Link>}>
         Issues
       </AppBarContainer>
-      <Box>
-        <Box position="static" sx={{ borderBottom: "3px solid #f4f4f4" }}>
-          <Tabs value={selectedTab} onChange={handleChange}>
-            <Tab label="Detailed" />
-            <Tab label="Board" />
-          </Tabs>
-        </Box>
-        <Box>
-          <TabPanel selectedTab={selectedTab} index={0}>
-            <IssueDetailed />
-          </TabPanel>
-          <TabPanel selectedTab={selectedTab} index={1}>
-            <Outlet />
-          </TabPanel>
+      <Box sx={{ margin: 3, marginTop: 0 }}>
+        <Box position="static">
+          <StyledTabs value={selectedTab} onChange={handleChange}>
+            <StyledTab label="Detailed" value={1} />
+            <StyledTab label="Board" value={2} />
+          </StyledTabs>
+          {/* styled tab panels */}
+          <Outlet context={[selectedTab]} />
         </Box>
       </Box>
     </Fragment>

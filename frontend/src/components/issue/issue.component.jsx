@@ -10,7 +10,7 @@ const Issue = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (issueId != "board") {
+      if (issueId !== "board") {
         try {
           const response = await fetch(
             `http://localhost:4000/api/issues/${issueId}`,

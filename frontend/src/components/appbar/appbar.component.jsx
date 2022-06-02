@@ -8,7 +8,6 @@ const AppBarContainer = (props) => {
     bgcolor: "white",
     color: "black",
     boxShadow: "none",
-    borderBottom: "3px solid #f4f4f4",
   };
 
   return (

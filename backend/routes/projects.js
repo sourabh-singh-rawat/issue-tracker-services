@@ -1,6 +1,30 @@
-const pool = require("../db");
 const express = require("express");
 const router = express.Router();
+const pool = require("../database");
+
+router.put("/project/:projectid", (req, res) => {
+  const { projectid } = req.params;
+  const { newFieldValue } = req.body;
+
+  pool.query(
+    "SELECT * FROM projects WHERE id = $1",
+    [projectid],
+    (error, result) => {
+      if (error)
+        return res.send(
+          "Error: Cannot get the project with project id: " + projectid
+        );
+
+      // update
+      pool.query(
+        "UPDATE projects SET name = $1 WHERE id = $2",
+        [newFieldValue, projectid],
+        (error, result) => {}
+      );
+      return res.send(result.rows[0]);
+    }
+  );
+});
 
 router.get("/projects/:projectId", (req, res) => {
   const { projectId } = req.params;
@@ -10,10 +34,8 @@ router.get("/projects/:projectId", (req, res) => {
     `SELECT * FROM projects WHERE id = $1`,
     [projectId],
     (error, result) => {
-      if (error) res.status(500).send("Cannot find project in database");
+      if (error) return res.status(500).send("Cannot find project in database");
 
-      if (result.rows.length === 0)
-        return res.status(500).send("Cannot find project in database");
       const {
         id,
         name,
@@ -30,18 +52,9 @@ router.get("/projects/:projectId", (req, res) => {
 });
 
 router.get("/projects", (req, res) => {
-  // description: Get all projects
-  // response:
-  //   status:
-  //     200: Success
-  //     500: Error
-  //   data:
-  //     projects: Array of projects
-
   // TODO: confirm authentication and then send data back
   pool.query(`SELECT * FROM projects`, (error, result) => {
     if (error) {
-      console.log(error);
       return res.status(500).send("Error getting projects");
     }
     return res.status(200).json(result.rows);

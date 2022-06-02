@@ -1,13 +1,16 @@
-import { useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { Typography } from "@mui/material";
+import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
 
 const ProjectMembers = () => {
-  const { id } = useParams();
+  const [selectedTab] = useOutletContext();
 
   return (
-    <div>
-      <Typography variant="body2">All the members of the project</Typography>
-    </div>
+    <StyledTabPanel selectedTab={selectedTab} index={2}>
+      <div>
+        <Typography variant="body2">All the members of the project</Typography>
+      </div>
+    </StyledTabPanel>
   );
 };
 

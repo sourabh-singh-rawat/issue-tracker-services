@@ -14,8 +14,10 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
   });
 
   const handleChange = (e) => {
-    const { name } = e.target;
-    setFormFields({ ...formFields, [name]: e.target.value });
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+
+    setFormFields({ ...formFields, [fieldName]: fieldValue });
   };
 
   const handleSubmit = async (e) => {
@@ -38,14 +40,14 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
       <Grid item xs={12}>
         <AppBarContainer>Create Project</AppBarContainer>
       </Grid>
-      <Grid item padding={"1em"} xs={12}>
+      <Grid item xs={4} sx={{ margin: 3, marginTop: 0 }}>
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container columnSpacing={4} rowSpacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
                 name="projectName"
                 label="Project Name"
-                variant="outlined"
+                variant="standard"
                 onChange={handleChange}
                 required
                 fullWidth
@@ -55,6 +57,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
               <TextField
                 name="projectDescription"
                 label="Description"
+                variant="standard"
                 rows={4}
                 onChange={handleChange}
                 multiline
@@ -65,7 +68,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
               <TextField
                 name="projectOwnerEmail"
                 label="Owner"
-                variant="outlined"
+                variant="standard"
                 value={email}
                 onChange={handleChange}
                 InputLabelProps={{
@@ -82,6 +85,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
                 name="startDate"
                 label="Start Date"
                 type="date"
+                variant="standard"
                 onChange={handleChange}
                 InputLabelProps={{
                   shrink: true,
@@ -94,6 +98,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
                 name="endDate"
                 label="End Date"
                 type="date"
+                variant="standard"
                 onChange={handleChange}
                 InputLabelProps={{
                   shrink: true,

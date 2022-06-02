@@ -43,8 +43,10 @@ const IssueForm = ({ email }) => {
   }, []);
 
   const handleChange = (e) => {
-    const { name } = e.target;
-    setFormFields({ ...formFields, [name]: e.target.value });
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+
+    setFormFields({ ...formFields, [fieldName]: fieldValue });
   };
 
   const handleSubmit = async (e) => {
@@ -73,7 +75,6 @@ const IssueForm = ({ email }) => {
           <TextField
             name="issueName"
             label="Issue Name"
-            variant="outlined"
             onChange={handleChange}
             fullWidth
             required
