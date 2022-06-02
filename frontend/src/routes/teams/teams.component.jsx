@@ -5,7 +5,7 @@ import AppBarContainer from "../../components/appbar/appbar.component";
 const Teams = () => {
   return (
     <Box>
-      <AppBarContainer element={<Link to="/team/create">Create</Link>}>
+      <AppBarContainer element={<Link to="/team/create">Create team</Link>}>
         Teams
       </AppBarContainer>
       <Grid container>

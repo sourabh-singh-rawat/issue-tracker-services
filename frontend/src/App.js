@@ -14,6 +14,8 @@ import Issues from "./routes/issues/issues.component";
 import IssuesBoard from "./components/issue-board/issues-board.component";
 import ProjectForm from "./components/project-form/project-form.component";
 import IssueForm from "./components/issue-form/issue-form.component";
+import TeamForm from "./components/team-form/team-form.component";
+import IssuesDetailed from "./components/issues-detailed/issues-detailed.component";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -28,18 +30,20 @@ const App = () => {
         <Route path="projects" element={<Projects />} />
         <Route path="teams" element={<Teams />} />
         <Route path="issues" element={<Issues />}>
+          <Route index element={<IssuesDetailed />} />
           <Route path=":board" element={<IssuesBoard />} />
         </Route>
         {/* project route */}
         <Route path="project">
           <Route path="create" element={<ProjectForm />} />
           <Route path=":projectId" element={<Project />}>
-            <Route path="members" element={<ProjectMembers />} />
+            <Route path="issues" element={<IssuesDetailed />} />
+            <Route path="people" element={<ProjectMembers />} />
           </Route>
         </Route>
         {/* team route */}
         <Route path="team">
-          <Route path="create" element={<h1>Team Form</h1>} />
+          <Route path="create" element={<TeamForm />} />
         </Route>
         {/* issue route */}
         <Route path="issue">

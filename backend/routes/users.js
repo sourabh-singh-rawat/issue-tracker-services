@@ -1,6 +1,6 @@
 const express = require("express");
-const pool = require("../db");
 const userRouter = express.Router();
+const pool = require("../database");
 
 userRouter.post("/users", (req, res) => {
   // description: Add a user

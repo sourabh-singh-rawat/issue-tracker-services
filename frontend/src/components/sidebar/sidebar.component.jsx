@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 
 // MUI Theme
@@ -6,21 +7,21 @@ import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import GroupsIcon from "@mui/icons-material/Groups";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import BugReportIcon from "@mui/icons-material/BugReport";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import { useState } from "react";
+import {
+  Menu,
+  X,
+  Home,
+  Users,
+  AlertTriangle,
+  LogIn,
+  Folder,
+} from "react-feather";
 
 export const drawerWidth = 240;
 
@@ -69,6 +70,7 @@ const Sidebar = () => {
   const handleDrawerClose = () => setOpen(false);
 
   // styles
+  const listItemStyles = { display: "block" };
   const listItemTextStyles = { opacity: open ? 1 : 0 };
   const listItemIconStyles = {
     minWidth: 0,
@@ -83,9 +85,16 @@ const Sidebar = () => {
   return (
     <>
       <Box sx={{ diplay: "flex" }}>
-        <CssBaseline />
         {/* drawer */}
-        <Drawer variant="permanent" open={open}>
+        <Drawer
+          variant="permanent"
+          open={open}
+          PaperProps={{
+            sx: {
+              backgroundColor: "#f7f7f7",
+            },
+          }}
+        >
           <Toolbar>
             {/* hamburger */}
             <IconButton
@@ -98,34 +107,34 @@ const Sidebar = () => {
                 ...(open && { display: "none" }),
               }}
             >
-              <MenuIcon />
+              <Menu />
             </IconButton>
             <IconButton
               onClick={handleDrawerClose}
               sx={{ opacity: open ? 1 : 0 }} // important fix for chevronLeft icon
             >
-              <ChevronLeftIcon />
+              <X />
             </IconButton>
           </Toolbar>
           <Divider />
           <List>
             {/* dashboard button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem disablePadding sx={listItemStyles}>
               <Link to="/">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <DashboardIcon />
+                    <Home />
                   </ListItemIcon>
                   <ListItemText primary={"Dashboard"} sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
             {/* projects button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem disablePadding sx={listItemStyles}>
               <Link to="/projects">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <AssignmentIcon />
+                    <Folder />
                   </ListItemIcon>
                   <ListItemText
                     primary="Projects"
@@ -135,11 +144,11 @@ const Sidebar = () => {
               </Link>
             </ListItem>
             {/* teams button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem disablePadding sx={listItemStyles}>
               <Link to="/teams">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <GroupsIcon />
+                    <Users />
                   </ListItemIcon>
                   <ListItemText
                     primary="Teams"
@@ -149,22 +158,22 @@ const Sidebar = () => {
               </Link>
             </ListItem>
             {/* issues button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem disablePadding sx={listItemStyles}>
               <Link to="/issues">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <BugReportIcon />
+                    <AlertTriangle />
                   </ListItemIcon>
                   <ListItemText primary={"Issues"} sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
             {/* signup button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem disablePadding sx={listItemStyles}>
               <Link to="/signup">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <InboxIcon />
+                    <LogIn />
                   </ListItemIcon>
                   <ListItemText primary={"Sign Up"} sx={listItemTextStyles} />
                 </ListItemButton>
