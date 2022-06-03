@@ -8,7 +8,9 @@ const ProjectMembers = () => {
   return (
     <StyledTabPanel selectedTab={selectedTab} index={2}>
       <div>
-        <Typography variant="body2">All the members of the project</Typography>
+        <Typography variant="body2">
+          All the people working on this project
+        </Typography>
       </div>
     </StyledTabPanel>
   );

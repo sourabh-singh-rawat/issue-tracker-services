@@ -2,12 +2,44 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../database");
 
-router.get("/issues/:issueId", (req, res) => {
+router.put("/issue/:issueId", (req, res) => {
+  const { issueId } = req.params;
+  const { projectId } = req.query;
+  const { field, newVal } = req.body;
+
+  const mapFieldToQuery = {
+    issue_name:
+      "UPDATE issues SET issue_name = $1 WHERE issue_id = $2 AND project_id = $3",
+  };
+
+  pool.query(
+    "SELECT * FROM issues WHERE project_id = $1",
+    [projectId],
+    (error, result) => {
+      if (error)
+        return res.send(
+          "Error: Cannot get the project with project id: " + projectId
+        );
+
+      // update
+      pool.query(
+        mapFieldToQuery[field],
+        [newVal, issueId, projectId],
+        (error, result) => {
+          if (error) return res.status(500).send("Error: cannot update");
+          return res.send(result.rows[0]);
+        }
+      );
+    }
+  );
+});
+
+router.get("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;
 
   if (issueId) {
     pool.query(
-      "SELECT * FROM issues WHERE issueid = $1",
+      "SELECT * FROM issues WHERE issue_id = $1",
       [issueId],
       (error, result) => {
         if (error) {
@@ -25,7 +57,7 @@ router.get("/issues", (req, res) => {
 
   if (project_id) {
     return pool.query(
-      "SELECT * FROM issues WHERE projectid = $1",
+      "SELECT * FROM issues WHERE project_id = $1",
       [project_id],
       (error, result) => {
         if (error) {
@@ -33,7 +65,8 @@ router.get("/issues", (req, res) => {
             .status(500)
             .send("Cannot fetch issues from project with id " + project_id);
         }
-        res.send(result.rows);
+
+        return res.send(result.rows);
       }
     );
   }
@@ -48,31 +81,31 @@ router.get("/issues", (req, res) => {
 
 router.post("/issues/create", (req, res) => {
   const {
-    issueName,
-    issueDescription,
-    projectName,
-    projectId,
-    issueReporter,
-    issuePriority,
-    issueStatus,
-    issueAssignee,
-    dueDate,
+    issue_name,
+    issue_description,
+    project_name,
+    project_id,
+    issue_reporter,
+    issue_priority,
+    issue_status,
+    issue_assignee,
+    due_date,
   } = req.body;
 
   // storing this data in a database
   // creating a new issue in issue table
   pool.query(
     `CREATE TABLE IF NOT EXISTS issues (
-      issueId SERIAL,
-      issueName VARCHAR(255),
-      issueDescription VARCHAR(255),
-      projectName VARCHAR(255),
-      projectId INTEGER ,
-      issueReporter VARCHAR(255),
-      issuePriority VARCHAR(255),
-      issueStatus VARCHAR(255),
-      issueAssignee VARCHAR(255),
-      dueDate VARCHAR(255),
+      issue_id SERIAL,
+      issue_name VARCHAR(255),
+      issue_description VARCHAR(255),
+      project_name VARCHAR(255),
+      project_id INTEGER ,
+      issue_reporter VARCHAR(255),
+      issue_priority VARCHAR(255),
+      issue_status VARCHAR(255),
+      issue_assignee VARCHAR(255),
+      due_date VARCHAR(255),
 
       PRIMARY KEY (issueId),
       FOREIGN KEY (projectId) REFERENCES projects(id)
@@ -85,18 +118,18 @@ router.post("/issues/create", (req, res) => {
 
       // adding a new issue to the issues table
       pool.query(
-        `INSERT INTO issues (issueName, issueDescription, projectName, projectId, issueReporter, issuePriority, issueStatus, issueAssignee, dueDate)
+        `INSERT INTO issues (issue_name, issue_description, project_name, project_id, issue_reporter, issue_priority, issue_status, issue_assignee, due_date)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [
-          issueName,
-          issueDescription,
-          projectName,
-          projectId,
-          issueReporter,
-          issuePriority,
-          issueStatus,
-          issueAssignee,
-          dueDate,
+          issue_name,
+          issue_description,
+          project_name,
+          project_id,
+          issue_reporter,
+          issue_priority,
+          issue_status,
+          issue_assignee,
+          due_date,
         ],
         (error, result) => {
           if (error) {

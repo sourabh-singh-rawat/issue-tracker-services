@@ -2,26 +2,34 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../database");
 
-router.put("/project/:projectid", (req, res) => {
-  const { projectid } = req.params;
-  const { newFieldValue } = req.body;
+router.put("/project/:projectId", (req, res) => {
+  const { projectId } = req.params;
+  const { field, newVal } = req.body;
+  const mapFieldToQuery = {
+    name: "UPDATE projects SET name = $1 WHERE id = $2",
+    start_date: "UPDATE projects SET start_date = $1 WHERE id = $2",
+    end_date: "UPDATE projects SET end_date = $1 WHERE id = $2",
+  };
+  console.log(field, newVal, projectId);
 
   pool.query(
     "SELECT * FROM projects WHERE id = $1",
-    [projectid],
+    [projectId],
     (error, result) => {
       if (error)
         return res.send(
-          "Error: Cannot get the project with project id: " + projectid
+          "Error: Cannot get the project with project id: " + projectId
         );
 
       // update
       pool.query(
-        "UPDATE projects SET name = $1 WHERE id = $2",
-        [newFieldValue, projectid],
-        (error, result) => {}
+        mapFieldToQuery[field],
+        [newVal, projectId],
+        (error, result) => {
+          if (error) return res.status(500).send("Error: cannot update");
+          return res.send(result.rows[0]);
+        }
       );
-      return res.send(result.rows[0]);
     }
   );
 });
@@ -85,8 +93,8 @@ router.post("/projects/create", (req, res) => {
       description TEXT NOT NULL,
       owner_uid VARCHAR(255) NOT NULL,
       owner_email VARCHAR(255) NOT NULL,
-      start_date DATE,
-      end_date DATE,
+      start_date TIMESTAMP WITH TIME ZONE,
+      end_date TIMESTAMP WITH TIME ZONE,
       number_of_issues INTEGER,
       PRIMARY KEY (id),
       FOREIGN KEY (owner_uid) REFERENCES users(uid)

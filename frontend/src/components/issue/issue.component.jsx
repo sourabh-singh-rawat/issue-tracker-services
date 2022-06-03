@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import { Grid } from "@mui/material";
-import AppBarContainer from "../appbar/appbar.component";
+import { Grid, Typography } from "@mui/material";
+import StyledAppBar from "../styled-appbar/styled-appbar.component";
 
 const Issue = () => {
   const { issueId } = useParams();
@@ -13,7 +12,7 @@ const Issue = () => {
       if (issueId !== "board") {
         try {
           const response = await fetch(
-            `http://localhost:4000/api/issues/${issueId}`,
+            `http://localhost:4000/api/issue/${issueId}`,
             {
               method: "GET",
               headers: {
@@ -33,15 +32,15 @@ const Issue = () => {
     fetchData();
   }, [issueId]);
 
-  const { issuename, issuedescription } = state;
+  const { issue_name, issue_description } = state;
 
   return (
     <Grid container>
       <Grid item xs={12}>
-        <AppBarContainer>{issuename}</AppBarContainer>
+        <StyledAppBar>{issue_name}</StyledAppBar>
       </Grid>
-      <Grid item xs={12}>
-        {issuedescription}
+      <Grid item xs={12} sx={{ margin: 3 }}>
+        <Typography>{issue_description}</Typography>
       </Grid>
     </Grid>
   );

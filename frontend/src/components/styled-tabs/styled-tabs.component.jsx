@@ -9,9 +9,9 @@ const StyledTabs = (props) => {
         borderRadius: 1,
         borderBottom: "1px solid #f5f7f9",
         "& .MuiTabs-indicator": {
-          backgroundColor: "#058079",
+          backgroundColor: "primary.main",
         },
-        backgroundColor: "#e2edec",
+        backgroundColor: "background.tabs",
       }}
     ></Tabs>
   );

@@ -1,10 +1,12 @@
 import { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, IconButton, Snackbar } from "@mui/material";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
-import AppBarContainer from "../../components/appbar/appbar.component";
+import IconButton from "@mui/material/IconButton";
+import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 
 const Projects = () => {
   const [rows, setRows] = useState([]);
@@ -33,22 +35,26 @@ const Projects = () => {
   );
 
   const handleCellEditStop = (params, e) => {
-    const fieldId = params.id;
-    const newFieldValue = e.target.value;
-    const previousFieldValue = params.formattedValue;
+    const id = params.id;
+    const field = params.field;
+    const oldVal = params.value;
+    const newVal = e.target.value;
 
-    if (newFieldValue && previousFieldValue !== newFieldValue) {
+    if (newVal && oldVal !== newVal) {
       // send update request to the server
       const putData = async () => {
-        await fetch(`http://localhost:4000/api/project/${fieldId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ newFieldValue }),
-        });
+        const response = await fetch(
+          `http://localhost:4000/api/project/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ field, newVal }),
+          }
+        );
 
-        setSnackbarOpen(true);
+        if (response.status === 200) setSnackbarOpen(true);
       };
 
       putData();
@@ -69,7 +75,11 @@ const Projects = () => {
       headerName: "Name",
       width: 325,
       renderCell: (params) => {
-        return <Link to={`/project/${params.row.id}`}>{params.row.name}</Link>;
+        return (
+          <Link to={`/project/${params.row.id}/overview`}>
+            {params.row.name}
+          </Link>
+        );
       },
       editable: true,
     },
@@ -84,6 +94,7 @@ const Projects = () => {
       field: "start_date",
       headerName: "Start Date",
       width: 150,
+      type: "date",
       renderCell: (params) => {
         return new Date(params.value).toLocaleDateString("en-gb", {
           year: "numeric",
@@ -91,11 +102,13 @@ const Projects = () => {
           day: "2-digit",
         });
       },
+      editable: true,
     },
     {
       field: "end_date",
       width: 150,
       headerName: "End Date",
+      type: "date",
       renderCell: (params) => {
         return new Date(params.value).toLocaleDateString("en-gb", {
           year: "numeric",
@@ -103,6 +116,7 @@ const Projects = () => {
           day: "2-digit",
         });
       },
+      editable: true,
     },
   ];
 
@@ -117,7 +131,7 @@ const Projects = () => {
       });
 
       const data = await result.json();
-
+      console.log(data);
       setRows(data);
     };
     fetchData();
@@ -127,11 +141,9 @@ const Projects = () => {
     <Box>
       <Grid container sx={{ height: "80vh" }}>
         <Grid item xs={12}>
-          <AppBarContainer
-            element={<Link to="/project/create">Create project</Link>}
-          >
+          <StyledAppBar button={{ to: "/project/create", p: "Create project" }}>
             Projects
-          </AppBarContainer>
+          </StyledAppBar>
           <DataGrid
             rows={rows}
             columns={columns}

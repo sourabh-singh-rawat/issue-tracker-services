@@ -1,13 +1,13 @@
 import { Box, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
-import AppBarContainer from "../../components/appbar/appbar.component";
+import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 
 const Teams = () => {
   return (
     <Box>
-      <AppBarContainer element={<Link to="/team/create">Create team</Link>}>
+      <StyledAppBar button={{ to: "/team/create", p: "Create team" }}>
         Teams
-      </AppBarContainer>
+      </StyledAppBar>
       <Grid container>
         <Grid item></Grid>
       </Grid>

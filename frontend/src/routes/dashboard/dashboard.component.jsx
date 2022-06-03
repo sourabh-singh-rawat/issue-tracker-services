@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 
 // MUI Styles
 import { Grid } from "@mui/material";
-import AppBarContainer from "../../components/appbar/appbar.component";
+import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 
 const Dashboard = () => {
   return (
     <>
-      <AppBarContainer element={<DashboardButton />}>Dashboard</AppBarContainer>
+      <StyledAppBar element={<DashboardButton />}>Dashboard</StyledAppBar>
       <Grid container>
         <Grid item></Grid>
       </Grid>

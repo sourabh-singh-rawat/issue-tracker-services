@@ -1,30 +1,48 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Grid, Box, Typography, Toolbar } from "@mui/material";
-import AppBarContainer from "../appbar/appbar.component";
-import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
-import StyledTabs from "../styled-tabs/styled-tabs.component";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import StyledTab from "../styled-tab/styled-tab.component";
+import StyledTabs from "../styled-tabs/styled-tabs.component";
+import StyledAppBar from "../styled-appbar/styled-appbar.component";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Button, Toolbar } from "@mui/material";
+import { useTheme } from "@emotion/react";
 
 const Project = () => {
+  // hooks
+  const theme = useTheme();
   const navigate = useNavigate();
-  const { projectId } = useParams();
-  const tabName = useLocation().pathname.split("/")[3];
-  const [project, setProject] = useState({});
-  const { name, description } = project;
+  const location = useLocation();
+  const params = useParams();
+
+  // state
+  const [project, setProject] = useState({ name: "" });
+
+  // projectId
+  const { projectId } = params;
+
+  const path = location.pathname.split("/");
+  const tabName = path[3];
+
   const mapTabNameToIndex = {
+    overview: 0,
     issues: 1,
     people: 2,
+    activity: 3,
   };
-  const [selectedTab, setSelectedTab] = useState(
-    tabName ? mapTabNameToIndex[tabName] : 0
-  );
 
-  const handleChange = (event, newValue) => {
+  const [selectedTab, setSelectedTab] = useState(mapTabNameToIndex[tabName]);
+
+  const handleChange = (e, newValue) => {
     const mapIndexToTab = {
-      0: `/project/${projectId}`,
+      0: `/project/${projectId}/overview`,
       1: `/project/${projectId}/issues`,
       2: `/project/${projectId}/people`,
+      3: `/project/${projectId}/activity`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -32,6 +50,8 @@ const Project = () => {
   };
 
   useEffect(() => {
+    setSelectedTab(mapTabNameToIndex[tabName]);
+
     const fetchData = async () => {
       const response = await fetch(
         `http://localhost:4000/api/projects/${projectId}?tab=issues`
@@ -40,32 +60,45 @@ const Project = () => {
       setProject(data);
     };
     fetchData();
-  }, [projectId]);
-
-  useEffect(() => {
-    setSelectedTab(tabName ? mapTabNameToIndex[tabName] : 0);
-  }, [tabName]);
+  }, [tabName, projectId]);
 
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Toolbar>Projects / {name}</Toolbar>
-        <AppBarContainer>{name}</AppBarContainer>
+        <Toolbar
+          sx={{ borderBottom: `1px solid ${theme.palette.background.main}` }}
+        >
+          <Button
+            href={`/projects`}
+            underline="hover"
+            startIcon={<ArrowBackIcon />}
+            sx={{ textTransform: "none" }}
+          >
+            Back to all projects
+          </Button>
+        </Toolbar>
+        {/* <Breadcrumbs>
+          <Link href={`/projects`} underline="hover">
+            projects
+          </Link>
+          <Link href={`/project/${projectId}/overview`} underline="hover">
+            {project.name.toLowerCase()}
+          </Link>
+          <Typography>{tabName}</Typography>
+        </Breadcrumbs> */}
       </Grid>
-      <Grid item xs={12} sx={{ marginLeft: 3 }}></Grid>
+      <StyledAppBar>{project.name}</StyledAppBar>
       <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
         <Box>
           <StyledTabs value={selectedTab} onChange={handleChange}>
-            <StyledTab label="Description" />
-            <StyledTab label="Issues" />
-            <StyledTab label="People" />
+            <StyledTab label="Overview" value={0} />
+            <StyledTab label="Issues" value={1} />
+            <StyledTab label="People" value={2} />
+            <StyledTab label="Activity" value={3} />
           </StyledTabs>
         </Box>
 
         {/* styled tab panels */}
-        <StyledTabPanel selectedTab={selectedTab} index={0}>
-          <Typography variant="body2">{description}</Typography>
-        </StyledTabPanel>
         <Outlet context={[selectedTab, project]} />
       </Grid>
     </Grid>
