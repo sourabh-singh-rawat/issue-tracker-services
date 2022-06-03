@@ -1,29 +1,27 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Autocomplete,
-} from "@mui/material";
 import { connect } from "react-redux";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const IssueForm = ({ email }) => {
   const [formFields, setFormFields] = useState({
-    issueName: "",
-    issueDescription: "",
-    projectName: "",
-    projectId: "",
-    issueReporter: email,
-    issueAssignee: "",
-    issuePriority: "",
-    issueStatus: "",
-    dueDate: "",
+    issue_name: "",
+    issue_description: "",
+    project_name: "",
+    project_id: "",
+    issue_reporter: email,
+    issue_assignee: "",
+    issue_priority: "",
+    issue_status: "",
+    due_date: "",
   });
   const [projectNames, setProjectNames] = useState([]);
 
@@ -73,7 +71,7 @@ const IssueForm = ({ email }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="issueName"
+            name="issue_name"
             label="Issue Name"
             onChange={handleChange}
             fullWidth
@@ -82,7 +80,7 @@ const IssueForm = ({ email }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="issueDescription"
+            name="issue_description"
             label="Description"
             rows={2}
             onChange={handleChange}
@@ -100,8 +98,8 @@ const IssueForm = ({ email }) => {
                 const id = selectedOption.split("#")[1];
                 setFormFields({
                   ...formFields,
-                  projectName: name,
-                  projectId: id,
+                  project_name: name,
+                  project_id: id,
                 });
               }
             }}
@@ -115,7 +113,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Reporter</InputLabel>
             <Select
-              name="issueReporter"
+              name="issue_reporter"
               label="Reporter"
               value={email}
               onChange={handleChange}
@@ -132,7 +130,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Assigned To</InputLabel>
             <Select
-              name="issueAssignee"
+              name="issue_assignee"
               label="Assigned To"
               onChange={handleChange}
               defaultValue=""
@@ -148,7 +146,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Priority</InputLabel>
             <Select
-              name="issuePriority"
+              name="issue_priority"
               label="Priority"
               onChange={handleChange}
               defaultValue={""}
@@ -161,7 +159,7 @@ const IssueForm = ({ email }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            name="dueDate"
+            name="due_date"
             label="Due Date"
             type="date"
             onChange={handleChange}
@@ -175,7 +173,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
-              name="issueStatus"
+              name="issue_status"
               label="Status"
               onChange={handleChange}
               defaultValue={""}

@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Menu, MenuItem, Button } from "@mui/material";
+
+import Menu from "@mui/material/Menu";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const DashboardButton = () => {

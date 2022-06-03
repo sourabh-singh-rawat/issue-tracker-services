@@ -91,6 +91,7 @@ router.post("/issues/create", (req, res) => {
     issue_assignee,
     due_date,
   } = req.body;
+  console.log(req.body);
 
   // storing this data in a database
   // creating a new issue in issue table
@@ -107,8 +108,8 @@ router.post("/issues/create", (req, res) => {
       issue_assignee VARCHAR(255),
       due_date VARCHAR(255),
 
-      PRIMARY KEY (issueId),
-      FOREIGN KEY (projectId) REFERENCES projects(id)
+      PRIMARY KEY (issue_id),
+      FOREIGN KEY (project_id) REFERENCES projects(id)
     )`,
     (error, result) => {
       if (error) {
