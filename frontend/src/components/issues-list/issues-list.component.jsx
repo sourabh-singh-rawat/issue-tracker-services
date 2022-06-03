@@ -3,10 +3,10 @@ import { Link, useOutletContext } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
-import Snackbar from "@mui/material/Snackbar";
 
 const IssuesList = () => {
   // context

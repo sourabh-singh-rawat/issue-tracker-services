@@ -1,5 +1,5 @@
 import { useOutletContext } from "react-router-dom";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
 
 const ProjectMembers = () => {

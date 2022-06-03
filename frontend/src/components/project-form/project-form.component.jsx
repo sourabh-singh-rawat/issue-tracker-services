@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { connect } from "react-redux";
-import { Grid, Box, Button, TextField, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
 
 const ProjectForm = ({ uid, email = "Unassigned" }) => {
