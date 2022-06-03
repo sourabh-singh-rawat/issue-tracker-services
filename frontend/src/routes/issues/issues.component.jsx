@@ -1,14 +1,16 @@
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate, useParams, Link, Outlet } from "react-router-dom";
-
-import { Box } from "@mui/material";
-import AppBarContainer from "../../components/appbar/appbar.component";
+import { useNavigate, useParams, Outlet } from "react-router-dom";
+import Box from "@mui/material/Box";
 import StyledTab from "../../components/styled-tab/styled-tab.component";
 import StyledTabs from "../../components/styled-tabs/styled-tabs.component";
+import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 
-const Issues = (props) => {
+const Issues = () => {
   const navigate = useNavigate();
-  const { board } = useParams();
+  const params = useParams();
+  const { board } = params;
+
+  // state
   const [selectedTab, setSelectedTab] = useState(board ? 2 : 1);
 
   const handleChange = (e, newValue) => {
@@ -23,11 +25,12 @@ const Issues = (props) => {
   useEffect(() => {
     setSelectedTab(board ? 2 : 1);
   }, [board]);
+
   return (
     <Fragment>
-      <AppBarContainer element={<Link to="/issue/create">Create issue</Link>}>
+      <StyledAppBar button={{ to: "/issue/create", p: "Create issue" }}>
         Issues
-      </AppBarContainer>
+      </StyledAppBar>
       <Box sx={{ margin: 3, marginTop: 0 }}>
         <Box position="static">
           <StyledTabs value={selectedTab} onChange={handleChange}>

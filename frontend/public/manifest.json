@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Issue Tracker",
+  "name": "Track issues in your projects",
   "icons": [
     {
       "src": "favicon.ico",

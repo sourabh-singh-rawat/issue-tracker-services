@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-
-// MUI Theme
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -91,7 +89,7 @@ const Sidebar = () => {
           open={open}
           PaperProps={{
             sx: {
-              backgroundColor: "#f7f7f7",
+              backgroundColor: "background.main",
             },
           }}
         >

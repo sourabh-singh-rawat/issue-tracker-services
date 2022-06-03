@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { connect } from "react-redux";
-import { Grid, Box, Button, TextField } from "@mui/material";
-import AppBarContainer from "../appbar/appbar.component";
+import { Grid, Box, Button, TextField, Typography } from "@mui/material";
+import StyledAppBar from "../styled-appbar/styled-appbar.component";
 
 const ProjectForm = ({ uid, email = "Unassigned" }) => {
   const [formFields, setFormFields] = useState({
@@ -38,9 +38,12 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <AppBarContainer>Create Project</AppBarContainer>
+        <StyledAppBar>Create Project</StyledAppBar>
       </Grid>
       <Grid item xs={4} sx={{ margin: 3, marginTop: 0 }}>
+        <Box sx={{ marginBottom: 2 }}>
+          <Typography>Enter project details</Typography>
+        </Box>
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container columnSpacing={4} rowSpacing={2}>
             <Grid item xs={12} sm={12}>
@@ -49,7 +52,6 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
                 label="Project Name"
                 variant="standard"
                 onChange={handleChange}
-                required
                 fullWidth
               />
             </Grid>
@@ -108,8 +110,14 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
             </Grid>
 
             <Grid item xs={12}>
-              <Button variant="contained" type="submit" size="large" fullWidth>
-                Create Project
+              <Button
+                variant="contained"
+                type="submit"
+                size="large"
+                fullWidth
+                sx={{ textTransform: "none" }}
+              >
+                Create project
               </Button>
             </Grid>
           </Grid>
