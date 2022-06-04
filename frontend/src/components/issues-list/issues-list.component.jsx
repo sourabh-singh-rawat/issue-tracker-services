@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useState } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
@@ -83,7 +84,10 @@ const IssuesList = () => {
       width: 300,
       renderCell: (params) => {
         return (
-          <Link to={`/issue/${params.row.issue_id}`}>
+          <Link
+            href={`/issue/${params.row.issue_id}`}
+            sx={{ textDecoration: "none", color: "primary.text" }}
+          >
             {params.row.issue_name}
           </Link>
         );
