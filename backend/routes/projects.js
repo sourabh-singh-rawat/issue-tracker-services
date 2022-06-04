@@ -88,7 +88,7 @@ router.post("/projects/create", (req, res) => {
   // Create projects table if not exits
   pool.query(
     `CREATE TABLE IF NOT EXISTS projects (
-      id SERIAL,
+      id TEXT,
       name VARCHAR(255) NOT NULL,
       description TEXT NOT NULL,
       owner_uid VARCHAR(255) NOT NULL,

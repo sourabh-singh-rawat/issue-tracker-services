@@ -26,7 +26,7 @@ router.put("/issue/:issueId", (req, res) => {
         mapFieldToQuery[field],
         [newVal, issueId, projectId],
         (error, result) => {
-          if (error) return res.status(500).send("Error: cannot update");
+          if (error) return res.status(400).send("Error: cannot update");
           return res.send(result.rows[0]);
         }
       );
@@ -34,18 +34,20 @@ router.put("/issue/:issueId", (req, res) => {
   );
 });
 
+// single issue
 router.get("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;
-
   if (issueId) {
     pool.query(
-      "SELECT * FROM issues WHERE issue_id = $1",
+      "SELECT * FROM issues JOIN projects ON  issues.project_id = projects.id where issue_id = $1",
       [issueId],
       (error, result) => {
         if (error) {
-          return res.status(500).send("Cannot fetch issue");
+          console.log(error);
+          return res.status(404).send("Cannot fetch issue");
         }
-        res.send(result.rows[0]);
+        console.log(result.rows[0]);
+        return res.send(result.rows[0]);
       }
     );
   }
@@ -65,7 +67,6 @@ router.get("/issues", (req, res) => {
             .status(500)
             .send("Cannot fetch issues from project with id " + project_id);
         }
-
         return res.send(result.rows);
       }
     );
@@ -113,7 +114,6 @@ router.post("/issues/create", (req, res) => {
     )`,
     (error, result) => {
       if (error) {
-        console.log(error);
         return res.status(500).send("Error creating table");
       }
 
