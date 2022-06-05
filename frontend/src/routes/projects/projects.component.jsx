@@ -1,12 +1,14 @@
 import { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Select from "@mui/material/Select";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
+import { MenuItem, Typography } from "@mui/material";
 
 const Projects = () => {
   const [rows, setRows] = useState([]);
@@ -28,6 +30,53 @@ const Projects = () => {
       </IconButton>
     </Fragment>
   );
+
+  const SelectEditInputCell = (props) => {
+    const { id, value, field } = props;
+    const apiRef = useGridApiContext();
+
+    const handleChange = async (event) => {
+      await apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: event.target.value,
+      });
+
+      fetch(`http://localhost:4000/api/project/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ field, value: event.target.value }),
+      }).then((response) => {
+        if (response.status === 200) setSnackbarOpen(true);
+      });
+    };
+
+    return (
+      <Select
+        value={value || ""}
+        onChange={handleChange}
+        displayEmpty
+        autoFocus
+        fullWidth
+      >
+        <MenuItem value="In Progress">
+          <Typography variant="body2">In Progress</Typography>
+        </MenuItem>
+        <MenuItem value="Finished">
+          <Typography variant="body2">Finished</Typography>
+        </MenuItem>
+        <MenuItem value="Proposed">
+          <Typography variant="body2">Proposed</Typography>
+        </MenuItem>
+      </Select>
+    );
+  };
+
+  const renderSelectEditInputCell = (params) => {
+    return <SelectEditInputCell {...params} />;
+  };
 
   const handleCellEditStop = (params, e) => {
     const id = params.id;
@@ -83,7 +132,13 @@ const Projects = () => {
       headerName: "Owner",
       width: 250,
     },
-    { field: "status", headerName: "Status" },
+    {
+      field: "status",
+      headerName: "Status",
+      renderEditCell: renderSelectEditInputCell,
+      editable: true,
+      width: 180,
+    },
     { field: "issues", headerName: "Issues" },
     {
       field: "start_date",
@@ -126,7 +181,6 @@ const Projects = () => {
       });
 
       const data = await result.json();
-      console.log(data);
       setRows(data);
     };
     fetchData();

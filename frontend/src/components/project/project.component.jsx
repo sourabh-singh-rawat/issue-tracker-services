@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
+import { setProject } from "../../redux/project/project.action-creator";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import PageTitle from "../page-title/page-title.component";
 import StyledTab from "../styled-tab/styled-tab.component";
 import StyledTabs from "../styled-tabs/styled-tabs.component";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
-import Snackbar from "@mui/material/Snackbar";
-import { setProject } from "../../redux/project/project.action-creator";
-import PageTitle from "../page-title/page-title.component";
 
 const Project = (props) => {
   // hooks
@@ -21,8 +20,6 @@ const Project = (props) => {
 
   // state and props
   const { project, dispatch } = props;
-
-  // projectId
   const { projectId } = params;
 
   const path = location.pathname.split("/");

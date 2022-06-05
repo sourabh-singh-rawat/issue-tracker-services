@@ -18,7 +18,6 @@ export const projectReducer = (state = initialState, action) => {
     case actionTypes.SET_PROJECT:
       return {
         ...state,
-        hello: "hello world!",
         ...action.payload,
       };
 
