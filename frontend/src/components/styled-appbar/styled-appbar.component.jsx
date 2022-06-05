@@ -5,14 +5,17 @@ import Typography from "@mui/material/Typography";
 
 const StyledAppBar = (props) => {
   const { children, button } = props;
-  const appBarStyles = {
-    bgcolor: "transparent",
-    color: "black",
-    boxShadow: "none",
-  };
 
   return (
-    <AppBar position="static" sx={appBarStyles}>
+    <AppBar
+      position="static"
+      sx={{
+        width: "100%",
+        color: "black",
+        bgcolor: "transparent",
+        boxShadow: "none",
+      }}
+    >
       <Toolbar>
         <Typography
           variant="h5"

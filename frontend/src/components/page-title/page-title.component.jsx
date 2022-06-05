@@ -35,7 +35,7 @@ const PageTitle = (props) => {
     </Fragment>
   );
 
-  const handleEdit = (e) => {
+  const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
@@ -99,11 +99,17 @@ const PageTitle = (props) => {
             autoFocus
             name="name"
             value={page.name}
-            onChange={handleEdit}
-            variant={"standard"}
+            onChange={handleChange}
+            variant="standard"
+            inputProps={{
+              style: {
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              },
+            }}
           />
           <Button
-            variant={"contained"}
+            variant="contained"
             onClick={handleSave}
             sx={{
               boxShadow: "none",
@@ -146,7 +152,10 @@ const PageTitle = (props) => {
           </Button>
         </Box>
       ) : (
-        <Typography variant="h5" fontWeight="bold">
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: "bold", color: "primary.text2" }}
+        >
           {page.name}
           <IconButton
             onClick={() => {

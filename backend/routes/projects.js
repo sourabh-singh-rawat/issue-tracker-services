@@ -4,13 +4,15 @@ const pool = require("../database");
 
 router.put("/project/:projectId", (req, res) => {
   const { projectId } = req.params;
-  const { field, newVal } = req.body;
+  const { field, value } = req.body;
   const mapFieldToQuery = {
     name: "UPDATE projects SET name = $1 WHERE id = $2",
+    status: "UPDATE projects SET status = $1 WHERE id = $2",
+    description: "UPDATE projects SET description = $1 WHERE id = $2",
     start_date: "UPDATE projects SET start_date = $1 WHERE id = $2",
     end_date: "UPDATE projects SET end_date = $1 WHERE id = $2",
   };
-  console.log(field, newVal, projectId);
+  console.log(field, value, projectId);
 
   pool.query(
     "SELECT * FROM projects WHERE id = $1",
@@ -21,12 +23,12 @@ router.put("/project/:projectId", (req, res) => {
           "Error: Cannot get the project with project id: " + projectId
         );
 
-      // update
       pool.query(
         mapFieldToQuery[field],
-        [newVal, projectId],
+        [value, projectId],
         (error, result) => {
-          if (error) return res.status(500).send("Error: cannot update");
+          console.log(error);
+          if (error) return res.status(400).send("Error: cannot update");
           return res.send(result.rows[0]);
         }
       );
@@ -37,23 +39,11 @@ router.put("/project/:projectId", (req, res) => {
 router.get("/projects/:projectId", (req, res) => {
   const { projectId } = req.params;
 
-  // Search this id in Projects Database
   pool.query(
     `SELECT * FROM projects WHERE id = $1`,
     [projectId],
     (error, result) => {
-      if (error) return res.status(500).send("Cannot find project in database");
-
-      const {
-        id,
-        name,
-        description,
-        owner_uid,
-        owner_email,
-        start_date,
-        end_date,
-      } = result;
-
+      if (error) return res.status(404).send("Cannot find project in database");
       res.send(result.rows[0]);
     }
   );
@@ -95,7 +85,8 @@ router.post("/projects/create", (req, res) => {
       owner_email VARCHAR(255) NOT NULL,
       start_date TIMESTAMP WITH TIME ZONE,
       end_date TIMESTAMP WITH TIME ZONE,
-      number_of_issues INTEGER,
+      status VARCHAR(25),
+
       PRIMARY KEY (id),
       FOREIGN KEY (owner_uid) REFERENCES users(uid)
     )`,

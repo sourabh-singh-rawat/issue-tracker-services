@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import PageTitle from "../page-title/page-title.component";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
+import PageDescription from "../page-description/page-description.component";
 
 const Issue = (props) => {
   const params = useParams();
@@ -82,7 +83,7 @@ const Issue = (props) => {
         </StyledAppBar>
       </Grid>
       <Grid item xs={12} sx={{ margin: 3, marginTop: 0 }}>
-        <Typography>{issue.description}</Typography>
+        <PageDescription page={issue} type="issue" />
       </Grid>
     </Grid>
   );

@@ -5,6 +5,7 @@ const StyledTab = (props) => {
     <Tab
       {...props}
       sx={{
+        color: "primary.text",
         textTransform: "none",
       }}
     ></Tab>
