@@ -1,69 +1,97 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { connect } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { setIssue } from "../../redux/issue/issue.action-creator";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import PageTitle from "../page-title/page-title.component";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
 
-const Issue = () => {
+const Issue = (props) => {
   const params = useParams();
+  const navigate = useNavigate();
+
   const { issueId } = params;
-  const [state, setState] = useState({});
+  const { issue, dispatch } = props;
 
-  console.log(state);
-  const { issue_name, issue_id, issue_description, project_id, name } = state;
   useEffect(() => {
-    const fetchData = async () => {
-      if (issueId !== "board") {
-        try {
-          const response = await fetch(
-            `http://localhost:4000/api/issue/${issueId}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const data = await response.json();
-          setState(data);
-        } catch (err) {
-          console.log("cannot fetch data from server");
-        }
-      }
-    };
-
-    fetchData();
+    if (issueId !== "board") {
+      fetch(`http://localhost:4000/api/issue/${issueId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          dispatch(setIssue(data));
+        });
+    }
   }, [issueId]);
 
   return (
     <Grid container>
       <Grid item xs={12} sx={{ margin: 3, marginBottom: 0 }}>
         <Breadcrumbs>
-          <Link href={`/projects`} underline="hover">
+          <Link
+            onClick={() => {
+              navigate(`/projects`);
+            }}
+            underline="hover"
+            sx={{ cursor: "pointer" }}
+          >
             <Typography variant="body2">projects</Typography>
           </Link>
-          <Link href={`/project/${project_id}/overview`} underline="hover">
+          <Link
+            onClick={() => {
+              navigate(`/project/${issue.projectId}/overview`);
+            }}
+            underline="hover"
+            sx={{ cursor: "pointer" }}
+          >
             <Typography variant="body2">
-              {name && name.toLowerCase()}
+              {issue.projectName && issue.projectName.toLowerCase()}
             </Typography>
           </Link>
-          <Link href={`/project/${project_id}/issues`} underline="hover">
+          <Link
+            onClick={() => {
+              navigate(`/project/${issue.projectId}/issues`);
+            }}
+            underline="hover"
+            sx={{ cursor: "pointer" }}
+          >
             <Typography variant="body2">issues</Typography>
           </Link>
-          <Typography variant="body2">{issue_id}</Typography>
+          <Typography variant="body2">{issue.id}</Typography>
         </Breadcrumbs>
       </Grid>
       <Grid item xs={12}>
-        <StyledAppBar>{issue_name}</StyledAppBar>
+        <StyledAppBar>
+          <PageTitle
+            page={issue}
+            dispatch={dispatch}
+            issueId={issue.id}
+            projectId={issue.projectId}
+            type="issue"
+          />
+        </StyledAppBar>
       </Grid>
-      <Grid item xs={12} sx={{ margin: 3 }}>
-        <Typography>{issue_description}</Typography>
+      <Grid item xs={12} sx={{ margin: 3, marginTop: 0 }}>
+        <Typography>{issue.description}</Typography>
       </Grid>
     </Grid>
   );
 };
 
-export default Issue;
+const mapStateToProps = (store) => {
+  return {
+    issue: store.issue,
+  };
+};
+
+export default connect(mapStateToProps)(Issue);

@@ -13,12 +13,7 @@ const Projects = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   // snackbar
-  const handleSnackbarClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
   // snackbar action
   const action = (

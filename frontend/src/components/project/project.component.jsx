@@ -1,55 +1,27 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { connect } from "react-redux";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import StyledTab from "../styled-tab/styled-tab.component";
 import StyledTabs from "../styled-tabs/styled-tabs.component";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
-import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Edit2 } from "react-feather";
+import { setProject } from "../../redux/project/project.action-creator";
+import PageTitle from "../page-title/page-title.component";
 
-const Project = () => {
+const Project = (props) => {
   // hooks
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // state
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [project, setProject] = useState({
-    id: "",
-    name: "",
-    description: "",
-    owner_uid: "",
-    owner_email: "",
-    start_date: "",
-    end_date: "",
-  });
-  const [projectNameSelected, setProjectNameSelected] = useState(false);
+  // state and props
+  const { project, dispatch } = props;
 
-  // snackbar
-  const handleSnackbarClose = () => setSnackbarOpen(false);
-
-  // snackbar action
-  const action = (
-    <Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleSnackbarClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </Fragment>
-  );
   // projectId
   const { projectId } = params;
 
@@ -77,12 +49,6 @@ const Project = () => {
     setSelectedTab(newValue);
   };
 
-  const handleEditChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setProject({ ...project, [name]: value });
-  };
-
   useEffect(() => {
     setSelectedTab(mapTabNameToIndex[tabName]);
 
@@ -90,8 +56,8 @@ const Project = () => {
       .then((response) => {
         if (response.status === 200) return response.json();
       })
-      .then((project) => {
-        setProject(project);
+      .then((data) => {
+        dispatch(setProject({ ...data }));
       });
   }, [tabName, projectId]);
 
@@ -124,82 +90,12 @@ const Project = () => {
         </Breadcrumbs>
       </Grid>
       <StyledAppBar>
-        {projectNameSelected ? (
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <TextField
-              autoFocus
-              name="name"
-              value={project.name}
-              onChange={handleEditChange}
-              variant={"standard"}
-            />
-            <Button
-              variant={"contained"}
-              onClick={() => {
-                if (project.name !== project.oldProjectName) {
-                  // send update request to server
-                  fetch(`http://localhost:4000/api/project/${projectId}`, {
-                    method: "PUT",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      field: "name",
-                      newVal: project.name,
-                    }),
-                  }).then((response) => {
-                    if (response.status === 200) setSnackbarOpen(true);
-                  });
-                }
-                setProjectNameSelected(false);
-              }}
-              sx={{
-                boxShadow: "none",
-                marginLeft: "5px",
-                textTransform: "none",
-                ":hover": { boxShadow: "none" },
-              }}
-            >
-              <Typography variant="body2">Save</Typography>
-            </Button>
-            <Button
-              onClick={() => {
-                setProject({ ...project, name: project.oldProjectName });
-                setProjectNameSelected(false);
-              }}
-              sx={{
-                color: "primary.text",
-                textTransform: "none",
-                marginLeft: "5px",
-                backgroundColor: "background.main",
-                ":hover": {
-                  backgroundColor: "background.main2",
-                },
-              }}
-            >
-              <Typography variant="body2">Cancel</Typography>
-            </Button>
-          </Box>
-        ) : (
-          <Typography variant="h5" fontWeight="bold">
-            {project.name}
-            <IconButton
-              onClick={() => {
-                // save value in temp
-                setProject({ ...project, oldProjectName: project.name });
-                setProjectNameSelected(true);
-              }}
-              sx={{
-                color: "background.main3",
-                ":hover": {
-                  color: "primary.main",
-                },
-              }}
-            >
-              <Edit2 width="24px" height="24px" />
-            </IconButton>
-          </Typography>
-        )}
+        <PageTitle
+          page={project}
+          dispatch={dispatch}
+          projectId={projectId}
+          type="project"
+        />
       </StyledAppBar>
       <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
         <Box>
@@ -212,17 +108,15 @@ const Project = () => {
         </Box>
         {/* styled tab panels */}
         <Outlet context={[selectedTab, project]} />
-        {/* snackbar updated */}
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={6000}
-          action={action}
-          onClose={handleSnackbarClose}
-          message="Updated"
-        />
       </Grid>
     </Grid>
   );
 };
 
-export default Project;
+const mapStateToProps = (store) => {
+  return {
+    project: store.project,
+  };
+};
+
+export default connect(mapStateToProps)(Project);
