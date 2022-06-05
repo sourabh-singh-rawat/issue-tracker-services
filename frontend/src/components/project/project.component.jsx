@@ -87,12 +87,7 @@ const Project = (props) => {
         </Breadcrumbs>
       </Grid>
       <StyledAppBar>
-        <PageTitle
-          page={project}
-          dispatch={dispatch}
-          projectId={projectId}
-          type="project"
-        />
+        <PageTitle page={project} projectId={projectId} type="project" />
       </StyledAppBar>
       <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
         <Box>

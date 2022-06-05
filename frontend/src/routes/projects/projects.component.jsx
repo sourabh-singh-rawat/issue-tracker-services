@@ -1,35 +1,18 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Select from "@mui/material/Select";
-import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
 import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 import { MenuItem, Typography } from "@mui/material";
+import StyledSnackbar from "../../components/styled-snackbar/styled-snackbar.component";
+import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
 
-const Projects = () => {
+const Projects = (props) => {
+  const { dispatch } = props;
   const [rows, setRows] = useState([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  // snackbar
-  const handleSnackbarClose = () => setSnackbarOpen(false);
-
-  // snackbar action
-  const action = (
-    <Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleSnackbarClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </Fragment>
-  );
 
   const SelectEditInputCell = (props) => {
     const { id, value, field } = props;
@@ -49,7 +32,7 @@ const Projects = () => {
         },
         body: JSON.stringify({ field, value: event.target.value }),
       }).then((response) => {
-        if (response.status === 200) setSnackbarOpen(true);
+        if (response.status === 200) dispatch(setSnackbarOpen());
       });
     };
 
@@ -81,27 +64,20 @@ const Projects = () => {
   const handleCellEditStop = (params, e) => {
     const id = params.id;
     const field = params.field;
-    const oldVal = params.value;
-    const newVal = e.target.value;
+    const old = params.value;
+    const value = e.target.value;
 
-    if (newVal && oldVal !== newVal) {
+    if (value && old !== value) {
       // send update request to the server
-      const putData = async () => {
-        const response = await fetch(
-          `http://localhost:4000/api/project/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ field, newVal }),
-          }
-        );
-
-        if (response.status === 200) setSnackbarOpen(true);
-      };
-
-      putData();
+      fetch(`http://localhost:4000/api/project/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ field, value }),
+      }).then((response) => {
+        if (response.status === 200) dispatch(setSnackbarOpen());
+      });
     }
   };
 
@@ -170,20 +146,15 @@ const Projects = () => {
     },
   ];
 
-  // fetch all projects
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("http://localhost:4000/api/projects", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await result.json();
-      setRows(data);
-    };
-    fetchData();
+    fetch("http://localhost:4000/api/projects", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setRows(data));
   }, []);
 
   return (
@@ -214,15 +185,15 @@ const Projects = () => {
         </Grid>
       </Grid>
       {/* snackbar updated */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        action={action}
-        onClose={handleSnackbarClose}
-        message="Updated"
-      />
+      <StyledSnackbar />
     </Box>
   );
 };
 
-export default Projects;
+const mapStateToProps = (store) => {
+  return {
+    snackbar: store.snackbar,
+  };
+};
+
+export default connect(mapStateToProps)(Projects);

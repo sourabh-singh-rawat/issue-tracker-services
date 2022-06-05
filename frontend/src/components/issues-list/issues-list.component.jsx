@@ -1,46 +1,21 @@
-import { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useEffect, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
+import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
+import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
-const IssuesList = () => {
-  // context
+const IssuesList = (props) => {
+  const { dispatch } = props;
+  const [rows, setRows] = useState([]);
   const [selectedTab, project] = useOutletContext();
 
-  // state
-  const [rows, setRows] = useState([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  console.log(rows);
   let projectId;
   project ? (projectId = project.id) : (projectId = "");
-
-  // snackbar
-  const handleSnackbarClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
-
-  // snackbar action
-  const action = (
-    <Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleSnackbarClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </Fragment>
-  );
 
   const handleCellEditStop = (params, e) => {
     const id = params.id;
@@ -62,7 +37,7 @@ const IssuesList = () => {
             body: JSON.stringify({ field, newVal }),
           }
         );
-        if (response.status === 200) setSnackbarOpen(true);
+        if (response.status === 200) dispatch(setSnackbarOpen());
       };
 
       putData();
@@ -119,16 +94,26 @@ const IssuesList = () => {
   ];
 
   useEffect(() => {
-    if (projectId || projectId === "") {
-      const fetchData = async () => {
-        const response = await fetch(
-          `http://localhost:4000/api/issues?project_id=${projectId}`
-        );
-        const data = await response.json();
-        setRows(data);
-      };
-
-      fetchData();
+    if (projectId) {
+      fetch(`http://localhost:4000/api/issues?projectId=${projectId}`, {
+        method: "GET",
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setRows(data);
+        });
+    } else {
+      fetch(`http://localhost:4000/api/issues`, {
+        method: "GET",
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setRows(data);
+        });
     }
   }, [projectId]);
 
@@ -156,13 +141,7 @@ const IssuesList = () => {
               hideFooter
             ></DataGrid>
             {/* snackbar updated */}
-            <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={6000}
-              action={action}
-              onClose={handleSnackbarClose}
-              message="Updated"
-            />
+            <StyledSnackbar />
           </Grid>
         </Grid>
       </Box>
@@ -170,4 +149,8 @@ const IssuesList = () => {
   );
 };
 
-export default IssuesList;
+const mapStateToProps = (store) => {
+  return {};
+};
+
+export default connect(mapStateToProps)(IssuesList);
