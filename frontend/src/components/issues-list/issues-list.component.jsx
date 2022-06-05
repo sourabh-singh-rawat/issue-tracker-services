@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
 
 const IssuesList = () => {
@@ -16,7 +16,7 @@ const IssuesList = () => {
   // state
   const [rows, setRows] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+  console.log(rows);
   let projectId;
   project ? (projectId = project.id) : (projectId = "");
 
@@ -62,7 +62,6 @@ const IssuesList = () => {
             body: JSON.stringify({ field, newVal }),
           }
         );
-        console.log(response);
         if (response.status === 200) setSnackbarOpen(true);
       };
 
@@ -72,48 +71,51 @@ const IssuesList = () => {
 
   const columns = [
     {
-      field: "issue_id",
+      field: "id",
       headerName: "#",
       width: 50,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "issue_name",
+      field: "name",
       headerName: "Name",
       width: 300,
       renderCell: (params) => {
         return (
-          <Link
-            href={`/issue/${params.row.issue_id}`}
-            sx={{ textDecoration: "none", color: "primary.text" }}
-          >
-            {params.row.issue_name}
+          <Link to={`/issue/${params.row.id}`}>
+            <Typography
+              variant="body2"
+              sx={{ textDecoration: "none", color: "primary.text" }}
+            >
+              {params.row.name}
+            </Typography>
           </Link>
         );
       },
       editable: true,
     },
+    { field: "status", headerName: "Status", width: 150 },
+    { field: "priority", headerName: "Priority", width: 150 },
+
     {
-      field: "project_id",
-      headerName: "Project #",
-      width: 75,
-      align: "center",
-      headerAlign: "center",
-    },
-    { field: "issue_status", headerName: "Status", width: 150 },
-    {
-      field: "issue_reporter",
+      field: "reporter",
       headerName: "Reporter",
       width: 250,
     },
     {
-      field: "issue_assignee",
+      field: "assignee",
       headerName: "Assigned To",
       width: 250,
     },
-    { field: "issue_priority", headerName: "Priority", width: 150 },
-    { field: "due_date", headerName: "Due Date", width: 150 },
+    { field: "dueDate", headerName: "Due Date", width: 150 },
+    {
+      field: "project_id",
+      headerName: "Project Id",
+      width: 100,
+      align: "center",
+      headerAlign: "center",
+    },
   ];
 
   useEffect(() => {
@@ -143,7 +145,7 @@ const IssuesList = () => {
               rowsPerPageOptions={[10]}
               disableSelectionOnClick
               getRowId={(row) => {
-                return row.issue_id;
+                return row.id;
               }}
               initialState={{
                 sorting: {

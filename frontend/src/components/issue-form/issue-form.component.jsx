@@ -13,17 +13,17 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 const IssueForm = ({ email }) => {
   const [formFields, setFormFields] = useState({
-    issue_name: "",
-    issue_description: "",
-    project_name: "",
-    project_id: "",
-    issue_reporter: email,
-    issue_assignee: "",
-    issue_priority: "",
-    issue_status: "",
-    due_date: "",
+    name: "",
+    description: "",
+    status: "",
+    priority: "",
+    reporter: "",
+    assignee: "",
+    dueDate: "",
+    projectId: "",
   });
   const [projectNames, setProjectNames] = useState([]);
+  console.log(formFields);
 
   useEffect(() => {
     // TODO: Move this to redux in future
@@ -71,7 +71,7 @@ const IssueForm = ({ email }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="issue_name"
+            name="name"
             label="Issue Name"
             onChange={handleChange}
             fullWidth
@@ -80,7 +80,7 @@ const IssueForm = ({ email }) => {
         </Grid>
         <Grid item xs={12} sm={12}>
           <TextField
-            name="issue_description"
+            name="description"
             label="Description"
             rows={2}
             onChange={handleChange}
@@ -98,8 +98,7 @@ const IssueForm = ({ email }) => {
                 const id = selectedOption.split("#")[1];
                 setFormFields({
                   ...formFields,
-                  project_name: name,
-                  project_id: id,
+                  projectId: id,
                 });
               }
             }}
@@ -113,7 +112,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Reporter</InputLabel>
             <Select
-              name="issue_reporter"
+              name="reporter"
               label="Reporter"
               value={email}
               onChange={handleChange}
@@ -130,7 +129,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Assigned To</InputLabel>
             <Select
-              name="issue_assignee"
+              name="assignee"
               label="Assigned To"
               onChange={handleChange}
               defaultValue=""
@@ -146,7 +145,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Priority</InputLabel>
             <Select
-              name="issue_priority"
+              name="priority"
               label="Priority"
               onChange={handleChange}
               defaultValue={""}
@@ -159,7 +158,7 @@ const IssueForm = ({ email }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            name="due_date"
+            name="dueDate"
             label="Due Date"
             type="date"
             onChange={handleChange}
@@ -173,7 +172,7 @@ const IssueForm = ({ email }) => {
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
-              name="issue_status"
+              name="status"
               label="Status"
               onChange={handleChange}
               defaultValue={""}

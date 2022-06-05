@@ -6,10 +6,9 @@ router.put("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;
   const { projectId } = req.query;
   const { field, newVal } = req.body;
-
+  console.log(field, newVal, projectId);
   const mapFieldToQuery = {
-    issue_name:
-      "UPDATE issues SET issue_name = $1 WHERE issue_id = $2 AND project_id = $3",
+    name: "UPDATE issues SET name = $1 WHERE id  = $2 AND project_id = $3",
   };
 
   pool.query(
@@ -34,19 +33,25 @@ router.put("/issue/:issueId", (req, res) => {
   );
 });
 
-// single issue
 router.get("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;
   if (issueId) {
     pool.query(
-      "SELECT * FROM issues JOIN projects ON  issues.project_id = projects.id where issue_id = $1",
+      ` SELECT 
+          i.id, i.name, i.description, i.status, i.priority, i.reporter, i.assignee, 
+          i.due_date AS "dueDate",
+          i.project_id AS "projectId",
+          p.name AS "projectName",
+          p.owner_uid AS "projectOwnerUid"
+        FROM issues AS i JOIN projects AS p ON i.project_id = p.id 
+        WHERE i.id = $1`,
       [issueId],
       (error, result) => {
         if (error) {
           console.log(error);
           return res.status(404).send("Cannot fetch issue");
         }
-        console.log(result.rows[0]);
+
         return res.send(result.rows[0]);
       }
     );
@@ -54,62 +59,47 @@ router.get("/issue/:issueId", (req, res) => {
 });
 
 router.get("/issues", (req, res) => {
-  // check query parameters
-  const { project_id } = req.query;
+  const { projectId } = req.query;
 
-  if (project_id) {
+  if (projectId) {
     return pool.query(
-      "SELECT * FROM issues WHERE project_id = $1",
-      [project_id],
+      `SELECT *, issues.due_date AS "dueDate" FROM issues WHERE project_id = $1`,
+      [projectId],
       (error, result) => {
         if (error) {
           return res
-            .status(500)
-            .send("Cannot fetch issues from project with id " + project_id);
+            .status(404)
+            .send("Cannot fetch issues from project with id " + projectId);
         }
+
         return res.send(result.rows);
       }
     );
   }
 
-  pool.query("SELECT * FROM issues", (error, result) => {
+  pool.query(`SELECT *, due_date AS "dueDate" FROM issues`, (error, result) => {
     if (error) {
-      return res.status(500).end("Error fetching issues from issue table");
+      return res.status(404).end("Cannot fetch issues from issue table");
     }
+
     res.send(result.rows);
   });
 });
 
 router.post("/issues/create", (req, res) => {
-  const {
-    issue_name,
-    issue_description,
-    project_name,
-    project_id,
-    issue_reporter,
-    issue_priority,
-    issue_status,
-    issue_assignee,
-    due_date,
-  } = req.body;
-  console.log(req.body);
-
-  // storing this data in a database
-  // creating a new issue in issue table
   pool.query(
     `CREATE TABLE IF NOT EXISTS issues (
-      issue_id SERIAL,
-      issue_name VARCHAR(255),
-      issue_description VARCHAR(255),
-      project_name VARCHAR(255),
-      project_id INTEGER ,
-      issue_reporter VARCHAR(255),
-      issue_priority VARCHAR(255),
-      issue_status VARCHAR(255),
-      issue_assignee VARCHAR(255),
-      due_date VARCHAR(255),
+      id SERIAL,
+      name VARCHAR(255),
+      description VARCHAR(255),
+      status VARCHAR(50),
+      priority VARCHAR(50),
+      reporter VARCHAR(255),
+      assignee VARCHAR(255),
+      due_date DATE,
+      project_id INTEGER,
 
-      PRIMARY KEY (issue_id),
+      PRIMARY KEY (id),
       FOREIGN KEY (project_id) REFERENCES projects(id)
     )`,
     (error, result) => {
@@ -117,20 +107,30 @@ router.post("/issues/create", (req, res) => {
         return res.status(500).send("Error creating table");
       }
 
+      const {
+        name,
+        description,
+        status,
+        priority,
+        reporter,
+        assignee,
+        dueDate,
+        projectId,
+      } = req.body;
+
       // adding a new issue to the issues table
       pool.query(
-        `INSERT INTO issues (issue_name, issue_description, project_name, project_id, issue_reporter, issue_priority, issue_status, issue_assignee, due_date)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        `INSERT INTO issues (name, description, status, priority, reporter, assignee, due_date, project_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
-          issue_name,
-          issue_description,
-          project_name,
-          project_id,
-          issue_reporter,
-          issue_priority,
-          issue_status,
-          issue_assignee,
-          due_date,
+          name,
+          description,
+          status,
+          priority,
+          reporter,
+          assignee,
+          dueDate,
+          projectId,
         ],
         (error, result) => {
           if (error) {
