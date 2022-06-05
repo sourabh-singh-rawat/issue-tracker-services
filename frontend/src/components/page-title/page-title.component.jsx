@@ -1,39 +1,21 @@
-import { useState, Fragment } from "react";
+import { connect } from "react-redux";
 import {
   setProject,
   updateProject,
 } from "../../redux/project/project.action-creator";
+import { Edit2 } from "react-feather";
 import { setIssue, updateIssue } from "../../redux/issue/issue.action-creator";
+import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import CloseIcon from "@mui/icons-material/Close";
-import { Edit2 } from "react-feather";
-import Snackbar from "@mui/material/Snackbar";
+import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
 const PageTitle = (props) => {
-  const { page, dispatch, projectId, issueId, type } = props;
+  const { page, dispatch, projectId, type } = props;
   const { nameSelected } = page;
-
-  // snackbar
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const handleSnackbarClose = () => setSnackbarOpen(false);
-
-  // snackbar action
-  const action = (
-    <Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleSnackbarClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </Fragment>
-  );
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -55,16 +37,15 @@ const PageTitle = (props) => {
           },
           body: JSON.stringify({
             field: "name",
-            newVal: page.name,
+            value: page.name,
           }),
         }).then((response) => {
-          if (response.status === 200) setSnackbarOpen(true);
+          if (response.status === 200) dispatch(setSnackbarOpen());
         });
-        dispatch(updateProject({ nameSelected: false }));
       }
       if (type === "issue") {
         fetch(
-          `http://localhost:4000/api/issue/${issueId}/?projectId=${page.projectId}`,
+          `http://localhost:4000/api/issue/${page.id}/?projectId=${page.projectId}`,
           {
             method: "PUT",
             headers: {
@@ -72,27 +53,22 @@ const PageTitle = (props) => {
             },
             body: JSON.stringify({
               field: "name",
-              newVal: page.name,
+              value: page.name,
             }),
           }
         ).then((response) => {
-          if (response.status === 200) setSnackbarOpen(true);
+          if (response.status === 200) dispatch(setSnackbarOpen());
         });
-        dispatch(updateIssue({ nameSelected: false }));
       }
     }
+    dispatch(updateProject({ nameSelected: false }));
+    dispatch(updateIssue({ nameSelected: false }));
   };
 
   return (
     <>
       {/* snackbar updated */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        action={action}
-        onClose={handleSnackbarClose}
-        message="Updated"
-      />
+      <StyledSnackbar />
       {nameSelected ? (
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <TextField
@@ -190,4 +166,10 @@ const PageTitle = (props) => {
   );
 };
 
-export default PageTitle;
+const mapStateToProps = (store) => {
+  return {
+    snackbar: store.snackbar,
+  };
+};
+
+export default connect(mapStateToProps)(PageTitle);

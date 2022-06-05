@@ -5,10 +5,11 @@ const pool = require("../database");
 router.put("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;
   const { projectId } = req.query;
-  const { field, newVal } = req.body;
-  console.log(field, newVal, projectId);
+  const { field, value } = req.body;
+  console.log(field, value, projectId);
   const mapFieldToQuery = {
-    name: "UPDATE issues SET name = $1 WHERE id  = $2 AND project_id = $3",
+    name: "UPDATE issues SET name = $1 WHERE id  = $2",
+    description: "UPDATE issues SET description = $1 WHERE id  = $2",
   };
 
   pool.query(
@@ -21,16 +22,41 @@ router.put("/issue/:issueId", (req, res) => {
         );
 
       // update
-      pool.query(
-        mapFieldToQuery[field],
-        [newVal, issueId, projectId],
-        (error, result) => {
-          if (error) return res.status(400).send("Error: cannot update");
-          return res.send(result.rows[0]);
-        }
-      );
+      pool.query(mapFieldToQuery[field], [value, issueId], (error, result) => {
+        if (error) return res.status(400).send("Error: cannot update");
+        return res.send(result.rows[0]);
+      });
     }
   );
+});
+
+router.get("/issues", (req, res) => {
+  const { projectId } = req.query;
+  if (projectId)
+    return pool.query(
+      `SELECT *, issues.due_date AS "dueDate" FROM issues WHERE project_id = $1`,
+      [projectId],
+      (error, result) => {
+        if (error) {
+          return res
+            .status(404)
+            .send("Cannot fetch issues from project with id " + projectId);
+        }
+
+        return res.send(result.rows);
+      }
+    );
+  else
+    pool.query(
+      `SELECT *, due_date AS "dueDate" FROM issues`,
+      (error, result) => {
+        if (error) {
+          return res.status(404).end("Cannot fetch issues from issue table");
+        }
+
+        res.send(result.rows);
+      }
+    );
 });
 
 router.get("/issue/:issueId", (req, res) => {
@@ -56,34 +82,6 @@ router.get("/issue/:issueId", (req, res) => {
       }
     );
   }
-});
-
-router.get("/issues", (req, res) => {
-  const { projectId } = req.query;
-
-  if (projectId) {
-    return pool.query(
-      `SELECT *, issues.due_date AS "dueDate" FROM issues WHERE project_id = $1`,
-      [projectId],
-      (error, result) => {
-        if (error) {
-          return res
-            .status(404)
-            .send("Cannot fetch issues from project with id " + projectId);
-        }
-
-        return res.send(result.rows);
-      }
-    );
-  }
-
-  pool.query(`SELECT *, due_date AS "dueDate" FROM issues`, (error, result) => {
-    if (error) {
-      return res.status(404).end("Cannot fetch issues from issue table");
-    }
-
-    res.send(result.rows);
-  });
 });
 
 router.post("/issues/create", (req, res) => {

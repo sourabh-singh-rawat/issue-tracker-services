@@ -1,44 +1,28 @@
-import { useState } from "react";
 import { connect } from "react-redux";
 import { Edit2 } from "react-feather";
+import { updateIssue } from "../../redux/issue/issue.action-creator";
 import { updateProject } from "../../redux/project/project.action-creator";
+import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Snackbar from "@mui/material/Snackbar";
 import TextField from "@mui/material/TextField";
-import CloseIcon from "@mui/icons-material/Close";
+import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
 const PageDescription = (props) => {
   const { page, type, dispatch } = props;
 
-  // snackbar
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const handleSnackbarClose = () => setSnackbarOpen(false);
-
-  // snackbar action
-  const action = (
-    <>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleSnackbarClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
-  );
-
   const handleChange = (e) => {
     if (type === "project")
       dispatch(updateProject({ description: e.target.value }));
+    if (type === "issue")
+      dispatch(updateIssue({ description: e.target.value }));
   };
 
   const handleSave = () => {
     if (page.description !== page.previousValue) {
-      if (type === "project")
+      if (type === "project") {
         fetch(`http://localhost:4000/api/project/${page.id}`, {
           method: "PUT",
           headers: {
@@ -49,10 +33,26 @@ const PageDescription = (props) => {
             value: page.description,
           }),
         }).then((response) => {
-          if (response.status === 200) setSnackbarOpen(true);
+          if (response.status === 200) dispatch(setSnackbarOpen());
         });
-
+      }
       dispatch(updateProject({ descriptionSelected: false }));
+
+      if (type === "issue") {
+        fetch(`http://localhost:4000/api/issue/${page.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            field: "description",
+            value: page.description,
+          }),
+        }).then((response) => {
+          if (response.status === 200) dispatch(setSnackbarOpen());
+        });
+        dispatch(updateIssue({ descriptionSelected: false }));
+      }
     }
   };
 
@@ -73,6 +73,13 @@ const PageDescription = (props) => {
             if (type === "project")
               dispatch(
                 updateProject({
+                  descriptionSelected: true,
+                  previousValue: page.description,
+                })
+              );
+            if (type === "issue")
+              dispatch(
+                updateIssue({
                   descriptionSelected: true,
                   previousValue: page.description,
                 })
@@ -132,6 +139,14 @@ const PageDescription = (props) => {
                     description: page.previousValue,
                   })
                 );
+
+              if (type === "issue")
+                dispatch(
+                  updateIssue({
+                    descriptionSelected: false,
+                    description: page.previousValue,
+                  })
+                );
             }}
             sx={{
               color: "primary.text",
@@ -148,13 +163,7 @@ const PageDescription = (props) => {
         </Grid>
       )}
       {/* snackbar updated */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        action={action}
-        onClose={handleSnackbarClose}
-        message="Updated"
-      />
+      <StyledSnackbar />
     </Grid>
   );
 };

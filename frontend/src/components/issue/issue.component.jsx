@@ -33,7 +33,7 @@ const Issue = (props) => {
           dispatch(setIssue(data));
         });
     }
-  }, [issueId]);
+  }, []);
 
   return (
     <Grid container>
@@ -75,7 +75,6 @@ const Issue = (props) => {
         <StyledAppBar>
           <PageTitle
             page={issue}
-            dispatch={dispatch}
             issueId={issue.id}
             projectId={issue.projectId}
             type="issue"
