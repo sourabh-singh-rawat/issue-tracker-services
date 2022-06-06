@@ -9,13 +9,13 @@ const StyledTabs = (props) => {
         borderRadius: 1,
         color: "primary.main",
         borderBottom: "1px solid #f1f3f7",
+        backgroundColor: "background.main3",
         "& .Mui-selected": {
           color: "primary.main",
         },
         "& .MuiTabs-indicator": {
           backgroundColor: "primary.main",
         },
-        backgroundColor: "background.main3",
       }}
     ></Tabs>
   );

@@ -1,4 +1,4 @@
-const pool = require("../database");
+const pool = require("../db/connect");
 const express = require("express");
 const router = express.Router();
 

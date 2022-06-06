@@ -12,9 +12,9 @@ app.use(
 app.options("*", cors());
 
 // Routers
-const userRouter = require("./routes/users");
-const issueRouter = require("./routes/issues");
-const projectRouter = require("./routes/projects");
+const userRouter = require("./routes/usersRoute");
+const issueRouter = require("./routes/issuesRoute");
+const projectRouter = require("./routes/projectsRoute");
 
 app.use("/api", userRouter);
 app.use("/api", issueRouter);

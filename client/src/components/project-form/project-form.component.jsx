@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -8,34 +9,37 @@ import TextField from "@mui/material/TextField";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
 
 const ProjectForm = ({ uid, email = "Unassigned" }) => {
+  const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
-    projectName: "",
-    projectDescription: "",
-    projectOwnerUID: uid,
-    projectOwnerEmail: email,
-    startDate: null,
-    endDate: null,
+    name: "",
+    description: "",
+    ownerEmail: email,
+    ownerUid: uid,
+    startDate: "",
+    endDate: "",
   });
 
   const handleChange = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
+    const name = e.target.name;
+    const value = e.target.value;
 
-    setFormFields({ ...formFields, [fieldName]: fieldValue });
+    setFormFields({ ...formFields, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formFields);
 
-    // TODO: Add validation
-
-    await fetch("http://localhost:4000/api/projects/create", {
+    fetch("http://localhost:4000/api/projects/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formFields),
+    }).then((response) => {
+      if (response.status === 200)
+        response.json().then((data) => {
+          navigate(`/project/${data.id}/overview`);
+        });
     });
   };
 
@@ -52,7 +56,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
           <Grid container columnSpacing={4} rowSpacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
-                name="projectName"
+                name="name"
                 label="Project Name"
                 variant="standard"
                 onChange={handleChange}
@@ -61,7 +65,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
-                name="projectDescription"
+                name="description"
                 label="Description"
                 variant="standard"
                 rows={4}
@@ -72,7 +76,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
-                name="projectOwnerEmail"
+                name="ownerEmail"
                 label="Owner"
                 variant="standard"
                 value={email}

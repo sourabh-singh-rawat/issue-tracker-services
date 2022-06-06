@@ -1,18 +1,10 @@
 const express = require("express");
 const userRouter = express.Router();
-const pool = require("../database");
+const pool = require("../db/connect");
 
 userRouter.post("/users", (req, res) => {
-  // description: Add a user
-  // response:
-  //   status:
-  //     200: Success
-  //     500: Error
-  //   data:
-  //     string: "User added to users table"
   const { uid, displayName, email } = req.body;
 
-  // Create users table (if not exists)
   pool.query(
     `CREATE TABLE IF NOT EXISTS users (
       id SERIAL ,
