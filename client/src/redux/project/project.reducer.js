@@ -7,10 +7,10 @@ const initialState = {
   previousName: "",
   description: "",
   descriptionSelected: false,
-  owner_uid: "",
-  owner_email: "",
-  start_date: "",
-  end_date: "",
+  ownerUid: "",
+  ownerEmail: "",
+  startDate: "",
+  endDate: "",
 };
 
 export const projectReducer = (state = initialState, action) => {

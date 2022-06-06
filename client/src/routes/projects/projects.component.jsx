@@ -9,10 +9,10 @@ import StyledAppBar from "../../components/styled-appbar/styled-appbar.component
 import { MenuItem, Typography } from "@mui/material";
 import StyledSnackbar from "../../components/styled-snackbar/styled-snackbar.component";
 import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
+import { setIssueList } from "../../redux/issues-list/issue-list.action-creator";
 
 const Projects = (props) => {
-  const { dispatch } = props;
-  const [rows, setRows] = useState([]);
+  const { dispatch, issueList } = props;
 
   const SelectEditInputCell = (props) => {
     const { id, value, field } = props;
@@ -154,7 +154,7 @@ const Projects = (props) => {
       },
     })
       .then((response) => response.json())
-      .then((data) => setRows(data));
+      .then((data) => dispatch(setIssueList(data)));
   }, []);
 
   return (
@@ -165,7 +165,7 @@ const Projects = (props) => {
             Projects
           </StyledAppBar>
           <DataGrid
-            rows={rows}
+            rows={issueList}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
@@ -193,6 +193,7 @@ const Projects = (props) => {
 const mapStateToProps = (store) => {
   return {
     snackbar: store.snackbar,
+    issueList: store.issueList.issues,
   };
 };
 

@@ -36,7 +36,6 @@ const PageDescription = (props) => {
           if (response.status === 200) dispatch(setSnackbarOpen());
         });
       }
-      dispatch(updateProject({ descriptionSelected: false }));
 
       if (type === "issue") {
         fetch(`http://localhost:4000/api/issue/${page.id}`, {
@@ -51,9 +50,10 @@ const PageDescription = (props) => {
         }).then((response) => {
           if (response.status === 200) dispatch(setSnackbarOpen());
         });
-        dispatch(updateIssue({ descriptionSelected: false }));
       }
     }
+    dispatch(updateIssue({ descriptionSelected: false }));
+    dispatch(updateProject({ descriptionSelected: false }));
   };
 
   return (
@@ -128,7 +128,7 @@ const PageDescription = (props) => {
               ":hover": { boxShadow: "none" },
             }}
           >
-            Save
+            <Typography variant="body2">Save</Typography>
           </Button>
           <Button
             onClick={() => {

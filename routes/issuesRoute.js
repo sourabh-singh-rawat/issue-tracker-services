@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../database");
+const pool = require("../db/connect");
 
 router.put("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;

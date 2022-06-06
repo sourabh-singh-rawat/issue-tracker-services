@@ -20,27 +20,20 @@ const IssuesList = (props) => {
   const handleCellEditStop = (params, e) => {
     const id = params.id;
     const field = params.field;
-    const oldVal = params.value;
-    const newVal = e.target.value;
+    const old = params.value;
+    const value = e.target.value;
     const projectId = params.row.project_id;
 
-    if (newVal && oldVal !== newVal) {
-      // send update request to the server
-      const putData = async () => {
-        const response = await fetch(
-          `http://localhost:4000/api/issue/${id}/?projectId=${projectId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ field, newVal }),
-          }
-        );
+    if (value && old !== value) {
+      fetch(`http://localhost:4000/api/issue/${id}/?projectId=${projectId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ field, value }),
+      }).then((response) => {
         if (response.status === 200) dispatch(setSnackbarOpen());
-      };
-
-      putData();
+      });
     }
   };
 
