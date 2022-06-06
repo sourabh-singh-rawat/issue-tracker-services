@@ -1,4 +1,4 @@
-const pg = require("pg");
+import pg from "pg";
 const { Pool } = pg;
 
 const databaseName = "issue-tracker";
@@ -15,4 +15,4 @@ const pool = new Pool({
   port: port,
 });
 
-module.exports = pool;
+export default pool;

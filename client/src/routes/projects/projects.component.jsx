@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
+import { setIssueList } from "../../redux/issues-list/issue-list.action-creator";
+import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Select from "@mui/material/Select";
 import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 import { MenuItem, Typography } from "@mui/material";
 import StyledSnackbar from "../../components/styled-snackbar/styled-snackbar.component";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
-import { setIssueList } from "../../redux/issues-list/issue-list.action-creator";
 
 const Projects = (props) => {
   const { dispatch, issueList } = props;

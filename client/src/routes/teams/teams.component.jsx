@@ -1,5 +1,5 @@
-import { Box, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
 
 const Teams = () => {

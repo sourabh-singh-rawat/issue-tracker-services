@@ -26,33 +26,27 @@ const IssueForm = ({ email }) => {
   console.log(formFields);
 
   useEffect(() => {
-    // TODO: Move this to redux in future
-    const fetchData = async () => {
-      const response = await fetch("http://127.0.0.1:4000/api/projects");
-      const data = await response.json();
-      const projectNamesArr = data.map(
-        (project) => `${project.name} #${project.id}`
-      );
-
-      setProjectNames(projectNamesArr);
-    };
-
-    fetchData();
+    fetch("http://127.0.0.1:4000/api/projects")
+      .then((response) => response.json())
+      .then((data) => {
+        const projectNames = data.map(
+          (project) => `${project.name} #${project.id}`
+        );
+        setProjectNames(projectNames);
+      });
   }, []);
 
   const handleChange = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
+    const name = e.target.name;
+    const value = e.target.value;
 
-    setFormFields({ ...formFields, [fieldName]: fieldValue });
+    setFormFields({ ...formFields, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
 
-    // TODO: Add validation
-    await fetch("http://localhost:4000/api/issues/create", {
+    fetch("http://localhost:4000/api/issues/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +88,6 @@ const IssueForm = ({ email }) => {
             options={projectNames}
             onChange={(e, selectedOption) => {
               if (selectedOption) {
-                const name = selectedOption.split("#")[0];
                 const id = selectedOption.split("#")[1];
                 setFormFields({
                   ...formFields,
