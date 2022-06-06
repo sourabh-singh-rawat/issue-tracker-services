@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import { Box, Toolbar, Divider } from "@mui/material";
+import { IconButton } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import {
   Menu,
   X,
@@ -20,6 +20,7 @@ import {
   LogIn,
   Folder,
 } from "react-feather";
+import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
 export const drawerWidth = 240;
 
@@ -123,7 +124,7 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <Home />
                   </ListItemIcon>
-                  <ListItemText primary={"Dashboard"} sx={listItemTextStyles} />
+                  <ListItemText primary="Dashboard" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -134,10 +135,7 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <Folder />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Projects"
-                    sx={listItemTextStyles}
-                  ></ListItemText>
+                  <ListItemText primary="Projects" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -148,10 +146,7 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <Users />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Teams"
-                    sx={listItemTextStyles}
-                  ></ListItemText>
+                  <ListItemText primary="Teams" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -162,7 +157,7 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <AlertTriangle />
                   </ListItemIcon>
-                  <ListItemText primary={"Issues"} sx={listItemTextStyles} />
+                  <ListItemText primary="Issues" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -173,17 +168,17 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <LogIn />
                   </ListItemIcon>
-                  <ListItemText primary={"Sign Up"} sx={listItemTextStyles} />
+                  <ListItemText primary="Sign Up" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
           </List>
         </Drawer>
       </Box>
-
       <Box sx={{ flexGrow: 1 }}>
         <Outlet />
       </Box>
+      <StyledSnackbar />
     </>
   );
 };

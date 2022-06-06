@@ -11,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
 const PageTitle = (props) => {
   const { page, dispatch, projectId, type } = props;
@@ -67,8 +66,6 @@ const PageTitle = (props) => {
 
   return (
     <>
-      {/* snackbar updated */}
-      <StyledSnackbar />
       {nameSelected ? (
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <TextField

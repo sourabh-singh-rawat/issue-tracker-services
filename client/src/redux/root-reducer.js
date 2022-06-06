@@ -4,11 +4,13 @@ import { issueReducer } from "./issue/issue.reducer";
 import { projectReducer } from "./project/project.reducer";
 import { snackbarReducer } from "./snackbar/snackbar.reducer";
 import { issueListReducer } from "./issues-list/issue-list.reducer";
+import { projectListReducer } from "./project-list/project-list.reducer";
 
 export const rootReducer = combineReducers({
   user: userReducer,
   project: projectReducer,
   issue: issueReducer,
   issueList: issueListReducer,
+  projectList: projectListReducer,
   snackbar: snackbarReducer,
 });
