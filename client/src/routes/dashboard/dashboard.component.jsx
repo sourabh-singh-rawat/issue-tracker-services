@@ -1,15 +1,24 @@
 import { connect } from "react-redux";
-import DashboardButton from "../../components/dashboard-button/dashboard-button.component";
-import Grid from "@mui/material/Grid";
+import { Box, Grid } from "@mui/material";
 import StyledAppBar from "../../components/styled-appbar/styled-appbar.component";
+import IssueSummary from "../../components/issue-summary/issue-summary.component";
+import ProjectSummary from "../../components/project-summary/project-summary.component";
 
 const Dashboard = () => {
   return (
     <>
-      <StyledAppBar element={<DashboardButton />}>Dashboard</StyledAppBar>
-      <Grid container>
-        <Grid item></Grid>
-      </Grid>
+      <StyledAppBar>Dashboard</StyledAppBar>
+      <Box sx={{ marginLeft: 3, marginRight: 3 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={12} md={8}>
+            <ProjectSummary />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
+            <IssueSummary />
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 };

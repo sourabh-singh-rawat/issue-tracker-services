@@ -2,16 +2,15 @@ import { connect } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
+import { setIssueList } from "../../redux/issues-list/issue-list.action-creator";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import StyledTabPanel from "../styled-tab-panel/styled-tab-panel.component";
-import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
 const IssuesList = (props) => {
-  const { dispatch } = props;
-  const [rows, setRows] = useState([]);
+  const { dispatch, issueList } = props;
   const [selectedTab, project] = useOutletContext();
 
   let projectId;
@@ -95,19 +94,18 @@ const IssuesList = (props) => {
           return response.json();
         })
         .then((data) => {
-          setRows(data);
-        });
-    } else {
-      fetch(`http://localhost:4000/api/issues`, {
-        method: "GET",
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          setRows(data);
+          dispatch(setIssueList(data));
         });
     }
+    fetch(`http://localhost:4000/api/issues`, {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        dispatch(setIssueList(data));
+      });
   }, [projectId]);
 
   return (
@@ -117,7 +115,7 @@ const IssuesList = (props) => {
           <Grid item xs={12}>
             <DataGrid
               autoHeight
-              rows={rows}
+              rows={issueList}
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
@@ -133,8 +131,6 @@ const IssuesList = (props) => {
               onCellEditStop={handleCellEditStop}
               hideFooter
             ></DataGrid>
-            {/* snackbar updated */}
-            <StyledSnackbar />
           </Grid>
         </Grid>
       </Box>
@@ -143,7 +139,7 @@ const IssuesList = (props) => {
 };
 
 const mapStateToProps = (store) => {
-  return {};
+  return { issueList: store.issueList.issues };
 };
 
 export default connect(mapStateToProps)(IssuesList);

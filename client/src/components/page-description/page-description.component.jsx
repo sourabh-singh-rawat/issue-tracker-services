@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import StyledSnackbar from "../styled-snackbar/styled-snackbar.component";
 
 const PageDescription = (props) => {
   const { page, type, dispatch } = props;
@@ -162,8 +161,6 @@ const PageDescription = (props) => {
           </Button>
         </Grid>
       )}
-      {/* snackbar updated */}
-      <StyledSnackbar />
     </Grid>
   );
 };

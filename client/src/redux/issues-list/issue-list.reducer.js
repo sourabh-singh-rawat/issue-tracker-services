@@ -10,6 +10,6 @@ export const issueListReducer = (state = initialState, action) => {
     case actionTypes.SET_ISSUE_LIST:
       return { ...state, issues: action.payload, count: action.payload.length };
     default:
-      return { ...state };
+      return state;
   }
 };
