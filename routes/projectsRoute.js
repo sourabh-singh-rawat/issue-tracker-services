@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
+import pool from "../db/connect.js";
 const router = express.Router();
-const pool = require("../db/connect");
 
 router.put("/project/:projectId", (req, res) => {
   const { projectId } = req.params;
@@ -102,4 +102,4 @@ router.post("/projects/create", (req, res) => {
   );
 });
 
-module.exports = router;
+export default router;

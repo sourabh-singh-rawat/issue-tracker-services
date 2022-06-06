@@ -1,12 +1,11 @@
-const express = require("express");
+import express from "express";
+import pool from "../db/connect.js";
 const router = express.Router();
-const pool = require("../db/connect");
 
 router.put("/issue/:issueId", (req, res) => {
   const { issueId } = req.params;
   const { projectId } = req.query;
   const { field, value } = req.body;
-  console.log(field, value, projectId);
   const mapFieldToQuery = {
     name: "UPDATE issues SET name = $1 WHERE id  = $2",
     description: "UPDATE issues SET description = $1 WHERE id  = $2",
@@ -15,13 +14,12 @@ router.put("/issue/:issueId", (req, res) => {
   pool.query(
     "SELECT * FROM issues WHERE project_id = $1",
     [projectId],
-    (error, result) => {
-      if (error)
-        return res.send(
-          "Error: Cannot get the project with project id: " + projectId
-        );
+    (error) => {
+      if (error) {
+        console.log(` Cannot get the project with project id: ${projectId}`);
+        return res.status(404);
+      }
 
-      // update
       pool.query(mapFieldToQuery[field], [value, issueId], (error, result) => {
         if (error) return res.status(400).send("Error: cannot update");
         return res.send(result.rows[0]);
@@ -38,9 +36,8 @@ router.get("/issues", (req, res) => {
       [projectId],
       (error, result) => {
         if (error) {
-          return res
-            .status(404)
-            .send("Cannot fetch issues from project with id " + projectId);
+          console.log("Cannot find issues with project", error);
+          return res.status(404);
         }
 
         return res.send(result.rows);
@@ -51,7 +48,8 @@ router.get("/issues", (req, res) => {
       `SELECT *, due_date AS "dueDate" FROM issues`,
       (error, result) => {
         if (error) {
-          return res.status(404).end("Cannot fetch issues from issue table");
+          console.log("Cannot fetch issues from issue table", error);
+          return res.status(404);
         }
 
         res.send(result.rows);
@@ -74,8 +72,8 @@ router.get("/issue/:issueId", (req, res) => {
       [issueId],
       (error, result) => {
         if (error) {
-          console.log(error);
-          return res.status(404).send("Cannot fetch issue");
+          console.log("Cannot fetch issue", error);
+          return res.status(404);
         }
 
         return res.send(result.rows[0]);
@@ -100,9 +98,10 @@ router.post("/issues/create", (req, res) => {
       PRIMARY KEY (id),
       FOREIGN KEY (project_id) REFERENCES projects(id)
     )`,
-    (error, result) => {
+    (error) => {
       if (error) {
-        return res.status(500).send("Error creating table");
+        console.log("Error creating table", error);
+        return res.status(404);
       }
 
       const {
@@ -116,10 +115,9 @@ router.post("/issues/create", (req, res) => {
         projectId,
       } = req.body;
 
-      // adding a new issue to the issues table
       pool.query(
         `INSERT INTO issues (name, description, status, priority, reporter, assignee, due_date, project_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
           name,
           description,
@@ -130,17 +128,18 @@ router.post("/issues/create", (req, res) => {
           dueDate,
           projectId,
         ],
-        (error, result) => {
+        (error) => {
           if (error) {
-            return console.log("Error adding issue to issues table", error);
+            console.log("Error adding issue to issues table", error);
+            return res.status(404);
           }
 
-          console.log("Issue added to issues table");
-          return res.status(200).send("Issue added to issues table");
+          console.log("Issue added in the database");
+          return res.status(200);
         }
       );
     }
   );
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const express = require("express");
-const userRouter = express.Router();
-const pool = require("../db/connect");
+import express from "express";
+import pool from "../db/connect.js";
+const router = express.Router();
 
-userRouter.post("/users", (req, res) => {
+router.post("/users", (req, res) => {
   const { uid, displayName, email } = req.body;
 
   pool.query(
@@ -49,4 +49,4 @@ userRouter.post("/users", (req, res) => {
   );
 });
 
-module.exports = userRouter;
+export default router;

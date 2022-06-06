@@ -1,20 +1,18 @@
-const express = require("express");
-const cors = require("cors");
-const PORT = 4000;
-const app = express();
-
-app.use(express.json());
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-app.options("*", cors());
+import express from "express";
+import cors from "cors";
 
 // Routers
-const userRouter = require("./routes/usersRoute");
-const issueRouter = require("./routes/issuesRoute");
-const projectRouter = require("./routes/projectsRoute");
+import userRouter from "./routes/usersRoute.js";
+import issueRouter from "./routes/issuesRoute.js";
+import projectRouter from "./routes/projectsRoute.js";
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Options
+app.use(express.json());
+app.use(cors({ origin: "*" }));
+app.options("*", cors());
 
 app.use("/api", userRouter);
 app.use("/api", issueRouter);
