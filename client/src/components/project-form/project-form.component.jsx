@@ -13,8 +13,8 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    ownerEmail: email,
-    ownerUid: uid,
+    email: email,
+    uid: uid,
     startDate: "",
     endDate: "",
   });

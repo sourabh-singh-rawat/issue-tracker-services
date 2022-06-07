@@ -8,9 +8,9 @@ import { projectListReducer } from "./project-list/project-list.reducer";
 
 export const rootReducer = combineReducers({
   user: userReducer,
-  project: projectReducer,
   issue: issueReducer,
   issueList: issueListReducer,
+  project: projectReducer,
   projectList: projectListReducer,
   snackbar: snackbarReducer,
 });

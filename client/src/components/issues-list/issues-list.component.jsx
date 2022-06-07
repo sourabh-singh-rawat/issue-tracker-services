@@ -87,7 +87,7 @@ const IssuesList = (props) => {
 
   useEffect(() => {
     if (projectId) {
-      fetch(`http://localhost:4000/api/issues?projectId=${projectId}`, {
+      fetch(`http://localhost:4000/api/issues/?projectId=${projectId}`, {
         method: "GET",
       })
         .then((response) => {
@@ -96,16 +96,16 @@ const IssuesList = (props) => {
         .then((data) => {
           dispatch(setIssueList(data));
         });
-    }
-    fetch(`http://localhost:4000/api/issues`, {
-      method: "GET",
-    })
-      .then((response) => {
-        return response.json();
+    } else
+      fetch(`http://localhost:4000/api/issues/all`, {
+        method: "GET",
       })
-      .then((data) => {
-        dispatch(setIssueList(data));
-      });
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          dispatch(setIssueList(data));
+        });
   }, [projectId]);
 
   return (
