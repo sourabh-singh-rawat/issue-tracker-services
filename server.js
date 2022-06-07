@@ -1,4 +1,5 @@
 import express from "express";
+const app = express();
 import cors from "cors";
 
 // Routers
@@ -6,7 +7,6 @@ import userRouter from "./routes/usersRoute.js";
 import issueRouter from "./routes/issuesRoute.js";
 import projectRouter from "./routes/projectsRoute.js";
 
-const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Options

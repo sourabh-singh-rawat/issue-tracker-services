@@ -3,14 +3,10 @@ import {
   setProject,
   updateProject,
 } from "../../redux/project/project.action-creator";
-import { Edit2 } from "react-feather";
 import { setIssue, updateIssue } from "../../redux/issue/issue.action-creator";
 import { setSnackbarOpen } from "../../redux/snackbar/snackbar.action-creator";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { Edit2 } from "react-feather";
+import { Box, Typography, Button, IconButton, TextField } from "@mui/material";
 
 const PageTitle = (props) => {
   const { page, dispatch, projectId, type } = props;

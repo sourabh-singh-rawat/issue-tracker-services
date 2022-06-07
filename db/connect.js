@@ -1,18 +1,21 @@
+import dotenv from "dotenv";
+dotenv.config();
 import pg from "pg";
 const { Pool } = pg;
 
-const databaseName = "issue-tracker";
-const hostName = "localhost";
-const userName = "laizinova";
-const password = "702365";
+// CONNECTION VARIABLES
+const hostName = process.env.HOST;
+const userName = process.env.USER;
+const password = process.env.PASSWORD;
+const databaseName = process.env.DATABASE;
 const port = 5432;
 
-const pool = new Pool({
-  user: userName,
+const db = new Pool({
   host: hostName,
-  database: databaseName,
+  user: userName,
   password: password,
+  database: databaseName,
   port: port,
 });
 
-export default pool;
+export default db;
