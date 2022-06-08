@@ -1,13 +1,13 @@
 import ProjectsModel from "../models/Projects.js";
 
-// Asks model to create a new project
 const createProject = async (req, res) => {
-  const { name, description, ownerUid, startDate, endDate } = req.body;
+  const { name, description, ownerUid, email, startDate, endDate } = req.body;
   try {
-    await ProjectsModel.createOne(
+    await ProjectsModel.insertOne(
       name,
       description,
       ownerUid,
+      email,
       startDate,
       endDate
     );
@@ -18,10 +18,9 @@ const createProject = async (req, res) => {
   }
 };
 
-// Asks model to get all projects
 const getAllProjects = async (req, res) => {
   try {
-    const response = await ProjectsModel.getAll();
+    const response = await ProjectsModel.find();
     res.send(response.rows);
   } catch (error) {
     if (error) {
@@ -31,12 +30,11 @@ const getAllProjects = async (req, res) => {
   }
 };
 
-// Asks model to get project
 const getProject = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const response = await ProjectsModel.getOne(id);
+    const response = await ProjectsModel.findOne(id);
     res.send(response.rows[0]);
   } catch (error) {
     console.log("READ_ERROR: Cannot get project " + id, error);
@@ -44,7 +42,6 @@ const getProject = async (req, res) => {
   }
 };
 
-// Asks model to update project
 const updateProject = async (req, res) => {
   const { id } = req.params;
   const { field, value } = req.body;

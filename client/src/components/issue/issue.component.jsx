@@ -19,7 +19,7 @@ const Issue = (props) => {
 
   useEffect(() => {
     if (issueId !== "board") {
-      fetch(`http://localhost:4000/api/issue/${issueId}`, {
+      fetch(`http://localhost:4000/api/issues/${issueId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

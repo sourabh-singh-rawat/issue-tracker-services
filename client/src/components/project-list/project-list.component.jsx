@@ -64,8 +64,8 @@ const ProjectList = (props) => {
 
     if (value && old !== value) {
       // send update request to the server
-      fetch(`http://localhost:4000/api/project/${id}`, {
-        method: "PUT",
+      fetch(`http://localhost:4000/api/projects/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
