@@ -2,7 +2,7 @@ import IssuesModel from "../models/Issues.js";
 
 const getAllIssues = async (req, res) => {
   try {
-    const response = await IssuesModel.getAll();
+    const response = await IssuesModel.find();
     res.send(response.rows);
   } catch (error) {
     console.log("READ_ERROR: Cannot get all issues", error);
@@ -15,7 +15,7 @@ const getAllIssuesByProjectId = async (req, res) => {
 
   if (projectId) {
     try {
-      const response = await IssuesModel.getAllByProjectId(projectId);
+      const response = await IssuesModel.findByProjectId(projectId);
       return res.send(response.rows);
     } catch (error) {
       console.log(
@@ -33,7 +33,7 @@ const getIssue = async (req, res) => {
   const { issueId } = req.params;
 
   try {
-    const response = await IssuesModel.getOne(issueId);
+    const response = await IssuesModel.findOne(issueId);
     return res.send(response.rows[0]);
   } catch (error) {
     console.log("READ_ERROR: Cannot get issue");
@@ -53,4 +53,39 @@ const updateIssue = async (req, res) => {
   }
 };
 
-export default { getAllIssues, getAllIssuesByProjectId, getIssue, updateIssue };
+const createIssue = async (req, res) => {
+  const {
+    name,
+    description,
+    status,
+    priority,
+    reporter,
+    assignee,
+    dueDate,
+    projectId,
+  } = req.body;
+
+  try {
+    await IssuesModel.createOne(
+      name,
+      description,
+      status,
+      priority,
+      reporter,
+      assignee,
+      dueDate,
+      projectId
+    );
+  } catch (error) {
+    console.log("CREATE_ERROR: Cannot create issue", error);
+    return res.status(400).send("Cannot create issue");
+  }
+};
+
+export default {
+  getAllIssues,
+  getAllIssuesByProjectId,
+  getIssue,
+  updateIssue,
+  createIssue,
+};

@@ -24,8 +24,8 @@ const IssuesList = (props) => {
     const projectId = params.row.project_id;
 
     if (value && old !== value) {
-      fetch(`http://localhost:4000/api/issue/${id}/?projectId=${projectId}`, {
-        method: "PUT",
+      fetch(`http://localhost:4000/api/issues/${id}/?projectId=${projectId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },

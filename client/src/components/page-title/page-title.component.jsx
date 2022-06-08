@@ -25,8 +25,8 @@ const PageTitle = (props) => {
     if (page.name !== page.previousName) {
       // 2. On clicking save button send update request to server on project or issue?
       if (type === "project") {
-        fetch(`http://localhost:4000/api/project/${projectId}`, {
-          method: "PUT",
+        fetch(`http://localhost:4000/api/projects/${projectId}`, {
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -40,9 +40,9 @@ const PageTitle = (props) => {
       }
       if (type === "issue") {
         fetch(
-          `http://localhost:4000/api/issue/${page.id}/?projectId=${page.projectId}`,
+          `http://localhost:4000/api/issues/${page.id}/?projectId=${page.projectId}`,
           {
-            method: "PUT",
+            method: "PATCH",
             headers: {
               "Content-Type": "application/json",
             },

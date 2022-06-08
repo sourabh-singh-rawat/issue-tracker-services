@@ -1,12 +1,12 @@
 import db from "../db/connect.js";
 
 // GET ALL ISSUES
-const getAll = () => {
+const find = () => {
   return db.query(`SELECT *, issues.due_date AS "dueDate" FROM issues`);
 };
 
 // GET ALL ISSUES BY PROJECTID
-const getAllByProjectId = (id) => {
+const findByProjectId = (id) => {
   return db.query(
     `SELECT *, issues.due_date AS "dueDate" FROM issues WHERE project_id = $1`,
     [id]
@@ -14,7 +14,7 @@ const getAllByProjectId = (id) => {
 };
 
 // GET ISSUE
-const getOne = (id) => {
+const findOne = (id) => {
   return db.query(
     `SELECT 
      i.id, i.name, i.description, i.status, i.priority, i.reporter, i.assignee, 
@@ -38,4 +38,30 @@ const updateOne = (issueId, field, value) => {
   return db.query(map[field], [value, issueId]);
 };
 
-export default { getAll, getAllByProjectId, getOne, updateOne };
+const createOne = (
+  name,
+  description,
+  status,
+  priority,
+  reporter,
+  assignee,
+  dueDate,
+  projectId
+) => {
+  return db.query(
+    `INSERT INTO issues (name, description, status, priority, reporter, assignee, due_date, project_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [
+      name,
+      description,
+      status,
+      priority,
+      reporter,
+      assignee,
+      dueDate,
+      projectId,
+    ]
+  );
+};
+
+export default { findOne, find, findByProjectId, updateOne, createOne };

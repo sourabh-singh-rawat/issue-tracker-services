@@ -22,8 +22,8 @@ const PageDescription = (props) => {
   const handleSave = () => {
     if (page.description !== page.previousValue) {
       if (type === "project") {
-        fetch(`http://localhost:4000/api/project/${page.id}`, {
-          method: "PUT",
+        fetch(`http://localhost:4000/api/projects/${page.id}`, {
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -37,8 +37,8 @@ const PageDescription = (props) => {
       }
 
       if (type === "issue") {
-        fetch(`http://localhost:4000/api/issue/${page.id}`, {
-          method: "PUT",
+        fetch(`http://localhost:4000/api/issues/${page.id}`, {
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },

@@ -1,6 +1,7 @@
 import express from "express";
 const app = express();
 import cors from "cors";
+import morgan from "morgan";
 
 // Routers
 import userRouter from "./routes/usersRoute.js";
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 4000;
 
 // Options
 app.use(express.json());
+// app.use(morgan("tiny"));
 app.use(cors({ origin: "*" }));
 app.options("*", cors());
 
