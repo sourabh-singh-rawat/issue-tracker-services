@@ -5,7 +5,7 @@ import StyledAppBar from "../../components/styled-appbar/styled-appbar.component
 const Teams = () => {
   return (
     <Box>
-      <StyledAppBar button={{ to: "/team/create", p: "Create team" }}>
+      <StyledAppBar button={{ to: "/teams/create", p: "Create team" }}>
         Teams
       </StyledAppBar>
       <Grid container>

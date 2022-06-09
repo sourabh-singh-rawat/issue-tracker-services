@@ -9,6 +9,7 @@ import { theme } from "./theme.styles";
 
 import App from "./App";
 import "./index.css";
+import { CssBaseline } from "@mui/material";
 
 //creating root element
 const root = createRoot(document.getElementById("root"));
@@ -18,6 +19,7 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           <App />
         </ThemeProvider>
       </BrowserRouter>

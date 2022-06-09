@@ -5,11 +5,12 @@ const StyledTabs = (props) => {
     <Tabs
       {...props}
       textColor="inherit"
+      fontSize="inherit"
       sx={{
         borderRadius: 1,
         color: "primary.main",
-        borderBottom: "1px solid #f1f3f7",
-        backgroundColor: "background.main3",
+        borderBottom: "2px solid #f1f3f7",
+        // backgroundColor: "background.main3",
         "& .Mui-selected": {
           color: "primary.main",
         },
@@ -17,7 +18,7 @@ const StyledTabs = (props) => {
           backgroundColor: "primary.main",
         },
       }}
-    ></Tabs>
+    />
   );
 };
 

@@ -1,11 +1,19 @@
 import db from "../db/connect.js";
 
-const insertOne = (name, description, uid, email, startDate, endDate) => {
+const insertOne = (
+  name,
+  description,
+  uid,
+  email,
+  startDate,
+  endDate,
+  status
+) => {
   return db.query(
-    `INSERT INTO projects (name, description, owner_uid, owner_email, start_date, end_date)
-     VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO projects (name, description, status, owner_uid, owner_email, start_date, end_date)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING id`,
-    [name, description, uid, email, startDate, endDate]
+    [name, description, uid, email, startDate, endDate, status]
   );
 };
 

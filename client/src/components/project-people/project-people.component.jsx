@@ -6,12 +6,10 @@ const ProjectMembers = () => {
   const [selectedTab] = useOutletContext();
 
   return (
-    <StyledTabPanel selectedTab={selectedTab} index={2}>
-      <div>
-        <Typography variant="body2">
-          All the people working on this project
-        </Typography>
-      </div>
+    <StyledTabPanel selectedTab={selectedTab} index={102}>
+      <Typography variant="body1">
+        All the people working on this project
+      </Typography>
     </StyledTabPanel>
   );
 };

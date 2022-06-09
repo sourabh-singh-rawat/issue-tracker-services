@@ -57,11 +57,14 @@ const PageDescription = (props) => {
 
   return (
     <Grid container>
-      <Grid item sm={12} sx={{ display: "flex", alignItems: "center" }}>
+      <Grid
+        item
+        sm={12}
+        sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
+      >
         <Typography
-          variant="h6"
+          variant="h5"
           sx={{
-            marginRight: 0.5,
             fontWeight: "bold",
           }}
         >
@@ -105,12 +108,12 @@ const PageDescription = (props) => {
             InputProps={{
               style: {
                 color: "primary.text",
-                fontSize: "14px",
+                fontSize: "inherit",
               },
             }}
           />
         ) : (
-          <Typography variant="body2" sx={{ lineHeight: 1.5 }}>
+          <Typography variant="body1" sx={{ lineHeight: 1.5 }}>
             {page.description}
           </Typography>
         )}

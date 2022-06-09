@@ -44,7 +44,6 @@ const getIssue = async (req, res) => {
 const updateIssue = async (req, res) => {
   const { issueId } = req.params;
   const { field, value } = req.body;
-
   try {
     await IssuesModel.updateOne(issueId, field, value);
     return res.send("Issue Updated");

@@ -1,11 +1,25 @@
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { setSnackbarClose } from "../../redux/snackbar/snackbar.action-creator";
-import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
+import {
+  setSnackbarClose,
+  setSnackbarOpen,
+} from "../../redux/snackbar/snackbar.action-creator";
+import { Snackbar, IconButton, Slide } from "@mui/material";
+import { Close } from "@mui/icons-material/";
 
+function SlideTransition(props) {
+  return <Slide {...props} direction="up" />;
+}
 const StyledSnackbar = (props) => {
   const { snackbar, dispatch } = props;
+
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch(setSnackbarClose());
+  };
+
   const action = (
     <>
       <IconButton
@@ -16,7 +30,7 @@ const StyledSnackbar = (props) => {
           dispatch(setSnackbarClose());
         }}
       >
-        <CloseIcon fontSize="small" />
+        <Close fontSize="small" />
       </IconButton>
     </>
   );
@@ -25,9 +39,11 @@ const StyledSnackbar = (props) => {
     <Snackbar
       open={snackbar.open}
       autoHideDuration={6000}
-      onClose={() => dispatch(setSnackbarClose())}
+      onClose={handleClose}
       action={action}
       message={snackbar.message}
+      TransitionComponent={SlideTransition}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
     />
   );
 };

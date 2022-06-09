@@ -16,6 +16,11 @@ import IssuesBoard from "./components/issue-board/issues-board.component";
 import IssuesList from "./components/issues-list/issues-list.component";
 import IssueForm from "./components/issue-form/issue-form.component";
 import TeamForm from "./components/team-form/team-form.component";
+import ProjectList from "./components/project-list/project-list.component";
+import IssueOverview from "./components/issue-overview/issue-overview.component";
+import IssueOpen from "./components/issue-open/issue-open.component";
+import IssueProgress from "./components/issue-progress/issue-progress.component";
+import IssueClosed from "./components/issue-closed/issue-closed.component";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -27,14 +32,13 @@ const App = () => {
       <Route path="/" element={<Sidebar />}>
         <Route index element={<Dashboard />} />
         {/* list routes */}
-        <Route path="projects" element={<Projects />} />
         <Route path="teams" element={<Teams />} />
         <Route path="issues" element={<Issues />}>
           <Route index element={<IssuesList />} />
-          <Route path=":board" element={<IssuesBoard />} />
         </Route>
         {/* project route */}
-        <Route path="project">
+        <Route path="projects" element={<Projects />}>
+          <Route path="all" element={<ProjectList />} />
           <Route path="create" element={<ProjectForm />} />
           <Route path=":projectId" element={<Project />}>
             <Route path="overview" element={<ProjectOverview />} />
@@ -44,13 +48,18 @@ const App = () => {
           </Route>
         </Route>
         {/* team route */}
-        <Route path="team">
+        <Route path="teams">
           <Route path="create" element={<TeamForm />} />
         </Route>
         {/* issue route */}
-        <Route path="issue">
+        <Route path="issues" element={<Issues />}>
           <Route path="create" element={<IssueForm />} />
-          <Route path=":issueId" element={<Issue />} />
+          <Route path=":issueId" element={<Issue />}>
+            <Route path="overview" element={<IssueOverview />} />
+            <Route path="open" element={<IssueOpen />} />
+            <Route path="progress" element={<IssueProgress />} />
+            <Route path="closed" element={<IssueClosed />} />
+          </Route>
         </Route>
       </Route>
       <Route path="/signup" element={<SignUp />} />

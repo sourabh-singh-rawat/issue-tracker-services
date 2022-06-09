@@ -1,12 +1,14 @@
 import ProjectsModel from "../models/Projects.js";
 
 const createProject = async (req, res) => {
-  const { name, description, ownerUid, email, startDate, endDate } = req.body;
+  const { name, description, uid, email, startDate, endDate, status } =
+    req.body;
   try {
     await ProjectsModel.insertOne(
       name,
       description,
-      ownerUid,
+      status,
+      uid,
       email,
       startDate,
       endDate

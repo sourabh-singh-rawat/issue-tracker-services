@@ -8,7 +8,7 @@ const ProjectOverview = (props) => {
   const [selectedTab] = useOutletContext();
 
   return (
-    <StyledTabPanel selectedTab={selectedTab} index={0}>
+    <StyledTabPanel selectedTab={selectedTab} index={100}>
       <PageDescription page={project} type="project" />
     </StyledTabPanel>
   );

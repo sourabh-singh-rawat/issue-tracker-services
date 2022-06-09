@@ -61,7 +61,7 @@ const PageTitle = (props) => {
   };
 
   return (
-    <>
+    <Box sx={{ paddingBottom: 1 }}>
       {nameSelected ? (
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <TextField
@@ -72,7 +72,7 @@ const PageTitle = (props) => {
             variant="standard"
             inputProps={{
               style: {
-                fontSize: "1.5rem",
+                fontSize: "2rem",
                 fontWeight: "bold",
               },
             }}
@@ -122,7 +122,7 @@ const PageTitle = (props) => {
         </Box>
       ) : (
         <Typography
-          variant="h5"
+          variant="h4"
           sx={{ fontWeight: "bold", color: "primary.text2" }}
         >
           {page.name}
@@ -155,7 +155,7 @@ const PageTitle = (props) => {
           </IconButton>
         </Typography>
       )}
-    </>
+    </Box>
   );
 };
 
