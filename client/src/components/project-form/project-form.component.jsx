@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import StyledAppBar from "../styled-appbar/styled-appbar.component";
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 const ProjectForm = ({ uid, email = "Unassigned" }) => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
     uid: uid,
     startDate: "",
     endDate: "",
+    status: "",
   });
 
   const handleChange = (e) => {
@@ -46,78 +48,149 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <StyledAppBar>Create Project</StyledAppBar>
+        <StyledAppBar>Add Project</StyledAppBar>
       </Grid>
-      <Grid item xs={4} sx={{ margin: 3, marginTop: 0 }}>
+      <Grid item xs={12}>
         <Box sx={{ marginBottom: 2 }}>
-          <Typography>Enter project details</Typography>
+          <Typography variant="body2" sx={{ color: "primary.text3" }}>
+            In this section your can store important information about your
+            project.
+          </Typography>
         </Box>
+      </Grid>
+      <Grid item sm={12}>
         <Box component="form" onSubmit={handleSubmit}>
-          <Grid container columnSpacing={4} rowSpacing={2}>
-            <Grid item xs={12} sm={12}>
+          <Grid container rowSpacing={2} columnSpacing={3}>
+            <Grid item sm={6}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Project Name
+              </Typography>
               <TextField
+                helperText="Do not exceed 20 characters"
                 name="name"
-                label="Project Name"
-                variant="standard"
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  "& .MuiFormHelperText-contained": {
+                    marginLeft: 0,
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item sm={3}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Start Date
+              </Typography>
+              <TextField
+                name="startDate"
+                type="date"
                 onChange={handleChange}
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} sm={12}>
+            <Grid item sm={3}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                End Date
+              </Typography>
               <TextField
-                name="description"
-                label="Description"
-                variant="standard"
-                rows={4}
+                name="endDate"
+                type="date"
                 onChange={handleChange}
-                multiline
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} sm={12}>
+            <Grid item sm={6}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Status
+              </Typography>
+              <FormControl fullWidth>
+                <Select
+                  value={formFields.status}
+                  name="status"
+                  onChange={handleChange}
+                  displayEmpty
+                >
+                  <MenuItem value="">None</MenuItem>
+                  <MenuItem value={"Open"}>Open</MenuItem>
+                  <MenuItem value={"In Progress"}>In Progress</MenuItem>
+                  <MenuItem value={"Closed"}>Closed</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item sm={6}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Project Owner Email
+              </Typography>
               <TextField
-                name="ownerEmail"
-                label="Owner"
-                variant="standard"
+                name="email"
                 value={email}
                 onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 autoFocus={true}
                 fullWidth
                 disabled
               />
             </Grid>
-            <Grid item sm={12}></Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="startDate"
-                label="Start Date"
-                type="date"
-                variant="standard"
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true,
+            <Grid item sm={6}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
                 }}
+              >
+                Project Description
+              </Typography>
+              <TextField
+                name="description"
+                helperText="Do not exceed 100 characters"
+                rows={4}
+                onChange={handleChange}
+                multiline
                 fullWidth
+                sx={{
+                  "& .MuiFormHelperText-contained": {
+                    marginLeft: 0,
+                  },
+                }}
               />
             </Grid>
-            <Grid item xs={12} sm={6} paddingBottom="1em">
-              <TextField
-                name="endDate"
-                label="End Date"
-                type="date"
-                variant="standard"
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                fullWidth
-              />
-            </Grid>
-
-            <Grid item xs={12}>
+            <Grid item sm={6}>
               <Button
                 variant="contained"
                 type="submit"
@@ -125,7 +198,7 @@ const ProjectForm = ({ uid, email = "Unassigned" }) => {
                 fullWidth
                 sx={{ textTransform: "none" }}
               >
-                Create project
+                Create Project
               </Button>
             </Grid>
           </Grid>

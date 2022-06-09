@@ -1,45 +1,44 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
+import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
 import { setProject } from "../../redux/project/project.action-creator";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
+import {
+  Box,
+  Grid,
+  Link,
+  Typography,
+  Breadcrumbs,
+  Toolbar,
+} from "@mui/material";
 import PageTitle from "../page-title/page-title.component";
 import StyledTab from "../styled-tab/styled-tab.component";
 import StyledTabs from "../styled-tabs/styled-tabs.component";
-import StyledAppBar from "../styled-appbar/styled-appbar.component";
 
 const Project = (props) => {
-  // hooks
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // state and props
   const { project, dispatch } = props;
   const { projectId } = params;
 
-  const path = location.pathname.split("/");
-  const tabName = path[3];
+  const path = location.pathname.split("/")[3];
 
-  const mapTabNameToIndex = {
-    overview: 0,
-    issues: 1,
-    people: 2,
-    activity: 3,
+  const mapPathToIndex = {
+    overview: 100,
+    issues: 101,
+    people: 102,
+    activity: 103,
   };
 
-  const [selectedTab, setSelectedTab] = useState(mapTabNameToIndex[tabName]);
+  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[path]);
 
   const handleChange = (e, newValue) => {
     const mapIndexToTab = {
-      0: `/project/${projectId}/overview`,
-      1: `/project/${projectId}/issues`,
-      2: `/project/${projectId}/people`,
-      3: `/project/${projectId}/activity`,
+      100: `/projects/${projectId}/overview`,
+      101: `/projects/${projectId}/issues`,
+      102: `/projects/${projectId}/people`,
+      103: `/projects/${projectId}/activity`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -47,58 +46,59 @@ const Project = (props) => {
   };
 
   useEffect(() => {
-    setSelectedTab(mapTabNameToIndex[tabName]);
+    setSelectedTab(mapPathToIndex[path]);
 
     fetch(`http://localhost:4000/api/projects/${projectId}`)
       .then((response) => {
         if (response.status === 200) return response.json();
       })
       .then((data) => {
-        dispatch(setProject({ ...data }));
+        dispatch(setProject(data));
       });
-  }, [tabName, projectId]);
+  }, [path, projectId]);
 
   return (
     <Grid container>
-      <Grid item xs={12} sx={{ margin: 3, marginBottom: 0 }}>
-        <Breadcrumbs>
-          <Link
-            onClick={() => {
-              navigate(`/projects`);
-            }}
-            underline="hover"
-            sx={{ ":hover": { cursor: "pointer" } }}
-          >
-            <Typography variant="body2">projects</Typography>
-          </Link>
-          <Link
-            onClick={(e) => {
-              navigate(`/project/${projectId}/overview`);
-              setSelectedTab(0);
-            }}
-            underline="hover"
-            sx={{ ":hover": { cursor: "pointer" } }}
-          >
-            <Typography variant="body2">
-              {project.name.toLowerCase()}
-            </Typography>
-          </Link>
-          <Typography variant="body2">{tabName}</Typography>
-        </Breadcrumbs>
+      <Grid item xs={12}>
+        <Toolbar disableGutters>
+          <Breadcrumbs separator="•">
+            <Link
+              onClick={() => navigate(`/projects/all`)}
+              underline="hover"
+              sx={{ ":hover": { cursor: "pointer" } }}
+            >
+              <Typography variant="body1">projects</Typography>
+            </Link>
+            <Link
+              onClick={(e) => {
+                navigate(`/projects/${projectId}/overview`);
+                setSelectedTab(100);
+              }}
+              underline="hover"
+              sx={{ ":hover": { cursor: "pointer" } }}
+            >
+              <Typography variant="body1">
+                {project.name.toLowerCase()}
+              </Typography>
+            </Link>
+            <Typography variant="body1">{path}</Typography>
+          </Breadcrumbs>
+        </Toolbar>
       </Grid>
-      <StyledAppBar>
-        <PageTitle page={project} projectId={projectId} type="project" />
-      </StyledAppBar>
-      <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
+      <Grid item xs={12}>
+        <Toolbar disableGutters>
+          <PageTitle page={project} projectId={projectId} type="project" />
+        </Toolbar>
+      </Grid>
+      <Grid item xs={12}>
         <Box>
           <StyledTabs value={selectedTab} onChange={handleChange}>
-            <StyledTab label="Overview" value={0} />
-            <StyledTab label="Issues" value={1} />
-            <StyledTab label="People" value={2} />
-            <StyledTab label="Activity" value={3} />
+            <StyledTab label="Overview" value={100} />
+            <StyledTab label="Issues" value={101} />
+            <StyledTab label="People" value={102} />
+            <StyledTab label="Activity" value={103} />
           </StyledTabs>
         </Box>
-        {/* styled tab panels */}
         <Outlet context={[selectedTab, project]} />
       </Grid>
     </Grid>

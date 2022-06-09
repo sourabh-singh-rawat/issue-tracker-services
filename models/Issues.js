@@ -1,7 +1,7 @@
 import db from "../db/connect.js";
 
 // GET ALL ISSUES
-const find = () => {
+const find = (options) => {
   return db.query(`SELECT *, issues.due_date AS "dueDate" FROM issues`);
 };
 
@@ -29,13 +29,16 @@ const findOne = (id) => {
 };
 
 // UPDATE ISSUE
-const updateOne = (issueId, field, value) => {
+const updateOne = (id, field, value) => {
+  console.log(id, field, value);
   const map = {
     name: "UPDATE issues SET name = $1 WHERE id = $2",
     description: "UPDATE issues SET description = $1 WHERE id  = $2",
+    status: "UPDATE issues SET status = $1 WHERE id = $2",
+    priority: "UPDATE issues SET priority = $1 WHERE id = $2",
   };
 
-  return db.query(map[field], [value, issueId]);
+  return db.query(map[field], [value, id]);
 };
 
 const createOne = (
