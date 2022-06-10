@@ -1,4 +1,4 @@
-import { actionTypes } from "./project.types.js";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   id: "",
@@ -13,17 +13,15 @@ const initialState = {
   endDate: "",
 };
 
-export const projectReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case actionTypes.SET_PROJECT:
-      return {
-        ...state,
-        ...action.payload,
-      };
+const projectReducer = createSlice({
+  name: "currentProject",
+  initialState,
+  reducers: {
+    // case reducers
+    setProject: (state, action) => ({ ...state, ...action.payload }),
+    updateProject: (state, action) => ({ ...state, ...action.payload }),
+  },
+});
 
-    case actionTypes.UPDATE_PROJECT:
-      return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-};
+export const { setProject, updateProject } = projectReducer.actions;
+export default projectReducer.reducer;

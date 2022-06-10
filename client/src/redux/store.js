@@ -1,5 +1,18 @@
 import logger from "redux-logger";
-import { createStore, applyMiddleware } from "redux";
-import { rootReducer } from "./root-reducer";
+import { configureStore } from "@reduxjs/toolkit";
+import issueReducer from "./issue/issue.reducer";
+import issueListReducer from "./issues-list/issue-list.reducer";
+import projectReducer from "./project/project.reducer";
+import projectListReducer from "./project-list/project-list.reducer";
+import snackbarReducer from "./snackbar/snackbar.reducer";
 
-export const store = createStore(rootReducer, applyMiddleware(logger));
+export const store = configureStore({
+  reducer: {
+    issue: issueReducer,
+    issueList: issueListReducer,
+    project: projectReducer,
+    projectList: projectListReducer,
+    snackbar: snackbarReducer,
+  },
+  middleware: [logger],
+});

@@ -1,4 +1,0 @@
-export const actionTypes = {
-  SET_SNACKBAR_OPEN: "SET_SNACKBAR_OPEN",
-  SET_SNACKBAR_CLOSE: "SET_SNACKBAR_CLOSE",
-};

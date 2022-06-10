@@ -1,19 +1,17 @@
-import { actionTypes } from "./snackbar.types";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   open: false,
   message: "Updated!",
 };
 
-export const snackbarReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case actionTypes.SET_SNACKBAR_OPEN:
-      return { ...state, open: true };
+const snackbarSlice = createSlice({
+  name: "snackbar",
+  initialState,
+  reducers: {
+    setSnackbarOpen: (state, action) => ({ ...state, open: action.payload }),
+  },
+});
 
-    case actionTypes.SET_SNACKBAR_CLOSE:
-      return { ...state, open: false };
-
-    default:
-      return state;
-  }
-};
+export const { setSnackbarOpen } = snackbarSlice.actions;
+export default snackbarSlice.reducer;
