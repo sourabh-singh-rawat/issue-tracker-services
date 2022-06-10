@@ -1,26 +1,22 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./routes/dashboard/dashboard.component";
-import SignIn from "./routes/signin/signin.component";
-import SignUp from "./routes/signup/signup.component";
-import Teams from "./routes/teams/teams.component";
-import Sidebar from "./components/sidebar/sidebar.component";
-import Project from "./components/project/project.component";
-import Projects from "./routes/projects/projects.component";
-import ProjectForm from "./components/project-form/project-form.component";
-import ProjectOverview from "./components/project-overview/project-overview.component";
-import ProjectPeople from "./components/project-people/project-people.component";
-import ProjectActivity from "./components/project-activity/project-activity.component";
-import Issue from "./components/issue/issue.component";
-import Issues from "./routes/issues/issues.component";
-import IssuesBoard from "./components/issue-board/issues-board.component";
-import IssuesList from "./components/issues-list/issues-list.component";
-import IssueForm from "./components/issue-form/issue-form.component";
-import TeamForm from "./components/team-form/team-form.component";
-import ProjectList from "./components/project-list/project-list.component";
-import IssueOverview from "./components/issue-overview/issue-overview.component";
-import IssueOpen from "./components/issue-open/issue-open.component";
-import IssueProgress from "./components/issue-progress/issue-progress.component";
-import IssueClosed from "./components/issue-closed/issue-closed.component";
+import Dashboard from "./routes/dashboard/dashboard";
+import SignIn from "./routes/signin/signin";
+import SignUp from "./routes/signup/signup";
+import Teams from "./routes/teams/teams";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Project from "./components/Project/Project";
+import Projects from "./routes/projects/projects";
+import ProjectForm from "./components/ProjectForm/ProjectForm";
+import ProjectOverview from "./components/ProjectOverview/ProjectOverview";
+import ProjectPeople from "./components/ProjectPeople/ProjectPeople";
+import ProjectActivity from "./components/Activity/Activity";
+import Issue from "./components/Issue/Issue";
+import Issues from "./routes/Issues/issues";
+import IssuesList from "./components/IssuesList/IssuesList";
+import IssueForm from "./components/IssueForm/IssueForm";
+import TeamForm from "./components/TeamForm/TeamForm";
+import ProjectList from "./components/ProjectList/ProjectList";
+import IssueOverview from "./components/IssueOverview/IssueOverview";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -56,9 +52,6 @@ const App = () => {
           <Route path="create" element={<IssueForm />} />
           <Route path=":issueId" element={<Issue />}>
             <Route path="overview" element={<IssueOverview />} />
-            <Route path="open" element={<IssueOpen />} />
-            <Route path="progress" element={<IssueProgress />} />
-            <Route path="closed" element={<IssueClosed />} />
           </Route>
         </Route>
       </Route>

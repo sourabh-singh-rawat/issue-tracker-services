@@ -1,19 +1,21 @@
-import { actionTypes } from "../project-list/project-list.types";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   projects: [],
   count: 0,
 };
 
-export const projectListReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case actionTypes.SET_PROJECT_LIST:
-      return {
-        ...state,
-        projects: action.payload,
-        count: action.payload.length,
-      };
-    default:
-      return state;
-  }
-};
+const projectListReducer = createSlice({
+  name: "projectList",
+  initialState,
+  reducers: {
+    setProjectList: (state, action) => ({
+      ...state,
+      projects: action.payload,
+      count: action.payload.length,
+    }),
+  },
+});
+
+export const { setProjectList } = projectListReducer.actions;
+export default projectListReducer.reducer;

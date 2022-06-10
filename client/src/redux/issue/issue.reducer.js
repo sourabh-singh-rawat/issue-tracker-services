@@ -1,4 +1,4 @@
-import { actionTypes } from "./issue.types";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   id: "",
@@ -17,13 +17,19 @@ const initialState = {
   projectOwnerUid: "",
 };
 
-export const issueReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case actionTypes.SET_ISSUE:
+const issueReducer = createSlice({
+  name: "currentIssue",
+  initialState,
+  reducers: {
+    // case reducers
+    setIssue: (state, action) => {
       return { ...state, ...action.payload };
-    case actionTypes.UPDATE_ISSUE:
+    },
+    updateIssue: (state, action) => {
       return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const { setIssue, updateIssue } = issueReducer.actions;
+export default issueReducer.reducer;

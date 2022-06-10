@@ -1,15 +1,22 @@
-import { actionTypes } from "./issue-list.type";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   issues: [],
   count: 0,
 };
 
-export const issueListReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case actionTypes.SET_ISSUE_LIST:
-      return { ...state, issues: action.payload, count: action.payload.length };
-    default:
-      return state;
-  }
-};
+const issueListSlice = createSlice({
+  name: "issueList",
+  initialState,
+  reducers: {
+    // case reducers
+    setIssueList: (state, action) => ({
+      ...state,
+      issues: action.payload,
+      count: action.payload.length,
+    }),
+  },
+});
+
+export const { setIssueList } = issueListSlice.actions;
+export default issueListSlice.reducer;

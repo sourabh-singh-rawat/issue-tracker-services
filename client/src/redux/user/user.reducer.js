@@ -1,4 +1,4 @@
-import { USER_ACTION_TYPES } from "./user.types";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   uid: undefined,
@@ -10,12 +10,12 @@ const initialState = {
   },
 };
 
-export const userReducer = (state = initialState, action) => {
-  const { type, payload } = action;
-
-  switch (type) {
-    case USER_ACTION_TYPES.SET_USER:
-      const { user } = payload;
+const userSlice = createSlice({
+  name: "currentUser",
+  initialState,
+  reducers: {
+    setCurrentUser: (state, action) => {
+      const { user } = action.payload;
       const {
         uid,
         email,
@@ -33,8 +33,9 @@ export const userReducer = (state = initialState, action) => {
           lastSignInTime,
         },
       };
+    },
+  },
+});
 
-    default:
-      return state;
-  }
-};
+export const { setCurrentUser } = userSlice.actions;
+export default userSlice.reducer;
