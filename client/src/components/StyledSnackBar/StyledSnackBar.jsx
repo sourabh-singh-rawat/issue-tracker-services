@@ -1,4 +1,4 @@
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
 import { Snackbar, IconButton, Slide } from "@mui/material";
 import { Close } from "@mui/icons-material/";
@@ -39,8 +39,4 @@ const StyledSnackbar = () => {
   );
 };
 
-const mapStateToProps = (store) => ({
-  snackbar: store.snackbar,
-});
-
-export default connect(mapStateToProps)(StyledSnackbar);
+export default StyledSnackbar;

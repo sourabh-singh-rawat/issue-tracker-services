@@ -54,19 +54,12 @@ export const signUpWithEmailAndPassword = async (
 };
 
 // Storing user information in the database
-export const storeUserInfoInDatabase = async (userCredential) => {
-  const { user } = userCredential;
+export const storeUserInfoInDatabase = async ({ user }) => {
   const { uid, displayName, email } = user;
 
-  await fetch("http://localhost:4000/api/users", {
+  await fetch("http://localhost:4000/api/users/create", {
     method: "POST",
-    body: JSON.stringify({
-      uid,
-      email,
-      displayName,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
+    body: JSON.stringify({ name: displayName, email, uid }),
+    headers: { "Content-Type": "application/json" },
   });
 };

@@ -1,38 +1,48 @@
-import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+
+// MUI Theme
 import { styled } from "@mui/material/styles";
-import { Box, Toolbar, Divider, SwipeableDrawer } from "@mui/material";
-import { IconButton } from "@mui/material";
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import {
+  Box,
+  List,
+  Divider,
+  Toolbar,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+  CssBaseline,
+} from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import {
   Menu,
-  X,
-  Home,
+  ArrowLeft,
+  Grid,
   Users,
   AlertTriangle,
+  FolderPlus,
   LogIn,
-  Folder,
 } from "react-feather";
+import { useState } from "react";
 import StyledSnackbar from "../StyledSnackBar/StyledSnackBar";
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  overflowX: "hidden",
+});
+
 const closedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  width: `calc(${theme.spacing(7)})`,
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(7)})`,
+    width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
+
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -40,6 +50,10 @@ const Drawer = styled(MuiDrawer, {
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
   ...(!open && {
     ...closedMixin(theme),
     "& .MuiDrawer-paper": closedMixin(theme),
@@ -47,204 +61,122 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
 
   // styles
+  const listItemTextStyles = { opacity: open ? 1 : 0 };
   const listItemIconStyles = {
     minWidth: 0,
-    mr: "auto",
+    mr: open ? 1.5 : "auto",
     justifyContent: "center",
   };
   const listItemButtonStyles = {
     minHeight: 48,
+    px: (open && 4) || (!open && 2.5),
   };
 
   return (
     <>
       <Box sx={{ diplay: "flex" }}>
+        <CssBaseline />
         {/* drawer */}
-        <Drawer
-          variant="permanent"
-          PaperProps={{
-            sx: {
-              backgroundColor: "background.main",
-            },
-          }}
-        >
+        <Drawer variant="permanent" open={open}>
           <Toolbar>
+            {/* hamburger */}
             <IconButton
               color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
               edge="start"
-              onClick={() => setOpen(true)}
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                marginRight: 5,
+                ...(open && { display: "none" }),
               }}
             >
               <Menu />
+            </IconButton>
+            <IconButton
+              onClick={handleDrawerClose}
+              sx={{ opacity: open ? 1 : 0 }} // important fix for chevronLeft icon
+            >
+              <ArrowLeft />
             </IconButton>
           </Toolbar>
           <Divider />
           <List>
             {/* dashboard button */}
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ display: "block" }}>
               <Link to="/">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <Home />
+                    <Grid />
                   </ListItemIcon>
-                  {/* <ListItemText primary="Dashboard" /> */}
+                  <ListItemText primary={"Dashboard"} sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
             {/* projects button */}
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ display: "block" }}>
               <Link to="/projects/all">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
-                    <Folder />
+                    <FolderPlus />
                   </ListItemIcon>
-                  {/* <ListItemText primary="Projects" /> */}
+                  <ListItemText
+                    primary="Projects"
+                    sx={listItemTextStyles}
+                  ></ListItemText>
                 </ListItemButton>
               </Link>
             </ListItem>
             {/* teams button */}
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ display: "block" }}>
               <Link to="/teams">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
                     <Users />
                   </ListItemIcon>
-                  {/* <ListItemText primary="Teams" /> */}
+                  <ListItemText
+                    primary="Teams"
+                    sx={listItemTextStyles}
+                  ></ListItemText>
                 </ListItemButton>
               </Link>
             </ListItem>
             {/* issues button */}
-            <ListItem disablePadding>
-              <Link to="/issues?tabs=all">
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <Link to="/issues">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
                     <AlertTriangle />
                   </ListItemIcon>
-                  {/* <ListItemText primary="Issues" /> */}
+                  <ListItemText primary={"Issues"} sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
             {/* signup button */}
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ display: "block" }}>
               <Link to="/signup">
                 <ListItemButton sx={listItemButtonStyles}>
                   <ListItemIcon sx={listItemIconStyles}>
                     <LogIn />
                   </ListItemIcon>
-                  {/* <ListItemText primary="Sign Up" /> */}
+                  <ListItemText primary={"Sign Up"} sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
           </List>
         </Drawer>
       </Box>
-      <SwipeableDrawer
-        open={open}
-        onClose={toggleDrawer}
-        onOpen={toggleDrawer}
-        PaperProps={{
-          sx: {
-            backgroundColor: "background.main",
-            width: drawerWidth,
-          },
-        }}
-      >
-        <Box sx={{ width: 250 }}>
-          <Toolbar>
-            <IconButton onClick={toggleDrawer}>
-              <X />
-            </IconButton>
-          </Toolbar>
-          <List>
-            {/* dashboard button */}
-            <Link to="/" onClick={toggleDrawer} sx={{ width: "100%" }}>
-              <ListItem disablePadding>
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <Home />
-                  </ListItemIcon>
-                  <ListItemText primary="Dashboard" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            {/* projects button */}
-            <Link
-              to="/projects/all"
-              onClick={toggleDrawer}
-              sx={{ width: "100%" }}
-            >
-              <ListItem disablePadding>
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <Folder />
-                  </ListItemIcon>
-                  <ListItemText primary="Projects" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            {/* teams button */}
-            <Link to="/teams">
-              <ListItem
-                disablePadding
-                onClick={toggleDrawer}
-                sx={{ width: "100%" }}
-              >
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <Users />
-                  </ListItemIcon>
-                  <ListItemText primary="Teams" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            {/* issues button */}
-            <Link to="/issues?tabs=all">
-              <ListItem
-                disablePadding
-                onClick={toggleDrawer}
-                sx={{ width: "100%" }}
-              >
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <AlertTriangle />
-                  </ListItemIcon>
-                  <ListItemText primary="Issues" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            {/* signup button */}
-            <Link to="/signup">
-              <ListItem
-                disablePadding
-                onClick={toggleDrawer}
-                sx={{ width: "100%" }}
-              >
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <LogIn />
-                  </ListItemIcon>
-                  <ListItemText primary="Sign Up" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          </List>
-        </Box>
-      </SwipeableDrawer>
-      <StyledSnackbar />
+
       <Box sx={{ flexGrow: 1 }}>
         <Outlet />
       </Box>
+
+      <StyledSnackbar />
     </>
   );
 };

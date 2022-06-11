@@ -17,14 +17,13 @@ import {
   signUpWithEmailAndPassword,
 } from "../../utils/firebase.utils";
 
-const SignUp = (props) => {
+const SignUp = () => {
   const dispatch = useDispatch();
-
-  // Storing user information from form into state
   const [formFields, setFormFields] = useState({
     name: "",
     email: "",
     password: "",
+    uid: "",
   });
 
   const handleSubmit = async (e) => {
@@ -38,9 +37,7 @@ const SignUp = (props) => {
       password
     );
 
-    if (userCredential) {
-      dispatch(setCurrentUser(userCredential));
-    }
+    if (userCredential) dispatch(setCurrentUser(userCredential.user));
   };
 
   // Every time user writes something in TextFields update state
@@ -51,19 +48,13 @@ const SignUp = (props) => {
 
   const continueWithGoogleHandler = async () => {
     const userCredential = await continueWithGoogle();
-
-    // Store userCredential into redux store
-    dispatch(setCurrentUser(userCredential));
+    dispatch(setCurrentUser(userCredential.user));
   };
 
   // Form  Component
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-        }}
-      >
+      <Box sx={{ marginTop: 8 }}>
         <Typography variant="h4" fontWeight="bold">
           Sign Up
         </Typography>
@@ -74,7 +65,7 @@ const SignUp = (props) => {
         </Typography>
       </Box>
 
-      <Divider></Divider>
+      <Divider />
 
       <Box sx={{ padding: "1em 0" }}>
         <Grid container>

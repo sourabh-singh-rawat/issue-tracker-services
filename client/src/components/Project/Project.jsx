@@ -15,12 +15,11 @@ import StyledTab from "../StyledTab/StyledTab";
 import StyledTabs from "../StyledTabs/StyledTabs";
 
 const Project = () => {
-  const params = useParams();
+  const { projectId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const project = useSelector((store) => store.project);
   const dispatch = useDispatch();
-  const { projectId } = params;
   const path = location.pathname.split("/")[3];
 
   const mapPathToIndex = {
@@ -99,6 +98,8 @@ const Project = () => {
             <StyledTab label="Activity" value={103} />
           </StyledTabs>
         </Box>
+      </Grid>
+      <Grid item xs={12}>
         <Outlet context={[selectedTab, project]} />
       </Grid>
     </Grid>

@@ -98,9 +98,7 @@ const IssuesList = () => {
         `http://localhost:4000/api/issues/${id}?projectId=${projectId}`,
         {
           method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ field, value }),
         }
       );
@@ -149,17 +147,20 @@ const IssuesList = () => {
       width: 250,
     },
     {
-      field: "assignee",
+      field: "assigned_to",
       headerName: "Assigned To",
       width: 250,
     },
-    { field: "dueDate", headerName: "Due Date", width: 150 },
+    { field: "due_date", headerName: "Due Date", width: 150 },
     {
       field: "project_id",
       headerName: "Project Id",
       width: 100,
-      align: "center",
-      headerAlign: "center",
+    },
+    {
+      field: "creation_date",
+      headerName: "creation_date",
+      width: 100,
     },
   ];
 
