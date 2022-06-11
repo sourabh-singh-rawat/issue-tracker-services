@@ -53,28 +53,10 @@ const updateIssue = async (req, res) => {
 };
 
 const createIssue = async (req, res) => {
-  const {
-    name,
-    description,
-    status,
-    priority,
-    reporter,
-    assignee,
-    dueDate,
-    projectId,
-  } = req.body;
+  req.body;
 
   try {
-    await IssuesModel.createOne(
-      name,
-      description,
-      status,
-      priority,
-      reporter,
-      assignee,
-      dueDate,
-      projectId
-    );
+    await IssuesModel.insertOne(req.body);
   } catch (error) {
     console.log("CREATE_ERROR: Cannot create issue", error);
     return res.status(400).send("Cannot create issue");

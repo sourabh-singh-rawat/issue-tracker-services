@@ -1,29 +1,36 @@
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import Autocomplete from "@mui/material/Autocomplete";
+import { connect, useSelector } from "react-redux";
+import {
+  Box,
+  Grid,
+  Button,
+  Select,
+  MenuItem,
+  TextField,
+  InputLabel,
+  Typography,
+  FormControl,
+  Autocomplete,
+  Toolbar,
+} from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { enIN } from "date-fns/locale";
 
 const IssueForm = ({ email }) => {
+  const uid = useSelector((store) => store.user.uid);
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
     status: "",
     priority: "",
     reporter: "",
-    assignee: "",
-    dueDate: "",
-    projectId: "",
+    assigned_to: "",
+    due_date: null,
+    project_id: "",
+    team_id: "",
   });
   const [projectNames, setProjectNames] = useState([]);
-  console.log(formFields);
 
   useEffect(() => {
     fetch("http://127.0.0.1:4000/api/projects")
@@ -46,7 +53,7 @@ const IssueForm = ({ email }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/issues/create", {
+    await fetch("http://localhost:4000/api/issues/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,133 +63,206 @@ const IssueForm = ({ email }) => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Grid container columnSpacing={4} rowSpacing={2}>
-        <Grid item sm={12}>
-          <Typography variant="h4" fontWeight="bold">
-            Create Issue
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <TextField
-            name="name"
-            label="Issue Name"
-            onChange={handleChange}
-            fullWidth
-            required
-          />
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <TextField
-            name="description"
-            label="Description"
-            rows={2}
-            onChange={handleChange}
-            multiline
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <Autocomplete
-            disablePortal
-            options={projectNames}
-            onChange={(e, selectedOption) => {
-              if (selectedOption) {
-                const id = selectedOption.split("#")[1];
-                setFormFields({
-                  ...formFields,
-                  projectId: id,
-                });
-              }
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label="Project Name" />
-            )}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Reporter</InputLabel>
-            <Select
-              name="reporter"
-              label="Reporter"
-              value={email}
-              onChange={handleChange}
-              defaultValue=""
-            >
-              {/* project memebers */}
-              <MenuItem value={"Sourabh Singh Rawat"}>
-                Sourabh Singh Rawat
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Assigned To</InputLabel>
-            <Select
-              name="assignee"
-              label="Assigned To"
-              onChange={handleChange}
-              defaultValue=""
-            >
-              {/* project memebers */}
-              <MenuItem value={"Sourabh Singh Rawat"}>
-                Sourabh Singh Rawat
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Priority</InputLabel>
-            <Select
-              name="priority"
-              label="Priority"
-              onChange={handleChange}
-              defaultValue={""}
-            >
-              <MenuItem value={"Low"}>Low</MenuItem>
-              <MenuItem value={"Medium"}>Medium</MenuItem>
-              <MenuItem value={"High"}>High</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            name="dueDate"
-            label="Due Date"
-            type="date"
-            onChange={handleChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Status</InputLabel>
-            <Select
-              name="status"
-              label="Status"
-              onChange={handleChange}
-              defaultValue={""}
-            >
-              <MenuItem value={"Open"}>Open</MenuItem>
-              <MenuItem value={"In Progress"}>Completed</MenuItem>
-              <MenuItem value={"Closed"}>Postponed</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" type="submit" size="large" fullWidth>
-            Create Issue
-          </Button>
-        </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <Toolbar disableGutters>
+          <Typography variant="h6">Add an Issue</Typography>
+        </Toolbar>
       </Grid>
-    </Box>
+      <Grid item xs={12}>
+        <Typography
+          variant="body1"
+          sx={{ color: "primary.text3", marginBottom: 2 }}
+        >
+          Enter important details about the issue.
+        </Typography>
+      </Grid>
+      <Grid container>
+        <Box component="form" onSubmit={handleSubmit}>
+          <Grid container rowSpacing={2} columnSpacing={3}>
+            <Grid item xs={12} sm={12}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Name
+              </Typography>
+              <TextField
+                name="name"
+                onChange={handleChange}
+                fullWidth
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Description
+              </Typography>
+              <TextField
+                name="description"
+                rows={4}
+                onChange={handleChange}
+                multiline
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Project
+              </Typography>
+              <Autocomplete
+                disablePortal
+                options={projectNames}
+                onChange={(e, selectedOption) => {
+                  if (selectedOption) {
+                    const id = selectedOption.split("#")[1];
+                    setFormFields({ ...formFields, project_id: id });
+                  }
+                }}
+                renderInput={(params) => <TextField {...params} />}
+                fullWidth
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Reported By
+              </Typography>
+              <FormControl fullWidth>
+                <Select
+                  name="reporter"
+                  value={email}
+                  onChange={handleChange}
+                  defaultValue=""
+                >
+                  {/* project memebers */}
+                  <MenuItem value={uid}>Sourabh Singh Rawat</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Assigned To
+              </Typography>
+              <FormControl fullWidth>
+                <Select
+                  name="assigned_to"
+                  onChange={handleChange}
+                  defaultValue=""
+                  value={formFields.uid}
+                >
+                  {/* project memebers */}
+                  <MenuItem value={uid}>Sourabh Singh Rawat</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Priority
+              </Typography>
+              <FormControl fullWidth>
+                <Select
+                  name="priority"
+                  onChange={handleChange}
+                  defaultValue={""}
+                >
+                  <MenuItem value={"Low"}>Low</MenuItem>
+                  <MenuItem value={"Medium"}>Medium</MenuItem>
+                  <MenuItem value={"High"}>High</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Due Date
+              </Typography>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                adapterLocale={enIN}
+              >
+                <DatePicker
+                  value={formFields.due_date}
+                  onChange={(date) =>
+                    setFormFields({ ...formFields, due_date: date })
+                  }
+                  renderInput={(props) => <TextField {...props} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Status
+              </Typography>
+              <FormControl fullWidth>
+                <Select name="status" onChange={handleChange} defaultValue={""}>
+                  <MenuItem value={"Open"}>Open</MenuItem>
+                  <MenuItem value={"In Progress"}>In Progress</MenuItem>
+                  <MenuItem value={"Closed"}>Closed</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="contained" type="submit" size="large" fullWidth>
+                Create Issue
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

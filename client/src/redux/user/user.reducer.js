@@ -4,10 +4,6 @@ const initialState = {
   uid: undefined,
   displayName: undefined,
   email: undefined,
-  metadata: {
-    creationTime: undefined,
-    lastSignInTime: undefined,
-  },
 };
 
 const userSlice = createSlice({
@@ -15,24 +11,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser: (state, action) => {
-      const { user } = action.payload;
-      const {
-        uid,
-        email,
-        displayName,
-        metadata: { creationTime, lastSignInTime },
-      } = user;
-
-      return {
-        ...state,
-        uid,
-        displayName,
-        email,
-        metadata: {
-          creationTime,
-          lastSignInTime,
-        },
-      };
+      const { uid, displayName, email } = action.payload;
+      return { ...state, uid, displayName, email };
     },
   },
 });

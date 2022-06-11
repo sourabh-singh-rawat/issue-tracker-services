@@ -41,18 +41,22 @@ const updateOne = (id, field, value) => {
   return db.query(map[field], [value, id]);
 };
 
-const createOne = (
-  name,
-  description,
-  status,
-  priority,
-  reporter,
-  assignee,
-  dueDate,
-  projectId
-) => {
+const insertOne = (document) => {
+  const {
+    name,
+    description,
+    status,
+    priority,
+    reporter,
+    assigned_to,
+    due_date,
+    project_id,
+    // team_id,
+  } = document;
+  console.log(document);
+
   return db.query(
-    `INSERT INTO issues (name, description, status, priority, reporter, assignee, due_date, project_id)
+    `INSERT INTO issues (name, description, status, priority, reporter, assigned_to, due_date, project_id)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [
       name,
@@ -60,11 +64,12 @@ const createOne = (
       status,
       priority,
       reporter,
-      assignee,
-      dueDate,
-      projectId,
+      assigned_to,
+      due_date,
+      project_id,
+      // team_id,
     ]
   );
 };
 
-export default { findOne, find, findByProjectId, updateOne, createOne };
+export default { findOne, find, findByProjectId, updateOne, insertOne };

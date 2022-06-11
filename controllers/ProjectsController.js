@@ -1,22 +1,15 @@
 import ProjectsModel from "../models/Projects.js";
 
 const createProject = async (req, res) => {
-  const { name, description, uid, email, startDate, endDate, status } =
-    req.body;
+  const document = req.body;
+  if (document.name.length === 0) document.name = "Untitled Document";
+  // TODO santitize document
   try {
-    await ProjectsModel.insertOne(
-      name,
-      description,
-      status,
-      uid,
-      email,
-      startDate,
-      endDate
-    );
+    await ProjectsModel.insertOne(document);
     return res.status(200).send("Success");
   } catch (error) {
-    console.log("INSERT_ERROR: Cannot insert data in the table", error);
-    return error;
+    console.log("INSERT_ERROR: Cannot insert new project", error);
+    res.status(400).send("Cannot create new project");
   }
 };
 
@@ -49,6 +42,7 @@ const updateProject = async (req, res) => {
   const { field, value } = req.body;
 
   try {
+    console.log(id, field, value);
     const response = await ProjectsModel.updateOne(id, field, value);
     res.send(response.rows[0]);
   } catch (error) {

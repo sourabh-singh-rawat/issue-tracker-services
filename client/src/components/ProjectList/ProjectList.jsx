@@ -1,15 +1,32 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { format, formatISO, parseISO } from "date-fns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { enIN } from "date-fns/locale";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
-import { Select, MenuItem, Typography, FormControl } from "@mui/material";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
+import {
+  Select,
+  MenuItem,
+  TextField,
+  Typography,
+  FormControl,
+} from "@mui/material";
 import { setProjectList } from "../../redux/project-list/project-list.reducer";
+import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
   const projectList = useSelector((store) => store.projectList);
   const [pageSize, setPageSize] = useState(10);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const dateInput = (props) => <TextField {...props} variant="standard" />;
+  const handleStartDateChange = (dateSelected) => setStartDate(dateSelected);
+  const handleEndDateChange = (dateSelected) => setEndDate(dateSelected);
 
   useEffect(() => {
     (async () => {
@@ -20,7 +37,7 @@ const ProjectList = () => {
       const data = await response.json();
       dispatch(setProjectList(data));
     })();
-  }, []);
+  }, [setStartDate, setEndDate]);
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
@@ -45,137 +62,144 @@ const ProjectList = () => {
     return (
       <FormControl size="small" fullWidth>
         <Select value={value} onChange={handleChange} fullWidth>
-          {["Not Started", "Open", "Completed", "Paused"].map((text) => (
-            <MenuItem value={text} key={text}>
-              <Typography variant="body2">{text}</Typography>
-            </MenuItem>
-          ))}
+          {["Not Started", "Open", "Paused", "Closed"].map((value) => {
+            return (
+              <MenuItem value={value} key={value} sx={{ background: "none" }}>
+                <Typography variant="body2">{value}</Typography>
+              </MenuItem>
+            );
+          })}
         </Select>
       </FormControl>
     );
   };
 
-  const renderSelectEditInputCell = (params) => {
-    return <SelectEditInputCell {...params} />;
-  };
-
-  const handleCellEditStop = async (params, e) => {
-    const id = params.id;
-    const field = params.field;
-    const old = params.value;
-    const value = e.target.value;
-
-    if (value && old !== value) {
-      const response = await fetch(`http://localhost:4000/api/projects/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ field, value }),
-      });
-
-      if (response.status === 200) dispatch(setSnackbarOpen(true));
-    }
-  };
-
-  const renderNameCell = (params) => (
-    <Link to={`/projects/${params.row.id}/overview`}>
-      <Typography variant="body1" sx={{ color: "primary.text3" }}>
-        {params.row.name}
-      </Typography>
-    </Link>
+  const renderSelectEditInputCell = (params) => (
+    <SelectEditInputCell {...params} />
   );
 
-  const renderDateCell = (params) =>
-    new Date(params.value).toLocaleDateString("en-gb", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-
   // COLUMN DEFINTIONS
-  const nameCol = {
-    field: "name",
-    headerName: "Name",
-    minWidth: 325,
-    editable: true,
-    flex: 0.8,
-    renderCell: renderNameCell,
-  };
-
-  const idCol = {
-    field: "id",
-    headerName: "Id",
-    minWidth: 75,
-    align: "center",
-    headerAlign: "center",
-    flex: 0.15,
-  };
-
-  const ownerEmailCol = {
-    field: "owner_email",
-    headerName: "Owner",
-    minWidth: 250,
-  };
-
-  const statusCol = {
-    field: "status",
-    headerName: "Status",
-    minWidth: 150,
-    editable: "true",
-    renderCell: (params) => {
-      return renderSelectEditInputCell(params);
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      minWidth: 300,
+      flex: 0.5,
+      renderCell: (params) => (
+        <Link to={`/projects/${params.row.id}/overview`}>
+          <Typography variant="body1" sx={{ color: "primary.text3" }}>
+            {params.row.name}
+          </Typography>
+        </Link>
+      ),
     },
-    renderEditCell: renderSelectEditInputCell,
-  };
+    {
+      field: "id",
+      headerName: "Id",
+      minWidth: 75,
+      align: "center",
+      headerAlign: "center",
+      flex: 0.15,
+    },
+    {
+      field: "owner_email",
+      headerName: "Owner",
+      minWidth: 250,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 150,
+      editable: true,
+      renderCell: (params) => renderSelectEditInputCell(params),
+      renderEditCell: renderSelectEditInputCell,
+    },
+    {
+      field: "start_date",
+      headerName: "Start Date",
+      type: "date",
+      flex: 0.15,
+      minWidth: 150,
+      renderCell: ({ id, field, value, row }) => {
+        return (
+          <LocalizationProvider
+            dateAdapter={AdapterDateFns}
+            adapterLocale={enIN}
+          >
+            <DatePicker
+              value={startDate || value}
+              maxDateTime={parseISO(row.end_date)}
+              renderInput={dateInput}
+              onChange={handleStartDateChange}
+              onAccept={async (date) => {
+                const response = await fetch(
+                  `http://localhost:4000/api/projects/${id}`,
+                  {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ field, value: date }),
+                  }
+                );
 
-  const startDateCol = {
-    field: "start_date",
-    headerName: "Start Date",
-    minWidth: 125,
-    editable: true,
-    type: "date",
-    renderCell: renderDateCell,
-  };
-
-  const endDateCol = {
-    field: "end_date",
-    headerName: "End Date",
-    minWidth: 125,
-    editable: true,
-    type: "date",
-    renderCell: renderDateCell,
-  };
+                if (response.status === 200) dispatch(setSnackbarOpen(true));
+              }}
+            />
+          </LocalizationProvider>
+        );
+      },
+    },
+    {
+      field: "end_date",
+      headerName: "End Date",
+      type: "date",
+      flex: 0.15,
+      minWidth: 150,
+      renderCell: ({ id, field, value, row }) => {
+        return (
+          <LocalizationProvider
+            dateAdapter={AdapterDateFns}
+            adapterLocale={enIN}
+          >
+            <DatePicker
+              value={endDate || value}
+              minDateTime={row.start_date}
+              renderInput={dateInput}
+              onChange={handleEndDateChange}
+              onAccept={async (date) => {
+                const response = await fetch(
+                  `http://localhost:4000/api/projects/${id}`,
+                  {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ field, value: date }),
+                  }
+                );
+                if (response.status === 200) dispatch(setSnackbarOpen(true));
+              }}
+            />
+          </LocalizationProvider>
+        );
+      },
+    },
+  ];
 
   return (
     <DataGrid
       rows={projectList.projects}
-      columns={[
-        nameCol,
-        idCol,
-        ownerEmailCol,
-        statusCol,
-        startDateCol,
-        endDateCol,
-      ]}
+      columns={columns}
       pageSize={pageSize}
       onPageSizeChange={(pageSize) => setPageSize(pageSize)}
       rowsPerPageOptions={[10, 20, 50, 100]}
       initialState={{ sorting: { sortModel: [{ field: "id", sort: "asc" }] } }}
-      onCellEditStop={handleCellEditStop}
       autoHeight
-      checkboxSelection
-      experimentalFeatures={{ newEditingApi: true }}
       disableColumnMenu={true}
       disableSelectionOnClick
+      experimentalFeatures={{ newEditingApi: true }}
       sx={{
         border: 0,
         fontSize: "inherit",
         color: "primary.text2",
-        ".MuiDataGrid-cell": {
-          border: 0,
-          color: "primary.text3",
-        },
+        ".MuiDataGrid-cell": { border: 0, color: "primary.text3" },
       }}
     />
   );

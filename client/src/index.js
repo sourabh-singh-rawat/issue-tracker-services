@@ -4,7 +4,6 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { store } from "./redux/store";
 import { ThemeProvider } from "@emotion/react";
-
 import { theme } from "./theme.styles";
 
 import App from "./App";
