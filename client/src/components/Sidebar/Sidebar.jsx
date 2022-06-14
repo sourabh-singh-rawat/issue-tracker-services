@@ -15,7 +15,6 @@ import {
   ListItemButton,
   CssBaseline,
 } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {
   Menu,
   ArrowLeft,
@@ -25,8 +24,12 @@ import {
   FolderPlus,
   LogIn,
 } from "react-feather";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StyledSnackbar from "../StyledSnackBar/StyledSnackBar";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../utils/firebase.utils";
+import { setCurrentUser } from "../../redux/user/user.reducer";
+import { useDispatch } from "react-redux";
 
 export const drawerWidth = 240;
 
@@ -61,6 +64,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => setOpen(true);
@@ -153,7 +157,7 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <AlertTriangle />
                   </ListItemIcon>
-                  <ListItemText primary={"Issues"} sx={listItemTextStyles} />
+                  <ListItemText primary="Issues" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -164,9 +168,18 @@ const Sidebar = () => {
                   <ListItemIcon sx={listItemIconStyles}>
                     <LogIn />
                   </ListItemIcon>
-                  <ListItemText primary={"Sign Up"} sx={listItemTextStyles} />
+                  <ListItemText primary="Sign Up" sx={listItemTextStyles} />
                 </ListItemButton>
               </Link>
+            </ListItem>
+            {/* signout button */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton sx={listItemButtonStyles}>
+                <ListItemIcon sx={listItemIconStyles}>
+                  <LogIn />
+                </ListItemIcon>
+                <ListItemText primary="Sign Out" sx={listItemTextStyles} />
+              </ListItemButton>
             </ListItem>
           </List>
         </Drawer>

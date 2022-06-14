@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { setCurrentUser } from "../../redux/user/user.reducer";
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -18,10 +16,10 @@ import {
 } from "../../utils/firebase.utils";
 
 const SignUp = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
     name: "",
-    email: "",
+    owner_email: "",
     password: "",
     uid: "",
   });
@@ -36,8 +34,6 @@ const SignUp = () => {
       email,
       password
     );
-
-    if (userCredential) dispatch(setCurrentUser(userCredential.user));
   };
 
   // Every time user writes something in TextFields update state
@@ -48,7 +44,7 @@ const SignUp = () => {
 
   const continueWithGoogleHandler = async () => {
     const userCredential = await continueWithGoogle();
-    dispatch(setCurrentUser(userCredential.user));
+    navigate("/");
   };
 
   // Form  Component

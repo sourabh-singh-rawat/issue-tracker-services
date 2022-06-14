@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -57,9 +58,17 @@ export const signUpWithEmailAndPassword = async (
 export const storeUserInfoInDatabase = async ({ user }) => {
   const { uid, displayName, email } = user;
 
-  await fetch("http://localhost:4000/api/users/create", {
+  await fetch("http://localhost:4000/api/users", {
     method: "POST",
     body: JSON.stringify({ name: displayName, email, uid }),
     headers: { "Content-Type": "application/json" },
   });
+};
+
+export const signOutUser = () => {
+  signOut(auth);
+};
+
+export const onAuthStateChangedListener = (callback) => {
+  return onAuthStateChanged(auth, callback);
 };

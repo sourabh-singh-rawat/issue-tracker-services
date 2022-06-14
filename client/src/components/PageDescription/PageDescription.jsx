@@ -29,10 +29,7 @@ const PageDescription = ({ type }) => {
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              field: "description",
-              value: page.description,
-            }),
+            body: JSON.stringify({ description: page.description }),
           }
         );
 
@@ -44,13 +41,8 @@ const PageDescription = ({ type }) => {
           `http://localhost:4000/api/issues/${page.id}`,
           {
             method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              field: "description",
-              value: page.description,
-            }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description: page.description }),
           }
         );
         if (response.status === 200) dispatch(setSnackbarOpen(true));

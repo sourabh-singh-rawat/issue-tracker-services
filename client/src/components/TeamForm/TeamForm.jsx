@@ -3,10 +3,7 @@ import { Grid, Box, Typography, TextField } from "@mui/material";
 import StyledAppBar from "../StyledAppbar/StyledAppbar";
 
 const TeamForm = () => {
-  const [formFields, setFormFields] = useState({
-    name: "",
-    description: "",
-  });
+  const [formFields, setFormFields] = useState({ name: "", description: "" });
 
   const handleChange = (e) => {
     const fieldName = e.target.name;

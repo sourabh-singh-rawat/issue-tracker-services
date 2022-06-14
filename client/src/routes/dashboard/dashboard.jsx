@@ -13,11 +13,4 @@ const Dashboard = () => {
   );
 };
 
-const mapStateToProps = (state) => {
-  console.log(state);
-  return {
-    user: state.user,
-  };
-};
-
-export default connect(mapStateToProps)(Dashboard);
+export default Dashboard;

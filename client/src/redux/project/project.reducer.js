@@ -7,10 +7,10 @@ const initialState = {
   previousName: "",
   description: "",
   descriptionSelected: false,
-  ownerUid: "",
-  ownerEmail: "",
-  startDate: "",
-  endDate: "",
+  owner_uid: "",
+  owner_email: "",
+  start_date: "",
+  end_date: "",
 };
 
 const projectReducer = createSlice({

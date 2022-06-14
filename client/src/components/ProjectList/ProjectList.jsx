@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { format, formatISO, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { enIN } from "date-fns/locale";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -53,7 +53,7 @@ const ProjectList = () => {
       const response = await fetch(`http://localhost:4000/api/projects/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ field, value: event.target.value }),
+        body: JSON.stringify({ [field]: event.target.value }),
       });
       if (response.status === 200) dispatch(setSnackbarOpen(true));
       if (isValid) apiRef.current.stopCellEditMode({ id, field });
@@ -96,10 +96,10 @@ const ProjectList = () => {
     {
       field: "id",
       headerName: "Id",
-      minWidth: 75,
+      minWidth: 50,
       align: "center",
       headerAlign: "center",
-      flex: 0.15,
+      flex: 0.1,
     },
     {
       field: "owner_email",
@@ -137,7 +137,7 @@ const ProjectList = () => {
                   {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ field, value: date }),
+                    body: JSON.stringify({ [field]: date }),
                   }
                 );
 
@@ -171,7 +171,7 @@ const ProjectList = () => {
                   {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ field, value: date }),
+                    body: JSON.stringify({ [field]: date }),
                   }
                 );
                 if (response.status === 200) dispatch(setSnackbarOpen(true));

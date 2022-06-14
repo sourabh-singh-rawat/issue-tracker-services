@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import {
   Box,
@@ -7,7 +8,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  InputLabel,
   Typography,
   FormControl,
   Autocomplete,
@@ -18,6 +18,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { enIN } from "date-fns/locale";
 
 const IssueForm = ({ email }) => {
+  const navigate = useNavigate();
   const uid = useSelector((store) => store.user.uid);
   const [formFields, setFormFields] = useState({
     name: "",
@@ -53,13 +54,16 @@ const IssueForm = ({ email }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:4000/api/issues/create", {
+    const response = await fetch("http://localhost:4000/api/issues", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formFields),
     });
+
+    const { id } = await response.json();
+    navigate(`/issues/${id}/overview`);
   };
 
   return (
@@ -153,17 +157,13 @@ const IssueForm = ({ email }) => {
               >
                 Reported By
               </Typography>
-              <FormControl fullWidth>
-                <Select
-                  name="reporter"
-                  value={email}
-                  onChange={handleChange}
-                  defaultValue=""
-                >
-                  {/* project memebers */}
-                  <MenuItem value={uid}>Sourabh Singh Rawat</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+                name="reporter"
+                value={email}
+                disabled
+                onChange={handleChange}
+                fullWidth
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography
