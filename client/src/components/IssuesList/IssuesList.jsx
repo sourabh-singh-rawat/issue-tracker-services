@@ -15,11 +15,11 @@ import {
 const IssuesList = () => {
   const issueList = useSelector((store) => store.issueList);
   const dispatch = useDispatch();
-  const [selectedTab, project, tab] = useOutletContext();
+  const [selectedTab, project] = useOutletContext();
   const [pageSize, setPageSize] = useState(10);
 
-  let projectId;
-  project ? (projectId = project.id) : (projectId = "");
+  let project_id;
+  project ? (project_id = project.id) : (project_id = "");
 
   const SelectEditInputCell = (props) => {
     const { id, value, field } = props;
@@ -36,10 +36,8 @@ const IssuesList = () => {
 
       const response = await fetch(`http://localhost:4000/api/issues/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ field, value: event.target.value }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: event.target.value }),
       });
 
       if (response.status === 200) dispatch(setSnackbarOpen(true));
@@ -85,27 +83,6 @@ const IssuesList = () => {
       </Typography>
     </Link>
   );
-
-  const handleCellEditStop = async (params, e) => {
-    const id = params.id;
-    const field = params.field;
-    const old = params.value;
-    const value = e.target.value;
-    const projectId = params.row.project_id;
-
-    if (value && old !== value) {
-      const response = await fetch(
-        `http://localhost:4000/api/issues/${id}?projectId=${projectId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ field, value }),
-        }
-      );
-
-      if (response.status === 200) dispatch(setSnackbarOpen(true));
-    }
-  };
 
   const columns = [
     {
@@ -165,27 +142,16 @@ const IssuesList = () => {
   ];
 
   useEffect(() => {
-    if (projectId) {
-      fetch(`http://localhost:4000/api/issues/?projectId=${projectId}`, {
-        method: "GET",
+    fetch(`http://localhost:4000/api/issues?project_id=${project_id}`, {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
       })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          dispatch(setIssueList(data));
-        });
-    } else
-      fetch(`http://localhost:4000/api/issues/all`, {
-        method: "GET",
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          dispatch(setIssueList(data));
-        });
-  }, [projectId]);
+      .then((data) => {
+        dispatch(setIssueList(data));
+      });
+  }, [project_id]);
 
   return (
     <Grid container>
@@ -203,7 +169,6 @@ const IssuesList = () => {
               sortModel: [{ field: "id", sort: "asc" }],
             },
           }}
-          onCellEditStop={handleCellEditStop}
           autoHeight
           checkboxSelection
           disableSelectionOnClick

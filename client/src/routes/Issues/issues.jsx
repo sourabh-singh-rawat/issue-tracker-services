@@ -9,7 +9,6 @@ import { Grid, Typography } from "@mui/material";
 import StyledTab from "../../components/StyledTab/StyledTab";
 import StyledTabs from "../../components/StyledTabs/StyledTabs";
 import StyledAppBar from "../../components/StyledAppbar/StyledAppbar";
-import IssuesList from "../../components/IssuesList/IssuesList";
 
 const Issues = () => {
   const navigate = useNavigate();

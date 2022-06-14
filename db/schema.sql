@@ -35,15 +35,14 @@ CREATE TABLE IF NOT EXISTS projects (
   name VARCHAR(255),
   description VARCHAR,
   status VARCHAR(25),
-  owner_uid VARCHAR(255), --global
+  owner_uid VARCHAR(255) NOT NULL, --global
   owner_email VARCHAR(255),
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   start_date TIMESTAMP WITH TIME ZONE,
   end_date TIMESTAMP WITH TIME ZONE,
 
   PRIMARY KEY (id),
-  FOREIGN KEY (owner_uid) REFERENCES users(uid),
-  FOREIGN KEY (owner_email) REFERENCES users(email)
+  FOREIGN KEY (owner_uid) REFERENCES users(uid)
 );
 
 -- issues

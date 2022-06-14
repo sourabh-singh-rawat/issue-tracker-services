@@ -68,13 +68,13 @@ const Issue = ({ issue }) => {
             {[
               { text: "projects", onClick: () => navigate(`/projects/all`) },
               {
-                text: issue.projectName && issue.projectName.toLowerCase(),
+                text: issue.project_name && issue.project_name.toLowerCase(),
                 onClick: () =>
-                  navigate(`/projects/${issue.projectId}/overview`),
+                  navigate(`/projects/${issue.project_id}/overview`),
               },
               {
                 text: "issues",
-                onClick: () => navigate(`/projects/${issue.projectId}/issues`),
+                onClick: () => navigate(`/projects/${issue.project_id}/issues`),
               },
             ].map(({ text, onClick }) => (
               <Link

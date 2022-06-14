@@ -34,10 +34,7 @@ const PageTitle = ({ type }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            field: "name",
-            value: page.name,
-          }),
+          body: JSON.stringify({ ["name"]: page.name }),
         }).then((response) => {
           if (response.status === 200) dispatch(setSnackbarOpen(true));
         });
@@ -50,10 +47,7 @@ const PageTitle = ({ type }) => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              field: "name",
-              value: page.name,
-            }),
+            body: JSON.stringify({ ["name"]: page.name }),
           }
         ).then((response) => {
           if (response.status === 200) dispatch(setSnackbarOpen(true));

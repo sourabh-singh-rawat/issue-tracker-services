@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import en_IN from "date-fns/locale/en-IN";
@@ -16,6 +16,8 @@ import {
   Typography,
   FormControl,
 } from "@mui/material";
+import { auth, onAuthStateChangedListener } from "../../utils/firebase.utils";
+import { setCurrentUser } from "../../redux/user/user.reducer";
 
 const ProjectForm = () => {
   const navigate = useNavigate();
@@ -23,8 +25,8 @@ const ProjectForm = () => {
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    email,
-    uid,
+    owner_email: "",
+    owner_uid: uid,
     status: "",
     start_date: null,
     end_date: null,
@@ -36,19 +38,15 @@ const ProjectForm = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    console.log(formFields);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:4000/api/projects/create", {
+    const response = await fetch("http://localhost:4000/api/projects", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formFields),
-    }).then((response) => {
-      if (response.status === 200)
-        response.json().then((data) => {
-          navigate(`/project/${data.id}/overview`);
-        });
     });
+    const { id } = await response.json();
+    if (response.status === 200) navigate(`/projects/${id}/overview`);
   };
 
   return (
@@ -189,7 +187,7 @@ const ProjectForm = () => {
                 Owner Email
               </Typography>
               <TextField
-                name="email"
+                name="owner_email"
                 value={email}
                 onChange={handleChange}
                 autoFocus={true}

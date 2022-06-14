@@ -10,11 +10,10 @@ const initialState = {
   status: "",
   priority: "",
   reporter: "",
-  assignee: "",
-  dueDate: "",
-  projectId: "",
-  projectName: "",
-  projectOwnerUid: "",
+  assigned_to: "",
+  due_date: "",
+  project_id: "",
+  project_name: "",
 };
 
 const issueReducer = createSlice({
