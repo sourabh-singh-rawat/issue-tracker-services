@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import en_IN from "date-fns/locale/en-IN";
@@ -8,16 +8,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   Box,
   Grid,
-  Select,
   Button,
   Toolbar,
-  MenuItem,
   TextField,
   Typography,
-  FormControl,
 } from "@mui/material";
-import { auth, onAuthStateChangedListener } from "../../utils/firebase.utils";
-import { setCurrentUser } from "../../redux/user/user.reducer";
+import StyledSelect from "../StyledSelect/StyledSelect";
+import StyledTextField from "../StyledTextField/StyledTextField";
+import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 
 const ProjectForm = () => {
   const navigate = useNavigate();
@@ -68,86 +66,34 @@ const ProjectForm = () => {
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container rowSpacing={2} columnSpacing={3}>
             <Grid item xs={12} sm={12} md={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Name
-              </Typography>
-              <TextField
-                helperText="Do not exceed 20 characters"
-                name="name"
+              <StyledTextField
+                name="Name"
+                type="text"
                 onChange={handleChange}
-                fullWidth
-                sx={{
-                  "& .MuiFormHelperText-contained": {
-                    marginLeft: 0,
-                  },
-                }}
+                helperText="Do not exceed 50 characters"
               />
             </Grid>
             <Grid item xs={12} sm={12} md={3}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Start Date
-              </Typography>
-              <LocalizationProvider
-                dateAdapter={AdapterDateFns}
-                adapterLocale={en_IN}
-              >
-                <DatePicker
-                  value={formFields.start_date}
-                  onChange={(date) => {
-                    setFormFields({ ...formFields, start_date: date });
-                  }}
-                  maxDate={formFields.end_date}
-                  renderInput={(params) => (
-                    <TextField name="start_date" {...params} fullWidth />
-                  )}
-                />
-              </LocalizationProvider>
+              <StyledDatePicker
+                name="start_date"
+                value={formFields.start_date}
+                maxDate={formFields.end_date}
+                onChange={(date) =>
+                  setFormFields({ ...formFields, start_date: date })
+                }
+                handleChange={handleChange}
+              />
             </Grid>
             <Grid item xs={12} sm={12} md={3}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                End Date
-              </Typography>
-              <LocalizationProvider
-                dateAdapter={AdapterDateFns}
-                adapterLocale={en_IN}
-              >
-                <DatePicker
-                  value={formFields.end_date}
-                  onChange={(date) => {
-                    setFormFields({ ...formFields, end_date: date });
-                  }}
-                  minDate={formFields.start_date}
-                  renderInput={(params) => (
-                    <TextField
-                      name="end_date"
-                      onChange={handleChange}
-                      {...params}
-                      fullWidth
-                    />
-                  )}
-                />
-              </LocalizationProvider>
+              <StyledDatePicker
+                name="end_date"
+                value={formFields.end_date}
+                minDate={formFields.start_date}
+                onChange={(date) =>
+                  setFormFields({ ...formFields, end_date: date })
+                }
+                handleChange={handleChange}
+              />
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
               <Typography
@@ -160,64 +106,31 @@ const ProjectForm = () => {
               >
                 Status
               </Typography>
-              <FormControl fullWidth>
-                <Select
-                  value={formFields.status}
-                  name="status"
-                  onChange={handleChange}
-                  defaultValue="Not Started"
-                  displayEmpty
-                >
-                  <MenuItem value="Not Started">Not Started</MenuItem>
-                  <MenuItem value="Open">Open</MenuItem>
-                  <MenuItem value="Completed">Completed</MenuItem>
-                  <MenuItem value="Pasued">Paused</MenuItem>
-                </Select>
-              </FormControl>
+              <StyledSelect
+                name="status"
+                value={formFields.status}
+                onChange={handleChange}
+                items={["Not Started", "Open", "Completed", "Paused"]}
+                defaultValue={"Not Started"}
+              />
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Owner Email
-              </Typography>
-              <TextField
-                name="owner_email"
+              <StyledTextField
+                name="Email"
+                type="email"
                 value={email}
                 onChange={handleChange}
-                autoFocus={true}
-                fullWidth
                 disabled
               />
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Description
-              </Typography>
-              <TextField
-                name="description"
-                helperText="Do not exceed 100 characters"
-                rows={4}
+              <StyledTextField
+                name="Description"
+                type="text"
                 onChange={handleChange}
+                rows={4}
+                helperText="Do not exceed 100 characters"
                 multiline
-                fullWidth
-                sx={{
-                  "& .MuiFormHelperText-contained": {
-                    marginLeft: 0,
-                  },
-                }}
               />
             </Grid>
           </Grid>

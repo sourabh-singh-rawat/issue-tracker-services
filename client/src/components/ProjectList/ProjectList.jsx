@@ -16,6 +16,7 @@ import {
 import { setProjectList } from "../../redux/project-list/project-list.reducer";
 import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
 import { DatePicker } from "@mui/x-date-pickers";
+import StyledSelect from "../StyledSelect/StyledSelect";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,10 @@ const ProjectList = () => {
     (async () => {
       const response = await fetch("http://localhost:4000/api/projects", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("TOKEN"),
+        },
       });
       const data = await response.json();
       dispatch(setProjectList(data));
@@ -60,17 +64,14 @@ const ProjectList = () => {
     };
 
     return (
-      <FormControl size="small" fullWidth>
-        <Select value={value} onChange={handleChange} fullWidth>
-          {["Not Started", "Open", "Paused", "Closed"].map((value) => {
-            return (
-              <MenuItem value={value} key={value} sx={{ background: "none" }}>
-                <Typography variant="body2">{value}</Typography>
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+      <StyledSelect
+        size="small"
+        name="status"
+        value={value}
+        onChange={handleChange}
+        items={["Not Started", "Open", "Completed", "Paused"]}
+        defaultValue={"Not Started"}
+      />
     );
   };
 

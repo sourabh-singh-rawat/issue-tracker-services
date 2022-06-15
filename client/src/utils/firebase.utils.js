@@ -2,13 +2,14 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   updateProfile,
-  onAuthStateChanged,
-  signOut,
 } from "firebase/auth";
 
+// Main firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDm_H6GkkUh5DuXCwyMHmZLrIeLWn3iaE0",
   authDomain: "issue-tracker-66803.firebaseapp.com",
@@ -23,13 +24,11 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
-// TODO: Authenticated user
-
 // Continue with Google
 const googleAuthProvider = new GoogleAuthProvider();
+
 export const continueWithGoogle = async () => {
-  const userCredential = await signInWithPopup(auth, googleAuthProvider);
-  console.log("User signed in using google popup");
+  const userCredential = await signInWithRedirect(auth, googleAuthProvider);
 
   storeUserInfoInDatabase(userCredential);
 
@@ -65,9 +64,9 @@ export const storeUserInfoInDatabase = async ({ user }) => {
   });
 };
 
-export const signOutUser = () => {
-  signOut(auth);
-};
+// export const signOutUser = () => {
+//   signOut(auth);
+// };
 
 export const onAuthStateChangedListener = (callback) => {
   return onAuthStateChanged(auth, callback);
