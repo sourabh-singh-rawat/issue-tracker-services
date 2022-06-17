@@ -64,7 +64,7 @@ const Issue = ({ issue }) => {
     <Grid container>
       <Grid item xs={12}>
         <Toolbar disableGutters>
-          <Breadcrumbs separator="•">
+          <Breadcrumbs separator=">">
             {[
               { text: "projects", onClick: () => navigate(`/projects/all`) },
               {
@@ -81,12 +81,22 @@ const Issue = ({ issue }) => {
                 key={text}
                 onClick={onClick}
                 underline="hover"
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: "pointer", color: "text.subtitle1" }}
               >
-                <Typography>{text}</Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: "bold",
+                    ":hover": { color: "text.main" },
+                  }}
+                >
+                  {text}
+                </Typography>
               </Link>
             ))}
-            <Typography>{issue.id}</Typography>
+            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+              {issue.id}
+            </Typography>
           </Breadcrumbs>
         </Toolbar>
       </Grid>

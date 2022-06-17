@@ -54,15 +54,12 @@ const PageDescription = ({ type }) => {
 
   return (
     <Grid container>
-      <Grid
-        item
-        sm={12}
-        sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-      >
+      <Grid item sm={12} sx={{ display: "flex", alignItems: "center" }}>
         <Typography
-          variant="h5"
           sx={{
             fontWeight: "bold",
+            color: "text.main",
+            fontSize: "16px",
           }}
         >
           Description
@@ -86,9 +83,7 @@ const PageDescription = ({ type }) => {
           }}
           sx={{
             color: "background.main3",
-            ":hover": {
-              color: "primary.main",
-            },
+            ":hover": { color: "primary.main" },
           }}
         >
           <Edit2 width="24px" height="24px" />
@@ -102,17 +97,9 @@ const PageDescription = ({ type }) => {
             autoFocus
             multiline
             fullWidth
-            InputProps={{
-              style: {
-                color: "primary.text",
-                fontSize: "inherit",
-              },
-            }}
           />
         ) : (
-          <Typography variant="body1" sx={{ lineHeight: 1.5 }}>
-            {page.description}
-          </Typography>
+          <Typography variant="body2">{page.description}</Typography>
         )}
       </Grid>
       {/* edit buttons */}
@@ -148,13 +135,11 @@ const PageDescription = ({ type }) => {
                 );
             }}
             sx={{
-              color: "primary.text",
+              color: "text.main",
               textTransform: "none",
               marginLeft: "5px",
-              backgroundColor: "background.main",
-              ":hover": {
-                backgroundColor: "background.main2",
-              },
+              backgroundColor: "transparent",
+              ":hover": { backgroundColor: "primary.dark" },
             }}
           >
             <Typography variant="body2">Cancel</Typography>
