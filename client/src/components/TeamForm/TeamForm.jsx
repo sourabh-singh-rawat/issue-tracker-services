@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Grid, Box, Typography, TextField } from "@mui/material";
-import StyledAppBar from "../StyledAppbar/StyledAppbar";
 
 const TeamForm = () => {
   const [formFields, setFormFields] = useState({ name: "", description: "" });
@@ -20,9 +19,6 @@ const TeamForm = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <Typography variant="h4" fontWeight="bold">
-        <StyledAppBar>Create Team</StyledAppBar>
-      </Typography>
       <Grid container columnSpacing={4} rowSpacing={2}>
         <Grid item sm={12}>
           <TextField

@@ -73,32 +73,39 @@ const IssuesList = () => {
     <SelectEditInputCell {...params} />
   );
 
-  const renderNameCell = (params) => (
-    <Link to={`/issues/${params.row.id}/overview`}>
-      <Typography
-        variant="body1"
-        sx={{ textDecoration: "none", color: "primary.text" }}
-      >
-        {params.row.name}
-      </Typography>
-    </Link>
-  );
-
   const columns = [
-    {
-      field: "id",
-      headerName: "#",
-      width: 100,
-      align: "center",
-      headerAlign: "center",
-    },
     {
       field: "name",
       headerName: "Name",
-      flex: 0.7,
-      minWidth: 500,
-      renderCell: renderNameCell,
+      flex: 0.3,
+      minWidth: 300,
+      renderCell: (params) => (
+        <Link
+          to={`/issues/${params.row.id}/overview`}
+          style={{ textDecoration: "none" }}
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.subtitle1",
+              fontWeight: "bold",
+              "&:hover": {
+                color: "primary.main",
+                textDecoration: "none!important",
+              },
+            }}
+          >
+            {params.row.name}
+          </Typography>
+        </Link>
+      ),
       editable: true,
+    },
+    {
+      field: "id",
+      headerName: "ID",
+      minWidth: 100,
+      flex: 0.14,
     },
     {
       editable: true,
@@ -136,7 +143,7 @@ const IssuesList = () => {
     },
     {
       field: "creation_date",
-      headerName: "creation_date",
+      headerName: "Created On",
       width: 100,
     },
   ];
@@ -166,20 +173,22 @@ const IssuesList = () => {
           getRowId={(row) => row.id}
           initialState={{
             sorting: {
-              sortModel: [{ field: "id", sort: "asc" }],
+              sortModel: [{ field: "creation_date", sort: "asc" }],
             },
           }}
           autoHeight
-          checkboxSelection
           disableSelectionOnClick
           sx={{
             border: 0,
-            fontSize: "inherit",
             color: "primary.text2",
             ".MuiDataGrid-cell": {
               border: 0,
               boxShadow: 0,
-              color: "primary.text3",
+              color: "text.subtitle1",
+            },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              fontWeight: "bold",
+              fontSize: "16px",
             },
           }}
         />

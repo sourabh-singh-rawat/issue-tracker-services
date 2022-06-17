@@ -7,15 +7,16 @@ const StyledTabs = (props) => {
       textColor="inherit"
       fontSize="inherit"
       sx={{
-        borderRadius: 1,
         color: "primary.main",
-        borderBottom: "2px solid #f1f3f7",
-        // backgroundColor: "background.main3",
+        borderBottom: "1px solid #e3e4e6",
+
         "& .Mui-selected": {
           color: "primary.main",
         },
         "& .MuiTabs-indicator": {
           backgroundColor: "primary.main",
+          display: "flex",
+          justifyContent: "center",
         },
       }}
     />

@@ -1,64 +1,59 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  signInWithGoogle,
+  signUpWithEmailAndPassword,
+} from "../../firebase/auth";
+import {
   Box,
   Grid,
   Button,
   Divider,
   Container,
-  TextField,
   Typography,
 } from "@mui/material";
-
-import {
-  continueWithGoogle,
-  signUpWithEmailAndPassword,
-} from "../../utils/firebase.utils";
 import StyledTextField from "../../components/StyledTextField/StyledTextField";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
     name: "",
-    owner_email: "",
+    email: "",
     password: "",
-    uid: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // TODO: Sanitization
-    const { name, email, password } = formFields;
-    const userCredential = await signUpWithEmailAndPassword(
-      name,
-      email,
-      password
-    );
+    const { email, password } = formFields;
+    try {
+      const response = await signUpWithEmailAndPassword(email, password);
+      const { user } = response;
+      navigate("/");
+    } catch (error) {
+      console.log("error");
+    }
   };
 
-  // Every time user writes something in TextFields update state
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name);
     setFormFields({ ...formFields, [name]: value });
   };
 
   const continueWithGoogleHandler = async () => {
-    const userCredential = await continueWithGoogle();
+    await signInWithGoogle();
     navigate("/");
   };
 
-  // Form  Component
   return (
     <Container component="main" maxWidth="xs">
-      <Grid container>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <Box sx={{ marginTop: 8 }}>
             <Typography variant="h4" fontWeight="bold">
               Sign Up
             </Typography>
-
-            <Typography variant="body1" paddingBottom="1em">
+            <Typography variant="body1">
               Create an account & help your organization track issues
               efficiently.
               <Link to="/">Dashboard</Link>
@@ -68,15 +63,25 @@ const SignUp = () => {
         <Grid item xs={12}>
           <Divider />
           <Box sx={{ padding: "1em 0" }}>
-            <Grid container>
-              <Grid item xs={8}>
+            <Typography>Sign in using</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <Button
                   variant="contained"
-                  size="medium"
                   onClick={continueWithGoogleHandler}
                   fullWidth
+                  sx={{ textTransform: "none" }}
                 >
-                  Continue with Google
+                  Google
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{ textTransform: "none" }}
+                >
+                  Github
                 </Button>
               </Grid>
             </Grid>
@@ -89,20 +94,27 @@ const SignUp = () => {
             <Grid container>
               <Grid item xs={12}>
                 <StyledTextField
-                  name="Name"
+                  title="Name"
+                  name="name"
                   type="text"
                   onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <StyledTextField
-                  name="Email"
+                  title="Email"
+                  name="email"
                   type="email"
                   onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
-                <StyledTextField name="Password" type="password" />
+                <StyledTextField
+                  title="Password"
+                  name="Password"
+                  type="password"
+                  onChange={handleChange}
+                />
               </Grid>
               <Button
                 variant="contained"

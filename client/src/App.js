@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { setCurrentUser } from "./redux/user/user.reducer";
-import { onAuthStateChangedListener } from "./utils/firebase.utils";
+import { onAuthStateChangedListener } from "./firebase/firebase-config";
 import Dashboard from "./routes/Dashboard/Dashboard";
 import SignIn from "./routes/SignIn/SignIn";
 import SignUp from "./routes/SignUp/SignUp";
@@ -21,6 +21,8 @@ import IssueForm from "./components/IssueForm/IssueForm";
 import TeamForm from "./components/TeamForm/TeamForm";
 import ProjectList from "./components/ProjectList/ProjectList";
 import IssueOverview from "./components/IssueOverview/IssueOverview";
+import ProtectedRoutes from "./routes/ProtectedRoutes/ProtectedRoutes";
+import ProjectSetting from "./components/ProjectSettings/ProjectSettings";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -32,43 +34,47 @@ const App = () => {
   useEffect(() => {
     return onAuthStateChangedListener(async (user) => {
       if (user) {
-        const token = await user.getIdToken();
-        window.localStorage.setItem("TOKEN", token);
+        await user.getIdToken();
+        const { displayName, email } = user;
+        localStorage.setItem("user", JSON.stringify({ displayName, email }));
 
         dispatch(setCurrentUser(user));
       }
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <Routes>
-      <Route path="/" element={<Sidebar />}>
-        <Route index element={<Dashboard />} />
-        {/* list routes */}
-        <Route path="teams" element={<Teams />} />
-        <Route path="issues" element={<Issues />}>
-          <Route index element={<IssuesList />} />
-        </Route>
-        {/* project route */}
-        <Route path="projects" element={<Projects />}>
-          <Route path="all" element={<ProjectList />} />
-          <Route path="create" element={<ProjectForm />} />
-          <Route path=":projectId" element={<Project />}>
-            <Route path="overview" element={<ProjectOverview />} />
-            <Route path="issues" element={<IssuesList />} />
-            <Route path="people" element={<ProjectPeople />} />
-            <Route path="activity" element={<ProjectActivity />} />
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/" element={<Sidebar />}>
+          <Route index element={<Dashboard />} />
+          {/* list routes */}
+          <Route path="teams" element={<Teams />} />
+          <Route path="issues" element={<Issues />}>
+            <Route index element={<IssuesList />} />
           </Route>
-        </Route>
-        {/* team route */}
-        <Route path="teams">
-          <Route path="create" element={<TeamForm />} />
-        </Route>
-        {/* issue route */}
-        <Route path="issues" element={<Issues />}>
-          <Route path="create" element={<IssueForm />} />
-          <Route path=":issueId" element={<Issue />}>
-            <Route path="overview" element={<IssueOverview />} />
+          {/* project route */}
+          <Route path="projects" element={<Projects />}>
+            <Route path="all" element={<ProjectList />} />
+            <Route path="create" element={<ProjectForm />} />
+            <Route path=":projectId" element={<Project />}>
+              <Route path="overview" element={<ProjectOverview />} />
+              <Route path="issues" element={<IssuesList />} />
+              <Route path="people" element={<ProjectPeople />} />
+              <Route path="activity" element={<ProjectActivity />} />
+              <Route path="settings" element={<ProjectSetting />} />
+            </Route>
+          </Route>
+          {/* team route */}
+          <Route path="teams">
+            <Route path="create" element={<TeamForm />} />
+          </Route>
+          {/* issue route */}
+          <Route path="issues" element={<Issues />}>
+            <Route path="create" element={<IssueForm />} />
+            <Route path=":issueId" element={<Issue />}>
+              <Route path="overview" element={<IssueOverview />} />
+            </Route>
           </Route>
         </Route>
       </Route>

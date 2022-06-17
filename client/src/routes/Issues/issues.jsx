@@ -1,37 +1,29 @@
 import { useEffect, useState } from "react";
-import {
-  useNavigate,
-  useLocation,
-  Outlet,
-  useSearchParams,
-} from "react-router-dom";
-import { Grid, Typography } from "@mui/material";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { Button, Grid, Toolbar, Typography } from "@mui/material";
 import StyledTab from "../../components/StyledTab/StyledTab";
 import StyledTabs from "../../components/StyledTabs/StyledTabs";
-import StyledAppBar from "../../components/StyledAppbar/StyledAppbar";
+import { Plus } from "react-feather";
 
 const Issues = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [URLSearchParams] = useSearchParams();
   const { pathname } = location;
-
-  const tab = URLSearchParams.get("tabs");
+  const tab = pathname.split("/")[2];
   console.log(tab);
+
   const mapPathToIndex = {
-    all: 101,
     open: 1,
     progress: 2,
     closed: 3,
   };
-  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tab]);
+  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tab] || 101);
 
   const handleChange = (e, newValue) => {
     const mapIndexToTab = {
-      101: "?tabs=all",
-      1: "?tabs=open",
-      2: "?tabs=progress",
-      3: "?tabs=closed",
+      1: "open",
+      2: "progress",
+      3: "closed",
     };
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
@@ -43,15 +35,25 @@ const Issues = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
-        <StyledAppBar button={{ to: "/issues/create", p: "Create issue" }}>
-          Issues
-        </StyledAppBar>
-      </Grid>
       {pathname === "/issues" && (
         <>
-          <Grid item xs={12} margin={3}>
-            <Typography variant="body1" sx={{ color: "primary.text3" }}>
+          <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
+            <Toolbar disableGutters>
+              <Typography
+                sx={{ fontWeight: "bold", fontSize: "30px", flexGrow: 1 }}
+              >
+                Issues
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{ textTransform: "none", fontWeight: "bold" }}
+                startIcon={<Plus />}
+                onClick={() => navigate("/issues/create")}
+              >
+                Create Issue
+              </Button>
+            </Toolbar>
+            <Typography variant="body2" sx={{ color: "text.subtitle1" }}>
               This section contains all the issues that you have created.
             </Typography>
           </Grid>

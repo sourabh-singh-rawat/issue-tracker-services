@@ -2,34 +2,50 @@ import en_IN from "date-fns/locale/en-IN";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TextField, Typography } from "@mui/material";
+import { FormHelperText, TextField, Typography } from "@mui/material";
 
-const StyledDatePicker = ({ name, handleChange, ...otherProps }) => {
+const StyledDatePicker = ({
+  name,
+  title,
+  minimized,
+  handleChange,
+  helperText,
+  ...otherProps
+}) => {
   return (
     <>
-      <Typography
-        variant="body1"
-        sx={{
-          color: "primary.text",
-          fontWeight: "bold",
-          paddingBottom: 1,
-        }}
-      >
-        End Date
-      </Typography>
+      {!minimized && (
+        <Typography
+          variant="body2"
+          sx={{
+            color: "primary.text",
+            fontWeight: "bold",
+            paddingBottom: 1,
+          }}
+        >
+          {title}
+        </Typography>
+      )}
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
         <DatePicker
           {...otherProps}
           renderInput={(params) => (
             <TextField
+              size="small"
               name={name}
               onChange={handleChange}
-              {...params}
+              variant={!minimized ? "outlined" : "standard"}
               fullWidth
+              {...params}
             />
           )}
         />
       </LocalizationProvider>
+      <FormHelperText>
+        <Typography variant="body2" component="span">
+          {helperText}
+        </Typography>
+      </FormHelperText>
     </>
   );
 };

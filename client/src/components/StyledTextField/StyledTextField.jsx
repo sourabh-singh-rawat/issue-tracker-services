@@ -1,21 +1,23 @@
 import { Typography, TextField } from "@mui/material";
 
-const StyledTextField = ({ name, ...otherProps }) => {
+const StyledTextField = ({ title, name, ...otherProps }) => {
   return (
     <>
-      <Typography variant="body1" fontWeight="bold" sx={{ paddingBottom: 1 }}>
-        {name}
+      <Typography variant="body2" fontWeight="bold" sx={{ paddingBottom: 1 }}>
+        {title}
       </Typography>
       <TextField
-        fullWidth
-        required
-        {...otherProps}
+        name={name.toLowerCase()}
+        size="small"
         sx={{
           paddingBottom: 2,
           "& .MuiFormHelperText-contained": {
             marginLeft: 0,
+            fontSize: "14px",
           },
         }}
+        fullWidth
+        {...otherProps}
       />
     </>
   );

@@ -120,8 +120,11 @@ const PageTitle = ({ type }) => {
         </Box>
       ) : (
         <Typography
-          variant="h4"
-          sx={{ fontWeight: "bold", color: "primary.text2" }}
+          sx={{
+            fontSize: "1.875rem",
+            fontWeight: "bold",
+            color: "text.main",
+          }}
         >
           {page.name}
           <IconButton

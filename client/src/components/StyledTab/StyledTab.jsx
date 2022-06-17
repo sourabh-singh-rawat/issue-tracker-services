@@ -5,10 +5,11 @@ const StyledTab = (props) => {
     <Tab
       {...props}
       sx={{
-        color: "primary.text3",
-        fontSize: "inherit",
+        color: "text.main",
+        fontSize: "14px",
         textTransform: "none",
       }}
+      disableRipple
     />
   );
 };

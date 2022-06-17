@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
-
-// MUI Theme
+import { useState } from "react";
 import { styled } from "@mui/material/styles";
+import { signOutUser } from "../../firebase/auth";
 import MuiDrawer from "@mui/material/Drawer";
 import {
   Box,
@@ -11,29 +11,27 @@ import {
   IconButton,
   ListItem,
   ListItemIcon,
-  ListItemText,
+  Container,
   ListItemButton,
   CssBaseline,
+  Typography,
 } from "@mui/material";
 import {
   Menu,
-  ArrowLeft,
+  X,
   Grid,
   Users,
   AlertTriangle,
   FolderPlus,
   LogIn,
+  Settings,
 } from "react-feather";
-import { useEffect, useState } from "react";
 import StyledSnackbar from "../StyledSnackBar/StyledSnackBar";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../utils/firebase.utils";
-import { setCurrentUser } from "../../redux/user/user.reducer";
-import { useDispatch } from "react-redux";
+import Navbar from "../Navbar/Navbar";
 
 export const drawerWidth = 240;
 
-const openedMixin = (theme) => ({
+const openedMixin = () => ({
   width: drawerWidth,
   overflowX: "hidden",
 });
@@ -64,129 +62,144 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const Sidebar = () => {
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
   // styles
-  const listItemTextStyles = { opacity: open ? 1 : 0 };
+  const listItemTypographyStyles = {
+    opacity: open ? 1 : 0,
+    color: "text.main",
+    fontWeight: "bold",
+  };
   const listItemIconStyles = {
     minWidth: 0,
     mr: open ? 1.5 : "auto",
     justifyContent: "center",
   };
   const listItemButtonStyles = {
-    minHeight: 48,
+    height: "40px",
     px: (open && 4) || (!open && 2.5),
+  };
+
+  const listLinkStyles = {
+    textDecoration: "none",
+    color: "text.subtitle1",
   };
 
   return (
     <>
-      <Box sx={{ diplay: "flex" }}>
-        <CssBaseline />
-        {/* drawer */}
-        <Drawer variant="permanent" open={open}>
-          <Toolbar>
-            {/* hamburger */}
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                marginRight: 5,
-                ...(open && { display: "none" }),
-              }}
-            >
-              <Menu />
-            </IconButton>
-            <IconButton
-              onClick={handleDrawerClose}
-              sx={{ opacity: open ? 1 : 0 }} // important fix for chevronLeft icon
-            >
-              <ArrowLeft />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List>
-            {/* dashboard button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <Link to="/">
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <Grid />
-                  </ListItemIcon>
-                  <ListItemText primary={"Dashboard"} sx={listItemTextStyles} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            {/* projects button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <Link to="/projects/all">
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <FolderPlus />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Projects"
-                    sx={listItemTextStyles}
-                  ></ListItemText>
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            {/* teams button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <Link to="/teams">
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <Users />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Teams"
-                    sx={listItemTextStyles}
-                  ></ListItemText>
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            {/* issues button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <Link to="/issues">
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <AlertTriangle />
-                  </ListItemIcon>
-                  <ListItemText primary="Issues" sx={listItemTextStyles} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            {/* signup button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <Link to="/signup">
-                <ListItemButton sx={listItemButtonStyles}>
-                  <ListItemIcon sx={listItemIconStyles}>
-                    <LogIn />
-                  </ListItemIcon>
-                  <ListItemText primary="Sign Up" sx={listItemTextStyles} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            {/* signout button */}
-            <ListItem disablePadding sx={{ display: "block" }}>
+      <Navbar />
+      <CssBaseline />
+      {/* drawer */}
+      <Drawer variant="permanent" open={open}>
+        <Toolbar variant="dense" />
+        <Divider />
+
+        <List>
+          {/* dashboard button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link to="/" style={listLinkStyles}>
+              <ListItemButton sx={listItemButtonStyles}>
+                <ListItemIcon sx={listItemIconStyles}>
+                  <Grid />
+                </ListItemIcon>
+                <Typography variant="body2" sx={listItemTypographyStyles}>
+                  Dashboard
+                </Typography>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          {/* projects button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link to="/projects/all" style={listLinkStyles}>
+              <ListItemButton sx={listItemButtonStyles}>
+                <ListItemIcon sx={listItemIconStyles}>
+                  <FolderPlus />
+                </ListItemIcon>
+                <Typography variant="body2" sx={listItemTypographyStyles}>
+                  Projects
+                </Typography>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          {/* teams button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link to="/teams" style={listLinkStyles}>
+              <ListItemButton sx={listItemButtonStyles}>
+                <ListItemIcon sx={listItemIconStyles}>
+                  <Users />
+                </ListItemIcon>
+                <Typography variant="body2" sx={listItemTypographyStyles}>
+                  Teams
+                </Typography>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          {/* issues button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link to="/issues" style={listLinkStyles}>
+              <ListItemButton sx={listItemButtonStyles}>
+                <ListItemIcon sx={listItemIconStyles}>
+                  <AlertTriangle />
+                </ListItemIcon>
+                <Typography variant="body2" sx={listItemTypographyStyles}>
+                  Issues
+                </Typography>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          {/* signup button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link to="/signup" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
                   <LogIn />
                 </ListItemIcon>
-                <ListItemText primary="Sign Out" sx={listItemTextStyles} />
+                <Typography variant="body2" sx={listItemTypographyStyles}>
+                  Sign Up
+                </Typography>
               </ListItemButton>
-            </ListItem>
-          </List>
-        </Drawer>
-      </Box>
+            </Link>
+          </ListItem>
+          {/* settings button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton sx={listItemButtonStyles} onClick={signOutUser}>
+              <ListItemIcon sx={listItemIconStyles}>
+                <Settings />
+              </ListItemIcon>
+              <Typography variant="body2" sx={listItemTypographyStyles}>
+                Settings
+              </Typography>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Toolbar>
+          {/* hamburger */}
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ marginRight: 5, ...(open && { display: "none" }) }}
+          >
+            <Menu />
+          </IconButton>
+          <IconButton
+            onClick={handleDrawerClose}
+            sx={{ opacity: open ? 1 : 0 }} // important fix for chevronLeft icon
+          >
+            <X />
+          </IconButton>
+        </Toolbar>
+      </Drawer>
 
       <Box sx={{ flexGrow: 1 }}>
-        <Outlet />
+        <Toolbar variant="dense" />
+        <Container>
+          <Outlet />
+        </Container>
       </Box>
 
       <StyledSnackbar />

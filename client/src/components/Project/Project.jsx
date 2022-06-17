@@ -9,10 +9,12 @@ import {
   Typography,
   Breadcrumbs,
   Toolbar,
+  Button,
 } from "@mui/material";
 import PageTitle from "../PageTitle/PageTitle";
 import StyledTab from "../StyledTab/StyledTab";
 import StyledTabs from "../StyledTabs/StyledTabs";
+import { ArrowBack } from "@mui/icons-material";
 
 const Project = () => {
   const { projectId } = useParams();
@@ -27,6 +29,7 @@ const Project = () => {
     issues: 101,
     people: 102,
     activity: 103,
+    settings: 104,
   };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[path]);
@@ -37,6 +40,7 @@ const Project = () => {
       101: `/projects/${projectId}/issues`,
       102: `/projects/${projectId}/people`,
       103: `/projects/${projectId}/activity`,
+      104: `/projects/${projectId}/settings`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -60,28 +64,18 @@ const Project = () => {
     <Grid container>
       <Grid item xs={12}>
         <Toolbar disableGutters>
-          <Breadcrumbs separator="•">
-            <Link
-              onClick={() => navigate(`/projects/all`)}
-              underline="hover"
-              sx={{ ":hover": { cursor: "pointer" } }}
-            >
-              <Typography variant="body1">projects</Typography>
-            </Link>
-            <Link
-              onClick={(e) => {
-                navigate(`/projects/${projectId}/overview`);
-                setSelectedTab(100);
-              }}
-              underline="hover"
-              sx={{ ":hover": { cursor: "pointer" } }}
-            >
-              <Typography variant="body1">
-                {project.name.toLowerCase()}
-              </Typography>
-            </Link>
-            <Typography variant="body1">{path}</Typography>
-          </Breadcrumbs>
+          <Button
+            variant="text"
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/projects/all")}
+            sx={{
+              color: "text.subtitle1",
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Back to all projects
+          </Button>
         </Toolbar>
       </Grid>
       <Grid item xs={12}>
@@ -96,6 +90,7 @@ const Project = () => {
             <StyledTab label="Issues" value={101} />
             <StyledTab label="People" value={102} />
             <StyledTab label="Activity" value={103} />
+            <StyledTab label="Settings" value={104} />
           </StyledTabs>
         </Box>
       </Grid>
