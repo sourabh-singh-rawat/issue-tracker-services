@@ -11,6 +11,10 @@ export const theme = createTheme({
       main: "#1e212a",
       subtitle1: "#65676e",
     },
+    background: {
+      default: "#f7f7f8",
+      tabs: "#ededee",
+    },
   },
   typography: {
     fontFamily: ["inter", "arial"].join(","),
@@ -18,20 +22,7 @@ export const theme = createTheme({
   },
   components: {
     MuiTypography: {
-      defaultProps: {
-        variantMapping: {
-          h1: "h2",
-          h2: "h2",
-          h3: "h2",
-          h4: "h2",
-          h5: "h2",
-          h6: "h2",
-          subtitle1: "h2",
-          subtitle2: "h2",
-          body1: "span",
-          body2: "span",
-        },
-      },
+      defaultProps: {},
     },
   },
 });

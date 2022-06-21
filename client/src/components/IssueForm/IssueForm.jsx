@@ -1,44 +1,42 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Box,
   Grid,
   Button,
-  Select,
-  MenuItem,
   TextField,
   Typography,
-  FormControl,
   Autocomplete,
   Toolbar,
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { enIN } from "date-fns/locale";
+import { ArrowBack } from "@mui/icons-material";
+import StyledTextField from "../StyledTextField/StyledTextField";
+import StyledSelect from "../StyledSelect/StyledSelect";
+import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 
-const IssueForm = ({ email }) => {
+const IssueForm = () => {
   const navigate = useNavigate();
-  const uid = useSelector((store) => store.user.uid);
+  const user = useSelector((store) => store.user);
+  const [projectNames, setProjectNames] = useState([]);
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    status: "",
-    priority: "",
-    reporter: "",
-    assigned_to: "",
+    status: "Open",
+    priority: "Low",
+    reporter: user ? user.uid : null,
+    assigned_to: null,
     due_date: null,
     project_id: "",
     team_id: "",
   });
-  const [projectNames, setProjectNames] = useState([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:4000/api/projects")
       .then((response) => response.json())
       .then((data) => {
         const projectNames = data.map(
-          (project) => `${project.name} #${project.id}`
+          (project) => `${project.name} (${project.id})`
         );
         setProjectNames(projectNames);
       });
@@ -48,82 +46,82 @@ const IssueForm = ({ email }) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setFormFields({ ...formFields, [name]: value });
+    setFormFields({ ...formFields, [name]: value, uid: user.uid });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:4000/api/issues", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formFields),
-    });
+    console.log(formFields);
 
-    const { id } = await response.json();
-    navigate(`/issues/${id}/overview`);
+    // const response = await fetch("http://localhost:4000/api/issues", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(formFields),
+    // });
+
+    // const { id } = await response.json();
+    // navigate(`/issues/${id}/overview`);
   };
 
   return (
     <Grid container>
       <Grid item xs={12}>
         <Toolbar disableGutters>
-          <Typography variant="h6">Add an Issue</Typography>
+          <Button
+            variant="text"
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/issues")}
+            sx={{
+              color: "text.subtitle1",
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Back to all issues
+          </Button>
+        </Toolbar>
+        <Toolbar disableGutters>
+          <Typography sx={{ fontWeight: "600", fontSize: "30px" }}>
+            New Issue
+          </Typography>
         </Toolbar>
       </Grid>
       <Grid item xs={12}>
         <Typography
-          variant="body1"
-          sx={{ color: "primary.text3", marginBottom: 2 }}
+          variant="body2"
+          sx={{ color: "text.subtitle1", marginBottom: 2 }}
         >
-          Enter important details about the issue.
+          Issues are problem you need to solve
         </Typography>
       </Grid>
-      <Grid container>
+      <Grid item sm={12}>
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container rowSpacing={2} columnSpacing={3}>
             <Grid item xs={12} sm={12}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Name
-              </Typography>
-              <TextField
+              <StyledTextField
                 name="name"
+                title="Name"
                 onChange={handleChange}
+                helperText="A precise name for the issue"
                 fullWidth
                 required
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Description
-              </Typography>
-              <TextField
+              <StyledTextField
                 name="description"
-                rows={4}
+                title="Description"
                 onChange={handleChange}
+                helperText="A text description of the issue."
                 multiline
+                rows={4}
                 fullWidth
               />
             </Grid>
             <Grid item xs={12} sm={12}>
               <Typography
-                variant="body1"
+                variant="body2"
                 sx={{
                   color: "primary.text",
                   paddingBottom: 1,
@@ -134,10 +132,11 @@ const IssueForm = ({ email }) => {
               </Typography>
               <Autocomplete
                 disablePortal
+                size="small"
                 options={projectNames}
                 onChange={(e, selectedOption) => {
                   if (selectedOption) {
-                    const id = selectedOption.split("#")[1];
+                    const id = selectedOption.split("(")[1].slice(1, -1);
                     setFormFields({ ...formFields, project_id: id });
                   }
                 }}
@@ -147,112 +146,54 @@ const IssueForm = ({ email }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Reported By
-              </Typography>
-              <TextField
+              <StyledTextField
                 name="reporter"
-                value={email}
-                disabled
+                title="Reporter"
+                value={user ? user.email : "none"}
                 onChange={handleChange}
+                helperText="This is the person who created this issue."
+                fullWidth
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledSelect
+                name="assigned_to"
+                title="Assigned To"
+                onChange={handleChange}
+                items={["Sourabh Singh Rawat"]}
+                // defaultValue=""
+                // value={formFields.uid}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledSelect
+                name="priority"
+                title="Priority"
+                onChange={handleChange}
+                defaultValue="Low"
+                items={["Low", "Medium", "High"]}
                 fullWidth
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Assigned To
-              </Typography>
-              <FormControl fullWidth>
-                <Select
-                  name="assigned_to"
-                  onChange={handleChange}
-                  defaultValue=""
-                  value={formFields.uid}
-                >
-                  {/* project memebers */}
-                  <MenuItem value={uid}>Sourabh Singh Rawat</MenuItem>
-                </Select>
-              </FormControl>
+              <StyledDatePicker
+                name="due_date"
+                title="Dude Date"
+                minDate={new Date()}
+                value={formFields.due_date}
+                onChange={(date) =>
+                  setFormFields({ ...formFields, due_date: date })
+                }
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Priority
-              </Typography>
-              <FormControl fullWidth>
-                <Select
-                  name="priority"
-                  onChange={handleChange}
-                  defaultValue={""}
-                >
-                  <MenuItem value={"Low"}>Low</MenuItem>
-                  <MenuItem value={"Medium"}>Medium</MenuItem>
-                  <MenuItem value={"High"}>High</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Due Date
-              </Typography>
-              <LocalizationProvider
-                dateAdapter={AdapterDateFns}
-                adapterLocale={enIN}
-              >
-                <DatePicker
-                  value={formFields.due_date}
-                  onChange={(date) =>
-                    setFormFields({ ...formFields, due_date: date })
-                  }
-                  renderInput={(props) => <TextField {...props} />}
-                />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Status
-              </Typography>
-              <FormControl fullWidth>
-                <Select name="status" onChange={handleChange} defaultValue={""}>
-                  <MenuItem value={"Open"}>Open</MenuItem>
-                  <MenuItem value={"In Progress"}>In Progress</MenuItem>
-                  <MenuItem value={"Closed"}>Closed</MenuItem>
-                </Select>
-              </FormControl>
+              <StyledSelect
+                name="status"
+                title="Status"
+                items={["Open", "In Progress", "Closed"]}
+                defaultValue="Open"
+              />
             </Grid>
             <Grid item xs={12}>
               <Button variant="contained" type="submit" size="large" fullWidth>
@@ -266,8 +207,4 @@ const IssueForm = ({ email }) => {
   );
 };
 
-const mapStateToProps = (store) => {
-  return { email: store.user.email };
-};
-
-export default connect(mapStateToProps)(IssueForm);
+export default IssueForm;

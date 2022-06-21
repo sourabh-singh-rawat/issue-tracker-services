@@ -1,6 +1,5 @@
 import db from "../db/connect.js";
 
-// create a user
 const insertOne = (name, email, uid) => {
   return db.query(
     `INSERT INTO users (name, email, uid) 
@@ -10,13 +9,10 @@ const insertOne = (name, email, uid) => {
   );
 };
 
-// list users
 const find = () => db.query("SELECT * FROM users");
 
-// get a specific user
 const findOne = (uid) => db.query(`SELECT * FROM users WHERE uid = $1`, [uid]);
 
-// update a specific user
 const updateOne = (uid, document) => {
   let query = Object.keys(document)
     .reduce((prev, cur, index) => {
@@ -29,7 +25,6 @@ const updateOne = (uid, document) => {
   return db.query(query, Object.values(document));
 };
 
-// delete specific user
 const deleteOne = (uid) =>
   db.query(`DELETE FROM users WHERE uid = $1 RETURNING *`, [uid]);
 

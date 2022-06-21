@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useOutletContext } from "react-router-dom";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
-import { setIssueList } from "../../redux/issues-list/issue-list.reducer";
-import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
+import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import {
-  Grid,
-  Select,
-  MenuItem,
-  Typography,
-  FormControl,
-} from "@mui/material/";
+  setIssueList,
+  updateIssueList,
+} from "../../reducers/issue-list.reducer";
+import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
+import { Select, MenuItem, Typography, FormControl } from "@mui/material/";
+import { format, parseISO } from "date-fns";
+import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 
 const IssuesList = () => {
-  const issueList = useSelector((store) => store.issueList);
+  const { rows, rowCount, page, pageSize } = useSelector(
+    (store) => store.issueList
+  );
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTab, project] = useOutletContext();
-  const [pageSize, setPageSize] = useState(10);
 
   let project_id;
   project ? (project_id = project.id) : (project_id = "");
@@ -73,10 +74,29 @@ const IssuesList = () => {
     <SelectEditInputCell {...params} />
   );
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    (async () => {
+      const response = await fetch(
+        `http://localhost:4000/api/issues?limit=${pageSize}&page=${page}&project_id=${project_id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const data = await response.json();
+      setIsLoading(false);
+
+      dispatch(setIssueList(data));
+    })();
+  }, [pageSize, page, rowCount]);
+
   const columns = [
     {
       field: "name",
-      headerName: "Name",
+      headerName: "NAME",
       flex: 0.3,
       minWidth: 300,
       renderCell: (params) => (
@@ -99,7 +119,6 @@ const IssuesList = () => {
           </Typography>
         </Link>
       ),
-      editable: true,
     },
     {
       field: "id",
@@ -108,92 +127,92 @@ const IssuesList = () => {
       flex: 0.14,
     },
     {
-      editable: true,
       field: "status",
-      headerName: "Status",
-      width: 150,
-      renderCell: (params) => {
-        return renderSelectEditInputCell(params);
-      },
-      renderEditCell: renderSelectEditInputCell,
-    },
-    {
-      field: "priority",
-      headerName: "Priority",
+      headerName: "STATUS",
       width: 150,
       editable: true,
       renderCell: renderSelectEditInputCell,
       renderEditCell: renderSelectEditInputCell,
     },
     {
-      field: "reporter",
-      headerName: "Reporter",
-      width: 250,
+      field: "priority",
+      headerName: "PRIORITY",
+      width: 150,
+      editable: true,
+      renderCell: renderSelectEditInputCell,
+      renderEditCell: renderSelectEditInputCell,
     },
     {
       field: "assigned_to",
-      headerName: "Assigned To",
+      headerName: "ASSIGNED TO",
       width: 250,
     },
-    { field: "due_date", headerName: "Due Date", width: 150 },
+    {
+      field: "due_date",
+      headerName: "DUE DATE",
+      width: 150,
+      renderCell: ({ value }) =>
+        value ? format(parseISO(value), "eee, PP") : "-",
+    },
     {
       field: "project_id",
-      headerName: "Project Id",
+      headerName: "PROJECT ID",
       width: 100,
     },
     {
       field: "creation_date",
-      headerName: "Created On",
-      width: 100,
+      headerName: "CREATED AT",
+      width: 150,
+      renderCell: ({ value }) => format(parseISO(value), "eee, PP"),
+    },
+    {
+      field: "reporter",
+      headerName: "REPORTER",
+      width: 150,
     },
   ];
 
-  useEffect(() => {
-    fetch(`http://localhost:4000/api/issues?project_id=${project_id}`, {
-      method: "GET",
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        dispatch(setIssueList(data));
-      });
-  }, [project_id]);
-
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <DataGrid
-          experimentalFeatures={{ newEditingApi: true }}
-          rows={issueList.issues}
-          columns={columns}
-          pageSize={pageSize}
-          onPageSizeChange={(pageSize) => setPageSize(pageSize)}
-          rowsPerPageOptions={[10, 20, 50, 100]}
-          getRowId={(row) => row.id}
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "creation_date", sort: "asc" }],
-            },
-          }}
-          autoHeight
-          disableSelectionOnClick
-          sx={{
+    <StyledTabPanel selectedTab={selectedTab} index={101}>
+      <DataGrid
+        experimentalFeatures={{ newEditingApi: true }}
+        rows={rows}
+        rowCount={rowCount}
+        rowsPerPageOptions={[10, 20, 50, 100]}
+        pagination
+        loading={isLoading}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
+        onPageSizeChange={(pageSize) => {
+          dispatch(updateIssueList({ pageSize }));
+        }}
+        paginationMode="server"
+        getRowId={(row) => row.id}
+        initialState={{
+          sorting: { sortModel: [{ field: "due_date", sort: "desc" }] },
+        }}
+        columns={columns}
+        sx={{
+          color: "primary.text2",
+          border: 0,
+          ".MuiDataGrid-cell": {
+            color: "text.subtitle1",
             border: 0,
-            color: "primary.text2",
-            ".MuiDataGrid-cell": {
-              border: 0,
-              boxShadow: 0,
-              color: "text.subtitle1",
-            },
-            "& .MuiDataGrid-columnHeaderTitle": {
-              fontWeight: "bold",
-              fontSize: "16px",
-            },
-          }}
-        />
-      </Grid>
-    </Grid>
+            boxShadow: 0,
+          },
+          ".MuiDataGrid-columnHeaderTitle": {
+            fontWeight: "bold",
+          },
+          ".MuiDataGrid-columnHeaders": {
+            backgroundColor: "background.tabs",
+            borderRadius: "5px",
+          },
+        }}
+        autoHeight
+        disableSelectionOnClick
+      />
+    </StyledTabPanel>
   );
 };
 

@@ -1,43 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { Plus } from "react-feather";
 import { Button, Grid, Toolbar, Typography } from "@mui/material";
 import StyledTab from "../../components/StyledTab/StyledTab";
 import StyledTabs from "../../components/StyledTabs/StyledTabs";
-import { Plus } from "react-feather";
 
 const Issues = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
-  const tab = pathname.split("/")[2];
-  console.log(tab);
 
-  const mapPathToIndex = {
-    open: 1,
-    progress: 2,
-    closed: 3,
-  };
-  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tab] || 101);
+  const [selectedTab, setSelectedTab] = useState(101);
 
-  const handleChange = (e, newValue) => {
-    const mapIndexToTab = {
-      1: "open",
-      2: "progress",
-      3: "closed",
-    };
-    navigate(`${mapIndexToTab[newValue]}`);
-    setSelectedTab(newValue);
-  };
+  const handleChange = (e, newValue) => setSelectedTab(newValue);
 
   useEffect(() => {
-    setSelectedTab(mapPathToIndex[tab] || 101);
+    setSelectedTab(101);
   }, [selectedTab]);
 
   return (
     <Grid container>
       {pathname === "/issues" && (
         <>
-          <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
+          <Grid item xs={12}>
             <Toolbar disableGutters>
               <Typography
                 sx={{ fontWeight: "bold", fontSize: "30px", flexGrow: 1 }}
@@ -48,7 +33,7 @@ const Issues = () => {
                 variant="contained"
                 sx={{ textTransform: "none", fontWeight: "bold" }}
                 startIcon={<Plus />}
-                onClick={() => navigate("/issues/create")}
+                onClick={() => navigate("/issues/new")}
               >
                 Create Issue
               </Button>
@@ -57,7 +42,7 @@ const Issues = () => {
               This section contains all the issues that you have created.
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
+          <Grid item xs={12}>
             <StyledTabs value={selectedTab} onChange={handleChange}>
               <StyledTab label="All Issues" value={101} />
               <StyledTab label="Open" value={1} />
@@ -67,8 +52,8 @@ const Issues = () => {
           </Grid>
         </>
       )}
-      <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
-        <Outlet context={[selectedTab, undefined, tab]} />
+      <Grid item xs={12}>
+        <Outlet context={[selectedTab]} />
       </Grid>
     </Grid>
   );

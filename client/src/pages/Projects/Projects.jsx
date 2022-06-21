@@ -8,8 +8,8 @@ const Projects = () => {
 
   return (
     <Grid container>
-      {pathname === "/projects/all" && (
-        <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
+      {pathname === "/projects" && (
+        <Grid item xs={12}>
           <Toolbar disableGutters>
             <Typography
               sx={{ fontWeight: "bold", fontSize: "30px", flexGrow: 1 }}
@@ -20,7 +20,7 @@ const Projects = () => {
               variant="contained"
               sx={{ textTransform: "none", fontWeight: "bold" }}
               startIcon={<Plus />}
-              onClick={() => navigate("/projects/create")}
+              onClick={() => navigate("/projects/new")}
             >
               Create Project
             </Button>
@@ -31,7 +31,7 @@ const Projects = () => {
           </Typography>
         </Grid>
       )}
-      <Grid item xs={12} sx={{ marginLeft: 3, marginRight: 3 }}>
+      <Grid item xs={12}>
         <Outlet />
       </Grid>
     </Grid>

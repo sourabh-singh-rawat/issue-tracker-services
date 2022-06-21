@@ -1,23 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
-import { setProject } from "../../redux/project/project.reducer";
-import {
-  Box,
-  Grid,
-  Link,
-  Typography,
-  Breadcrumbs,
-  Toolbar,
-  Button,
-} from "@mui/material";
-import PageTitle from "../PageTitle/PageTitle";
-import StyledTab from "../StyledTab/StyledTab";
-import StyledTabs from "../StyledTabs/StyledTabs";
+import { setProject } from "../../reducers/project.reducer";
+import PageTitle from "../../components/PageTitle/PageTitle";
+import StyledTab from "../../components/StyledTab/StyledTab";
+import StyledTabs from "../../components/StyledTabs/StyledTabs";
+import { Box, Grid, Toolbar, Button } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
 const Project = () => {
-  const { projectId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const project = useSelector((store) => store.project);
@@ -31,18 +23,17 @@ const Project = () => {
     activity: 103,
     settings: 104,
   };
+  const mapIndexToTab = {
+    100: `/projects/${id}/overview`,
+    101: `/projects/${id}/issues`,
+    102: `/projects/${id}/people`,
+    103: `/projects/${id}/activity`,
+    104: `/projects/${id}/settings`,
+  };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[path]);
 
   const handleChange = (e, newValue) => {
-    const mapIndexToTab = {
-      100: `/projects/${projectId}/overview`,
-      101: `/projects/${projectId}/issues`,
-      102: `/projects/${projectId}/people`,
-      103: `/projects/${projectId}/activity`,
-      104: `/projects/${projectId}/settings`,
-    };
-
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
   };
@@ -51,14 +42,14 @@ const Project = () => {
     setSelectedTab(mapPathToIndex[path]);
 
     (async () => {
-      const response = await fetch(
-        `http://localhost:4000/api/projects/${projectId}`,
-        { method: "GET", "Content-Type": "application/json" }
-      );
+      const response = await fetch(`http://localhost:4000/api/projects/${id}`, {
+        method: "GET",
+        "Content-Type": "application/json",
+      });
       const data = await response.json();
       if (response.status === 200) dispatch(setProject(data));
     })();
-  }, [path, projectId]);
+  }, [path, id]);
 
   return (
     <Grid container>
@@ -67,7 +58,7 @@ const Project = () => {
           <Button
             variant="text"
             startIcon={<ArrowBack />}
-            onClick={() => navigate("/projects/all")}
+            onClick={() => navigate("/projects")}
             sx={{
               color: "text.subtitle1",
               textTransform: "none",
@@ -80,7 +71,7 @@ const Project = () => {
       </Grid>
       <Grid item xs={12}>
         <Toolbar disableGutters>
-          <PageTitle page={project} projectId={projectId} type="project" />
+          <PageTitle page={project} projectId={id} type="project" />
         </Toolbar>
       </Grid>
       <Grid item xs={12}>

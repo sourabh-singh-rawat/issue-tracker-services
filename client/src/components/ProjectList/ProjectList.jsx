@@ -2,19 +2,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
-import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { TextField, Typography } from "@mui/material";
-import { setProjectList } from "../../redux/project-list/project-list.reducer";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
+import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
+import { setProjectList } from "../../reducers/project-list.reducer";
+import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
-import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
   const { projects } = useSelector((store) => store.projectList);
   const [pageSize, setPageSize] = useState(10);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
 
   const dateInput = (props) => <TextField {...props} variant="standard" />;
 
@@ -30,7 +27,7 @@ const ProjectList = () => {
       const data = await response.json();
       dispatch(setProjectList(data));
     })();
-  }, [setStartDate, setEndDate]);
+  }, []);
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
@@ -73,7 +70,7 @@ const ProjectList = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Name",
+      headerName: "NAME",
       minWidth: 300,
       flex: 0.3,
       renderCell: (params) => (
@@ -105,7 +102,7 @@ const ProjectList = () => {
     },
     {
       field: "status",
-      headerName: "Status",
+      headerName: "STATUS",
       minWidth: 150,
       editable: true,
       flex: 0.14,
@@ -114,7 +111,7 @@ const ProjectList = () => {
     },
     {
       field: "creation_date",
-      headerName: "Created On",
+      headerName: "CREATED ON",
       type: "date",
       minWidth: 175,
       flex: 0.14,
@@ -154,7 +151,7 @@ const ProjectList = () => {
     // },
     {
       field: "end_date",
-      headerName: "End Date",
+      headerName: "END DATE",
       type: "date",
       minWidth: 150,
       flex: 0.14,

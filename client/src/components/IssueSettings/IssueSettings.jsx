@@ -1,31 +1,29 @@
+import { Box, Button, Divider, Grid, Typography } from "@mui/material";
+import { format, parseISO } from "date-fns";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { format, parseISO } from "date-fns";
-import { updateProject } from "../../reducers/project.reducer";
+import { updateIssue } from "../../reducers/issue.reducer";
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
-import { Box, Button, Divider, Grid, Typography } from "@mui/material";
-import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 import StyledTextField from "../StyledTextField/StyledTextField";
 
-const ProjectSettings = () => {
+const IssueSettings = () => {
   const dispatch = useDispatch();
-  const project = useSelector((store) => store.project);
-  const startDate = useSelector((store) => store.project.start_date);
-  const endDate = useSelector((store) => store.project.end_date);
+  const issue = useSelector((store) => store.issue);
   const [selectedTab] = useOutletContext();
 
   const handleChange = ({ target: { name, value } }) => {
-    dispatch(updateProject({ [name]: value }));
+    dispatch(updateIssue({ [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, description, status, end_date, start_date } = project;
+    const { name, description, status, due_date, reporter } = issue;
     const response = await fetch(
-      `http://localhost:4000/api/projects/${project.id}`,
+      `http://localhost:4000/api/issues/${issue.id}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -33,8 +31,6 @@ const ProjectSettings = () => {
           name,
           description,
           status,
-          end_date,
-          start_date,
         }),
       }
     );
@@ -43,7 +39,7 @@ const ProjectSettings = () => {
   };
 
   return (
-    <StyledTabPanel selectedTab={selectedTab} index={104}>
+    <StyledTabPanel selectedTab={selectedTab} index={2}>
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container sx={{ marginTop: 3 }}>
           <Grid item className="lhs" xs={12} md={4}>
@@ -57,17 +53,17 @@ const ProjectSettings = () => {
                 <StyledTextField
                   name="name"
                   title="Name"
-                  value={project.name}
+                  value={issue.name}
                   onChange={handleChange}
-                  helperText="A name for your project"
+                  helperText="A name for your issue"
                 />
               </Grid>
               <Grid item xs={12}>
                 <StyledTextField
-                  name="owner_uid"
-                  title="Owner UID"
-                  value={project.owner_uid}
-                  helperText="This is the UID of the project owner"
+                  name="id"
+                  title="Issue ID"
+                  value={issue.id}
+                  helperText="This is the UID of the issue owner"
                   disabled
                 />
               </Grid>
@@ -75,7 +71,7 @@ const ProjectSettings = () => {
                 <StyledTextField
                   name="id"
                   title="Project ID"
-                  value={project.id}
+                  value={issue.project_id}
                   helperText="This is the Project ID."
                   disabled
                 />
@@ -84,7 +80,7 @@ const ProjectSettings = () => {
                 <StyledTextField
                   name="description"
                   title="Description"
-                  value={project.description}
+                  value={issue.description}
                   onChange={handleChange}
                   helperText="A text description of the project. Max character count is 150"
                   rows={4}
@@ -108,19 +104,19 @@ const ProjectSettings = () => {
                   name="creation_date"
                   title="Created At"
                   value={
-                    project.creation_date
-                      ? format(parseISO(project.creation_date), "PPPPpppp")
+                    issue.creation_date
+                      ? format(parseISO(issue.creation_date), "PPPPpppp")
                       : "loading"
                   }
                   helperText="The day this project was created, this cannot be changed."
                   disabled
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <StyledSelect
                   title="Status"
                   name="status"
-                  value={project.status ? project.status : "Not Started"}
+                  value={issue.status ? issue.status : "Not Started"}
                   onChange={handleChange}
                   helperText="The current status of your project."
                   // onChange={handleChange}
@@ -128,7 +124,19 @@ const ProjectSettings = () => {
                   defaultValue={"Not Started"}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6}>
+                <StyledSelect
+                  title="Priority"
+                  name="priority"
+                  value={issue.priority ? issue.priority : "Low"}
+                  onChange={handleChange}
+                  helperText="The current status of your project."
+                  // onChange={handleChange}
+                  items={["Low", "Medium", "High"]}
+                  defaultValue={"Low"}
+                />
+              </Grid>
+              {/* <Grid item xs={12} md={6}>
                 <StyledDatePicker
                   title="Start Date"
                   name="start_date"
@@ -140,8 +148,8 @@ const ProjectSettings = () => {
                   }
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid> */}
+              {/* <Grid item xs={12} md={6}>
                 <StyledDatePicker
                   title="End Date"
                   name="end_date"
@@ -153,7 +161,7 @@ const ProjectSettings = () => {
                   }
                   handleChange={handleChange}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Grid>
         </Grid>
@@ -173,5 +181,4 @@ const ProjectSettings = () => {
     </StyledTabPanel>
   );
 };
-
-export default ProjectSettings;
+export default IssueSettings;

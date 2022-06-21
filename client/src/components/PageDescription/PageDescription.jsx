@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Edit2 } from "react-feather";
-import { updateIssue } from "../../redux/issue/issue.reducer";
-import { updateProject } from "../../redux/project/project.reducer";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
+import { updateIssue } from "../../reducers/issue.reducer";
+import { updateProject } from "../../reducers/project.reducer";
+import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import { Grid, Button, IconButton, Typography, TextField } from "@mui/material";
 
 const PageDescription = ({ type }) => {

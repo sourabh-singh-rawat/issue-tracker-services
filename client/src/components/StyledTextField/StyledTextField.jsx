@@ -11,6 +11,10 @@ const StyledTextField = ({ title, name, ...otherProps }) => {
         size="small"
         sx={{
           paddingBottom: 2,
+          fontSize: "14px",
+          "& .MuiOutlinedInput-input": {
+            fontSize: "14px",
+          },
           "& .MuiFormHelperText-contained": {
             marginLeft: 0,
             fontSize: "14px",

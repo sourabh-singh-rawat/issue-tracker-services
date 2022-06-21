@@ -1,28 +1,34 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
-import { setCurrentUser } from "./redux/user/user.reducer";
-import { onAuthStateChangedListener } from "./firebase/firebase-config";
-import Dashboard from "./routes/Dashboard/Dashboard";
-import SignIn from "./routes/SignIn/SignIn";
-import SignUp from "./routes/SignUp/SignUp";
-import Teams from "./routes/Teams/Teams";
+import { setCurrentUser } from "./reducers/user.reducer";
+import { onAuthStateChangedListener } from "./auth/firebase-config";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import SignIn from "./pages/SignIn/SignIn";
+import SignUp from "./pages/SignUp/SignUp";
+import Teams from "./pages/Teams/Teams";
 import Sidebar from "./components/Sidebar/Sidebar";
-import Project from "./components/Project/Project";
-import Projects from "./routes/Projects/Projects";
+import Project from "./pages/Project/Project";
+import Projects from "./pages/Projects/Projects";
 import ProjectForm from "./components/ProjectForm/ProjectForm";
 import ProjectOverview from "./components/ProjectOverview/ProjectOverview";
 import ProjectPeople from "./components/ProjectPeople/ProjectPeople";
 import ProjectActivity from "./components/Activity/Activity";
 import Issue from "./components/Issue/Issue";
-import Issues from "./routes/Issues/Issues";
+import Issues from "./pages/Issues/Issues";
 import IssuesList from "./components/IssuesList/IssuesList";
 import IssueForm from "./components/IssueForm/IssueForm";
 import TeamForm from "./components/TeamForm/TeamForm";
 import ProjectList from "./components/ProjectList/ProjectList";
 import IssueOverview from "./components/IssueOverview/IssueOverview";
-import ProtectedRoutes from "./routes/ProtectedRoutes/ProtectedRoutes";
+import ProtectedRoutes from "./pages/ProtectedRoutes/ProtectedRoutes";
 import ProjectSetting from "./components/ProjectSettings/ProjectSettings";
+import IssueSettings from "./components/IssueSettings/IssueSettings";
+import IssueTasks from "./components/IssueTasks/IssueTasks";
+import TeamList from "./components/TeamList/TeamList";
+import Team from "./pages/Team/Team";
+import TeamOverview from "./components/TeamOverview/TeamOverview";
+import TeamSettings from "./components/TeamSettings/TeamSettings";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -32,7 +38,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    return onAuthStateChangedListener(async (user) => {
+    onAuthStateChangedListener(async (user) => {
       if (user) {
         await user.getIdToken();
         const { displayName, email } = user;
@@ -49,15 +55,14 @@ const App = () => {
         <Route path="/" element={<Sidebar />}>
           <Route index element={<Dashboard />} />
           {/* list routes */}
-          <Route path="teams" element={<Teams />} />
           <Route path="issues" element={<Issues />}>
             <Route index element={<IssuesList />} />
           </Route>
           {/* project route */}
           <Route path="projects" element={<Projects />}>
-            <Route path="all" element={<ProjectList />} />
-            <Route path="create" element={<ProjectForm />} />
-            <Route path=":projectId" element={<Project />}>
+            <Route index element={<ProjectList />} />
+            <Route path="new" element={<ProjectForm />} />
+            <Route path=":id" element={<Project />}>
               <Route path="overview" element={<ProjectOverview />} />
               <Route path="issues" element={<IssuesList />} />
               <Route path="people" element={<ProjectPeople />} />
@@ -66,14 +71,21 @@ const App = () => {
             </Route>
           </Route>
           {/* team route */}
-          <Route path="teams">
-            <Route path="create" element={<TeamForm />} />
+          <Route path="teams" element={<Teams />}>
+            <Route index element={<TeamList />} />
+            <Route path="new" element={<TeamForm />} />
+            <Route path=":id" element={<Team />}>
+              <Route path="overview" element={<TeamOverview />} />
+              <Route path="settings" element={<TeamSettings />} />
+            </Route>
           </Route>
           {/* issue route */}
           <Route path="issues" element={<Issues />}>
-            <Route path="create" element={<IssueForm />} />
-            <Route path=":issueId" element={<Issue />}>
+            <Route path="new" element={<IssueForm />} />
+            <Route path=":id" element={<Issue />}>
               <Route path="overview" element={<IssueOverview />} />
+              <Route path="tasks" element={<IssueTasks />} />
+              <Route path="settings" element={<IssueSettings />} />
             </Route>
           </Route>
         </Route>

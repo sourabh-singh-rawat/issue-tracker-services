@@ -1,7 +1,13 @@
 import { useState } from "react";
-import { Grid, Box, Typography, TextField } from "@mui/material";
+import { Grid, Typography, Toolbar, Button } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import StyledTextField from "../StyledTextField/StyledTextField";
+import { Box } from "@mui/system";
+import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 
 const TeamForm = () => {
+  const navigate = useNavigate();
   const [formFields, setFormFields] = useState({ name: "", description: "" });
 
   const handleChange = (e) => {
@@ -11,34 +17,89 @@ const TeamForm = () => {
     setFormFields({ ...formFields, [fieldName]: fieldValue });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TODO: send state data to the server
+    const response = await fetch("http://localhost:4000/api/teams", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formFields),
+    });
+
+    const { id } = await response.json();
+
+    if (response.status === 200) setSnackbarOpen(true);
+    navigate(`/team/${id}`);
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Grid container columnSpacing={4} rowSpacing={2}>
-        <Grid item sm={12}>
-          <TextField
-            name="teamName"
-            label="Team Name"
-            onChange={handleChange}
-            fullWidth
-            required
-          ></TextField>
+    <Box>
+      <Grid container>
+        <Grid item xs={12}>
+          <Toolbar disableGutters>
+            <Button
+              variant="text"
+              startIcon={<ArrowBack />}
+              onClick={() => navigate("/teams")}
+              sx={{
+                color: "text.subtitle1",
+                textTransform: "none",
+                fontWeight: "bold",
+              }}
+            >
+              Back to teams
+            </Button>
+          </Toolbar>
+          <Toolbar disableGutters>
+            <Typography sx={{ fontWeight: "600", fontSize: "30px" }}>
+              New Team
+            </Typography>
+          </Toolbar>
         </Grid>
-        <Grid item sm={12}>
-          <TextField
-            name="teamDescription"
-            label="Team Description"
-            rows={2}
-            multiline
-            fullWidth
-          ></TextField>
+        <Grid item xs={12}>
+          <Typography
+            variant="body2"
+            sx={{ color: "text.subtitle1", marginBottom: 2 }}
+          >
+            Create teams to organize people involved with your project.
+          </Typography>
         </Grid>
-        <Grid item sm={12}></Grid>
+
+        <Grid item xs={12}>
+          <Box component="form" onSubmit={handleSubmit}>
+            <Grid item sm={12}>
+              <StyledTextField
+                name="name"
+                title="Name"
+                helperText="The name for your team."
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+            <Grid item sm={12}>
+              <StyledTextField
+                name="description"
+                title="Description"
+                helperText="A text description of your team. Max character count is 150."
+                onChange={handleChange}
+                rows={4}
+                multiline
+              />
+            </Grid>
+            <Grid container marginTop={2}>
+              <Grid item>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ textTransform: "none", fontWeight: "bold" }}
+                  fullWidth
+                >
+                  Create Team
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
       </Grid>
     </Box>
   );

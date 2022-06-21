@@ -4,7 +4,6 @@ import {
   MenuItem,
   Typography,
   FormHelperText,
-  Box,
 } from "@mui/material";
 
 const StyledSelect = ({
@@ -15,13 +14,8 @@ const StyledSelect = ({
   ...otherProps
 }) => {
   return (
-    <Box>
-      <Typography
-        component="span"
-        variant="body2"
-        fontWeight="bold"
-        sx={{ paddingBottom: 1 }}
-      >
+    <>
+      <Typography variant="body2" fontWeight="bold" sx={{ paddingBottom: 1 }}>
         {title}
       </Typography>
       <FormControl fullWidth>
@@ -29,6 +23,7 @@ const StyledSelect = ({
           size="small"
           defaultValue={defaultValue}
           displayEmpty
+          sx={{ fontSize: "14px" }}
           {...otherProps}
         >
           {items.map((item) => (
@@ -43,7 +38,7 @@ const StyledSelect = ({
           {helperText}
         </Typography>
       </FormHelperText>
-    </Box>
+    </>
   );
 };
 
