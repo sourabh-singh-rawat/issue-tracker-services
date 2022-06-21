@@ -45,7 +45,7 @@ const ProjectForm = () => {
           <Button
             variant="text"
             startIcon={<ArrowBack />}
-            onClick={() => navigate("/projects/all")}
+            onClick={() => navigate("/projects")}
             sx={{
               color: "text.subtitle1",
               textTransform: "none",
@@ -72,7 +72,7 @@ const ProjectForm = () => {
       <Grid item sm={12}>
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container rowSpacing={2} columnSpacing={3}>
-            <Grid item xs={12} sm={12} md={6}>
+            <Grid item xs={12} sm={12} md={12}>
               <StyledTextField
                 title="Name"
                 name="name"
@@ -81,9 +81,8 @@ const ProjectForm = () => {
                 helperText="A name for your project"
               />
             </Grid>
-            <Grid item xs={12} sm={12} md={3}>
+            <Grid item xs={12} sm={12} md={6}>
               <StyledDatePicker
-                helperText="A name for your project"
                 title="Start Date"
                 name="start_date"
                 value={formFields.start_date}
@@ -91,10 +90,11 @@ const ProjectForm = () => {
                 onChange={(date) =>
                   setFormFields({ ...formFields, start_date: date })
                 }
+                helperText="Set a start date for your project"
                 handleChange={handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={12} md={3}>
+            <Grid item xs={12} sm={12} md={6}>
               <StyledDatePicker
                 title="End Date"
                 name="end_date"
@@ -103,6 +103,7 @@ const ProjectForm = () => {
                 onChange={(date) =>
                   setFormFields({ ...formFields, end_date: date })
                 }
+                helperText="Set an end date for your project"
                 handleChange={handleChange}
               />
             </Grid>
@@ -113,9 +114,11 @@ const ProjectForm = () => {
                 value={formFields.status}
                 onChange={handleChange}
                 items={["Not Started", "Open", "Completed", "Paused"]}
+                helperText="Current status of your project."
                 defaultValue={"Not Started"}
               />
             </Grid>
+            <Grid item md={6}></Grid>
             <Grid item xs={12} sm={12} md={6}>
               <StyledTextField
                 title="Email"
@@ -124,16 +127,17 @@ const ProjectForm = () => {
                 value={email}
                 onChange={handleChange}
                 disabled
+                helperText="project owner's email"
                 required
               />
             </Grid>
-            <Grid item xs={12} sm={12} md={6}>
+            <Grid item xs={12} sm={12} md={12}>
               <StyledTextField
                 name="Description"
                 type="text"
                 onChange={handleChange}
                 rows={4}
-                helperText="Do not exceed 100 characters"
+                helperText="A text description of your project. Do not exceed 150 characters"
                 multiline
               />
             </Grid>
@@ -143,9 +147,8 @@ const ProjectForm = () => {
               <Button
                 variant="contained"
                 type="submit"
-                size="large"
                 fullWidth
-                sx={{ textTransform: "none" }}
+                sx={{ textTransform: "none", fontWeight: "bold" }}
               >
                 Create Project
               </Button>

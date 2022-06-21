@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  signInWithGoogle,
-  signUpWithEmailAndPassword,
-} from "../../firebase/auth";
+import { signInWithGoogle, signUpWithEmailAndPassword } from "../../auth/auth";
 import {
   Box,
   Grid,
@@ -13,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import StyledTextField from "../../components/StyledTextField/StyledTextField";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -25,6 +23,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formFields;
+
     try {
       const response = await signUpWithEmailAndPassword(email, password);
       const { user } = response;
@@ -47,46 +46,37 @@ const SignUp = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Box sx={{ marginTop: 8 }}>
-            <Typography variant="h4" fontWeight="bold">
-              Sign Up
+            <Typography fontWeight="bold" sx={{ fontSize: "30px" }}>
+              Sign up
             </Typography>
-            <Typography variant="body1">
-              Create an account & help your organization track issues
-              efficiently.
-              <Link to="/">Dashboard</Link>
+            <Typography variant="body2">
+              Create an account & help yourself track issues efficiently.
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <Divider />
-          <Box sx={{ padding: "1em 0" }}>
-            <Typography>Sign in using</Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  onClick={continueWithGoogleHandler}
-                  fullWidth
-                  sx={{ textTransform: "none" }}
-                >
-                  Google
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  sx={{ textTransform: "none" }}
-                >
-                  Github
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-          <Divider>Or sign up with your email</Divider>
+          <Button
+            variant="outlined"
+            onClick={continueWithGoogleHandler}
+            startIcon={<GoogleIcon />}
+            sx={{
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+            fullWidth
+          >
+            Continue with Google
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Divider>
+            <Typography variant="body2" sx={{ color: "text.subtitle1" }}>
+              Or sign up with your email
+            </Typography>
+          </Divider>
         </Grid>
         {/* Signup form */}
         <Grid item xs={12}>
@@ -97,6 +87,7 @@ const SignUp = () => {
                   title="Name"
                   name="name"
                   type="text"
+                  placeholder="yourname"
                   onChange={handleChange}
                 />
               </Grid>
@@ -105,6 +96,7 @@ const SignUp = () => {
                   title="Email"
                   name="email"
                   type="email"
+                  placeholder="name@example.com"
                   onChange={handleChange}
                 />
               </Grid>
@@ -113,20 +105,24 @@ const SignUp = () => {
                   title="Password"
                   name="Password"
                   type="password"
+                  placeholder="password"
                   onChange={handleChange}
                 />
               </Grid>
               <Button
                 variant="contained"
-                size="large"
                 type="submit"
                 fullWidth
-                sx={{ margin: "1em 0" }}
+                sx={{
+                  textTransform: "none",
+                  margin: "1em 0",
+                  fontWeight: "bold",
+                }}
               >
                 Create an account
               </Button>
             </Grid>
-            <Grid container justifyContent="flex-end">
+            <Grid container>
               <Grid item>
                 <Typography variant="body2">
                   <Link to="/signin">Already have an account? Sign In</Link>

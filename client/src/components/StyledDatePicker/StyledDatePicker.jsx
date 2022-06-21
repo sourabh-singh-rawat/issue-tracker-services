@@ -28,7 +28,6 @@ const StyledDatePicker = ({
       )}
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
         <DatePicker
-          {...otherProps}
           renderInput={(params) => (
             <TextField
               size="small"
@@ -37,8 +36,10 @@ const StyledDatePicker = ({
               variant={!minimized ? "outlined" : "standard"}
               fullWidth
               {...params}
+              sx={{ ".MuiOutlinedInput-input": { fontSize: "14px" } }}
             />
           )}
+          {...otherProps}
         />
       </LocalizationProvider>
       <FormHelperText>

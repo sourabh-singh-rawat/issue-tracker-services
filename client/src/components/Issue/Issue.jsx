@@ -1,59 +1,52 @@
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setIssue } from "../../redux/issue/issue.reducer";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { setIssue } from "../../reducers/issue.reducer";
 import {
   Box,
   Link,
   Grid,
+  Button,
+  Toolbar,
   Typography,
   Breadcrumbs,
-  Toolbar,
 } from "@mui/material";
 import PageTitle from "../PageTitle/PageTitle";
 import StyledTabs from "../StyledTabs/StyledTabs";
 import StyledTab from "../StyledTab/StyledTab";
+import { ArrowBack } from "@mui/icons-material";
 
-const Issue = ({ issue }) => {
+const Issue = () => {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const issue = useSelector((store) => store.issue);
 
-  const { issueId } = params;
+  const { id } = params;
   const tabName = location.pathname.split("/")[3];
 
-  const mapTabToIndex = {
-    overview: 0,
-    open: 1,
-    progress: 2,
-    closed: 3,
-  };
+  const mapTabToIndex = { overview: 0, tasks: 1, settings: 2 };
 
   const [selectedTab, setSelectedTab] = useState(mapTabToIndex[tabName]);
 
   useEffect(() => {
     setSelectedTab(mapTabToIndex[tabName]);
     (async () => {
-      const response = await fetch(
-        `http://localhost:4000/api/issues/${issueId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetch(`http://localhost:4000/api/issues/${id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await response.json();
       dispatch(setIssue(data));
     })();
-  }, [issueId, tabName]);
+  }, [id, tabName]);
 
   const handleChange = (e, newValue) => {
     const mapIndexToTab = {
       0: `/issues/${issue.id}/overview`,
-      1: `/issues/${issue.id}/open`,
-      2: `/issues/${issue.id}/progress`,
-      3: `/issues/${issue.id}/closed`,
+      1: `/issues/${issue.id}/tasks`,
+      2: `/issues/${issue.id}/settings`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -62,43 +55,51 @@ const Issue = ({ issue }) => {
 
   return (
     <Grid container>
+      <Toolbar disableGutters>
+        <Button
+          variant="text"
+          startIcon={<ArrowBack />}
+          onClick={() => navigate("/issues")}
+          sx={{
+            color: "text.subtitle1",
+            textTransform: "none",
+            fontWeight: "bold",
+          }}
+        >
+          Back to all Issues
+        </Button>
+      </Toolbar>
       <Grid item xs={12}>
-        <Toolbar disableGutters>
-          <Breadcrumbs separator=">">
-            {[
-              { text: "projects", onClick: () => navigate(`/projects/all`) },
-              {
-                text: issue.project_name && issue.project_name.toLowerCase(),
-                onClick: () =>
-                  navigate(`/projects/${issue.project_id}/overview`),
-              },
-              {
-                text: "issues",
-                onClick: () => navigate(`/projects/${issue.project_id}/issues`),
-              },
-            ].map(({ text, onClick }) => (
-              <Link
-                key={text}
-                onClick={onClick}
-                underline="hover"
-                sx={{ cursor: "pointer", color: "text.subtitle1" }}
+        <Breadcrumbs separator="/">
+          {[
+            { text: "projects", onClick: () => navigate(`/projects`) },
+            {
+              text: issue.project_name && issue.project_name.toLowerCase(),
+              onClick: () => navigate(`/projects/${issue.project_id}/overview`),
+            },
+            {
+              text: "issues",
+              onClick: () => navigate(`/projects/${issue.project_id}/issues`),
+            },
+          ].map(({ text, onClick }) => (
+            <Link
+              key={text}
+              onClick={onClick}
+              underline="hover"
+              sx={{ cursor: "pointer", color: "text.subtitle1" }}
+            >
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: "bold", ":hover": { color: "text.main" } }}
               >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontWeight: "bold",
-                    ":hover": { color: "text.main" },
-                  }}
-                >
-                  {text}
-                </Typography>
-              </Link>
-            ))}
-            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              {issue.id}
-            </Typography>
-          </Breadcrumbs>
-        </Toolbar>
+                {text}
+              </Typography>
+            </Link>
+          ))}
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            {issue.id}
+          </Typography>
+        </Breadcrumbs>
       </Grid>
       <Grid item xs={12}>
         <Toolbar disableGutters>
@@ -114,9 +115,8 @@ const Issue = ({ issue }) => {
         <Box>
           <StyledTabs value={selectedTab} onChange={handleChange}>
             <StyledTab label="Overview" value={0} />
-            <StyledTab label="Open" value={1} />
-            <StyledTab label="In Progress" value={2} />
-            <StyledTab label="Closed" value={3} />
+            <StyledTab label="Tasks" value={1} />
+            <StyledTab label="Settings" value={2} />
           </StyledTabs>
         </Box>
         <Outlet context={[selectedTab, issue]} />
@@ -125,10 +125,4 @@ const Issue = ({ issue }) => {
   );
 };
 
-const mapStateToProps = (store) => {
-  return {
-    issue: store.issue,
-  };
-};
-
-export default connect(mapStateToProps)(Issue);
+export default Issue;

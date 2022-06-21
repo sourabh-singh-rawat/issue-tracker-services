@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setProject, updateProject } from "../../redux/project/project.reducer";
-import { setIssue, updateIssue } from "../../redux/issue/issue.reducer";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
-import { Edit2 } from "react-feather";
+import { setProject, updateProject } from "../../reducers/project.reducer";
+import { setIssue, updateIssue } from "../../reducers/issue.reducer";
+import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import { Box, Typography, Button, IconButton, TextField } from "@mui/material";
+import { Edit2 } from "react-feather";
 
 const PageTitle = ({ type }) => {
   const dispatch = useDispatch();
@@ -31,9 +31,7 @@ const PageTitle = ({ type }) => {
       if (type === "project") {
         fetch(`http://localhost:4000/api/projects/${page.id}`, {
           method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ["name"]: page.name }),
         }).then((response) => {
           if (response.status === 200) dispatch(setSnackbarOpen(true));
@@ -44,9 +42,7 @@ const PageTitle = ({ type }) => {
           `http://localhost:4000/api/issues/${page.id}/?projectId=${page.projectId}`,
           {
             method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ ["name"]: page.name }),
           }
         ).then((response) => {
@@ -69,10 +65,7 @@ const PageTitle = ({ type }) => {
             onChange={handleChange}
             variant="standard"
             inputProps={{
-              style: {
-                fontSize: "2rem",
-                fontWeight: "bold",
-              },
+              style: { fontSize: "2rem", fontWeight: "bold" },
             }}
           />
           <Button
@@ -92,17 +85,11 @@ const PageTitle = ({ type }) => {
               // 3. On clicking cancel set name=previousName and set selected value to false
               if (type === "project")
                 dispatch(
-                  setProject({
-                    name: page.previousName,
-                    nameSelected: false,
-                  })
+                  setProject({ name: page.previousName, nameSelected: false })
                 );
               if (type === "issue")
                 dispatch(
-                  setIssue({
-                    name: page.previousName,
-                    nameSelected: false,
-                  })
+                  setIssue({ name: page.previousName, nameSelected: false })
                 );
             }}
             sx={{
@@ -110,9 +97,7 @@ const PageTitle = ({ type }) => {
               textTransform: "none",
               marginLeft: "5px",
               backgroundColor: "background.main",
-              ":hover": {
-                backgroundColor: "background.main2",
-              },
+              ":hover": { backgroundColor: "background.main2" },
             }}
           >
             <Typography variant="body2">Cancel</Typography>
@@ -120,11 +105,7 @@ const PageTitle = ({ type }) => {
         </Box>
       ) : (
         <Typography
-          sx={{
-            fontSize: "1.875rem",
-            fontWeight: "bold",
-            color: "text.main",
-          }}
+          sx={{ fontSize: "1.875rem", fontWeight: "bold", color: "text.main" }}
         >
           {page.name}
           <IconButton
@@ -132,24 +113,16 @@ const PageTitle = ({ type }) => {
               // 4. On clicking edit button update selected value to true
               if (type === "project")
                 dispatch(
-                  updateProject({
-                    previousName: page.name,
-                    nameSelected: true,
-                  })
+                  updateProject({ previousName: page.name, nameSelected: true })
                 );
               if (type === "issue")
                 dispatch(
-                  updateIssue({
-                    previousName: page.name,
-                    nameSelected: true,
-                  })
+                  updateIssue({ previousName: page.name, nameSelected: true })
                 );
             }}
             sx={{
               color: "background.main3",
-              ":hover": {
-                color: "primary.main",
-              },
+              ":hover": { color: "primary.main" },
             }}
           >
             <Edit2 width="24px" height="24px" />

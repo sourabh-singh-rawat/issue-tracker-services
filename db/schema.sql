@@ -63,3 +63,25 @@ CREATE TABLE IF NOT EXISTS issues (
   FOREIGN KEY (project_id) REFERENCES projects(id),
   FOREIGN KEY (assigned_to) REFERENCES users(uid)
 );
+
+-- user project map
+CREATE TABLE IF NOT EXISTS user_project_map (
+    user_id VARCHAR(255),
+    project_id uuid,
+    role VARCHAR(255),
+
+    PRIMARY KEY (user_id, project_id),
+    FOREIGN KEY (user_id) REFERENCES users(uid),
+    FOREIGN KEY (project_id) REFERENCES projects(id)
+);
+
+-- user team map
+CREATE TABLE IF NOT EXISTS  user_team_map (
+    user_id VARCHAR(255),
+    team_id uuid,
+    role VARCHAR (255),
+    
+    PRIMARY KEY (user_id, team_id),
+    FOREIGN KEY (user_id) REFERENCES users(uid),
+    FOREIGN KEY (team_id) REFERENCES teams(id)
+);

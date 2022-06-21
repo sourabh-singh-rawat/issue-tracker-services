@@ -6,6 +6,7 @@ const app = express();
 import userRouter from "./routers/user.js";
 import issueRouter from "./routers/issue.js";
 import projectRouter from "./routers/project.js";
+import teamRouter from "./routers/team.js";
 
 const PORT = process.env.PORT || 4000;
 
@@ -17,6 +18,7 @@ app.options("*", cors());
 app.use("/api", userRouter);
 app.use("/api", issueRouter);
 app.use("/api", projectRouter);
+app.use("/api", teamRouter);
 
 app.listen(PORT, () => {
   console.log("Server is running at port 4000");

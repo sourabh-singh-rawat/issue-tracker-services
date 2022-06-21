@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setSnackbarOpen } from "../../redux/snackbar/snackbar.reducer";
+import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import { Snackbar, IconButton, Slide } from "@mui/material";
 import { Close } from "@mui/icons-material/";
 

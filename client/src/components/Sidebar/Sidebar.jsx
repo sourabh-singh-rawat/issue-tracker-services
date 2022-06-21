@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
-import { signOutUser } from "../../firebase/auth";
+import { signOutUser } from "../../auth/auth";
 import MuiDrawer from "@mui/material/Drawer";
 import {
   Box,
@@ -96,7 +96,6 @@ const Sidebar = () => {
       <Drawer variant="permanent" open={open}>
         <Toolbar variant="dense" />
         <Divider />
-
         <List>
           {/* dashboard button */}
           <ListItem disablePadding sx={{ display: "block" }}>
@@ -113,7 +112,7 @@ const Sidebar = () => {
           </ListItem>
           {/* projects button */}
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link to="/projects/all" style={listLinkStyles}>
+            <Link to="/projects" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
                   <FolderPlus />

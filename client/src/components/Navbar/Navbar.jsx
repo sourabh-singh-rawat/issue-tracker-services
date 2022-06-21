@@ -1,14 +1,6 @@
-import {
-  AppBar,
-  Toolbar,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  Typography,
-  Button,
-} from "@mui/material";
 import { LogIn } from "react-feather";
-import { signOutUser } from "../../firebase/auth";
+import { signOutUser } from "../../auth/auth";
+import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 
 const Navbar = () => {
   return (
@@ -24,11 +16,11 @@ const Navbar = () => {
     >
       <Toolbar variant="dense" sx={{ display: "flex" }}>
         <Typography sx={{ flexGrow: 1 }}>Issue Tracker</Typography>
+        {/* signout button */}
         <Button onClick={signOutUser} startIcon={<LogIn />}>
           <Typography variant="body2">Sign Out</Typography>
         </Button>
       </Toolbar>
-      {/* signout button */}
     </AppBar>
   );
 };

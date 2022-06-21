@@ -1,14 +1,14 @@
 import React from "react";
-import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { store } from "./redux/store";
+import { Provider } from "react-redux";
+import { store } from "./reducers/store";
 import { ThemeProvider } from "@emotion/react";
+import { CssBaseline } from "@mui/material";
 import { theme } from "./theme.styles";
 
 import App from "./App";
 import "./index.css";
-import { CssBaseline } from "@mui/material";
 
 //creating root element
 const root = createRoot(document.getElementById("root"));

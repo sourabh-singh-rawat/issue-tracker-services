@@ -1,4 +1,3 @@
-// Storing user information in the database
 export const storeUserInfoInDatabase = async (user) => {
   const { uid, displayName, email } = user;
 
