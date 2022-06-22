@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS issues (
   FOREIGN KEY (assigned_to) REFERENCES users(uid)
 );
 
--- user project map
-CREATE TABLE IF NOT EXISTS user_project_map (
+-- project user
+CREATE TABLE IF NOT EXISTS project_user (
     user_id VARCHAR(255),
     project_id uuid,
     role VARCHAR(255),
@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS user_project_map (
     FOREIGN KEY (project_id) REFERENCES projects(id)
 );
 
--- user team map
-CREATE TABLE IF NOT EXISTS  user_team_map (
+-- team user
+CREATE TABLE IF NOT EXISTS  team_user (
     user_id VARCHAR(255),
     team_id uuid,
     role VARCHAR (255),
@@ -84,4 +84,10 @@ CREATE TABLE IF NOT EXISTS  user_team_map (
     PRIMARY KEY (user_id, team_id),
     FOREIGN KEY (user_id) REFERENCES users(uid),
     FOREIGN KEY (team_id) REFERENCES teams(id)
+);
+
+-- project status
+CREATE TABLE IF NOT EXISTS project_status (
+  code INTEGER UNIQUE,
+  text VARCHAR (20),
 );

@@ -3,7 +3,7 @@ import { Typography, TextField } from "@mui/material";
 const StyledTextField = ({ title, name, ...otherProps }) => {
   return (
     <>
-      <Typography variant="body2" fontWeight="bold" sx={{ paddingBottom: 1 }}>
+      <Typography variant="body1" fontWeight="bold" sx={{ paddingBottom: 1 }}>
         {title}
       </Typography>
       <TextField
@@ -11,13 +11,10 @@ const StyledTextField = ({ title, name, ...otherProps }) => {
         size="small"
         sx={{
           paddingBottom: 2,
-          fontSize: "14px",
-          "& .MuiOutlinedInput-input": {
+          ".MuiOutlinedInput-input": {},
+          ".MuiFormHelperText-contained": {
             fontSize: "14px",
-          },
-          "& .MuiFormHelperText-contained": {
             marginLeft: 0,
-            fontSize: "14px",
           },
         }}
         fullWidth

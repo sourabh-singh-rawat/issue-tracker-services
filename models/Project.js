@@ -1,4 +1,5 @@
 import db from "../db/connect.js";
+import { createSelectQuery } from "../utils/find.js";
 
 const insertOne = (document) => {
   const {
@@ -18,7 +19,11 @@ const insertOne = (document) => {
   );
 };
 
-const find = () => db.query(`SELECT * FROM projects`);
+const find = (options) => {
+  const { query, colValues } = createSelectQuery(options, "projects");
+
+  return db.query(query, colValues);
+};
 
 const findOne = (id) =>
   db.query(
@@ -45,4 +50,6 @@ const deleteOne = (id) =>
     [id]
   );
 
-export default { insertOne, find, findOne, updateOne, deleteOne };
+const rowCount = () => db.query(`SELECT count(*) FROM projects`);
+
+export default { insertOne, find, findOne, updateOne, deleteOne, rowCount };

@@ -19,14 +19,14 @@ const Project = () => {
   const mapPathToIndex = {
     overview: 100,
     issues: 101,
-    people: 102,
+    members: 102,
     activity: 103,
     settings: 104,
   };
   const mapIndexToTab = {
     100: `/projects/${id}/overview`,
     101: `/projects/${id}/issues`,
-    102: `/projects/${id}/people`,
+    102: `/projects/${id}/members`,
     103: `/projects/${id}/activity`,
     104: `/projects/${id}/settings`,
   };
@@ -79,13 +79,13 @@ const Project = () => {
           <StyledTabs value={selectedTab} onChange={handleChange}>
             <StyledTab label="Overview" value={100} />
             <StyledTab label="Issues" value={101} />
-            <StyledTab label="People" value={102} />
+            <StyledTab label="Members" value={102} />
             <StyledTab label="Activity" value={103} />
             <StyledTab label="Settings" value={104} />
           </StyledTabs>
         </Box>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ marginTop: 2 }}>
         <Outlet context={[selectedTab, project]} />
       </Grid>
     </Grid>

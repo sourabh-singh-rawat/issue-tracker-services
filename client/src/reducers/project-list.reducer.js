@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  projects: [],
-  count: 0,
+  rows: [],
+  rowCount: 0,
+  page: 0,
+  pageSize: 10,
 };
 
 const projectListReducer = createSlice({
@@ -11,11 +13,12 @@ const projectListReducer = createSlice({
   reducers: {
     setProjectList: (state, action) => ({
       ...state,
-      projects: action.payload,
-      count: action.payload.length,
+      rows: action.payload.data,
+      rowCount: action.payload.rowCount,
     }),
+    updateProjectList: (state, action) => ({ ...state, ...action.payload }),
   },
 });
 
-export const { setProjectList } = projectListReducer.actions;
+export const { setProjectList, updateProjectList } = projectListReducer.actions;
 export default projectListReducer.reducer;

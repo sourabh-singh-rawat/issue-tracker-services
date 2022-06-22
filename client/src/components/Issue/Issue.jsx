@@ -11,10 +11,10 @@ import {
   Typography,
   Breadcrumbs,
 } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 import PageTitle from "../PageTitle/PageTitle";
 import StyledTabs from "../StyledTabs/StyledTabs";
 import StyledTab from "../StyledTab/StyledTab";
-import { ArrowBack } from "@mui/icons-material";
 
 const Issue = () => {
   const params = useParams();
@@ -89,14 +89,14 @@ const Issue = () => {
               sx={{ cursor: "pointer", color: "text.subtitle1" }}
             >
               <Typography
-                variant="body2"
+                variant="body1"
                 sx={{ fontWeight: "bold", ":hover": { color: "text.main" } }}
               >
                 {text}
               </Typography>
             </Link>
           ))}
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          <Typography variant="body1" sx={{ fontWeight: "bold" }}>
             {issue.id}
           </Typography>
         </Breadcrumbs>

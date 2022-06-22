@@ -65,7 +65,7 @@ const PageTitle = ({ type }) => {
             onChange={handleChange}
             variant="standard"
             inputProps={{
-              style: { fontSize: "2rem", fontWeight: "bold" },
+              style: { fontWeight: "bold", fontSize: "2em" },
             }}
           />
           <Button
@@ -78,7 +78,7 @@ const PageTitle = ({ type }) => {
               ":hover": { boxShadow: "none" },
             }}
           >
-            <Typography variant="body2">Save</Typography>
+            <Typography variant="body1">Save</Typography>
           </Button>
           <Button
             onClick={() => {
@@ -100,12 +100,13 @@ const PageTitle = ({ type }) => {
               ":hover": { backgroundColor: "background.main2" },
             }}
           >
-            <Typography variant="body2">Cancel</Typography>
+            <Typography variant="body1">Cancel</Typography>
           </Button>
         </Box>
       ) : (
         <Typography
-          sx={{ fontSize: "1.875rem", fontWeight: "bold", color: "text.main" }}
+          variant="h4"
+          sx={{ fontWeight: "bold", color: "text.main" }}
         >
           {page.name}
           <IconButton

@@ -45,7 +45,7 @@ const ProjectSettings = () => {
   return (
     <StyledTabPanel selectedTab={selectedTab} index={104}>
       <Box component="form" onSubmit={handleSubmit}>
-        <Grid container sx={{ marginTop: 3 }}>
+        <Grid container>
           <Grid item className="lhs" xs={12} md={4}>
             <Typography variant="body1" sx={{ fontWeight: "bold" }}>
               Basic Information
@@ -133,7 +133,7 @@ const ProjectSettings = () => {
                   title="Start Date"
                   name="start_date"
                   value={startDate}
-                  maxDate={endDate}
+                  maxDate={parseISO(endDate)}
                   helperText="The day your project started."
                   onChange={(date) =>
                     dispatch(updateProject({ start_date: date }))
@@ -146,7 +146,7 @@ const ProjectSettings = () => {
                   title="End Date"
                   name="end_date"
                   value={endDate}
-                  minDate={startDate}
+                  minDate={parseISO(startDate)}
                   helperText="The day your project will end. (due date)"
                   onChange={(date) =>
                     dispatch(updateProject({ end_date: date }))

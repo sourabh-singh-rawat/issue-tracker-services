@@ -10,11 +10,10 @@ import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 const ProjectForm = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  const [email, setEmail] = useState("Unassigned");
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    owner_email: email,
+    owner_email: "Unassigned",
     owner_uid: "",
     status: "",
     start_date: null,
@@ -27,15 +26,15 @@ const ProjectForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formFields);
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/api/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formFields),
-    });
-    const { id } = await response.json();
-    if (response.status === 200) navigate(`/projects/${id}/overview`);
+    console.log(formFields);
+    // const response = await fetch("http://localhost:4000/api/projects", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(formFields),
+    // });
+    // const { id } = await response.json();
+    // if (response.status === 200) navigate(`/projects/${id}/overview`);
   };
 
   return (
@@ -56,14 +55,14 @@ const ProjectForm = () => {
           </Button>
         </Toolbar>
         <Toolbar disableGutters>
-          <Typography sx={{ fontWeight: "600", fontSize: "30px" }}>
+          <Typography variant="h4" sx={{ fontWeight: "600" }}>
             New Project
           </Typography>
         </Toolbar>
       </Grid>
       <Grid item xs={12}>
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{ color: "text.subtitle1", marginBottom: 2 }}
         >
           Projects are container for storing issues.
@@ -121,13 +120,13 @@ const ProjectForm = () => {
             <Grid item md={6}></Grid>
             <Grid item xs={12} sm={12} md={6}>
               <StyledTextField
-                title="Email"
+                title="Owner's Email"
                 name="owner_email"
                 type="email"
-                value={email}
+                value={user ? user.email : "Unassigned"}
                 onChange={handleChange}
                 disabled
-                helperText="project owner's email"
+                helperText="Project owner's email"
                 required
               />
             </Grid>

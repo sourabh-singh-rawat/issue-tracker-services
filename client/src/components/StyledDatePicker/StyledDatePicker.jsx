@@ -16,7 +16,7 @@ const StyledDatePicker = ({
     <>
       {!minimized && (
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{
             color: "primary.text",
             fontWeight: "bold",
@@ -36,7 +36,6 @@ const StyledDatePicker = ({
               variant={!minimized ? "outlined" : "standard"}
               fullWidth
               {...params}
-              sx={{ ".MuiOutlinedInput-input": { fontSize: "14px" } }}
             />
           )}
           {...otherProps}

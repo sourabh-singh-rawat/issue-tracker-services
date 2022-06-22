@@ -12,9 +12,7 @@ const Teams = () => {
       {pathname === "/teams" && (
         <Grid item xs={12}>
           <Toolbar disableGutters>
-            <Typography
-              sx={{ fontWeight: "bold", fontSize: "30px", flexGrow: 1 }}
-            >
+            <Typography variant="h4" sx={{ fontWeight: "bold", flexGrow: 1 }}>
               Teams
             </Typography>
             <Button
@@ -23,10 +21,10 @@ const Teams = () => {
               startIcon={<Plus />}
               onClick={() => navigate("/teams/new")}
             >
-              Create Teams
+              Create Team
             </Button>
           </Toolbar>
-          <Typography variant="body2" sx={{ color: "text.subtitle1" }}>
+          <Typography variant="body1" sx={{ color: "text.subtitle1" }}>
             Create teams to organize people involved with your project.
           </Typography>
         </Grid>
