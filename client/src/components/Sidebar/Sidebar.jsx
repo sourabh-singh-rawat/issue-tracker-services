@@ -16,18 +16,17 @@ import {
   CssBaseline,
   Typography,
 } from "@mui/material";
-import {
-  Menu,
-  X,
-  Grid,
-  Users,
-  AlertTriangle,
-  FolderPlus,
-  LogIn,
-  Settings,
-} from "react-feather";
+import { Menu, X } from "react-feather";
 import StyledSnackbar from "../StyledSnackBar/StyledSnackBar";
 import Navbar from "../Navbar/Navbar";
+import {
+  AssignmentOutlined,
+  ErrorOutline,
+  GridView,
+  LoginOutlined,
+  PeopleOutline,
+  SettingsOutlined,
+} from "@mui/icons-material";
 
 export const drawerWidth = 240;
 
@@ -62,7 +61,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -90,21 +89,19 @@ const Sidebar = () => {
 
   return (
     <>
-      <Navbar />
-      <CssBaseline />
       {/* drawer */}
+      <Navbar />
       <Drawer variant="permanent" open={open}>
-        <Toolbar variant="dense" />
-        <Divider />
         <List>
+          <Toolbar />
           {/* dashboard button */}
           <ListItem disablePadding sx={{ display: "block" }}>
             <Link to="/" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
-                  <Grid />
+                  <GridView />
                 </ListItemIcon>
-                <Typography variant="body2" sx={listItemTypographyStyles}>
+                <Typography variant="body1" sx={listItemTypographyStyles}>
                   Dashboard
                 </Typography>
               </ListItemButton>
@@ -115,9 +112,9 @@ const Sidebar = () => {
             <Link to="/projects" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
-                  <FolderPlus />
+                  <AssignmentOutlined />
                 </ListItemIcon>
-                <Typography variant="body2" sx={listItemTypographyStyles}>
+                <Typography variant="body1" sx={listItemTypographyStyles}>
                   Projects
                 </Typography>
               </ListItemButton>
@@ -128,9 +125,9 @@ const Sidebar = () => {
             <Link to="/teams" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
-                  <Users />
+                  <PeopleOutline />
                 </ListItemIcon>
-                <Typography variant="body2" sx={listItemTypographyStyles}>
+                <Typography variant="body1" sx={listItemTypographyStyles}>
                   Teams
                 </Typography>
               </ListItemButton>
@@ -141,9 +138,9 @@ const Sidebar = () => {
             <Link to="/issues" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
-                  <AlertTriangle />
+                  <ErrorOutline />
                 </ListItemIcon>
-                <Typography variant="body2" sx={listItemTypographyStyles}>
+                <Typography variant="body1" sx={listItemTypographyStyles}>
                   Issues
                 </Typography>
               </ListItemButton>
@@ -154,9 +151,9 @@ const Sidebar = () => {
             <Link to="/signup" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
-                  <LogIn />
+                  <LoginOutlined />
                 </ListItemIcon>
-                <Typography variant="body2" sx={listItemTypographyStyles}>
+                <Typography variant="body1" sx={listItemTypographyStyles}>
                   Sign Up
                 </Typography>
               </ListItemButton>
@@ -166,9 +163,9 @@ const Sidebar = () => {
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton sx={listItemButtonStyles} onClick={signOutUser}>
               <ListItemIcon sx={listItemIconStyles}>
-                <Settings />
+                <SettingsOutlined />
               </ListItemIcon>
-              <Typography variant="body2" sx={listItemTypographyStyles}>
+              <Typography variant="body1" sx={listItemTypographyStyles}>
                 Settings
               </Typography>
             </ListItemButton>
@@ -195,8 +192,8 @@ const Sidebar = () => {
       </Drawer>
 
       <Box sx={{ flexGrow: 1 }}>
-        <Toolbar variant="dense" />
         <Container>
+          <Toolbar />
           <Outlet />
         </Container>
       </Box>

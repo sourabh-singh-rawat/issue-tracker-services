@@ -1,33 +1,46 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { enIN } from "date-fns/esm/locale";
 import { format, parseISO } from "date-fns";
 import { TextField, Typography } from "@mui/material";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
-import { setProjectList } from "../../reducers/project-list.reducer";
+import {
+  setProjectList,
+  updateProjectList,
+} from "../../reducers/project-list.reducer";
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
-  const { projects } = useSelector((store) => store.projectList);
-  const [pageSize, setPageSize] = useState(10);
+  const { rows, rowCount, page, pageSize } = useSelector(
+    (store) => store.projectList
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
-  const dateInput = (props) => <TextField {...props} variant="standard" />;
+  // const dateInput = (props) => <TextField {...props} variant="standard" />;
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
-      const response = await fetch("http://localhost:4000/api/projects", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + window.localStorage.getItem("TOKEN"),
-        },
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/projects?limit=${pageSize}&page=${page}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.localStorage.getItem("TOKEN"),
+          },
+        }
+      );
+
       const data = await response.json();
+      setIsLoading(false);
+
       dispatch(setProjectList(data));
     })();
-  }, []);
+  }, [pageSize, page]);
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
@@ -45,6 +58,7 @@ const ProjectList = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [field]: event.target.value }),
       });
+
       if (response.status === 200) dispatch(setSnackbarOpen(true));
       if (isValid) apiRef.current.stopCellEditMode({ id, field });
     };
@@ -56,8 +70,7 @@ const ProjectList = () => {
         value={value}
         onChange={handleChange}
         items={["Not Started", "Open", "Completed", "Paused"]}
-        defaultValue={"Not Started"}
-        sx={{ fontSize: "14px" }}
+        defaultValue="Not Started"
       />
     );
   };
@@ -72,14 +85,14 @@ const ProjectList = () => {
       field: "name",
       headerName: "NAME",
       minWidth: 300,
-      flex: 0.3,
+      flex: 0.35,
       renderCell: (params) => (
         <Link
           to={`/projects/${params.row.id}/overview`}
           style={{ textDecoration: "none" }}
         >
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
               color: "text.subtitle1",
               fontWeight: "bold",
@@ -98,14 +111,14 @@ const ProjectList = () => {
       field: "id",
       headerName: "ID",
       minWidth: 75,
-      flex: 0.14,
+      flex: 0.1,
     },
     {
       field: "status",
       headerName: "STATUS",
-      minWidth: 150,
+      minWidth: 125,
       editable: true,
-      flex: 0.14,
+      flex: 0.15,
       renderCell: (params) => renderSelectEditInputCell(params),
       renderEditCell: renderSelectEditInputCell,
     },
@@ -113,9 +126,9 @@ const ProjectList = () => {
       field: "creation_date",
       headerName: "CREATED ON",
       type: "date",
-      minWidth: 175,
-      flex: 0.14,
-      renderCell: ({ value }) => format(parseISO(value), "eee, PP"),
+      minWidth: 125,
+      flex: 0.15,
+      renderCell: ({ value }) => format(parseISO(value), "P", { locale: enIN }),
     },
     // {
     //   field: "start_date",
@@ -153,38 +166,49 @@ const ProjectList = () => {
       field: "end_date",
       headerName: "END DATE",
       type: "date",
-      minWidth: 150,
-      flex: 0.14,
+      minWidth: 125,
+      flex: 0.15,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "eee, PP") : "-",
+        value ? format(parseISO(value), "P", { locale: enIN }) : "-",
     },
   ];
 
   return (
     <DataGrid
-      rows={projects}
+      experimentalFeatures={{ newEditingApi: true }}
       columns={columns}
-      pageSize={pageSize}
-      onPageSizeChange={(pageSize) => setPageSize(pageSize)}
+      rows={rows}
+      rowCount={rowCount}
       rowsPerPageOptions={[10, 20, 50, 100]}
+      pagination
+      paginationMode="server"
+      loading={isLoading}
+      page={page}
+      pageSize={pageSize}
+      onPageChange={(newPage) => dispatch(updateProjectList({ page: newPage }))}
+      onPageSizeChange={(pageSize) => dispatch(updateProjectList({ pageSize }))}
       initialState={{
-        sorting: { sortModel: [{ field: "creation_date", sort: "asc" }] },
+        sorting: { sortModel: [{ field: "name", sort: "asc" }] },
       }}
       autoHeight
-      disableColumnMenu={true}
+      disableColumnMenu
       disableSelectionOnClick
-      experimentalFeatures={{ newEditingApi: true }}
       sx={{
         border: 0,
+        fontSize: "inherit",
         color: "primary.text2",
         ".MuiDataGrid-cell": {
           border: 0,
-          fontSize: "14px",
           color: "text.subtitle1",
         },
         "& .MuiDataGrid-columnHeaderTitle": {
           fontWeight: "bold",
-          fontSize: "16px",
+        },
+        ".MuiDataGrid-columnHeaders": {
+          borderBottom: "2px solid #343a27",
+        },
+        ".MuiDataGrid-columnSeparator": {
+          display: "none",
         },
       }}
     />

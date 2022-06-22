@@ -4,10 +4,12 @@ const StyledTab = (props) => {
   return (
     <Tab
       {...props}
+      iconPosition="start"
       sx={{
         color: "text.main",
-        fontSize: "14px",
         textTransform: "none",
+        fontSize: "16px",
+        fontWeight: "bold",
       }}
       disableRipple
     />

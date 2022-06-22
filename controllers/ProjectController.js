@@ -3,9 +3,6 @@ import Project from "../models/Project.js";
 const create = async (req, res) => {
   const document = req.body;
 
-  // TODO santitize document
-  if (document.name.length === 0) document.name = "Untitled Document";
-
   try {
     const project = (await Project.insertOne(document)).rows[0];
     return res.send(project);
@@ -15,9 +12,34 @@ const create = async (req, res) => {
 };
 
 const index = async (req, res) => {
+  // filtering
+  const { status } = req.query;
+
+  // sorting
+  const { sort_by } = req.query;
+  const sortOptions = {};
+  if (sort_by) {
+    const [field, order] = sort_by.split(":");
+    sortOptions.field = field;
+    sortOptions.order = order;
+  }
+
+  // pagination
+  const { limit, page } = req.query;
+
   try {
-    const response = await Project.find();
-    res.send(response.rows);
+    const response = await Project.find({
+      options: { status },
+      pagingOptions: {
+        limit: parseInt(limit),
+        offset: parseInt(limit) * parseInt(page),
+      },
+      sortOptions,
+    });
+
+    const rowCount = await (await Project.rowCount()).rows[0].count;
+
+    res.send({ data: response.rows, rowCount: parseInt(rowCount) });
   } catch (error) {
     if (error) {
       console.log("READ_ERROR: Cannot get all projects", error);

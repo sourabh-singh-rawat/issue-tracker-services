@@ -3,14 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   rows: [],
   rowCount: 0,
-  isLoading: false,
   page: 0,
   pageSize: 10,
 };
-
-// create team
-// then add team to the project
-// this project is managed by: pep team
 
 const issueListSlice = createSlice({
   name: "issueList",

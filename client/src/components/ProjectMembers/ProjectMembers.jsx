@@ -1,5 +1,5 @@
 import { useOutletContext } from "react-router-dom";
-import Typography from "@mui/material/Typography";
+import { Grid, Button } from "@mui/material";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 
 const ProjectMembers = () => {
@@ -7,9 +7,14 @@ const ProjectMembers = () => {
 
   return (
     <StyledTabPanel selectedTab={selectedTab} index={102}>
-      <Typography variant="body1">
-        All the people working on this project
-      </Typography>
+      <Grid container>
+        <Grid item>
+          <Button variant="contained" sx={{ textTransform: "none" }}>
+            Add Member
+          </Button>
+        </Grid>
+        <Grid item></Grid>
+      </Grid>
     </StyledTabPanel>
   );
 };

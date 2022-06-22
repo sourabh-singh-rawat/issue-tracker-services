@@ -5,7 +5,6 @@ const StyledTabs = (props) => {
     <Tabs
       {...props}
       textColor="inherit"
-      fontSize="inherit"
       sx={{
         color: "primary.main",
         borderBottom: "1px solid #e3e4e6",

@@ -3,27 +3,24 @@ import { createTheme } from "@mui/material";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#635dff",
       light: "",
+      main: "#6c4dff",
       dark: "",
     },
     text: {
-      main: "#1e212a",
-      subtitle1: "#65676e",
+      main: "#3e3b48",
+      subtitle1: "#3e3b48",
     },
     background: {
-      default: "#f7f7f8",
-      tabs: "#ededee",
+      default: "#fbfaff",
+      appbar: "#1e212a",
     },
   },
   typography: {
     fontFamily: ["inter", "arial"].join(","),
-    subtitle1: { fontSize: 30 },
-  },
-  components: {
-    MuiTypography: {
-      defaultProps: {},
-    },
+    fontWeightRegular: 400,
+    h4: { fontSize: 30 },
+    body1: { fontSize: 15 },
   },
 });
 

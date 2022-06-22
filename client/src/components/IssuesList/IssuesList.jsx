@@ -6,9 +6,17 @@ import {
   setIssueList,
   updateIssueList,
 } from "../../reducers/issue-list.reducer";
-import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
-import { Select, MenuItem, Typography, FormControl } from "@mui/material/";
 import { format, parseISO } from "date-fns";
+import { enIN } from "date-fns/locale";
+import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
+import {
+  Select,
+  MenuItem,
+  Typography,
+  FormControl,
+  Autocomplete,
+  TextField,
+} from "@mui/material/";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 
 const IssuesList = () => {
@@ -61,7 +69,7 @@ const IssuesList = () => {
           {selectOptions.map((value) => {
             return (
               <MenuItem value={value} key={value} sx={{ background: "none" }}>
-                <Typography variant="body2">{value}</Typography>
+                <Typography variant="body1">{value}</Typography>
               </MenuItem>
             );
           })}
@@ -79,7 +87,7 @@ const IssuesList = () => {
 
     (async () => {
       const response = await fetch(
-        `http://localhost:4000/api/issues?limit=${pageSize}&page=${page}&project_id=${project_id}`,
+        `http://localhost:4000/api/issues?limit=${pageSize}&page=${page}&project_id=${project_id}&sort_by=creation_date:desc`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -91,24 +99,24 @@ const IssuesList = () => {
 
       dispatch(setIssueList(data));
     })();
-  }, [pageSize, page, rowCount]);
+  }, [pageSize, page]);
 
   const columns = [
     {
       field: "name",
       headerName: "NAME",
       flex: 0.3,
-      minWidth: 300,
+      minWidth: 350,
       renderCell: (params) => (
         <Link
           to={`/issues/${params.row.id}/overview`}
           style={{ textDecoration: "none" }}
         >
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
-              color: "text.subtitle1",
               fontWeight: "bold",
+              color: "text.subtitle1",
               "&:hover": {
                 color: "primary.main",
                 textDecoration: "none!important",
@@ -121,10 +129,16 @@ const IssuesList = () => {
       ),
     },
     {
-      field: "id",
-      headerName: "ID",
-      minWidth: 100,
-      flex: 0.14,
+      field: "reporter",
+      headerName: "REPORTER",
+      width: 150,
+    },
+    {
+      field: "creation_date",
+      headerName: "CREATED",
+      width: 125,
+      renderCell: ({ value }) =>
+        value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
     },
     {
       field: "status",
@@ -160,15 +174,10 @@ const IssuesList = () => {
       width: 100,
     },
     {
-      field: "creation_date",
-      headerName: "CREATED AT",
-      width: 150,
-      renderCell: ({ value }) => format(parseISO(value), "eee, PP"),
-    },
-    {
-      field: "reporter",
-      headerName: "REPORTER",
-      width: 150,
+      field: "id",
+      headerName: "ISSUE ID",
+      minWidth: 100,
+      flex: 0.14,
     },
   ];
 
@@ -176,26 +185,28 @@ const IssuesList = () => {
     <StyledTabPanel selectedTab={selectedTab} index={101}>
       <DataGrid
         experimentalFeatures={{ newEditingApi: true }}
+        columns={columns}
         rows={rows}
         rowCount={rowCount}
         rowsPerPageOptions={[10, 20, 50, 100]}
         pagination
+        paginationMode="server"
         loading={isLoading}
         page={page}
         pageSize={pageSize}
         onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
-        onPageSizeChange={(pageSize) => {
-          dispatch(updateIssueList({ pageSize }));
-        }}
-        paginationMode="server"
+        onPageSizeChange={(pageSize) => dispatch(updateIssueList({ pageSize }))}
         getRowId={(row) => row.id}
         initialState={{
-          sorting: { sortModel: [{ field: "due_date", sort: "desc" }] },
+          sorting: { sortModel: [{ field: "creation_date", sort: "desc" }] },
         }}
-        columns={columns}
+        autoHeight
+        disableColumnMenu
+        disableSelectionOnClick
         sx={{
           color: "primary.text2",
           border: 0,
+          fontSize: "inherit",
           ".MuiDataGrid-cell": {
             color: "text.subtitle1",
             border: 0,
@@ -205,12 +216,12 @@ const IssuesList = () => {
             fontWeight: "bold",
           },
           ".MuiDataGrid-columnHeaders": {
-            backgroundColor: "background.tabs",
-            borderRadius: "5px",
+            borderBottom: "2px solid #343a27",
+          },
+          ".MuiDataGrid-columnSeparator": {
+            display: "none",
           },
         }}
-        autoHeight
-        disableSelectionOnClick
       />
     </StyledTabPanel>
   );

@@ -56,10 +56,10 @@ const PageDescription = ({ type }) => {
     <Grid container>
       <Grid item sm={12} sx={{ display: "flex", alignItems: "center" }}>
         <Typography
+          variant="body1"
           sx={{
             fontWeight: "bold",
             color: "text.main",
-            fontSize: "16px",
           }}
         >
           Description
@@ -99,14 +99,14 @@ const PageDescription = ({ type }) => {
             fullWidth
           />
         ) : (
-          <Typography variant="body2">{page.description}</Typography>
+          <Typography variant="body1">{page.description}</Typography>
         )}
       </Grid>
       {/* edit buttons */}
       {page.descriptionSelected && (
         <Grid item sm={12} sx={{ marginTop: 1 }}>
           <Button
-            variant={"contained"}
+            variant="contained"
             onClick={handleSave}
             sx={{
               boxShadow: "none",
@@ -114,7 +114,7 @@ const PageDescription = ({ type }) => {
               ":hover": { boxShadow: "none" },
             }}
           >
-            <Typography variant="body2">Save</Typography>
+            <Typography variant="body1">Save</Typography>
           </Button>
           <Button
             onClick={() => {
@@ -142,7 +142,7 @@ const PageDescription = ({ type }) => {
               ":hover": { backgroundColor: "primary.dark" },
             }}
           >
-            <Typography variant="body2">Cancel</Typography>
+            <Typography variant="body1">Cancel</Typography>
           </Button>
         </Grid>
       )}

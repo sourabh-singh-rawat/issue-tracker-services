@@ -22,7 +22,7 @@ const TeamList = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Name",
+      headerName: "NAME",
       minWidth: 200,
       flex: 0.3,
       renderCell: (params) => (
@@ -31,7 +31,7 @@ const TeamList = () => {
           style={{ textDecoration: "none" }}
         >
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
               color: "text.subtitle1",
               fontWeight: "bold",
@@ -48,13 +48,13 @@ const TeamList = () => {
     },
     {
       field: "description",
-      headerName: "Description",
+      headerName: "DESCRIPTION",
       minWidth: 150,
       flex: 0.4,
     },
     {
       field: "creation_date",
-      headerName: "Created At",
+      headerName: "CREATED AT",
       width: 200,
       flex: 0.2,
       renderCell: ({ value }) =>
@@ -67,6 +67,7 @@ const TeamList = () => {
       rows={rows}
       columns={columns}
       sx={{
+        fontSize: "inherit",
         color: "primary.text2",
         border: 0,
         ".MuiDataGrid-cell": {
@@ -75,11 +76,14 @@ const TeamList = () => {
           boxShadow: 0,
         },
         "& .MuiDataGrid-columnHeaderTitle": {
-          fontSize: "16px",
           fontWeight: "bold",
+        },
+        ".MuiDataGrid-columnHeaders": {
+          borderBottom: "2px solid #343a27",
         },
       }}
       autoHeight
+      disableSelectionOnClick
     />
   );
 };

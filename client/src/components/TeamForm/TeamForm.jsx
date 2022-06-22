@@ -29,7 +29,7 @@ const TeamForm = () => {
     const { id } = await response.json();
 
     if (response.status === 200) setSnackbarOpen(true);
-    navigate(`/team/${id}`);
+    navigate(`/teams/${id}/overview`);
   };
 
   return (
@@ -51,14 +51,14 @@ const TeamForm = () => {
             </Button>
           </Toolbar>
           <Toolbar disableGutters>
-            <Typography sx={{ fontWeight: "600", fontSize: "30px" }}>
+            <Typography variant="h4" sx={{ fontWeight: "600" }}>
               New Team
             </Typography>
           </Toolbar>
         </Grid>
         <Grid item xs={12}>
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{ color: "text.subtitle1", marginBottom: 2 }}
           >
             Create teams to organize people involved with your project.

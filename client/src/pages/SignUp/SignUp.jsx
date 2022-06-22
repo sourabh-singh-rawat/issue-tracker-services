@@ -49,10 +49,10 @@ const SignUp = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Box sx={{ marginTop: 8 }}>
-            <Typography fontWeight="bold" sx={{ fontSize: "30px" }}>
+            <Typography variant="h4" fontWeight="bold">
               Sign up
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body1">
               Create an account & help yourself track issues efficiently.
             </Typography>
           </Box>
@@ -73,7 +73,7 @@ const SignUp = () => {
         </Grid>
         <Grid item xs={12}>
           <Divider>
-            <Typography variant="body2" sx={{ color: "text.subtitle1" }}>
+            <Typography variant="body1" sx={{ color: "text.subtitle1" }}>
               Or sign up with your email
             </Typography>
           </Divider>
@@ -124,7 +124,7 @@ const SignUp = () => {
             </Grid>
             <Grid container>
               <Grid item>
-                <Typography variant="body2">
+                <Typography variant="body1">
                   <Link to="/signin">Already have an account? Sign In</Link>
                 </Typography>
               </Grid>

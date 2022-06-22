@@ -68,7 +68,7 @@ const Team = () => {
       </Grid>
       <Grid item xs={12}>
         <Toolbar disableGutters>
-          <Typography sx={{ fontSize: "30px", fontWeight: "bold" }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
             {name}
           </Typography>
         </Toolbar>

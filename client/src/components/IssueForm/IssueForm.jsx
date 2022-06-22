@@ -82,14 +82,14 @@ const IssueForm = () => {
           </Button>
         </Toolbar>
         <Toolbar disableGutters>
-          <Typography sx={{ fontWeight: "600", fontSize: "30px" }}>
+          <Typography variant="h4" sx={{ fontWeight: "600" }}>
             New Issue
           </Typography>
         </Toolbar>
       </Grid>
       <Grid item xs={12}>
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{ color: "text.subtitle1", marginBottom: 2 }}
         >
           Issues are problem you need to solve
@@ -121,7 +121,7 @@ const IssueForm = () => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <Typography
-                variant="body2"
+                variant="body1"
                 sx={{
                   color: "primary.text",
                   paddingBottom: 1,

@@ -12,7 +12,7 @@ import Project from "./pages/Project/Project";
 import Projects from "./pages/Projects/Projects";
 import ProjectForm from "./components/ProjectForm/ProjectForm";
 import ProjectOverview from "./components/ProjectOverview/ProjectOverview";
-import ProjectPeople from "./components/ProjectPeople/ProjectPeople";
+import ProjectMembers from "./components/ProjectMembers/ProjectMembers";
 import ProjectActivity from "./components/Activity/Activity";
 import Issue from "./components/Issue/Issue";
 import Issues from "./pages/Issues/Issues";
@@ -29,6 +29,7 @@ import TeamList from "./components/TeamList/TeamList";
 import Team from "./pages/Team/Team";
 import TeamOverview from "./components/TeamOverview/TeamOverview";
 import TeamSettings from "./components/TeamSettings/TeamSettings";
+import ProjectIssues from "./components/ProjectIssues/ProjectIssues";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -64,8 +65,8 @@ const App = () => {
             <Route path="new" element={<ProjectForm />} />
             <Route path=":id" element={<Project />}>
               <Route path="overview" element={<ProjectOverview />} />
-              <Route path="issues" element={<IssuesList />} />
-              <Route path="people" element={<ProjectPeople />} />
+              <Route path="issues" element={<ProjectIssues />} />
+              <Route path="members" element={<ProjectMembers />} />
               <Route path="activity" element={<ProjectActivity />} />
               <Route path="settings" element={<ProjectSetting />} />
             </Route>
