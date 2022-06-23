@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { setCurrentUser } from "./reducers/user.reducer";
-import { onAuthStateChangedListener } from "./auth/firebase-config";
+import { onAuthStateChangedListener } from "./config/firebase.config";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";

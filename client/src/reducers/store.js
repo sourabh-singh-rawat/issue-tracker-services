@@ -1,13 +1,13 @@
 import logger from "redux-logger";
 import { configureStore } from "@reduxjs/toolkit";
 import issueReducer from "./issue.reducer";
-import issueListReducer from "./issue-list.reducer";
+import issueListReducer from "./issueList.reducer";
 import projectReducer from "./project.reducer";
-import projectListReducer from "./project-list.reducer";
+import projectListReducer from "./projectList.reducer";
 import snackbarReducer from "./snackbar.reducer";
 import userReducer from "./user.reducer";
 import teamReducer from "./team.reducer";
-import teamListReducer from "./team-list.reducer";
+import teamListReducer from "./teamList.reducer";
 
 export const store = configureStore({
   reducer: {

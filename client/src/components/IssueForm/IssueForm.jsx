@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -19,6 +19,7 @@ const IssueForm = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
   const [projectNames, setProjectNames] = useState([]);
+  const { pathname } = useLocation();
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
@@ -66,28 +67,30 @@ const IssueForm = () => {
 
   return (
     <Grid container>
+      {pathname === "/issues/new" && (
+        <Grid item xs={12}>
+          <Toolbar disableGutters>
+            <Button
+              variant="text"
+              startIcon={<ArrowBack />}
+              onClick={() => navigate("/issues")}
+              sx={{
+                color: "text.subtitle1",
+                textTransform: "none",
+                fontWeight: "bold",
+              }}
+            >
+              Back to all issues
+            </Button>
+          </Toolbar>
+        </Grid>
+      )}
       <Grid item xs={12}>
-        <Toolbar disableGutters>
-          <Button
-            variant="text"
-            startIcon={<ArrowBack />}
-            onClick={() => navigate("/issues")}
-            sx={{
-              color: "text.subtitle1",
-              textTransform: "none",
-              fontWeight: "bold",
-            }}
-          >
-            Back to all issues
-          </Button>
-        </Toolbar>
         <Toolbar disableGutters>
           <Typography variant="h4" sx={{ fontWeight: "600" }}>
             New Issue
           </Typography>
         </Toolbar>
-      </Grid>
-      <Grid item xs={12}>
         <Typography
           variant="body1"
           sx={{ color: "text.subtitle1", marginBottom: 2 }}

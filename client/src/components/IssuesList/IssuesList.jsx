@@ -5,30 +5,20 @@ import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import {
   setIssueList,
   updateIssueList,
-} from "../../reducers/issue-list.reducer";
+} from "../../reducers/issueList.reducer";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
-import {
-  Select,
-  MenuItem,
-  Typography,
-  FormControl,
-  Autocomplete,
-  TextField,
-} from "@mui/material/";
+import { Select, MenuItem, Typography, FormControl } from "@mui/material/";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 
 const IssuesList = () => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTab, project_id = ""] = useOutletContext();
   const { rows, rowCount, page, pageSize } = useSelector(
     (store) => store.issueList
   );
-  const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedTab, project] = useOutletContext();
-
-  let project_id;
-  project ? (project_id = project.id) : (project_id = "");
 
   const SelectEditInputCell = (props) => {
     const { id, value, field } = props;

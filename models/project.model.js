@@ -1,5 +1,5 @@
-import db from "../db/connect.js";
-import { createSelectQuery } from "../utils/find.js";
+import db from "../config/connect.config.js";
+import { createSelectQuery } from "../utils/queryCreator.utils.js";
 
 const insertOne = (document) => {
   const {

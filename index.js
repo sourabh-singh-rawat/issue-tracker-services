@@ -1,12 +1,12 @@
 import express from "express";
-import cors from "cors";
 const app = express();
+import cors from "cors";
 
 // Routers
-import userRouter from "./routers/user.js";
-import issueRouter from "./routers/issue.js";
-import projectRouter from "./routers/project.js";
-import teamRouter from "./routers/team.js";
+import userRouter from "./routes/users.route.js";
+import issueRouter from "./routes/issues.route.js";
+import projectRouter from "./routes/projects.route.js";
+import teamRouter from "./routes/teams.route.js";
 
 const PORT = process.env.PORT || 4000;
 

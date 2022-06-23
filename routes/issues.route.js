@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import IssueController from "../controllers/IssueController.js";
+import IssueController from "../controllers/issues.controller.js";
 
 router.post("/issues", IssueController.create);
 router.get("/issues", IssueController.index);

@@ -1,5 +1,5 @@
-import Team from "../models/Team.js";
-import TeamUserMap from "../models/UserTeamMap.js";
+import Team from "../models/team.model.js";
+import TeamUserMap from "../models/teamUser.model.js";
 
 const create = async (req, res) => {
   try {
