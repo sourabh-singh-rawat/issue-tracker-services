@@ -1,4 +1,4 @@
-import db from "../db/connect.js";
+import db from "../config/connect.config.js";
 
 const insertOne = (document) => {
   const { user_id, team_id, role } = document;

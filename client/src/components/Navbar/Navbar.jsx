@@ -1,5 +1,5 @@
 import { LogIn } from "react-feather";
-import { signOutUser } from "../../auth/auth";
+import { signOutUser } from "../../utils/firebase.utils";
 import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 import { BugReport } from "@mui/icons-material";
 

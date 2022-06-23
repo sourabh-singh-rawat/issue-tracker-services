@@ -1,19 +1,17 @@
 import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
-import { signOutUser } from "../../auth/auth";
+import { signOutUser } from "../../utils/firebase.utils";
 import MuiDrawer from "@mui/material/Drawer";
 import {
   Box,
   List,
-  Divider,
   Toolbar,
   IconButton,
   ListItem,
   ListItemIcon,
   Container,
   ListItemButton,
-  CssBaseline,
   Typography,
 } from "@mui/material";
 import { Menu, X } from "react-feather";

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithGoogle, signUpWithEmailAndPassword } from "../../auth/auth";
+import {
+  signInWithGoogle,
+  signUpWithEmailAndPassword,
+} from "../../utils/firebase.utils";
 import {
   Box,
   Grid,

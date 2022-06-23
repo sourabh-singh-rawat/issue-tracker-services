@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
+import { ArrowBack } from "@mui/icons-material";
+import { Box, Grid, Toolbar, Button } from "@mui/material";
 import { setProject } from "../../reducers/project.reducer";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import StyledTab from "../../components/StyledTab/StyledTab";
 import StyledTabs from "../../components/StyledTabs/StyledTabs";
-import { Box, Grid, Toolbar, Button } from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
 
 const Project = () => {
   const { id } = useParams();
@@ -49,7 +49,7 @@ const Project = () => {
       const data = await response.json();
       if (response.status === 200) dispatch(setProject(data));
     })();
-  }, [path, id]);
+  }, [id]);
 
   return (
     <Grid container>
@@ -86,7 +86,7 @@ const Project = () => {
         </Box>
       </Grid>
       <Grid item xs={12} sx={{ marginTop: 2 }}>
-        <Outlet context={[selectedTab, project]} />
+        <Outlet context={[selectedTab, id]} />
       </Grid>
     </Grid>
   );

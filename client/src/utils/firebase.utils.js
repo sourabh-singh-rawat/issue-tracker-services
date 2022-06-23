@@ -1,12 +1,13 @@
-import { auth } from "./firebase-config";
 import {
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { storeUserInfoInDatabase } from "./db";
+import { auth } from "../config/firebase.config.js";
+import { storeUserInfoInDatabase } from "./database.utils.js";
 
+// SIGN IN
 export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
 
@@ -14,13 +15,13 @@ export const signInWithGoogle = async () => {
     const response = await signInWithPopup(auth, provider);
     const { user } = response;
 
-    // storing user in the database
-    storeUserInfoInDatabase(user);
+    await storeUserInfoInDatabase(user);
   } catch (error) {
     console.log(error);
   }
 };
 
+// SIGN UP
 export const signUpWithEmailAndPassword = async (email, password) => {
   try {
     const credentials = await createUserWithEmailAndPassword(
@@ -35,6 +36,7 @@ export const signUpWithEmailAndPassword = async (email, password) => {
   }
 };
 
+// SIGN OUT
 export const signOutUser = async () => {
   try {
     await signOut(auth);

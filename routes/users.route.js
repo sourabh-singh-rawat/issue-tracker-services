@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import UserController from "../controllers/UserController.js";
+import UserController from "../controllers/user.controller.js";
 
 router.post("/users", UserController.create); // create user
 router.get("/users", UserController.index); // get a list of users

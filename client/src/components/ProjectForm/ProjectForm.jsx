@@ -6,6 +6,7 @@ import { Box, Grid, Button, Toolbar, Typography } from "@mui/material";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledTextField from "../StyledTextField/StyledTextField";
 import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
+import { useEffect } from "react";
 
 const ProjectForm = () => {
   const navigate = useNavigate();
@@ -13,28 +14,37 @@ const ProjectForm = () => {
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    owner_email: "Unassigned",
+    owner_email: "",
     owner_uid: "",
     status: "",
     start_date: null,
     end_date: null,
   });
 
+  useEffect(() => {
+    setFormFields({
+      ...formFields,
+      owner_email: user ? user.email : "",
+      owner_uid: user ? user.uid : "",
+    });
+  }, [user]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormFields({ ...formFields, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
-    // const response = await fetch("http://localhost:4000/api/projects", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formFields),
-    // });
-    // const { id } = await response.json();
-    // if (response.status === 200) navigate(`/projects/${id}/overview`);
+
+    const response = await fetch("http://localhost:4000/api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formFields),
+    });
+    const { id } = await response.json();
+    if (response.status === 200) navigate(`/projects/${id}/overview`);
   };
 
   return (
@@ -123,7 +133,7 @@ const ProjectForm = () => {
                 title="Owner's Email"
                 name="owner_email"
                 type="email"
-                value={user ? user.email : "Unassigned"}
+                value={formFields.owner_email}
                 onChange={handleChange}
                 disabled
                 helperText="Project owner's email"
@@ -133,6 +143,7 @@ const ProjectForm = () => {
             <Grid item xs={12} sm={12} md={12}>
               <StyledTextField
                 name="Description"
+                title="Description"
                 type="text"
                 onChange={handleChange}
                 rows={4}

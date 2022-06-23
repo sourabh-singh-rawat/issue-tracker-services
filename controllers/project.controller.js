@@ -1,4 +1,4 @@
-import Project from "../models/Project.js";
+import Project from "../models/project.model.js";
 
 const create = async (req, res) => {
   const document = req.body;

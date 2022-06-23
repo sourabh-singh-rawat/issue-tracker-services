@@ -8,7 +8,7 @@ import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import {
   setProjectList,
   updateProjectList,
-} from "../../reducers/project-list.reducer";
+} from "../../reducers/projectList.reducer";
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
 

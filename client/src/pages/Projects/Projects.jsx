@@ -1,6 +1,6 @@
-import { Button, Grid, Toolbar, Typography } from "@mui/material";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Plus } from "react-feather";
+import { Add } from "@mui/icons-material";
+import { Button, Grid, Toolbar, Typography } from "@mui/material";
 
 const Projects = () => {
   const { pathname } = useLocation();
@@ -17,7 +17,7 @@ const Projects = () => {
             <Button
               variant="contained"
               sx={{ textTransform: "none", fontWeight: "bold" }}
-              startIcon={<Plus />}
+              startIcon={<Add />}
               onClick={() => navigate("/projects/new")}
             >
               Create Project
