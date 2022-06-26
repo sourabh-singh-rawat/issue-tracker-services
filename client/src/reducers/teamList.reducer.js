@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   rows: [],
   rowCount: 0,
-  isLoading: false,
   page: 0,
   pageSize: 10,
 };

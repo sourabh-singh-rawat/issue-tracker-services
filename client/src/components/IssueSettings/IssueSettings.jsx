@@ -1,8 +1,7 @@
-import { Box, Button, Divider, Grid, Typography } from "@mui/material";
-import { format, parseISO } from "date-fns";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { format, parseISO } from "date-fns";
 import { useOutletContext } from "react-router-dom";
+import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import { updateIssue } from "../../reducers/issue.reducer";
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
@@ -116,24 +115,22 @@ const IssueSettings = () => {
                 <StyledSelect
                   title="Status"
                   name="status"
-                  value={issue.status ? issue.status : "Not Started"}
+                  value={issue.status}
                   onChange={handleChange}
-                  helperText="The current status of your project."
+                  helperText="The current status of the issue."
                   // onChange={handleChange}
-                  items={["Not Started", "Open", "Completed", "Paused"]}
-                  defaultValue={"Not Started"}
+                  items={["Open", "In Progress", "Closed"]}
                 />
               </Grid>
               <Grid item xs={6}>
                 <StyledSelect
                   title="Priority"
                   name="priority"
-                  value={issue.priority ? issue.priority : "Low"}
+                  value={issue.priority}
                   onChange={handleChange}
-                  helperText="The current status of your project."
+                  helperText="The current status of your issue."
                   // onChange={handleChange}
-                  items={["Low", "Medium", "High"]}
-                  defaultValue={"Low"}
+                  items={["Lowest", "Low", "Medium", "High", "Highest"]}
                 />
               </Grid>
               {/* <Grid item xs={12} md={6}>

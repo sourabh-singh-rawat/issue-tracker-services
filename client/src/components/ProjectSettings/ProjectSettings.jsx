@@ -120,12 +120,10 @@ const ProjectSettings = () => {
                 <StyledSelect
                   title="Status"
                   name="status"
-                  value={project.status ? project.status : "Not Started"}
+                  value={project.status}
                   onChange={handleChange}
-                  helperText="The current status of your project."
-                  // onChange={handleChange}
                   items={["Not Started", "Open", "Completed", "Paused"]}
-                  defaultValue={"Not Started"}
+                  helperText="The current status of your project."
                 />
               </Grid>
               <Grid item xs={12} md={6}>

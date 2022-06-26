@@ -4,15 +4,15 @@ export const theme = createTheme({
   palette: {
     primary: {
       light: "",
-      main: "#5e1fec",
+      main: "#112edd",
       dark: "",
     },
     text: {
       main: "#3e3b48",
-      subtitle1: "#3e3b48",
+      subtitle1: "#828282",
     },
     background: {
-      default: "#fbfaff",
+      // default: "#fbfaff",
       appbar: "#1e212a",
     },
   },
@@ -20,7 +20,7 @@ export const theme = createTheme({
     fontFamily: ["inter", "arial"].join(","),
     fontWeightRegular: 400,
     h4: { fontSize: 30 },
-    body1: { fontSize: 15 },
+    body1: { fontSize: 16 },
   },
 });
 

@@ -1,10 +1,11 @@
 import Project from "../models/project.model.js";
+import ProjectMember from "../models/projectMember.model.js";
 
 const create = async (req, res) => {
-  const document = req.body;
-
   try {
-    const project = (await Project.insertOne(document)).rows[0];
+    const project = (await Project.insertOne(req.body)).rows[0];
+    await ProjectMember.insertOne(project.id, project.owner_uid);
+
     return res.send(project);
   } catch (error) {
     res.status(500).send(error);
@@ -12,6 +13,8 @@ const create = async (req, res) => {
 };
 
 const index = async (req, res) => {
+  const { uid } = req.user;
+
   // filtering
   const { status } = req.query;
 
@@ -29,7 +32,7 @@ const index = async (req, res) => {
 
   try {
     const response = await Project.find({
-      options: { status },
+      options: { owner_uid: uid, status },
       pagingOptions: {
         limit: parseInt(limit),
         offset: parseInt(limit) * parseInt(page),
@@ -39,12 +42,20 @@ const index = async (req, res) => {
 
     const rowCount = await (await Project.rowCount()).rows[0].count;
 
-    res.send({ data: response.rows, rowCount: parseInt(rowCount) });
+    res.send({ rows: response.rows, rowCount: parseInt(rowCount) });
   } catch (error) {
-    if (error) {
-      console.log("READ_ERROR: Cannot get all projects", error);
-      res.status(404).send("Cannot get all projects");
-    }
+    res.status(500).send();
+  }
+};
+
+const indexProjectMembers = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const projectMembers = (await ProjectMember.findByProjectId(id)).rows;
+    res.send(projectMembers);
+  } catch (error) {
+    res.status(500).send();
   }
 };
 
@@ -71,7 +82,6 @@ const update = async (req, res) => {
   }
 };
 
-// Asks model to delete project
 const destroy = async (req, res) => {
   const { id } = req.params;
 
@@ -84,4 +94,4 @@ const destroy = async (req, res) => {
   }
 };
 
-export default { create, index, show, update, destroy };
+export default { create, index, indexProjectMembers, show, update, destroy };

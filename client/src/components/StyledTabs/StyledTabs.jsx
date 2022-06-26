@@ -8,14 +8,14 @@ const StyledTabs = (props) => {
       sx={{
         color: "primary.main",
         borderBottom: "1px solid #e3e4e6",
-
-        "& .Mui-selected": {
-          color: "primary.main",
+        ".MuiButtonBase-root": {
+          padding: 0,
+          marginRight: 4,
+          borderWidth: 0,
+          minWidth: "auto",
         },
-        "& .MuiTabs-indicator": {
-          backgroundColor: "primary.main",
-          display: "flex",
-          justifyContent: "center",
+        ".Mui-selected": {
+          color: "primary.main",
         },
       }}
     />

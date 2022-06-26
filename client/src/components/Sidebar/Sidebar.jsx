@@ -1,30 +1,32 @@
-import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
-import { styled } from "@mui/material/styles";
+import { Outlet, Link } from "react-router-dom";
 import { signOutUser } from "../../utils/firebase.utils";
+import { styled } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import {
   Box,
   List,
   Toolbar,
-  IconButton,
   ListItem,
-  ListItemIcon,
   Container,
-  ListItemButton,
   Typography,
+  IconButton,
+  ListItemIcon,
+  ListItemButton,
 } from "@mui/material";
-import { Menu, X } from "react-feather";
-import StyledSnackbar from "../StyledSnackBar/StyledSnackBar";
-import Navbar from "../Navbar/Navbar";
 import {
-  AssignmentOutlined,
-  ErrorOutline,
+  Menu,
+  Close,
   GridView,
-  LoginOutlined,
+  ErrorOutline,
   PeopleOutline,
+  LoginOutlined,
   SettingsOutlined,
+  EmojiPeopleOutlined,
+  AssignmentOutlined,
 } from "@mui/icons-material";
+import Navbar from "../Navbar/Navbar";
+import StyledSnackbar from "../StyledSnackBar/StyledSnackBar";
 
 export const drawerWidth = 240;
 
@@ -60,7 +62,6 @@ const Drawer = styled(MuiDrawer, {
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
-
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
@@ -114,6 +115,19 @@ const Sidebar = () => {
                 </ListItemIcon>
                 <Typography variant="body1" sx={listItemTypographyStyles}>
                   Projects
+                </Typography>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          {/* people button */}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <Link to="/people" style={listLinkStyles}>
+              <ListItemButton sx={listItemButtonStyles}>
+                <ListItemIcon sx={listItemIconStyles}>
+                  <EmojiPeopleOutlined />
+                </ListItemIcon>
+                <Typography variant="body1" sx={listItemTypographyStyles}>
+                  People
                 </Typography>
               </ListItemButton>
             </Link>
@@ -173,7 +187,6 @@ const Sidebar = () => {
           {/* hamburger */}
           <IconButton
             color="inherit"
-            aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             sx={{ marginRight: 5, ...(open && { display: "none" }) }}
@@ -184,7 +197,7 @@ const Sidebar = () => {
             onClick={handleDrawerClose}
             sx={{ opacity: open ? 1 : 0 }} // important fix for chevronLeft icon
           >
-            <X />
+            <Close />
           </IconButton>
         </Toolbar>
       </Drawer>

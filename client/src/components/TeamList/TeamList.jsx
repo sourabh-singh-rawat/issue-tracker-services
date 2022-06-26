@@ -1,9 +1,9 @@
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { format, parseISO } from "date-fns";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { setTeamList } from "../../reducers/teamList.reducer";
 
 const TeamList = () => {
@@ -13,9 +13,9 @@ const TeamList = () => {
   useEffect(() => {
     (async () => {
       const response = await fetch("http://localhost:4000/api/teams");
-      const { rows } = await response.json();
+      const { rows, rowCount } = await response.json();
 
-      dispatch(setTeamList({ rows }));
+      dispatch(setTeamList({ rows, rowCount }));
     })();
   }, []);
 

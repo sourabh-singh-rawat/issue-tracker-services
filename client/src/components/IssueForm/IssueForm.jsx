@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -9,23 +9,29 @@ import {
   Typography,
   Autocomplete,
   Toolbar,
+  Avatar,
+  MenuItem,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import StyledTextField from "../StyledTextField/StyledTextField";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
+import { onAuthStateChangedListener } from "../../config/firebase.config";
 
 const IssueForm = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  const [projectNames, setProjectNames] = useState([]);
+  const project = useSelector((store) => store.project);
+  const { id } = useParams();
   const { pathname } = useLocation();
+  const [projects, setProjects] = useState([]);
+  const [projectMembers, setProjectMembers] = useState([]);
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    status: "Open",
-    priority: "Low",
-    reporter: user ? user.uid : null,
+    status: 0,
+    priority: 0,
+    reporter: null,
     assigned_to: null,
     due_date: null,
     project_id: "",
@@ -33,15 +39,45 @@ const IssueForm = () => {
   });
 
   useEffect(() => {
-    fetch("http://127.0.0.1:4000/api/projects")
-      .then((response) => response.json())
-      .then((data) => {
-        const projectNames = data.map(
-          (project) => `${project.name} (${project.id})`
-        );
-        setProjectNames(projectNames);
-      });
+    return onAuthStateChangedListener(async (user) => {
+      const token = await user.getIdToken();
+      const fetchProjects = async () => {
+        const projects = await fetch("http://127.0.0.1:4000/api/projects", {
+          method: "GET",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        });
+        const data = await projects.json();
+
+        setProjects(data.rows);
+      };
+
+      !id && fetchProjects();
+    });
   }, []);
+
+  useEffect(() => {
+    const fetchProjectMembers = async () => {
+      const response = await fetch(
+        `http://localhost:4000/api/projects/${
+          id || formFields.project_id
+        }/members`
+      );
+
+      const members = await response.json();
+      setProjectMembers(members);
+    };
+    fetchProjectMembers();
+  }, [formFields.project_id]);
+
+  useEffect(() => {
+    setFormFields({
+      ...formFields,
+      reporter: user.uid,
+      project_id: project.id,
+    });
+  }, [project]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -52,17 +88,16 @@ const IssueForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     console.log(formFields);
 
-    // const response = await fetch("http://localhost:4000/api/issues", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formFields),
-    // });
+    const response = await fetch("http://localhost:4000/api/issues", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formFields),
+    });
 
-    // const { id } = await response.json();
-    // navigate(`/issues/${id}/overview`);
+    const { id } = await response.json();
+    navigate(`/issues/${id}/overview`);
   };
 
   return (
@@ -106,7 +141,7 @@ const IssueForm = () => {
                 name="name"
                 title="Name"
                 onChange={handleChange}
-                helperText="A precise name for the issue"
+                helperText="A title for the issue"
                 fullWidth
                 required
               />
@@ -123,30 +158,46 @@ const IssueForm = () => {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "primary.text",
-                  paddingBottom: 1,
-                  fontWeight: "bold",
-                }}
-              >
-                Project
-              </Typography>
-              <Autocomplete
-                disablePortal
-                size="small"
-                options={projectNames}
-                onChange={(e, selectedOption) => {
-                  if (selectedOption) {
-                    const id = selectedOption.split("(")[1].slice(1, -1);
-                    setFormFields({ ...formFields, project_id: id });
-                  }
-                }}
-                renderInput={(params) => <TextField {...params} />}
-                fullWidth
-                required
-              />
+              {id ? (
+                <StyledTextField
+                  name="project_id"
+                  title="Project"
+                  value={project ? project.name : "loading"}
+                  disabled
+                />
+              ) : (
+                <>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "primary.text",
+                      paddingBottom: 1,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Project
+                  </Typography>
+                  <Autocomplete
+                    disablePortal
+                    size="small"
+                    options={projects}
+                    onChange={(e, selectedProject) => {
+                      if (selectedProject) {
+                        setFormFields({
+                          ...formFields,
+                          project_id: selectedProject.id,
+                        });
+                      }
+                    }}
+                    getOptionLabel={(option) => {
+                      return `${option.name} (${option.id.split("-")[0]})`;
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    fullWidth
+                    required
+                  />
+                </>
+              )}
             </Grid>
             <Grid item xs={12} sm={6}>
               <StyledTextField
@@ -160,13 +211,36 @@ const IssueForm = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <StyledSelect
-                name="assigned_to"
-                title="Assigned To"
-                onChange={handleChange}
-                items={["Sourabh Singh Rawat"]}
-                // defaultValue=""
-                // value={formFields.uid}
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "primary.text",
+                  paddingBottom: 1,
+                  fontWeight: "bold",
+                }}
+              >
+                Assigned To
+              </Typography>
+              <Autocomplete
+                disablePortal
+                size="small"
+                options={projectMembers}
+                onChange={(e, selectedMember) => {
+                  if (selectedMember) {
+                    setFormFields({
+                      ...formFields,
+                      assigned_to: selectedMember.user_id,
+                    });
+                  }
+                }}
+                getOptionLabel={(option) => {
+                  return `${option.email}`;
+                }}
+                renderInput={(params) => (
+                  <TextField name="assigned_to" {...params} />
+                )}
+                fullWidth
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -174,17 +248,20 @@ const IssueForm = () => {
                 name="priority"
                 title="Priority"
                 onChange={handleChange}
-                defaultValue="Low"
-                items={["Low", "Medium", "High"]}
+                defaultValue="Lowest"
+                items={["Lowest", "Low", "Medium", "High", "Highest"]}
                 fullWidth
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <StyledDatePicker
                 name="due_date"
-                title="Dude Date"
+                title="Due Date"
                 minDate={new Date()}
                 value={formFields.due_date}
+                getOptionLabel={(option) => {
+                  return `${option.name}`;
+                }}
                 onChange={(date) =>
                   setFormFields({ ...formFields, due_date: date })
                 }
