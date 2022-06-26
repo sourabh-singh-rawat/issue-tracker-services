@@ -13,7 +13,7 @@ const issueListSlice = createSlice({
   reducers: {
     setIssueList: (state, action) => ({
       ...state,
-      rows: action.payload.data,
+      rows: action.payload.rows,
       rowCount: action.payload.rowCount,
     }),
     updateIssueList: (state, action) => ({ ...state, ...action.payload }),

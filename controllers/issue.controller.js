@@ -1,4 +1,4 @@
-import Issue from "../models/issues.model.js";
+import Issue from "../models/issue.model.js";
 
 const create = async (req, res) => {
   try {
@@ -9,11 +9,8 @@ const create = async (req, res) => {
   }
 };
 
-// get /api/issues
-// GET /api/issues?status=open
-// GET /api/issues?project_id=517b4cca-0b00-4ea4-9ab9-874f6c5aeb74
-// GET /api/issues?status=open&limit=10
-// GET /api/issues?status=open&limit=10&offset=0
+//  options: status, project_id, limit, page
+
 const index = async (req, res) => {
   // filtering
   const { status, priority, project_id, reporter, assigned_to } = req.query;
@@ -44,7 +41,7 @@ const index = async (req, res) => {
 
     const rowCount = await (await Issue.rowCount()).rows[0].count;
 
-    res.send({ data: issues, rowCount: parseInt(rowCount) });
+    res.send({ rows: issues, rowCount: parseInt(rowCount) });
   } catch (error) {
     res.status(500).send(error);
   }

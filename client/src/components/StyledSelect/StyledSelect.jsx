@@ -6,27 +6,16 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-const StyledSelect = ({
-  title,
-  defaultValue,
-  items,
-  helperText,
-  ...otherProps
-}) => {
+const StyledSelect = ({ title, items, helperText, ...otherProps }) => {
   return (
     <>
       <Typography variant="body1" fontWeight="bold" sx={{ paddingBottom: 1 }}>
         {title}
       </Typography>
       <FormControl fullWidth>
-        <Select
-          size="small"
-          defaultValue={defaultValue}
-          displayEmpty
-          {...otherProps}
-        >
-          {items.map((item) => (
-            <MenuItem value={item} key={item}>
+        <Select size="small" displayEmpty {...otherProps} defaultValue={0}>
+          {items.map((item, index) => (
+            <MenuItem value={index} key={item}>
               {item}
             </MenuItem>
           ))}

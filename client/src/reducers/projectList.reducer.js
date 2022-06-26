@@ -13,7 +13,7 @@ const projectListReducer = createSlice({
   reducers: {
     setProjectList: (state, action) => ({
       ...state,
-      rows: action.payload.data,
+      rows: action.payload.rows,
       rowCount: action.payload.rowCount,
     }),
     updateProjectList: (state, action) => ({ ...state, ...action.payload }),

@@ -49,7 +49,7 @@ const Project = () => {
       const data = await response.json();
       if (response.status === 200) dispatch(setProject(data));
     })();
-  }, [id]);
+  }, [path, id]);
 
   return (
     <Grid container>

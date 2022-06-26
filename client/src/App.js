@@ -16,7 +16,7 @@ import ProjectMembers from "./components/ProjectMembers/ProjectMembers";
 import ProjectActivity from "./components/Activity/Activity";
 import Issue from "./components/Issue/Issue";
 import Issues from "./pages/Issues/Issues";
-import IssuesList from "./components/IssuesList/IssuesList";
+import IssueListFiltered from "./pages/IssueListFiltered/IssueListFiltered";
 import IssueForm from "./components/IssueForm/IssueForm";
 import TeamForm from "./components/TeamForm/TeamForm";
 import ProjectList from "./components/ProjectList/ProjectList";
@@ -30,6 +30,7 @@ import Team from "./pages/Team/Team";
 import TeamOverview from "./components/TeamOverview/TeamOverview";
 import TeamSettings from "./components/TeamSettings/TeamSettings";
 import ProjectIssues from "./components/ProjectIssues/ProjectIssues";
+import IssuesList from "./components/IssuesList/IssuesList";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -55,10 +56,6 @@ const App = () => {
       <Route element={<ProtectedRoutes />}>
         <Route path="/" element={<Sidebar />}>
           <Route index element={<Dashboard />} />
-          {/* list routes */}
-          <Route path="issues" element={<Issues />}>
-            <Route index element={<IssuesList />} />
-          </Route>
           {/* project route */}
           <Route path="projects" element={<Projects />}>
             <Route index element={<ProjectList />} />
@@ -82,6 +79,7 @@ const App = () => {
           </Route>
           {/* issue route */}
           <Route path="issues" element={<Issues />}>
+            <Route index element={<IssueListFiltered />} />
             <Route path="new" element={<IssueForm />} />
             <Route path=":id" element={<Issue />}>
               <Route path="overview" element={<IssueOverview />} />

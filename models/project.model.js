@@ -1,7 +1,7 @@
 import db from "../config/connect.config.js";
-import { createSelectQuery } from "../utils/queryCreator.utils.js";
+import { createSelectQuery } from "../utils/createSelectQuery.utils.js";
 
-const insertOne = (document) => {
+const insertOne = (project) => {
   const {
     name = "My Project",
     description,
@@ -10,7 +10,8 @@ const insertOne = (document) => {
     start_date,
     end_date,
     status,
-  } = document;
+  } = project;
+
   return db.query(
     `INSERT INTO projects (name, description, status, owner_uid, owner_email, start_date, end_date)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -21,7 +22,6 @@ const insertOne = (document) => {
 
 const find = (options) => {
   const { query, colValues } = createSelectQuery(options, "projects");
-
   return db.query(query, colValues);
 };
 
@@ -32,14 +32,14 @@ const findOne = (id) =>
     [id]
   );
 
-const updateOne = (id, document) => {
-  let query = Object.keys(document).reduce((prev, cur, index) => {
+const updateOne = (id, project) => {
+  let query = Object.keys(project).reduce((prev, cur, index) => {
     return prev + " " + cur + "=$" + (index + 1) + ",";
   }, "UPDATE projects SET");
   query = query.slice(0, -1);
   query += " WHERE id='" + id + "' RETURNING *";
 
-  return db.query(query, Object.values(document));
+  return db.query(query, Object.values(project));
 };
 
 const deleteOne = (id) =>
@@ -52,4 +52,11 @@ const deleteOne = (id) =>
 
 const rowCount = () => db.query(`SELECT count(*) FROM projects`);
 
-export default { insertOne, find, findOne, updateOne, deleteOne, rowCount };
+export default {
+  insertOne,
+  find,
+  findOne,
+  updateOne,
+  deleteOne,
+  rowCount,
+};

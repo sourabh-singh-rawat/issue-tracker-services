@@ -12,11 +12,11 @@ const ProjectForm = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
   const [formFields, setFormFields] = useState({
-    name: "",
+    name: "My Project",
     description: "",
     owner_email: "",
     owner_uid: "",
-    status: "",
+    status: 0,
     start_date: null,
     end_date: null,
   });
@@ -124,7 +124,6 @@ const ProjectForm = () => {
                 onChange={handleChange}
                 items={["Not Started", "Open", "Completed", "Paused"]}
                 helperText="Current status of your project."
-                defaultValue={"Not Started"}
               />
             </Grid>
             <Grid item md={6}></Grid>

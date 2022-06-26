@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthStateChangedListener } from "../../config/firebase.config";
+import { setIssueList } from "../../reducers/issueList.reducer";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Toolbar, Typography } from "@mui/material";
+import IssuesList from "../../components/IssuesList/IssuesList";
 
 const Issues = () => {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { pathname } = location;
-
-  const [selectedTab, setSelectedTab] = useState(101);
-
   return (
     <Grid container>
       {pathname === "/issues" && (
@@ -35,7 +35,7 @@ const Issues = () => {
         </>
       )}
       <Grid item xs={12}>
-        <Outlet context={[selectedTab]} />
+        <Outlet />
       </Grid>
     </Grid>
   );

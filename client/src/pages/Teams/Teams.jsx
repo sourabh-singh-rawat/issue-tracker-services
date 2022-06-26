@@ -1,7 +1,6 @@
 import { Button, Grid, Toolbar, Typography } from "@mui/material";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { Plus } from "react-feather";
-import { ArrowBack } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 
 const Teams = () => {
   const { pathname } = useLocation();
@@ -18,7 +17,7 @@ const Teams = () => {
             <Button
               variant="contained"
               sx={{ textTransform: "none", fontWeight: "bold" }}
-              startIcon={<Plus />}
+              startIcon={<Add />}
               onClick={() => navigate("/teams/new")}
             >
               Create Team

@@ -1,7 +1,8 @@
 import { useOutletContext } from "react-router-dom";
-import { Grid, Button } from "@mui/material";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
+import ProjectMemberFormModel from "../ProjectMemberFormModel/ProjectMemberFormModel";
+import ProjectMemberList from "../ProjectMemberList/ProjectMemberList";
 
 const ProjectMembers = () => {
   const [selectedTab] = useOutletContext();
@@ -11,11 +12,11 @@ const ProjectMembers = () => {
       <Grid container>
         <Grid item sx={{ display: "flex" }} xs={12}>
           <Box sx={{ flexGrow: 1 }} />
-          <Button variant="contained" sx={{ textTransform: "none" }}>
-            Add Member
-          </Button>
+          <ProjectMemberFormModel />
         </Grid>
-        <Grid item></Grid>
+        <Grid item>
+          <ProjectMemberList />
+        </Grid>
       </Grid>
     </StyledTabPanel>
   );

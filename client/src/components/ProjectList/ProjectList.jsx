@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { enIN } from "date-fns/esm/locale";
 import { format, parseISO } from "date-fns";
-import { TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import {
   setProjectList,
@@ -11,6 +11,7 @@ import {
 } from "../../reducers/projectList.reducer";
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
+import { onAuthStateChangedListener } from "../../config/firebase.config";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
@@ -19,27 +20,28 @@ const ProjectList = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  // const dateInput = (props) => <TextField {...props} variant="standard" />;
-
   useEffect(() => {
     setIsLoading(true);
-    (async () => {
-      const response = await fetch(
-        `http://localhost:4000/api/projects?limit=${pageSize}&page=${page}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + window.localStorage.getItem("TOKEN"),
-          },
-        }
-      );
+    const fetchProjects = async () => {
+      onAuthStateChangedListener(async (user) => {
+        let token = await user.getIdToken();
 
-      const data = await response.json();
-      setIsLoading(false);
-
-      dispatch(setProjectList(data));
-    })();
+        const response = await fetch(
+          `http://localhost:4000/api/projects?limit=${pageSize}&page=${page}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        const projects = await response.json();
+        dispatch(setProjectList(projects));
+        setIsLoading(false);
+      });
+    };
+    fetchProjects();
   }, [pageSize, page]);
 
   const SelectEditInputCell = ({ id, value, field }) => {
@@ -198,15 +200,13 @@ const ProjectList = () => {
         fontSize: "inherit",
         color: "primary.text2",
         ".MuiDataGrid-cell": {
-          border: 0,
           color: "text.subtitle1",
         },
         "& .MuiDataGrid-columnHeaderTitle": {
+          fontSize: "14px",
           fontWeight: "bold",
         },
-        ".MuiDataGrid-columnHeaders": {
-          borderBottom: "2px solid #343a27",
-        },
+        ".MuiDataGrid-columnHeaders": {},
         ".MuiDataGrid-columnSeparator": {
           display: "none",
         },

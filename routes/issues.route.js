@@ -1,9 +1,11 @@
 import express from "express";
 const router = express.Router();
-import IssueController from "../controllers/issues.controller.js";
+import { auth } from "../middlewares/auth.middleware.js";
+
+import IssueController from "../controllers/issue.controller.js";
 
 router.post("/issues", IssueController.create);
-router.get("/issues", IssueController.index);
+router.get("/issues", auth, IssueController.index);
 router.get("/issues/:id", IssueController.show);
 router.patch("/issues/:id", IssueController.update);
 router.delete("/issues/:id", IssueController.destroy);
