@@ -1,14 +1,23 @@
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import { updateIssueList } from "../../reducers/issueList.reducer";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { Select, MenuItem, Typography, FormControl } from "@mui/material/";
+import {
+  setIssueStatus,
+  setIssuePriority,
+} from "../../reducers/issueOptions.reducer";
 
 const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
   const dispatch = useDispatch();
+  const issueStatus = useSelector((store) => store.issueOptions.issueStatus);
+  const issuePriority = useSelector(
+    (store) => store.issueOptions.issuePriority
+  );
 
   const SelectEditInputCell = (props) => {
     const { id, value, field } = props;
@@ -36,20 +45,33 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
     let selectOptions = [];
     switch (field) {
       case "status":
-        selectOptions = ["Open", "In Progress", "Closed"];
+        selectOptions = issueStatus;
         break;
       case "priority":
-        selectOptions = ["Lowest", "Low", "Medium", "High", "Highest"];
+        selectOptions = issuePriority;
         break;
     }
 
     return (
       <FormControl size="small" fullWidth>
-        <Select value={value} onChange={handleChange} fullWidth>
-          {selectOptions.map((value, index) => {
+        <Select
+          value={value}
+          onChange={handleChange}
+          sx={{ color: "text.subtitle1", fontSize: "15px", fontWeight: "bold" }}
+          fullWidth
+        >
+          {selectOptions.map(({ code, message }, index) => {
             return (
-              <MenuItem value={index} key={value} sx={{ background: "none" }}>
-                <Typography variant="body1">{value}</Typography>
+              <MenuItem
+                key={code}
+                value={code}
+                sx={{
+                  color: "text.subtitle1",
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                }}
+              >
+                {message.toUpperCase()}
               </MenuItem>
             );
           })}
@@ -61,6 +83,25 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
   const renderSelectEditInputCell = (params) => (
     <SelectEditInputCell {...params} />
   );
+
+  useEffect(() => {
+    const fetchIssueStatus = async () => {
+      const response = await fetch("http://localhost:4000/api/issues/status");
+      const status = await response.json();
+
+      dispatch(setIssueStatus(status));
+    };
+
+    const fetchIssuePriority = async () => {
+      const response = await fetch("http://localhost:4000/api/issues/priority");
+      const priority = await response.json();
+
+      dispatch(setIssuePriority(priority));
+    };
+
+    fetchIssueStatus();
+    fetchIssuePriority();
+  }, []);
 
   const columns = [
     {
@@ -169,14 +210,20 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
         color: "primary.text2",
         ".MuiDataGrid-cell": {
           color: "text.subtitle1",
+          border: "none",
         },
         "& .MuiDataGrid-columnHeaderTitle": {
           fontSize: "14px",
           fontWeight: "bold",
         },
-        ".MuiDataGrid-columnHeaders": {},
+        ".MuiDataGrid-columnHeaders": {
+          borderBottom: "2px solid #DFE1E6",
+        },
         ".MuiDataGrid-columnSeparator": {
           display: "none",
+        },
+        ".MuiDataGrid-footerContainer": {
+          borderTop: "2px solid #DFE1E6",
         },
       }}
     />

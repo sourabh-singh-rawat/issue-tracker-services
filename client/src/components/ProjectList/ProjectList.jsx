@@ -12,11 +12,15 @@ import {
 import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import { onAuthStateChangedListener } from "../../config/firebase.config";
+import { setProjectStatus } from "../../reducers/projectOptions.reducer";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
   const { rows, rowCount, page, pageSize } = useSelector(
     (store) => store.projectList
+  );
+  const projectStatus = useSelector(
+    (store) => store.projectOptions.projectStatus
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,6 +45,15 @@ const ProjectList = () => {
         setIsLoading(false);
       });
     };
+
+    const fetchProjectStatus = async () => {
+      const response = await fetch("http://localhost:4000/api/projects/status");
+      const status = await response.json();
+
+      dispatch(setProjectStatus(status));
+    };
+
+    fetchProjectStatus();
     fetchProjects();
   }, [pageSize, page]);
 
@@ -67,12 +80,9 @@ const ProjectList = () => {
 
     return (
       <StyledSelect
-        size="small"
-        name="status"
         value={value}
         onChange={handleChange}
-        items={["Not Started", "Open", "Completed", "Paused"]}
-        defaultValue="Not Started"
+        items={projectStatus}
       />
     );
   };
@@ -201,14 +211,20 @@ const ProjectList = () => {
         color: "primary.text2",
         ".MuiDataGrid-cell": {
           color: "text.subtitle1",
+          border: "none",
         },
         "& .MuiDataGrid-columnHeaderTitle": {
           fontSize: "14px",
           fontWeight: "bold",
         },
-        ".MuiDataGrid-columnHeaders": {},
+        ".MuiDataGrid-columnHeaders": {
+          borderBottom: "2px solid #DFE1E6",
+        },
         ".MuiDataGrid-columnSeparator": {
           display: "none",
+        },
+        ".MuiDataGrid-footerContainer": {
+          borderTop: "2px solid #DFE1E6",
         },
       }}
     />

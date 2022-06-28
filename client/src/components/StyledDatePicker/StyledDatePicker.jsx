@@ -34,8 +34,9 @@ const StyledDatePicker = ({
               name={name}
               onChange={handleChange}
               variant={!minimized ? "outlined" : "standard"}
-              fullWidth
+              sx={{ ".MuiOutlinedInput-root": { borderRadius: 2 } }}
               {...params}
+              fullWidth
             />
           )}
           {...otherProps}

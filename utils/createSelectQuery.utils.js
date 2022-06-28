@@ -1,6 +1,7 @@
 export const createSelectQuery = (
   { options, pagingOptions, sortOptions: { field = "name", order = "asc" } },
-  tableName
+  tableName,
+  table2
 ) => {
   // Remove all the props with falsey values
   Object.keys(options).forEach((option) => {

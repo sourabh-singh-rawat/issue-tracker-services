@@ -1,5 +1,7 @@
+import MemberList from "../MemberList/MemberList";
+
 const ProjectMemberList = () => {
-  return "Project Member list component";
+  return <MemberList />;
 };
 
 export default ProjectMemberList;

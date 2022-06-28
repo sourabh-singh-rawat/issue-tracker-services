@@ -8,12 +8,17 @@ import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 import StyledTextField from "../StyledTextField/StyledTextField";
+import { useEffect } from "react";
+import { setProjectStatus } from "../../reducers/projectOptions.reducer";
 
 const ProjectSettings = () => {
   const dispatch = useDispatch();
   const project = useSelector((store) => store.project);
   const startDate = useSelector((store) => store.project.start_date);
   const endDate = useSelector((store) => store.project.end_date);
+  const projectStatus = useSelector(
+    (store) => store.projectOptions.projectStatus
+  );
   const [selectedTab] = useOutletContext();
 
   const handleChange = ({ target: { name, value } }) => {
@@ -41,6 +46,17 @@ const ProjectSettings = () => {
 
     if (response.status === 200) dispatch(setSnackbarOpen(true));
   };
+
+  useEffect(() => {
+    const fetchProjectStatus = async () => {
+      const response = await fetch("http://localhost:4000/api/projects/status");
+      const status = await response.json();
+
+      dispatch(setProjectStatus(status));
+    };
+
+    fetchProjectStatus();
+  }, []);
 
   return (
     <StyledTabPanel selectedTab={selectedTab} index={104}>
@@ -122,7 +138,7 @@ const ProjectSettings = () => {
                   name="status"
                   value={project.status}
                   onChange={handleChange}
-                  items={["Not Started", "Open", "Completed", "Paused"]}
+                  items={projectStatus}
                   helperText="The current status of your project."
                 />
               </Grid>
