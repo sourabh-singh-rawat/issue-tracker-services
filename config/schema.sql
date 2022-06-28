@@ -5,7 +5,7 @@ CREATE DATABASE "issue-tracker";
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   
 
 -- TABLES
--- teams
+-- Teams
 CREATE TABLE IF NOT EXISTS teams (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS teams (
   PRIMARY KEY (id)
 );
 
--- users
+-- Users
 CREATE TABLE IF NOT EXISTS users (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS project_status (
 );
 
 INSERT INTO project_status
-VALUES (0, 'not started'), (1, 'open'), (2, 'completed'), (3, 'paused');
+VALUES (0, 'not started'), (1, 'open'), (2, 'paused'), (3, 'completed');
 
 CREATE TABLE IF NOT EXISTS projects (
   id uuid DEFAULT uuid_generate_v4(),
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS issue_status (
   message VARCHAR(20)
 );
 INSERT INTO issue_status 
-VALUES (0, 'Open'), (1, 'In Progress') ,(2, 'Closed');
+VALUES (0, 'open'), (1, 'in pogress'), (2, 'in review') ,(3, 'closed');
 
 CREATE TABLE IF NOT EXISTS issue_priority (
   priority INTEGER UNIQUE,
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS issues (
   FOREIGN KEY (assigned_to) REFERENCES users(uid)
 );
 
--- project members
+-- Project members
 CREATE TABLE IF NOT EXISTS project_members (
     project_id uuid,
     user_id VARCHAR(255),
@@ -99,7 +99,14 @@ CREATE TABLE IF NOT EXISTS project_members (
     FOREIGN KEY (project_id) REFERENCES projects(id)
 );
 
--- team members
+-- Team members
+CREATE TABLE IF NOT EXISTS roles (
+  code INTEGER,
+  message VARCHAR(20)
+);
+INSERT INTO roles 
+VALUES (0, 'member'), (1, 'admin');
+
 CREATE TABLE IF NOT EXISTS  team_members (
     user_id VARCHAR(255),
     team_id uuid,

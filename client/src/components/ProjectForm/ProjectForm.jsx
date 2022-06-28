@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Grid, Button, Toolbar, Typography } from "@mui/material";
@@ -7,9 +7,14 @@ import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledTextField from "../StyledTextField/StyledTextField";
 import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 import { useEffect } from "react";
+import { setProjectStatus } from "../../reducers/projectOptions.reducer";
 
 const ProjectForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const projectStatus = useSelector(
+    (store) => store.projectOptions.projectStatus
+  );
   const user = useSelector((store) => store.user);
   const [formFields, setFormFields] = useState({
     name: "My Project",
@@ -27,6 +32,15 @@ const ProjectForm = () => {
       owner_email: user ? user.email : "",
       owner_uid: user ? user.uid : "",
     });
+
+    const fetchProjectStatus = async () => {
+      const response = await fetch("http://localhost:4000/api/projects/status");
+      const status = await response.json();
+
+      dispatch(setProjectStatus(status));
+    };
+
+    fetchProjectStatus();
   }, [user]);
 
   const handleChange = (e) => {
@@ -122,7 +136,7 @@ const ProjectForm = () => {
                 name="status"
                 value={formFields.status}
                 onChange={handleChange}
-                items={["Not Started", "Open", "Completed", "Paused"]}
+                items={projectStatus}
                 helperText="Current status of your project."
               />
             </Grid>

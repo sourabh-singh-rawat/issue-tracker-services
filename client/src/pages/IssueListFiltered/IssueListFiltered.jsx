@@ -34,7 +34,6 @@ const IssueListFiltered = () => {
         dispatch(setIssueList(data));
       });
     };
-
     fetchIssues();
   }, [pageSize, page]);
 

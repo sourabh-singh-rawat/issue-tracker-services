@@ -7,11 +7,20 @@ import { setSnackbarOpen } from "../../reducers/snackbar.reducer";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledTabPanel from "../StyledTabPanel/StyledTabPanel";
 import StyledTextField from "../StyledTextField/StyledTextField";
+import { useEffect } from "react";
+import {
+  setIssueStatus,
+  setIssuePriority,
+} from "../../reducers/issueOptions.reducer";
 
 const IssueSettings = () => {
   const dispatch = useDispatch();
   const issue = useSelector((store) => store.issue);
   const [selectedTab] = useOutletContext();
+  const issueStatus = useSelector((store) => store.issueOptions.issueStatus);
+  const issuePriority = useSelector(
+    (store) => store.issueOptions.issuePriority
+  );
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(updateIssue({ [name]: value }));
@@ -36,6 +45,25 @@ const IssueSettings = () => {
 
     if (response.status === 200) dispatch(setSnackbarOpen(true));
   };
+
+  useEffect(() => {
+    const fetchIssueStatus = async () => {
+      const response = await fetch("http://localhost:4000/api/issues/status");
+      const status = await response.json();
+
+      dispatch(setIssueStatus(status));
+    };
+
+    const fetchIssuePriority = async () => {
+      const response = await fetch("http://localhost:4000/api/issues/priority");
+      const priority = await response.json();
+
+      dispatch(setIssuePriority(priority));
+    };
+
+    fetchIssueStatus();
+    fetchIssuePriority();
+  }, []);
 
   return (
     <StyledTabPanel selectedTab={selectedTab} index={2}>
@@ -119,7 +147,7 @@ const IssueSettings = () => {
                   onChange={handleChange}
                   helperText="The current status of the issue."
                   // onChange={handleChange}
-                  items={["Open", "In Progress", "Closed"]}
+                  items={issueStatus}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -130,7 +158,7 @@ const IssueSettings = () => {
                   onChange={handleChange}
                   helperText="The current status of your issue."
                   // onChange={handleChange}
-                  items={["Lowest", "Low", "Medium", "High", "Highest"]}
+                  items={issuePriority}
                 />
               </Grid>
               {/* <Grid item xs={12} md={6}>

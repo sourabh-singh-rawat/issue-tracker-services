@@ -1,4 +1,6 @@
 import Issue from "../models/issue.model.js";
+import IssueStatus from "../models/issueStatus.model.js";
+import IssuePriority from "../models/issuePriority.model.js";
 
 const create = async (req, res) => {
   try {
@@ -47,6 +49,24 @@ const index = async (req, res) => {
   }
 };
 
+const indexIssueStatus = async (req, res) => {
+  try {
+    const issueStatus = await IssueStatus.find();
+    res.send(issueStatus.rows);
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const indexIssuePriority = async (req, res) => {
+  try {
+    const issuePriority = await IssuePriority.find();
+    res.send(issuePriority.rows);
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
 const show = async (req, res) => {
   const { id } = req.params;
 
@@ -83,4 +103,12 @@ const destroy = async (req, res) => {
   }
 };
 
-export default { create, index, show, update, destroy };
+export default {
+  create,
+  index,
+  indexIssueStatus,
+  indexIssuePriority,
+  show,
+  update,
+  destroy,
+};

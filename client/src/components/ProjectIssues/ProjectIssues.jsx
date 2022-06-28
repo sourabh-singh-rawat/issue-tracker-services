@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { onAuthStateChangedListener } from "../../config/firebase.config";
 import { Grid, Box } from "@mui/material";
 import { setIssueList } from "../../reducers/issueList.reducer";
-import IssueFormModalButton from "../IssueFormModalButton/IssueFormModalButton";
+import AddIssueButton from "../AddIssueButton/AddIssueButton";
 import IssuesList from "../IssuesList/IssuesList";
-import { onAuthStateChangedListener } from "../../config/firebase.config";
 
 const ProjectIssues = () => {
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const ProjectIssues = () => {
     <Grid container spacing={2}>
       <Grid item xs={12} sx={{ display: "flex" }}>
         <Box sx={{ flexGrow: 1 }} />
-        <IssueFormModalButton />
+        <AddIssueButton />
       </Grid>
       <Grid item xs={12}>
         <IssuesList

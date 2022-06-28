@@ -1,4 +1,6 @@
+import Role from "../models/roles.model.js";
 import Project from "../models/project.model.js";
+import ProjectStatus from "../models/projectStatus.model.js";
 import ProjectMember from "../models/projectMember.model.js";
 
 const create = async (req, res) => {
@@ -9,6 +11,13 @@ const create = async (req, res) => {
     return res.send(project);
   } catch (error) {
     res.status(500).send(error);
+  }
+};
+
+const createProjectMember = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(500).send();
   }
 };
 
@@ -53,7 +62,25 @@ const indexProjectMembers = async (req, res) => {
 
   try {
     const projectMembers = (await ProjectMember.findByProjectId(id)).rows;
-    res.send(projectMembers);
+    res.send({ rows: projectMembers, rowCount: -1 });
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const indexProjectMemberRole = async (req, res) => {
+  try {
+    const role = await Role.find();
+    res.send(role.rows);
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const indexProjectStatus = async (req, res) => {
+  try {
+    const status = await ProjectStatus.find();
+    res.send(status.rows);
   } catch (error) {
     res.status(500).send();
   }
@@ -94,4 +121,13 @@ const destroy = async (req, res) => {
   }
 };
 
-export default { create, index, indexProjectMembers, show, update, destroy };
+export default {
+  create,
+  index,
+  indexProjectStatus,
+  indexProjectMembers,
+  indexProjectMemberRole,
+  show,
+  update,
+  destroy,
+};

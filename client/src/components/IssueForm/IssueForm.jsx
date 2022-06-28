@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Grid,
@@ -9,19 +9,26 @@ import {
   Typography,
   Autocomplete,
   Toolbar,
-  Avatar,
-  MenuItem,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import StyledTextField from "../StyledTextField/StyledTextField";
 import StyledSelect from "../StyledSelect/StyledSelect";
 import StyledDatePicker from "../StyledDatePicker/StyledDatePicker";
 import { onAuthStateChangedListener } from "../../config/firebase.config";
+import {
+  setIssueStatus,
+  setIssuePriority,
+} from "../../reducers/issueOptions.reducer";
 
 const IssueForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const project = useSelector((store) => store.project);
+  const issueStatus = useSelector((store) => store.issueOptions.issueStatus);
+  const issuePriority = useSelector(
+    (store) => store.issueOptions.issuePriority
+  );
   const { id } = useParams();
   const { pathname } = useLocation();
   const [projects, setProjects] = useState([]);
@@ -39,7 +46,7 @@ const IssueForm = () => {
   });
 
   useEffect(() => {
-    return onAuthStateChangedListener(async (user) => {
+    onAuthStateChangedListener(async (user) => {
       const token = await user.getIdToken();
       const fetchProjects = async () => {
         const projects = await fetch("http://127.0.0.1:4000/api/projects", {
@@ -55,6 +62,23 @@ const IssueForm = () => {
 
       !id && fetchProjects();
     });
+
+    const fetchIssueStatus = async () => {
+      const response = await fetch("http://localhost:4000/api/issues/status");
+      const status = await response.json();
+
+      dispatch(setIssueStatus(status));
+    };
+
+    const fetchIssuePriority = async () => {
+      const response = await fetch("http://localhost:4000/api/issues/priority");
+      const priority = await response.json();
+
+      dispatch(setIssuePriority(priority));
+    };
+
+    fetchIssueStatus();
+    fetchIssuePriority();
   }, []);
 
   useEffect(() => {
@@ -66,7 +90,7 @@ const IssueForm = () => {
       );
 
       const members = await response.json();
-      setProjectMembers(members);
+      setProjectMembers(members.rows);
     };
     fetchProjectMembers();
   }, [formFields.project_id]);
@@ -74,7 +98,7 @@ const IssueForm = () => {
   useEffect(() => {
     setFormFields({
       ...formFields,
-      reporter: user.uid,
+      // reporter: user.uid,
       project_id: project.id,
     });
   }, [project]);
@@ -248,8 +272,8 @@ const IssueForm = () => {
                 name="priority"
                 title="Priority"
                 onChange={handleChange}
-                defaultValue="Lowest"
-                items={["Lowest", "Low", "Medium", "High", "Highest"]}
+                defaultValue={0}
+                items={issuePriority}
                 fullWidth
               />
             </Grid>
@@ -271,8 +295,8 @@ const IssueForm = () => {
               <StyledSelect
                 name="status"
                 title="Status"
-                items={["Open", "In Progress", "Closed"]}
-                defaultValue="Open"
+                items={issueStatus}
+                defaultValue={0}
               />
             </Grid>
             <Grid item xs={12}>

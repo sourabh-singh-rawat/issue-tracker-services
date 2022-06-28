@@ -121,13 +121,13 @@ const Sidebar = () => {
           </ListItem>
           {/* people button */}
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link to="/people" style={listLinkStyles}>
+            <Link to="/collaborators" style={listLinkStyles}>
               <ListItemButton sx={listItemButtonStyles}>
                 <ListItemIcon sx={listItemIconStyles}>
                   <EmojiPeopleOutlined />
                 </ListItemIcon>
                 <Typography variant="body1" sx={listItemTypographyStyles}>
-                  People
+                  Collaborators
                 </Typography>
               </ListItemButton>
             </Link>

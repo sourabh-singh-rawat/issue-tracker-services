@@ -13,10 +13,23 @@ const StyledSelect = ({ title, items, helperText, ...otherProps }) => {
         {title}
       </Typography>
       <FormControl fullWidth>
-        <Select size="small" displayEmpty {...otherProps} defaultValue={0}>
-          {items.map((item, index) => (
-            <MenuItem value={index} key={item}>
-              {item}
+        <Select
+          displayEmpty
+          size="small"
+          sx={{ color: "text.subtitle1", fontSize: "15px", fontWeight: "bold" }}
+          {...otherProps}
+        >
+          {items.map(({ code, message }, index) => (
+            <MenuItem
+              key={code}
+              value={code}
+              sx={{
+                color: "text.subtitle1",
+                fontSize: "15px",
+                fontWeight: "bold",
+              }}
+            >
+              {message.toUpperCase()}
             </MenuItem>
           ))}
         </Select>

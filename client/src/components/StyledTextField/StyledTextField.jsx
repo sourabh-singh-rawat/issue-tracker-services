@@ -7,18 +7,15 @@ const StyledTextField = ({ title, name, ...otherProps }) => {
         {title}
       </Typography>
       <TextField
-        name={name.toLowerCase()}
+        name={name && name.toLowerCase()}
         size="small"
         sx={{
           paddingBottom: 2,
-          ".MuiOutlinedInput-input": {},
-          ".MuiFormHelperText-contained": {
-            fontSize: "14px",
-            marginLeft: 0,
-          },
+          ".MuiOutlinedInput-root": { borderRadius: 2 },
+          ".MuiFormHelperText-contained": { fontSize: "14px", marginLeft: 0 },
         }}
-        fullWidth
         {...otherProps}
+        fullWidth
       />
     </>
   );

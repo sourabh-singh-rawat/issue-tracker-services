@@ -67,19 +67,25 @@ const TeamList = () => {
       rows={rows}
       columns={columns}
       sx={{
+        border: 0,
         fontSize: "inherit",
         color: "primary.text2",
-        border: 0,
         ".MuiDataGrid-cell": {
           color: "text.subtitle1",
-          border: 0,
-          boxShadow: 0,
+          border: "none",
         },
         "& .MuiDataGrid-columnHeaderTitle": {
+          fontSize: "14px",
           fontWeight: "bold",
         },
         ".MuiDataGrid-columnHeaders": {
-          borderBottom: "2px solid #343a27",
+          borderBottom: "2px solid #DFE1E6",
+        },
+        ".MuiDataGrid-columnSeparator": {
+          display: "none",
+        },
+        ".MuiDataGrid-footerContainer": {
+          borderTop: "2px solid #DFE1E6",
         },
       }}
       autoHeight
