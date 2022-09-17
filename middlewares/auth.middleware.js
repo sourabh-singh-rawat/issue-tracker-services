@@ -1,4 +1,4 @@
-import { adminAuth } from "../config/firebase.config.js";
+import { adminAuth } from "../services/auth.service.js";
 
 export const auth = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -9,6 +9,6 @@ export const auth = async (req, res, next) => {
     req.user = decodedToken;
     next();
   } catch (error) {
-    res.status(401).send("Please authenticate!");
+    res.status(401).send("Unauthorized");
   }
 };

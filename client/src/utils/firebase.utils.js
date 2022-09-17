@@ -1,27 +1,59 @@
 import {
+  signOut,
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
-import { auth } from "../config/firebase.config.js";
 import { storeUserInfoInDatabase } from "./database.utils.js";
+import { auth } from "../app/services/auth.service";
 
-// SIGN IN
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (inviteToken) => {
   const provider = new GoogleAuthProvider();
 
-  try {
-    const response = await signInWithPopup(auth, provider);
-    const { user } = response;
+  // if token exist then the user needs to signin and add to project member list
+  if (inviteToken) {
+    try {
+      // verifying token
+      const response = await fetch(
+        `http://localhost:4000/api/auth/verifyToken`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ inviteToken }),
+        }
+      );
+      const decodedToken = await response.json();
 
-    await storeUserInfoInDatabase(user);
-  } catch (error) {
-    console.log(error);
+      const { user } = await signInWithPopup(auth, provider);
+
+      if (user) {
+        // store the user in the database
+        await storeUserInfoInDatabase(user);
+        const { uid } = user;
+
+        // user signed in so add the user to project_member
+        const { toProject } = decodedToken;
+        const response = await fetch(
+          `http://localhost:4000/api/projects/${toProject}/members`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...decodedToken, uid }),
+          }
+        );
+      } else {
+        console.log("Error signing in user");
+      }
+    } catch (error) {}
+  } else {
+    try {
+      const { user } = await signInWithPopup(auth, provider);
+
+      await storeUserInfoInDatabase(user);
+    } catch (error) {}
   }
 };
 
-// SIGN UP
 export const signUpWithEmailAndPassword = async (email, password) => {
   try {
     const credentials = await createUserWithEmailAndPassword(
@@ -29,14 +61,9 @@ export const signUpWithEmailAndPassword = async (email, password) => {
       email,
       password
     );
-
-    console.log(credentials);
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
-// SIGN OUT
 export const signOutUser = async () => {
   try {
     await signOut(auth);

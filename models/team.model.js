@@ -1,4 +1,4 @@
-import db from "../config/connect.config.js";
+import db from "../services/db.service.js";
 
 const insertOne = ({ name, description }) =>
   db.query(

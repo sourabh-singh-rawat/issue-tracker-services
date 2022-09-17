@@ -1,7 +1,11 @@
 export const createSelectQuery = (
-  { options, pagingOptions, sortOptions: { field = "name", order = "asc" } },
-  tableName,
-  table2
+  {
+    options,
+    pagingOptions,
+    sortOptions: { field = "name", order = "asc" },
+    whereClause,
+  },
+  table1
 ) => {
   // Remove all the props with falsey values
   Object.keys(options).forEach((option) => {
@@ -13,7 +17,7 @@ export const createSelectQuery = (
   });
 
   let index = 0;
-  let select = "SELECT * FROM " + tableName + " ";
+  let select = "SELECT * FROM " + table1 + " ";
   let condition = "";
   let orderBy = "ORDER BY ";
   let pagination = "";
@@ -24,7 +28,7 @@ export const createSelectQuery = (
       .reduce((prev, cur) => {
         index++;
         return prev + cur + "=$" + index + " AND ";
-      }, "WHERE ")
+      }, `WHERE `)
       .slice(0, -4);
   }
 

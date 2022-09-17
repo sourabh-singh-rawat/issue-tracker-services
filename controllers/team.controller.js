@@ -7,7 +7,7 @@ const create = async (req, res) => {
 
     res.send(team);
   } catch (error) {
-    res.stats(500).send();
+    res.status(500).send();
   }
 };
 
