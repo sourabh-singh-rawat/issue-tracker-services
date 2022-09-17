@@ -1,10 +1,10 @@
-import db from "../config/connect.config.js";
+import db from "../services/db.service.js";
 
-const insertOne = (projectId, projectOwnerUid) => {
+const insertOne = (projectId, userUid) => {
   return db.query(
     `INSERT INTO project_members (project_id, user_id, role)
      VALUES ($1, $2, 'admin')`,
-    [projectId, projectOwnerUid]
+    [projectId, userUid]
   );
 };
 
@@ -18,4 +18,13 @@ const findByProjectId = (projectId) => {
   );
 };
 
-export default { insertOne, findByProjectId };
+const findPeopleRelatedToUid = (uid) => {
+  return db.query(
+    `SELECT DISTINCT user_id 
+    FROM project_members 
+    WHERE project_id IN (SELECT project_id FROM project_members WHERE user_id = $1)`,
+    [uid]
+  );
+};
+
+export default { insertOne, findByProjectId, findPeopleRelatedToUid };

@@ -1,4 +1,4 @@
-import db from "../config/connect.config.js";
+import db from "../services/db.service.js";
 import { createSelectQuery } from "../utils/createSelectQuery.utils.js";
 
 const insertOne = (project) => {
@@ -42,13 +42,24 @@ const updateOne = (id, project) => {
   return db.query(query, Object.values(project));
 };
 
-const deleteOne = (id) =>
-  db.query(
+const deleteOne = (id) => {
+  return db.query(
     `DELETE FROM projects 
-     WHERE id = $1 
+     WHERE id=$1 
      RETURNING *`,
     [id]
   );
+};
+
+const statusCount = (id) => {
+  return db.query(
+    `SELECT issue_status.status, message, COUNT(issues.status) 
+    FROM (SELECT * FROM issues WHERE project_id = $1) AS issues 
+    RIGHT OUTER JOIN issue_status ON issues.status = issue_status.status
+    GROUP BY issue_status.status, message;`,
+    [id]
+  );
+};
 
 const rowCount = () => db.query(`SELECT count(*) FROM projects`);
 
@@ -58,5 +69,6 @@ export default {
   findOne,
   updateOne,
   deleteOne,
+  statusCount,
   rowCount,
 };

@@ -1,4 +1,4 @@
-import db from "../config/connect.config.js";
+import db from "../services/db.service.js";
 
 const insertOne = (name, email, uid) => {
   return db.query(
@@ -9,9 +9,17 @@ const insertOne = (name, email, uid) => {
   );
 };
 
-const find = () => db.query("SELECT * FROM users");
+const find = () => {
+  return db.query("SELECT * FROM users");
+};
 
-const findOne = (uid) => db.query(`SELECT * FROM users WHERE uid = $1`, [uid]);
+const findOne = (uid) => {
+  return db.query(`SELECT * FROM users WHERE uid=$1`, [uid]);
+};
+
+const findOneByEmail = (email) => {
+  return db.query(`SELECT * FROM users WHERE email ILIKE $1`, [email]);
+};
 
 const updateOne = (uid, document) => {
   let query = Object.keys(document)
@@ -25,7 +33,15 @@ const updateOne = (uid, document) => {
   return db.query(query, Object.values(document));
 };
 
-const deleteOne = (uid) =>
-  db.query(`DELETE FROM users WHERE uid = $1 RETURNING *`, [uid]);
+const deleteOne = (uid) => {
+  return db.query(`DELETE FROM users WHERE uid = $1 RETURNING *`, [uid]);
+};
 
-export default { insertOne, find, findOne, updateOne, deleteOne };
+export default {
+  insertOne,
+  find,
+  findOne,
+  findOneByEmail,
+  updateOne,
+  deleteOne,
+};

@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 // create a user
 const create = async (req, res) => {
   const { name, email, uid } = req.body;
+
   try {
     const user = (await User.insertOne(name, email, uid)).rows[0];
     res.send(user);
@@ -24,6 +25,7 @@ const index = async (req, res) => {
 // get specific user
 const show = async (req, res) => {
   const { id } = req.params;
+
   try {
     const user = (await User.findOne(id)).rows[0];
     if (!user) return res.status(404).send();

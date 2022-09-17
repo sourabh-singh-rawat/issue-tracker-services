@@ -1,8 +1,18 @@
+import jwt from "jsonwebtoken";
+
+import sgMail from "../services/email.service.js";
+
+import User from "../models/user.model.js";
 import Role from "../models/roles.model.js";
 import Project from "../models/project.model.js";
 import ProjectStatus from "../models/projectStatus.model.js";
 import ProjectMember from "../models/projectMember.model.js";
+import { response } from "express";
 
+/**
+ * Creates a new project member
+ * @returns -- the newly created member
+ */
 const create = async (req, res) => {
   try {
     const project = (await Project.insertOne(req.body)).rows[0];
@@ -15,12 +25,69 @@ const create = async (req, res) => {
 };
 
 const createProjectMember = async (req, res) => {
+  const { uid, toProject } = req.body;
+
   try {
+    response = await ProjectMember.insertOne(toProject, uid);
+    res.send(response);
   } catch (error) {
-    res.status(500).send();
+    res.status(500);
   }
 };
 
+/**
+ * Sends an email to the given email address
+ * @return confirmation that the email is sent
+ */
+const invite = async (req, res) => {
+  const { user_id } = req.user;
+  const { email, role } = req.body;
+  const { id } = req.params;
+
+  try {
+    const token = jwt.sign(
+      { inviteEmail: email, assignRole: role, toProject: id, by: user_id },
+      process.env.JWT_SECRET
+    );
+
+    // send invite link to email
+    const msg = {
+      to: email,
+      from: "sourabh.rawatcc@gmail.com", // Change to your verified sender
+      subject: "Test: Issue Tracker Member Invitation",
+      text: `You are invited to ${id} by ${email}`,
+      html: `<strong>Click the link to accept invite: <a href="http://localhost:4000/api/projects/${id}/members/confirm?inviteToken=${token}">${token}</a></strong>`,
+    };
+
+    await sgMail.send(msg);
+
+    res.send("Email sent!");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Cannot send email");
+  }
+};
+
+const confirmInvite = async (req, res) => {
+  const { inviteToken } = req.query;
+  const validToken = jwt.verify(inviteToken, process.env.JWT_SECRET);
+
+  // check if the invited user has already an account
+  const user = (await User.findOneByEmail(validToken.inviteEmail)).rows[0];
+
+  if (!user) {
+    // Create a new account
+    res.redirect(`http://localhost:3000/signup?inviteToken=${inviteToken}`);
+  } else {
+    // User exist, now check if the user is already authenticated
+    res.redirect(`http://localhost:3000/signin?inviteToken=${inviteToken}`);
+  }
+};
+
+/**
+ * List projects created by the user
+ * @returns array of project created by the user
+ */
 const index = async (req, res) => {
   const { uid } = req.user;
 
@@ -41,12 +108,14 @@ const index = async (req, res) => {
 
   try {
     const response = await Project.find({
-      options: { owner_uid: uid, status },
+      owner_uid: uid,
+      options: { status },
       pagingOptions: {
         limit: parseInt(limit),
         offset: parseInt(limit) * parseInt(page),
       },
       sortOptions,
+      whereClause: `WHERE id IN (SELECT project_id from project_members where user_id = '${uid}') `,
     });
 
     const rowCount = await (await Project.rowCount()).rows[0].count;
@@ -68,6 +137,9 @@ const indexProjectMembers = async (req, res) => {
   }
 };
 
+/**
+ * Lists roles available to project members
+ */
 const indexProjectMemberRole = async (req, res) => {
   try {
     const role = await Role.find();
@@ -77,6 +149,9 @@ const indexProjectMemberRole = async (req, res) => {
   }
 };
 
+/**
+ * List project status available to projects
+ */
 const indexProjectStatus = async (req, res) => {
   try {
     const status = await ProjectStatus.find();
@@ -86,6 +161,9 @@ const indexProjectStatus = async (req, res) => {
   }
 };
 
+/**
+ * @returns project
+ */
 const show = async (req, res) => {
   const { id } = req.params;
 
@@ -93,6 +171,19 @@ const show = async (req, res) => {
     const project = (await Project.findOne(id)).rows[0];
     res.send(project);
   } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const showIssuesStatusCount = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let statusCount = (await Project.statusCount(id)).rows;
+
+    res.send(statusCount);
+  } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -117,17 +208,21 @@ const destroy = async (req, res) => {
     if (!project) res.status(404);
     res.send(project);
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send(error);
   }
 };
 
 export default {
   create,
+  createProjectMember,
   index,
   indexProjectStatus,
   indexProjectMembers,
   indexProjectMemberRole,
   show,
+  showIssuesStatusCount,
   update,
   destroy,
+  invite,
+  confirmInvite,
 };
