@@ -2,25 +2,24 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import {
-  Box,
-  Grid,
-  Button,
-  Divider,
-  Container,
-  Typography,
-} from "@mui/material";
+import MuiBox from "@mui/material/Box";
+import MuiGrid from "@mui/material/Grid";
+import MuiButton from "@mui/material/Button";
+import MuiDivider from "@mui/material/Divider";
+import MuiContainer from "@mui/material/Container";
+import MuiTypography from "@mui/material/Typography";
+
 import TextField from "../../../../common/TextField";
 import GoogleIcon from "@mui/icons-material/Google";
 
 import {
-  signInWithGoogle,
+  continueWithGoogle,
   signUpWithEmailAndPassword,
 } from "../../../../utils/firebase.utils";
 
 import { onAuthStateChangedListener } from "../../../../app/services/auth.service";
 
-const SignUp = () => {
+export default function SignUp() {
   const token = useSelector((store) => store.auth.token);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -29,19 +28,23 @@ const SignUp = () => {
     email: "",
     password: "",
   });
-
   const inviteToken = searchParams.get("inviteToken");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = formFields;
+    const { name, email, password } = formFields;
 
-    try {
-      const response = await signUpWithEmailAndPassword(email, password);
-      navigate("/");
-    } catch (error) {
-      console.log("error");
-    }
+    // try {
+    const response = await signUpWithEmailAndPassword({
+      name,
+      email,
+      password,
+      inviteToken,
+    });
+    //   navigate("/");
+    // } catch (error) {
+    //   console.log("error");
+    // }
   };
 
   const handleChange = (e) => {
@@ -49,8 +52,8 @@ const SignUp = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const continueWithGoogleHandler = async () => {
-    await signInWithGoogle(inviteToken);
+  const handleContinueWithGoogle = async () => {
+    await continueWithGoogle(inviteToken);
   };
 
   useEffect(() => {
@@ -60,22 +63,22 @@ const SignUp = () => {
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Box sx={{ marginTop: 8 }}>
-            <Typography variant="h4" fontWeight="bold">
+    <MuiContainer component="main" maxWidth="xs">
+      <MuiGrid container spacing={2}>
+        <MuiGrid item xs={12}>
+          <MuiBox sx={{ marginTop: 8 }}>
+            <MuiTypography variant="h4" fontWeight="bold">
               Sign up
-            </Typography>
-            <Typography variant="body1">
+            </MuiTypography>
+            <MuiTypography variant="body1">
               Create an account & help yourself track issues efficiently.
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
+            </MuiTypography>
+          </MuiBox>
+        </MuiGrid>
+        <MuiGrid item xs={12}>
+          <MuiButton
             variant="outlined"
-            onClick={continueWithGoogleHandler}
+            onClick={handleContinueWithGoogle}
             startIcon={<GoogleIcon />}
             sx={{
               textTransform: "none",
@@ -84,29 +87,29 @@ const SignUp = () => {
             fullWidth
           >
             Continue with Google
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Divider>
-            <Typography variant="body1" sx={{ color: "text.subtitle1" }}>
+          </MuiButton>
+        </MuiGrid>
+        {/* <MuiGrid item xs={12}>
+          <MuiDivider>
+            <MuiTypography variant="body1" sx={{ color: "text.subtitle1" }}>
               Or sign up with your email
-            </Typography>
-          </Divider>
-        </Grid>
+            </MuiTypography>
+          </MuiDivider>
+        </MuiGrid> */}
         {/* Signup form */}
-        <Grid item xs={12}>
-          <Box component="form" onSubmit={handleSubmit}>
-            <Grid container>
-              <Grid item xs={12}>
+        {/* <MuiGrid item xs={12}>
+          <MuiBox component="form" onSubmit={handleSubmit}>
+            <MuiGrid container>
+              <MuiGrid item xs={12}>
                 <TextField
                   title="Name"
                   name="name"
                   type="text"
-                  placeholder="yourname"
+                  placeholder="your name"
                   onChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </MuiGrid>
+              <MuiGrid item xs={12}>
                 <TextField
                   title="Email"
                   name="email"
@@ -114,8 +117,8 @@ const SignUp = () => {
                   placeholder="name@example.com"
                   onChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </MuiGrid>
+              <MuiGrid item xs={12}>
                 <TextField
                   title="Password"
                   name="Password"
@@ -123,8 +126,8 @@ const SignUp = () => {
                   placeholder="password"
                   onChange={handleChange}
                 />
-              </Grid>
-              <Button
+              </MuiGrid>
+              <MuiButton
                 variant="contained"
                 type="submit"
                 fullWidth
@@ -135,20 +138,18 @@ const SignUp = () => {
                 }}
               >
                 Create an account
-              </Button>
-            </Grid>
-            <Grid container>
-              <Grid item>
-                <Typography variant="body1">
+              </MuiButton>
+            </MuiGrid>
+            <MuiGrid container>
+              <MuiGrid item>
+                <MuiTypography variant="body1">
                   <Link to="/signin">Already have an account? Sign In</Link>
-                </Typography>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>
-    </Container>
+                </MuiTypography>
+              </MuiGrid>
+            </MuiGrid>
+          </MuiBox>
+        </MuiGrid> */}
+      </MuiGrid>
+    </MuiContainer>
   );
-};
-
-export default SignUp;
+}

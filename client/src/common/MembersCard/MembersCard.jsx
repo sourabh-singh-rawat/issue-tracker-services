@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Fragment } from "react";
 
-const MembersCard = () => {
+export default function MembersCard() {
   return (
     <Fragment>
       <Typography variant="body1" fontWeight={600}>
@@ -9,6 +9,4 @@ const MembersCard = () => {
       </Typography>
     </Fragment>
   );
-};
-
-export default MembersCard;
+}

@@ -6,9 +6,9 @@ import MuiButton from "@mui/material/Button";
 import MuiCircularProgress from "@mui/material/CircularProgress";
 import MuiAddIcon from "@mui/icons-material/Add";
 
-import SectionHeader from "../../../../common/SectionHeader/SectionHeader";
+import SectionHeader from "../../../../common/SectionHeader";
 
-const Issues = () => {
+export default function Issues() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const loading = useSelector((store) => store.auth.loading);
@@ -38,6 +38,4 @@ const Issues = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
-
-export default Issues;
+}

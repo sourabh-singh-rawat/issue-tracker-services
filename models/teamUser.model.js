@@ -1,10 +1,10 @@
 import db from "../services/db.service.js";
 
-const insertOne = (document) => {
+const insertOne = function insertOneTeamUser(document) {
   const { user_id, team_id, role } = document;
 
   return db.query(
-    `INSERT INTO user_team_map (user_id, team_id, role)
+    `INSERT INTO team_members (user_id, team_id, role)
      VALUES ($1, $2, $3)
      RETURNING *
     `,
@@ -12,7 +12,8 @@ const insertOne = (document) => {
   );
 };
 
-const find = (id) =>
-  db.query(`SELECT * FROM user_team_map WHERE team_id = $1`, [id]);
+const find = function findTeamUsers(id) {
+  return db.query(`SELECT * FROM team_members WHERE team_id = $1`, [id]);
+};
 
 export default { insertOne, find };

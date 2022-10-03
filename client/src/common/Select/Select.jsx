@@ -5,7 +5,7 @@ import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-const Select = ({ title, items, helperText, ...otherProps }) => {
+export default function Select({ title, items, helperText, ...otherProps }) {
   return (
     <Fragment>
       <MuiTypography
@@ -44,6 +44,4 @@ const Select = ({ title, items, helperText, ...otherProps }) => {
       </MuiFormHelperText>
     </Fragment>
   );
-};
-
-export default Select;
+}

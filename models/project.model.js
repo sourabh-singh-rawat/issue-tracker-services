@@ -1,12 +1,12 @@
 import db from "../services/db.service.js";
 import { createSelectQuery } from "../utils/createSelectQuery.utils.js";
 
-const insertOne = (project) => {
+const insertOne = function insertOneProject(project) {
   const {
     name = "My Project",
     description,
-    owner_uid,
-    owner_email,
+    id,
+    email,
     start_date,
     end_date,
     status,
@@ -14,25 +14,26 @@ const insertOne = (project) => {
 
   return db.query(
     `INSERT INTO projects (name, description, status, owner_uid, owner_email, start_date, end_date)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     VALUES ($1, $2, $3, ($4)::uuid, $5, $6, $7)
      RETURNING *`,
-    [name, description, status, owner_uid, owner_email, start_date, end_date]
+    [name, description, status, id, email, start_date, end_date]
   );
 };
 
-const find = (options) => {
+const find = function findProjects(options) {
   const { query, colValues } = createSelectQuery(options, "projects");
   return db.query(query, colValues);
 };
 
-const findOne = (id) =>
-  db.query(
+const findOne = function findOneProject(id) {
+  return db.query(
     `SELECT * FROM projects 
      WHERE id = $1`,
     [id]
   );
+};
 
-const updateOne = (id, project) => {
+const updateOne = function updateOneProject(id, project) {
   let query = Object.keys(project).reduce((prev, cur, index) => {
     return prev + " " + cur + "=$" + (index + 1) + ",";
   }, "UPDATE projects SET");
@@ -42,7 +43,7 @@ const updateOne = (id, project) => {
   return db.query(query, Object.values(project));
 };
 
-const deleteOne = (id) => {
+const deleteOne = function deleteOneProject(id) {
   return db.query(
     `DELETE FROM projects 
      WHERE id=$1 
@@ -51,17 +52,20 @@ const deleteOne = (id) => {
   );
 };
 
-const statusCount = (id) => {
+const statusCount = function statusCount(id) {
   return db.query(
     `SELECT issue_status.status, message, COUNT(issues.status) 
     FROM (SELECT * FROM issues WHERE project_id = $1) AS issues 
     RIGHT OUTER JOIN issue_status ON issues.status = issue_status.status
-    GROUP BY issue_status.status, message;`,
+    GROUP BY issue_status.status, message
+    ORDER BY issue_status.status`,
     [id]
   );
 };
 
-const rowCount = () => db.query(`SELECT count(*) FROM projects`);
+const rowCount = function rowCount() {
+  return db.query(`SELECT count(*) FROM projects`);
+};
 
 export default {
   insertOne,

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -12,16 +13,23 @@ import IssueStatusSelector from "../../../issue/components/IssueStatusSelector/I
 import IssuePrioritySelector from "../../../issue/components/IssuePrioritySelector/IssuePrioritySelector";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
+import { useUpdateIssueMutation } from "../../../issue/issue.api";
 import { updateIssueList } from "../../issueList.slice";
 
-const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
+export default function IssuesList({
+  rows,
+  rowCount,
+  isLoading,
+  page,
+  pageSize,
+}) {
+  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
   const dispatch = useDispatch();
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
 
     const handleChange = async (event) => {
-      console.log("running");
       apiRef.current.startCellEditMode({ id, field });
       const isValid = await apiRef.current.setEditCellValue({
         id,
@@ -29,13 +37,8 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
         value: event.target.value,
       });
 
-      const response = await fetch(`http://localhost:4000/api/issues/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ [field]: event.target.value }),
-      });
+      await updateIssueQuery({ id, payload: { [field]: event.target.value } });
 
-      if (response.status === 200) dispatch(setSnackbarOpen(true));
       if (isValid) apiRef.current.stopCellEditMode({ id, field });
     };
 
@@ -50,6 +53,10 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
   const renderSelectEditInputCell = (params) => (
     <SelectEditInputCell {...params} />
   );
+
+  useEffect(() => {
+    if (isSuccess) dispatch(setSnackbarOpen(true));
+  }, [isSuccess]);
 
   const columns = [
     {
@@ -107,7 +114,7 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
         value ? format(parseISO(value), "eee, PP") : "-",
     },
     {
-      field: "reporter",
+      field: "reporter_id",
       headerName: "Reporter",
       width: 150,
     },
@@ -147,6 +154,4 @@ const IssuesList = ({ rows, rowCount, isLoading, page, pageSize }) => {
       }}
     />
   );
-};
-
-export default IssuesList;
+}

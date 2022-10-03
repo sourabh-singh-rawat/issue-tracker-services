@@ -48,9 +48,9 @@ const projectApiSlice = apiSlice.injectEndpoints({
       },
     }),
     updateProject: build.mutation({
-      query: ({ uid, payload }) => {
+      query: ({ id, payload }) => {
         return {
-          url: `/projects/${uid}`,
+          url: `/projects/${id}`,
           method: "PATCH",
           body: payload,
         };

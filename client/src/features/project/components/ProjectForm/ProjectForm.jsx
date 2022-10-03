@@ -22,20 +22,10 @@ const ProjectForm = () => {
   const [formFields, setFormFields] = useState({
     name: "My Project",
     description: "",
-    owner_email: "",
-    owner_uid: "",
     status: 0,
     start_date: null,
     end_date: null,
   });
-
-  useEffect(() => {
-    setFormFields({
-      ...formFields,
-      owner_email: user?.email,
-      owner_uid: user?.uid,
-    });
-  }, [user]);
 
   useEffect(() => {
     if (isSuccess) navigate(`/projects/${data.id}/overview`);
@@ -107,18 +97,6 @@ const ProjectForm = () => {
               />
             </MuiGrid>
             <MuiGrid item md={6}></MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={6}>
-              <TextField
-                title="Owner's Email"
-                name="owner_email"
-                type="email"
-                value={formFields.owner_email}
-                onChange={handleChange}
-                disabled
-                helperText="Project owner's email"
-                required
-              />
-            </MuiGrid>
             <MuiGrid item xs={12} sm={12} md={12}>
               <TextField
                 name="Description"

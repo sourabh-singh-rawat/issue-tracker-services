@@ -7,7 +7,7 @@ import MuiAvatar from "@mui/material/Avatar";
 import List from "../List";
 import MuiTypography from "@mui/material/Typography";
 
-const MemberList = () => {
+export default function MemberList() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { rows } = useSelector((store) => store.project.members);
@@ -15,7 +15,7 @@ const MemberList = () => {
 
   useEffect(() => {
     if (projectMembers.data) dispatch(setMembers(projectMembers.data));
-  }, [projectMembers.data]);
+  }, [projectMembers.isSuccess]);
 
   const columns = [
     {
@@ -23,7 +23,9 @@ const MemberList = () => {
       headerName: "Name",
       minWidth: 300,
       flex: 0.3,
-      renderCell: ({ id, value }) => {
+      renderCell: (props) => {
+        const { id, value } = props;
+
         return (
           <Fragment>
             <MuiAvatar
@@ -62,6 +64,4 @@ const MemberList = () => {
       }}
     />
   );
-};
-
-export default MemberList;
+}

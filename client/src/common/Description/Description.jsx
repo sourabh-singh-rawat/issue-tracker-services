@@ -1,17 +1,18 @@
 import { Fragment } from "react";
 import { useDispatch } from "react-redux";
+
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 
-const Description = ({
+export default function Description({
   page,
   updateDescription,
   updateDescriptionQuery,
   loading,
-}) => {
+}) {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -111,6 +112,4 @@ const Description = ({
       )}
     </MuiGrid>
   );
-};
-
-export default Description;
+}

@@ -7,7 +7,14 @@ import MuiButton from "@mui/material/Button";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 
-const Title = ({ page, updateTitle, updateTitleQuery }) => {
+import Breadcrumbs from "../Breadcrumbs";
+
+export default function Title({
+  page,
+  updateTitle,
+  updateTitleQuery,
+  breadcrumbItems,
+}) {
   const dispatch = useDispatch();
   const { nameSelected } = page;
 
@@ -26,6 +33,7 @@ const Title = ({ page, updateTitle, updateTitleQuery }) => {
 
   return (
     <Fragment>
+      <Breadcrumbs items={breadcrumbItems} />
       {nameSelected ? (
         <MuiBox
           sx={{ display: "flex", alignItems: "flex-end", marginLeft: "-14px" }}
@@ -37,8 +45,8 @@ const Title = ({ page, updateTitle, updateTitleQuery }) => {
             onChange={handleChange}
             inputProps={{
               style: {
-                fontSize: "32px",
                 padding: "0 14px",
+                fontSize: "32px",
                 fontWeight: "bold",
               },
             }}
@@ -102,5 +110,4 @@ const Title = ({ page, updateTitle, updateTitleQuery }) => {
       )}
     </Fragment>
   );
-};
-export default Title;
+}

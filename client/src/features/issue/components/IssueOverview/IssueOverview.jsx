@@ -1,30 +1,36 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useOutletContext } from "react-router-dom";
 
+import MuiTypography from "@mui/material/Typography";
+
 import TabPanel from "../../../../common/TabPanel";
 import Description from "../../../../common/Description";
 
-import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { updateIssue } from "../../issue.slice";
+import { setSnackbarOpen } from "../../../snackbar.reducer";
+import { useUpdateIssueMutation } from "../../issue.api";
+import { useEffect } from "react";
 
-const IssueOverview = () => {
+export default function IssueOverview() {
   const dispatch = useDispatch();
+  const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
   const { id } = useParams();
   const [selectedTab] = useOutletContext();
   const issue = useSelector((store) => store.issue.info);
 
   const updatePageQuery = async () => {
-    const response = await fetch(`http://localhost:4000/api/issues/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ description: issue.description }),
-    });
-
-    if (response.status === 200) dispatch(setSnackbarOpen(true));
+    updateIssueMutation({ id, payload: { description: issue.description } });
   };
+
+  useEffect(() => {
+    if (isSuccess) dispatch(setSnackbarOpen(true));
+  }, [isSuccess]);
 
   return (
     <TabPanel selectedTab={selectedTab} index={0}>
+      <MuiTypography variant="body2" fontWeight={600}>
+        Description
+      </MuiTypography>
       <Description
         page={issue}
         updateDescription={updateIssue}
@@ -32,6 +38,4 @@ const IssueOverview = () => {
       />
     </TabPanel>
   );
-};
-
-export default IssueOverview;
+}

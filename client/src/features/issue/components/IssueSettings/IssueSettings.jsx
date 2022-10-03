@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { format, formatISO, parseISO } from "date-fns";
@@ -21,10 +21,13 @@ import {
 import {
   useGetIssuesStatusQuery,
   useGetIssuesPriorityQuery,
+  useUpdateIssueMutation,
 } from "../../issue.api";
 
-const IssueSettings = () => {
+export default function IssueSettings() {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
   const [selectedTab] = useOutletContext();
   const status = useGetIssuesStatusQuery();
   const priority = useGetIssuesPriorityQuery();
@@ -38,24 +41,15 @@ const IssueSettings = () => {
     e.preventDefault();
 
     const { name, description, status, priority, due_date, reporter } = issue;
-    const response = await fetch(
-      `http://localhost:4000/api/issues/${issue.id}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          description,
-          status,
-          priority,
-          due_date,
-          reporter,
-        }),
-      }
-    );
-
-    if (response.status === 200) dispatch(setSnackbarOpen(true));
+    updateIssueQuery({
+      id,
+      payload: { name, description, status, priority, due_date, reporter },
+    });
   };
+
+  useEffect(() => {
+    if (isSuccess) dispatch(setSnackbarOpen(true));
+  }, [isSuccess]);
 
   useEffect(() => {
     if (status.data) dispatch(setIssueStatus(status.data));
@@ -63,7 +57,7 @@ const IssueSettings = () => {
   }, [status.data, priority.data, issue]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={2}>
+    <TabPanel selectedTab={selectedTab} index={3}>
       <Grid container component="form" onSubmit={handleSubmit} gap="20px">
         <Grid item xs={12}>
           <Grid container>
@@ -189,5 +183,4 @@ const IssueSettings = () => {
       </Grid>
     </TabPanel>
   );
-};
-export default IssueSettings;
+}

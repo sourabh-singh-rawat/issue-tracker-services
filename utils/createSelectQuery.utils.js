@@ -1,12 +1,12 @@
-export const createSelectQuery = (
+export const createSelectQuery = function createSelectQuery(
   {
+    id,
     options,
     pagingOptions,
     sortOptions: { field = "name", order = "asc" },
-    whereClause,
   },
-  table1
-) => {
+  table
+) {
   // Remove all the props with falsey values
   Object.keys(options).forEach((option) => {
     if (!options[option]) delete options[option];
@@ -17,8 +17,8 @@ export const createSelectQuery = (
   });
 
   let index = 0;
-  let select = "SELECT * FROM " + table1 + " ";
-  let condition = "";
+  let select = "SELECT * FROM " + table + " ";
+  let condition = `WHERE id IN (SELECT project_id from project_members where user_id='${id}'::uuid)`;
   let orderBy = "ORDER BY ";
   let pagination = "";
 

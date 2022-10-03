@@ -3,25 +3,11 @@ import { useState, Fragment } from "react";
 import MuiBox from "@mui/material/Box";
 import MuiModal from "@mui/material/Modal";
 import MuiButton from "@mui/material/Button";
-
 import MuiAddIcon from "@mui/icons-material/Add";
 
 import IssueForm from "../IssueForm";
 
-const style = {
-  p: 4,
-  position: "absolute",
-  height: "80vh",
-  overflowX: "scroll",
-  top: "50%",
-  left: "50%",
-  bgcolor: "background.paper",
-  transform: "translate(-50%, -50%)",
-  borderRadius: 2,
-  boxShadow: 24,
-};
-
-const IssueFormModal = () => {
+export default function IssueFormModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -43,12 +29,23 @@ const IssueFormModal = () => {
           ".MuiBackdrop-root": { backgroundColor: "rgba(9, 30, 66, 0.54)" },
         }}
       >
-        <MuiBox sx={{ ...style }}>
+        <MuiBox
+          sx={{
+            p: 4,
+            position: "absolute",
+            height: "80vh",
+            overflowX: "scroll",
+            top: "50%",
+            left: "50%",
+            bgcolor: "background.paper",
+            transform: "translate(-50%, -50%)",
+            borderRadius: 2,
+            boxShadow: 24,
+          }}
+        >
           <IssueForm />
         </MuiBox>
       </MuiModal>
     </Fragment>
   );
-};
-
-export default IssueFormModal;
+}

@@ -9,7 +9,7 @@ import MuiIconButton from "@mui/material/IconButton";
 
 const SlideTransition = (props) => <MuiSlide {...props} direction="up" />;
 
-const Snackbar = () => {
+export default function Snackbar() {
   const dispatch = useDispatch();
   const snackbar = useSelector((store) => store.snackbar);
 
@@ -39,6 +39,4 @@ const Snackbar = () => {
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
     />
   );
-};
-
-export default Snackbar;
+}

@@ -7,34 +7,30 @@ import MuiGrid from "@mui/material/Grid";
 import Tab from "../../../../common/Tab/Tab";
 import Tabs from "../../../../common/Tabs/Tabs";
 import TitleSection from "../../../../common/TitleSection";
-import BackButton from "../../../../common/BackButton/BackButton";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { setIssue, updateIssue } from "../../issue.slice";
 
-import { useGetIssueQuery } from "../../issue.api";
+import { useGetIssueQuery, useUpdateIssueMutation } from "../../issue.api";
 
-const Issue = () => {
+export default function Issue() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { id } = useParams();
+
   const { data } = useGetIssueQuery(id);
+  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
+
   const issue = useSelector((store) => store.issue.info);
   const tabName = location.pathname.split("/")[3];
-  const mapTabToIndex = { overview: 0, tasks: 1, settings: 2 };
+  const mapTabToIndex = { overview: 0, tasks: 1, comments: 2, settings: 3 };
   const [selectedTab, setSelectedTab] = useState(mapTabToIndex[tabName]);
 
-  const updateTitleQuery = () => {
-    fetch(
-      `http://localhost:4000/api/issues/${id}/?projectId=${issue.projectId}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ["name"]: issue.name }),
-      }
-    ).then((response) => {
-      if (response.status === 200) dispatch(setSnackbarOpen(true));
+  const updateTitleQuery = async () => {
+    updateIssueQuery({
+      id,
+      payload: { name: issue.name },
     });
   };
 
@@ -46,11 +42,16 @@ const Issue = () => {
     if (data) dispatch(setIssue(data));
   }, [data]);
 
+  useEffect(() => {
+    if (isSuccess) dispatch(setSnackbarOpen(true));
+  }, [isSuccess]);
+
   const handleChange = (e, newValue) => {
     const mapIndexToTab = {
       0: `/issues/${issue.id}/overview`,
       1: `/issues/${issue.id}/tasks`,
-      2: `/issues/${issue.id}/settings`,
+      2: `/issues/${issue.id}/comments`,
+      3: `/issues/${issue.id}/settings`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -64,7 +65,7 @@ const Issue = () => {
           breadcrumbItems={[
             { text: "projects", onClick: () => navigate(`/projects`) },
             {
-              text: issue.project_name && issue.project_name.toLowerCase(),
+              text: issue.project_name?.toLowerCase(),
               onClick: () => navigate(`/projects/${issue.project_id}/overview`),
             },
             {
@@ -83,7 +84,8 @@ const Issue = () => {
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab label="Overview" value={0} />
           <Tab label="Tasks" value={1} />
-          <Tab label="Settings" value={2} />
+          <Tab label="Comments" value={2} />
+          <Tab label="Settings" value={3} />
         </Tabs>
       </MuiGrid>
       <MuiGrid item xs={12}>
@@ -91,6 +93,4 @@ const Issue = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
-
-export default Issue;
+}

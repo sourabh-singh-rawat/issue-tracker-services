@@ -8,14 +8,14 @@ import MuiFormHelperText from "@mui/material/FormHelperText";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Fragment } from "react";
 
-const DatePicker = ({
+export default function DatePicker({
   name,
   title,
   minimized,
   handleChange,
   helperText,
   ...otherProps
-}) => {
+}) {
   return (
     <Fragment>
       {!minimized && (
@@ -53,6 +53,4 @@ const DatePicker = ({
       </MuiFormHelperText>
     </Fragment>
   );
-};
-
-export default DatePicker;
+}

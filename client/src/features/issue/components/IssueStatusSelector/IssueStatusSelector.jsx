@@ -6,7 +6,12 @@ import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-const IssueStatusSelector = ({ value, handleChange, title, helperText }) => {
+export default function IssueStatusSelector({
+  value,
+  handleChange,
+  title,
+  helperText,
+}) {
   const issueStatus = useSelector((store) => store.issue.options.status.result);
 
   return (
@@ -59,6 +64,4 @@ const IssueStatusSelector = ({ value, handleChange, title, helperText }) => {
       </MuiFormHelperText>
     </Fragment>
   );
-};
-
-export default IssueStatusSelector;
+}
