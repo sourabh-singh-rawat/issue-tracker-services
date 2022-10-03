@@ -7,7 +7,12 @@ import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-const IssuePrioritySelector = ({ value, handleChange, title, helperText }) => {
+export default function IssuePrioritySelector({
+  value,
+  handleChange,
+  title,
+  helperText,
+}) {
   const issuePriority = useSelector(
     (store) => store.issue.options.priority.result
   );
@@ -60,6 +65,4 @@ const IssuePrioritySelector = ({ value, handleChange, title, helperText }) => {
       </MuiFormHelperText>
     </Fragment>
   );
-};
-
-export default IssuePrioritySelector;
+}

@@ -10,8 +10,7 @@ import MuiAutocomplete from "@mui/material/Autocomplete";
 
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
-import BackButton from "../../../../common/BackButton/BackButton";
-import SectionHeader from "../../../../common/SectionHeader/SectionHeader";
+import SectionHeader from "../../../../common/SectionHeader";
 
 import IssueStatusSelector from "../IssueStatusSelector/IssueStatusSelector";
 import IssuePrioritySelector from "../IssuePrioritySelector/IssuePrioritySelector";
@@ -20,7 +19,7 @@ import { useCreateIssueMutation } from "../../issue.api";
 import { useGetProjectsQuery } from "../../../projectList/projectList.api";
 import { useGetCollaboratorsQuery } from "../../../collaboratorList/collaboratorList.api";
 
-const IssueForm = () => {
+export default function IssueForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ const IssueForm = () => {
     sortBy: "creation_date:desc",
   });
   const collaborators = useGetCollaboratorsQuery(user.uid);
-  const [createIssue, { data }] = useCreateIssueMutation();
+  const [createIssue, { isSuccess }] = useCreateIssueMutation();
 
   const [projects, setProjects] = useState([]);
   const [projectMembers, setProjectMembers] = useState([]);
@@ -43,7 +42,6 @@ const IssueForm = () => {
     description: "",
     status: 0,
     priority: 0,
-    reporter: null,
     assigned_to: null,
     due_date: null,
     project_id: "",
@@ -61,7 +59,6 @@ const IssueForm = () => {
   useEffect(() => {
     setFormFields({
       ...formFields,
-      reporter: user.uid,
       project_id: project.id,
     });
   }, [project]);
@@ -236,6 +233,4 @@ const IssueForm = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
-
-export default IssueForm;
+}

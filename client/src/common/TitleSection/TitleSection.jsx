@@ -8,19 +8,17 @@ import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-import Chip from "../Chip";
 import Title from "../Title/Title";
 
-const TitleSection = ({
-  breadcrumbItems,
+export default function TitleSection({
   page,
   updateTitle,
   updateTitleQuery,
   loading,
-}) => {
+  breadcrumbItems,
+}) {
   const location = useLocation();
   const type = location.pathname.split("/")[1];
-  const project = useSelector((store) => store.project.info);
 
   return (
     <MuiGrid container gap="2px">
@@ -30,9 +28,9 @@ const TitleSection = ({
         ) : (
           <Title
             page={page}
-            type={breadcrumbItems}
             updateTitle={updateTitle}
             updateTitleQuery={updateTitleQuery}
+            breadcrumbItems={breadcrumbItems}
           />
         )}
       </MuiGrid>
@@ -44,8 +42,8 @@ const TitleSection = ({
           </MuiTypography>
           <MuiTypography variant="body2" component="span" fontWeight={600}>
             Published on{" "}
-            {project.creation_date &&
-              format(parseISO(project.creation_date), "PPPpp", {
+            {page.creation_date &&
+              format(parseISO(page.creation_date), "PPPpp", {
                 locale: enIN,
               })}
           </MuiTypography>
@@ -53,6 +51,4 @@ const TitleSection = ({
       </MuiGrid>
     </MuiGrid>
   );
-};
-
-export default TitleSection;
+}

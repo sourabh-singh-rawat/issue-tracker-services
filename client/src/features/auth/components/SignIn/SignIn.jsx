@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import {
   Box,
@@ -18,7 +13,8 @@ import TextField from "../../../../common/TextField";
 import GoogleIcon from "@mui/icons-material/Google";
 
 import {
-  signInWithGoogle,
+  continueWithGoogle,
+  signOutUser,
   signUpWithEmailAndPassword,
 } from "../../../../utils/firebase.utils";
 
@@ -49,12 +45,11 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const continueWithGoogleHandler = async () => {
-    await signInWithGoogle(inviteToken);
+  const handleContinueWithGoogle = async () => {
+    await continueWithGoogle(inviteToken);
   };
 
   useEffect(() => {
@@ -79,7 +74,7 @@ const Login = () => {
         <Grid item xs={12}>
           <Button
             variant="outlined"
-            onClick={continueWithGoogleHandler}
+            onClick={handleContinueWithGoogle}
             startIcon={<GoogleIcon />}
             sx={{
               textTransform: "none",
@@ -90,15 +85,15 @@ const Login = () => {
             Continue with Google
           </Button>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Divider>
             <Typography variant="body1" sx={{ color: "text.subtitle1" }}>
               Or
             </Typography>
           </Divider>
-        </Grid>
+        </Grid> */}
         {/* Signup form */}
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Box component="form" onSubmit={handleSubmit}>
             <Grid container gap="20px">
               <Grid item xs={12}>
@@ -140,7 +135,7 @@ const Login = () => {
               </Grid>
             </Grid>
           </Box>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

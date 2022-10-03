@@ -1,7 +1,7 @@
 const themeConfig = {
   palette: {
     primary: {
-      main: "#8a2be2",
+      main: "#2B2539",
       sea: "#BED3CC",
       coral: "#EFC8C8",
       slate: "#2B2539",

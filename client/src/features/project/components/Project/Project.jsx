@@ -6,7 +6,6 @@ import MuiGrid from "@mui/material/Grid";
 
 import Tab from "../../../../common/Tab";
 import Tabs from "../../../../common/Tabs";
-import PageDescription from "../../../../common/Description";
 import PageTitleSection from "../../../../common/TitleSection";
 
 import { setProject, setStatus, updateProject } from "../../project.slice";
@@ -25,14 +24,14 @@ const Project = () => {
   const location = useLocation();
   const status = useGetStatusQuery();
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
-  const path = location.pathname.split("/")[3];
+  const tabName = location.pathname.split("/")[3];
 
-  const { data } = useGetProjectQuery(id);
+  const { data, isFetching } = useGetProjectQuery(id);
   const project = useSelector((store) => store.project.info);
 
   const updateDescriptionQuery = () => {
     updateProjectMutation({
-      uid: id,
+      id,
       payload: { description: project.description },
     });
   };
@@ -53,7 +52,7 @@ const Project = () => {
     4: `/projects/${id}/settings`,
   };
 
-  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[path]);
+  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tabName]);
 
   const handleChange = (e, newValue) => {
     navigate(`${mapIndexToTab[newValue]}`);
@@ -61,7 +60,7 @@ const Project = () => {
   };
 
   const updateTitleQuery = () => {
-    updateProjectMutation({ uid: id, payload: { name: project.name } });
+    updateProjectMutation({ id, payload: { name: project.name } });
   };
 
   useEffect(() => {
@@ -73,12 +72,12 @@ const Project = () => {
   }, [status]);
 
   useEffect(() => {
-    setSelectedTab(mapPathToIndex[path]);
-  }, [path, id]);
+    setSelectedTab(mapPathToIndex[tabName]);
+  }, [tabName, id]);
 
   useEffect(() => {
     if (data) dispatch(setProject({ ...data, loading: false }));
-  }, [data]);
+  }, [isFetching]);
 
   return (
     <MuiGrid container gap="20px">
@@ -88,6 +87,19 @@ const Project = () => {
           updateTitle={updateProject}
           updateTitleQuery={updateTitleQuery}
           loading={project.loading}
+          breadcrumbItems={[
+            {
+              text: "projects",
+              onClick: () => navigate("/projects"),
+            },
+            {
+              text: project.name?.toLowerCase(),
+              onClick: () => navigate(`/projects/${project.id}/overview`),
+            },
+            {
+              text: tabName,
+            },
+          ]}
         />
         {/* <PageDescription
           page={project}

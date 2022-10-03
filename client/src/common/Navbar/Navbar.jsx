@@ -13,7 +13,6 @@ import MuiIconButton from "@mui/material/IconButton";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiLogoutIcon from "@mui/icons-material/Logout";
 import MuiAccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
-import MuiAccountCircle from "@mui/icons-material/AccountCircle";
 import MuiNotifications from "@mui/icons-material/Notifications";
 
 import { signOutUser } from "../../utils/firebase.utils";
@@ -25,7 +24,7 @@ const appBarStyles = {
   zIndex: (theme) => theme.zIndex.drawer + 1,
 };
 
-const Navbar = ({ onClick, loading }) => {
+export default function Navbar({ onClick, loading }) {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname.split("/")[3];
@@ -41,10 +40,10 @@ const Navbar = ({ onClick, loading }) => {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <MuiAppBar position="absolute" sx={appBarStyles}>
+    <MuiAppBar position="fixed" sx={appBarStyles}>
       <MuiToolbar
         variant="dense"
-        sx={{ bgcolor: "#FFFFFF", color: "text.subtitle1" }}
+        sx={{ bgcolor: "primary.slate", color: "text.subtitle1" }}
       >
         <MuiGrid container>
           {/* <MuiGrid item sx={{ color: "text.subtitle1" }}>
@@ -92,6 +91,4 @@ const Navbar = ({ onClick, loading }) => {
       </MuiToolbar>
     </MuiAppBar>
   );
-};
-
-export default Navbar;
+}

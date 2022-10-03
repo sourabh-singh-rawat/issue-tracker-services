@@ -7,6 +7,7 @@ import { format, parseISO } from "date-fns";
 import { useGridApiContext } from "@mui/x-data-grid";
 
 import MuiTypography from "@mui/material/Typography";
+
 import List from "../../../../common/List";
 import ProjectStatusSelector from "../../../project/components/ProjectStatusSelector";
 import ActionButton from "../ActionButton";
@@ -95,12 +96,6 @@ const ProjectList = () => {
         </Link>
       ),
     },
-    // {
-    //   field: "id",
-    //   headerName: "Id",
-    //   minWidth: 75,
-    //   flex: 0.1,
-    // },
     {
       field: "status",
       headerName: "Status",
@@ -118,38 +113,6 @@ const ProjectList = () => {
       flex: 0.15,
       renderCell: ({ value }) => format(parseISO(value), "P", { locale: enIN }),
     },
-    // {
-    //   field: "start_date",
-    //   headerName: "Start Date",
-    //   type: "date",
-    //   minWidth: 150,
-    //   flex: 0.14,
-    //   renderCell: ({ id, field, value, row }) => {
-    //     return (
-    //       <StyledDatePicker
-    //         name="start_date"
-    //         value={value}
-    //         maxDateTime={row.end_date}
-    //         renderInput={dateInput}
-    //         onChange={(dateSelected) => setStartDate(dateSelected)}
-    //         // handleChange={handleChange}
-    //         onAccept={async (date) => {
-    //           const response = await fetch(
-    //             `http://localhost:4000/api/projects/${id}`,
-    //             {
-    //               method: "PATCH",
-    //               headers: { "Content-Type": "application/json" },
-    //               body: JSON.stringify({ [field]: date }),
-    //             }
-    //           );
-
-    //           if (response.status === 200) dispatch(setSnackbarOpen(true));
-    //         }}
-    //         minimized
-    //       />
-    //     );
-    //   },
-    // },
     {
       field: "end_date",
       headerName: "End Date",

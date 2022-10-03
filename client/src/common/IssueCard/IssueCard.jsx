@@ -1,52 +1,23 @@
-import { Fragment } from "react";
-import { useSelector } from "react-redux";
-
-import Card from "@mui/material/Card";
-import MuiButton from "@mui/material/Button";
-import MuiRemoveIcon from "@mui/icons-material/Remove";
-
+import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
-import { CardContent } from "@mui/material";
 
-const IssueCard = ({
-  title,
-  color = "primary.oatmeal",
-  bgColor,
-  count,
-  percentCount,
-}) => {
+export default function IssueCard({ title, count }) {
   return (
-    <Card
-      sx={{
-        marginTop: "10px",
-        borderRadius: "12px",
-        color: `${color}`,
-        backgroundColor: `${bgColor}`,
-        textTransform: "none",
-        cursor: "pointer",
-      }}
-    >
-      <CardContent>
-        <MuiTypography
-          variant="body2"
-          sx={{ fontWeight: 600, paddingBottom: "4px" }}
-        >
-          {title}
-        </MuiTypography>
-        <MuiTypography variant="h4" fontWeight={600} fontFamily="Roboto Mono">
-          {count}
-        </MuiTypography>
-        <MuiTypography
-          variant="body2"
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          <MuiRemoveIcon />
-          <span style={{ fontFamily: "Roboto Mono" }}>{percentCount}</span>%
-          last week
-        </MuiTypography>
-      </CardContent>
-    </Card>
+    <MuiGrid item xs={2} sx={{ padding: "16px" }}>
+      <MuiTypography
+        variant="body2"
+        fontWeight={600}
+        sx={{ textTransform: "capitalize", color: "text.subtitle1" }}
+      >
+        {title}
+      </MuiTypography>
+      <MuiTypography
+        variant="h5"
+        sx={{ fontFamily: "Roboto Mono" }}
+        fontWeight={400}
+      >
+        {count}
+      </MuiTypography>
+    </MuiGrid>
   );
-};
-
-export default IssueCard;
+}

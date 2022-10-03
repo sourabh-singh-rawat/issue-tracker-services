@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 
-import Sidebar from "../common/Sidebar/Sidebar";
+import Main from "../common/Main";
 import Dashboard from "../features/dashboard/components/Dashboard";
 import SignIn from "../features/auth/components/SignIn";
 import SignUp from "../features/auth/components/SignUp";
@@ -24,6 +24,7 @@ import Issue from "../features/issue/components/Issue";
 import IssueOverview from "../features/issue/components/IssueOverview";
 import IssueListFiltered from "../features/issueList/component/IssueListFiltered";
 import IssueTasks from "../features/issue/components/IssueTasks";
+import IssueComments from "../features/issue/components/IssueComments/IssueComments";
 import IssueSettings from "../features/issue/components/IssueSettings";
 import ProjectList from "../features/projectList/components/ProjectList";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
@@ -65,7 +66,7 @@ const App = () => {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/signin" element={<SignIn />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Sidebar />}>
+        <Route path="/" element={<Main />}>
           <Route index element={<Dashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="profile">
@@ -103,6 +104,7 @@ const App = () => {
             <Route path=":id" element={<Issue />}>
               <Route path="overview" element={<IssueOverview />} />
               <Route path="tasks" element={<IssueTasks />} />
+              <Route path="comments" element={<IssueComments />} />
               <Route path="settings" element={<IssueSettings />} />
             </Route>
           </Route>

@@ -1,18 +1,19 @@
 import db from "../services/db.service.js";
 
-const insertOne = ({ name, description }) =>
-  db.query(
+const insertOne = function insertOneTeam({ name, description }) {
+  return db.query(
     `INSERT INTO teams (name, description) 
      VALUES ($1, $2)
      RETURNING *`,
     [name, description]
   );
+};
 
-const find = () => {
+const find = function findTeams() {
   return db.query(`SELECT * FROM teams`);
 };
 
-const findOne = (id) => {
+const findOne = function findOneTeam(id) {
   return db.query(
     `SELECT * FROM teams
      WHERE id = $1`,
@@ -20,7 +21,7 @@ const findOne = (id) => {
   );
 };
 
-const updateOne = (id, document) => {
+const updateOne = function updateOneTeam(id, document) {
   let query = Object.keys(document)
     .reduce(
       (prev, cur, index) => prev + " " + cur + "=$" + (index + 1) + ",",

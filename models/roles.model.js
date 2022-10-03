@@ -1,6 +1,6 @@
 import db from "../services/db.service.js";
 
-const find = () => {
+const find = function findProjectMemberRoles() {
   return db.query(`SELECT * FROM roles`);
 };
 

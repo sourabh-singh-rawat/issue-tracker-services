@@ -17,12 +17,15 @@ const CollaboratorList = () => {
   const { page, pageSize, rowCount } = useSelector(
     (store) => store.collaboratorList
   );
-  const { data, isLoading } = useGetCollaboratorsQuery(user ? user.uid : "");
-  const columns = [{ field: "user_id", headerName: "USER_ID" }];
+  const { data, isLoading } = useGetCollaboratorsQuery();
+  const columns = [
+    { field: "name", headerName: "Name", flex: 0.45 },
+    { field: "email", headerName: "Email", flex: 0.3 },
+  ];
 
   useEffect(() => {
     if (data) dispatch(setCollaboratorList(data));
-  }, [data]);
+  }, [isLoading]);
 
   return (
     <List

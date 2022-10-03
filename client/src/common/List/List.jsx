@@ -1,6 +1,6 @@
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 
-const List = ({
+export default function List({
   rows,
   rowCount,
   columns,
@@ -11,7 +11,7 @@ const List = ({
   onPageChange,
   onPageSizeChange,
   getRowId,
-}) => {
+}) {
   const styles = {
     border: "none",
     ".MuiDataGrid-cell": {
@@ -55,6 +55,4 @@ const List = ({
       disableSelectionOnClick
     />
   );
-};
-
-export default List;
+}

@@ -14,9 +14,10 @@ import { setIssueStatusCount, updateProject } from "../../project.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 
 import {
-  useGetProjectIssuesStatusCountQuery,
   useUpdateProjectMutation,
+  useGetProjectIssuesStatusCountQuery,
 } from "../../project.api";
+import IssueStats from "../../../../common/IssueStats/IssueStats";
 
 const ProjectOverview = () => {
   const { id } = useParams();
@@ -66,55 +67,7 @@ const ProjectOverview = () => {
           />
         </MuiGrid>
         <MuiGrid item sm={12}>
-          <MuiTypography variant="body1" fontWeight={600}>
-            Issues
-          </MuiTypography>
-          <MuiGrid container spacing={2}>
-            <MuiGrid item>
-              <IssueCard
-                title={"Total Issues"}
-                count={totalIssueCount}
-                percentCount={0}
-                bgColor={"primary.slate"}
-              />
-            </MuiGrid>
-            <MuiGrid item>
-              <IssueCard
-                title={"Open"}
-                count={issuesStatusCount[0].count}
-                percentCount={0}
-                color={"primary.slate"}
-                bgColor={"primary.coral"}
-              />
-            </MuiGrid>
-            <MuiGrid item>
-              <IssueCard
-                title={"In Progress"}
-                count={issuesStatusCount[1].count}
-                percentCount={0}
-                color={"primary.slate"}
-                bgColor={"primary.oatmeal"}
-              />
-            </MuiGrid>
-            <MuiGrid item>
-              <IssueCard
-                title={"In Review"}
-                count={issuesStatusCount[2].count}
-                percentCount={0}
-                color={"primary.slate"}
-                bgColor={"primary.chartreuse"}
-              />
-            </MuiGrid>
-            <MuiGrid item>
-              <IssueCard
-                title={"Closed"}
-                count={issuesStatusCount[3].count}
-                percentCount={0}
-                color={"primary.slate"}
-                bgColor={"primary.sea"}
-              />
-            </MuiGrid>
-          </MuiGrid>
+          <IssueStats issuesStatusCount={issuesStatusCount} />
         </MuiGrid>
         <MuiGrid item sm={12}>
           <MembersCard />

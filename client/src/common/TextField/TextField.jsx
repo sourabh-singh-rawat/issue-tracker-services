@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 
-const TextField = ({ title, name, ...otherProps }) => {
+export default function TextField({ title, name, ...otherProps }) {
   return (
     <Fragment>
       <MuiTypography variant="body2" fontWeight={600} paddingBottom={1}>
@@ -32,6 +32,4 @@ const TextField = ({ title, name, ...otherProps }) => {
       />
     </Fragment>
   );
-};
-
-export default TextField;
+}

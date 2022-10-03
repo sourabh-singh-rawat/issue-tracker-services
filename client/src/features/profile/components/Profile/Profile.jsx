@@ -4,7 +4,7 @@ import MuiGrid from "@mui/material/Grid";
 
 import SectionHeader from "../../../../common/SectionHeader";
 
-const Profile = () => {
+export default function Profile() {
   const profile = useSelector((store) => store.profile);
   console.log(profile);
 
@@ -13,6 +13,4 @@ const Profile = () => {
       <SectionHeader title="Your Profile" subtitle="" />
     </MuiGrid>
   );
-};
-
-export default Profile;
+}

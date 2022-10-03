@@ -6,8 +6,6 @@ const styles = {
   fontWeight: 400,
 };
 
-const Tab = (props) => {
+export default function Tab(props) {
   return <MuiTab {...props} sx={styles} disableRipple />;
-};
-
-export default Tab;
+}

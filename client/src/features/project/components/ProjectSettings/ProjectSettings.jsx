@@ -5,14 +5,16 @@ import { format, formatISO, parse, parseISO } from "date-fns";
 import { updateProject } from "../../project.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { useUpdateProjectMutation } from "../../project.api";
-import ProjectStatusSelector from "../ProjectStatusSelector";
+
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiDivider from "@mui/material/Divider";
 import MuiTypography from "@mui/material/Typography";
+
 import TabPanel from "../../../../common/TabPanel";
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
+import ProjectStatusSelector from "../ProjectStatusSelector";
 
 const ProjectSettings = () => {
   const dispatch = useDispatch();
@@ -29,7 +31,7 @@ const ProjectSettings = () => {
 
     const { name, description, status, end_date, start_date } = project;
     await updateProjectRequest({
-      uid: project.id,
+      id: project.id,
       payload: { name, description, status, end_date, start_date },
     });
   };
@@ -62,7 +64,7 @@ const ProjectSettings = () => {
                 <MuiGrid item xs={12}>
                   <TextField
                     name="owner_uid"
-                    title="Owner UID"
+                    title="Owner ID"
                     value={project.owner_uid}
                     disabled
                   />

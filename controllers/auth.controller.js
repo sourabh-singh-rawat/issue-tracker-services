@@ -1,21 +1,23 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv/config";
 
-const createToken = async (req, res) => {
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const createToken = async function createToken(req, res) {
   const { payload } = req.body;
-  const token = jwt.sign(payload, process.env.JWT_SECRET);
+  const token = jwt.sign(payload, JWT_SECRET);
 
   return token;
 };
 
-const verifyToken = (req, res) => {
+const verifyToken = async function verifyToken(req, res) {
   try {
     const { inviteToken } = req.body;
-    const validToken = jwt.verify(inviteToken, process.env.JWT_SECRET);
+    const decodedValidToken = jwt.verify(inviteToken, JWT_SECRET);
 
-    res.send(validToken);
+    res.send(decodedValidToken);
   } catch (error) {
-    res.status(500);
+    res.status(500).send();
   }
 };
 

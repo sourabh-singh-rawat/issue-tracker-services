@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  comments: [],
   info: {
     nameSelected: false,
     descriptionSelected: false,
@@ -18,10 +19,12 @@ const issueSlice = createSlice({
   initialState,
   reducers: {
     setIssue: (state, action) => {
-      return { ...state, info: { ...action.payload } };
+      state.info = action.payload;
+      return state;
     },
-    updateIssue: (state, action) => {
-      return { ...state, info: { ...state.info, ...action.payload } };
+    setComments: (state, action) => {
+      state.comments = action.payload;
+      return state;
     },
     setIssueStatus: (state, action) => {
       state.options.status.loading = false;
@@ -33,9 +36,18 @@ const issueSlice = createSlice({
       state.options.priority.result = action.payload;
       return state;
     },
+    updateIssue: (state, action) => {
+      state.info = { ...state.info, ...action.payload };
+      return state;
+    },
   },
 });
 
-export const { setIssue, updateIssue, setIssueStatus, setIssuePriority } =
-  issueSlice.actions;
+export const {
+  setIssue,
+  setComments,
+  setIssueStatus,
+  setIssuePriority,
+  updateIssue,
+} = issueSlice.actions;
 export default issueSlice.reducer;

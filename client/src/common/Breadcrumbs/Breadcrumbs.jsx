@@ -3,7 +3,7 @@ import MuiLink from "@mui/material/Link";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
-const Breadcrumbs = ({ items, loading }) => {
+export default function Breadcrumbs({ items, loading }) {
   return (
     <MuiBreadcrumbs separator="/">
       {items.map(({ text, onClick }, index) => (
@@ -29,6 +29,4 @@ const Breadcrumbs = ({ items, loading }) => {
       ))}
     </MuiBreadcrumbs>
   );
-};
-
-export default Breadcrumbs;
+}

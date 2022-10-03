@@ -1,10 +1,13 @@
 import { useLocation, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
 import SectionHeader from "../../../../common/SectionHeader";
+import { CircularProgress } from "@mui/material";
 
 const People = () => {
   const { pathname } = useLocation();
+  const loading = useSelector((store) => store.auth.loading);
 
   return (
     <MuiGrid container gap="40px">
@@ -17,7 +20,7 @@ const People = () => {
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        <Outlet />
+        {loading ? <CircularProgress /> : <Outlet />}
       </MuiGrid>
     </MuiGrid>
   );

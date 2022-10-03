@@ -7,7 +7,7 @@ import { setIssueList } from "../../issueList.slice";
 
 import { useGetIssuesQuery } from "../../issueList.api";
 
-const IssueListFiltered = () => {
+export default function IssueListFiltered() {
   const dispatch = useDispatch();
   const reporterId = useSelector((store) => store.auth.user.uid);
   const { rows, rowCount, page, pageSize } = useSelector(
@@ -33,6 +33,4 @@ const IssueListFiltered = () => {
       isLoading={isLoading}
     />
   );
-};
-
-export default IssueListFiltered;
+}
