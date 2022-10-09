@@ -32,6 +32,7 @@ export default function IssueOverview() {
         Description
       </MuiTypography>
       <Description
+        loading={issue.loading}
         page={issue}
         updateDescription={updateIssue}
         updateDescriptionQuery={updatePageQuery}

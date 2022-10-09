@@ -47,7 +47,7 @@ export default function DatePicker({
         />
       </LocalizationProvider>
       <MuiFormHelperText>
-        <MuiTypography variant="body2" component="span" fontWeight={500}>
+        <MuiTypography variant="body2" component="span" fontWeight={600}>
           {helperText}
         </MuiTypography>
       </MuiFormHelperText>

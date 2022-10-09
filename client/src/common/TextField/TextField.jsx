@@ -15,13 +15,11 @@ export default function TextField({ title, name, ...otherProps }) {
           input: { fontSize: "14px" },
           "input:disabled": {
             color: "#eff0f2",
-            fontWeight: 600,
             backgroundColor: "#eff0f2",
           },
           ".MuiFormHelperText-contained": {
             fontSize: "14px",
             marginLeft: 0,
-            fontWeight: 500,
           },
           ".MuiInputBase-root": {
             fontSize: "14px",

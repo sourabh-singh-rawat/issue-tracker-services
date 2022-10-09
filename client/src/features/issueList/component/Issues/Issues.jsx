@@ -19,13 +19,13 @@ export default function Issues() {
         <MuiGrid item xs={12}>
           <SectionHeader
             title="Issues"
-            subtitle="This section contains all the issues that you have created."
+            subtitle="All the issues assgined to you or created by you."
             actionButton={
               <MuiButton
                 variant="contained"
                 startIcon={<MuiAddIcon />}
                 onClick={() => navigate("/issues/new")}
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Create Issue
               </MuiButton>

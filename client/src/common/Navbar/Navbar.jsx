@@ -25,13 +25,7 @@ const appBarStyles = {
 };
 
 export default function Navbar({ onClick, loading }) {
-  const navigate = useNavigate();
   const location = useLocation();
-  const path = location.pathname.split("/")[3];
-  const breadcrumbItems = [
-    { text: "projects", onClick: () => navigate(`/projects`) },
-    { text: path },
-  ];
   const [anchorEl, setAnchorEl] = useState(null);
 
   const auth = useSelector((store) => store.auth.user);
@@ -41,10 +35,7 @@ export default function Navbar({ onClick, loading }) {
 
   return (
     <MuiAppBar position="fixed" sx={appBarStyles}>
-      <MuiToolbar
-        variant="dense"
-        sx={{ bgcolor: "primary.slate", color: "text.subtitle1" }}
-      >
+      <MuiToolbar variant="dense" sx={{ backgroundColor: "secondary.main" }}>
         <MuiGrid container>
           {/* <MuiGrid item sx={{ color: "text.subtitle1" }}>
             <BackButton onClick={onClick} />
@@ -54,7 +45,7 @@ export default function Navbar({ onClick, loading }) {
           </MuiGrid> */}
         </MuiGrid>
         <MuiNotifications />
-        <MuiTypography variant="body1">
+        <MuiTypography variant="body2">
           {auth && (
             <Fragment>
               <MuiIconButton onClick={handleMenu} color="inherit">

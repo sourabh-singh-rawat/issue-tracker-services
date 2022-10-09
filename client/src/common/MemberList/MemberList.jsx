@@ -8,9 +8,11 @@ import List from "../List";
 import MuiTypography from "@mui/material/Typography";
 
 export default function MemberList() {
-  const dispatch = useDispatch();
   const { id } = useParams();
-  const { rows } = useSelector((store) => store.project.members);
+  const dispatch = useDispatch();
+  const { rows, rowCount, pageSize } = useSelector(
+    (store) => store.project.members
+  );
   const projectMembers = useGetProjectMembersQuery(id);
 
   useEffect(() => {
@@ -19,24 +21,29 @@ export default function MemberList() {
 
   const columns = [
     {
+      flex: 0.3,
       field: "name",
       headerName: "Name",
       minWidth: 300,
-      flex: 0.3,
-      renderCell: (props) => {
-        const { id, value } = props;
-
+      renderCell: ({ id, value }) => {
         return (
           <Fragment>
             <MuiAvatar
-              sx={{ width: "35px", height: "35px", marginRight: "10px" }}
+              sx={{ width: "32px", height: "32px", marginRight: "10px" }}
             >
               {value.match(/\b(\w)/g)[0]}
             </MuiAvatar>
-            <Link to={`/profile/${id}`}>
+            <Link to={`/profile/${id}`} style={{ textDecoration: "none" }}>
               <MuiTypography
                 variant="body2"
-                sx={{ color: "text.subtitle1", fontWeight: 600 }}
+                sx={{
+                  color: "text.primary",
+                  fontWeight: 500,
+                  "&:hover": {
+                    color: "primary.main",
+                    textDecoration: "none!important",
+                  },
+                }}
               >
                 {value}
               </MuiTypography>
@@ -46,18 +53,20 @@ export default function MemberList() {
       },
     },
     {
+      flex: 0.3,
       field: "email",
       headerName: "Email",
       minWidth: 300,
-      flex: 0.3,
     },
-    { field: "role", headerName: "Role", minWidth: 200, flex: 0.3 },
+    { field: "role", headerName: "Role", minWidth: 200 },
   ];
 
   return (
     <List
       rows={rows}
+      rowCount={rowCount}
       columns={columns}
+      pageSize={pageSize}
       getRowId={(row) => row.user_id}
       initialState={{
         sorting: { sortModel: [{ field: "name", sort: "asc" }] },

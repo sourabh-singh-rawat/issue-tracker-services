@@ -7,7 +7,7 @@ export default function SectionHeader({ title, subtitle, actionButton }) {
       <MuiGrid item xs={12} sx={{ display: "flex" }}>
         <MuiTypography
           variant="h4"
-          sx={{ fontWeight: "bold", paddingTop: "2px", flexGrow: 1 }}
+          sx={{ fontWeight: 600, paddingTop: "2px", flexGrow: 1 }}
         >
           {title}
         </MuiTypography>

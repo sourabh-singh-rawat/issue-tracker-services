@@ -1,26 +1,36 @@
 const themeConfig = {
   palette: {
     primary: {
-      main: "#2B2539",
-      sea: "#BED3CC",
-      coral: "#EFC8C8",
-      slate: "#2B2539",
-      oatmeal: "#EBE9E4",
-      chartreuse: "#EEEFC8",
+      main: "#635DFF",
+      dark: "#030066",
+    },
+    secondary: {
+      main: "#152828",
     },
     text: {
-      main: "#2B2539",
-      subtitle1: "#65676e",
+      primary: "#080F0F",
+      secondary: "#5E5A5A",
+      disabled: "#080F0F",
+    },
+    // error: {
+    //   // main: "",
+    //   // dark: "",
+    // },
+    warning: {
+      main: "#FF6700",
+      dark: "#F56200",
     },
     background: {
-      appbar: "#1e212a",
-      edit: "#ebecf0",
+      paper: "#FFF",
+      default: "#FFF",
+    },
+    action: {
+      hover: "#EBEBEB",
     },
   },
   typography: {
-    fontFamily: ["Inter", "sans-serif"].join(","),
-    h4: { fontSize: 32 },
-    body1: { fontSize: 16 },
+    fontFamily: ["Inter"].join(","),
+    h4: { fontSize: 30, fontFamily: ["Inter"] },
     body2: { fontSize: 14 },
   },
 };

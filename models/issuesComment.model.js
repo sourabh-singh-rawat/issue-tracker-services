@@ -18,9 +18,16 @@ const find = function findComments(issueId) {
     `SELECT issue_comments.id, name, issue_id, description,  user_id, issue_comments.creation_date 
      FROM issue_comments INNER JOIN users
      ON issue_comments.user_id = users.id
-     WHERE issue_id=$1`,
+     WHERE issue_id=$1
+     ORDER BY issue_comments.creation_date DESC`,
     [issueId]
   );
+};
+
+const rowCount = function countComments(issueId) {
+  return db.query(`SELECT COUNT(id) FROM issue_comments WHERE issue_id=$1`, [
+    issueId,
+  ]);
 };
 
 const updateOne = function updateIssueComment({ commentId, description }) {
@@ -42,6 +49,7 @@ const deleteOne = function deleteIssueComment(commentId) {
 export default {
   insertOne,
   find,
+  rowCount,
   updateOne,
   deleteOne,
 };

@@ -1,5 +1,5 @@
 import db from "../services/db.service.js";
-import { createSelectQuery } from "../utils/createSelectQuery.utils.js";
+import { selectProjectsQuery } from "../utils/projects/selectProjectsQuery.utils.js";
 
 const insertOne = function insertOneProject(project) {
   const {
@@ -21,7 +21,7 @@ const insertOne = function insertOneProject(project) {
 };
 
 const find = function findProjects(options) {
-  const { query, colValues } = createSelectQuery(options, "projects");
+  const { query, colValues } = selectProjectsQuery(options);
   return db.query(query, colValues);
 };
 
@@ -63,8 +63,9 @@ const statusCount = function statusCount(id) {
   );
 };
 
-const rowCount = function rowCount() {
-  return db.query(`SELECT count(*) FROM projects`);
+const rowCount = function rowCount(options) {
+  const { query, colValues } = selectProjectsQuery(options, "projects");
+  return db.query(query, colValues);
 };
 
 export default {

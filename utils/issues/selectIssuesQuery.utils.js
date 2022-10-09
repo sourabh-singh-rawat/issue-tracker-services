@@ -1,12 +1,9 @@
-export const createSelectQuery = function createSelectQuery(
-  {
-    id,
-    options,
-    pagingOptions,
-    sortOptions: { field = "name", order = "asc" },
-  },
-  table
-) {
+export const selectIssuesQuery = function createSelectQuery({
+  reporter_id,
+  options,
+  pagingOptions,
+  sortOptions: { field = "name", order = "asc" },
+}) {
   // Remove all the props with falsey values
   Object.keys(options).forEach((option) => {
     if (!options[option]) delete options[option];
@@ -17,18 +14,18 @@ export const createSelectQuery = function createSelectQuery(
   });
 
   let index = 0;
-  let select = "SELECT * FROM " + table + " ";
-  let condition = `WHERE id IN (SELECT project_id from project_members where user_id='${id}'::uuid)`;
+  let select = "SELECT * FROM issues ";
+  let condition = `WHERE project_id IN (SELECT project_id FROM project_members WHERE user_id='${reporter_id}') `;
   let orderBy = "ORDER BY ";
   let pagination = "";
 
   // WHERE CONDITION
   if (Object.keys(options).length !== 0) {
-    condition = Object.keys(options)
+    condition += Object.keys(options)
       .reduce((prev, cur) => {
         index++;
         return prev + cur + "=$" + index + " AND ";
-      }, `WHERE `)
+      }, `AND `)
       .slice(0, -4);
   }
 

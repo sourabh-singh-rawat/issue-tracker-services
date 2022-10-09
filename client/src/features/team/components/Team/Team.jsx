@@ -61,7 +61,7 @@ const Team = () => {
             onClick={() => navigate("/teams")}
             sx={{
               color: "text.subtitle1",
-              fontWeight: "bold",
+              fontWeight: 600,
               textTransform: "none",
             }}
           >
@@ -71,7 +71,7 @@ const Team = () => {
       </MuiGrid>
       <MuiGrid item xs={12}>
         <MuiToolbar disableGutters>
-          <MuiTypography variant="h4" sx={{ fontWeight: "bold" }}>
+          <MuiTypography variant="h4" sx={{ fontWeight: 600 }}>
             {name}
           </MuiTypography>
         </MuiToolbar>

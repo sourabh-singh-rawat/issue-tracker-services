@@ -36,7 +36,7 @@ export default function IssuePrioritySelector({
           sx={{
             color: "text.subtitle1",
             fontSize: "13px",
-            fontWeight: "bold",
+            fontWeight: 600,
           }}
         >
           {issuePriority.map(({ priority, message }) => (
@@ -46,7 +46,7 @@ export default function IssuePrioritySelector({
               sx={{
                 color: "text.subtitle1",
                 fontSize: "13px",
-                fontWeight: "bold",
+                fontWeight: 600,
               }}
             >
               {message.toUpperCase()}

@@ -1,5 +1,5 @@
 import db from "../services/db.service.js";
-import { createSelectQuery } from "../utils/createSelectQuery.utils.js";
+import { selectIssuesQuery } from "../utils/issues/selectIssuesQuery.utils.js";
 
 const insertOne = function insertOneIssue({
   name,
@@ -29,7 +29,7 @@ const insertOne = function insertOneIssue({
 };
 
 const find = function findIssues(options) {
-  const { query, colValues } = createSelectQuery(options, "issues");
+  const { query, colValues } = selectIssuesQuery(options);
   return db.query(query, colValues);
 };
 
@@ -64,10 +64,9 @@ const deleteOne = function deleteOneIssue(id) {
   return db.query(`DELETE FROM issues WHERE id=$1 RETURNING *`, [id]);
 };
 
-const rowCount = function rowCount(projectId) {
-  return db.query(`SELECT count(*) FROM issues WHERE project_id = $1`, [
-    projectId,
-  ]);
+const rowCount = function findIssues(options) {
+  const { query, colValues } = selectIssuesQuery(options);
+  return db.query(query, colValues);
 };
 
 export default { insertOne, findOne, find, updateOne, deleteOne, rowCount };

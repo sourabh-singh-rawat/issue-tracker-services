@@ -28,7 +28,7 @@ export const continueWithGoogle = async (inviteToken) => {
       if (user) {
         // store the user in the database
         await storeUserInfoInDatabase(user);
-        const { uid } = user;
+        const { uid, accessToken } = user;
 
         // user signed in so add the user to project_member
         const { toProject } = decodedToken;
@@ -36,10 +36,15 @@ export const continueWithGoogle = async (inviteToken) => {
           `http://localhost:4000/api/projects/${toProject}/members`,
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
             body: JSON.stringify({ ...decodedToken, uid }),
           }
         );
+
+        console.log(response);
       } else {
         console.log("Error signing in user");
       }
@@ -111,10 +116,8 @@ export const signUpWithEmailAndPassword = async ({
 export const signOutUser = async () => {
   try {
     await signOut(auth);
-    console.log("running");
     window.localStorage.clear();
   } catch (error) {
     console.log(error);
-    console.log("Cannot sign out");
   }
 };

@@ -6,7 +6,7 @@ import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
 
 import IssueList from "../../../issueList/component/IssueList";
-import AddIssueButton from "../../../issue/components/AddIssueButton";
+import AddIssue from "../../../issue/components/AddIssue";
 
 import { setIssueList } from "../../../issueList/issueList.slice";
 import { useGetProjectIssuesQuery } from "../../project.api";
@@ -18,20 +18,21 @@ const ProjectIssues = () => {
     (store) => store.issueList
   );
 
-  const issues = useGetProjectIssuesQuery({
+  const getProjectIssuesQuery = useGetProjectIssuesQuery({
     projectId: id,
     sortBy: "creation_date:desc",
   });
 
   useEffect(() => {
-    if (issues.data) dispatch(setIssueList(issues.data));
-  }, [pageSize, page, issues.data]);
+    if (getProjectIssuesQuery.data)
+      dispatch(setIssueList(getProjectIssuesQuery.data));
+  }, [pageSize, page, getProjectIssuesQuery.isSuccess]);
 
   return (
     <MuiGrid container spacing={2}>
       <MuiGrid item xs={12} sx={{ display: "flex" }}>
         <MuiBox sx={{ flexGrow: 1 }} />
-        <AddIssueButton />
+        <AddIssue />
       </MuiGrid>
       <MuiGrid item xs={12}>
         <IssueList
@@ -39,7 +40,7 @@ const ProjectIssues = () => {
           rowCount={rowCount}
           page={page}
           pageSize={pageSize}
-          isLoading={issues.isLoading}
+          isLoading={getProjectIssuesQuery.isLoading}
         />
       </MuiGrid>
     </MuiGrid>

@@ -70,7 +70,7 @@ export default function SignUp() {
             <MuiTypography variant="h4" fontWeight="bold">
               Sign up
             </MuiTypography>
-            <MuiTypography variant="body1">
+            <MuiTypography variant="body2">
               Create an account & help yourself track issues efficiently.
             </MuiTypography>
           </MuiBox>
@@ -82,7 +82,7 @@ export default function SignUp() {
             startIcon={<GoogleIcon />}
             sx={{
               textTransform: "none",
-              fontWeight: "bold",
+              fontWeight: 600,
             }}
             fullWidth
           >
@@ -91,7 +91,7 @@ export default function SignUp() {
         </MuiGrid>
         {/* <MuiGrid item xs={12}>
           <MuiDivider>
-            <MuiTypography variant="body1" sx={{ color: "text.subtitle1" }}>
+            <MuiTypography variant="body2" sx={{ color: "text.subtitle1" }}>
               Or sign up with your email
             </MuiTypography>
           </MuiDivider>
@@ -134,7 +134,7 @@ export default function SignUp() {
                 sx={{
                   textTransform: "none",
                   margin: "1em 0",
-                  fontWeight: "bold",
+                  fontWeight: 600,
                 }}
               >
                 Create an account
@@ -142,7 +142,7 @@ export default function SignUp() {
             </MuiGrid>
             <MuiGrid container>
               <MuiGrid item>
-                <MuiTypography variant="body1">
+                <MuiTypography variant="body2">
                   <Link to="/signin">Already have an account? Sign In</Link>
                 </MuiTypography>
               </MuiGrid>

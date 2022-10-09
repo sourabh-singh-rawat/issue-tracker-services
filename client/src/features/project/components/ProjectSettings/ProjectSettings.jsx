@@ -46,7 +46,7 @@ const ProjectSettings = () => {
         <MuiGrid item xs={12}>
           <MuiGrid container>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body1" sx={{ fontWeight: "bold" }}>
+              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
                 Basic Information
               </MuiTypography>
             </MuiGrid>
@@ -96,7 +96,7 @@ const ProjectSettings = () => {
         <MuiGrid item xs={12}>
           <MuiGrid container>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body1" sx={{ fontWeight: "bold" }}>
+              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
                 Detailed Information
               </MuiTypography>
             </MuiGrid>
@@ -160,7 +160,7 @@ const ProjectSettings = () => {
               <MuiButton
                 type="submit"
                 variant="contained"
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Save Changes
               </MuiButton>

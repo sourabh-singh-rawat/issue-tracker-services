@@ -13,7 +13,7 @@ export default function Tabs(props) {
           minWidth: "auto",
           opacity: 1,
           color: "text.subtitle1",
-          fontWeight: 500,
+          fontWeight: 600,
         },
         ".Mui-selected": {
           color: "primary.main",
