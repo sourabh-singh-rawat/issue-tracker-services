@@ -27,24 +27,24 @@ const ProjectList = () => {
   const { rows, rowCount, page, pageSize } = useSelector(
     (store) => store.projectList
   );
-  const status = useGetStatusQuery();
-  const projects = useGetProjectsQuery({
+  const getStatusQuery = useGetStatusQuery();
+  const getProjectsQuery = useGetProjectsQuery({
     page,
     pageSize,
     sortBy: "creation_date:desc",
   });
 
   useEffect(() => {
-    if (status.data) dispatch(setStatus(status.data));
-  }, [status.data]);
+    if (getStatusQuery.data) dispatch(setStatus(getStatusQuery.data));
+  }, [getStatusQuery.data]);
 
   useEffect(() => {
-    if (projects.data) dispatch(setProjectList(projects.data));
-  }, [pageSize, page, projects.data]);
+    if (getProjectsQuery.data) dispatch(setProjectList(getProjectsQuery.data));
+  }, [pageSize, page, getProjectsQuery.data]);
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
-    const [updateProject, { error }] = useUpdateProjectMutation();
+    const [updateProject, { isSuccess }] = useUpdateProjectMutation();
 
     const handleChange = async (event) => {
       apiRef.current.startCellEditMode({ id, field });
@@ -55,12 +55,16 @@ const ProjectList = () => {
       });
 
       await updateProject({
-        uid: id,
+        id,
         payload: { [field]: event.target.value },
       });
-      if (!error) dispatch(setSnackbarOpen(true));
+
       if (isValid) apiRef.current.stopCellEditMode({ id, field });
     };
+
+    useEffect(() => {
+      if (isSuccess) dispatch(setSnackbarOpen(true));
+    }, [isSuccess]);
 
     return <ProjectStatusSelector value={value} handleChange={handleChange} />;
   };
@@ -83,7 +87,7 @@ const ProjectList = () => {
           <MuiTypography
             variant="body2"
             sx={{
-              color: "text.main",
+              color: "text.primary",
               fontWeight: 500,
               "&:hover": {
                 color: "primary.main",
@@ -137,11 +141,12 @@ const ProjectList = () => {
       rows={rows}
       rowCount={rowCount}
       columns={columns}
-      loading={projects.isLoading}
+      loading={getProjectsQuery.isLoading}
       page={page}
       pageSize={pageSize}
       onPageChange={(newPage) => dispatch(updateProjectList({ page: newPage }))}
       onPageSizeChange={(pageSize) => dispatch(updateProjectList({ pageSize }))}
+      getRowId={(row) => row.id}
       initialState={{
         sorting: { sortModel: [{ field: "name", sort: "asc" }] },
       }}

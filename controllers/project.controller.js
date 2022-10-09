@@ -32,7 +32,9 @@ const createMember = async function createProjectMember(req, res) {
   const { uid, toProject } = req.body;
 
   try {
-    response = await ProjectMember.insertOne(toProject, uid);
+    const { id } = (await User.findOne(uid)).rows[0];
+    const response = (await ProjectMember.insertOne(toProject, id)).rows[0];
+
     res.send(response);
   } catch (error) {
     res.status(500).send();
@@ -67,7 +69,6 @@ const invite = async function inviteByEmail(req, res) {
 
     res.send("Email sent!");
   } catch (error) {
-    console.log(error);
     res.status(500).send("Cannot send email");
   }
 };
@@ -112,20 +113,30 @@ const index = async function indexProjects(req, res) {
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const response = await Project.find({
-      id: id,
-      options: { status },
-      pagingOptions: {
-        limit: parseInt(limit),
-        offset: parseInt(limit) * parseInt(page),
-      },
-      sortOptions,
-    });
 
-    const rowCount = await (await Project.rowCount()).rows[0].count;
+    const projects = (
+      await Project.find({
+        id,
+        options: { status },
+        pagingOptions: {
+          limit: parseInt(limit),
+          offset: parseInt(limit) * parseInt(page),
+        },
+        sortOptions,
+      })
+    ).rows;
+    const rowCount = (
+      await Project.rowCount({
+        id,
+        options: { status },
+        pagingOptions: {},
+        sortOptions,
+      })
+    ).rowCount;
 
-    res.send({ rows: response.rows, rowCount: parseInt(rowCount) });
+    res.send({ rows: projects, rowCount: parseInt(rowCount) });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -135,9 +146,8 @@ const indexMembers = async function indexProjectMembers(req, res) {
 
   try {
     const projectMembers = (await ProjectMember.findByProjectId(id)).rows;
-    res.send({ rows: projectMembers, rowCount: -1 });
+    res.send({ rows: projectMembers, rowCount: projectMembers.length });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -188,7 +198,6 @@ const showIssuesStatusCount = async function showIssuesStatusCount(req, res) {
 
     res.send(statusCount);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -200,7 +209,6 @@ const update = async function updateProject(req, res) {
     const project = (await Project.updateOne(id, req.body)).rows[0];
     res.send(project);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

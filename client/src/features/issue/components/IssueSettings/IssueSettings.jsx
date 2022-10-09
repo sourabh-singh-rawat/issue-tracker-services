@@ -62,7 +62,7 @@ export default function IssueSettings() {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12} md={4}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 Basic Information
               </Typography>
             </Grid>
@@ -82,7 +82,7 @@ export default function IssueSettings() {
                     name="id"
                     title="Issue ID"
                     value={issue.id}
-                    helperText="This is the UID of the issue owner"
+                    helperText="This is Issue Id"
                     disabled
                   />
                 </Grid>
@@ -91,7 +91,7 @@ export default function IssueSettings() {
                     name="id"
                     title="Project ID"
                     value={issue.project_id}
-                    helperText="This is the Project ID."
+                    helperText="This is the Project Id"
                     disabled
                   />
                 </Grid>
@@ -114,7 +114,7 @@ export default function IssueSettings() {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12} md={4}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 Detailed Information
               </Typography>
             </Grid>
@@ -173,7 +173,7 @@ export default function IssueSettings() {
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Save Changes
               </Button>

@@ -22,7 +22,7 @@ const Teams = () => {
             actionButton={
               <Button
                 variant="contained"
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
                 startIcon={<Add />}
                 onClick={() => navigate("/teams/new")}
               >

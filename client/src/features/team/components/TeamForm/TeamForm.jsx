@@ -73,7 +73,7 @@ const TeamForm = () => {
                   <MuiButton
                     type="submit"
                     variant="contained"
-                    sx={{ textTransform: "none", fontWeight: "bold" }}
+                    sx={{ textTransform: "none", fontWeight: 600 }}
                     fullWidth
                   >
                     Create Team

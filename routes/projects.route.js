@@ -5,7 +5,7 @@ import ProjectController from "../controllers/project.controller.js";
 const router = express.Router();
 
 router.post("/projects", auth, ProjectController.create);
-router.post("/projects/:id/members", ProjectController.createMember);
+router.post("/projects/:id/members", auth, ProjectController.createMember);
 router.post("/projects/:id/members/invite", auth, ProjectController.invite);
 router.get("/projects", auth, ProjectController.index);
 router.get("/projects/status", ProjectController.indexStatus);

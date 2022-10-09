@@ -13,7 +13,7 @@ const BackButton = ({ message, onClick }) => {
         sx={{
           color: "text.subtitle1",
           padding: 0,
-          fontWeight: "bold",
+          fontWeight: 600,
           textTransform: "none",
           width: "25px",
         }}
@@ -24,7 +24,7 @@ const BackButton = ({ message, onClick }) => {
         sx={{
           color: "text.subtitle1",
           padding: 0,
-          fontWeight: "bold",
+          fontWeight: 600,
           textTransform: "none",
           width: "25px",
         }}

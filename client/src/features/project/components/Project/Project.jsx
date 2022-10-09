@@ -26,7 +26,7 @@ const Project = () => {
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
   const tabName = location.pathname.split("/")[3];
 
-  const { data, isFetching } = useGetProjectQuery(id);
+  const getProjectQuery = useGetProjectQuery(id);
   const project = useSelector((store) => store.project.info);
 
   const updateDescriptionQuery = () => {
@@ -76,8 +76,9 @@ const Project = () => {
   }, [tabName, id]);
 
   useEffect(() => {
-    if (data) dispatch(setProject({ ...data, loading: false }));
-  }, [isFetching]);
+    if (getProjectQuery.data)
+      dispatch(setProject({ ...getProjectQuery.data, loading: false }));
+  }, [getProjectQuery.isSuccess]);
 
   return (
     <MuiGrid container gap="20px">

@@ -50,7 +50,6 @@ const InviteButton = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
     sendInvite({ id, payload: formFields });
   };
 
@@ -88,7 +87,7 @@ const InviteButton = () => {
             </MuiGrid>
             <MuiGrid item xs={8}>
               <MuiTypography
-                variant="body1"
+                variant="body2"
                 fontWeight="bold"
                 sx={{ paddingBottom: 1 }}
               >

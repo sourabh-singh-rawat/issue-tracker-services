@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS issue_status (
 );
 
 INSERT INTO issue_status 
-VALUES (0, 'open'), (1, 'in progress'), (2, 'in review') ,(3, 'closed');
+VALUES (1, 'open'), (2, 'in progress'), (3, 'in review'), (4, 'closed');
 
 CREATE TABLE IF NOT EXISTS issue_priority (
   priority INTEGER UNIQUE,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS issue_priority (
 );
 
 INSERT INTO issue_priority
-VALUES (0, 'lowest'), (1, 'low'), (2, 'medium'), (3, 'high'), (4, 'highest');
+VALUES (1, 'lowest'), (2, 'low'), (3, 'medium'), (4, 'high'), (5 'highest');
 
 CREATE TABLE IF NOT EXISTS issues (
   id uuid DEFAULT uuid_generate_v4(),
@@ -132,9 +132,14 @@ CREATE TABLE IF NOT EXISTS issue_comments (
 -- Issue Tasks
 CREATE TABLE issue_tasks (
   id uuid DEFAULT uuid_generate_v4(),
-  description VARCHAR(255),
   issue_id uuid,
+  name VARCHAR(255),
+  description VARCHAR(255),
+  due_date TIMESTAMP WITH TIME ZONE,
+  assigned_to uuid,
+  status BOOLEAN,
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
-  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
+  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,
+  FOREIGN KEY (assigned_to) REFERENCES users(id)
 );

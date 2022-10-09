@@ -32,7 +32,8 @@ const projectSlice = createSlice({
   initialState,
   reducers: {
     setProject: (state, action) => {
-      return { ...state, info: { ...action.payload } };
+      state.info = { ...state.info, ...action.payload, loading: false };
+      return state;
     },
     updateProject: (state, action) => ({
       ...state,

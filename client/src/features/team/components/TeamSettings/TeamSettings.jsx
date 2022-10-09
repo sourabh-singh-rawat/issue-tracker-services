@@ -36,7 +36,7 @@ const TeamSettings = () => {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container sx={{ marginTop: 3 }}>
           <Grid item xs={12} md={4}>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
               Basic Information
             </Typography>
           </Grid>
@@ -79,7 +79,7 @@ const TeamSettings = () => {
               <Button
                 variant="contained"
                 type="submit"
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Save Changes
               </Button>

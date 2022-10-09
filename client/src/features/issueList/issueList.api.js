@@ -10,7 +10,7 @@ const issueListApiSlice = apiSlice.injectEndpoints({
         reporterId,
       }) =>
         `/issues?page=${page}&limit=${pageSize}&sort_by=${sortBy}&reporterId=${reporterId}`,
-      providesTags: ["Issue"],
+      providesTags: ["IssueList"],
     }),
   }),
 });

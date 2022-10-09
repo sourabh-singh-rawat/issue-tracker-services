@@ -5,7 +5,7 @@ import { auth } from "../middlewares/auth.middleware.js";
 import IssueController from "../controllers/issue.controller.js";
 
 router.post("/issues", auth, IssueController.create);
-router.post("/issues/tasks", IssueController.createTask);
+router.post("/issues/tasks", auth, IssueController.createTask);
 router.post("/issues/comments", auth, IssueController.createComment);
 router.get("/issues", auth, IssueController.index);
 router.get("/issues/status", IssueController.indexStatus);

@@ -24,7 +24,7 @@ const Projects = () => {
                 variant="contained"
                 startIcon={<MuiAddIcon />}
                 onClick={() => navigate("/projects/new")}
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Create Project
               </MuiButton>

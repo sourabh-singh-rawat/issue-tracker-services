@@ -6,23 +6,23 @@ import { DataGrid } from "@mui/x-data-grid";
 import { format, parseISO } from "date-fns";
 import Typography from "@mui/material/Typography";
 
-import { setList } from "../../../team/team.slice";
+import { setList } from "../../../teamList/teamList.slice";
 
 import { useGetTeamsQuery } from "../../../team/team.api";
 
 const TeamList = () => {
   const dispatch = useDispatch();
-  const { data } = useGetTeamsQuery();
-  const { rows } = useSelector((store) => store.team.list);
+  const { data, isSuccess } = useGetTeamsQuery();
+  const teams = useSelector((store) => store.teamList.rows);
 
   useEffect(() => {
     if (data) dispatch(setList({ rows: data.rows, rowCount: data.rowCount }));
-  }, [data]);
+  }, [isSuccess]);
 
   const columns = [
     {
       field: "name",
-      headerName: "NAME",
+      headerName: "Name",
       minWidth: 200,
       flex: 0.3,
       renderCell: (params) => (
@@ -31,10 +31,10 @@ const TeamList = () => {
           style={{ textDecoration: "none" }}
         >
           <Typography
-            variant="body1"
+            variant="body2"
             sx={{
               color: "text.subtitle1",
-              fontWeight: "bold",
+              fontWeight: 600,
               "&:hover": {
                 color: "primary.main",
                 textDecoration: "none!important",
@@ -48,13 +48,13 @@ const TeamList = () => {
     },
     {
       field: "description",
-      headerName: "DESCRIPTION",
+      headerName: "Description",
       minWidth: 150,
       flex: 0.4,
     },
     {
       field: "creation_date",
-      headerName: "CREATED AT",
+      headerName: "Created At",
       width: 200,
       flex: 0.2,
       renderCell: ({ value }) =>
@@ -62,9 +62,11 @@ const TeamList = () => {
     },
   ];
 
+  console.log(teams);
+
   return (
     <DataGrid
-      rows={rows}
+      rows={teams}
       columns={columns}
       sx={{
         border: 0,
@@ -76,7 +78,7 @@ const TeamList = () => {
         },
         "& .MuiDataGrid-columnHeaderTitle": {
           fontSize: "14px",
-          fontWeight: "bold",
+          fontWeight: 600,
         },
         ".MuiDataGrid-columnHeaders": {
           borderBottom: "2px solid #DFE1E6",

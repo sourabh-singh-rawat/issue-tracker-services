@@ -6,10 +6,12 @@ import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
+import MuiSkeleton from "@mui/material/Skeleton";
 
 import Breadcrumbs from "../Breadcrumbs";
 
 export default function Title({
+  loading,
   page,
   updateTitle,
   updateTitleQuery,
@@ -33,80 +35,91 @@ export default function Title({
 
   return (
     <Fragment>
-      <Breadcrumbs items={breadcrumbItems} />
+      <Breadcrumbs loading={loading} items={breadcrumbItems} />
       {nameSelected ? (
-        <MuiBox
-          sx={{ display: "flex", alignItems: "flex-end", marginLeft: "-14px" }}
-        >
-          <MuiTextField
-            autoFocus
-            name="name"
-            value={page.name}
-            onChange={handleChange}
-            inputProps={{
-              style: {
-                padding: "0 14px",
-                fontSize: "32px",
-                fontWeight: "bold",
-              },
-            }}
-            fullWidth
-          />
-          <MuiButton
-            variant="contained"
-            onClick={handleSave}
-            sx={{
-              marginLeft: "5px",
-              textTransform: "none",
-              ":hover": { boxShadow: "none" },
-            }}
-          >
-            <MuiTypography variant="body2">Save</MuiTypography>
-          </MuiButton>
-          <MuiButton
-            onClick={() => {
-              dispatch(
-                updateTitle({ name: page.previousName, nameSelected: false })
-              );
-            }}
-            sx={{
-              color: "primary.text",
-              marginLeft: "5px",
-              textTransform: "none",
-              backgroundColor: "background.main",
-              ":hover": { backgroundColor: "background.main2" },
-            }}
-          >
-            <MuiTypography variant="body2">Cancel</MuiTypography>
-          </MuiButton>
-        </MuiBox>
-      ) : (
-        <MuiGrid item xs={12}>
-          <MuiTypography
-            variant="h4"
-            sx={{
-              color: "text.main",
-              padding: "0px 14px",
-              marginLeft: "-14px",
-              lineHeight: 1.5,
-              fontWeight: 600,
-              borderRadius: "4px",
-              ":hover": {
-                backgroundColor: "background.edit",
-              },
-            }}
-            onClick={() => {
-              dispatch(
-                updateTitle({
-                  previousName: page.name,
-                  nameSelected: true,
-                })
-              );
-            }}
-          >
-            {page.name}
-          </MuiTypography>
+        <MuiGrid container sx={{ marginLeft: "-14px" }}>
+          <MuiGrid item flexGrow={1}>
+            <MuiTextField
+              autoFocus
+              name="name"
+              value={page.name}
+              onChange={handleChange}
+              inputProps={{
+                style: {
+                  padding: "0 14px",
+                  fontSize: "30px",
+                  fontWeight: 600,
+                },
+              }}
+              fullWidth
+            />
+          </MuiGrid>
+          <MuiGrid item>
+            <MuiButton
+              variant="contained"
+              onClick={handleSave}
+              sx={{
+                height: "100%",
+                marginLeft: "8px",
+                textTransform: "none",
+                ":hover": { boxShadow: "none" },
+              }}
+            >
+              <MuiTypography variant="body2">Save</MuiTypography>
+            </MuiButton>
+          </MuiGrid>
+          <MuiGrid item>
+            <MuiButton
+              onClick={() => {
+                dispatch(
+                  updateTitle({ name: page.previousName, nameSelected: false })
+                );
+              }}
+              sx={{
+                color: "primary.text",
+                height: "100%",
+                marginLeft: "8px",
+                textTransform: "none",
+                ":hover": { backgroundColor: "action.hover" },
+              }}
+            >
+              <MuiTypography variant="body2">Cancel</MuiTypography>
+            </MuiButton>
+          </MuiGrid>
         </MuiGrid>
+      ) : (
+        <Fragment>
+          {loading ? (
+            <MuiSkeleton />
+          ) : (
+            <MuiGrid item xs={12}>
+              <MuiTypography
+                variant="h4"
+                sx={{
+                  padding: "0px 14px",
+                  marginLeft: "-14px",
+                  lineHeight: 1.5,
+                  fontWeight: 600,
+                  borderRadius: "4px",
+                  ":hover": {
+                    cursor: "text",
+                    backgroundColor: "action.hover",
+                  },
+                }}
+                onClick={() => {
+                  dispatch(
+                    updateTitle({
+                      previousName: page.name,
+                      nameSelected: true,
+                    })
+                  );
+                }}
+              >
+                {page.name}
+              </MuiTypography>
+            </MuiGrid>
+          )}
+        </Fragment>
       )}
     </Fragment>
   );

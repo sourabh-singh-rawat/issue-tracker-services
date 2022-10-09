@@ -3,7 +3,8 @@ import db from "../services/db.service.js";
 const insertOne = (projectId, userId) => {
   return db.query(
     `INSERT INTO project_members (project_id, user_id, role)
-     VALUES ($1, $2, $3)`,
+     VALUES ($1::uuid, $2::uuid, $3)
+     RETURNING *`,
     [projectId, userId, 0]
   );
 };

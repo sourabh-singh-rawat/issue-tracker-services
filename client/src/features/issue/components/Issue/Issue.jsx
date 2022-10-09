@@ -74,6 +74,7 @@ export default function Issue() {
             },
             { text: tabName },
           ]}
+          loading={issue?.loading}
           page={issue}
           updateTitle={updateIssue}
           updateTitleQuery={updateTitleQuery}
@@ -84,7 +85,7 @@ export default function Issue() {
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab label="Overview" value={0} />
           <Tab label="Tasks" value={1} />
-          <Tab label="Comments" value={2} />
+          <Tab label={"Comments "} value={2} />
           <Tab label="Settings" value={3} />
         </Tabs>
       </MuiGrid>

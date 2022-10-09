@@ -2,7 +2,7 @@ import express from "express";
 const app = express();
 import cors from "cors";
 
-// Routers
+// Importing Routers
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/users.route.js";
 import issueRouter from "./routes/issues.route.js";
@@ -22,6 +22,7 @@ app.use(
   })
 );
 
+// Connecting Routers
 app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", issueRouter);

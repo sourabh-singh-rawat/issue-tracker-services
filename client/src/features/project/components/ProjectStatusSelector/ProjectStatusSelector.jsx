@@ -28,8 +28,8 @@ const ProjectStatusSelector = ({ value, handleChange, title, helperText }) => {
             value={value}
             onChange={handleChange}
             size="small"
-            displayEmpty
             sx={{ color: "text.subtitle1", fontSize: "13px", fontWeight: 600 }}
+            displayEmpty
           >
             {projectStatus.map(({ status, message, color }) => (
               <MuiMenuItem
@@ -41,9 +41,6 @@ const ProjectStatusSelector = ({ value, handleChange, title, helperText }) => {
                   fontWeight: 600,
                 }}
               >
-                {/* <MuiCircleIcon
-                  sx={{ width: "0.5em", color: `${color}`, height: "100%" }}
-                /> */}
                 <span>{message.toUpperCase()}</span>
               </MuiMenuItem>
             ))}

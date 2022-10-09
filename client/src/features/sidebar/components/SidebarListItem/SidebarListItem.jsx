@@ -7,7 +7,7 @@ import MuiTypography from "@mui/material/Typography";
 
 export default function SidebarListItem({ open, text, icon, to }) {
   const listItemTypographyStyles = {
-    color: "text.main",
+    color: "text.primary",
     opacity: open ? 1 : 0,
     fontWeight: 600,
   };

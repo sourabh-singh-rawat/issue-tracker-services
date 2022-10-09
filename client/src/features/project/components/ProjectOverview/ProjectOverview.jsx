@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext, useParams } from "react-router-dom";
 
-import MuiTypography from "@mui/material/Typography";
 import MuiGrid from "@mui/material/Grid";
+import MuiDivider from "@mui/material/Divider";
+import MuiTypography from "@mui/material/Typography";
 
 import TabPanel from "../../../../common/TabPanel";
-import PageDescription from "../../../../common/Description";
-import IssueCard from "../../../../common/IssueCard";
 import MembersCard from "../../../../common/MembersCard";
+import PageDescription from "../../../../common/Description";
+import IssueStats from "../IssueStats";
 
 import { setIssueStatusCount, updateProject } from "../../project.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
@@ -17,7 +18,6 @@ import {
   useUpdateProjectMutation,
   useGetProjectIssuesStatusCountQuery,
 } from "../../project.api";
-import IssueStats from "../../../../common/IssueStats/IssueStats";
 
 const ProjectOverview = () => {
   const { id } = useParams();
@@ -30,14 +30,9 @@ const ProjectOverview = () => {
     (store) => store.project.issuesStatusCount
   );
 
-  let totalIssueCount = issuesStatusCount.reduce(
-    (prev, cur) => (prev += parseInt(cur.count)),
-    0
-  );
-
   const updateDescriptionQuery = () => {
     updateProjectMutation({
-      uid: id,
+      id,
       payload: { description: project.description },
     });
   };
@@ -55,9 +50,9 @@ const ProjectOverview = () => {
   return (
     <TabPanel selectedTab={selectedTab} index={0}>
       <MuiGrid container spacing={4}>
-        <MuiGrid item sm={12}>
-          <MuiTypography variant="body1" fontWeight={600}>
-            Description
+        <MuiGrid item xs={12} sm={12} md={6}>
+          <MuiTypography variant="body2" fontWeight={600}>
+            Description:
           </MuiTypography>
           <PageDescription
             page={project}
@@ -66,11 +61,12 @@ const ProjectOverview = () => {
             loading={project.loading}
           />
         </MuiGrid>
-        <MuiGrid item sm={12}>
-          <IssueStats issuesStatusCount={issuesStatusCount} />
+        <MuiGrid item xs={12} sm={12} md={6}>
+          <MembersCard />
         </MuiGrid>
         <MuiGrid item sm={12}>
-          <MembersCard />
+          <IssueStats issuesStatusCount={issuesStatusCount} />
+          <MuiDivider />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>

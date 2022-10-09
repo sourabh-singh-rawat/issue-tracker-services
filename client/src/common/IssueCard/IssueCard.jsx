@@ -1,15 +1,24 @@
-import MuiGrid from "@mui/material/Grid";
+import { Fragment } from "react";
+
+import MuiBox from "@mui/material/Box";
 import MuiTypography from "@mui/material/Typography";
 
 export default function IssueCard({ title, count }) {
   return (
-    <MuiGrid item xs={2} sx={{ padding: "16px" }}>
+    <MuiBox
+      sx={{
+        paddingLeft: "16px",
+        paddingRight: "16px",
+        paddingBottom: "8px",
+        paddingTop: "8px",
+      }}
+    >
       <MuiTypography
         variant="body2"
         fontWeight={600}
         sx={{ textTransform: "capitalize", color: "text.subtitle1" }}
       >
-        {title}
+        {title}:
       </MuiTypography>
       <MuiTypography
         variant="h5"
@@ -18,6 +27,6 @@ export default function IssueCard({ title, count }) {
       >
         {count}
       </MuiTypography>
-    </MuiGrid>
+    </MuiBox>
   );
 }

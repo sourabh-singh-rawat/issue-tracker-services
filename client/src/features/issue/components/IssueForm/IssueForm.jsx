@@ -71,7 +71,6 @@ export default function IssueForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
 
     const { data } = await createIssue({ payload: formFields });
     navigate(`/issues/${data.id}/overview`);
@@ -121,7 +120,7 @@ export default function IssueForm() {
                     sx={{
                       color: "primary.text",
                       paddingBottom: 1,
-                      fontWeight: "bold",
+                      fontWeight: 600,
                     }}
                   >
                     Project
@@ -163,7 +162,7 @@ export default function IssueForm() {
                 sx={{
                   color: "primary.text",
                   paddingBottom: 1,
-                  fontWeight: "bold",
+                  fontWeight: 600,
                 }}
               >
                 Assigned To

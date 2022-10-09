@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  comments: [],
+  comments: {
+    loading: true,
+    rows: [],
+    rowCount: [],
+  },
   info: {
     nameSelected: false,
     descriptionSelected: false,
+    loading: true,
     status: 0,
     priority: 0,
   },
@@ -12,6 +17,7 @@ const initialState = {
     status: { loading: true, result: [{ status: 0, message: "to do" }] },
     priority: { loading: true, result: [{ status: 0, message: "lowest" }] },
   },
+  tasks: { loading: true, rows: [], rowCount: [] },
 };
 
 const issueSlice = createSlice({
@@ -19,11 +25,13 @@ const issueSlice = createSlice({
   initialState,
   reducers: {
     setIssue: (state, action) => {
-      state.info = action.payload;
+      state.info = { ...state.info, ...action.payload, loading: false };
+
       return state;
     },
     setComments: (state, action) => {
-      state.comments = action.payload;
+      state.comments = { ...state.comments, ...action.payload, loading: false };
+
       return state;
     },
     setIssueStatus: (state, action) => {

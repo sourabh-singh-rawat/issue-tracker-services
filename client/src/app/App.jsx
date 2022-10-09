@@ -22,7 +22,7 @@ import Issues from "../features/issueList/component/Issues";
 import IssueForm from "../features/issue/components/IssueForm";
 import Issue from "../features/issue/components/Issue";
 import IssueOverview from "../features/issue/components/IssueOverview";
-import IssueListFiltered from "../features/issueList/component/IssueListFiltered";
+import IssueList from "../features/issueList/component/IssueList";
 import IssueTasks from "../features/issue/components/IssueTasks";
 import IssueComments from "../features/issue/components/IssueComments/IssueComments";
 import IssueSettings from "../features/issue/components/IssueSettings";
@@ -99,7 +99,7 @@ const App = () => {
           </Route>
           {/* issue route */}
           <Route path="issues" element={<Issues />}>
-            <Route index element={<IssueListFiltered />} />
+            <Route index element={<IssueList />} />
             <Route path="new" element={<IssueForm />} />
             <Route path=":id" element={<Issue />}>
               <Route path="overview" element={<IssueOverview />} />

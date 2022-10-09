@@ -115,7 +115,7 @@ const ProjectForm = () => {
                 type="submit"
                 variant="contained"
                 fullWidth
-                sx={{ textTransform: "none", fontWeight: "bold" }}
+                sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Create Project
               </Button>

@@ -66,7 +66,7 @@ export default function Description({
                   marginLeft: "-14px",
                   borderRadius: "4px",
                   color: "text.subtitle1",
-                  ":hover": { backgroundColor: "background.edit" },
+                  ":hover": { backgroundColor: "action.hover" },
                 }}
               >
                 {page.description ? page.description : "Add a description..."}

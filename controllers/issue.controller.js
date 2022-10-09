@@ -23,7 +23,7 @@ const index = async function indexIssues(req, res) {
   const { uid } = req.user;
 
   // filtering
-  const { status, priority, project_id, reporterId, assigned_to } = req.query;
+  const { status, priority, project_id, assigned_to } = req.query;
 
   // sorting
   const { sort_by } = req.query;
@@ -38,16 +38,17 @@ const index = async function indexIssues(req, res) {
   const { limit, page } = req.query;
 
   try {
-    const reporter = (await User.findOne(reporterId)).rows[0];
+    const reporter = (await User.findOne(uid)).rows[0];
+    const options = {
+      status,
+      priority,
+      project_id,
+      assigned_to,
+    };
     const issues = (
       await Issue.find({
-        options: {
-          status,
-          priority,
-          project_id,
-          reporter_id: reporter?.id,
-          assigned_to,
-        },
+        reporter_id: reporter.id,
+        options,
         pagingOptions: {
           limit: parseInt(limit),
           offset: parseInt(limit) * parseInt(page),
@@ -56,10 +57,18 @@ const index = async function indexIssues(req, res) {
       })
     ).rows;
 
-    const rowCount = await (await Issue.rowCount(project_id)).rows[0].count;
+    const rowCount = (
+      await Issue.rowCount({
+        reporter_id: reporter.id,
+        options,
+        pagingOptions: {},
+        sortOptions: {},
+      })
+    ).rowCount;
 
-    res.send({ rows: issues, rowCount: parseInt(rowCount) });
+    res.send({ rows: issues, rowCount: rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -92,7 +101,6 @@ const show = async function showIssue(req, res) {
 
     return res.send(issue);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -156,7 +164,9 @@ const indexComments = async function indexComments(req, res) {
 
   try {
     const comments = (await IssueComment.find(issueId)).rows;
-    res.send(comments);
+    const rowCount = (await IssueComment.rowCount(issueId)).rows[0].count;
+
+    res.send({ rows: comments, rowCount: parseInt(rowCount) });
   } catch (error) {
     res.status(500).send();
   }
@@ -167,7 +177,8 @@ const destroyComment = async function deleteComment(req, res) {
 
   try {
     const deletedComment = (await IssueComment.deleteOne(commentId)).rows[0];
-    if (!deleteComment) res.status(500).send();
+    if (!deletedComment) res.status(500).send();
+
     res.send(deletedComment);
   } catch (error) {
     res.status(500).send();
@@ -175,6 +186,7 @@ const destroyComment = async function deleteComment(req, res) {
 };
 
 const createTask = async function createIssueTask(req, res) {
+  const { uid } = req.user;
   const { description, issue_id } = req.body;
 
   try {
@@ -190,9 +202,9 @@ const showTask = async function showIssueTask(req, res) {
   try {
     const task = (await IssueTask.findOne(taskId)).rows[0];
     if (!task) res.status(500).send();
+
     res.send(task);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -205,7 +217,6 @@ const updateTask = async function updateIssueTask(req, res) {
     const task = (await IssueTask.updateOne({ description, taskId })).rows[0];
     res.send(task);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

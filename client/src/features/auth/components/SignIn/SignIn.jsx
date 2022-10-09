@@ -78,7 +78,7 @@ const Login = () => {
             startIcon={<GoogleIcon />}
             sx={{
               textTransform: "none",
-              fontWeight: "bold",
+              fontWeight: 600,
             }}
             fullWidth
           >
@@ -87,7 +87,7 @@ const Login = () => {
         </Grid>
         {/* <Grid item xs={12}>
           <Divider>
-            <Typography variant="body1" sx={{ color: "text.subtitle1" }}>
+            <Typography variant="body2" sx={{ color: "text.subtitle1" }}>
               Or
             </Typography>
           </Divider>
@@ -120,7 +120,7 @@ const Login = () => {
                 fullWidth
                 sx={{
                   margin: "1em 0",
-                  fontWeight: "bold",
+                  fontWeight: 600,
                   textTransform: "none",
                 }}
               >
@@ -129,7 +129,7 @@ const Login = () => {
             </Grid>
             <Grid container>
               <Grid item>
-                <Typography variant="body1">
+                <Typography variant="body2">
                   <Link to="/signin">Don't have an account? Sign Up</Link>
                 </Typography>
               </Grid>

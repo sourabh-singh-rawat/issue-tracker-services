@@ -32,7 +32,7 @@ export default function IssueStatusSelector({
           displayEmpty
           sx={{
             fontSize: "13px",
-            fontWeight: "bold",
+            fontWeight: 600,
             color: "text.subtitle1",
           }}
         >
@@ -43,7 +43,7 @@ export default function IssueStatusSelector({
                 value={status}
                 sx={{
                   fontSize: "13px",
-                  fontWeight: "bold",
+                  fontWeight: 600,
                   color: "text.subtitle1",
                 }}
               >

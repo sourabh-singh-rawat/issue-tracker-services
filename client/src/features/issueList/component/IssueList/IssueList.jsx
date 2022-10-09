@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { enIN } from "date-fns/locale";
 import { format, parseISO } from "date-fns";
@@ -13,18 +13,28 @@ import IssueStatusSelector from "../../../issue/components/IssueStatusSelector/I
 import IssuePrioritySelector from "../../../issue/components/IssuePrioritySelector/IssuePrioritySelector";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { useUpdateIssueMutation } from "../../../issue/issue.api";
-import { updateIssueList } from "../../issueList.slice";
+import { setIssueList, updateIssueList } from "../../issueList.slice";
 
-export default function IssuesList({
-  rows,
-  rowCount,
-  isLoading,
-  page,
-  pageSize,
-}) {
-  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
+import { useUpdateIssueMutation } from "../../../issue/issue.api";
+import { useGetIssuesQuery } from "../../issueList.api";
+
+export default function IssuesList() {
   const dispatch = useDispatch();
+  const reporterId = useSelector((store) => store.auth.user.uid);
+  const { rows, rowCount, page, pageSize } = useSelector(
+    (store) => store.issueList
+  );
+  const getIssuesQuery = useGetIssuesQuery({
+    page,
+    pageSize,
+    sortBy: "creation_date:desc",
+    reporterId,
+  });
+  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
+
+  useEffect(() => {
+    if (getIssuesQuery.data) dispatch(setIssueList(getIssuesQuery.data));
+  }, [pageSize, page, getIssuesQuery.data]);
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
@@ -73,7 +83,7 @@ export default function IssuesList({
             variant="body2"
             sx={{
               fontWeight: 500,
-              color: "text.subtitle1",
+              color: "text.primary",
               "&:hover": {
                 color: "primary.main",
                 textDecoration: "none!important",
@@ -140,10 +150,10 @@ export default function IssuesList({
 
   return (
     <List
-      columns={columns}
       rows={rows}
       rowCount={rowCount}
-      loading={isLoading}
+      columns={columns}
+      loading={getIssuesQuery.isLoading}
       page={page}
       pageSize={pageSize}
       onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
