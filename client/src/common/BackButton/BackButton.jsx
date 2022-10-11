@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import MuiIconButton from "@mui/material/IconButton";
 import MuiGrid from "@mui/material/Grid";
 import MuiArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -11,7 +10,7 @@ const BackButton = ({ message, onClick }) => {
         variant="text"
         onClick={onClick}
         sx={{
-          color: "text.subtitle1",
+          color: "text.primary",
           padding: 0,
           fontWeight: 600,
           textTransform: "none",
@@ -22,7 +21,7 @@ const BackButton = ({ message, onClick }) => {
       </MuiIconButton>
       <MuiIconButton
         sx={{
-          color: "text.subtitle1",
+          color: "text.primary",
           padding: 0,
           fontWeight: 600,
           textTransform: "none",

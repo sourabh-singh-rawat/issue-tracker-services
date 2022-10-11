@@ -170,7 +170,7 @@ const indexRoles = async function indexProjectMemberRoles(req, res) {
 const indexStatus = async function indexProjectStatus(req, res) {
   try {
     const status = await ProjectStatus.find();
-    res.send(status.rows);
+    res.send({ rows: status.rows, rowCount: status.rowCount });
   } catch (error) {
     res.status(500).send();
   }

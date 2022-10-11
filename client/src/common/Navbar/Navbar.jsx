@@ -36,14 +36,7 @@ export default function Navbar({ onClick, loading }) {
   return (
     <MuiAppBar position="fixed" sx={appBarStyles}>
       <MuiToolbar variant="dense" sx={{ backgroundColor: "secondary.main" }}>
-        <MuiGrid container>
-          {/* <MuiGrid item sx={{ color: "text.subtitle1" }}>
-            <BackButton onClick={onClick} />
-          </MuiGrid> */}
-          {/* <MuiGrid item sx={{ color: "text.subtitle1" }}>
-            <Breadcrumbs items={breadcrumbItems} loading={loading} />
-          </MuiGrid> */}
-        </MuiGrid>
+        <MuiGrid container></MuiGrid>
         <MuiNotifications />
         <MuiTypography variant="body2">
           {auth && (

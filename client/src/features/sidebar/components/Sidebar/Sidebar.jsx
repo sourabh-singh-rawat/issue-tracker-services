@@ -4,8 +4,6 @@ import { styled } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiList from "@mui/material/List";
-import MuiListItem from "@mui/material/ListItem";
-import MuiTypography from "@mui/material/Typography";
 
 import MuiGridViewIcon from "@mui/icons-material/GridView";
 import MuiHandshakeIcon from "@mui/icons-material/HandshakeOutlined";
@@ -19,7 +17,7 @@ import SidebarListItem from "../SidebarListItem";
 export const drawerWidth = 240;
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
@@ -60,19 +58,11 @@ export default function Sidebar() {
       <MuiList>
         <MuiToolbar variant="dense" />
         <SidebarListItem
-          open
+          open={open}
           to="/"
           text="Dashboard"
           icon={<MuiGridViewIcon sx={iconStyles} />}
         />
-        <MuiListItem disablePadding sx={{ display: "block", paddingLeft: 2.5 }}>
-          <MuiTypography
-            sx={{ fontSize: "12px", fontWeight: 600, color: "GrayText" }}
-          >
-            MANAGE
-          </MuiTypography>
-        </MuiListItem>
-
         {[
           {
             to: "/projects",
@@ -101,7 +91,12 @@ export default function Sidebar() {
           },
         ].map(({ text, ...otherProps }) => {
           return (
-            <SidebarListItem key={text} open text={text} {...otherProps} />
+            <SidebarListItem
+              key={text}
+              open={open}
+              text={text}
+              {...otherProps}
+            />
           );
         })}
       </MuiList>

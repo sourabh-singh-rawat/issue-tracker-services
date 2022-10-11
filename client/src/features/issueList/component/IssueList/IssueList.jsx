@@ -18,13 +18,14 @@ import { setIssueList, updateIssueList } from "../../issueList.slice";
 import { useUpdateIssueMutation } from "../../../issue/issue.api";
 import { useGetIssuesQuery } from "../../issueList.api";
 
-export default function IssuesList() {
+export default function IssuesList({ projectId }) {
   const dispatch = useDispatch();
   const reporterId = useSelector((store) => store.auth.user.uid);
   const { rows, rowCount, page, pageSize } = useSelector(
     (store) => store.issueList
   );
   const getIssuesQuery = useGetIssuesQuery({
+    projectId,
     page,
     pageSize,
     sortBy: "creation_date:desc",
@@ -96,11 +97,6 @@ export default function IssuesList() {
       ),
     },
     {
-      field: "project_id",
-      headerName: "Project Id",
-      width: 100,
-    },
-    {
       field: "status",
       headerName: "Status",
       width: 150,
@@ -129,6 +125,11 @@ export default function IssuesList() {
       width: 150,
     },
     {
+      field: "project_id",
+      headerName: "Project Id",
+      width: 100,
+    },
+    {
       field: "creation_date",
       headerName: "Created",
       width: 125,
@@ -141,10 +142,10 @@ export default function IssuesList() {
       width: 250,
     },
     {
+      flex: 0.14,
       field: "id",
       headerName: "Issue Id",
       minWidth: 100,
-      flex: 0.14,
     },
   ];
 

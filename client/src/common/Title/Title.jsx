@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 
-import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTextField from "@mui/material/TextField";
@@ -40,7 +39,6 @@ export default function Title({
         <MuiGrid container sx={{ marginLeft: "-14px" }}>
           <MuiGrid item flexGrow={1}>
             <MuiTextField
-              autoFocus
               name="name"
               value={page.name}
               onChange={handleChange}
@@ -51,6 +49,7 @@ export default function Title({
                   fontWeight: 600,
                 },
               }}
+              autoFocus
               fullWidth
             />
           </MuiGrid>
@@ -92,31 +91,34 @@ export default function Title({
           {loading ? (
             <MuiSkeleton />
           ) : (
-            <MuiGrid item xs={12}>
-              <MuiTypography
-                variant="h4"
-                sx={{
-                  padding: "0px 14px",
-                  marginLeft: "-14px",
-                  lineHeight: 1.5,
-                  fontWeight: 600,
-                  borderRadius: "4px",
-                  ":hover": {
-                    cursor: "text",
-                    backgroundColor: "action.hover",
-                  },
-                }}
-                onClick={() => {
-                  dispatch(
-                    updateTitle({
-                      previousName: page.name,
-                      nameSelected: true,
-                    })
-                  );
-                }}
-              >
-                {page.name}
-              </MuiTypography>
+            <MuiGrid container>
+              <MuiGrid item flexGrow={1}>
+                <MuiTypography
+                  variant="h4"
+                  sx={{
+                    padding: "0px 14px",
+                    marginLeft: "-14px",
+                    lineHeight: 1.5,
+                    fontWeight: 600,
+                    borderRadius: "4px",
+                    transition: "250ms",
+                    ":hover": {
+                      cursor: "text",
+                      backgroundColor: "action.hover",
+                    },
+                  }}
+                  onClick={() => {
+                    dispatch(
+                      updateTitle({
+                        previousName: page.name,
+                        nameSelected: true,
+                      })
+                    );
+                  }}
+                >
+                  {page.name}
+                </MuiTypography>
+              </MuiGrid>
             </MuiGrid>
           )}
         </Fragment>

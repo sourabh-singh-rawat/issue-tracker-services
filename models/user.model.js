@@ -17,14 +17,14 @@ const findOneByEmail = function findOneUserByEmail(email) {
   return db.query(`SELECT * FROM users WHERE email ILIKE $1`, [email]);
 };
 
-const updateOne = function updateOneUser(uid, document) {
+const updateOne = function updateOneUser({ id, document }) {
   let query = Object.keys(document)
     .reduce((prev, cur, index) => {
       return prev + " " + cur + "=$" + (index + 1) + ",";
     }, "UPDATE users SET")
     .slice(0, -1); // removing last ,
 
-  query += " WHERE uid='" + uid + "' RETURNING *";
+  query += " WHERE id='" + id + "' RETURNING *";
 
   return db.query(query, Object.values(document));
 };

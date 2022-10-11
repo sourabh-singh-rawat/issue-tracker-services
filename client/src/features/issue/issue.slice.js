@@ -14,8 +14,8 @@ const initialState = {
     priority: 0,
   },
   options: {
-    status: { loading: true, result: [{ status: 0, message: "to do" }] },
-    priority: { loading: true, result: [{ status: 0, message: "lowest" }] },
+    status: { loading: true, rows: [{ status: 0, message: "to do" }] },
+    priority: { loading: true, rows: [{ status: 0, message: "lowest" }] },
   },
   tasks: { loading: true, rows: [], rowCount: [] },
 };
@@ -36,12 +36,12 @@ const issueSlice = createSlice({
     },
     setIssueStatus: (state, action) => {
       state.options.status.loading = false;
-      state.options.status.result = action.payload;
+      state.options.status.rows = action.payload.rows;
       return state;
     },
     setIssuePriority: (state, action) => {
       state.options.priority.loading = false;
-      state.options.priority.result = action.payload;
+      state.options.priority.rows = action.payload.rows;
       return state;
     },
     updateIssue: (state, action) => {

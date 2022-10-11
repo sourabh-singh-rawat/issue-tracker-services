@@ -87,7 +87,7 @@ const Login = () => {
         </Grid>
         {/* <Grid item xs={12}>
           <Divider>
-            <Typography variant="body2" sx={{ color: "text.subtitle1" }}>
+            <Typography variant="body2" sx={{ color: "text.primary" }}>
               Or
             </Typography>
           </Divider>

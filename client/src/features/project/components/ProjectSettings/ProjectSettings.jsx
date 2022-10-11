@@ -42,7 +42,7 @@ const ProjectSettings = () => {
 
   return (
     <TabPanel selectedTab={selectedTab} index={4}>
-      <MuiGrid container onSubmit={handleSubmit} component="form" gap="20px">
+      <MuiGrid container onSubmit={handleSubmit} component="form" gap="10px">
         <MuiGrid item xs={12}>
           <MuiGrid container>
             <MuiGrid item xs={12} md={4}>

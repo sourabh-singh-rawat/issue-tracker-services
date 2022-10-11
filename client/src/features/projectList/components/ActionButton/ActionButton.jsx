@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 
-import DeleteProjectDialog from "../DeleteProjectDialog/DeleteProjectDialog";
+import DeleteProject from "../DeleteProject";
 
 const modalStyles = {
   position: "absolute",
@@ -28,8 +28,8 @@ const ActionButton = ({ id }) => {
 
   return (
     <Fragment>
-      <Button onClick={handleClick}>
-        <MoreHoriz sx={{ color: "text.main" }} />
+      <Button onClick={handleClick} disableRipple>
+        <MoreHoriz sx={{ color: "text.primary" }} />
       </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem
@@ -38,12 +38,11 @@ const ActionButton = ({ id }) => {
             handleClose();
             navigate(`/projects/${id}/settings`);
           }}
+          disableRipple
         >
           <Typography variant="body2">Edit</Typography>
         </MenuItem>
-        <MenuItem key="delete">
-          <DeleteProjectDialog id={id} />
-        </MenuItem>
+        <DeleteProject id={id} />
       </Menu>
     </Fragment>
   );

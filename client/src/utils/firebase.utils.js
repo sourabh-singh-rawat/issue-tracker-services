@@ -43,8 +43,6 @@ export const continueWithGoogle = async (inviteToken) => {
             body: JSON.stringify({ ...decodedToken, uid }),
           }
         );
-
-        console.log(response);
       } else {
         console.log("Error signing in user");
       }

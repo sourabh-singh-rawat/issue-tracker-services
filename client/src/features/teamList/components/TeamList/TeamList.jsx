@@ -33,7 +33,7 @@ const TeamList = () => {
           <Typography
             variant="body2"
             sx={{
-              color: "text.subtitle1",
+              color: "text.primary",
               fontWeight: 600,
               "&:hover": {
                 color: "primary.main",
@@ -73,7 +73,7 @@ const TeamList = () => {
         fontSize: "inherit",
         color: "primary.text2",
         ".MuiDataGrid-cell": {
-          color: "text.subtitle1",
+          color: "text.primary",
           border: "none",
         },
         "& .MuiDataGrid-columnHeaderTitle": {

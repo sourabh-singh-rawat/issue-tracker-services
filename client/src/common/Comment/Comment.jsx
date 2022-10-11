@@ -1,4 +1,4 @@
-import { parseISO, format } from "date-fns";
+import { parseISO, format, formatDistance } from "date-fns";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiAvatar from "@mui/material/Avatar";
@@ -9,20 +9,22 @@ import DeleteComment from "../../features/issue/components/DeleteComment";
 export default function Comment({
   id,
   issue_id,
+  name,
   description,
   creation_date,
-  name,
+  photo_url,
 }) {
   return (
     <MuiGrid
       container
       sx={{
-        padding: "8px 12px",
+        paddingTop: "8px",
         borderRadius: "4px",
       }}
     >
       <MuiGrid item>
         <MuiAvatar
+          src={photo_url}
           sx={{
             width: "32px",
             height: "32px",
@@ -33,15 +35,15 @@ export default function Comment({
         </MuiAvatar>
       </MuiGrid>
       <MuiGrid item>
-        <MuiGrid container sx={{ paddingLeft: "8px" }} columnSpacing={1}>
+        <MuiGrid container sx={{ paddingLeft: "16px" }} columnSpacing={1}>
           <MuiGrid item>
             <MuiTypography variant="body2" fontWeight={600}>
               {name}
             </MuiTypography>
           </MuiGrid>
           <MuiGrid item>
-            <MuiTypography fontSize="13px" sx={{ color: "text.subtitle1" }}>
-              {format(parseISO(creation_date), "PPPp")}
+            <MuiTypography fontSize="13px" sx={{ color: "text.secondary" }}>
+              {formatDistance(parseISO(creation_date), new Date())} ago
             </MuiTypography>
           </MuiGrid>
           <MuiGrid item xs={12}>
@@ -51,7 +53,7 @@ export default function Comment({
             <Breadcrumbs separator="•">
               <MuiTypography
                 sx={{
-                  fontSize: "13px",
+                  fontSize: "14px",
                   fontWeight: 600,
                   ":hover": { cursor: "pointer" },
                 }}

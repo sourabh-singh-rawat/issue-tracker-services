@@ -39,7 +39,8 @@ const ProjectList = () => {
   }, [getStatusQuery.data]);
 
   useEffect(() => {
-    if (getProjectsQuery.data) dispatch(setProjectList(getProjectsQuery.data));
+    if (getProjectsQuery.isSuccess)
+      dispatch(setProjectList(getProjectsQuery.data));
   }, [pageSize, page, getProjectsQuery.data]);
 
   const SelectEditInputCell = ({ id, value, field }) => {
@@ -89,7 +90,7 @@ const ProjectList = () => {
             sx={{
               color: "text.primary",
               fontWeight: 500,
-              "&:hover": {
+              ":hover": {
                 color: "primary.main",
                 textDecoration: "none!important",
               },

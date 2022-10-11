@@ -13,7 +13,7 @@ const ProjectMembers = () => {
 
   return (
     <TabPanel index={2} selectedTab={selectedTab}>
-      <MuiGrid container gap="20px">
+      <MuiGrid container gap="10px">
         <MuiGrid item>
           <MuiGrid container spacing={2}>
             <MuiGrid item xs={8} md={10} display="flex">

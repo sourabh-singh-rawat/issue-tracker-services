@@ -14,7 +14,7 @@ export default function IssuePrioritySelector({
   helperText,
 }) {
   const issuePriority = useSelector(
-    (store) => store.issue.options.priority.result
+    (store) => store.issue.options.priority.rows
   );
 
   return (
@@ -34,8 +34,8 @@ export default function IssuePrioritySelector({
           size="small"
           displayEmpty
           sx={{
-            color: "text.subtitle1",
-            fontSize: "13px",
+            color: "text.primary",
+            fontSize: "12px",
             fontWeight: 600,
           }}
         >
@@ -44,8 +44,8 @@ export default function IssuePrioritySelector({
               key={priority}
               value={priority}
               sx={{
-                color: "text.subtitle1",
-                fontSize: "13px",
+                color: "text.primary",
+                fontSize: "12px",
                 fontWeight: 600,
               }}
             >

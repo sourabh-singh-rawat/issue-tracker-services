@@ -15,7 +15,7 @@ export default function List({
   const styles = {
     border: "none",
     ".MuiDataGrid-cell": {
-      color: "text.subtitle1",
+      color: "text.primary",
       border: "none",
     },
     "& .MuiDataGrid-columnHeaderTitle": {
