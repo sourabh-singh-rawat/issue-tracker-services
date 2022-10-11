@@ -76,15 +76,6 @@ const projectApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    // createProjectMember: build.mutation({
-    //   query: ({ id, payload }) => {
-    //     return {
-    //       url: `/projects/${id}/members`,
-    //       method: `POST`,
-    //       body: payload,
-    //     };
-    //   },
-    // }),
   }),
 });
 

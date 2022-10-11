@@ -23,7 +23,7 @@ export default function SidebarListItem({ open, text, icon, to }) {
   };
 
   const listLinkStyles = {
-    color: "text.subtitle1",
+    color: "text.primary",
     textDecoration: "none",
   };
 

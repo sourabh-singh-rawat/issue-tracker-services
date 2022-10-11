@@ -14,7 +14,7 @@ export default function SectionHeader({ title, subtitle, actionButton }) {
         {actionButton}
       </MuiGrid>
       <MuiGrid item>
-        <MuiTypography variant="body2" sx={{ color: "text.subtitle1" }}>
+        <MuiTypography variant="body2" sx={{ color: "text.primary" }}>
           {subtitle}
         </MuiTypography>
       </MuiGrid>

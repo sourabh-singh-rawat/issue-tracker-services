@@ -29,7 +29,7 @@ export default function MembersCard() {
             People:
           </MuiTypography>
         </MuiGrid>
-        <MuiGrid item>
+        <MuiGrid item sx={{ marginTop: "8px" }}>
           <AvatarGroup total={members.rowCount} members={members.rows} />
         </MuiGrid>
       </MuiGrid>

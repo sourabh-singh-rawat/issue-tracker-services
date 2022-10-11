@@ -1,12 +1,12 @@
-import MuiSkeleton from "@mui/material/Skeleton";
 import MuiLink from "@mui/material/Link";
+import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
 export default function Breadcrumbs({ items, loading }) {
   return (
     <MuiBreadcrumbs separator="/">
-      {items.map(({ text, onClick }, index) => {
+      {items.map(({ text, onClick }) => {
         return (
           <div key={Math.random()}>
             {loading ? (

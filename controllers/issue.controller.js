@@ -23,7 +23,7 @@ const index = async function indexIssues(req, res) {
   const { uid } = req.user;
 
   // filtering
-  const { status, priority, project_id, assigned_to } = req.query;
+  const { status, priority, projectId, assigned_to } = req.query;
 
   // sorting
   const { sort_by } = req.query;
@@ -40,11 +40,12 @@ const index = async function indexIssues(req, res) {
   try {
     const reporter = (await User.findOne(uid)).rows[0];
     const options = {
+      project_id: projectId,
       status,
       priority,
-      project_id,
       assigned_to,
     };
+
     const issues = (
       await Issue.find({
         reporter_id: reporter.id,
@@ -59,6 +60,7 @@ const index = async function indexIssues(req, res) {
 
     const rowCount = (
       await Issue.rowCount({
+        project_id: projectId,
         reporter_id: reporter.id,
         options,
         pagingOptions: {},
@@ -76,7 +78,7 @@ const index = async function indexIssues(req, res) {
 const indexStatus = async function indexIssueStatus(req, res) {
   try {
     const issueStatus = await IssueStatus.find();
-    res.send(issueStatus.rows);
+    res.send({ rows: issueStatus.rows, rowCount: issueStatus.rowCount });
   } catch (error) {
     res.status(500).send();
   }
@@ -85,7 +87,7 @@ const indexStatus = async function indexIssueStatus(req, res) {
 const indexPriority = async function indexIssuePriority(req, res) {
   try {
     const issuePriority = await IssuePriority.find();
-    res.send(issuePriority.rows);
+    res.send({ rows: issuePriority.rows, rowCount: issuePriority.rowCount });
   } catch (error) {
     res.status(500).send();
   }

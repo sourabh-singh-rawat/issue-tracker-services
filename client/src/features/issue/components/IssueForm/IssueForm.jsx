@@ -18,6 +18,7 @@ import IssuePrioritySelector from "../IssuePrioritySelector/IssuePrioritySelecto
 import { useCreateIssueMutation } from "../../issue.api";
 import { useGetProjectsQuery } from "../../../projectList/projectList.api";
 import { useGetCollaboratorsQuery } from "../../../collaboratorList/collaboratorList.api";
+import { Avatar } from "@mui/material";
 
 export default function IssueForm() {
   const { id } = useParams();
@@ -161,7 +162,6 @@ export default function IssueForm() {
                 variant="body2"
                 sx={{
                   color: "primary.text",
-                  paddingBottom: 1,
                   fontWeight: 600,
                 }}
               >
@@ -179,12 +179,29 @@ export default function IssueForm() {
                     });
                   }
                 }}
-                getOptionLabel={(option) => {
-                  return `${option.user_id}`;
+                renderOption={(props, option) => {
+                  return (
+                    <MuiGrid container {...props}>
+                      <MuiGrid item>
+                        <Avatar
+                          src={option.photo_url}
+                          sx={{ width: "24px", height: "24px" }}
+                        />
+                      </MuiGrid>
+                      <MuiGrid item sx={{ paddingLeft: "8px" }}>
+                        <MuiTypography variant="body2">
+                          {option.name}
+                        </MuiTypography>
+                      </MuiGrid>
+                    </MuiGrid>
+                  );
                 }}
-                renderInput={(params) => (
-                  <TextField name="assigned_to" {...params} />
-                )}
+                getOptionLabel={(option) => {
+                  return option.name;
+                }}
+                renderInput={(params) => {
+                  return <TextField name="assigned_to" {...params} />;
+                }}
                 fullWidth
                 required
               />

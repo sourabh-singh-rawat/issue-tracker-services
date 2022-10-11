@@ -16,6 +16,7 @@ import {
   useGetProjectQuery,
   useUpdateProjectMutation,
 } from "../../project.api";
+import ProjectStatusSelector from "../ProjectStatusSelector/ProjectStatusSelector";
 
 const Project = () => {
   const { id } = useParams();
@@ -28,13 +29,6 @@ const Project = () => {
 
   const getProjectQuery = useGetProjectQuery(id);
   const project = useSelector((store) => store.project.info);
-
-  const updateDescriptionQuery = () => {
-    updateProjectMutation({
-      id,
-      payload: { description: project.description },
-    });
-  };
 
   const mapPathToIndex = {
     overview: 0,
@@ -78,10 +72,10 @@ const Project = () => {
   useEffect(() => {
     if (getProjectQuery.data)
       dispatch(setProject({ ...getProjectQuery.data, loading: false }));
-  }, [getProjectQuery.isSuccess]);
+  }, [getProjectQuery.data]);
 
   return (
-    <MuiGrid container gap="20px">
+    <MuiGrid container spacing="12px">
       <MuiGrid item xs={12}>
         <PageTitleSection
           page={project}
@@ -101,13 +95,18 @@ const Project = () => {
               text: tabName,
             },
           ]}
+          statusSelector={
+            <ProjectStatusSelector
+              value={project.status}
+              handleChange={(e) => {
+                const { name, value } = e.target;
+                updateProjectMutation({ id, payload: { status: value } });
+                dispatch(updateProject({ status: value }));
+              }}
+              variant="dense"
+            />
+          }
         />
-        {/* <PageDescription
-          page={project}
-          updateDescription={updateProject}
-          updateDescriptionQuery={updateDescriptionQuery}
-          loading={project.loading}
-        /> */}
       </MuiGrid>
       <MuiGrid item xs={12}>
         <Tabs value={selectedTab} onChange={handleChange}>

@@ -65,8 +65,10 @@ const ProjectOverview = () => {
           <MembersCard />
         </MuiGrid>
         <MuiGrid item sm={12}>
-          <IssueStats issuesStatusCount={issuesStatusCount} />
-          <MuiDivider />
+          <IssueStats
+            loading={issuesStatusCount.loading}
+            issuesStatusCount={issuesStatusCount.rows}
+          />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>

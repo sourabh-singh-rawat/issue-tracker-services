@@ -15,15 +15,18 @@ const initialState = {
   },
   members: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
   issues: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
-  issuesStatusCount: [
-    { status: 0, count: 0 },
-    { status: 1, count: 0 },
-    { status: 2, count: 0 },
-    { status: 3, count: 0 },
-  ],
+  issuesStatusCount: {
+    loading: true,
+    rows: [
+      { status: 0, count: 0 },
+      { status: 1, count: 0 },
+      { status: 2, count: 0 },
+      { status: 3, count: 0 },
+    ],
+  },
   options: {
-    status: { loading: true, result: [{ code: 0, message: "Not Started" }] },
-    roles: { loading: true, result: [{ code: 0, message: "Member" }] },
+    status: { loading: true, rows: [{ code: 0, message: "Not Started" }] },
+    roles: { loading: true, rows: [{ code: 0, message: "Member" }] },
   },
 };
 
@@ -52,16 +55,17 @@ const projectSlice = createSlice({
       };
     },
     setIssueStatusCount: (state, action) => {
-      state.issuesStatusCount = action.payload;
+      state.issuesStatusCount.rows = action.payload;
+      state.issuesStatusCount.loading = false;
       return state;
     },
     setStatus: (state, action) => {
       state.options.status.loading = false;
-      state.options.status.result = action.payload;
+      state.options.status.rows = action.payload.rows;
       return state;
     },
     setMemberRoles: (state, action) => {
-      state.options.roles = action.payload;
+      state.options.roles.rows = action.payload.rows;
       return state;
     },
   },

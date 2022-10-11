@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(255),
   email VARCHAR(255) UNIQUE NOT NULL,
   uid VARCHAR(255) UNIQUE NOT NULL,
+  photo_url VARCHAR(255),
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (id)
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS issues (
   FOREIGN KEY (status) REFERENCES issue_status(status),
   FOREIGN KEY (priority) REFERENCES issue_priority(priority),
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-  FOREIGN KEY (reporter_id) REFERENCES  users(id) ON DELETE CASCADE,
+  FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE CASCADE
 );
 

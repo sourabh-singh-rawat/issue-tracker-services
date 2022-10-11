@@ -29,7 +29,7 @@ function IssueComments() {
   }, [getIssueCommentsQuery.data]);
 
   return (
-    <MuiGrid container>
+    <MuiGrid container spacing={1}>
       <MuiGrid item xs={12}>
         <AddComment />
       </MuiGrid>

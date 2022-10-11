@@ -6,13 +6,15 @@ export default function Tabs(props) {
       {...props}
       textColor="inherit"
       sx={{
+        borderTop: "1px solid #e3e4e6",
         borderBottom: "1px solid #e3e4e6",
+
         ".MuiButtonBase-root": {
           padding: 0,
           marginRight: 4,
           minWidth: "auto",
           opacity: 1,
-          color: "text.subtitle1",
+          color: "text.primary",
           fontWeight: 600,
         },
         ".Mui-selected": {

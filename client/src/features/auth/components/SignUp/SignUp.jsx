@@ -91,7 +91,7 @@ export default function SignUp() {
         </MuiGrid>
         {/* <MuiGrid item xs={12}>
           <MuiDivider>
-            <MuiTypography variant="body2" sx={{ color: "text.subtitle1" }}>
+            <MuiTypography variant="body2" sx={{ color: "text.primary" }}>
               Or sign up with your email
             </MuiTypography>
           </MuiDivider>

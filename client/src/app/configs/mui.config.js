@@ -21,7 +21,7 @@ const themeConfig = {
       dark: "#F56200",
     },
     background: {
-      paper: "#FFF",
+      paper: "#fbf7f4",
       default: "#FFF",
     },
     action: {

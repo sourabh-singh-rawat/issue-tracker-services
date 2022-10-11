@@ -15,7 +15,7 @@ const insertOne = function insertOneComment({
 
 const find = function findComments(issueId) {
   return db.query(
-    `SELECT issue_comments.id, name, issue_id, description,  user_id, issue_comments.creation_date 
+    `SELECT issue_comments.id, name, issue_id, description, photo_url, user_id, issue_comments.creation_date 
      FROM issue_comments INNER JOIN users
      ON issue_comments.user_id = users.id
      WHERE issue_id=$1

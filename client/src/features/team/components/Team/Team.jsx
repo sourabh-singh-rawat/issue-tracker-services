@@ -60,7 +60,7 @@ const Team = () => {
             startIcon={<MuiArrowBackIcon />}
             onClick={() => navigate("/teams")}
             sx={{
-              color: "text.subtitle1",
+              color: "text.primary",
               fontWeight: 600,
               textTransform: "none",
             }}

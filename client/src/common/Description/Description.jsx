@@ -65,7 +65,8 @@ export default function Description({
                   padding: "8px 14px",
                   marginLeft: "-14px",
                   borderRadius: "4px",
-                  color: "text.subtitle1",
+                  color: "text.primary",
+                  transition: "250ms",
                   ":hover": { backgroundColor: "action.hover" },
                 }}
               >

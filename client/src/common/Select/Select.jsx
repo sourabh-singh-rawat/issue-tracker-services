@@ -15,7 +15,7 @@ export default function Select({ title, items, helperText, ...otherProps }) {
         <MuiSelect
           displayEmpty
           size="small"
-          sx={{ color: "text.subtitle1", fontSize: "14px", fontWeight: 600 }}
+          sx={{ color: "text.primary", fontSize: "14px", fontWeight: 600 }}
           {...otherProps}
         >
           {items.map(({ code, message }, index) => (
@@ -23,7 +23,7 @@ export default function Select({ title, items, helperText, ...otherProps }) {
               key={code}
               value={code}
               sx={{
-                color: "text.subtitle1",
+                color: "text.primary",
                 fontSize: "14px",
                 fontWeight: 600,
               }}

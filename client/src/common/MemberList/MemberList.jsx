@@ -1,11 +1,13 @@
 import { Fragment, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import MuiAvatar from "@mui/material/Avatar";
+import MuiTypography from "@mui/material/Typography";
+
+import List from "../List";
+
 import { setMembers } from "../../features/project/project.slice";
 import { useGetProjectMembersQuery } from "../../features/project/project.api";
-import MuiAvatar from "@mui/material/Avatar";
-import List from "../List";
-import MuiTypography from "@mui/material/Typography";
 
 export default function MemberList() {
   const { id } = useParams();
@@ -17,7 +19,7 @@ export default function MemberList() {
 
   useEffect(() => {
     if (projectMembers.data) dispatch(setMembers(projectMembers.data));
-  }, [projectMembers.isSuccess]);
+  }, [projectMembers.data]);
 
   const columns = [
     {
@@ -25,10 +27,11 @@ export default function MemberList() {
       field: "name",
       headerName: "Name",
       minWidth: 300,
-      renderCell: ({ id, value }) => {
+      renderCell: ({ id, value, row: { photo_url } }) => {
         return (
           <Fragment>
             <MuiAvatar
+              src={photo_url}
               sx={{ width: "32px", height: "32px", marginRight: "10px" }}
             >
               {value.match(/\b(\w)/g)[0]}

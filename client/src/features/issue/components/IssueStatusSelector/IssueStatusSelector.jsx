@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
+
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
@@ -12,7 +13,7 @@ export default function IssueStatusSelector({
   title,
   helperText,
 }) {
-  const issueStatus = useSelector((store) => store.issue.options.status.result);
+  const issueStatus = useSelector((store) => store.issue.options.status.rows);
 
   return (
     <Fragment>
@@ -33,7 +34,7 @@ export default function IssueStatusSelector({
           sx={{
             fontSize: "13px",
             fontWeight: 600,
-            color: "text.subtitle1",
+            color: "text.primary",
           }}
         >
           {issueStatus.map(({ status, message }) => {
@@ -44,7 +45,7 @@ export default function IssueStatusSelector({
                 sx={{
                   fontSize: "13px",
                   fontWeight: 600,
-                  color: "text.subtitle1",
+                  color: "text.primary",
                 }}
               >
                 {message.toUpperCase()}

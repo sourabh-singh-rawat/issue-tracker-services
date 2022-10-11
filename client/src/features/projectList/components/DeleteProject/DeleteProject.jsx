@@ -7,11 +7,12 @@ import MuiDialogContent from "@mui/material/DialogContent";
 import MuiDialogContentText from "@mui/material/DialogContentText";
 import MuiDialogTitle from "@mui/material/DialogTitle";
 import MuiTypography from "@mui/material/Typography";
+import MuiMenuItem from "@mui/material/MenuItem";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { useDeleteProjectMutation } from "../../../project/project.api";
 
-const DeleteProjectDialog = ({ id }) => {
+export default function DeleteProject({ id }) {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -24,9 +25,9 @@ const DeleteProjectDialog = ({ id }) => {
 
   return (
     <Fragment>
-      <MuiTypography variant="body2" onClick={handleClickOpen}>
-        Delete
-      </MuiTypography>
+      <MuiMenuItem disableRipple onClick={handleClickOpen}>
+        <MuiTypography variant="body2">Delete</MuiTypography>
+      </MuiMenuItem>
       <MuiDialog open={open} onClose={handleClose}>
         <MuiDialogTitle>
           Are you sure you want to delete this project?
@@ -34,7 +35,7 @@ const DeleteProjectDialog = ({ id }) => {
         <MuiDialogContent>
           <MuiDialogContentText component="div">
             <MuiTypography variant="body2">
-              This action is irreversible: {id}
+              Deleting a project is irreversible
             </MuiTypography>
           </MuiDialogContentText>
         </MuiDialogContent>
@@ -47,12 +48,10 @@ const DeleteProjectDialog = ({ id }) => {
             }}
             autoFocus
           >
-            Agree
+            Delete
           </MuiButton>
         </MuiDialogActions>
       </MuiDialog>
     </Fragment>
   );
-};
-
-export default DeleteProjectDialog;
+}

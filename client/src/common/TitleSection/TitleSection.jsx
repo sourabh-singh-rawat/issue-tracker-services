@@ -1,39 +1,41 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { format, formatISO, parseISO, parse } from "date-fns";
+import { useLocation } from "react-router-dom";
+import { format, formatISO, parseISO } from "date-fns";
 import { enIN } from "date-fns/esm/locale";
 
-import { IconButton, Skeleton } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-import DeleteIcon from "@mui/icons-material/Delete";
-
 import Title from "../Title/Title";
+import ProjectStatusSelector from "../../features/project/components/ProjectStatusSelector/ProjectStatusSelector";
 
 export default function TitleSection({
   page,
+  loading,
   updateTitle,
   updateTitleQuery,
-  loading,
   breadcrumbItems,
+  statusSelector,
 }) {
   const location = useLocation();
   const type = location.pathname.split("/")[1];
 
   return (
-    <MuiGrid container gap="0">
+    <MuiGrid container>
       <MuiGrid item xs={12}>
         <Title
-          loading={loading}
           page={page}
+          loading={loading}
           updateTitle={updateTitle}
           updateTitleQuery={updateTitleQuery}
           breadcrumbItems={breadcrumbItems}
+          statusSelector={statusSelector}
         />
       </MuiGrid>
       <MuiGrid item xs={12} sx={{ color: "text.secondary" }}>
         <MuiBreadcrumbs separator="•">
+          {loading ? <Skeleton width="80px" /> : statusSelector}
           {loading ? (
             <Skeleton width="80px" />
           ) : (
