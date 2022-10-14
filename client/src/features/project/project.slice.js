@@ -57,15 +57,19 @@ const projectSlice = createSlice({
     setIssueStatusCount: (state, action) => {
       state.issuesStatusCount.rows = action.payload;
       state.issuesStatusCount.loading = false;
+
       return state;
     },
     setStatus: (state, action) => {
       state.options.status.loading = false;
       state.options.status.rows = action.payload.rows;
+
       return state;
     },
     setMemberRoles: (state, action) => {
       state.options.roles.rows = action.payload.rows;
+      state.options.roles.rowCount = action.payload.rowCount;
+
       return state;
     },
   },

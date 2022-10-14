@@ -11,7 +11,7 @@ const insertOne = (projectId, userId) => {
 
 const findByProjectId = (projectId) => {
   return db.query(
-    `SELECT user_id, project_id, name, email, role, photo_url
+    `SELECT user_id, email, photo_url, name, role, project_members.creation_date
      FROM project_members 
      JOIN users ON project_members.user_id = users.id 
      WHERE project_id = $1`,

@@ -1,6 +1,5 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
@@ -12,7 +11,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useCreateIssueCommentMutation } from "../../issue.api";
 
 export default function AddComment() {
-  const dispatch = useDispatch();
   const { id } = useParams();
   const [commentBoxSelected, setCommentBoxSelected] = useState(false);
   const [createComment, { isSuccess }] = useCreateIssueCommentMutation();
@@ -26,7 +24,6 @@ export default function AddComment() {
   };
 
   const handleSave = (e) => {
-    // Don't like the title, change it to something else because bernardo is not leaving
     if (formFields.description.length > 0) {
       const { description } = formFields;
       createComment({ issue_id: id, description });

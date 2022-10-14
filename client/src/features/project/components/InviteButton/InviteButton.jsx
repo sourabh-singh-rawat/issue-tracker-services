@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,7 +13,6 @@ import MuiAddIcon from "@mui/icons-material/Add";
 import Select from "../../../../common/Select";
 
 import { setMemberRoles } from "../../project.slice";
-
 import { useGetRolesQuery, useSendInviteMutation } from "../../project.api";
 
 const style = {
@@ -31,7 +30,7 @@ const style = {
 const InviteButton = () => {
   const dispatch = useDispatch();
   const roles = useGetRolesQuery();
-  const memberRoles = useSelector((store) => store.project.options.roles);
+  const memberRoles = useSelector((store) => store.project.options.roles.rows);
   const { id } = useParams();
   const [sendInvite] = useSendInviteMutation();
 

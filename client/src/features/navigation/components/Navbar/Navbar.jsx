@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
@@ -12,10 +12,10 @@ import MuiIconButton from "@mui/material/IconButton";
 
 import MuiAvatar from "@mui/material/Avatar";
 import MuiLogoutIcon from "@mui/icons-material/Logout";
-import MuiAccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import MuiNotifications from "@mui/icons-material/Notifications";
+import MuiAccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 
-import { signOutUser } from "../../utils/firebase.utils";
+import { signOutUser } from "../../../../utils/firebase.utils";
 
 const appBarStyles = {
   width: "100%",

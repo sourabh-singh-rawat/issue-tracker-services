@@ -16,14 +16,15 @@ export default function IssueCard({ title, count, loading }) {
       ) : (
         <MuiBox
           sx={{
+            cursor: "pointer",
             padding: "16px",
+            minHeight: "60px",
             border: "1px solid #E3E4E6",
             borderRadius: "8px",
-            cursor: "pointer",
             transition: "500ms",
-            minHeight: "60px",
             ":hover": {
               border: "1px solid #CABBA5",
+              boxShadow: 4,
             },
           }}
         >

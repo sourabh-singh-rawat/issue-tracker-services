@@ -11,39 +11,38 @@ import { Fragment } from "react";
 export default function DatePicker({
   name,
   title,
-  minimized,
+  value,
+  onChange,
   handleChange,
   helperText,
-  ...otherProps
 }) {
   return (
     <Fragment>
-      {!minimized && (
-        <MuiTypography
-          variant="body2"
-          sx={{
-            color: "primary.text",
-            fontWeight: 600,
-            paddingBottom: 1,
-          }}
-        >
-          {title}
-        </MuiTypography>
-      )}
+      <MuiTypography
+        variant="body2"
+        sx={{
+          color: "primary.text",
+          fontWeight: 600,
+          // paddingBottom: 1,
+        }}
+      >
+        {title}
+      </MuiTypography>
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
         <MuiDatePicker
+          onChange={onChange}
+          value={value}
           renderInput={(params) => (
             <MuiTextField
+              fullWidth
               size="small"
+              variant="outlined"
               name={name}
               onChange={handleChange}
-              variant={!minimized ? "outlined" : "standard"}
-              fullWidth
               sx={{ ".MuiInputBase-input": { fontSize: "14px" } }}
               {...params}
             />
           )}
-          {...otherProps}
         />
       </LocalizationProvider>
       <MuiFormHelperText>

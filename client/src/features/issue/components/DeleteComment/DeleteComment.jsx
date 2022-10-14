@@ -24,7 +24,7 @@ export default function ({ id, issue_id }) {
         variant="body2"
         onClick={handleOpen}
         sx={{
-          fontSize: "14px",
+          fontSize: "13px",
           fontWeight: 600,
           ":hover": { cursor: "pointer" },
         }}

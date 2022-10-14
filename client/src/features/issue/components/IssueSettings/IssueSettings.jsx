@@ -27,7 +27,7 @@ import {
 export default function IssueSettings() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
+  const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
   const [selectedTab] = useOutletContext();
   const status = useGetIssuesStatusQuery();
   const priority = useGetIssuesPriorityQuery();
@@ -41,9 +41,9 @@ export default function IssueSettings() {
     e.preventDefault();
 
     const { name, description, status, priority, due_date, reporter } = issue;
-    updateIssueQuery({
+    updateIssueMutation({
       id,
-      payload: { name, description, status, priority, due_date, reporter },
+      body: { name, description, status, priority, due_date, reporter },
     });
   };
 

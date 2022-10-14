@@ -59,7 +59,7 @@ export default function Issue() {
   };
 
   return (
-    <MuiGrid container gap="20px">
+    <MuiGrid container spacing={2}>
       <MuiGrid item xs={12}>
         <TitleSection
           breadcrumbItems={[

@@ -75,7 +75,7 @@ const Project = () => {
   }, [getProjectQuery.data]);
 
   return (
-    <MuiGrid container spacing="12px">
+    <MuiGrid container spacing={2}>
       <MuiGrid item xs={12}>
         <PageTitleSection
           page={project}

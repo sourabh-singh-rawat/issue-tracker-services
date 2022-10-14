@@ -49,7 +49,7 @@ const ProjectOverview = () => {
 
   return (
     <TabPanel selectedTab={selectedTab} index={0}>
-      <MuiGrid container spacing={4}>
+      <MuiGrid container spacing="16px">
         <MuiGrid item xs={12} sm={12} md={6}>
           <MuiTypography variant="body2" fontWeight={600}>
             Description:

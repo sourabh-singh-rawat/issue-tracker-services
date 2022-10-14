@@ -1,6 +1,10 @@
 import { Fragment, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
+import { format, formatISO, parseISO } from "date-fns";
+import { enIN } from "date-fns/locale";
+
 import MuiAvatar from "@mui/material/Avatar";
 import MuiTypography from "@mui/material/Typography";
 
@@ -26,7 +30,7 @@ export default function MemberList() {
       flex: 0.3,
       field: "name",
       headerName: "Name",
-      minWidth: 300,
+      minWidth: 200,
       renderCell: ({ id, value, row: { photo_url } }) => {
         return (
           <Fragment>
@@ -44,7 +48,7 @@ export default function MemberList() {
                   fontWeight: 500,
                   "&:hover": {
                     color: "primary.main",
-                    textDecoration: "none!important",
+                    textDecoration: "none !important",
                   },
                 }}
               >
@@ -59,7 +63,15 @@ export default function MemberList() {
       flex: 0.3,
       field: "email",
       headerName: "Email",
-      minWidth: 300,
+      minWidth: 200,
+    },
+    {
+      field: "creation_date",
+      headerName: "Creation Date",
+      minWidth: 200,
+      renderCell: ({ value }) => {
+        return format(parseISO(value), "PP", { locale: enIN });
+      },
     },
     { field: "role", headerName: "Role", minWidth: 200 },
   ];

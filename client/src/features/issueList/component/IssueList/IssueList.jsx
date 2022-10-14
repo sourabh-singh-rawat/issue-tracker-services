@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { enIN } from "date-fns/locale";
 import { format, parseISO } from "date-fns";
+import { enIN } from "date-fns/locale";
 import { useGridApiContext } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 
@@ -31,7 +31,7 @@ export default function IssuesList({ projectId }) {
     sortBy: "creation_date:desc",
     reporterId,
   });
-  const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
+  const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
 
   useEffect(() => {
     if (getIssuesQuery.data) dispatch(setIssueList(getIssuesQuery.data));
@@ -48,7 +48,10 @@ export default function IssuesList({ projectId }) {
         value: event.target.value,
       });
 
-      await updateIssueQuery({ id, payload: { [field]: event.target.value } });
+      await updateIssueMutation({
+        id,
+        body: { [field]: event.target.value },
+      });
 
       if (isValid) apiRef.current.stopCellEditMode({ id, field });
     };

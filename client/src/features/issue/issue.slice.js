@@ -30,18 +30,29 @@ const issueSlice = createSlice({
       return state;
     },
     setComments: (state, action) => {
-      state.comments = { ...state.comments, ...action.payload, loading: false };
+      state.comments.rows = action.payload.rows;
+      state.comments.rowCount = action.payload.rowCount;
+      state.comments.loading = false;
+
+      return state;
+    },
+    setTasks: (state, action) => {
+      state.tasks.rows = action.payload.rows;
+      state.tasks.rowCount = action.payload.rowCount;
+      state.tasks.loading = false;
 
       return state;
     },
     setIssueStatus: (state, action) => {
       state.options.status.loading = false;
       state.options.status.rows = action.payload.rows;
+
       return state;
     },
     setIssuePriority: (state, action) => {
       state.options.priority.loading = false;
       state.options.priority.rows = action.payload.rows;
+
       return state;
     },
     updateIssue: (state, action) => {
@@ -57,5 +68,6 @@ export const {
   setIssueStatus,
   setIssuePriority,
   updateIssue,
+  setTasks,
 } = issueSlice.actions;
 export default issueSlice.reducer;
