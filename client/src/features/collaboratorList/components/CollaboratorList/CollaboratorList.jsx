@@ -1,5 +1,9 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+import MuiTypography from "@mui/material/Typography";
+import MuiAvatar from "@mui/material/Avatar";
 
 import List from "../../../../common/List";
 
@@ -17,22 +21,54 @@ const CollaboratorList = () => {
   const { page, pageSize, rowCount } = useSelector(
     (store) => store.collaboratorList
   );
-  const { data, isLoading } = useGetCollaboratorsQuery();
+  const getCollaboratorsQuery = useGetCollaboratorsQuery();
   const columns = [
-    { field: "name", headerName: "Name", flex: 0.45 },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 0.45,
+      renderCell: ({ id, value, row: { photo_url } }) => {
+        return (
+          <Fragment>
+            <MuiAvatar
+              src={photo_url}
+              sx={{ width: "32px", height: "32px", marginRight: "10px" }}
+            >
+              {value.match(/\b(\w)/g)[0]}
+            </MuiAvatar>
+            <Link to={`/profile/${id}`} style={{ textDecoration: "none" }}>
+              <MuiTypography
+                variant="body2"
+                sx={{
+                  color: "text.primary",
+                  fontWeight: 500,
+                  "&:hover": {
+                    color: "primary.main",
+                    textDecoration: "none!important",
+                  },
+                }}
+              >
+                {value}
+              </MuiTypography>
+            </Link>
+          </Fragment>
+        );
+      },
+    },
     { field: "email", headerName: "Email", flex: 0.3 },
   ];
 
   useEffect(() => {
-    if (data) dispatch(setCollaboratorList(data));
-  }, [isLoading]);
+    if (getCollaboratorsQuery.data)
+      dispatch(setCollaboratorList(getCollaboratorsQuery.data));
+  }, [getCollaboratorsQuery.isSuccess]);
 
   return (
     <List
       rows={rows}
       rowCount={rowCount}
       columns={columns}
-      loading={isLoading}
+      loading={getCollaboratorsQuery.isLoading}
       page={page}
       pageSize={pageSize}
       onPageChange={(newPage) =>

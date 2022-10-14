@@ -189,10 +189,17 @@ const destroyComment = async function deleteComment(req, res) {
 
 const createTask = async function createIssueTask(req, res) {
   const { uid } = req.user;
-  const { description, issue_id } = req.body;
+  const { issueId, dueDate, description, completed } = req.body;
 
   try {
-    const task = (await IssueTask.insertOne({ description, issue_id })).rows[0];
+    const task = (
+      await IssueTask.insertOne({
+        issueId,
+        dueDate,
+        description,
+        completed,
+      })
+    ).rows[0];
     res.send(task);
   } catch (error) {
     res.status(500).send(error);
@@ -227,8 +234,8 @@ const indexTasks = async function indexIssueTasks(req, res) {
   const { id } = req.params;
 
   try {
-    const tasks = (await IssueTask.find(id)).rows;
-    res.send(tasks);
+    const tasks = await IssueTask.find(id);
+    res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
   } catch (error) {
     res.status(500).send();
   }

@@ -1,10 +1,15 @@
 import db from "../services/db.service.js";
 
-const insertOne = function InsertOneIssueTask({ description, issue_id }) {
+const insertOne = function InsertOneIssueTask({
+  issueId,
+  dueDate,
+  description,
+  completed,
+}) {
   return db.query(
-    `INSERT INTO issue_tasks (description, issue_id) VALUES ($1, $2)
+    `INSERT INTO issue_tasks (issue_id, due_date, description, completed) VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [description, issue_id]
+    [issueId, dueDate, description, completed]
   );
 };
 

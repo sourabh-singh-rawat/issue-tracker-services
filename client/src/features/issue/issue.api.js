@@ -20,11 +20,6 @@ const issueApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    getIssueTasks: build.query({
-      query: (id) => {
-        return `/issues/${id}/tasks`;
-      },
-    }),
     getIssue: build.query({
       query: (id) => {
         return `/issues/${id}`;
@@ -41,11 +36,11 @@ const issueApiSlice = apiSlice.injectEndpoints({
       },
     }),
     updateIssue: build.mutation({
-      query: ({ id, payload }) => {
+      query: ({ id, body }) => {
         return {
           url: `issues/${id}`,
           method: "PATCH",
-          body: payload,
+          body,
         };
       },
     }),
@@ -56,11 +51,11 @@ const issueApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Comment"],
     }),
     createIssueComment: build.mutation({
-      query: (payload) => {
+      query: (body) => {
         return {
           url: `/issues/comments`,
           method: "POST",
-          body: payload,
+          body,
         };
       },
       invalidatesTags: ["Comment"],
@@ -74,18 +69,36 @@ const issueApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Comment"],
     }),
+    getIssueTasks: build.query({
+      query: (id) => {
+        return `/issues/${id}/tasks`;
+      },
+      providesTags: ["Task"],
+    }),
+    createIssueTask: build.mutation({
+      query: (body) => {
+        return {
+          url: "/issues/tasks",
+          method: "POST",
+          body,
+        };
+      },
+      invalidatesTags: ["Task"],
+    }),
   }),
 });
 
 export const {
   useCreateIssueMutation,
-  useCreateIssueTaskMutation,
   useGetIssueQuery,
-  useGetIssueTasksQuery,
   useGetIssuesStatusQuery,
   useGetIssuesPriorityQuery,
   useUpdateIssueMutation,
+
   useCreateIssueCommentMutation,
   useGetIssueCommentsQuery,
   useDeleteCommentMutation,
+
+  useGetIssueTasksQuery,
+  useCreateIssueTaskMutation,
 } = issueApiSlice;

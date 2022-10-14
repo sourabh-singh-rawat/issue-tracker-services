@@ -1,11 +1,11 @@
 -- DATABASE
 -- CREATE DATABASE "issue-tracker";
+-- TRUNCATE issues, issue_tasks, issue_comments, projects, project_members;
 
 -- EXTENSION
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   
 
 -- TABLES
--- Teams
 CREATE TABLE IF NOT EXISTS teams (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS teams (
   PRIMARY KEY (id)
 );
 
--- Users
 CREATE TABLE IF NOT EXISTS users (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
@@ -27,7 +26,6 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY (id)
 );
 
--- Projects
 CREATE TABLE IF NOT EXISTS project_status (
   status INTEGER UNIQUE,
   message VARCHAR (20)
@@ -52,7 +50,6 @@ CREATE TABLE IF NOT EXISTS projects (
   FOREIGN KEY (owner_uid) REFERENCES users(id)
 );
 
--- Issues
 CREATE TABLE IF NOT EXISTS issue_status (
   status INTEGER UNIQUE,
   message VARCHAR(20)
@@ -76,7 +73,6 @@ CREATE TABLE IF NOT EXISTS issues (
   status INTEGER,
   priority INTEGER,
   reporter_id uuid NOT NULL,
-  assigned_to uuid,
   project_id uuid,
   team_id uuid,
   due_date TIMESTAMP,
@@ -87,21 +83,27 @@ CREATE TABLE IF NOT EXISTS issues (
   FOREIGN KEY (priority) REFERENCES issue_priority(priority),
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
   FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Project members
+CREATE TABLE IF NOT EXISTS issue_assignee (
+  issue_id uuid,
+  assignee_id uuid,
+
+  FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS project_members (
     project_id uuid,
     user_id uuid,
     role INTEGER,
+    creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (user_id, project_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE 
 );
 
--- Team members
 CREATE TABLE IF NOT EXISTS roles (
   code INTEGER,
   message VARCHAR(20)
@@ -119,7 +121,6 @@ CREATE TABLE IF NOT EXISTS  team_members (
     FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
 
--- Issue Comments
 CREATE TABLE IF NOT EXISTS issue_comments (
   id uuid DEFAULT uuid_generate_v4(),
   description VARCHAR(255),
@@ -130,15 +131,13 @@ CREATE TABLE IF NOT EXISTS issue_comments (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Issue Tasks
 CREATE TABLE issue_tasks (
   id uuid DEFAULT uuid_generate_v4(),
   issue_id uuid,
-  name VARCHAR(255),
   description VARCHAR(255),
   due_date TIMESTAMP WITH TIME ZONE,
   assigned_to uuid,
-  status BOOLEAN,
+  completed BOOLEAN,
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,

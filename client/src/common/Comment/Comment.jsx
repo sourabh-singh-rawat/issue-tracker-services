@@ -1,4 +1,4 @@
-import { parseISO, format, formatDistance } from "date-fns";
+import { parseISO, formatDistance } from "date-fns";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiAvatar from "@mui/material/Avatar";
@@ -11,31 +11,38 @@ export default function Comment({
   issue_id,
   name,
   description,
-  creation_date,
   photo_url,
+  creation_date,
 }) {
   return (
     <MuiGrid
       container
       sx={{
-        paddingTop: "8px",
         borderRadius: "4px",
+        border: "1px solid #E3E4E6",
+        padding: "8px 8px 8px 12px",
       }}
     >
-      <MuiGrid item>
-        <MuiAvatar
-          src={photo_url}
-          sx={{
-            width: "32px",
-            height: "32px",
-            backgroundColor: "primary.main",
-          }}
+      <MuiGrid item xs={12}>
+        <MuiGrid
+          container
+          columnSpacing={1}
+          sx={{ display: "flex", alignItems: "center" }}
         >
-          <MuiTypography variant="body2">{name.match(/\b(\w)/g)}</MuiTypography>
-        </MuiAvatar>
-      </MuiGrid>
-      <MuiGrid item>
-        <MuiGrid container sx={{ paddingLeft: "16px" }} columnSpacing={1}>
+          <MuiGrid item>
+            <MuiAvatar
+              src={photo_url}
+              sx={{
+                width: "32px",
+                height: "32px",
+                backgroundColor: "primary.main",
+              }}
+            >
+              <MuiTypography variant="body2">
+                {name.match(/\b(\w)/g)}
+              </MuiTypography>
+            </MuiAvatar>
+          </MuiGrid>
           <MuiGrid item>
             <MuiTypography variant="body2" fontWeight={600}>
               {name}
@@ -46,6 +53,10 @@ export default function Comment({
               {formatDistance(parseISO(creation_date), new Date())} ago
             </MuiTypography>
           </MuiGrid>
+        </MuiGrid>
+      </MuiGrid>
+      <MuiGrid item>
+        <MuiGrid container>
           <MuiGrid item xs={12}>
             <MuiTypography variant="body2">{description}</MuiTypography>
           </MuiGrid>
@@ -53,7 +64,7 @@ export default function Comment({
             <Breadcrumbs separator="•">
               <MuiTypography
                 sx={{
-                  fontSize: "14px",
+                  fontSize: "13px",
                   fontWeight: 600,
                   ":hover": { cursor: "pointer" },
                 }}
