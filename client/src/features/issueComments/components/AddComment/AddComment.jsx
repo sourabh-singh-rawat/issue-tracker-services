@@ -8,7 +8,7 @@ import MuiTextField from "@mui/material/TextField";
 import MuiShortTextIcon from "@mui/icons-material/ShortText";
 import InputAdornment from "@mui/material/InputAdornment";
 
-import { useCreateIssueCommentMutation } from "../../issue.api";
+import { useCreateIssueCommentMutation } from "../../issueComments.api";
 
 const AddComment = () => {
   const { id } = useParams();

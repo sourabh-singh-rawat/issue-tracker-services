@@ -4,19 +4,19 @@ import { useOutletContext, useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
 
-import TabPanel from "../../../../common/TabPanel";
 import AddTask from "../AddTask";
-
-import { setTasks } from "../../issue.slice";
-import { useGetIssueTasksQuery } from "../../issue.api";
 import TaskList from "../TaskList/TaskList";
+import TabPanel from "../../../../common/TabPanel";
+
+import { setTasks } from "../../../issueTasks/issueTasks.slice";
+import { useGetIssueTasksQuery } from "../../issueTask.api";
 
 const IssueTasks = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
+  const issueTasks = useSelector((store) => store.issueTasks.rows);
   const getIssueTasks = useGetIssueTasksQuery(id);
-  const issueTasks = useSelector((store) => store.issue.tasks.rows);
 
   useEffect(() => {
     if (getIssueTasks.isSuccess) {

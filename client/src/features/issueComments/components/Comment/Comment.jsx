@@ -4,7 +4,8 @@ import MuiGrid from "@mui/material/Grid";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiTypography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import DeleteComment from "../../features/issue/components/DeleteComment";
+
+import DeleteComment from "../DeleteComment";
 
 const Comment = ({
   id,

@@ -7,6 +7,7 @@ import MuiGrid from "@mui/material/Grid";
 import Tab from "../../../../common/Tab";
 import Tabs from "../../../../common/Tabs";
 import PageTitleSection from "../../../../common/TitleSection";
+import ProjectStatusSelector from "../ProjectStatusSelector";
 
 import { setProject, setStatus, updateProject } from "../../project.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
@@ -16,7 +17,6 @@ import {
   useGetProjectQuery,
   useUpdateProjectMutation,
 } from "../../project.api";
-import ProjectStatusSelector from "../ProjectStatusSelector/ProjectStatusSelector";
 
 const Project = () => {
   const { id } = useParams();
@@ -90,9 +90,6 @@ const Project = () => {
             {
               text: project.name?.toLowerCase(),
               onClick: () => navigate(`/projects/${project.id}/overview`),
-            },
-            {
-              text: tabName,
             },
           ]}
           statusSelector={

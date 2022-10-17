@@ -5,7 +5,7 @@ import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
 const Breadcrumbs = ({ items, loading }) => {
   return (
-    <MuiBreadcrumbs separator="/" sx={{ textTransform: "capitalize" }}>
+    <MuiBreadcrumbs separator="/">
       {items.map(({ text, onClick }) => {
         return (
           <span key={text}>

@@ -11,9 +11,7 @@ import MuiInputAdornment from "@mui/material/InputAdornment";
 
 import MuiAddIcon from "@mui/icons-material/Add";
 
-import DatePicker from "../../../../common/DatePicker";
-
-import { useCreateIssueTaskMutation } from "../../issue.api";
+import { useCreateIssueTaskMutation } from "../../issueTask.api";
 
 const AddTask = () => {
   const { id } = useParams();

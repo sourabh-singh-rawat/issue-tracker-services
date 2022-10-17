@@ -24,15 +24,15 @@ import { useGetProjectsQuery } from "../../projectList.api";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
+  const { rows, rowCount, page, pageSize } = useSelector(
+    (store) => store.projectList
+  );
   const getStatusQuery = useGetStatusQuery();
   const getProjectsQuery = useGetProjectsQuery({
     page,
     pageSize,
     sortBy: "creation_date:desc",
   });
-  const { rows, rowCount, page, pageSize } = useSelector(
-    (store) => store.projectList
-  );
 
   useEffect(() => {
     if (getStatusQuery.data) dispatch(setStatus(getStatusQuery.data));

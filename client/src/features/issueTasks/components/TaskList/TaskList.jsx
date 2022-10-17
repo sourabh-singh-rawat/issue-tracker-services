@@ -1,5 +1,5 @@
 import MuiGrid from "@mui/material/Grid";
-import Task from "../../../../common/Task";
+import Task from "../Task";
 
 const TaskList = ({ rows, rowCount }) => {
   return (

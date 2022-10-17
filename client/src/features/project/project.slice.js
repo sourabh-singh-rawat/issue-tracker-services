@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  activty: [],
+  activty: {},
   info: {
     name: "",
     nameSelected: false,
@@ -14,7 +14,6 @@ const initialState = {
     status: "0_NOT_STARTED",
   },
   members: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
-  issues: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
   issuesStatusCount: {
     loading: true,
     rows: [
