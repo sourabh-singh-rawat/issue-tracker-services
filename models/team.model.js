@@ -1,6 +1,6 @@
 import db from "../services/db.service.js";
 
-const insertOne = function insertOneTeam({ name, description }) {
+const insertOne = ({ name, description }) => {
   return db.query(
     `INSERT INTO teams (name, description) 
      VALUES ($1, $2)
@@ -9,7 +9,7 @@ const insertOne = function insertOneTeam({ name, description }) {
   );
 };
 
-const find = function findTeams() {
+const find = () => {
   return db.query(`SELECT * FROM teams`);
 };
 
@@ -21,7 +21,7 @@ const findOne = function findOneTeam(id) {
   );
 };
 
-const updateOne = function updateOneTeam(id, document) {
+const updateOne = (id, document) => {
   let query = Object.keys(document)
     .reduce(
       (prev, cur, index) => prev + " " + cur + "=$" + (index + 1) + ",",

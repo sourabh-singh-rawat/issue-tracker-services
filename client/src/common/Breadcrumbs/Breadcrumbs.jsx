@@ -3,12 +3,12 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
-export default function Breadcrumbs({ items, loading }) {
+const Breadcrumbs = ({ items, loading }) => {
   return (
-    <MuiBreadcrumbs separator="/">
+    <MuiBreadcrumbs separator="/" sx={{ textTransform: "capitalize" }}>
       {items.map(({ text, onClick }) => {
         return (
-          <div key={Math.random()}>
+          <span key={text}>
             {loading ? (
               <MuiSkeleton variant="text" width="75px" height="20px" />
             ) : (
@@ -19,15 +19,22 @@ export default function Breadcrumbs({ items, loading }) {
               >
                 <MuiTypography
                   variant="body2"
-                  sx={{ ":hover": { color: "text.main" }, fontWeight: 600 }}
+                  sx={{
+                    fontWeight: 600,
+                    ":hover": {
+                      color: "text.main",
+                    },
+                  }}
                 >
                   {text}
                 </MuiTypography>
               </MuiLink>
             )}
-          </div>
+          </span>
         );
       })}
     </MuiBreadcrumbs>
   );
-}
+};
+
+export default Breadcrumbs;

@@ -1,17 +1,17 @@
 import { useEffect } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useOutletContext, useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
 
-import Task from "../../../../common/Task/Task";
 import TabPanel from "../../../../common/TabPanel";
 import AddTask from "../AddTask";
 
 import { setTasks } from "../../issue.slice";
 import { useGetIssueTasksQuery } from "../../issue.api";
+import TaskList from "../TaskList/TaskList";
 
-export default function IssueTasks() {
+const IssueTasks = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
@@ -26,16 +26,16 @@ export default function IssueTasks() {
 
   return (
     <TabPanel selectedTab={selectedTab} index={1}>
-      <AddTask />
       <MuiGrid container rowSpacing={1}>
-        {issueTasks.map(({ ...otherProps }) => {
-          return (
-            <MuiGrid item xs={12}>
-              <Task key={Math.random()} {...otherProps} />
-            </MuiGrid>
-          );
-        })}
+        <MuiGrid item xs={12}>
+          <AddTask />
+        </MuiGrid>
+        <MuiGrid item xs={12}>
+          <TaskList rows={issueTasks} />
+        </MuiGrid>
       </MuiGrid>
     </TabPanel>
   );
-}
+};
+
+export default IssueTasks;

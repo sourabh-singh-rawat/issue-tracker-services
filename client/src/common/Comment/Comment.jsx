@@ -6,14 +6,14 @@ import MuiTypography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import DeleteComment from "../../features/issue/components/DeleteComment";
 
-export default function Comment({
+const Comment = ({
   id,
   issue_id,
   name,
   description,
   photo_url,
   creation_date,
-}) {
+}) => {
   return (
     <MuiGrid
       container
@@ -57,7 +57,7 @@ export default function Comment({
       </MuiGrid>
       <MuiGrid item>
         <MuiGrid container>
-          <MuiGrid item xs={12}>
+          <MuiGrid item xs={12} sx={{ padding: "4px 0" }}>
             <MuiTypography variant="body2">{description}</MuiTypography>
           </MuiGrid>
           <MuiGrid item xs={12}>
@@ -78,4 +78,6 @@ export default function Comment({
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
+
+export default Comment;

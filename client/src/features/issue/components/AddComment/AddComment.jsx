@@ -10,7 +10,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 
 import { useCreateIssueCommentMutation } from "../../issue.api";
 
-export default function AddComment() {
+const AddComment = () => {
   const { id } = useParams();
   const [commentBoxSelected, setCommentBoxSelected] = useState(false);
   const [createComment, { isSuccess }] = useCreateIssueCommentMutation();
@@ -118,4 +118,6 @@ export default function AddComment() {
       )}
     </Fragment>
   );
-}
+};
+
+export default AddComment;

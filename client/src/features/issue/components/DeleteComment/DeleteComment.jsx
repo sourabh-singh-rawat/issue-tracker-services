@@ -8,7 +8,7 @@ import { DialogActions, DialogContent, DialogContentText } from "@mui/material";
 
 import { useDeleteCommentMutation } from "../../issue.api";
 
-export default function ({ id, issue_id }) {
+const DeleteComment = ({ id, issue_id }) => {
   const [deleteCommentMutation, { isSuccess }] = useDeleteCommentMutation();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -73,4 +73,6 @@ export default function ({ id, issue_id }) {
       </Dialog>
     </Fragment>
   );
-}
+};
+
+export default DeleteComment;

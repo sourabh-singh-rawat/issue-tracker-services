@@ -7,7 +7,7 @@ import MuiAddIcon from "@mui/icons-material/Add";
 
 import IssueForm from "../IssueForm";
 
-export default function IssueFormModal() {
+const AddIssue = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -48,4 +48,6 @@ export default function IssueFormModal() {
       </MuiModal>
     </Fragment>
   );
-}
+};
+
+export default AddIssue;

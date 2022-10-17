@@ -1,7 +1,7 @@
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-export default function SectionHeader({ title, subtitle, actionButton }) {
+const SectionHeader = ({ title, subtitle, actionButton }) => {
   return (
     <MuiGrid container gap="12px">
       <MuiGrid item xs={12} sx={{ display: "flex" }}>
@@ -20,4 +20,6 @@ export default function SectionHeader({ title, subtitle, actionButton }) {
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
+
+export default SectionHeader;

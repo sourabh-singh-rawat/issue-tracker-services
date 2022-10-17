@@ -9,13 +9,13 @@ import MuiSkeleton from "@mui/material/Skeleton";
 
 import Breadcrumbs from "../Breadcrumbs";
 
-export default function Title({
-  loading,
+const Title = ({
   page,
+  loading,
   updateTitle,
   updateTitleQuery,
   breadcrumbItems,
-}) {
+}) => {
   const dispatch = useDispatch();
   const { nameSelected } = page;
 
@@ -34,9 +34,11 @@ export default function Title({
 
   return (
     <Fragment>
-      <Breadcrumbs loading={loading} items={breadcrumbItems} />
+      {breadcrumbItems && (
+        <Breadcrumbs loading={loading} items={breadcrumbItems} />
+      )}
       {nameSelected ? (
-        <MuiGrid container sx={{ marginLeft: "-14px" }}>
+        <MuiGrid container sx={{ marginLeft: "-14px", marginBottom: "4px" }}>
           <MuiGrid item flexGrow={1}>
             <MuiTextField
               name="name"
@@ -91,7 +93,7 @@ export default function Title({
           {loading ? (
             <MuiSkeleton />
           ) : (
-            <MuiGrid container>
+            <MuiGrid container sx={{ marginBottom: "4px" }}>
               <MuiGrid item flexGrow={1}>
                 <MuiTypography
                   variant="h4"
@@ -125,4 +127,6 @@ export default function Title({
       )}
     </Fragment>
   );
-}
+};
+
+export default Title;

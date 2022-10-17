@@ -1,7 +1,7 @@
 import MuiAvatarGroup from "@mui/material/AvatarGroup";
 import MuiAvatar from "@mui/material/Avatar";
 
-export default function AvatarGroup({ members = [], total }) {
+const AvatarGroup = ({ members = [], total }) => {
   return (
     <MuiAvatarGroup max={5} total={total}>
       {members.map((member) => {
@@ -17,4 +17,6 @@ export default function AvatarGroup({ members = [], total }) {
       })}
     </MuiAvatarGroup>
   );
-}
+};
+
+export default AvatarGroup;

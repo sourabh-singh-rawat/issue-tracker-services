@@ -23,29 +23,30 @@ const ProjectStatusSelector = ({
 
   return (
     <MuiGrid container sx={{ display: "flex" }}>
-      <MuiGrid item xs={12}>
-        {title && (
+      {title && (
+        <MuiGrid item xs={12}>
           <MuiTypography variant="body2" fontWeight="bold" paddingBottom={1}>
             {title}
           </MuiTypography>
-        )}
-      </MuiGrid>
+        </MuiGrid>
+      )}
       <MuiFormControl fullWidth>
         {loading ? (
           <CircularProgress />
         ) : (
           <MuiSelect
+            displayEmpty
             name="status"
             size="small"
             value={value}
             onChange={handleChange}
             sx={{
               color: "text.primary",
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: 600,
-              height: variant == "dense" ? "24px" : "auto",
+              height: variant == "dense" ? "28px" : "auto",
+              textTransform: "capitalize",
             }}
-            displayEmpty
           >
             {projectStatus.map(({ status, message }) => (
               <MuiMenuItem
@@ -53,21 +54,24 @@ const ProjectStatusSelector = ({
                 value={status}
                 sx={{
                   color: "text.primary",
-                  fontSize: "13px",
+                  fontSize: "14px",
                   fontWeight: 600,
+                  textTransform: "capitalize",
                 }}
               >
-                <span>{message.toUpperCase()}</span>
+                <span>{message}</span>
               </MuiMenuItem>
             ))}
           </MuiSelect>
         )}
       </MuiFormControl>
-      <MuiFormHelperText>
-        <MuiTypography component="span" variant="body2">
-          {helperText}
-        </MuiTypography>
-      </MuiFormHelperText>
+      {helperText && (
+        <MuiFormHelperText>
+          <MuiTypography component="span" variant="body2">
+            {helperText}
+          </MuiTypography>
+        </MuiFormHelperText>
+      )}
     </MuiGrid>
   );
 };

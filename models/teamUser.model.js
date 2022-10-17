@@ -1,6 +1,6 @@
 import db from "../services/db.service.js";
 
-const insertOne = function insertOneTeamUser(document) {
+const insertOne = (document) => {
   const { user_id, team_id, role } = document;
 
   return db.query(
@@ -12,7 +12,7 @@ const insertOne = function insertOneTeamUser(document) {
   );
 };
 
-const find = function findTeamUsers(id) {
+const find = (id) => {
   return db.query(`SELECT * FROM team_members WHERE team_id = $1`, [id]);
 };
 

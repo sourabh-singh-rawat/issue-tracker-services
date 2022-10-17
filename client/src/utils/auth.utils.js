@@ -1,4 +1,4 @@
-export const verifyToken = async function verifyInviteToken(inviteToken) {
+export const verifyToken = async (inviteToken) => {
   const verifiedToken = await fetch(
     `http://localhost:4000/api/auth/verifyToken`,
     {

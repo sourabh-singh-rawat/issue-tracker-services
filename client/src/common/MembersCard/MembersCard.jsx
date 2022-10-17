@@ -10,7 +10,7 @@ import AvatarGroup from "../AvatarGroup";
 import { setMembers } from "../../features/project/project.slice";
 import { useGetProjectMembersQuery } from "../../features/project/project.api";
 
-export default function MembersCard() {
+const MembersCard = () => {
   const { id } = useParams();
   const dispatch = useDispatch((store) => store.project.members.rows);
   const members = useSelector((store) => store.project.members);
@@ -35,4 +35,6 @@ export default function MembersCard() {
       </MuiGrid>
     </Fragment>
   );
-}
+};
+
+export default MembersCard;

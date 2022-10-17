@@ -1,31 +1,35 @@
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
 
+import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-export default function IssuePrioritySelector({
+const IssuePrioritySelector = ({
   value,
   handleChange,
   title,
   helperText,
-}) {
+  variant,
+}) => {
   const issuePriority = useSelector(
     (store) => store.issue.options.priority.rows
   );
 
   return (
-    <Fragment>
-      <MuiTypography
-        variant="body2"
-        fontWeight="bold"
-        sx={{ paddingBottom: 1 }}
-      >
-        {title}
-      </MuiTypography>
+    <MuiGrid container sx={{ display: "flex" }}>
+      {title && (
+        <MuiTypography
+          variant="body2"
+          fontWeight="bold"
+          sx={{ paddingBottom: 1 }}
+        >
+          {title}
+        </MuiTypography>
+      )}
       <MuiFormControl fullWidth>
         <MuiSelect
           name="priority"
@@ -35,8 +39,10 @@ export default function IssuePrioritySelector({
           displayEmpty
           sx={{
             color: "text.primary",
-            fontSize: "12px",
+            fontSize: "14px",
             fontWeight: 600,
+            textTransform: "capitalize",
+            height: variant == "dense" ? "28px" : "auto",
           }}
         >
           {issuePriority.map(({ priority, message }) => (
@@ -45,11 +51,12 @@ export default function IssuePrioritySelector({
               value={priority}
               sx={{
                 color: "text.primary",
-                fontSize: "12px",
+                fontSize: "14px",
                 fontWeight: 600,
+                textTransform: "capitalize",
               }}
             >
-              {message.toUpperCase()}
+              {message}
             </MuiMenuItem>
           ))}
         </MuiSelect>
@@ -63,6 +70,8 @@ export default function IssuePrioritySelector({
           {helperText}
         </MuiTypography>
       </MuiFormHelperText>
-    </Fragment>
+    </MuiGrid>
   );
-}
+};
+
+export default IssuePrioritySelector;

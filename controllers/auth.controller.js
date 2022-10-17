@@ -3,14 +3,14 @@ import dotenv from "dotenv/config";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const createToken = async function createToken(req, res) {
+const createToken = async (req, res) => {
   const { payload } = req.body;
   const token = jwt.sign(payload, JWT_SECRET);
 
   return token;
 };
 
-const verifyToken = async function verifyToken(req, res) {
+const verifyToken = async (req, res) => {
   try {
     const { inviteToken } = req.body;
     const decodedValidToken = jwt.verify(inviteToken, JWT_SECRET);

@@ -7,12 +7,12 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 
-export default function Description({
+const Description = ({
   page,
   updateDescription,
   updateDescriptionQuery,
   loading,
-}) {
+}) => {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -113,4 +113,6 @@ export default function Description({
       )}
     </MuiGrid>
   );
-}
+};
+
+export default Description;

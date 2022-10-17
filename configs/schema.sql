@@ -2,6 +2,10 @@
 -- CREATE DATABASE "issue-tracker";
 -- TRUNCATE issues, issue_tasks, issue_comments, projects, project_members;
 
+-- drop table issue_comments, issue_priority, issue_status, 
+-- issue_tasks, issues, project_members, project_status, projects, 
+-- roles, team_members, teams, users;
+
 -- EXTENSION
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   
 
@@ -10,9 +14,10 @@ CREATE TABLE IF NOT EXISTS teams (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  lead uuid,
+  leader uuid,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (leader) REFERENCES project_members(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -27,19 +32,19 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS project_status (
-  status INTEGER UNIQUE,
+  status VARCHAR(20) UNIQUE,
   message VARCHAR (20)
 );
 
 INSERT INTO project_status
-VALUES (0, 'not started'), (1, 'open'), (2, 'paused'), (3, 'completed');
+VALUES ('0_NOT_STARTED', 'not started'), ('1_OPEN', 'open'), ('2_PAUSED', 'paused'), ('3_COMPLETED', 'completed');
 
 CREATE TABLE IF NOT EXISTS projects (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
   description VARCHAR,
-  status INTEGER DEFAULT 0,
-  owner_uid uuid NOT NULL, --global
+  status VARCHAR(20) DEFAULT 'NOT_STARTED',
+  owner_id uuid NOT NULL, --global
   owner_email VARCHAR(255),
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   start_date TIMESTAMP WITH TIME ZONE,
@@ -47,31 +52,31 @@ CREATE TABLE IF NOT EXISTS projects (
 
   PRIMARY KEY (id),
   FOREIGN KEY (status) REFERENCES project_status(status),
-  FOREIGN KEY (owner_uid) REFERENCES users(id)
+  FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS issue_status (
-  status INTEGER UNIQUE,
+  status VARCHAR(20) UNIQUE,
   message VARCHAR(20)
 );
 
 INSERT INTO issue_status 
-VALUES (1, 'open'), (2, 'in progress'), (3, 'in review'), (4, 'closed');
+VALUES ('0_OPEN', 'open'), ('1_IN_PROGRESS', 'in progress'), ('2_IN_REVIEW', 'in review'), ('3_CLOSED', 'closed');
 
 CREATE TABLE IF NOT EXISTS issue_priority (
-  priority INTEGER UNIQUE,
+  priority VARCHAR(20) UNIQUE,
   message VARCHAR (20)
 );
 
 INSERT INTO issue_priority
-VALUES (1, 'lowest'), (2, 'low'), (3, 'medium'), (4, 'high'), (5 'highest');
+VALUES ('0_LOWEST', 'lowest'), ('1_LOW', 'low'), ('2_MEDIUM', 'medium'), ('3_HIGH', 'high'), ('4_HIGHEST', 'highest');
 
 CREATE TABLE IF NOT EXISTS issues (
   id uuid DEFAULT uuid_generate_v4(),
   name VARCHAR(255),
   description VARCHAR(255),
-  status INTEGER,
-  priority INTEGER,
+  status VARCHAR(20),
+  priority VARCHAR(20),
   reporter_id uuid NOT NULL,
   project_id uuid,
   team_id uuid,
@@ -82,7 +87,7 @@ CREATE TABLE IF NOT EXISTS issues (
   FOREIGN KEY (status) REFERENCES issue_status(status),
   FOREIGN KEY (priority) REFERENCES issue_priority(priority),
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-  FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS issue_assignee (
@@ -96,7 +101,7 @@ CREATE TABLE IF NOT EXISTS issue_assignee (
 CREATE TABLE IF NOT EXISTS project_members (
     project_id uuid,
     user_id uuid,
-    role INTEGER,
+    role VARCHAR(20),
     creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (user_id, project_id),
@@ -105,11 +110,11 @@ CREATE TABLE IF NOT EXISTS project_members (
 );
 
 CREATE TABLE IF NOT EXISTS roles (
-  code INTEGER,
+  code VARCHAR(20),
   message VARCHAR(20)
 );
 INSERT INTO roles 
-VALUES (0, 'member'), (1, 'admin');
+VALUES ('MEMBER', 'member'), ('ADMIN', 'admin');
 
 CREATE TABLE IF NOT EXISTS  team_members (
     user_id uuid,

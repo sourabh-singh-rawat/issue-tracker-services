@@ -1,7 +1,7 @@
 import db from "../services/db.service.js";
 import { selectProjectsQuery } from "../utils/projects/selectProjectsQuery.utils.js";
 
-const insertOne = function insertOneProject(project) {
+const insertOne = (project) => {
   const {
     name = "My Project",
     description,
@@ -13,19 +13,19 @@ const insertOne = function insertOneProject(project) {
   } = project;
 
   return db.query(
-    `INSERT INTO projects (name, description, status, owner_uid, owner_email, start_date, end_date)
+    `INSERT INTO projects (name, description, status, owner_id, owner_email, start_date, end_date)
      VALUES ($1, $2, $3, ($4)::uuid, $5, $6, $7)
      RETURNING *`,
     [name, description, status, id, email, start_date, end_date]
   );
 };
 
-const find = function findProjects(options) {
+const find = (options) => {
   const { query, colValues } = selectProjectsQuery(options);
   return db.query(query, colValues);
 };
 
-const findOne = function findOneProject(id) {
+const findOne = (id) => {
   return db.query(
     `SELECT * FROM projects 
      WHERE id = $1`,
@@ -33,7 +33,7 @@ const findOne = function findOneProject(id) {
   );
 };
 
-const updateOne = function updateOneProject(id, project) {
+const updateOne = (id, project) => {
   let query = Object.keys(project).reduce((prev, cur, index) => {
     return prev + " " + cur + "=$" + (index + 1) + ",";
   }, "UPDATE projects SET");
@@ -43,7 +43,7 @@ const updateOne = function updateOneProject(id, project) {
   return db.query(query, Object.values(project));
 };
 
-const deleteOne = function deleteOneProject(id) {
+const deleteOne = (id) => {
   return db.query(
     `DELETE FROM projects 
      WHERE id=$1 
@@ -52,7 +52,7 @@ const deleteOne = function deleteOneProject(id) {
   );
 };
 
-const statusCount = function statusCount(id) {
+const statusCount = (id) => {
   return db.query(
     `SELECT issue_status.status, message, COUNT(issues.status) 
     FROM (SELECT * FROM issues WHERE project_id = $1) AS issues 
@@ -63,7 +63,7 @@ const statusCount = function statusCount(id) {
   );
 };
 
-const rowCount = function rowCount(options) {
+const rowCount = (options) => {
   const { query, colValues } = selectProjectsQuery(options, "projects");
   return db.query(query, colValues);
 };

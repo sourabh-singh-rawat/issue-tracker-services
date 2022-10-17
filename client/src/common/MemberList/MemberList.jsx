@@ -13,7 +13,7 @@ import List from "../List";
 import { setMembers } from "../../features/project/project.slice";
 import { useGetProjectMembersQuery } from "../../features/project/project.api";
 
-export default function MemberList() {
+const MemberList = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { rows, rowCount, pageSize } = useSelector(
@@ -88,4 +88,6 @@ export default function MemberList() {
       }}
     />
   );
-}
+};
+
+export default MemberList;

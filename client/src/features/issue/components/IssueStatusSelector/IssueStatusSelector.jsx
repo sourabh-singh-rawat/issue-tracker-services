@@ -1,29 +1,33 @@
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
 
+import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-export default function IssueStatusSelector({
+const IssueStatusSelector = ({
   value,
   handleChange,
   title,
   helperText,
-}) {
+  variant,
+}) => {
   const issueStatus = useSelector((store) => store.issue.options.status.rows);
 
   return (
-    <Fragment>
-      <MuiTypography
-        variant="body2"
-        fontWeight="bold"
-        sx={{ paddingBottom: 1 }}
-      >
-        {title}
-      </MuiTypography>
+    <MuiGrid container sx={{ display: "flex" }}>
+      {title && (
+        <MuiTypography
+          variant="body2"
+          fontWeight="bold"
+          sx={{ paddingBottom: 1 }}
+        >
+          {title}
+        </MuiTypography>
+      )}
       <MuiFormControl fullWidth>
         <MuiSelect
           name="status"
@@ -32,9 +36,11 @@ export default function IssueStatusSelector({
           size="small"
           displayEmpty
           sx={{
-            fontSize: "13px",
-            fontWeight: 600,
             color: "text.primary",
+            fontSize: "14px",
+            fontWeight: 600,
+            height: variant == "dense" ? "28px" : "auto",
+            textTransform: "capitalize",
           }}
         >
           {issueStatus.map(({ status, message }) => {
@@ -43,12 +49,13 @@ export default function IssueStatusSelector({
                 key={message}
                 value={status}
                 sx={{
-                  fontSize: "13px",
-                  fontWeight: 600,
                   color: "text.primary",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  textTransform: "capitalize",
                 }}
               >
-                {message.toUpperCase()}
+                {message}
               </MuiMenuItem>
             );
           })}
@@ -63,6 +70,8 @@ export default function IssueStatusSelector({
           {helperText}
         </MuiTypography>
       </MuiFormHelperText>
-    </Fragment>
+    </MuiGrid>
   );
-}
+};
+
+export default IssueStatusSelector;

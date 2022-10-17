@@ -7,6 +7,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
 import MuiAutocomplete from "@mui/material/Autocomplete";
+import Avatar from "@mui/material/Avatar";
 
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
@@ -18,9 +19,8 @@ import IssuePrioritySelector from "../IssuePrioritySelector/IssuePrioritySelecto
 import { useCreateIssueMutation } from "../../issue.api";
 import { useGetProjectsQuery } from "../../../projectList/projectList.api";
 import { useGetCollaboratorsQuery } from "../../../collaboratorList/collaboratorList.api";
-import { Avatar } from "@mui/material";
 
-export default function IssueForm() {
+const IssueForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,8 +41,8 @@ export default function IssueForm() {
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    status: 0,
-    priority: 0,
+    status: "0_OPEN",
+    priority: "0_LOWEST",
     assigned_to: null,
     due_date: null,
     project_id: "",
@@ -163,6 +163,7 @@ export default function IssueForm() {
                 sx={{
                   color: "primary.text",
                   fontWeight: 600,
+                  paddingBottom: 1,
                 }}
               >
                 Assigned To
@@ -249,4 +250,6 @@ export default function IssueForm() {
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
+
+export default IssueForm;

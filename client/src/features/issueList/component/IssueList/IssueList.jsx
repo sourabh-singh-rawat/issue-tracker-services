@@ -8,7 +8,6 @@ import { useGridApiContext } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 
 import List from "../../../../common/List/List";
-
 import IssueStatusSelector from "../../../issue/components/IssueStatusSelector/IssueStatusSelector";
 import IssuePrioritySelector from "../../../issue/components/IssuePrioritySelector/IssuePrioritySelector";
 
@@ -18,7 +17,7 @@ import { setIssueList, updateIssueList } from "../../issueList.slice";
 import { useUpdateIssueMutation } from "../../../issue/issue.api";
 import { useGetIssuesQuery } from "../../issueList.api";
 
-export default function IssuesList({ projectId }) {
+const IssueList = ({ projectId }) => {
   const dispatch = useDispatch();
   const reporterId = useSelector((store) => store.auth.user.uid);
   const { rows, rowCount, page, pageSize } = useSelector(
@@ -164,8 +163,10 @@ export default function IssuesList({ projectId }) {
       onPageSizeChange={(pageSize) => dispatch(updateIssueList({ pageSize }))}
       getRowId={(row) => row.id}
       initialState={{
-        sorting: { sortModel: [{ field: "creation_date", sort: "desc" }] },
+        sorting: { sortModel: [{ field: "status", sort: "desc" }] },
       }}
     />
   );
-}
+};
+
+export default IssueList;

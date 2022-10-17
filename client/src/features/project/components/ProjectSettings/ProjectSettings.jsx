@@ -63,9 +63,9 @@ const ProjectSettings = () => {
                 </MuiGrid>
                 <MuiGrid item xs={12}>
                   <TextField
-                    name="owner_uid"
+                    name="owner_id"
                     title="Owner ID"
-                    value={project.owner_uid}
+                    value={project.owner_id}
                     disabled
                   />
                 </MuiGrid>

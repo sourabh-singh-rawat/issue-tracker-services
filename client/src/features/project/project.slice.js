@@ -8,25 +8,28 @@ const initialState = {
     description: "",
     descriptionSelected: false,
     creation_date: null,
-    owner_uid: "",
+    owner_id: null,
     id: "",
     loading: true,
-    status: 0,
+    status: "0_NOT_STARTED",
   },
   members: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
   issues: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
   issuesStatusCount: {
     loading: true,
     rows: [
-      { status: 0, count: 0 },
-      { status: 1, count: 0 },
-      { status: 2, count: 0 },
-      { status: 3, count: 0 },
+      { status: "0_NOT_STARTED", count: 0 },
+      { status: "1_OPEN", count: 0 },
+      { status: "2_PAUSED", count: 0 },
+      { status: "3_COMPLETED", count: 0 },
     ],
   },
   options: {
-    status: { loading: true, rows: [{ code: 0, message: "Not Started" }] },
-    roles: { loading: true, rows: [{ code: 0, message: "Member" }] },
+    status: {
+      loading: true,
+      rows: [{ code: "NOT_STARTED", message: "Not Started" }],
+    },
+    roles: { loading: true, rows: [{ code: "MEMBER", message: "Member" }] },
   },
 };
 

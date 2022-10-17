@@ -40,7 +40,7 @@ const InviteButton = () => {
 
   const [members, setMembers] = useState([]);
 
-  const [formFields, setFormFields] = useState({ email: "", role: 0 });
+  const [formFields, setFormFields] = useState({ email: "", role: "MEMBER" });
   const onChange = (e) => {
     const { name, value } = e.target;
     setMembers([value]);

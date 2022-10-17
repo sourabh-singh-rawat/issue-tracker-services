@@ -1,11 +1,17 @@
-import Issue from "../models/issue.model.js";
 import User from "../models/user.model.js";
-import IssueStatus from "../models/issueStatus.model.js";
-import IssuePriority from "../models/issuePriority.model.js";
+import Issue from "../models/issue.model.js";
 import IssueComment from "../models/issuesComment.model.js";
 import IssueTask from "../models/issueTask.model.js";
+import IssueStatus from "../models/issueStatus.model.js";
+import IssuePriority from "../models/issuePriority.model.js";
 
-const create = async function createIssue(req, res) {
+/**
+ * Create issue
+ * @param {*} req
+ * @param {*} res
+ * @returns -- Issue that is created.
+ */
+const create = async (req, res) => {
   const { uid } = req.user;
   const body = req.body;
 
@@ -15,11 +21,56 @@ const create = async function createIssue(req, res) {
 
     res.send(issue);
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send();
   }
 };
 
-const index = async function indexIssues(req, res) {
+/**
+ * Create issue comment
+ * @param {*} req
+ * @param {*} res
+ * @returns -- Comment that is created.
+ */
+const createComment = async (req, res) => {
+  const { uid } = req.user;
+
+  try {
+    const { id } = (await User.findOne(uid)).rows[0];
+    const comment = (await IssueComment.insertOne({ user_id: id, ...req.body }))
+      .rows[0];
+
+    res.send(comment);
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+/**
+ * CREATE issue task
+ * @param {*} req
+ * @param {*} res
+ * @returns -- Task that is created.
+ */
+const createTask = async (req, res) => {
+  const { uid } = req.user;
+  const { issueId, dueDate, description, completed } = req.body;
+
+  try {
+    const task = (
+      await IssueTask.insertOne({
+        issueId,
+        dueDate,
+        description,
+        completed,
+      })
+    ).rows[0];
+    res.send(task);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+const index = async (req, res) => {
   const { uid } = req.user;
 
   // filtering
@@ -75,7 +126,31 @@ const index = async function indexIssues(req, res) {
   }
 };
 
-const indexStatus = async function indexIssueStatus(req, res) {
+const indexComments = async (req, res) => {
+  const issueId = req.params.id;
+
+  try {
+    const comments = (await IssueComment.find(issueId)).rows;
+    const rowCount = (await IssueComment.rowCount(issueId)).rows[0].count;
+
+    res.send({ rows: comments, rowCount: parseInt(rowCount) });
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const indexTasks = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tasks = await IssueTask.find(id);
+    res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const indexStatus = async (req, res) => {
   try {
     const issueStatus = await IssueStatus.find();
     res.send({ rows: issueStatus.rows, rowCount: issueStatus.rowCount });
@@ -84,7 +159,7 @@ const indexStatus = async function indexIssueStatus(req, res) {
   }
 };
 
-const indexPriority = async function indexIssuePriority(req, res) {
+const indexPriority = async (req, res) => {
   try {
     const issuePriority = await IssuePriority.find();
     res.send({ rows: issuePriority.rows, rowCount: issuePriority.rowCount });
@@ -93,7 +168,7 @@ const indexPriority = async function indexIssuePriority(req, res) {
   }
 };
 
-const show = async function showIssue(req, res) {
+const show = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -103,11 +178,12 @@ const show = async function showIssue(req, res) {
 
     return res.send(issue);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
 
-const update = async function updateIssue(req, res) {
+const update = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -118,7 +194,7 @@ const update = async function updateIssue(req, res) {
   }
 };
 
-const destroy = async function deleteIssue(req, res) {
+const destroy = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -130,21 +206,7 @@ const destroy = async function deleteIssue(req, res) {
   }
 };
 
-const createComment = async function createComment(req, res) {
-  const { uid } = req.user;
-
-  try {
-    const { id } = (await User.findOne(uid)).rows[0];
-    const comment = (await IssueComment.insertOne({ user_id: id, ...req.body }))
-      .rows[0];
-
-    res.send(comment);
-  } catch (error) {
-    res.status(500).send();
-  }
-};
-
-const updateComment = async function updateComment(req, res) {
+const updateComment = async (req, res) => {
   const { commentId } = req.params;
   const { description } = req.body;
 
@@ -161,20 +223,7 @@ const updateComment = async function updateComment(req, res) {
   }
 };
 
-const indexComments = async function indexComments(req, res) {
-  const issueId = req.params.id;
-
-  try {
-    const comments = (await IssueComment.find(issueId)).rows;
-    const rowCount = (await IssueComment.rowCount(issueId)).rows[0].count;
-
-    res.send({ rows: comments, rowCount: parseInt(rowCount) });
-  } catch (error) {
-    res.status(500).send();
-  }
-};
-
-const destroyComment = async function deleteComment(req, res) {
+const destroyComment = async (req, res) => {
   const { commentId } = req.params;
 
   try {
@@ -187,27 +236,9 @@ const destroyComment = async function deleteComment(req, res) {
   }
 };
 
-const createTask = async function createIssueTask(req, res) {
-  const { uid } = req.user;
-  const { issueId, dueDate, description, completed } = req.body;
-
-  try {
-    const task = (
-      await IssueTask.insertOne({
-        issueId,
-        dueDate,
-        description,
-        completed,
-      })
-    ).rows[0];
-    res.send(task);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
-
-const showTask = async function showIssueTask(req, res) {
+const showTask = async (req, res) => {
   const { taskId } = req.params;
+
   try {
     const task = (await IssueTask.findOne(taskId)).rows[0];
     if (!task) res.status(500).send();
@@ -218,30 +249,19 @@ const showTask = async function showIssueTask(req, res) {
   }
 };
 
-const updateTask = async function updateIssueTask(req, res) {
+const updateTask = async (req, res) => {
   const { taskId } = req.params;
   const { description } = req.body;
 
   try {
-    const task = (await IssueTask.updateOne({ description, taskId })).rows[0];
+    const task = (await IssueTask.updateOne({ taskId, description })).rows[0];
     res.send(task);
   } catch (error) {
     res.status(500).send();
   }
 };
 
-const indexTasks = async function indexIssueTasks(req, res) {
-  const { id } = req.params;
-
-  try {
-    const tasks = await IssueTask.find(id);
-    res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
-  } catch (error) {
-    res.status(500).send();
-  }
-};
-
-const destroyTask = async function deleteIssueTask(req, res) {
+const destroyTask = async (req, res) => {
   const { taskId } = req.params;
 
   try {
@@ -256,19 +276,19 @@ const destroyTask = async function deleteIssueTask(req, res) {
 
 export default {
   create,
+  createTask,
+  createComment,
   index,
+  indexTasks,
+  indexComments,
   indexStatus,
   indexPriority,
   show,
-  update,
-  destroy,
-  createComment,
-  indexComments,
-  updateComment,
-  destroyComment,
-  createTask,
-  indexTasks,
   showTask,
+  update,
   updateTask,
+  updateComment,
+  destroy,
   destroyTask,
+  destroyComment,
 };

@@ -8,7 +8,7 @@ import MuiAddIcon from "@mui/icons-material/Add";
 
 import SectionHeader from "../../../../common/SectionHeader";
 
-export default function Issues() {
+const Issues = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const loading = useSelector((store) => store.auth.loading);
@@ -38,4 +38,6 @@ export default function Issues() {
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
+
+export default Issues;

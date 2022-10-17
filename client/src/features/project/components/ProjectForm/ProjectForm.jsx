@@ -22,7 +22,7 @@ const ProjectForm = () => {
   const [formFields, setFormFields] = useState({
     name: "My Project",
     description: "",
-    status: 0,
+    status: "0_NOT_STARTED",
     start_date: null,
     end_date: null,
   });
