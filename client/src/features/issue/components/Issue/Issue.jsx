@@ -78,7 +78,6 @@ const Issue = () => {
               text: issue.id,
               onClick: () => navigate(`/issues/${issue.id}/overview`),
             },
-            { text: tabName },
           ]}
           loading={issue?.loading}
           page={issue}

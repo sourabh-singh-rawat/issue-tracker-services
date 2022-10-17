@@ -8,12 +8,12 @@ import MuiCheckbox from "@mui/material/Checkbox";
 import MuiTypography from "@mui/material/Typography";
 import MuiEditIcon from "@mui/icons-material/Edit";
 
-import TextField from "../TextField";
+import TextField from "../../../../common/TextField";
 
 import {
   useUpdateIssueTaskMutation,
   useDeleteIssueTaskMutation,
-} from "../../features/issue/issue.api";
+} from "../../issueTask.api";
 
 const Task = ({ taskId, due_date, description, completed }) => {
   const { id } = useParams();

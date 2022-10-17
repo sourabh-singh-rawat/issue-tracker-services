@@ -3,20 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
 
-import Comment from "../../../../common/Comment";
-import AddComment from "../../../issue/components/AddComment";
+import Comment from "../Comment";
+import AddComment from "../AddComment";
 
-import { setComments } from "../../../issue/issue.slice";
-
-import { useGetIssueCommentsQuery } from "../../../issue/issue.api";
-import { CircularProgress } from "@mui/material";
+import { setComments } from "../../issueComments.slice";
+import { useGetIssueCommentsQuery } from "../../issueComments.api";
 
 function IssueComments() {
-  const dispatch = useDispatch();
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const comments = useSelector((store) => store.issueComments);
   const getIssueCommentsQuery = useGetIssueCommentsQuery(id);
-  const comments = useSelector((store) => store.issue.comments);
 
   useEffect(() => {
     if (getIssueCommentsQuery.isSuccess)

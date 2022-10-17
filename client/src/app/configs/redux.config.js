@@ -4,7 +4,9 @@ import snackbarReducer from "../../features/snackbar.reducer";
 import authSlice from "../../features/auth/auth.slice";
 import collaboratorListSlice from "../../features/collaboratorList/collaboratorList.slice";
 import issueSlice from "../../features/issue/issue.slice";
+import issueCommentsSlice from "../../features/issueComments/issueComments.slice";
 import issueListSlice from "../../features/issueList/issueList.slice";
+import issueTasksSlice from "../../features/issueTasks/issueTasks.slice";
 import profileSlice from "../../features/profile/profile.slice";
 import projectSlice from "../../features/project/project.slice";
 import projectListSlice from "../../features/projectList/projectList.slice";
@@ -17,6 +19,8 @@ const storeConfig = {
     auth: authSlice,
     collaboratorList: collaboratorListSlice,
     issue: issueSlice,
+    issueComments: issueCommentsSlice,
+    issueTasks: issueTasksSlice,
     issueList: issueListSlice,
     profile: profileSlice,
     project: projectSlice,

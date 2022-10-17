@@ -1,12 +1,14 @@
-import { useState, Fragment, useEffect } from "react";
+import { Fragment, useState } from "react";
 
+import MuiButton from "@mui/material/Button";
+import MuiTypography from "@mui/material/Typography";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import MuiTypography from "@mui/material/Typography";
-import MuiButton from "@mui/material/Button";
-import { DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 
-import { useDeleteCommentMutation } from "../../issue.api";
+import { useDeleteCommentMutation } from "../../issueComments.api";
 
 const DeleteComment = ({ id, issue_id }) => {
   const [deleteCommentMutation, { isSuccess }] = useDeleteCommentMutation();

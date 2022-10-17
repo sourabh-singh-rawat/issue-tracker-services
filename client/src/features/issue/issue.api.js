@@ -11,15 +11,6 @@ const issueApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    createIssueTask: build.mutation({
-      query: (body) => {
-        return {
-          url: `/issues/tasks`,
-          method: "POST",
-          body,
-        };
-      },
-    }),
     getIssue: build.query({
       query: (id) => {
         return `/issues/${id}`;
@@ -44,65 +35,6 @@ const issueApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    getIssueComments: build.query({
-      query: (id) => {
-        return `issues/${id}/comments`;
-      },
-      providesTags: ["Comment"],
-    }),
-    createIssueComment: build.mutation({
-      query: (body) => {
-        return {
-          url: `/issues/comments`,
-          method: "POST",
-          body,
-        };
-      },
-      invalidatesTags: ["Comment"],
-    }),
-    deleteComment: build.mutation({
-      query: ({ id, commentId }) => {
-        return {
-          url: `issues/${id}/comments/${commentId}`,
-          method: "DELETE",
-        };
-      },
-      invalidatesTags: ["Comment"],
-    }),
-    getIssueTasks: build.query({
-      query: (id) => {
-        return `/issues/${id}/tasks`;
-      },
-      providesTags: ["Task"],
-    }),
-    createIssueTask: build.mutation({
-      query: (body) => {
-        return {
-          url: "/issues/tasks",
-          method: "POST",
-          body,
-        };
-      },
-      invalidatesTags: ["Task"],
-    }),
-    updateIssueTask: build.mutation({
-      query: ({ id, taskId, body }) => {
-        return {
-          url: `/issues/${id}/tasks/${taskId}`,
-          method: "PATCH",
-          body,
-        };
-      },
-    }),
-    deleteIssueTask: build.mutation({
-      query: ({ id, taskId }) => {
-        return {
-          url: `/issues/${id}/tasks/${taskId}`,
-          method: "DELETE",
-        };
-      },
-      invalidatesTags: ["Task"],
-    }),
   }),
 });
 
@@ -112,13 +44,4 @@ export const {
   useGetIssuesStatusQuery,
   useGetIssuesPriorityQuery,
   useUpdateIssueMutation,
-
-  useCreateIssueCommentMutation,
-  useGetIssueCommentsQuery,
-  useDeleteCommentMutation,
-
-  useGetIssueTasksQuery,
-  useCreateIssueTaskMutation,
-  useUpdateIssueTaskMutation,
-  useDeleteIssueTaskMutation,
 } = issueApiSlice;

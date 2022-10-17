@@ -1,11 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  comments: {
-    rows: [],
-    rowCount: [],
-    loading: true,
-  },
+  activity: {},
   info: {
     nameSelected: false,
     descriptionSelected: false,
@@ -20,11 +16,6 @@ const initialState = {
       loading: true,
     },
   },
-  tasks: {
-    rows: [],
-    rowCount: [],
-    loading: true,
-  },
 };
 
 const issueSlice = createSlice({
@@ -33,20 +24,6 @@ const issueSlice = createSlice({
   reducers: {
     setIssue: (state, action) => {
       state.info = { ...state.info, ...action.payload, loading: false };
-
-      return state;
-    },
-    setComments: (state, action) => {
-      state.comments.rows = action.payload.rows;
-      state.comments.rowCount = action.payload.rowCount;
-      state.comments.loading = false;
-
-      return state;
-    },
-    setTasks: (state, action) => {
-      state.tasks.rows = action.payload.rows;
-      state.tasks.rowCount = action.payload.rowCount;
-      state.tasks.loading = false;
 
       return state;
     },
@@ -69,12 +46,6 @@ const issueSlice = createSlice({
   },
 });
 
-export const {
-  setIssue,
-  setComments,
-  setIssueStatus,
-  setIssuePriority,
-  updateIssue,
-  setTasks,
-} = issueSlice.actions;
+export const { setIssue, setIssueStatus, setIssuePriority, updateIssue } =
+  issueSlice.actions;
 export default issueSlice.reducer;
