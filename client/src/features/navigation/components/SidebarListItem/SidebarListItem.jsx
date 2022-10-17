@@ -5,7 +5,7 @@ import MuiListItemButton from "@mui/material/ListItemButton";
 import MuiListItemIcon from "@mui/material/ListItemIcon";
 import MuiTypography from "@mui/material/Typography";
 
-export default function SidebarListItem({ open, text, icon, to }) {
+const SidebarListItem = ({ open, text, icon, to }) => {
   const listItemTypographyStyles = {
     color: "text.primary",
     opacity: open ? 1 : 0,
@@ -39,4 +39,6 @@ export default function SidebarListItem({ open, text, icon, to }) {
       </Link>
     </MuiListItem>
   );
-}
+};
+
+export default SidebarListItem;

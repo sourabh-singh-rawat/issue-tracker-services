@@ -5,7 +5,7 @@ import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-export default function Select({ title, items, helperText, ...otherProps }) {
+const Select = ({ title, items, helperText, ...otherProps }) => {
   return (
     <Fragment>
       <MuiTypography variant="body2" fontWeight={600} sx={{ paddingBottom: 1 }}>
@@ -40,4 +40,6 @@ export default function Select({ title, items, helperText, ...otherProps }) {
       </MuiFormHelperText>
     </Fragment>
   );
-}
+};
+
+export default Select;

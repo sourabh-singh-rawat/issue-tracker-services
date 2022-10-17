@@ -24,15 +24,15 @@ import { useGetProjectsQuery } from "../../projectList.api";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
-  const { rows, rowCount, page, pageSize } = useSelector(
-    (store) => store.projectList
-  );
   const getStatusQuery = useGetStatusQuery();
   const getProjectsQuery = useGetProjectsQuery({
     page,
     pageSize,
     sortBy: "creation_date:desc",
   });
+  const { rows, rowCount, page, pageSize } = useSelector(
+    (store) => store.projectList
+  );
 
   useEffect(() => {
     if (getStatusQuery.data) dispatch(setStatus(getStatusQuery.data));
@@ -112,11 +112,21 @@ const ProjectList = () => {
     },
     {
       field: "creation_date",
-      headerName: "Created On",
+      headerName: "Creation Date",
       type: "date",
       minWidth: 125,
       flex: 0.15,
-      renderCell: ({ value }) => format(parseISO(value), "P", { locale: enIN }),
+      renderCell: ({ value }) =>
+        value ? format(parseISO(value), "P", { locale: enIN }) : "-",
+    },
+    {
+      field: "start_date",
+      headerName: "Start Date",
+      type: "date",
+      minWidth: 125,
+      flex: 0.15,
+      renderCell: ({ value }) =>
+        value ? format(parseISO(value), "P", { locale: enIN }) : "-",
     },
     {
       field: "end_date",

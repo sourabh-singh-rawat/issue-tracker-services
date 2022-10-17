@@ -2,13 +2,13 @@ import { Fragment } from "react";
 
 import MuiBox from "@mui/material/Box";
 import MuiTypography from "@mui/material/Typography";
-import { Skeleton } from "@mui/material";
+import MuiSkeleton from "@mui/material/Skeleton";
 
-export default function IssueCard({ title, count, loading }) {
+const IssueCard = ({ title, count, loading }) => {
   return (
     <Fragment>
       {loading ? (
-        <Skeleton
+        <MuiSkeleton
           variant="rectangular"
           height="90px"
           sx={{ borderRadius: "8px" }}
@@ -49,4 +49,6 @@ export default function IssueCard({ title, count, loading }) {
       )}
     </Fragment>
   );
-}
+};
+
+export default IssueCard;

@@ -12,8 +12,10 @@ import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { setIssue, updateIssue } from "../../issue.slice";
 
 import { useGetIssueQuery, useUpdateIssueMutation } from "../../issue.api";
+import IssueStatusSelector from "../IssueStatusSelector/IssueStatusSelector";
+import IssuePrioritySelector from "../IssuePrioritySelector/IssuePrioritySelector";
 
-export default function Issue() {
+const Issue = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,7 +32,7 @@ export default function Issue() {
   const updateTitleQuery = async () => {
     updateIssueQuery({
       id,
-      payload: { name: issue.name },
+      body: { name: issue.name },
     });
   };
 
@@ -63,7 +65,7 @@ export default function Issue() {
       <MuiGrid item xs={12}>
         <TitleSection
           breadcrumbItems={[
-            { text: "projects", onClick: () => navigate(`/projects`) },
+            { text: "Projects", onClick: () => navigate(`/projects`) },
             {
               text: issue.project_name?.toLowerCase(),
               onClick: () => navigate(`/projects/${issue.project_id}/overview`),
@@ -72,6 +74,10 @@ export default function Issue() {
               text: "issues",
               onClick: () => navigate(`/projects/${issue.project_id}/issues`),
             },
+            {
+              text: issue.id,
+              onClick: () => navigate(`/issues/${issue.id}/overview`),
+            },
             { text: tabName },
           ]}
           loading={issue?.loading}
@@ -79,6 +85,20 @@ export default function Issue() {
           updateTitle={updateIssue}
           updateTitleQuery={updateTitleQuery}
           onClick={() => navigate("/issues")}
+          statusSelector={
+            <IssueStatusSelector
+              value={issue.status}
+              // handleChange={(e) => {
+              //   const { name, value } = e.target;
+              //   updateProjectMutation({ id, payload: { status: value } });
+              //   dispatch(updateProject({ status: value }));
+              // }}
+              variant="dense"
+            />
+          }
+          prioritySelector={
+            <IssuePrioritySelector value={issue.priority} variant="dense" />
+          }
         />
       </MuiGrid>
       <MuiGrid item xs={12}>
@@ -94,4 +114,6 @@ export default function Issue() {
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
+
+export default Issue;

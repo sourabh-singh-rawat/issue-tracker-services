@@ -6,7 +6,7 @@ import { Skeleton } from "@mui/material";
 
 import IssueCard from "../../../../common/IssueCard";
 
-export default function IssueStats({ issuesStatusCount, loading }) {
+const IssueStats = ({ issuesStatusCount, loading }) => {
   const total = issuesStatusCount.reduce(
     (prev, cur) => prev + parseInt(cur.count),
     0
@@ -43,4 +43,6 @@ export default function IssueStats({ issuesStatusCount, loading }) {
       </MuiGrid>
     </Fragment>
   );
-}
+};
+
+export default IssueStats;

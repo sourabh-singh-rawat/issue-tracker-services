@@ -2,22 +2,29 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   comments: {
-    loading: true,
     rows: [],
     rowCount: [],
+    loading: true,
   },
   info: {
     nameSelected: false,
     descriptionSelected: false,
+    status: "OPEN",
+    priority: "0_LOWEST",
     loading: true,
-    status: 0,
-    priority: 0,
   },
   options: {
-    status: { loading: true, rows: [{ status: 0, message: "to do" }] },
-    priority: { loading: true, rows: [{ status: 0, message: "lowest" }] },
+    status: { loading: true, rows: [{ status: "0_OPEN", message: "open" }] },
+    priority: {
+      rows: [{ status: "0_LOWEST", message: "lowest" }],
+      loading: true,
+    },
   },
-  tasks: { loading: true, rows: [], rowCount: [] },
+  tasks: {
+    rows: [],
+    rowCount: [],
+    loading: true,
+  },
 };
 
 const issueSlice = createSlice({

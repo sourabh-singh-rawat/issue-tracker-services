@@ -12,7 +12,7 @@ import MuiMenuItem from "@mui/material/MenuItem";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { useDeleteProjectMutation } from "../../../project/project.api";
 
-export default function DeleteProject({ id }) {
+const DeleteProject = ({ id }) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -54,4 +54,6 @@ export default function DeleteProject({ id }) {
       </MuiDialog>
     </Fragment>
   );
-}
+};
+
+export default DeleteProject;

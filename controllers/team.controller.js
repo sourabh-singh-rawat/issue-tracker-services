@@ -1,7 +1,7 @@
 import Team from "../models/team.model.js";
 import TeamUser from "../models/teamUser.model.js";
 
-const create = async function createTeam(req, res) {
+const create = async (req, res) => {
   try {
     const team = (await Team.insertOne(req.body)).rows[0];
 
@@ -11,7 +11,7 @@ const create = async function createTeam(req, res) {
   }
 };
 
-const createMember = async function createTeamMember(req, res) {
+const createMember = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -23,7 +23,7 @@ const createMember = async function createTeamMember(req, res) {
   }
 };
 
-const index = async function indexTeams(req, res) {
+const index = async (req, res) => {
   try {
     const teams = (await Team.find()).rows;
 
@@ -33,7 +33,7 @@ const index = async function indexTeams(req, res) {
   }
 };
 
-const indexMembers = async function indexTeamMembers(req, res) {
+const indexMembers = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -44,7 +44,7 @@ const indexMembers = async function indexTeamMembers(req, res) {
   }
 };
 
-const show = async function showTeam(req, res) {
+const show = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -58,7 +58,7 @@ const show = async function showTeam(req, res) {
   }
 };
 
-const update = async function updateTeam(req, res) {
+const update = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -72,9 +72,9 @@ const update = async function updateTeam(req, res) {
   }
 };
 
-const destroy = async function deleteTeam() {};
+const destroy = async () => {};
 
-const destroyMember = async function deleteTeamMember() {};
+const destroyMember = async () => {};
 
 export default {
   create,

@@ -7,13 +7,13 @@ import MuiTypography from "@mui/material/Typography";
 
 import TabPanel from "../../../../common/TabPanel";
 import Description from "../../../../common/Description";
+import IssueAssignee from "../IssueAssignee/IssueAssignee";
 
 import { updateIssue } from "../../issue.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { useUpdateIssueMutation } from "../../issue.api";
-import IssueAssignee from "../IssueAssignee/IssueAssignee";
 
-export default function IssueOverview() {
+const IssueOverview = () => {
   const dispatch = useDispatch();
   const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
   const { id } = useParams();
@@ -51,4 +51,6 @@ export default function IssueOverview() {
       </MuiGrid>
     </TabPanel>
   );
-}
+};
+
+export default IssueOverview;

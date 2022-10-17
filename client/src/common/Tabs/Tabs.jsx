@@ -1,6 +1,6 @@
 import MuiTabs from "@mui/material/Tabs";
 
-export default function Tabs(props) {
+const Tabs = (props) => {
   return (
     <MuiTabs
       {...props}
@@ -23,4 +23,6 @@ export default function Tabs(props) {
       }}
     />
   );
-}
+};
+
+export default Tabs;

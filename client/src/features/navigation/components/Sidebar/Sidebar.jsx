@@ -16,7 +16,7 @@ import SidebarListItem from "../SidebarListItem";
 
 export const drawerWidth = 240;
 
-export default function Sidebar() {
+const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -102,4 +102,6 @@ export default function Sidebar() {
       </MuiList>
     </Drawer>
   );
-}
+};
+
+export default Sidebar;

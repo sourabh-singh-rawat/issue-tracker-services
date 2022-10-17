@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import ProjectMember from "../models/projectMember.model.js";
 
-const index = async function indexCollaborators(req, res) {
+const index = async (req, res) => {
   const { uid } = req.user;
 
   try {

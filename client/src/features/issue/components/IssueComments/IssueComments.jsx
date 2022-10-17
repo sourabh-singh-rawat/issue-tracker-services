@@ -29,20 +29,24 @@ function IssueComments() {
   }, [getIssueCommentsQuery.data]);
 
   return (
-    <MuiGrid container spacing={1}>
+    <MuiGrid container rowSpacing={1}>
       <MuiGrid item xs={12}>
         <AddComment />
       </MuiGrid>
       {comments.loading ? (
         <CircularProgress />
       ) : (
-        comments.rows.map(({ id, ...otherProps }) => {
-          return (
-            <MuiGrid key={id} item xs={12}>
-              <Comment id={id} {...otherProps} />
-            </MuiGrid>
-          );
-        })
+        <MuiGrid item xs={12}>
+          <MuiGrid container rowSpacing={0.5}>
+            {comments.rows.map(({ id, ...otherProps }) => {
+              return (
+                <MuiGrid key={id} item xs={12}>
+                  <Comment id={id} {...otherProps} />
+                </MuiGrid>
+              );
+            })}
+          </MuiGrid>
+        </MuiGrid>
       )}
     </MuiGrid>
   );

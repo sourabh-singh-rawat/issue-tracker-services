@@ -10,14 +10,15 @@ import MuiTypography from "@mui/material/Typography";
 import Title from "../Title/Title";
 import ProjectStatusSelector from "../../features/project/components/ProjectStatusSelector/ProjectStatusSelector";
 
-export default function TitleSection({
+const TitleSection = ({
   page,
   loading,
   updateTitle,
   updateTitleQuery,
   breadcrumbItems,
   statusSelector,
-}) {
+  prioritySelector,
+}) => {
   const location = useLocation();
   const type = location.pathname.split("/")[1];
 
@@ -30,12 +31,12 @@ export default function TitleSection({
           updateTitle={updateTitle}
           updateTitleQuery={updateTitleQuery}
           breadcrumbItems={breadcrumbItems}
-          statusSelector={statusSelector}
         />
       </MuiGrid>
       <MuiGrid item xs={12} sx={{ color: "text.secondary" }}>
         <MuiBreadcrumbs separator="•">
           {loading ? <Skeleton width="80px" /> : statusSelector}
+          {loading ? <Skeleton width="80px" /> : prioritySelector}
           {loading ? (
             <Skeleton width="80px" />
           ) : (
@@ -59,4 +60,6 @@ export default function TitleSection({
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
+
+export default TitleSection;

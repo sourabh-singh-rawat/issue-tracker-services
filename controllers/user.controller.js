@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 
-const create = async function createUser(req, res) {
+const create = async (req, res) => {
   const { name, email, uid, photoURL } = req.body;
 
   try {
@@ -24,7 +24,7 @@ const create = async function createUser(req, res) {
   }
 };
 
-const show = async function showUser(req, res) {
+const show = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -36,7 +36,7 @@ const show = async function showUser(req, res) {
   }
 };
 
-const update = async function updateUser(req, res) {
+const update = async (req, res) => {
   const { id } = req.params;
 
   // Check if the operation is valid or not
@@ -54,7 +54,7 @@ const update = async function updateUser(req, res) {
   }
 };
 
-const destroy = async function deleteUser(req, res) {
+const destroy = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -66,4 +66,9 @@ const destroy = async function deleteUser(req, res) {
   }
 };
 
-export default { create, show, update, destroy };
+export default {
+  create,
+  show,
+  update,
+  destroy,
+};

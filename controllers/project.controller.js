@@ -11,9 +11,9 @@ import { response } from "express";
 
 /**
  * Creates a new project member
- * @returns -- the newly created member
+ * @returns -- the newly created project
  */
-const create = async function createProject(req, res) {
+const create = async (req, res) => {
   const { uid, email } = req.user;
 
   try {
@@ -24,11 +24,16 @@ const create = async function createProject(req, res) {
 
     return res.send(project);
   } catch (error) {
-    res.status(500).send(error);
+    console.log(error);
+    res.status(500).send();
   }
 };
 
-const createMember = async function createProjectMember(req, res) {
+/**
+ * Creates a new project member
+ * @returns -- newly created member
+ */
+const createMember = async (req, res) => {
   const { uid, toProject } = req.body;
 
   try {
@@ -45,7 +50,7 @@ const createMember = async function createProjectMember(req, res) {
  * Sends an email to the given email address
  * @return confirmation that the email is sent
  */
-const invite = async function inviteByEmail(req, res) {
+const invite = async (req, res) => {
   const { user_id } = req.user;
   const { email, role } = req.body;
   const { id } = req.params;
@@ -73,7 +78,7 @@ const invite = async function inviteByEmail(req, res) {
   }
 };
 
-const confirmInvite = async function confirmInvite(req, res) {
+const confirmInvite = async (req, res) => {
   const { inviteToken } = req.query;
   const validToken = jwt.verify(inviteToken, process.env.JWT_SECRET);
 
@@ -93,7 +98,7 @@ const confirmInvite = async function confirmInvite(req, res) {
  * List projects created by the user
  * @returns array of project created by the user
  */
-const index = async function indexProjects(req, res) {
+const index = async (req, res) => {
   const { uid } = req.user;
 
   // filtering
@@ -141,7 +146,7 @@ const index = async function indexProjects(req, res) {
   }
 };
 
-const indexMembers = async function indexProjectMembers(req, res) {
+const indexMembers = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -155,7 +160,7 @@ const indexMembers = async function indexProjectMembers(req, res) {
 /**
  * Lists roles available to project members
  */
-const indexRoles = async function indexProjectMemberRoles(req, res) {
+const indexRoles = async (req, res) => {
   try {
     const role = await Role.find();
     res.send({ rows: role.rows, rowCount: role.rowCount });
@@ -167,7 +172,7 @@ const indexRoles = async function indexProjectMemberRoles(req, res) {
 /**
  * List project status available to projects
  */
-const indexStatus = async function indexProjectStatus(req, res) {
+const indexStatus = async (req, res) => {
   try {
     const status = await ProjectStatus.find();
     res.send({ rows: status.rows, rowCount: status.rowCount });
@@ -179,7 +184,7 @@ const indexStatus = async function indexProjectStatus(req, res) {
 /**
  * @returns project
  */
-const show = async function showProject(req, res) {
+const show = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -190,7 +195,7 @@ const show = async function showProject(req, res) {
   }
 };
 
-const showIssuesStatusCount = async function showIssuesStatusCount(req, res) {
+const showIssuesStatusCount = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -202,7 +207,7 @@ const showIssuesStatusCount = async function showIssuesStatusCount(req, res) {
   }
 };
 
-const update = async function updateProject(req, res) {
+const update = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -213,7 +218,7 @@ const update = async function updateProject(req, res) {
   }
 };
 
-const destroy = async function deleteProject(req, res) {
+const destroy = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -229,9 +234,9 @@ export default {
   create,
   createMember,
   index,
+  indexRoles,
   indexStatus,
   indexMembers,
-  indexRoles,
   show,
   showIssuesStatusCount,
   update,

@@ -29,7 +29,7 @@ const find = function findIssueTasks(id) {
   );
 };
 
-const updateOne = function updateIssueTask({ taskId, description }) {
+const updateOne = ({ taskId, description }) => {
   return db.query(
     `UPDATE issue_tasks 
      SET description=$1 
@@ -39,7 +39,7 @@ const updateOne = function updateIssueTask({ taskId, description }) {
   );
 };
 
-const deleteOne = function deleteIssueTask(taskId) {
+const deleteOne = (taskId) => {
   return db.query(
     `DELETE FROM issue_tasks 
      WHERE id=$1::uuid

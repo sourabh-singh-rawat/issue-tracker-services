@@ -1,9 +1,8 @@
-import { Fragment, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, Fragment } from "react";
 import { useSelector } from "react-redux";
 
-import MuiGrid from "@mui/material/Grid";
 import MuiMenu from "@mui/material/Menu";
+import MuiGrid from "@mui/material/Grid";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiMenuItem from "@mui/material/MenuItem";
@@ -24,8 +23,7 @@ const appBarStyles = {
   zIndex: (theme) => theme.zIndex.drawer + 1,
 };
 
-export default function Navbar({ onClick, loading }) {
-  const location = useLocation();
+const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const auth = useSelector((store) => store.auth.user);
@@ -75,4 +73,6 @@ export default function Navbar({ onClick, loading }) {
       </MuiToolbar>
     </MuiAppBar>
   );
-}
+};
+
+export default Navbar;

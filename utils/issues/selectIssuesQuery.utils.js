@@ -2,9 +2,8 @@ export const selectIssuesQuery = function createSelectQuery({
   reporter_id,
   options,
   pagingOptions,
-  sortOptions: { field = "name", order = "asc" },
+  sortOptions: { field = "status", order = "asc" },
 }) {
-  // Remove all the props with falsey values
   Object.keys(options).forEach((option) => {
     if (!options[option]) delete options[option];
   });
@@ -30,7 +29,7 @@ export const selectIssuesQuery = function createSelectQuery({
   }
 
   // ORDER BY
-  orderBy += field + " " + order;
+  orderBy += field + " " + order + " ";
 
   // LIMIT and OFFSET
   if (Object.keys(pagingOptions).length !== 0) {

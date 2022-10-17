@@ -24,7 +24,7 @@ import {
   useUpdateIssueMutation,
 } from "../../issue.api";
 
-export default function IssueSettings() {
+const IssueSettings = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
@@ -58,7 +58,13 @@ export default function IssueSettings() {
 
   return (
     <TabPanel selectedTab={selectedTab} index={3}>
-      <Grid container component="form" onSubmit={handleSubmit} gap="20px">
+      <Grid
+        container
+        component="form"
+        onSubmit={handleSubmit}
+        gap="20px"
+        rowSpacing={2}
+      >
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12} md={4}>
@@ -109,7 +115,7 @@ export default function IssueSettings() {
               </Grid>
             </Grid>
           </Grid>
-          <Divider />
+          <Divider sx={{ marginTop: 2 }} />
         </Grid>
         <Grid item xs={12}>
           <Grid container>
@@ -183,4 +189,6 @@ export default function IssueSettings() {
       </Grid>
     </TabPanel>
   );
-}
+};
+
+export default IssueSettings;

@@ -19,7 +19,7 @@ import {
 
 import { onAuthStateChangedListener } from "../../../../app/services/auth.service";
 
-export default function SignUp() {
+const SignUp = () => {
   const token = useSelector((store) => store.auth.token);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -152,4 +152,6 @@ export default function SignUp() {
       </MuiGrid>
     </MuiContainer>
   );
-}
+};
+
+export default SignUp;

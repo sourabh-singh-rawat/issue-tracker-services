@@ -1,6 +1,6 @@
 import db from "../services/db.service.js";
 
-const find = function findProjectStatus() {
+const find = () => {
   return db.query(`SELECT * FROM project_status ORDER BY status ASC`);
 };
 

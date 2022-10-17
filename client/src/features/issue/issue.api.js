@@ -12,11 +12,11 @@ const issueApiSlice = apiSlice.injectEndpoints({
       },
     }),
     createIssueTask: build.mutation({
-      query: (payload) => {
+      query: (body) => {
         return {
           url: `/issues/tasks`,
           method: "POST",
-          body: payload,
+          body,
         };
       },
     }),
@@ -85,6 +85,24 @@ const issueApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Task"],
     }),
+    updateIssueTask: build.mutation({
+      query: ({ id, taskId, body }) => {
+        return {
+          url: `/issues/${id}/tasks/${taskId}`,
+          method: "PATCH",
+          body,
+        };
+      },
+    }),
+    deleteIssueTask: build.mutation({
+      query: ({ id, taskId }) => {
+        return {
+          url: `/issues/${id}/tasks/${taskId}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Task"],
+    }),
   }),
 });
 
@@ -101,4 +119,6 @@ export const {
 
   useGetIssueTasksQuery,
   useCreateIssueTaskMutation,
+  useUpdateIssueTaskMutation,
+  useDeleteIssueTaskMutation,
 } = issueApiSlice;

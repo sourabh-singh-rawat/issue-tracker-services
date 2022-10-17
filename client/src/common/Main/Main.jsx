@@ -20,7 +20,7 @@ import {
   setIssueStatus,
 } from "../../features/issue/issue.slice";
 
-export default function Main() {
+const Main = () => {
   const dispatch = useDispatch();
   const issueStatus = useGetIssuesStatusQuery();
   const issuePriority = useGetIssuesPriorityQuery();
@@ -46,4 +46,6 @@ export default function Main() {
       </MuiBox>
     </Fragment>
   );
-}
+};
+
+export default Main;

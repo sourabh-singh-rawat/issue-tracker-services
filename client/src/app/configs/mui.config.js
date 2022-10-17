@@ -12,10 +12,6 @@ const themeConfig = {
       secondary: "#5E5A5A",
       disabled: "#080F0F",
     },
-    // error: {
-    //   // main: "",
-    //   // dark: "",
-    // },
     warning: {
       main: "#FF6700",
       dark: "#F56200",
