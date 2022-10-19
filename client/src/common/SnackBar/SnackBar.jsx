@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setSnackbarOpen } from "../../features/snackbar.reducer";
 
-// Mui Core
 import MuiSlide from "@mui/material/Slide";
 import MuiSnackbar from "@mui/material/Snackbar";
-import MuiCloseIcon from "@mui/icons-material/Close";
 import MuiIconButton from "@mui/material/IconButton";
+import MuiCloseIcon from "@mui/icons-material/Close";
 
 const SlideTransition = (props) => <MuiSlide {...props} direction="up" />;
 

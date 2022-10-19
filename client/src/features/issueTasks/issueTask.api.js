@@ -2,7 +2,7 @@ import { apiSlice } from "../../app/services/api.service";
 
 const issueTasksApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    createIssueTask: build.mutation({
+    createTask: build.mutation({
       query: (body) => {
         return {
           url: "/issues/tasks",
@@ -12,13 +12,13 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Task"],
     }),
-    getIssueTasks: build.query({
+    getTasks: build.query({
       query: (id) => {
         return `/issues/${id}/tasks`;
       },
       providesTags: ["Task"],
     }),
-    updateIssueTask: build.mutation({
+    updateTask: build.mutation({
       query: ({ id, taskId, body }) => {
         return {
           url: `/issues/${id}/tasks/${taskId}`,
@@ -26,8 +26,9 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
           body,
         };
       },
+      // invalidatesTags: ["Task"],
     }),
-    deleteIssueTask: build.mutation({
+    deleteTask: build.mutation({
       query: ({ id, taskId }) => {
         return {
           url: `/issues/${id}/tasks/${taskId}`,
@@ -40,8 +41,8 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetIssueTasksQuery,
-  useCreateIssueTaskMutation,
-  useUpdateIssueTaskMutation,
-  useDeleteIssueTaskMutation,
+  useCreateTaskMutation,
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation,
 } = issueTasksApiSlice;

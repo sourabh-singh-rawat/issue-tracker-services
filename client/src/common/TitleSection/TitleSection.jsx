@@ -8,7 +8,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
 import Title from "../Title/Title";
-import ProjectStatusSelector from "../../features/project/components/ProjectStatusSelector/ProjectStatusSelector";
+import Breadcrumbs from "../Breadcrumbs";
 
 const TitleSection = ({
   page,
@@ -25,12 +25,14 @@ const TitleSection = ({
   return (
     <MuiGrid container>
       <MuiGrid item xs={12}>
+        <Breadcrumbs items={breadcrumbItems} loading={loading} />
+      </MuiGrid>
+      <MuiGrid item xs={12}>
         <Title
           page={page}
           loading={loading}
           updateTitle={updateTitle}
           updateTitleQuery={updateTitleQuery}
-          breadcrumbItems={breadcrumbItems}
         />
       </MuiGrid>
       <MuiGrid item xs={12} sx={{ color: "text.secondary" }}>

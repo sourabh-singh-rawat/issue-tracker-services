@@ -45,7 +45,7 @@ const ProjectList = () => {
 
   const SelectEditInputCell = ({ id, value, field }) => {
     const apiRef = useGridApiContext();
-    const [updateProject, { isSuccess }] = useUpdateProjectMutation();
+    const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
 
     const handleChange = async (event) => {
       apiRef.current.startCellEditMode({ id, field });
@@ -55,9 +55,9 @@ const ProjectList = () => {
         value: event.target.value,
       });
 
-      await updateProject({
+      await updateProjectMutation({
         id,
-        payload: { [field]: event.target.value },
+        body: { [field]: event.target.value },
       });
 
       if (isValid) apiRef.current.stopCellEditMode({ id, field });

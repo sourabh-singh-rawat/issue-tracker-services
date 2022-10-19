@@ -17,8 +17,8 @@ import MuiAccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import { signOutUser } from "../../../../utils/firebase.utils";
 
 const appBarStyles = {
-  width: "100%",
   color: "white",
+  width: "100%",
   boxShadow: 1,
   zIndex: (theme) => theme.zIndex.drawer + 1,
 };

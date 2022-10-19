@@ -50,12 +50,12 @@ const IssueForm = () => {
   });
 
   useEffect(() => {
-    if (allProjects.data) setProjects(allProjects.data.rows);
-  }, [allProjects.isFetching]);
+    if (allProjects.isSuccess) setProjects(allProjects.data.rows);
+  }, [allProjects.data]);
 
   useEffect(() => {
-    if (collaborators.data) setProjectMembers(collaborators.data.rows);
-  }, [collaborators.isFetching]);
+    if (collaborators.isSuccess) setProjectMembers(collaborators.data.rows);
+  }, [collaborators.data]);
 
   useEffect(() => {
     setFormFields({

@@ -1,36 +1,59 @@
 import { Fragment } from "react";
+
+import MuiGrid from "@mui/material/Grid";
+import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 
-const TextField = ({ title, name, ...otherProps }) => {
+const TextField = ({
+  title,
+  name,
+  loading,
+  multiline,
+  rows,
+  ...otherProps
+}) => {
   return (
-    <Fragment>
-      {title && (
-        <MuiTypography variant="body2" fontWeight={600} paddingBottom={1}>
-          {title}
-        </MuiTypography>
-      )}
-      <MuiTextField
-        name={name && name.toLowerCase()}
-        size="small"
-        sx={{
-          input: { fontSize: "14px" },
-          "input:disabled": {
-            color: "#eff0f2",
-            backgroundColor: "#eff0f2",
-          },
-          ".MuiFormHelperText-contained": {
-            fontSize: "14px",
-            marginLeft: 0,
-          },
-          ".MuiInputBase-root": {
-            fontSize: "14px",
-          },
-        }}
-        {...otherProps}
-        fullWidth
-      />
-    </Fragment>
+    <MuiGrid container>
+      <MuiGrid item xs={12}>
+        {title && loading ? (
+          <MuiSkeleton width="20%" />
+        ) : (
+          <MuiTypography variant="body2" fontWeight={600} paddingBottom={1}>
+            {title}
+          </MuiTypography>
+        )}
+      </MuiGrid>
+      <MuiGrid item xs={12}>
+        {loading ? (
+          <Fragment>
+            <MuiSkeleton />
+            {multiline && <MuiSkeleton />}
+            {multiline && <MuiSkeleton />}
+            {multiline && <MuiSkeleton width="75%" />}
+          </Fragment>
+        ) : (
+          <MuiTextField
+            size="small"
+            name={name && name.toLowerCase()}
+            rows={rows}
+            sx={{
+              ".MuiInputBase-root": {
+                fontSize: "14px",
+                borderRadius: "4px",
+              },
+              ".MuiFormHelperText-contained": {
+                fontSize: "13px",
+                marginLeft: 0,
+              },
+            }}
+            multiline
+            fullWidth
+            {...otherProps}
+          />
+        )}
+      </MuiGrid>
+    </MuiGrid>
   );
 };
 

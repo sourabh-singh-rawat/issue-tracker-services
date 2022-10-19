@@ -1,11 +1,6 @@
 import db from "../services/db.service.js";
 
-const insertOne = function InsertOneIssueTask({
-  issueId,
-  dueDate,
-  description,
-  completed,
-}) {
+const insertOne = ({ issueId, dueDate, description, completed }) => {
   return db.query(
     `INSERT INTO issue_tasks (issue_id, due_date, description, completed) VALUES ($1, $2, $3, $4)
      RETURNING *`,
@@ -13,7 +8,7 @@ const insertOne = function InsertOneIssueTask({
   );
 };
 
-const findOne = function findOneIssueTask(taskId) {
+const findOne = (taskId) => {
   return db.query(
     `SELECT * FROM issue_tasks
      WHERE id=$1::uuid`,
@@ -21,25 +16,29 @@ const findOne = function findOneIssueTask(taskId) {
   );
 };
 
-const find = function findIssueTasks(id) {
+const find = (id) => {
   return db.query(
     `SELECT * FROM issue_tasks
-     WHERE issue_id = $1::uuid`,
+     WHERE issue_id = $1::uuid
+     ORDER BY creation_date`,
     [id]
   );
 };
 
-const updateOne = ({ taskId, description }) => {
-  return db.query(
-    `UPDATE issue_tasks 
-     SET description=$1 
-     WHERE id=$2::uuid
-     RETURNING *`,
-    [description, taskId]
-  );
+const updateOne = ({ taskId, updates }) => {
+  let query = Object.keys(updates)
+    .reduce(
+      (prev, cur, index) => prev + " " + cur + "=$" + (index + 1) + ",",
+      "UPDATE issue_tasks SET"
+    )
+    .slice(0, -1);
+
+  query += " WHERE id='" + taskId + "' RETURNING *";
+
+  return db.query(query, Object.values(updates));
 };
 
-const deleteOne = (taskId) => {
+const deleteOne = ({ taskId }) => {
   return db.query(
     `DELETE FROM issue_tasks 
      WHERE id=$1::uuid

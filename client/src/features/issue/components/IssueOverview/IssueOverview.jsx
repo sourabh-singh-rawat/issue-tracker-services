@@ -30,23 +30,28 @@ const IssueOverview = () => {
 
   return (
     <TabPanel selectedTab={selectedTab} index={0}>
-      <MuiGrid container columnSpacing={2}>
-        <MuiGrid item xs={6}>
-          <MuiTypography variant="body2" fontWeight={600}>
+      <MuiGrid container columnSpacing={2} rowSpacing={2}>
+        <MuiGrid item xs={12} sm={12} md={6}>
+          <MuiTypography variant="body1" fontWeight={600}>
             Description:
           </MuiTypography>
           <Description
-            loading={issue.loading}
             page={issue}
+            loading={issue.loading}
             updateDescription={updateIssue}
             updateDescriptionQuery={updatePageQuery}
           />
         </MuiGrid>
-        <MuiGrid item xs={6}>
-          <MuiTypography variant="body2" fontWeight={600}>
+        <MuiGrid item xs={12} sm={12} md={6}>
+          <MuiTypography variant="body1" fontWeight={600}>
             Assignee:
           </MuiTypography>
           <IssueAssignee />
+        </MuiGrid>
+        <MuiGrid item xs={12} sm={12} md={6}>
+          <MuiTypography variant="body1" fontWeight={600}>
+            Tasks:
+          </MuiTypography>
         </MuiGrid>
       </MuiGrid>
     </TabPanel>

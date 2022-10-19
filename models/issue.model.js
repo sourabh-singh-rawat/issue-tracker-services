@@ -7,15 +7,24 @@ const insertOne = ({
   status,
   priority,
   reporter_id,
-  assigned_to,
   due_date,
   project_id,
+  assigned_to,
 }) => {
   return db.query(
-    `INSERT INTO issues (name, description, status, priority, reporter_id, due_date, project_id)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `INSERT INTO issues (name, description, status, priority, reporter_id, due_date, project_id, assigned_to)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING *`,
-    [name, description, status, priority, reporter_id, due_date, project_id]
+    [
+      name,
+      description,
+      status,
+      priority,
+      reporter_id,
+      due_date,
+      project_id,
+      assigned_to,
+    ]
   );
 };
 
@@ -24,7 +33,7 @@ const find = (options) => {
   return db.query(query, colValues);
 };
 
-const findOne = function findOneIssue(id) {
+const findOne = (id) => {
   return db.query(
     `SELECT 
      issues.id, issues.name, issues.description, issues.status, 

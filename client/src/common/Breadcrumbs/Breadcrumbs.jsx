@@ -8,14 +8,17 @@ const Breadcrumbs = ({ items, loading }) => {
     <MuiBreadcrumbs separator="/">
       {items.map(({ text, onClick }) => {
         return (
-          <span key={text}>
+          <span key={onClick}>
             {loading ? (
               <MuiSkeleton variant="text" width="75px" height="20px" />
             ) : (
               <MuiLink
                 onClick={onClick}
                 underline="hover"
-                sx={{ cursor: "pointer", color: "text.secondary" }}
+                sx={{
+                  cursor: "pointer",
+                  color: "text.secondary",
+                }}
               >
                 <MuiTypography
                   variant="body2"

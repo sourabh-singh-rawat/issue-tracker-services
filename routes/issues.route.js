@@ -11,16 +11,21 @@ router.get("/issues", auth, IssueController.index);
 router.get("/issues/status", IssueController.indexStatus);
 router.get("/issues/priority", IssueController.indexPriority);
 router.get("/issues/:id", auth, IssueController.show);
-router.get("/issues/:id/tasks", IssueController.indexTasks);
-router.get("/issues/:id/tasks/:taskId", IssueController.showTask);
-router.get("/issues/:id/comments", IssueController.indexComments);
+router.get("/issues/:id/tasks", auth, IssueController.indexTasks);
+router.get("/issues/:id/tasks/:taskId", auth, IssueController.showTask);
+router.get("/issues/:id/comments", auth, IssueController.indexComments);
 router.patch("/issues/:id", auth, IssueController.update);
 router.patch("/issues/:id/tasks/:taskId", auth, IssueController.updateTask);
-router.patch("/issues/:id/comments/:commentId", IssueController.updateComment);
+router.patch(
+  "/issues/:id/comments/:commentId",
+  auth,
+  IssueController.updateComment
+);
 router.delete("/issues/:id", auth, IssueController.destroy);
-router.delete("/issues/:id/tasks/:taskId", IssueController.destroyTask);
+router.delete("/issues/:id/tasks/:taskId", auth, IssueController.destroyTask);
 router.delete(
   "/issues/:id/comments/:commentId",
+  auth,
   IssueController.destroyComment
 );
 

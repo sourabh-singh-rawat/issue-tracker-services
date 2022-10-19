@@ -9,14 +9,14 @@ import TaskList from "../TaskList/TaskList";
 import TabPanel from "../../../../common/TabPanel";
 
 import { setTasks } from "../../../issueTasks/issueTasks.slice";
-import { useGetIssueTasksQuery } from "../../issueTask.api";
+import { useGetTasksQuery } from "../../issueTask.api";
 
 const IssueTasks = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const [selectedTab] = useOutletContext();
   const issueTasks = useSelector((store) => store.issueTasks.rows);
-  const getIssueTasks = useGetIssueTasksQuery(id);
+  const getIssueTasks = useGetTasksQuery(id);
 
   useEffect(() => {
     if (getIssueTasks.isSuccess) {

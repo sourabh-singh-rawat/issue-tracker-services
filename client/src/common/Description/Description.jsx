@@ -27,7 +27,7 @@ const Description = ({
 
   return (
     <MuiGrid container>
-      <MuiGrid item sm={12}>
+      <MuiGrid item xs={12}>
         {page.descriptionSelected ? (
           <MuiTextField
             multiline
@@ -36,7 +36,10 @@ const Description = ({
             value={page.description}
             onChange={handleChange}
             inputProps={{
-              style: { fontSize: "14px", lineHeight: 1.5 },
+              style: {
+                fontSize: "14px",
+                lineHeight: 1.5,
+              },
             }}
             fullWidth
           />

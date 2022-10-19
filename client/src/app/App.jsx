@@ -48,12 +48,20 @@ const App = () => {
   useEffect(() => {
     return onAuthStateChangedListener((user) => {
       if (user) {
-        const { email, displayName, uid, accessToken, photoURL } = user;
+        const {
+          uid,
+          email,
+          displayName,
+          accessToken,
+          photoURL,
+          stsTokenManager: { refreshToken },
+        } = user;
 
         dispatch(
           setCredentials({
-            user: { email, displayName, uid, photoURL },
-            token: accessToken,
+            user: { uid, email, displayName, photoURL },
+            accessToken,
+            refreshToken,
             loading: false,
           })
         );

@@ -1,6 +1,5 @@
 import { useState, Fragment } from "react";
 import { useParams } from "react-router-dom";
-
 import { formatISO, parseISO } from "date-fns";
 
 import MuiGrid from "@mui/material/Grid";
@@ -11,11 +10,11 @@ import MuiInputAdornment from "@mui/material/InputAdornment";
 
 import MuiAddIcon from "@mui/icons-material/Add";
 
-import { useCreateIssueTaskMutation } from "../../issueTask.api";
+import { useCreateTaskMutation } from "../../issueTask.api";
 
 const AddTask = () => {
   const { id } = useParams();
-  const [createTask] = useCreateIssueTaskMutation();
+  const [createTask] = useCreateTaskMutation();
 
   const [task, setTask] = useState({
     dueDate: formatISO(new Date()),
@@ -123,16 +122,6 @@ const AddTask = () => {
           />
         </MuiGrid>
       )}
-      {/* <MuiGrid item >
-        <DatePicker
-          name="dueDate"
-          value={parseISO(task.dueDate)}
-          handleChange={handleDateChange}
-          onChange={(date) => {
-            setTask({ dueDate: formatISO(date) });
-          }}
-        />
-      </MuiGrid> */}
     </MuiGrid>
   );
 };

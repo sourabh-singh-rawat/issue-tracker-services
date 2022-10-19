@@ -24,11 +24,6 @@ const MembersCard = () => {
   return (
     <Fragment>
       <MuiGrid container>
-        <MuiGrid item xs={12}>
-          <MuiTypography variant="body2" fontWeight={600}>
-            People:
-          </MuiTypography>
-        </MuiGrid>
         <MuiGrid item sx={{ marginTop: "8px" }}>
           <AvatarGroup total={members.rowCount} members={members.rows} />
         </MuiGrid>
