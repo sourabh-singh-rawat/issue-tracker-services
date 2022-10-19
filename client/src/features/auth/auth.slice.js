@@ -4,7 +4,8 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    token: null,
+    accessToken: null,
+    refreshToken: null,
     loading: true,
   },
   reducers: {
@@ -13,7 +14,8 @@ const authSlice = createSlice({
     },
     signOut: (state, action) => {
       state.user = null;
-      state.token = null;
+      state.accessToken = null;
+      state.refreshToken = null;
       return state;
     },
   },

@@ -14,15 +14,15 @@ import { setMembers } from "../../features/project/project.slice";
 import { useGetProjectMembersQuery } from "../../features/project/project.api";
 
 const MemberList = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const { rows, rowCount, pageSize } = useSelector(
     (store) => store.project.members
   );
   const projectMembers = useGetProjectMembersQuery(id);
 
   useEffect(() => {
-    if (projectMembers.data) dispatch(setMembers(projectMembers.data));
+    if (projectMembers.isSuccess) dispatch(setMembers(projectMembers.data));
   }, [projectMembers.data]);
 
   const columns = [

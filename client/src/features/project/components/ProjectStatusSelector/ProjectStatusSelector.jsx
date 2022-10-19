@@ -67,7 +67,7 @@ const ProjectStatusSelector = ({
       </MuiFormControl>
       {helperText && (
         <MuiFormHelperText>
-          <MuiTypography component="span" variant="body2">
+          <MuiTypography component="span" sx={{ fontSize: "13px" }}>
             {helperText}
           </MuiTypography>
         </MuiFormHelperText>

@@ -37,7 +37,7 @@ const TeamSettings = () => {
         <Grid container sx={{ marginTop: 3 }}>
           <Grid item xs={12} md={4}>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              Basic Information
+              basic Information
             </Typography>
           </Grid>
           <Grid item xs={12} md={8}>

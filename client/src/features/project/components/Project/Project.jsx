@@ -17,12 +17,19 @@ import {
   useGetProjectQuery,
   useUpdateProjectMutation,
 } from "../../project.api";
+import {
+  useGetIssuesStatusQuery,
+  useGetIssuesPriorityQuery,
+} from "../../../issue/issue.api";
+import { setIssueStatus } from "../../../issue/issue.slice";
 
 const Project = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const issueStatus = useGetIssuesStatusQuery();
+  const issuePriority = useGetIssuesPriorityQuery();
   const status = useGetStatusQuery();
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
   const tabName = location.pathname.split("/")[3];
@@ -56,6 +63,18 @@ const Project = () => {
   const updateTitleQuery = () => {
     updateProjectMutation({ id, payload: { name: project.name } });
   };
+
+  useEffect(() => {
+    if (issueStatus.isSuccess) {
+      dispatch(setIssueStatus(issueStatus.data));
+    }
+  }, [issueStatus.data]);
+
+  useEffect(() => {
+    if (issueStatus.isSuccess) {
+      dispatch(setIssueStatus(issueStatus.data));
+    }
+  }, [issuePriority.data]);
 
   useEffect(() => {
     if (isSuccess) dispatch(setSnackbarOpen(true));

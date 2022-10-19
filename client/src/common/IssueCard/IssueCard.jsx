@@ -11,7 +11,7 @@ const IssueCard = ({ title, count, loading }) => {
         <MuiSkeleton
           variant="rectangular"
           height="90px"
-          sx={{ borderRadius: "8px" }}
+          sx={{ borderRadius: "4px" }}
         />
       ) : (
         <MuiBox
@@ -20,8 +20,8 @@ const IssueCard = ({ title, count, loading }) => {
             padding: "16px",
             minHeight: "60px",
             border: "1px solid #E3E4E6",
-            borderRadius: "8px",
-            transition: "500ms",
+            borderRadius: "4px",
+            transition: "250ms",
             ":hover": {
               border: "1px solid #CABBA5",
               boxShadow: 4,

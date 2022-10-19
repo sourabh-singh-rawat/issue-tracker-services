@@ -5,7 +5,6 @@
     --bg-primary: #ffffff;
     --bg-secondary: #f4f4f4;
     --main-primary: #59114D;
-    
 }
 
 body {
@@ -20,7 +19,10 @@ body {
     display: flex;
 }
 
-a {text-decoration: none;}
+a {
+    text-decoration: none;
+}
+
 a:hover {
     text-decoration: underline;
 }

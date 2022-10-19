@@ -242,7 +242,6 @@ const showTask = async (req, res) => {
   try {
     const task = (await IssueTask.findOne(taskId)).rows[0];
     if (!task) res.status(500).send();
-
     res.send(task);
   } catch (error) {
     res.status(500).send();
@@ -251,10 +250,18 @@ const showTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   const { taskId } = req.params;
-  const { description } = req.body;
+  const { description, completed } = req.body;
 
   try {
-    const task = (await IssueTask.updateOne({ taskId, description })).rows[0];
+    const task = (
+      await IssueTask.updateOne({
+        taskId,
+        updates: { description, completed },
+      })
+    ).rows[0];
+
+    if (!task) res.status(500).send();
+
     res.send(task);
   } catch (error) {
     res.status(500).send();
@@ -265,7 +272,7 @@ const destroyTask = async (req, res) => {
   const { taskId } = req.params;
 
   try {
-    const deletedTask = (await IssueTask.deleteOne(taskId)).rows[0];
+    const deletedTask = (await IssueTask.deleteOne({ taskId })).rows[0];
     if (!deletedTask) res.status(500).send();
 
     res.send(deletedTask);

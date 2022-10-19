@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { format, formatISO, parseISO } from "date-fns";
-import { Button, Divider, Grid, Typography } from "@mui/material";
+
+import MuiGrid from "@mui/material/Grid";
+import MuiButton from "@mui/material/Button";
+import MuiDivider from "@mui/material/Divider";
+import MuiSkeleton from "@mui/material/Skeleton";
+import MuiTypography from "@mui/material/Typography";
 
 import TabPanel from "../../../../common/TabPanel";
 import TextField from "../../../../common/TextField";
@@ -13,24 +17,14 @@ import IssueStatusSelector from "../IssueStatusSelector/IssueStatusSelector";
 import IssuePrioritySelector from "../IssuePrioritySelector/IssuePrioritySelector";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
-import {
-  updateIssue,
-  setIssueStatus,
-  setIssuePriority,
-} from "../../issue.slice";
-import {
-  useGetIssuesStatusQuery,
-  useGetIssuesPriorityQuery,
-  useUpdateIssueMutation,
-} from "../../issue.api";
+import { updateIssue } from "../../issue.slice";
+import { useUpdateIssueMutation } from "../../issue.api";
 
 const IssueSettings = () => {
-  const dispatch = useDispatch();
   const { id } = useParams();
-  const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
+  const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
-  const status = useGetIssuesStatusQuery();
-  const priority = useGetIssuesPriorityQuery();
+  const [updateIssueMutation, { isSuccess, data }] = useUpdateIssueMutation();
   const issue = useSelector((store) => store.issue.info);
 
   const handleChange = ({ target: { name, value } }) => {
@@ -49,144 +43,153 @@ const IssueSettings = () => {
 
   useEffect(() => {
     if (isSuccess) dispatch(setSnackbarOpen(true));
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (status.data) dispatch(setIssueStatus(status.data));
-    if (priority.data) dispatch(setIssuePriority(priority.data));
-  }, [status.data, priority.data, issue]);
+  }, [data]);
 
   return (
     <TabPanel selectedTab={selectedTab} index={3}>
-      <Grid
+      <MuiGrid
         container
         component="form"
-        onSubmit={handleSubmit}
-        gap="20px"
         rowSpacing={2}
+        onSubmit={handleSubmit}
       >
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12} md={4}>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Basic Information
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+        <MuiGrid item xs={12}>
+          <MuiGrid container rowSpacing={2}>
+            <MuiGrid item xs={12} md={4}>
+              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+                Basic Information:
+              </MuiTypography>
+              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
+                General information about your project.
+              </MuiTypography>
+            </MuiGrid>
+            <MuiGrid item xs={12} md={8}>
+              <MuiGrid container rowSpacing={3}>
+                <MuiGrid item xs={12}>
                   <TextField
                     name="name"
                     title="Name"
                     value={issue.name}
+                    loading={issue.loading}
                     onChange={handleChange}
-                    helperText="A name for your issue"
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </MuiGrid>
+                <MuiGrid item xs={12}>
                   <TextField
                     name="id"
                     title="Issue ID"
                     value={issue.id}
-                    helperText="This is Issue Id"
+                    loading={issue.loading}
                     disabled
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </MuiGrid>
+                <MuiGrid item xs={12}>
                   <TextField
                     name="id"
                     title="Project ID"
                     value={issue.project_id}
-                    helperText="This is the Project Id"
+                    loading={issue.loading}
                     disabled
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </MuiGrid>
+                <MuiGrid item xs={12}>
                   <TextField
                     name="description"
                     title="Description"
-                    value={issue.description}
-                    onChange={handleChange}
                     helperText="A text description of the project. Max character count is 150"
+                    value={issue.description}
+                    loading={issue.loading}
+                    onChange={handleChange}
                     rows={4}
                     multiline
                   />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Divider sx={{ marginTop: 2 }} />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12} md={4}>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Detailed Information
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+                </MuiGrid>
+              </MuiGrid>
+            </MuiGrid>
+          </MuiGrid>
+          <MuiDivider sx={{ marginTop: 2 }} />
+        </MuiGrid>
+        <MuiGrid item xs={12}>
+          <MuiGrid container rowSpacing={2}>
+            <MuiGrid item xs={12} md={4}>
+              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+                Issue Properties:
+              </MuiTypography>
+              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
+                General information about your project.
+              </MuiTypography>
+            </MuiGrid>
+            <MuiGrid item xs={12} md={8}>
+              <MuiGrid container spacing={3}>
+                <MuiGrid item xs={12}>
                   <TextField
                     name="creation_date"
-                    title="Created At"
+                    title="Creation Date"
+                    helperText="The day this project was created, this cannot be changed."
                     value={
                       issue.creation_date
                         ? format(parseISO(issue.creation_date), "PPPPpppp")
                         : "loading"
                     }
-                    helperText="The day this project was created, this cannot be changed."
+                    loading={issue.loading}
                     disabled
                   />
-                </Grid>
-                <Grid item xs={6}>
+                </MuiGrid>
+                <MuiGrid item xs={6}>
                   <IssueStatusSelector
                     title="Status"
                     name="status"
+                    helperText="The current status of issue."
                     value={issue.status}
+                    loading={issue.loading}
                     handleChange={handleChange}
-                    helperText="The current status of the issue."
                   />
-                </Grid>
-                <Grid item xs={6}>
+                </MuiGrid>
+                <MuiGrid item xs={6}>
                   <IssuePrioritySelector
                     title="Priority"
                     name="priority"
+                    helperText="The current priority of issue."
                     value={issue.priority}
+                    loading={issue.loading}
                     handleChange={handleChange}
-                    helperText="The current priority of this issue."
                   />
-                </Grid>
-                <Grid item xs={12} md={6}>
+                </MuiGrid>
+                <MuiGrid item xs={12} md={6}>
                   <DatePicker
                     title="Due Date"
                     name="due_date"
                     value={issue.due_date ? parseISO(issue.due_date) : null}
+                    loading={issue.loading}
                     onChange={(date) => {
                       dispatch(updateIssue({ due_date: formatISO(date) }));
                     }}
                     handleChange={handleChange}
                   />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sx={{ marginBottom: 8 }}>
-          <Grid container>
-            <Grid item md={4}></Grid>
-            <Grid item md={8}>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ textTransform: "none", fontWeight: 600 }}
-              >
-                Save Changes
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+                </MuiGrid>
+              </MuiGrid>
+            </MuiGrid>
+          </MuiGrid>
+        </MuiGrid>
+        <MuiGrid item xs={12} sx={{ marginBottom: 8 }}>
+          <MuiGrid container>
+            <MuiGrid item md={4}></MuiGrid>
+            <MuiGrid item xs={12} md={8}>
+              {issue.loading ? (
+                <MuiSkeleton width="20%" />
+              ) : (
+                <MuiButton
+                  type="submit"
+                  variant="contained"
+                  sx={{ textTransform: "none", fontWeight: 600 }}
+                >
+                  Save Changes
+                </MuiButton>
+              )}
+            </MuiGrid>
+          </MuiGrid>
+        </MuiGrid>
+      </MuiGrid>
     </TabPanel>
   );
 };

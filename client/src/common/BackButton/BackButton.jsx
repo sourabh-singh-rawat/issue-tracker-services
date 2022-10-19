@@ -10,22 +10,22 @@ const BackButton = ({ message, onClick }) => {
         variant="text"
         onClick={onClick}
         sx={{
-          color: "text.primary",
+          width: "25px",
           padding: 0,
+          color: "text.primary",
           fontWeight: 600,
           textTransform: "none",
-          width: "25px",
         }}
       >
         <MuiArrowBackIcon />
       </MuiIconButton>
       <MuiIconButton
         sx={{
-          color: "text.primary",
+          width: "25px",
           padding: 0,
+          color: "text.primary",
           fontWeight: 600,
           textTransform: "none",
-          width: "25px",
         }}
       >
         <MuiArrowRightIcon />

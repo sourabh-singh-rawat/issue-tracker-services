@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { format, formatISO, parse, parseISO } from "date-fns";
-import { updateProject } from "../../project.slice";
-import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { useUpdateProjectMutation } from "../../project.api";
+import { format, formatISO, parseISO } from "date-fns";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
@@ -16,10 +13,14 @@ import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
 import ProjectStatusSelector from "../ProjectStatusSelector";
 
+import { updateProject } from "../../project.slice";
+import { useUpdateProjectMutation } from "../../project.api";
+import { setSnackbarOpen } from "../../../snackbar.reducer";
+
 const ProjectSettings = () => {
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
-  const [updateProjectRequest, { isSuccess }] = useUpdateProjectMutation();
+  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
   const project = useSelector((store) => store.project.info);
 
   const handleChange = ({ target: { name, value } }) => {
@@ -30,7 +31,8 @@ const ProjectSettings = () => {
     e.preventDefault();
 
     const { name, description, status, end_date, start_date } = project;
-    await updateProjectRequest({
+
+    await updateProjectMutation({
       id: project.id,
       payload: { name, description, status, end_date, start_date },
     });
@@ -42,21 +44,30 @@ const ProjectSettings = () => {
 
   return (
     <TabPanel selectedTab={selectedTab} index={4}>
-      <MuiGrid container onSubmit={handleSubmit} component="form" gap="10px">
+      <MuiGrid
+        container
+        component="form"
+        rowSpacing={2}
+        onSubmit={handleSubmit}
+      >
         <MuiGrid item xs={12}>
-          <MuiGrid container>
+          <MuiGrid container rowSpacing={2}>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
+              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
                 Basic Information
+              </MuiTypography>
+              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
+                General information about your project.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
-              <MuiGrid container spacing={2}>
+              <MuiGrid container spacing={2} rowSpacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
                     name="name"
                     title="Name"
                     value={project.name}
+                    loading={project.loading}
                     onChange={handleChange}
                     required
                   />
@@ -66,6 +77,7 @@ const ProjectSettings = () => {
                     name="owner_id"
                     title="Owner ID"
                     value={project.owner_id}
+                    loading={project.loading}
                     disabled
                   />
                 </MuiGrid>
@@ -74,6 +86,7 @@ const ProjectSettings = () => {
                     name="id"
                     title="Project ID"
                     value={project.id}
+                    loading={project.loading}
                     disabled
                   />
                 </MuiGrid>
@@ -81,10 +94,11 @@ const ProjectSettings = () => {
                   <TextField
                     name="description"
                     title="Description"
-                    value={project.description}
-                    onChange={handleChange}
                     helperText="A free text description of the project. Max character count is 150"
                     rows={4}
+                    value={project.description}
+                    loading={project.loading}
+                    onChange={handleChange}
                     multiline
                   />
                 </MuiGrid>
@@ -94,32 +108,36 @@ const ProjectSettings = () => {
           <MuiDivider />
         </MuiGrid>
         <MuiGrid item xs={12}>
-          <MuiGrid container>
+          <MuiGrid container rowSpacing={2}>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
-                Detailed Information
+              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+                Detailed Information:
+              </MuiTypography>
+              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
+                General information about your project.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
-              <MuiGrid container spacing={2}>
+              <MuiGrid container spacing={2} rowSpacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
+                    loading={project.loading}
                     name="creation_date"
-                    title="Created At"
+                    title="Creation Date"
+                    helperText="The day this project was created, this cannot be changed."
                     value={
                       project.creation_date
                         ? format(parseISO(project.creation_date), "PPPPpppp")
                         : "loading"
                     }
-                    helperText="The day this project was created, this cannot be changed."
                     disabled
                   />
                 </MuiGrid>
                 <MuiGrid item xs={12}>
                   <ProjectStatusSelector
                     title="Status"
-                    value={project.status}
                     helperText="The current status of your project."
+                    value={project.status}
                     handleChange={handleChange}
                   />
                 </MuiGrid>
@@ -127,9 +145,10 @@ const ProjectSettings = () => {
                   <DatePicker
                     title="Start Date"
                     name="start_date"
+                    helperText="The day your project started."
+                    loading={project.loading}
                     value={parseISO(project.start_date)}
                     maxDate={parseISO(project.end_date)}
-                    helperText="The day your project started."
                     onChange={(date) =>
                       dispatch(updateProject({ start_date: formatISO(date) }))
                     }
@@ -138,6 +157,7 @@ const ProjectSettings = () => {
                 </MuiGrid>
                 <MuiGrid item xs={12} md={6}>
                   <DatePicker
+                    loading={project.loading}
                     title="End Date"
                     name="end_date"
                     value={parseISO(project.end_date)}

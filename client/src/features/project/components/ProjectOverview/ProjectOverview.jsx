@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext, useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiDivider from "@mui/material/Divider";
 import MuiTypography from "@mui/material/Typography";
 
 import TabPanel from "../../../../common/TabPanel";
@@ -49,22 +48,29 @@ const ProjectOverview = () => {
 
   return (
     <TabPanel selectedTab={selectedTab} index={0}>
-      <MuiGrid container spacing="16px">
+      <MuiGrid container spacing={2}>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body2" fontWeight={600}>
+          <MuiTypography variant="body1" fontWeight={600}>
             Description:
           </MuiTypography>
           <PageDescription
             page={project}
+            loading={project.loading}
             updateDescription={updateProject}
             updateDescriptionQuery={updateDescriptionQuery}
-            loading={project.loading}
           />
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
+          <MuiTypography variant="body1" fontWeight={600}>
+            People:
+          </MuiTypography>
           <MembersCard />
         </MuiGrid>
+
         <MuiGrid item sm={12}>
+          <MuiTypography variant="body1" fontWeight={600}>
+            Issue Status:
+          </MuiTypography>
           <IssueStats
             loading={issuesStatusCount.loading}
             issuesStatusCount={issuesStatusCount.rows}

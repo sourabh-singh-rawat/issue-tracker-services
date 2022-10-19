@@ -5,7 +5,7 @@ const initialState = {
   info: {
     nameSelected: false,
     descriptionSelected: false,
-    status: "OPEN",
+    status: "0_OPEN",
     priority: "0_LOWEST",
     loading: true,
   },
@@ -28,14 +28,14 @@ const issueSlice = createSlice({
       return state;
     },
     setIssueStatus: (state, action) => {
-      state.options.status.loading = false;
       state.options.status.rows = action.payload.rows;
+      state.options.status.loading = false;
 
       return state;
     },
     setIssuePriority: (state, action) => {
-      state.options.priority.loading = false;
       state.options.priority.rows = action.payload.rows;
+      state.options.priority.loading = false;
 
       return state;
     },

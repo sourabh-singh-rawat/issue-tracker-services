@@ -7,15 +7,7 @@ import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 import MuiSkeleton from "@mui/material/Skeleton";
 
-import Breadcrumbs from "../Breadcrumbs";
-
-const Title = ({
-  page,
-  loading,
-  updateTitle,
-  updateTitleQuery,
-  breadcrumbItems,
-}) => {
+const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
   const dispatch = useDispatch();
   const { nameSelected } = page;
 
@@ -34,9 +26,6 @@ const Title = ({
 
   return (
     <Fragment>
-      {breadcrumbItems && (
-        <Breadcrumbs loading={loading} items={breadcrumbItems} />
-      )}
       {nameSelected ? (
         <MuiGrid container sx={{ marginLeft: "-14px", marginBottom: "4px" }}>
           <MuiGrid item flexGrow={1}>
@@ -98,9 +87,9 @@ const Title = ({
                 <MuiTypography
                   variant="h4"
                   sx={{
+                    lineHeight: 1.5,
                     padding: "0px 14px",
                     marginLeft: "-14px",
-                    lineHeight: 1.5,
                     fontWeight: 600,
                     borderRadius: "4px",
                     transition: "250ms",

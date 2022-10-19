@@ -23,7 +23,7 @@ const style = {
   minWidth: 500,
   bgcolor: "background.paper",
   boxShadow: 24,
-  borderRadius: 2,
+  borderRadius: "4px",
   p: 4,
 };
 

@@ -7,13 +7,12 @@ import MuiGrid from "@mui/material/Grid";
 import Tab from "../../../../common/Tab/Tab";
 import Tabs from "../../../../common/Tabs/Tabs";
 import TitleSection from "../../../../common/TitleSection";
+import IssueStatusSelector from "../IssueStatusSelector";
+import IssuePrioritySelector from "../IssuePrioritySelector";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { setIssue, updateIssue } from "../../issue.slice";
-
 import { useGetIssueQuery, useUpdateIssueMutation } from "../../issue.api";
-import IssueStatusSelector from "../IssueStatusSelector/IssueStatusSelector";
-import IssuePrioritySelector from "../IssuePrioritySelector/IssuePrioritySelector";
 
 const Issue = () => {
   const { id } = useParams();
