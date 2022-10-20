@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
@@ -8,9 +9,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
+import { setLoadingComments } from "../../issueComments.slice";
 import { useDeleteCommentMutation } from "../../issueComments.api";
 
 const DeleteComment = ({ id, issue_id }) => {
+  const dispatch = useDispatch();
   const [deleteCommentMutation, { isSuccess }] = useDeleteCommentMutation();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -60,6 +63,7 @@ const DeleteComment = ({ id, issue_id }) => {
           <MuiButton
             onClick={() => {
               handleClose();
+              dispatch(setLoadingComments());
               handleDelete();
             }}
             sx={{

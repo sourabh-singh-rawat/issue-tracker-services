@@ -9,11 +9,11 @@ const insertOne = ({
   reporter_id,
   due_date,
   project_id,
-  assigned_to,
+  // assigned_to,
 }) => {
   return db.query(
-    `INSERT INTO issues (name, description, status, priority, reporter_id, due_date, project_id, assigned_to)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `INSERT INTO issues (name, description, status, priority, reporter_id, due_date, project_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING *`,
     [
       name,
@@ -23,7 +23,7 @@ const insertOne = ({
       reporter_id,
       due_date,
       project_id,
-      assigned_to,
+      // assigned_to,
     ]
   );
 };

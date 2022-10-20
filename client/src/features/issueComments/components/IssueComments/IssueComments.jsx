@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
-import CircularProgress from "@mui/material/CircularProgress";
+import MuiLinearProgress from "@mui/material/LinearProgress";
 
-import Comment from "../Comment";
 import AddComment from "../AddComment";
+import CommentList from "../CommentList";
 
-import { setComments } from "../../issueComments.slice";
+import { clearComments, setComments } from "../../issueComments.slice";
 import { useGetIssueCommentsQuery } from "../../issueComments.api";
 
 function IssueComments() {
@@ -16,6 +16,8 @@ function IssueComments() {
   const dispatch = useDispatch();
   const comments = useSelector((store) => store.issueComments);
   const getIssueCommentsQuery = useGetIssueCommentsQuery(id);
+
+  useEffect(() => () => dispatch(clearComments()), []); // clearComments on unmount
 
   useEffect(() => {
     if (getIssueCommentsQuery.isSuccess)
@@ -33,18 +35,12 @@ function IssueComments() {
         <AddComment />
       </MuiGrid>
       {comments.loading ? (
-        <CircularProgress />
+        <MuiGrid item xs={12}>
+          <MuiLinearProgress />
+        </MuiGrid>
       ) : (
         <MuiGrid item xs={12}>
-          <MuiGrid container rowSpacing={0.5}>
-            {comments.rows.map(({ id, ...otherProps }) => {
-              return (
-                <MuiGrid key={id} item xs={12}>
-                  <Comment id={id} {...otherProps} />
-                </MuiGrid>
-              );
-            })}
-          </MuiGrid>
+          <CommentList rows={comments.rows} />
         </MuiGrid>
       )}
     </MuiGrid>

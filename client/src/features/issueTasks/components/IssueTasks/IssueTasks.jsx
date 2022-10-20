@@ -15,7 +15,7 @@ const IssueTasks = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [selectedTab] = useOutletContext();
-  const issueTasks = useSelector((store) => store.issueTasks.rows);
+  const issueTasks = useSelector((store) => store.issueTasks);
   const getIssueTasks = useGetTasksQuery(id);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const IssueTasks = () => {
           <AddTask />
         </MuiGrid>
         <MuiGrid item xs={12}>
-          <TaskList rows={issueTasks} />
+          <TaskList rows={issueTasks.rows} loading={issueTasks.loading} />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>

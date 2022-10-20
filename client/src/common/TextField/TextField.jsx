@@ -4,6 +4,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
+import { alpha, useTheme } from "@mui/material/styles";
 
 const TextField = ({
   title,
@@ -13,6 +14,7 @@ const TextField = ({
   rows,
   ...otherProps
 }) => {
+  const theme = useTheme();
   return (
     <MuiGrid container>
       <MuiGrid item xs={12}>

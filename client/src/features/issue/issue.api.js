@@ -3,11 +3,11 @@ import { apiSlice } from "../../app/services/api.service";
 const issueApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     createIssue: build.mutation({
-      query: ({ payload }) => {
+      query: ({ body }) => {
         return {
           url: `/issues`,
           method: "POST",
-          body: payload,
+          body,
         };
       },
     }),

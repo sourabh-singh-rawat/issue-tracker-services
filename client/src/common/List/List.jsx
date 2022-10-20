@@ -1,3 +1,4 @@
+import MuiLinearProgress from "@mui/material/LinearProgress";
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 
 const List = ({
@@ -39,6 +40,7 @@ const List = ({
       rowCount={rowCount}
       columns={columns}
       loading={loading}
+      components={{ LoadingOverlay: MuiLinearProgress }}
       rowsPerPageOptions={[10, 20, 50, 100]}
       pagination
       page={page}

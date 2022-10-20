@@ -17,8 +17,17 @@ const issueCommentsSlice = createSlice({
 
       return state;
     },
+    setLoadingComments: (state, action) => {
+      state.loading = true;
+      return state;
+    },
+    clearComments: (state) => {
+      state = initialState;
+      return state;
+    },
   },
 });
 
-export const { setComments } = issueCommentsSlice.actions;
+export const { setComments, setLoadingComments, clearComments } =
+  issueCommentsSlice.actions;
 export default issueCommentsSlice.reducer;

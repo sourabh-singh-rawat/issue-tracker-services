@@ -7,6 +7,7 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormHelperText from "@mui/material/FormHelperText";
+import MuiCircularProgress from "@mui/material/CircularProgress";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const DatePicker = ({
@@ -36,7 +37,7 @@ const DatePicker = ({
       )}
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
         {loading ? (
-          <MuiSkeleton />
+          <MuiCircularProgress />
         ) : (
           <MuiDatePicker
             onChange={onChange}

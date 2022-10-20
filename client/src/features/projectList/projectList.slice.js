@@ -6,6 +6,7 @@ const initialState = {
   page: 0,
   pageSize: 10,
   filters: [],
+  loading: true,
 };
 
 const projectListSlice = createSlice({
@@ -17,12 +18,19 @@ const projectListSlice = createSlice({
       state.rowCount = action.payload.rowCount;
       return state;
     },
-    updateProjectList: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
+    updateProjectList: (state, action) => {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+    setLoadingProjectList: (state) => {
+      state.loading = true;
+      return state;
+    },
   },
 });
 
-export const { setProjectList, updateProjectList } = projectListSlice.actions;
+export const { setProjectList, updateProjectList, setLoadingProjectList } =
+  projectListSlice.actions;
 export default projectListSlice.reducer;

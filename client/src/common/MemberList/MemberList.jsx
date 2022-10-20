@@ -83,6 +83,7 @@ const MemberList = () => {
       columns={columns}
       pageSize={pageSize}
       getRowId={(row) => row.user_id}
+      loading={projectMembers.isLoading}
       initialState={{
         sorting: { sortModel: [{ field: "name", sort: "asc" }] },
       }}

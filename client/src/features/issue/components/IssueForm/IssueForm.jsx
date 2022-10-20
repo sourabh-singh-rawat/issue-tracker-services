@@ -43,7 +43,7 @@ const IssueForm = () => {
     description: "",
     status: "0_OPEN",
     priority: "0_LOWEST",
-    assigned_to: null,
+    // assigned_to: null,
     due_date: null,
     project_id: "",
     team_id: "",
@@ -72,8 +72,9 @@ const IssueForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formFields);
 
-    const { data } = await createIssue({ payload: formFields });
+    const { data } = await createIssue({ body: formFields });
     navigate(`/issues/${data.id}/overview`);
   };
 
@@ -157,7 +158,7 @@ const IssueForm = () => {
                 disabled
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={6}>
+            {/* <MuiGrid item xs={12} sm={6}>
               <MuiTypography
                 variant="body2"
                 sx={{
@@ -206,7 +207,7 @@ const IssueForm = () => {
                 fullWidth
                 required
               />
-            </MuiGrid>
+            </MuiGrid> */}
             <MuiGrid item xs={12} sm={6}>
               <IssuePrioritySelector
                 title="Priority"

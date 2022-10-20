@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { formatISO, parseISO } from "date-fns";
 
@@ -10,10 +11,12 @@ import MuiInputAdornment from "@mui/material/InputAdornment";
 
 import MuiAddIcon from "@mui/icons-material/Add";
 
+import { setLoadingTasks } from "../../issueTasks.slice";
 import { useCreateTaskMutation } from "../../issueTask.api";
 
 const AddTask = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [createTask] = useCreateTaskMutation();
 
   const [task, setTask] = useState({
@@ -40,6 +43,7 @@ const AddTask = () => {
     if (task.description.length > 0) {
       const { description, dueDate } = task;
       createTask({ issueId: id, description, dueDate, completed: false });
+      dispatch(setLoadingTasks());
     }
     setTask({ ...task, selected: false });
   };

@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
@@ -9,8 +10,10 @@ import MuiShortTextIcon from "@mui/icons-material/ShortText";
 import InputAdornment from "@mui/material/InputAdornment";
 
 import { useCreateIssueCommentMutation } from "../../issueComments.api";
+import { setComments, setLoadingComments } from "../../issueComments.slice";
 
 const AddComment = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [commentBoxSelected, setCommentBoxSelected] = useState(false);
   const [createComment, { isSuccess }] = useCreateIssueCommentMutation();
@@ -27,6 +30,7 @@ const AddComment = () => {
     if (formFields.description.length > 0) {
       const { description } = formFields;
       createComment({ issue_id: id, description });
+      dispatch(setLoadingComments());
     }
     setCommentBoxSelected(false);
   };

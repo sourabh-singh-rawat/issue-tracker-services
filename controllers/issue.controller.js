@@ -21,6 +21,7 @@ const create = async (req, res) => {
 
     res.send(issue);
   } catch (error) {
+    console.log(error);
     return res.status(500).send();
   }
 };

@@ -17,8 +17,12 @@ const issueTasksSlice = createSlice({
 
       return state;
     },
+    setLoadingTasks: (state, action) => {
+      state.loading = true;
+      return state;
+    },
   },
 });
 
-export const { setTasks } = issueTasksSlice.actions;
+export const { setTasks, setLoadingTasks } = issueTasksSlice.actions;
 export default issueTasksSlice.reducer;

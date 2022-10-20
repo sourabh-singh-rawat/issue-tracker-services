@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import MuiButton from "@mui/material/Button";
 import MuiDialog from "@mui/material/Dialog";
@@ -11,8 +12,10 @@ import MuiMenuItem from "@mui/material/MenuItem";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { useDeleteProjectMutation } from "../../../project/project.api";
+import { setLoadingProjectList } from "../../projectList.slice";
 
 const DeleteProject = ({ id }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,6 +47,7 @@ const DeleteProject = ({ id }) => {
           <MuiButton
             onClick={() => {
               handleClose();
+              dispatch(setLoadingProjectList());
               deleteProject({ id });
             }}
             autoFocus
