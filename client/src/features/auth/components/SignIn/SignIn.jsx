@@ -18,7 +18,7 @@ import {
   signUpWithEmailAndPassword,
 } from "../../../../utils/firebase.utils";
 
-import { onAuthStateChangedListener } from "../../../../app/services/auth.service";
+import { onAuthStateChangedListener } from "../../../../configs/firebase.config.js";
 
 const Login = () => {
   const navigate = useNavigate();

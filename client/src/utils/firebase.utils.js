@@ -1,4 +1,4 @@
-import { auth } from "../app/services/auth.service";
+import { auth } from "../configs/firebase.config.js";
 import { storeUserInfoInDatabase } from "./database.utils.js";
 
 import {

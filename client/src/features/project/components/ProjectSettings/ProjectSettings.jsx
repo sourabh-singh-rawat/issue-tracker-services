@@ -34,7 +34,7 @@ const ProjectSettings = () => {
 
     await updateProjectMutation({
       id: project.id,
-      payload: { name, description, status, end_date, start_date },
+      body: { name, description, status, end_date, start_date },
     });
   };
 

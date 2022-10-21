@@ -17,8 +17,6 @@ function IssueComments() {
   const comments = useSelector((store) => store.issueComments);
   const getIssueCommentsQuery = useGetIssueCommentsQuery(id);
 
-  useEffect(() => () => dispatch(clearComments()), []); // clearComments on unmount
-
   useEffect(() => {
     if (getIssueCommentsQuery.isSuccess)
       dispatch(
@@ -28,6 +26,8 @@ function IssueComments() {
         })
       );
   }, [getIssueCommentsQuery.data]);
+
+  useEffect(() => () => dispatch(clearComments()), []); // clearComments on unmount
 
   return (
     <MuiGrid container rowSpacing={1}>

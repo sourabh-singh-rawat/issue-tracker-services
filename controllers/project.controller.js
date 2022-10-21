@@ -14,11 +14,21 @@ import ProjectMember from "../models/projectMember.model.js";
  */
 const create = async (req, res) => {
   const { uid, email } = req.user;
+  const { name, description, status, start_date, end_date } = req.body;
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const project = (await Project.insertOne({ id, email, ...req.body }))
-      .rows[0];
+    const project = (
+      await Project.insertOne({
+        id,
+        email,
+        name,
+        description,
+        status,
+        start_date,
+        end_date,
+      })
+    ).rows[0];
     await ProjectMember.insertOne(project.id, id);
 
     return res.send(project);

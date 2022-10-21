@@ -4,17 +4,18 @@ import MuiGrid from "@mui/material/Grid";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
-import { alpha, useTheme } from "@mui/material/styles";
 
 const TextField = ({
   title,
   name,
+  value,
   loading,
   multiline,
   rows,
+  error,
+  helperText,
   ...otherProps
 }) => {
-  const theme = useTheme();
   return (
     <MuiGrid container>
       <MuiGrid item xs={12}>
@@ -39,16 +40,19 @@ const TextField = ({
             size="small"
             name={name && name.toLowerCase()}
             rows={rows}
+            value={value}
             sx={{
               ".MuiInputBase-root": {
                 fontSize: "14px",
-                borderRadius: "4px",
+                borderRadius: "6px",
               },
               ".MuiFormHelperText-contained": {
                 fontSize: "13px",
                 marginLeft: 0,
               },
             }}
+            error={error}
+            helperText={helperText}
             multiline
             fullWidth
             {...otherProps}

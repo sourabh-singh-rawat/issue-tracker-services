@@ -1,13 +1,20 @@
-import { apiSlice } from "../../app/services/api.service";
+import { apiSlice } from "../../configs/api.config.js";
 
 const projectApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     createProject: build.mutation({
-      query: ({ payload }) => {
+      query: ({ body }) => {
+        const { name, description, status, end_date, start_date } = body;
         return {
           url: "/projects",
           method: "POST",
-          body: payload,
+          body: {
+            name: name.value,
+            description: description.value,
+            status,
+            end_date,
+            start_date,
+          },
         };
       },
       invalidatesTags: ["Project"],
@@ -48,11 +55,11 @@ const projectApiSlice = apiSlice.injectEndpoints({
       },
     }),
     updateProject: build.mutation({
-      query: ({ id, payload }) => {
+      query: ({ id, body }) => {
         return {
           url: `/projects/${id}`,
           method: "PATCH",
-          body: payload,
+          body,
         };
       },
       transformResponse: (response) => response.data,

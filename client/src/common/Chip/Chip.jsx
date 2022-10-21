@@ -6,7 +6,7 @@ const Chip = ({ id }) => {
       label={id}
       size="small"
       sx={{
-        borderRadius: "4px",
+        borderRadius: "6px",
       }}
     />
   );

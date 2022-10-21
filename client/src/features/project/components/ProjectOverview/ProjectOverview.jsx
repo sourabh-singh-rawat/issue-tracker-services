@@ -32,7 +32,7 @@ const ProjectOverview = () => {
   const updateDescriptionQuery = () => {
     updateProjectMutation({
       id,
-      payload: { description: project.description },
+      body: { description: project.description },
     });
   };
 

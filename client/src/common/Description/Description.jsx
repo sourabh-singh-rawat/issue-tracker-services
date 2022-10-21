@@ -30,8 +30,6 @@ const Description = ({
       <MuiGrid item xs={12}>
         {page.descriptionSelected ? (
           <MuiTextField
-            multiline
-            autoFocus
             size="small"
             value={page.description}
             onChange={handleChange}
@@ -41,6 +39,8 @@ const Description = ({
                 lineHeight: 1.5,
               },
             }}
+            autoFocus
+            multiline
             fullWidth
           />
         ) : (
@@ -67,11 +67,12 @@ const Description = ({
                   lineHeight: 1.5,
                   padding: "8px 14px",
                   marginLeft: "-14px",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   color: "text.primary",
                   transition: "250ms",
                   ":hover": { backgroundColor: "action.hover" },
                 }}
+                multiline
               >
                 {page.description ? page.description : "Add a description..."}
               </MuiTypography>

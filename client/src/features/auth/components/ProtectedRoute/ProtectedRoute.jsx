@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-  let token = useSelector((store) => store.auth.token);
+  let token = useSelector((store) => store.auth.accessToken);
   if (token) window.localStorage.setItem("user", true);
   const location = useLocation();
 

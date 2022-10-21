@@ -7,7 +7,6 @@ import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
 import MuiAutocomplete from "@mui/material/Autocomplete";
-import Avatar from "@mui/material/Avatar";
 
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
@@ -23,7 +22,6 @@ import { useGetCollaboratorsQuery } from "../../../collaboratorList/collaborator
 const IssueForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const user = useSelector((store) => store.auth.user);
   const project = useSelector((store) => store.project.info);
