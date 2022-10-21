@@ -1,10 +1,9 @@
-import { Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
+
+import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
-
-import MuiGrid from "@mui/material/Grid";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -22,10 +21,13 @@ const ProjectStatusSelector = ({
   const loading = useSelector((store) => store.project.options.status.loading);
 
   return (
-    <MuiGrid container sx={{ display: "flex" }}>
+    <MuiGrid container>
       {title && (
         <MuiGrid item xs={12}>
-          <MuiTypography variant="body2" fontWeight="bold" paddingBottom={1}>
+          <MuiTypography
+            variant="body2"
+            sx={{ fontWeight: 600, paddingBottom: 1 }}
+          >
             {title}
           </MuiTypography>
         </MuiGrid>
@@ -35,7 +37,6 @@ const ProjectStatusSelector = ({
           <CircularProgress />
         ) : (
           <MuiSelect
-            displayEmpty
             name="status"
             size="small"
             value={value}
@@ -47,6 +48,7 @@ const ProjectStatusSelector = ({
               height: variant == "dense" ? "28px" : "auto",
               textTransform: "capitalize",
             }}
+            displayEmpty
           >
             {projectStatus.map(({ status, message }) => (
               <MuiMenuItem

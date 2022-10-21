@@ -36,7 +36,7 @@ import TeamSettings from "../features/team/components/TeamSettings";
 import Profile from "../features/profile/components/Profile";
 
 import { setCredentials } from "../features/auth/auth.slice";
-import { onAuthStateChangedListener } from "../app/services/auth.service";
+import { onAuthStateChangedListener } from "../configs/firebase.config.js";
 
 const NoComponent = () => {
   return <h1>404</h1>;

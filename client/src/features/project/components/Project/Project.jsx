@@ -28,13 +28,13 @@ const Project = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const status = useGetStatusQuery();
   const issueStatus = useGetIssuesStatusQuery();
   const issuePriority = useGetIssuesPriorityQuery();
-  const status = useGetStatusQuery();
+  const getProjectQuery = useGetProjectQuery(id);
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
   const tabName = location.pathname.split("/")[3];
 
-  const getProjectQuery = useGetProjectQuery(id);
   const project = useSelector((store) => store.project.info);
 
   const mapPathToIndex = {
@@ -61,7 +61,7 @@ const Project = () => {
   };
 
   const updateTitleQuery = () => {
-    updateProjectMutation({ id, payload: { name: project.name } });
+    updateProjectMutation({ id, body: { name: project.name } });
   };
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const Project = () => {
   }, [tabName, id]);
 
   useEffect(() => {
-    if (getProjectQuery.data)
+    if (getProjectQuery.isSuccess)
       dispatch(setProject({ ...getProjectQuery.data, loading: false }));
   }, [getProjectQuery.data]);
 
@@ -98,9 +98,9 @@ const Project = () => {
       <MuiGrid item xs={12}>
         <PageTitleSection
           page={project}
+          loading={project.loading}
           updateTitle={updateProject}
           updateTitleQuery={updateTitleQuery}
-          loading={project.loading}
           breadcrumbItems={[
             {
               text: "projects",
@@ -115,8 +115,8 @@ const Project = () => {
             <ProjectStatusSelector
               value={project.status}
               handleChange={(e) => {
-                const { name, value } = e.target;
-                updateProjectMutation({ id, payload: { status: value } });
+                const { value } = e.target;
+                updateProjectMutation({ id, body: { status: value } });
                 dispatch(updateProject({ status: value }));
               }}
               variant="dense"

@@ -1,7 +1,4 @@
-import { Fragment } from "react";
-
 import MuiGrid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 
 import IssueCard from "../../../../common/IssueCard";
 
@@ -17,7 +14,7 @@ const IssueStats = ({ issuesStatusCount, loading }) => {
       spacing={1}
       sx={{
         marginTop: "10px",
-        borderRadius: "4px",
+        borderRadius: "6px",
       }}
     >
       <MuiGrid item xs={12} md={2.4}>

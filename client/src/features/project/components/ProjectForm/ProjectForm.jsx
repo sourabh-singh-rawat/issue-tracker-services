@@ -1,48 +1,101 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
-import { Box, Button, Toolbar, Typography } from "@mui/material";
+import errors from "../../../../configs/errors";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import MuiGrid from "@mui/material/Grid";
 
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
-import BackButton from "../../../../common/BackButton/BackButton";
-import SectionHeader from "../../../../common/SectionHeader/SectionHeader";
+import SectionHeader from "../../../../common/SectionHeader";
+import ProjectStatusSelector from "../ProjectStatusSelector";
 
-import ProjectStatusSelector from "../ProjectStatusSelector/ProjectStatusSelector";
-
-import { useCreateProjectMutation } from "../../project.api";
+import { setStatus } from "../../project.slice";
+import { useGetStatusQuery, useCreateProjectMutation } from "../../project.api";
 
 const ProjectForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const getProjectStatusQuery = useGetStatusQuery();
   const [createProject, { isSuccess, data }] = useCreateProjectMutation();
-  const user = useSelector((store) => store.auth.user);
+
   const [formFields, setFormFields] = useState({
-    name: "My Project",
-    description: "",
+    name: {
+      value: "",
+      error: false,
+      errorMessage: errors.form.project.NAME_MAX_LENGTH_ERROR.message,
+    },
+    description: {
+      value: "",
+      charCount: 0,
+      error: false,
+      errorMessage: errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.message,
+    },
     status: "0_NOT_STARTED",
     start_date: null,
     end_date: null,
   });
 
+  const handleNameChange = (e) => {
+    const { name, value } = e.target;
+
+    if (value.length > errors.form.project.NAME_MAX_LENGTH_ERROR.limit) {
+      return setFormFields({
+        ...formFields,
+        name: { ...formFields.name, value, error: true },
+      });
+    }
+    setFormFields({
+      ...formFields,
+      name: { ...formFields.name, value, error: false },
+    });
+  };
+
+  const handleDescriptionChange = (e) => {
+    const { name, value } = e.target;
+
+    if (value.length > errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit) {
+      return setFormFields({
+        ...formFields,
+        description: { ...formFields.description, value, error: true },
+      });
+    }
+    setFormFields({
+      ...formFields,
+      description: { ...formFields.description, value, error: false },
+    });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormFields({
+      ...formFields,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    if (getProjectStatusQuery.isSuccess)
+      dispatch(setStatus(getProjectStatusQuery.data));
+  }, [getProjectStatusQuery.data]);
+
   useEffect(() => {
     if (isSuccess) navigate(`/projects/${data.id}/overview`);
   }, [isSuccess]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
-
   const handleSubmit = async (e) => {
-    createProject({ payload: formFields });
     e.preventDefault();
+
+    if (formFields.name.error || formFields.description.error)
+      return console.log("Form Field Errors");
+    createProject({ body: formFields });
   };
 
   return (
-    <MuiGrid container gap="20px">
+    <MuiGrid container rowSpacing={2}>
       <MuiGrid item xs={12}>
         <SectionHeader
           title="New Project"
@@ -51,14 +104,21 @@ const ProjectForm = () => {
       </MuiGrid>
       <MuiGrid item xs={12}>
         <Box component="form" onSubmit={handleSubmit}>
-          <MuiGrid container rowSpacing="20px" columnSpacing={4}>
+          <MuiGrid container rowSpacing={2} columnSpacing={4}>
             <MuiGrid item xs={12}>
               <TextField
                 title="Name"
                 name="name"
                 type="text"
-                onChange={handleChange}
-                helperText="A name for your project"
+                value={formFields.name.value}
+                onChange={handleNameChange}
+                error={formFields.name.error}
+                helperText={
+                  formFields.name.error
+                    ? formFields.name.errorMessage
+                    : `A name for your project. Do not exceed ${errors.form.project.NAME_MAX_LENGTH_ERROR.limit} characters`
+                }
+                required
               />
             </MuiGrid>
             <MuiGrid item xs={12} sm={12} md={6}>
@@ -102,14 +162,19 @@ const ProjectForm = () => {
                 name="Description"
                 title="Description"
                 type="text"
-                onChange={handleChange}
                 rows={4}
-                helperText="A text description of your project. Do not exceed 150 characters"
+                value={formFields.description.value}
+                placeholder={formFields.description.placeHolder}
+                error={formFields.description.error}
+                onChange={handleDescriptionChange}
+                helperText={
+                  formFields.description.error
+                    ? formFields.description.errorMessage
+                    : `A text description of your project. Do not exceed ${errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit} characters`
+                }
                 multiline
               />
             </MuiGrid>
-          </MuiGrid>
-          <MuiGrid container marginLeft={0}>
             <MuiGrid item>
               <Button
                 type="submit"

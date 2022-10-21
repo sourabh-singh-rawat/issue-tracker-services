@@ -41,8 +41,8 @@ VALUES ('0_NOT_STARTED', 'not started'), ('1_OPEN', 'open'), ('2_PAUSED', 'pause
 
 CREATE TABLE IF NOT EXISTS projects (
   id uuid DEFAULT uuid_generate_v4(),
-  name VARCHAR(255),
-  description VARCHAR,
+  name VARCHAR(60),
+  description VARCHAR(4000),
   status VARCHAR(20) DEFAULT 'NOT_STARTED',
   owner_id uuid NOT NULL, --global
   owner_email VARCHAR(255),
@@ -73,8 +73,8 @@ VALUES ('0_LOWEST', 'lowest'), ('1_LOW', 'low'), ('2_MEDIUM', 'medium'), ('3_HIG
 
 CREATE TABLE IF NOT EXISTS issues (
   id uuid DEFAULT uuid_generate_v4(),
-  name VARCHAR(255),
-  description VARCHAR(255),
+  name VARCHAR(60),
+  description VARCHAR(4000),
   status VARCHAR(20),
   priority VARCHAR(20),
   reporter_id uuid NOT NULL,

@@ -21,20 +21,22 @@ const IssuePrioritySelector = ({
   );
 
   return (
-    <MuiGrid container sx={{ display: "flex" }}>
-      <MuiGrid item xs={12}>
-        {title && loading ? (
-          <MuiSkeleton width="20%" />
-        ) : (
-          <MuiTypography
-            variant="body2"
-            fontWeight="bold"
-            sx={{ paddingBottom: 1 }}
-          >
-            {title}
-          </MuiTypography>
-        )}
-      </MuiGrid>
+    <MuiGrid container>
+      {title && (
+        <MuiGrid item xs={12}>
+          {loading ? (
+            <MuiSkeleton width="20%" />
+          ) : (
+            <MuiTypography
+              variant="body2"
+              fontWeight="bold"
+              sx={{ paddingBottom: 1 }}
+            >
+              {title}
+            </MuiTypography>
+          )}
+        </MuiGrid>
+      )}
       <MuiGrid item xs={12}>
         {loading ? (
           <MuiSkeleton />

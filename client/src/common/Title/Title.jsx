@@ -91,7 +91,7 @@ const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
                     padding: "0px 14px",
                     marginLeft: "-14px",
                     fontWeight: 600,
-                    borderRadius: "4px",
+                    borderRadius: "6px",
                     transition: "250ms",
                     ":hover": {
                       cursor: "text",

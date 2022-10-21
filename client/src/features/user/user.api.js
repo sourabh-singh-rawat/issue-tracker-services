@@ -1,4 +1,4 @@
-import { apiSlice } from "../../app/services/api.service";
+import { apiSlice } from "../../configs/rtk.config.js";
 
 const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({

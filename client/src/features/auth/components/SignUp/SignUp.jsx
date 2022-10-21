@@ -17,7 +17,7 @@ import {
   signUpWithEmailAndPassword,
 } from "../../../../utils/firebase.utils";
 
-import { onAuthStateChangedListener } from "../../../../app/services/auth.service";
+import { onAuthStateChangedListener } from "../../../../configs/firebase.config.js";
 
 const SignUp = () => {
   const token = useSelector((store) => store.auth.token);
@@ -34,17 +34,12 @@ const SignUp = () => {
     e.preventDefault();
     const { name, email, password } = formFields;
 
-    // try {
     const response = await signUpWithEmailAndPassword({
       name,
       email,
       password,
       inviteToken,
     });
-    //   navigate("/");
-    // } catch (error) {
-    //   console.log("error");
-    // }
   };
 
   const handleChange = (e) => {

@@ -69,7 +69,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
         cursor: "pointer",
         alignItems: "center",
         border: "1px solid #E3E4E6",
-        borderRadius: "4px",
+        borderRadius: "6px",
         transitionDuration: "250ms",
         ":hover": {
           boxShadow: 4,

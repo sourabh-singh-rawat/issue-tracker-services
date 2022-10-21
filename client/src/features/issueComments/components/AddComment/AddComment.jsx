@@ -49,10 +49,6 @@ const AddComment = () => {
                 size="small"
                 placeholder="Add Comment"
                 onChange={handleChange}
-                sx={{
-                  input: { fontSize: "14px" },
-                  backgroundColor: "action.hover",
-                }}
                 onClick={() => setCommentBoxSelected(true)}
                 InputProps={{
                   startAdornment: (
@@ -60,6 +56,18 @@ const AddComment = () => {
                       <MuiShortTextIcon />
                     </InputAdornment>
                   ),
+                }}
+                sx={{
+                  backgroundColor: "action.hover",
+                  borderRadius: "6px",
+                  input: { fontSize: "14px" },
+                  ".MuiInputBase-root": {
+                    fontSize: "14px",
+                    borderRadius: "6px",
+                  },
+                  ".MuiOutlinedInput-root": {
+                    borderRadius: "6px",
+                  },
                 }}
                 fullWidth
                 autoFocus
@@ -108,6 +116,14 @@ const AddComment = () => {
           sx={{
             input: { fontSize: "14px" },
             backgroundColor: "action.hover",
+            borderRadius: "6px",
+            ".MuiInputBase-root": {
+              fontSize: "14px",
+              borderRadius: "6px",
+            },
+            ".MuiOutlinedInput-root": {
+              borderRadius: "6px",
+            },
           }}
           onClick={() => setCommentBoxSelected(true)}
           InputProps={{

@@ -4,7 +4,7 @@ import Comment from "../Comment";
 
 const CommentList = ({ rows }) => {
   return (
-    <MuiGrid container rowSpacing={0.5}>
+    <MuiGrid container rowSpacing={1}>
       {rows.map(({ id, ...otherProps }) => {
         return (
           <MuiGrid key={id} item xs={12}>

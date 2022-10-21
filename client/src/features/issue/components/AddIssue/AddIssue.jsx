@@ -39,7 +39,7 @@ const AddIssue = () => {
             left: "50%",
             bgcolor: "background.paper",
             transform: "translate(-50%, -50%)",
-            borderRadius: "4px",
+            borderRadius: "6px",
             boxShadow: 24,
           }}
         >

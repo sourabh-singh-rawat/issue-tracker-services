@@ -2,8 +2,8 @@ import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import MuiTypography from "@mui/material/Typography";
 import MuiAvatar from "@mui/material/Avatar";
+import MuiTypography from "@mui/material/Typography";
 
 import List from "../../../../common/List";
 

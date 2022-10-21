@@ -1,3 +1,5 @@
+import { createTheme } from "@mui/material";
+
 const themeConfig = {
   palette: {
     primary: {
@@ -9,7 +11,7 @@ const themeConfig = {
     },
     text: {
       primary: "#080F0F",
-      secondary: "#5E5A5A",
+      secondary: "#70757a",
       disabled: "#080F0F",
     },
     warning: {
@@ -31,4 +33,4 @@ const themeConfig = {
   },
 };
 
-export default themeConfig;
+export const theme = createTheme(themeConfig);

@@ -6,6 +6,8 @@ import MuiTypography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 
 import DeleteComment from "../DeleteComment";
+import { Divider } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Comment = ({
   id,
@@ -19,61 +21,57 @@ const Comment = ({
     <MuiGrid
       container
       sx={{
-        borderRadius: "4px",
+        padding: "12px",
         border: "1px solid #E3E4E6",
-        padding: "8px 8px 8px 12px",
+        borderRadius: "6px",
       }}
     >
-      <MuiGrid item xs={12}>
-        <MuiGrid
-          container
-          columnSpacing={1}
-          sx={{ display: "flex", alignItems: "center" }}
+      <MuiGrid item sx={{ width: "60px", padding: "0 5px" }}>
+        <MuiAvatar
+          src={photo_url}
+          sx={{
+            width: "40px",
+            height: "40px",
+            backgroundColor: "primary.main",
+          }}
         >
+          <MuiTypography variant="body2">{name.match(/\b(\w)/g)}</MuiTypography>
+        </MuiAvatar>
+      </MuiGrid>
+      <MuiGrid item width={"calc(100% - 60px)"}>
+        <MuiGrid container>
           <MuiGrid item>
-            <MuiAvatar
-              src={photo_url}
-              sx={{
-                width: "32px",
-                height: "32px",
-                backgroundColor: "primary.main",
-              }}
-            >
-              <MuiTypography variant="body2">
-                {name.match(/\b(\w)/g)}
+            <Link to="/profile" style={{ color: "#080F0F" }}>
+              <MuiTypography variant="body2" fontWeight={600}>
+                {name}
               </MuiTypography>
-            </MuiAvatar>
+            </Link>
           </MuiGrid>
-          <MuiGrid item>
-            <MuiTypography variant="body2" fontWeight={600}>
-              {name}
-            </MuiTypography>
-          </MuiGrid>
-          <MuiGrid item>
-            <MuiTypography fontSize="13px" sx={{ color: "text.secondary" }}>
+          <MuiGrid item xs={12}>
+            <MuiTypography sx={{ color: "text.secondary", fontSize: "13px" }}>
               {formatDistance(parseISO(creation_date), new Date())} ago
             </MuiTypography>
           </MuiGrid>
-        </MuiGrid>
-      </MuiGrid>
-      <MuiGrid item>
-        <MuiGrid container>
-          <MuiGrid item xs={12} sx={{ padding: "4px 0" }}>
-            <MuiTypography variant="body2">{description}</MuiTypography>
-          </MuiGrid>
           <MuiGrid item xs={12}>
-            <Breadcrumbs separator="•">
-              <MuiTypography
-                sx={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  ":hover": { cursor: "pointer" },
-                }}
-              >
-                <a>Edit</a>
-              </MuiTypography>
-              <DeleteComment id={id} issue_id={issue_id} />
-            </Breadcrumbs>
+            <MuiGrid container>
+              <MuiGrid item xs={12} sx={{ paddingTop: "4px" }}>
+                <MuiTypography variant="body2">{description}</MuiTypography>
+              </MuiGrid>
+              <MuiGrid item xs={12}>
+                <Breadcrumbs separator="•">
+                  <MuiTypography
+                    sx={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      ":hover": { cursor: "pointer" },
+                    }}
+                  >
+                    <a>Edit</a>
+                  </MuiTypography>
+                  <DeleteComment id={id} issue_id={issue_id} />
+                </Breadcrumbs>
+              </MuiGrid>
+            </MuiGrid>
           </MuiGrid>
         </MuiGrid>
       </MuiGrid>
