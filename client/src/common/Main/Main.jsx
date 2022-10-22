@@ -6,8 +6,8 @@ import MuiBox from "@mui/material/Box";
 import MuiContainer from "@mui/material/Container";
 import MuiToolbar from "@mui/material/Toolbar";
 
-import Navbar from "../../features/navigation/components/Navbar";
-import Sidebar from "../../features/navigation/components/Sidebar";
+import Navbar from "../../features/navigation/components/containers/Navbar";
+import Sidebar from "../../features/navigation/components/containers/Sidebar";
 import SnackBar from "../SnackBar";
 
 import {
