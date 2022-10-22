@@ -7,7 +7,7 @@ const themeConfig = {
       dark: "#030066",
     },
     secondary: {
-      main: "#152828",
+      main: "#1e212a",
     },
     text: {
       primary: "#080F0F",
@@ -27,7 +27,8 @@ const themeConfig = {
   },
   typography: {
     fontFamily: ["Inter"].join(","),
-    h4: { fontSize: 30, fontFamily: ["Inter"] },
+    h4: { fontSize: 30 },
+    body1: { fontSize: 16 },
     body2: { fontSize: 14 },
   },
 };

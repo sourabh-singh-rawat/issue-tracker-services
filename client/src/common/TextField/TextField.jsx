@@ -18,15 +18,24 @@ const TextField = ({
 }) => {
   return (
     <MuiGrid container>
-      <MuiGrid item xs={12}>
-        {title && loading ? (
-          <MuiSkeleton width="20%" />
-        ) : (
-          <MuiTypography variant="body2" fontWeight={600} paddingBottom={1}>
-            {title}
-          </MuiTypography>
-        )}
-      </MuiGrid>
+      {title && (
+        <MuiGrid item xs={12}>
+          {loading ? (
+            <MuiSkeleton width="20%" />
+          ) : (
+            <MuiTypography
+              variant="body2"
+              sx={{
+                fontWeight: 600,
+                color: error && "error.main",
+                paddingBottom: 1,
+              }}
+            >
+              {title}
+            </MuiTypography>
+          )}
+        </MuiGrid>
+      )}
       <MuiGrid item xs={12}>
         {loading ? (
           <Fragment>
