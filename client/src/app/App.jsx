@@ -1,36 +1,43 @@
 import { Routes, Route } from "react-router-dom";
 
+import ProtectedRoute from "../features/auth/components/ProtectedRoute";
+
 import Main from "../common/Main";
 import Login from "../features/auth/pages/Login";
 import SignUp from "../features/auth/pages/Signup";
 import Dashboard from "../features/dashboard/pages/Dashboard";
+
 import Settings from "../features/settings/components/pages/Settings";
+
 import Collaborators from "../features/collaboratorList/pages/Collaborators";
 import CollaboratorList from "../features/collaboratorList/components/CollaboratorList";
-import Project from "../features/project/pages/Project";
+
 import Projects from "../features/projectList/pages/Projects";
-import ProjectForm from "../features/project/pages/ProjectForm";
-import ProjectMembers from "../features/project/pages/ProjectMembers";
-import ProjectIssues from "../features/project/pages/ProjectIssues";
+import Project from "../features/project/pages/Project";
 import ProjectOverview from "../features/project/pages/ProjectOverview";
+import ProjectIssues from "../features/project/pages/ProjectIssues";
+import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
 import ProjectSetting from "../features/project/pages/ProjectSettings";
+import ProjectForm from "../features/project/pages/ProjectForm";
 import ProjectList from "../features/projectList/components/containers/ProjectList";
-import Issue from "../features/issue/pages/Issue";
+
 import Issues from "../features/issueList/pages/Issues";
-import IssueForm from "../features/issue/pages/IssueForm";
+import Issue from "../features/issue/pages/Issue";
 import IssueOverview from "../features/issue/pages/IssueOverview";
-import IssueComments from "../features/issueComments/pages/IssueComments";
 import IssueTasks from "../features/issueTasks/pages/IssueTasks";
-import IssueList from "../features/issueList/components/containers/IssueList";
+import IssueComments from "../features/issueComments/pages/IssueComments";
 import IssueSettings from "../features/issue/pages/IssueSettings";
-import ProtectedRoute from "../features/auth/components/ProtectedRoute";
-import Team from "../features/team/pages/Team";
+import IssueForm from "../features/issue/pages/IssueForm";
+import IssueList from "../features/issueList/components/containers/IssueList";
+
 import Teams from "../features/teamList/pages/Teams";
-import TeamList from "../features/teamList/components/containers/TeamList";
-import TeamForm from "../features/team/pages/TeamForm";
+import Team from "../features/team/pages/Team";
 import TeamOverview from "../features/team/pages/TeamOverview";
 import TeamSettings from "../features/team/pages/TeamSettings";
+import TeamForm from "../features/team/pages/TeamForm";
+import TeamList from "../features/teamList/components/containers/TeamList";
+
 import Profile from "../features/profile/pages/Profile";
 
 const NoComponent = () => {

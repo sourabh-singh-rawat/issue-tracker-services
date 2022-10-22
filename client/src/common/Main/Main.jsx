@@ -1,6 +1,6 @@
-import { useEffect, Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import MuiBox from "@mui/material/Box";
 import MuiContainer from "@mui/material/Container";

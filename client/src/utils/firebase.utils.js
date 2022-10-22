@@ -1,5 +1,5 @@
 import { signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../configs/firebase.config.js";
+import { auth } from "../app/firebase.config.js";
 import { storeUserInfoInDatabase } from "./database.utils.js";
 import { verifyToken } from "./auth.utils";
 

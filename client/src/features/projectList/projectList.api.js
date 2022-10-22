@@ -1,4 +1,4 @@
-import { apiSlice } from "../../configs/api.config.js";
+import { apiSlice } from "../../app/api.config.js";
 
 const projectListApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({

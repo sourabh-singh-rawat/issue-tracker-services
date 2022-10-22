@@ -7,19 +7,19 @@ const themeConfig = {
       dark: "#030066",
     },
     secondary: {
-      main: "#1e212a",
+      main: "#333333",
     },
     text: {
       primary: "#080F0F",
-      secondary: "#70757a",
+      secondary: "#70757A",
     },
     warning: {
       main: "#FF6700",
       dark: "#F56200",
     },
     background: {
-      paper: "#fbf7f4",
-      default: "#FFF",
+      paper: "#FBF7F4",
+      default: "#FFFFFF",
     },
     action: {
       hover: "#EBEBEB",
