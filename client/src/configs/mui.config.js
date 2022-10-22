@@ -12,7 +12,6 @@ const themeConfig = {
     text: {
       primary: "#080F0F",
       secondary: "#70757a",
-      disabled: "#080F0F",
     },
     warning: {
       main: "#FF6700",

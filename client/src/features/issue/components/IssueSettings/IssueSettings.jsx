@@ -100,7 +100,7 @@ const IssueSettings = () => {
                     value={issue.description}
                     loading={issue.loading}
                     onChange={handleChange}
-                    rows={4}
+                    minRows={6}
                     multiline
                   />
                 </MuiGrid>

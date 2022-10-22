@@ -79,9 +79,9 @@ const Task = ({ taskId, due_date, description, completed }) => {
     >
       <MuiGrid item>
         <MuiCheckbox
-          disableRipple
           checked={task.completed}
           onClick={handleCheckBoxClick}
+          disableRipple
         />
       </MuiGrid>
       <MuiGrid item sx={{ flexGrow: 1 }}>
@@ -90,11 +90,11 @@ const Task = ({ taskId, due_date, description, completed }) => {
             <MuiGrid item flexGrow={1}>
               <TextField
                 name="description"
-                fullWidth
-                autoFocus
                 size="small"
                 value={task.description}
                 onChange={handleChange}
+                autoFocus
+                fullWidth
               />
             </MuiGrid>
             <MuiGrid item>
@@ -157,9 +157,6 @@ const Task = ({ taskId, due_date, description, completed }) => {
                 <MuiEditIcon />
               </MuiButton>
             </MuiGrid>
-            {/* <MuiGrid item>
-              <DatePicker value={format(parseISO(due_date), "P")} />
-            </MuiGrid> */}
           </MuiGrid>
         )}
       </MuiGrid>

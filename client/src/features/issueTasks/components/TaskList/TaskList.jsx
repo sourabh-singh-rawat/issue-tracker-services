@@ -16,7 +16,7 @@ const TaskList = ({ rows, rowCount, loading }) => {
         <Fragment>
           {rows.map(({ id, ...otherProps }) => {
             return (
-              <MuiGrid item xs={12}>
+              <MuiGrid key={id} xs={12} item>
                 <Task key={id} taskId={id} {...otherProps} />
               </MuiGrid>
             );

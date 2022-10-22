@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 
-import { Button, CircularProgress, Toolbar, Typography } from "@mui/material";
+import MuiButton from "@mui/material/Button";
 import MuiGrid from "@mui/material/Grid";
 import Add from "@mui/icons-material/Add";
 
@@ -10,7 +10,6 @@ import SectionHeader from "../../../../common/SectionHeader/SectionHeader";
 const Teams = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const loading = useSelector((store) => store.auth.loading);
 
   return (
     <MuiGrid container gap="40px">
@@ -20,20 +19,20 @@ const Teams = () => {
             title="Teams"
             subtitle="Create teams to organize people involved with your project."
             actionButton={
-              <Button
+              <MuiButton
                 variant="contained"
                 sx={{ textTransform: "none", fontWeight: 600 }}
                 startIcon={<Add />}
                 onClick={() => navigate("/teams/new")}
               >
                 Create Team
-              </Button>
+              </MuiButton>
             }
           />
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        {loading ? <CircularProgress /> : <Outlet />}
+        <Outlet />
       </MuiGrid>
     </MuiGrid>
   );

@@ -14,8 +14,8 @@ import DatePicker from "../../../../common/DatePicker";
 import ProjectStatusSelector from "../ProjectStatusSelector";
 
 import { updateProject } from "../../project.slice";
-import { useUpdateProjectMutation } from "../../project.api";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
+import { useUpdateProjectMutation } from "../../project.api";
 
 const ProjectSettings = () => {
   const dispatch = useDispatch();
@@ -95,10 +95,10 @@ const ProjectSettings = () => {
                     name="description"
                     title="Description"
                     helperText="A free text description of the project. Max character count is 150"
-                    rows={4}
                     value={project.description}
                     loading={project.loading}
                     onChange={handleChange}
+                    minRows={6}
                     multiline
                   />
                 </MuiGrid>

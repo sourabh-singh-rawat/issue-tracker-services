@@ -9,11 +9,12 @@ router.post("/projects/:id/members", auth, ProjectController.createMember);
 router.post("/projects/:id/members/invite", auth, ProjectController.invite);
 router.get("/projects", auth, ProjectController.index);
 router.get("/projects/status", ProjectController.indexStatus);
-router.get("/projects/members/roles", ProjectController.indexRoles);
+router.get("/projects/members/roles", auth, ProjectController.indexRoles);
 router.get("/projects/:id", auth, ProjectController.show);
 router.get("/projects/:id/members", ProjectController.indexMembers);
 router.get(
   "/projects/:id/issuesStatusCount",
+  auth,
   ProjectController.showIssuesStatusCount
 );
 router.get("/projects/:id/members/confirm", ProjectController.confirmInvite);

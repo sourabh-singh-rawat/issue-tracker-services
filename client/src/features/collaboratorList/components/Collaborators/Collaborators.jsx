@@ -7,7 +7,6 @@ import { CircularProgress } from "@mui/material";
 
 const People = () => {
   const { pathname } = useLocation();
-  const loading = useSelector((store) => store.auth.loading);
 
   return (
     <MuiGrid container gap="40px">
@@ -20,7 +19,7 @@ const People = () => {
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        {loading ? <CircularProgress /> : <Outlet />}
+        <Outlet />
       </MuiGrid>
     </MuiGrid>
   );

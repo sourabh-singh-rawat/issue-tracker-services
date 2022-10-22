@@ -1,11 +1,9 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 
 import Main from "../common/Main";
 import Dashboard from "../features/dashboard/components/Dashboard";
-import SignIn from "../features/auth/components/SignIn";
-import SignUp from "../features/auth/components/SignUp";
+import Login from "../features/auth/components/Login";
+import SignUp from "../features/auth/components/Signup";
 import Teams from "../features/teamList/components/Teams";
 import Settings from "../features/settings/components/Settings";
 import Collaborators from "../features/collaboratorList/components/Collaborators";
@@ -18,9 +16,9 @@ import ProjectIssues from "../features/project/components/ProjectIssues";
 import ProjectOverview from "../features/project/components/ProjectOverview";
 import ProjectActivity from "../features/project/components/ProjectActivity";
 import ProjectSetting from "../features/project/components/ProjectSettings";
+import Issue from "../features/issue/components/Issue";
 import Issues from "../features/issueList/component/Issues";
 import IssueForm from "../features/issue/components/IssueForm";
-import Issue from "../features/issue/components/Issue";
 import IssueOverview from "../features/issue/components/IssueOverview";
 import IssueComments from "../features/issueComments/components/IssueComments/IssueComments";
 import IssueList from "../features/issueList/component/IssueList";
@@ -35,44 +33,15 @@ import TeamOverview from "../features/team/components/TeamOverview";
 import TeamSettings from "../features/team/components/TeamSettings";
 import Profile from "../features/profile/components/Profile";
 
-import { setCredentials } from "../features/auth/auth.slice";
-import { onAuthStateChangedListener } from "../configs/firebase.config.js";
-
 const NoComponent = () => {
   return <h1>404</h1>;
 };
 
 const App = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    return onAuthStateChangedListener((user) => {
-      if (user) {
-        const {
-          uid,
-          email,
-          displayName,
-          accessToken,
-          photoURL,
-          stsTokenManager: { refreshToken },
-        } = user;
-
-        dispatch(
-          setCredentials({
-            user: { uid, email, displayName, photoURL },
-            accessToken,
-            refreshToken,
-            loading: false,
-          })
-        );
-      }
-    });
-  }, []);
-
   return (
     <Routes>
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/signin" element={<SignIn />} />
+      <Route path="/login" element={<Login />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Main />}>
           <Route index element={<Dashboard />} />
