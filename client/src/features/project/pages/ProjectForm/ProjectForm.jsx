@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import errors from "../../../../configs/errors";
+import errors from "../../../../app/errors";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

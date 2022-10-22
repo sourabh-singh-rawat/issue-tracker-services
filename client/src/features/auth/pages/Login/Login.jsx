@@ -5,7 +5,7 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 
 import { continueWithGoogle } from "../../../../utils/firebase.utils";
-import { onAuthStateChangedListener } from "../../../../configs/firebase.config";
+import { onAuthStateChangedListener } from "../../../../app/firebase.config";
 
 const Login = () => {
   const navigate = useNavigate();

@@ -10,7 +10,7 @@ import MuiTypography from "@mui/material/Typography";
 import GoogleIcon from "@mui/icons-material/Google";
 
 import { continueWithGoogle } from "../../../../utils/firebase.utils";
-import { onAuthStateChangedListener } from "../../../../configs/firebase.config";
+import { onAuthStateChangedListener } from "../../../../app/firebase.config";
 
 const SignUp = () => {
   const navigate = useNavigate();
