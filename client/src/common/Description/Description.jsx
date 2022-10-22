@@ -34,11 +34,9 @@ const Description = ({
             value={page.description}
             onChange={handleChange}
             inputProps={{
-              style: {
-                fontSize: "14px",
-                lineHeight: 1.5,
-              },
+              style: { fontSize: "14px", lineHeight: 1.5 },
             }}
+            minRows={4}
             autoFocus
             multiline
             fullWidth
@@ -72,7 +70,6 @@ const Description = ({
                   transition: "250ms",
                   ":hover": { backgroundColor: "action.hover" },
                 }}
-                multiline
               >
                 {page.description ? page.description : "Add a description..."}
               </MuiTypography>
@@ -81,7 +78,7 @@ const Description = ({
         )}
       </MuiGrid>
       {page.descriptionSelected && (
-        <MuiGrid item sm={12} sx={{ padding: "12px 0" }}>
+        <MuiGrid item sm={12} sx={{ padding: "8px 0" }}>
           <MuiButton
             variant="contained"
             onClick={handleSave}

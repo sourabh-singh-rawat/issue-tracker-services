@@ -11,7 +11,6 @@ import SectionHeader from "../../../../common/SectionHeader";
 const Issues = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const loading = useSelector((store) => store.auth.loading);
 
   return (
     <MuiGrid container gap="40px">
@@ -34,7 +33,7 @@ const Issues = () => {
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        {loading ? <MuiCircularProgress /> : <Outlet />}
+        <Outlet />
       </MuiGrid>
     </MuiGrid>
   );

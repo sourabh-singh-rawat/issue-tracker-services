@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import MuiMenu from "@mui/material/Menu";
@@ -24,6 +25,7 @@ const appBarStyles = {
 };
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const auth = useSelector((store) => store.auth.user);
@@ -58,9 +60,10 @@ const Navbar = () => {
                   <MuiTypography variant="body2">My Account</MuiTypography>
                 </MuiMenuItem>
                 <MuiMenuItem
-                  onClick={() => {
+                  onClick={async () => {
                     handleClose();
-                    signOutUser();
+                    await signOutUser();
+                    navigate("/login");
                   }}
                 >
                   <MuiLogoutIcon sx={{ fontSize: "18px" }} />
