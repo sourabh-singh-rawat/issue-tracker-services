@@ -2,16 +2,24 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   activty: {},
-  info: {
+  quick: {
     name: "",
     nameSelected: false,
     description: "",
     descriptionSelected: false,
     creation_date: null,
+    status: "0_NOT_STARTED",
+    loading: true,
+  },
+  settings: {
+    name: "",
+    description: "",
+    descriptionSelected: false,
+    creation_date: null,
     owner_id: null,
     id: "",
-    loading: true,
     status: "0_NOT_STARTED",
+    loading: true,
   },
   members: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
   issuesStatusCount: {
@@ -36,15 +44,39 @@ const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
+    setProjectQuick: (state, action) => {
+      const {
+        name,
+        nameSelected,
+        description,
+        descriptionSelected,
+        creation_date,
+        status,
+      } = action.payload;
+      state.quick = {
+        name,
+        nameSelected,
+        description,
+        descriptionSelected,
+        creation_date,
+        status,
+        loading: false,
+      };
+
+      return state;
+    },
     setProject: (state, action) => {
-      state.info = { ...state.info, ...action.payload, loading: false };
+      state.settings = { ...state.settings, ...action.payload, loading: false };
       return state;
     },
     updateProject: (state, action) => ({
       ...state,
-      info: { ...state.info, ...action.payload },
+      settings: { ...state.settings, ...action.payload },
     }),
-
+    updateProjectQuick: (state, action) => {
+      state.quick = { ...state.quick, ...action.payload };
+      return state;
+    },
     setMembers: (state, action) => {
       state.members.rows = action.payload.rows;
       state.members.rowCount = action.payload.rowCount;
@@ -78,14 +110,16 @@ const projectSlice = createSlice({
 });
 
 export const {
-  setProject,
-  updateProject,
   setStatus,
   setMemberRoles,
-  setIssueStatusCount,
   setList,
-  updateList,
+  setIssueStatusCount,
+  setProject,
+  setProjectQuick,
   setMembers,
+  updateProject,
+  updateProjectQuick,
+  updateList,
   updateMembers,
 } = projectSlice.actions;
 

@@ -24,7 +24,7 @@ const IssueForm = () => {
   const navigate = useNavigate();
 
   const user = useSelector((store) => store.auth.user);
-  const project = useSelector((store) => store.project.info);
+  const project = useSelector((store) => store.project.settings);
 
   const allProjects = useGetProjectsQuery({
     page: 0,

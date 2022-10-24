@@ -50,7 +50,9 @@ const DatePicker = ({
                   name={name}
                   onChange={handleChange}
                   sx={{
-                    ".MuiInputBase-input": { fontSize: "14px" },
+                    ".MuiInputBase-input": {
+                      fontSize: "14px",
+                    },
                   }}
                   fullWidth
                   {...params}

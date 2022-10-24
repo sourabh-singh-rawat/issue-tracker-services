@@ -47,6 +47,7 @@ const ProjectStatusSelector = ({
               fontWeight: 600,
               height: variant == "dense" ? "28px" : "auto",
               textTransform: "capitalize",
+              borderRadius: "6px",
             }}
             displayEmpty
           >
@@ -59,7 +60,11 @@ const ProjectStatusSelector = ({
                   fontSize: "14px",
                   fontWeight: 600,
                   textTransform: "capitalize",
+                  ":hover": {
+                    backgroundColor: "action.hover",
+                  },
                 }}
+                disableRipple
               >
                 <span>{message}</span>
               </MuiMenuItem>

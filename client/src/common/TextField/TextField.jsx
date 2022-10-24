@@ -51,13 +51,19 @@ const TextField = ({
             rows={rows}
             value={value}
             sx={{
-              ".MuiInputBase-root": {
+              ".MuiInputBase-input": {
                 fontSize: "14px",
                 borderRadius: "6px",
               },
               ".MuiFormHelperText-contained": {
                 fontSize: "13px",
                 marginLeft: 0,
+              },
+              ".Mui-disabled": {
+                backgroundColor: "action.hover",
+              },
+              ".MuiFormHelperText-root": {
+                backgroundColor: "transparent",
               },
             }}
             error={error}

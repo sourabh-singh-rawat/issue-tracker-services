@@ -8,7 +8,17 @@ const teamApiSlice = apiSlice.injectEndpoints({
     getTeams: build.query({
       query: () => `teams`,
     }),
+    createTeam: build.mutation({
+      query: ({ body }) => {
+        return {
+          url: `teams`,
+          method: "POST",
+          body,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetTeamQuery, useGetTeamsQuery } = teamApiSlice;
+export const { useGetTeamQuery, useGetTeamsQuery, useCreateTeamMutation } =
+  teamApiSlice;

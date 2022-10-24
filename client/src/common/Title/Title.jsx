@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
+import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
-import MuiSkeleton from "@mui/material/Skeleton";
 
 const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
   const dispatch = useDispatch();

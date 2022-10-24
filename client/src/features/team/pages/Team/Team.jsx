@@ -12,33 +12,33 @@ import MuiArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Tab from "../../../../common/Tab";
 import Tabs from "../../../../common/Tabs";
 
-import { setCurrent } from "../../team.slice";
+import { setTeam } from "../../team.slice";
 
 import { useGetTeamQuery } from "../../team.api";
 
 const Team = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const team = useGetTeamQuery();
   const { id } = useParams();
-  const { name } = useSelector((store) => store.team.current);
+  const getTeamQuery = useGetTeamQuery(id);
+  const team = useSelector((store) => store.team.info);
   const { pathname } = useLocation();
   const path = pathname.split("/")[3];
 
   const mapPathToIndex = {
     overview: 0,
-    issues: 101,
-    people: 1,
-    activity: 2,
-    settings: 3,
+    issues: 1,
+    people: 2,
+    activity: 3,
+    settings: 4,
   };
 
   const mapIndexToTab = {
     0: `/teams/${id}/overview`,
-    101: `/teams/${id}/issues`,
-    1: `/teams/${id}/people`,
-    2: `/teams/${id}/activity`,
-    3: `/teams/${id}/settings`,
+    1: `/teams/${id}/issues`,
+    2: `/teams/${id}/people`,
+    3: `/teams/${id}/activity`,
+    4: `/teams/${id}/settings`,
   };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[path]);
@@ -49,41 +49,25 @@ const Team = () => {
   };
 
   useEffect(() => {
-    if (team.data) dispatch(setCurrent(team.data));
-  }, [team.data]);
+    if (getTeamQuery.isSuccess) dispatch(setTeam(getTeamQuery.data));
+  }, [getTeamQuery.data]);
 
   return (
     <MuiGrid container>
       <MuiGrid item xs={12}>
         <MuiToolbar disableGutters>
-          <MuiButton
-            variant="text"
-            startIcon={<MuiArrowBackIcon />}
-            onClick={() => navigate("/teams")}
-            sx={{
-              color: "text.primary",
-              fontWeight: 600,
-              textTransform: "none",
-            }}
-          >
-            Back to all teams
-          </MuiButton>
-        </MuiToolbar>
-      </MuiGrid>
-      <MuiGrid item xs={12}>
-        <MuiToolbar disableGutters>
           <MuiTypography variant="h4" sx={{ fontWeight: 600 }}>
-            {name}
+            {team.name}
           </MuiTypography>
         </MuiToolbar>
       </MuiGrid>
       <MuiGrid item xs={12}>
         <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab label="Quick Start" value={0} />
-          <Tab label="Projects" value={101} />
-          <Tab label="People" value={1} />
-          <Tab label="Activity" value={2} />
-          <Tab label="Settings" value={3} />
+          <Tab label="Overview" value={0} />
+          <Tab label="Projects" value={1} />
+          <Tab label="People" value={2} />
+          <Tab label="Activity" value={3} />
+          <Tab label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
       <MuiGrid item xs={12}>

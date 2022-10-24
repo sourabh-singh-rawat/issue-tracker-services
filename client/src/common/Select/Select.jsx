@@ -9,9 +9,15 @@ import MuiFormHelperText from "@mui/material/FormHelperText";
 const Select = ({ title, items, helperText, ...otherProps }) => {
   return (
     <Fragment>
-      <MuiTypography variant="body2" fontWeight={600} sx={{ paddingBottom: 1 }}>
-        {title}
-      </MuiTypography>
+      {title && (
+        <MuiTypography
+          variant="body2"
+          fontWeight={600}
+          sx={{ paddingBottom: 1 }}
+        >
+          {title}
+        </MuiTypography>
+      )}
       <MuiFormControl fullWidth>
         <MuiSelect
           displayEmpty

@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { format, formatISO, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/esm/locale";
 
 import Skeleton from "@mui/material/Skeleton";
@@ -51,7 +51,7 @@ const TitleSection = ({
             <Skeleton width="80px" />
           ) : (
             <MuiTypography variant="body2" component="span" fontWeight={600}>
-              Published on{" "}
+              {" "}
               {page.creation_date &&
                 format(parseISO(page.creation_date), "PPPP", {
                   locale: enIN,
