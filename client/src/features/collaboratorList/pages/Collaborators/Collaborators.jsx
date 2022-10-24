@@ -3,9 +3,8 @@ import { useSelector } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
 import SectionHeader from "../../../../common/SectionHeader";
-import { CircularProgress } from "@mui/material";
 
-const People = () => {
+const Collaborators = () => {
   const { pathname } = useLocation();
 
   return (
@@ -13,7 +12,7 @@ const People = () => {
       {pathname === "/collaborators" && (
         <MuiGrid item xs={12}>
           <SectionHeader
-            title="People"
+            title="Colaborators"
             subtitle="This section contains all the collaborators that work with you."
           />
         </MuiGrid>
@@ -25,4 +24,4 @@ const People = () => {
   );
 };
 
-export default People;
+export default Collaborators;

@@ -1,12 +1,17 @@
+import User from "../models/user.model.js";
 import Team from "../models/team.model.js";
 import TeamUser from "../models/teamUser.model.js";
 
 const create = async (req, res) => {
+  const { uid } = req.user;
+  const { name } = req.body;
   try {
-    const team = (await Team.insertOne(req.body)).rows[0];
+    const { id } = (await User.findOne(uid)).rows[0];
+    const team = (await Team.insertOne({ name, leader: id })).rows[0];
 
     res.send(team);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

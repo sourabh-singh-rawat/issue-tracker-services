@@ -47,8 +47,8 @@ const TeamList = () => {
       ),
     },
     {
-      field: "description",
-      headerName: "Description",
+      field: "members",
+      headerName: "Members",
       minWidth: 150,
       flex: 0.4,
     },
@@ -57,8 +57,13 @@ const TeamList = () => {
       headerName: "Created At",
       width: 200,
       flex: 0.2,
-      renderCell: ({ value }) =>
-        value ? format(parseISO(value), "eee, PP") : "-",
+      renderCell: ({ value }) => {
+        return (
+          <Typography variant="body2">
+            {value ? format(parseISO(value), "eee, PP") : "-"}
+          </Typography>
+        );
+      },
     },
   ];
 

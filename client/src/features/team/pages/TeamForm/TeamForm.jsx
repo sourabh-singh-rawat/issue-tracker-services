@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import MuiBox from "@mui/material/Box";
@@ -9,9 +10,12 @@ import TextField from "../../../../common/TextField";
 import SectionHeader from "../../../../common/SectionHeader/SectionHeader";
 
 import { setSnackbarOpen } from "../../../snackbar.reducer";
+import { useCreateTeamMutation } from "../../team.api";
 
 const TeamForm = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [createTeamMutation, { isSuccess, data }] = useCreateTeamMutation();
   const [formFields, setFormFields] = useState({ name: "", description: "" });
 
   const handleChange = (e) => {
@@ -24,17 +28,15 @@ const TeamForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:4000/api/teams", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formFields),
-    });
-
-    const { id } = await response.json();
-
-    if (response.status === 200) setSnackbarOpen(true);
-    navigate(`/teams/${id}/overview`);
+    createTeamMutation({ body: formFields });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setSnackbarOpen(true));
+      navigate(`/teams/${data.id}/overview`);
+    }
+  }, [isSuccess]);
 
   return (
     <MuiGrid container gap="20px">
@@ -73,6 +75,7 @@ const TeamForm = () => {
                     type="submit"
                     variant="contained"
                     sx={{ textTransform: "none", fontWeight: 600 }}
+                    onClick={handleSubmit}
                     fullWidth
                   >
                     Create Team

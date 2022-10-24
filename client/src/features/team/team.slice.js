@@ -7,16 +7,16 @@ const teamSlice = createSlice({
     options: {},
   },
   reducers: {
-    setCurrent: (state, action) => ({
+    setTeam: (state, action) => ({
       ...state,
-      current: { ...action.payload },
+      info: { ...action.payload },
     }),
-    updateCurrent: (state, action) => ({
+    updateTeam: (state, action) => ({
       ...state,
-      current: { ...action.payload },
+      info: { ...action.payload },
     }),
   },
 });
 
-export const { setCurrent, updateCurrent, updateList } = teamSlice.actions;
+export const { setTeam, updateTeam, updateList } = teamSlice.actions;
 export default teamSlice.reducer;

@@ -30,7 +30,6 @@ const ProjectForm = () => {
     },
     description: {
       value: "",
-      charCount: 0,
       error: false,
       errorMessage: errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.message,
     },

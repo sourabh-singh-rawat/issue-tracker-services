@@ -12,13 +12,14 @@ const themeConfig = {
     text: {
       primary: "#080F0F",
       secondary: "#70757A",
+      disabled: "#080F0F",
     },
     warning: {
       main: "#FF6700",
       dark: "#F56200",
     },
     background: {
-      paper: "#FBF7F4",
+      paper: "#FFFFFF",
       default: "#FFFFFF",
     },
     action: {

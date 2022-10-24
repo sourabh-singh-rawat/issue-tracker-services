@@ -21,7 +21,7 @@ const ProjectSettings = () => {
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
-  const project = useSelector((store) => store.project.info);
+  const project = useSelector((store) => store.project.settings);
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(updateProject({ [name]: value }));
@@ -133,7 +133,7 @@ const ProjectSettings = () => {
                     disabled
                   />
                 </MuiGrid>
-                <MuiGrid item xs={12}>
+                <MuiGrid item xs={12} md={6}>
                   <ProjectStatusSelector
                     title="Status"
                     helperText="The current status of your project."
@@ -141,6 +141,7 @@ const ProjectSettings = () => {
                     handleChange={handleChange}
                   />
                 </MuiGrid>
+                <MuiGrid item xs={6}></MuiGrid>
                 <MuiGrid item xs={12} md={6}>
                   <DatePicker
                     title="Start Date"

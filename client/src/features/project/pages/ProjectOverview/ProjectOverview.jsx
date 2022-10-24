@@ -22,9 +22,9 @@ const ProjectOverview = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
-  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
-  const project = useSelector((store) => store.project.info);
   const projectIssueStatusCount = useGetProjectIssuesStatusCountQuery(id);
+  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
+  const project = useSelector((store) => store.project.settings);
   const issuesStatusCount = useSelector(
     (store) => store.project.issuesStatusCount
   );
@@ -37,10 +37,10 @@ const ProjectOverview = () => {
   };
 
   useEffect(() => {
-    if (projectIssueStatusCount.data) {
+    if (projectIssueStatusCount.isSuccess) {
       dispatch(setIssueStatusCount(projectIssueStatusCount.data));
     }
-  }, [projectIssueStatusCount.isSuccess]);
+  }, [projectIssueStatusCount.data]);
 
   useEffect(() => {
     if (isSuccess) dispatch(setSnackbarOpen(true));
@@ -62,14 +62,14 @@ const ProjectOverview = () => {
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
           <MuiTypography variant="body1" fontWeight={600}>
-            People:
+            Members:
           </MuiTypography>
           <MembersCard />
         </MuiGrid>
 
         <MuiGrid item sm={12}>
           <MuiTypography variant="body1" fontWeight={600}>
-            Issue Status:
+            Issue Stats:
           </MuiTypography>
           <IssueStats
             loading={issuesStatusCount.loading}

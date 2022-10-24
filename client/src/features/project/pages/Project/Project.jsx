@@ -9,7 +9,13 @@ import Tabs from "../../../../common/Tabs";
 import PageTitleSection from "../../../../common/TitleSection";
 import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
 
-import { setProject, setStatus, updateProject } from "../../project.slice";
+import {
+  setProject,
+  setProjectQuick,
+  setStatus,
+  updateProject,
+  updateProjectQuick,
+} from "../../project.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 
 import {
@@ -28,7 +34,7 @@ const Project = () => {
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
   const tabName = location.pathname.split("/")[3];
 
-  const project = useSelector((store) => store.project.info);
+  const project = useSelector((store) => store.project.quick);
 
   const mapPathToIndex = {
     overview: 0,
@@ -70,8 +76,10 @@ const Project = () => {
   }, [tabName, id]);
 
   useEffect(() => {
-    if (getProjectQuery.isSuccess)
+    if (getProjectQuery.isSuccess) {
+      dispatch(setProjectQuick(getProjectQuery.data));
       dispatch(setProject({ ...getProjectQuery.data, loading: false }));
+    }
   }, [getProjectQuery.data]);
 
   return (
@@ -80,7 +88,7 @@ const Project = () => {
         <PageTitleSection
           page={project}
           loading={project.loading}
-          updateTitle={updateProject}
+          updateTitle={updateProjectQuick}
           updateTitleQuery={updateTitleQuery}
           breadcrumbItems={[
             {
