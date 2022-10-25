@@ -1,19 +1,23 @@
 import { Fragment } from "react";
 
 import MuiGrid from "@mui/material/Grid";
+import MuiTypography from "@mui/material/Typography";
 import MuiLinearProgress from "@mui/material/LinearProgress";
 
 import Task from "../Task";
 
-const TaskList = ({ rows, rowCount, loading }) => {
+const TaskList = ({ rows, rowCount, title, loading }) => {
   return (
-    <MuiGrid container rowSpacing={1}>
+    <MuiGrid item xs={12}>
       {loading ? (
-        <MuiGrid item xs={12}>
-          <MuiLinearProgress />
-        </MuiGrid>
+        <MuiLinearProgress />
       ) : (
         <Fragment>
+          {rows.length > 0 && (
+            <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+              {title}
+            </MuiTypography>
+          )}
           {rows.map(({ id, ...otherProps }) => {
             return (
               <MuiGrid key={id} xs={12} item>

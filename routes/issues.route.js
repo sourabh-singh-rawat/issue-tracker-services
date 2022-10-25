@@ -11,7 +11,7 @@ router.get("/issues", auth, IssueController.index);
 router.get("/issues/status", auth, IssueController.indexStatus);
 router.get("/issues/priority", auth, IssueController.indexPriority);
 router.get("/issues/:id", auth, IssueController.show);
-router.get("/issues/:id/tasks", auth, IssueController.indexTasks);
+router.get("/issues/:id/tasks", IssueController.indexTasks);
 router.get("/issues/:id/tasks/:taskId", auth, IssueController.showTask);
 router.get("/issues/:id/comments", auth, IssueController.indexComments);
 router.patch("/issues/:id", auth, IssueController.update);

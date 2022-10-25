@@ -1,6 +1,6 @@
-import User from "../models/user.model.js";
-import Team from "../models/team.model.js";
-import TeamUser from "../models/teamUser.model.js";
+import User from "../models/User/user.model.js";
+import Team from "../models/Team/team.model.js";
+import TeamUser from "../models/TeamUser/teamUser.model.js";
 
 const create = async (req, res) => {
   const { uid } = req.user;

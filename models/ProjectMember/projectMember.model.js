@@ -1,4 +1,4 @@
-import db from "../services/db.service.js";
+import db from "../../services/db.service.js";
 
 const insertOne = (projectId, userId) => {
   return db.query(

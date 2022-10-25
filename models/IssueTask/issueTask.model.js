@@ -1,4 +1,5 @@
-import db from "../services/db.service.js";
+import db from "../../services/db.service.js";
+import { selectIssueTasks } from "./issueTask.utils.js";
 
 const insertOne = ({ issueId, dueDate, description, completed }) => {
   return db.query(
@@ -16,13 +17,15 @@ const findOne = (taskId) => {
   );
 };
 
-const find = (id) => {
-  return db.query(
-    `SELECT * FROM issue_tasks
-     WHERE issue_id = $1::uuid
-     ORDER BY creation_date`,
-    [id]
-  );
+const find = ({ id, filterOptions, pagingOptions, sortOptions }) => {
+  const { query, colValues } = selectIssueTasks({
+    id,
+    filterOptions,
+    pagingOptions,
+    sortOptions,
+  });
+
+  return db.query(query, colValues);
 };
 
 const updateOne = ({ taskId, updates }) => {
