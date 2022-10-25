@@ -1,4 +1,4 @@
-import db from "../services/db.service.js";
+import db from "../../services/db.service.js";
 
 const insertOne = (document) => {
   const { user_id, team_id, role } = document;

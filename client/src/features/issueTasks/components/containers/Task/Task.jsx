@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
@@ -68,8 +68,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
       sx={{
         cursor: "pointer",
         alignItems: "center",
-        border: "1px solid #E3E4E6",
-        borderRadius: "6px",
+        borderBottom: "1px solid #E3E4E6",
         transitionDuration: "250ms",
         ":hover": {
           boxShadow: 4,
@@ -136,9 +135,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
             <MuiGrid item flexGrow={1}>
               <MuiTypography
                 variant="body2"
-                sx={{
-                  textDecoration: task.completed && "line-through",
-                }}
+                sx={{ color: task.completed && "text.secondary" }}
               >
                 {task.description}
               </MuiTypography>

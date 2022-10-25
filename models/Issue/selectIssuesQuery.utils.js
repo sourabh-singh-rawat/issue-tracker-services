@@ -1,11 +1,11 @@
-export const selectIssuesQuery = function createSelectQuery({
+export const selectIssuesQuery = ({
   reporter_id,
-  options,
+  filterOptions,
   pagingOptions,
   sortOptions: { field = "status", order = "asc" },
-}) {
-  Object.keys(options).forEach((option) => {
-    if (!options[option]) delete options[option];
+}) => {
+  Object.keys(filterOptions).forEach((option) => {
+    if (!filterOptions[option]) delete filterOptions[option];
   });
 
   Object.keys(pagingOptions).forEach((option) => {
@@ -19,12 +19,12 @@ export const selectIssuesQuery = function createSelectQuery({
   let pagination = "";
 
   // WHERE CONDITION
-  if (Object.keys(options).length !== 0) {
-    condition += Object.keys(options)
+  if (Object.keys(filterOptions).length !== 0) {
+    condition += Object.keys(filterOptions)
       .reduce((prev, cur) => {
         index++;
         return prev + cur + "=$" + index + " AND ";
-      }, `AND `)
+      }, "AND ")
       .slice(0, -4);
   }
 
@@ -44,6 +44,9 @@ export const selectIssuesQuery = function createSelectQuery({
 
   return {
     query,
-    colValues: [...Object.values(options), ...Object.values(pagingOptions)],
+    colValues: [
+      ...Object.values(filterOptions),
+      ...Object.values(pagingOptions),
+    ],
   };
 };

@@ -13,8 +13,8 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Task"],
     }),
     getTasks: build.query({
-      query: (id) => {
-        return `/issues/${id}/tasks`;
+      query: ({ id, filters: { completed = false } }) => {
+        return `/issues/${id}/tasks?completed=${completed}`;
       },
       providesTags: ["Task"],
     }),
@@ -26,7 +26,7 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
           body,
         };
       },
-      // invalidatesTags: ["Task"],
+      invalidatesTags: ["Task"],
     }),
     deleteTask: build.mutation({
       query: ({ id, taskId }) => {

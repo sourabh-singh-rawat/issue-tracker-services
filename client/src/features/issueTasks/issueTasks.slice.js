@@ -1,19 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  rows: [],
-  rowCount: [],
-  loading: true,
+  completed: {
+    rows: [],
+    rowCount: [],
+    loading: true,
+  },
+  incompleted: {
+    rows: [],
+    rowCount: [],
+    loading: true,
+  },
 };
 
 const issueTasksSlice = createSlice({
   name: "issueTasks",
   initialState,
   reducers: {
-    setTasks: (state, action) => {
-      state.rows = action.payload.rows;
-      state.rowCount = action.payload.rowCount;
-      state.loading = false;
+    setCompletedTasks: (state, action) => {
+      state.completed.rows = action.payload.rows;
+      state.completed.rowCount = action.payload.rowCount;
+      state.completed.loading = false;
+
+      return state;
+    },
+    setIncompleteTasks: (state, action) => {
+      state.incompleted.rows = action.payload.rows;
+      state.incompleted.rowCount = action.payload.rowCount;
+      state.incompleted.loading = false;
 
       return state;
     },
@@ -24,5 +38,6 @@ const issueTasksSlice = createSlice({
   },
 });
 
-export const { setTasks, setLoadingTasks } = issueTasksSlice.actions;
+export const { setCompletedTasks, setIncompleteTasks, setLoadingTasks } =
+  issueTasksSlice.actions;
 export default issueTasksSlice.reducer;

@@ -1,5 +1,5 @@
-import db from "../services/db.service.js";
-import { selectIssuesQuery } from "../utils/issues/selectIssuesQuery.utils.js";
+import db from "../../services/db.service.js";
+import { selectIssuesQuery } from "./selectIssuesQuery.utils.js";
 
 const insertOne = ({
   name,

@@ -145,7 +145,7 @@ CREATE TABLE issue_tasks (
   description VARCHAR(255),
   due_date TIMESTAMP WITH TIME ZONE,
   assigned_to uuid,
-  completed BOOLEAN,
+  completed BOOLEAN DEFAULT false,
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,

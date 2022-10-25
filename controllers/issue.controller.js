@@ -1,9 +1,9 @@
-import User from "../models/user.model.js";
-import Issue from "../models/issue.model.js";
-import IssueComment from "../models/issuesComment.model.js";
-import IssueTask from "../models/issueTask.model.js";
-import IssueStatus from "../models/issueStatus.model.js";
-import IssuePriority from "../models/issuePriority.model.js";
+import User from "../models/User/user.model.js";
+import Issue from "../models/Issue/issue.model.js";
+import IssueComment from "../models/IssueComment/issuesComment.model.js";
+import IssueTask from "../models/IssueTask/issueTask.model.js";
+import IssueStatus from "../models/IssueStatus/issueStatus.model.js";
+import IssuePriority from "../models/IssuePriority/issuePriority.model.js";
 
 /**
  * Create issue
@@ -73,12 +73,21 @@ const createTask = async (req, res) => {
 
 const index = async (req, res) => {
   const { uid } = req.user;
+  const { status, priority, assigned_to, projectId, limit, page, sort_by } =
+    req.query;
 
-  // filtering
-  const { status, priority, projectId, assigned_to } = req.query;
+  const filterOptions = {
+    status,
+    priority,
+    assigned_to,
+    project_id: projectId,
+  };
 
-  // sorting
-  const { sort_by } = req.query;
+  const pagingOptions = {
+    limit: parseInt(limit),
+    offset: parseInt(limit) * parseInt(page),
+  };
+
   const sortOptions = {};
   if (sort_by) {
     const [field, order] = sort_by.split(":");
@@ -86,35 +95,22 @@ const index = async (req, res) => {
     sortOptions.order = order;
   }
 
-  // pagination
-  const { limit, page } = req.query;
-
   try {
     const reporter = (await User.findOne(uid)).rows[0];
-    const options = {
-      project_id: projectId,
-      status,
-      priority,
-      assigned_to,
-    };
 
     const issues = (
       await Issue.find({
         reporter_id: reporter.id,
-        options,
-        pagingOptions: {
-          limit: parseInt(limit),
-          offset: parseInt(limit) * parseInt(page),
-        },
+        filterOptions,
+        pagingOptions,
         sortOptions,
       })
     ).rows;
 
     const rowCount = (
       await Issue.rowCount({
-        project_id: projectId,
         reporter_id: reporter.id,
-        options,
+        filterOptions,
         pagingOptions: {},
         sortOptions: {},
       })
@@ -141,11 +137,30 @@ const indexComments = async (req, res) => {
 
 const indexTasks = async (req, res) => {
   const { id } = req.params;
+  const { completed } = req.query;
+
+  // filtering
+  const filterOptions = { completed };
+
+  // pagination
+  const pagingOptions = {
+    limit: 10,
+    offset: 0,
+  };
+
+  // sorting
+  const sortOptions = {};
 
   try {
-    const tasks = await IssueTask.find(id);
+    const tasks = await IssueTask.find({
+      id,
+      filterOptions,
+      pagingOptions,
+      sortOptions,
+    });
     res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

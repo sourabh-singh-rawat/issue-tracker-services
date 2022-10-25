@@ -8,7 +8,7 @@ import AddTask from "../../components/containers/AddTask";
 import TaskList from "../../components/containers/TaskList";
 import TabPanel from "../../../../common/TabPanel";
 
-import { setTasks } from "../../issueTasks.slice";
+import { setCompletedTasks, setIncompleteTasks } from "../../issueTasks.slice";
 import { useGetTasksQuery } from "../../issueTask.api";
 
 const IssueTasks = () => {
@@ -16,22 +16,42 @@ const IssueTasks = () => {
   const { id } = useParams();
   const [selectedTab] = useOutletContext();
   const issueTasks = useSelector((store) => store.issueTasks);
-  const getIssueTasks = useGetTasksQuery(id);
+  const incompletedIssues = useGetTasksQuery({
+    id,
+    filters: { completed: false },
+  });
+  const completedIssues = useGetTasksQuery({
+    id,
+    filters: { completed: true },
+  });
 
   useEffect(() => {
-    if (getIssueTasks.isSuccess) {
-      dispatch(setTasks(getIssueTasks.data));
+    if (completedIssues.isSuccess) {
+      dispatch(setCompletedTasks(completedIssues.data));
     }
-  }, [getIssueTasks.data]);
+  }, [completedIssues.data]);
+
+  useEffect(() => {
+    if (incompletedIssues.isSuccess) {
+      dispatch(setIncompleteTasks(incompletedIssues.data));
+    }
+  }, [incompletedIssues.data]);
 
   return (
     <TabPanel selectedTab={selectedTab} index={1}>
-      <MuiGrid container rowSpacing={1}>
+      <MuiGrid container rowSpacing={3}>
+        <TaskList
+          title="To do:"
+          rows={issueTasks.incompleted.rows}
+          loading={issueTasks.incompleted.loading}
+        />
+        <TaskList
+          title="Completed:"
+          rows={issueTasks.completed.rows}
+          loading={issueTasks.completed.loading}
+        />
         <MuiGrid item xs={12}>
           <AddTask />
-        </MuiGrid>
-        <MuiGrid item xs={12}>
-          <TaskList rows={issueTasks.rows} loading={issueTasks.loading} />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>
