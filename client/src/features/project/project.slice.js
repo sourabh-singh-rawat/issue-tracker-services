@@ -3,15 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   activty: {},
   quick: {
+    loading: true,
     name: "",
     nameSelected: false,
     description: "",
     descriptionSelected: false,
     creation_date: null,
     status: "0_NOT_STARTED",
-    loading: true,
   },
   settings: {
+    loading: true,
     name: "",
     description: "",
     descriptionSelected: false,
@@ -19,9 +20,14 @@ const initialState = {
     owner_id: null,
     id: "",
     status: "0_NOT_STARTED",
-    loading: true,
   },
-  members: { rows: [], rowCount: 0, page: 0, pageSize: 10 },
+  members: {
+    loading: true,
+    rows: [],
+    rowCount: 0,
+    page: 0,
+    pageSize: 10,
+  },
   issuesStatusCount: {
     loading: true,
     rows: [
@@ -36,7 +42,10 @@ const initialState = {
       loading: true,
       rows: [{ code: "NOT_STARTED", message: "Not Started" }],
     },
-    roles: { loading: true, rows: [{ code: "MEMBER", message: "Member" }] },
+    roles: {
+      loading: true,
+      rows: [{ code: "MEMBER", message: "Member" }],
+    },
   },
 };
 
@@ -53,6 +62,7 @@ const projectSlice = createSlice({
         creation_date,
         status,
       } = action.payload;
+
       state.quick = {
         name,
         nameSelected,
@@ -67,19 +77,24 @@ const projectSlice = createSlice({
     },
     setProject: (state, action) => {
       state.settings = { ...state.settings, ...action.payload, loading: false };
+
       return state;
     },
-    updateProject: (state, action) => ({
-      ...state,
-      settings: { ...state.settings, ...action.payload },
-    }),
+    updateProject: (state, action) => {
+      return {
+        ...state,
+        settings: { ...state.settings, ...action.payload },
+      };
+    },
     updateProjectQuick: (state, action) => {
       state.quick = { ...state.quick, ...action.payload };
+
       return state;
     },
     setMembers: (state, action) => {
       state.members.rows = action.payload.rows;
       state.members.rowCount = action.payload.rowCount;
+
       return state;
     },
     updateMembers: (state, action) => {

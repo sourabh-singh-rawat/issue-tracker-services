@@ -3,17 +3,17 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api.config.js";
 
 import authSlice from "../features/auth/auth.slice";
-import collaboratorListSlice from "../features/collaboratorList/collaboratorList.slice";
+import collaboratorListSlice from "../features/collaborator-list/collaborator-list.slice";
 import issueSlice from "../features/issue/issue.slice";
-import issueCommentsSlice from "../features/issueComments/issueComments.slice";
-import issueListSlice from "../features/issueList/issueList.slice";
-import issueTasksSlice from "../features/issueTasks/issueTasks.slice";
+import issueCommentsSlice from "../features/issue-comments/issue-comments.slice";
+import issueListSlice from "../features/issue-list/issue-list.slice";
+import issueTasksSlice from "../features/issue-tasks/issue-tasks.slice";
 import profileSlice from "../features/profile/profile.slice";
 import projectSlice from "../features/project/project.slice";
-import projectListSlice from "../features/projectList/projectList.slice";
+import projectListSlice from "../features/project-list/project-list.slice";
 import snackbarReducer from "../features/snackbar.reducer";
 import teamSlice from "../features/team/team.slice";
-import teamListSlice from "../features/teamList/teamList.slice";
+import teamListSlice from "../features/team-list/team-list.slice";
 
 const storeConfig = {
   reducer: {

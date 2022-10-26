@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
 
-import IssueList from "../../../issueList/components/containers/IssueList";
+import IssueList from "../../../issue-list/components/containers/IssueList";
 import AddIssueButton from "../../../issue/components/buttons/AddIssueButton";
 
 const ProjectIssues = () => {

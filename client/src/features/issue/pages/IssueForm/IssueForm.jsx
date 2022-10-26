@@ -16,8 +16,8 @@ import IssueStatusSelector from "../../components/containers/IssueStatusSelector
 import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
 
 import { useCreateIssueMutation } from "../../issue.api";
-import { useGetProjectsQuery } from "../../../projectList/projectList.api";
-import { useGetCollaboratorsQuery } from "../../../collaboratorList/collaboratorList.api";
+import { useGetProjectsQuery } from "../../../project-list/project-list.api";
+import { useGetCollaboratorsQuery } from "../../../collaborator-list/collaborator-list.api";
 
 const IssueForm = () => {
   const { id } = useParams();

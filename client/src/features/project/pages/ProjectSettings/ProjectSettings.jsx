@@ -118,7 +118,7 @@ const ProjectSettings = () => {
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
-              <MuiGrid container spacing={2} rowSpacing={3}>
+              <MuiGrid container columnSpacing={2} rowSpacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
                     loading={project.loading}
