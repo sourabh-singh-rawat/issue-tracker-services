@@ -269,6 +269,8 @@ const updateTask = async (req, res) => {
   const { taskId } = req.params;
   const { description, completed } = req.body;
 
+  const updateables = [];
+
   try {
     const task = (
       await IssueTask.updateOne({

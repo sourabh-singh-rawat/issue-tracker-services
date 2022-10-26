@@ -53,7 +53,6 @@ const TextField = ({
             sx={{
               ".MuiInputBase-input": {
                 fontSize: "14px",
-                borderRadius: "6px",
               },
               ".MuiFormHelperText-contained": {
                 fontSize: "13px",

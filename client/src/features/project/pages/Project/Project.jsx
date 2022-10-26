@@ -25,12 +25,12 @@ import {
 } from "../../project.api";
 
 const Project = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const status = useGetStatusQuery();
-  const getProjectQuery = useGetProjectQuery(id);
+  const { id } = useParams();
+  const getProject = useGetProjectQuery(id);
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
   const tabName = location.pathname.split("/")[3];
 
@@ -76,11 +76,11 @@ const Project = () => {
   }, [tabName, id]);
 
   useEffect(() => {
-    if (getProjectQuery.isSuccess) {
-      dispatch(setProjectQuick(getProjectQuery.data));
-      dispatch(setProject({ ...getProjectQuery.data, loading: false }));
+    if (getProject.isSuccess) {
+      dispatch(setProjectQuick(getProject.data));
+      dispatch(setProject({ ...getProject.data, loading: false }));
     }
-  }, [getProjectQuery.data]);
+  }, [getProject.data]);
 
   return (
     <MuiGrid container spacing={2}>

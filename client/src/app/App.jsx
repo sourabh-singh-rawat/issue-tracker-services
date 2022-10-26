@@ -6,13 +6,12 @@ import Main from "../common/Main";
 import Login from "../features/auth/pages/Login";
 import SignUp from "../features/auth/pages/Signup";
 import Dashboard from "../features/dashboard/pages/Dashboard";
-
 import Settings from "../features/settings/components/pages/Settings";
 
-import Collaborators from "../features/collaboratorList/pages/Collaborators";
-import CollaboratorList from "../features/collaboratorList/components/CollaboratorList";
+import Collaborators from "../features/collaborator-list/pages/Collaborators";
+import CollaboratorList from "../features/collaborator-list/components/CollaboratorList";
 
-import Projects from "../features/projectList/pages/Projects";
+import Projects from "../features/project-list/pages/Projects";
 import Project from "../features/project/pages/Project";
 import ProjectOverview from "../features/project/pages/ProjectOverview";
 import ProjectIssues from "../features/project/pages/ProjectIssues";
@@ -20,23 +19,23 @@ import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
 import ProjectSetting from "../features/project/pages/ProjectSettings";
 import ProjectForm from "../features/project/pages/ProjectForm";
-import ProjectList from "../features/projectList/components/containers/ProjectList";
+import ProjectList from "../features/project-list/components/containers/ProjectList";
 
-import Issues from "../features/issueList/pages/Issues";
+import Issues from "../features/issue-list/pages/Issues";
 import Issue from "../features/issue/pages/Issue";
 import IssueOverview from "../features/issue/pages/IssueOverview";
-import IssueTasks from "../features/issueTasks/pages/IssueTasks";
-import IssueComments from "../features/issueComments/pages/IssueComments";
+import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
+import IssueComments from "../features/issue-comments/pages/IssueComments";
 import IssueSettings from "../features/issue/pages/IssueSettings";
 import IssueForm from "../features/issue/pages/IssueForm";
-import IssueList from "../features/issueList/components/containers/IssueList";
+import IssueList from "../features/issue-list/components/containers/IssueList";
 
-import Teams from "../features/teamList/pages/Teams";
+import Teams from "../features/team-list/pages/Teams";
 import Team from "../features/team/pages/Team";
 import TeamOverview from "../features/team/pages/TeamOverview";
 import TeamSettings from "../features/team/pages/TeamSettings";
 import TeamForm from "../features/team/pages/TeamForm";
-import TeamList from "../features/teamList/components/containers/TeamList";
+import TeamList from "../features/team-list/components/containers/TeamList";
 
 import Profile from "../features/profile/pages/Profile";
 
