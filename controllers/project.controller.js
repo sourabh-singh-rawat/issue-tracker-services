@@ -2,11 +2,11 @@ import jwt from "jsonwebtoken";
 
 import sgMail from "../services/email.service.js";
 
-import User from "../models/User/user.model.js";
-import Role from "../models/Roles/roles.model.js";
-import Project from "../models/Project/project.model.js";
-import ProjectStatus from "../models/ProjectStatus/projectStatus.model.js";
-import ProjectMember from "../models/ProjectMember/projectMember.model.js";
+import User from "../models/user/user.model.js";
+import Role from "../models/roles/roles.model.js";
+import Project from "../models/project/project.model.js";
+import ProjectStatus from "../models/project-status/project-status.model.js";
+import ProjectMember from "../models/project-member/project-member.model.js";
 
 /**
  * Creates a new project member
