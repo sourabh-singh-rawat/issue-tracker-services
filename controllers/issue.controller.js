@@ -1,9 +1,9 @@
-import User from "../models/User/user.model.js";
-import Issue from "../models/Issue/issue.model.js";
-import IssueComment from "../models/IssueComment/issuesComment.model.js";
-import IssueTask from "../models/IssueTask/issueTask.model.js";
-import IssueStatus from "../models/IssueStatus/issueStatus.model.js";
-import IssuePriority from "../models/IssuePriority/issuePriority.model.js";
+import User from "../models/user/user.model.js";
+import Issue from "../models/issue/issue.model.js";
+import IssueComment from "../models/issue-comment/issue-comment.model.js";
+import IssueTask from "../models/issue-task/issue-task.model.js";
+import IssueStatus from "../models/issue-status/issue-status.model.js";
+import IssuePriority from "../models/Issue-priority/issue-priority.model.js";
 
 /**
  * Create issue

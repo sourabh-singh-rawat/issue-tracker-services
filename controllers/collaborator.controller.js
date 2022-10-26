@@ -1,5 +1,5 @@
 import User from "../models/User/user.model.js";
-import ProjectMember from "../models/ProjectMember/projectMember.model.js";
+import ProjectMember from "../models/project-member/project-member.model.js";
 
 const index = async (req, res) => {
   const { uid } = req.user;
