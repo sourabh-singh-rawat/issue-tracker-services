@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 
+import { styled } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
@@ -7,6 +8,44 @@ import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 import CircularProgress from "@mui/material/CircularProgress";
+
+const StyledSelect = styled(MuiSelect)(({ theme }) => {
+  return {
+    "&.MuiOutlinedInput-root": {
+      color: theme.palette.text.primary,
+      fontSize: "14px",
+      fontWeight: 500,
+      textTransform: "capitalize",
+      borderRadius: "4px",
+      backgroundColor: theme.palette.grey[200],
+      "& fieldset": {
+        border: `2px solid ${theme.palette.grey[200]}`,
+      },
+      "&:hover fieldset": {
+        backgroundColor: "transparent",
+        border: `2px solid ${theme.palette.grey[400]}`,
+        transitionDuration: "250ms",
+      },
+    },
+  };
+});
+
+const StyledMenuItem = styled(MuiMenuItem)(({ theme }) => {
+  return {
+    "&.MuiMenuItem-root": {
+      color: "text.primary",
+      fontSize: "14px",
+      fontWeight: 500,
+      textTransform: "capitalize",
+      ":hover": {
+        backgroundColor: "action.hover",
+      },
+    },
+    "&.Mui-selected": {
+      color: theme.palette.primary.main,
+    },
+  };
+});
 
 const ProjectStatusSelector = ({
   title,
@@ -26,7 +65,7 @@ const ProjectStatusSelector = ({
         <MuiGrid item xs={12}>
           <MuiTypography
             variant="body2"
-            sx={{ fontWeight: 600, paddingBottom: 1 }}
+            sx={{ fontWeight: 500, paddingBottom: 1 }}
           >
             {title}
           </MuiTypography>
@@ -36,40 +75,20 @@ const ProjectStatusSelector = ({
         {loading ? (
           <CircularProgress />
         ) : (
-          <MuiSelect
+          <StyledSelect
             name="status"
             size="small"
             value={value}
             onChange={handleChange}
-            sx={{
-              color: "text.primary",
-              fontSize: "14px",
-              fontWeight: 600,
-              height: variant == "dense" ? "28px" : "auto",
-              textTransform: "capitalize",
-              borderRadius: "6px",
-            }}
+            sx={{ height: variant == "dense" ? "28px" : "auto" }}
             displayEmpty
           >
             {projectStatus.map(({ status, message }) => (
-              <MuiMenuItem
-                key={status}
-                value={status}
-                sx={{
-                  color: "text.primary",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  textTransform: "capitalize",
-                  ":hover": {
-                    backgroundColor: "action.hover",
-                  },
-                }}
-                disableRipple
-              >
+              <StyledMenuItem key={status} value={status} disableRipple>
                 <span>{message}</span>
-              </MuiMenuItem>
+              </StyledMenuItem>
             ))}
-          </MuiSelect>
+          </StyledSelect>
         )}
       </MuiFormControl>
       {helperText && (

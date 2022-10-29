@@ -120,6 +120,24 @@ const ProjectForm = () => {
                 required
               />
             </MuiGrid>
+            <MuiGrid item xs={12} sm={12} md={12}>
+              <TextField
+                name="Description"
+                title="Description"
+                type="text"
+                minRows={4}
+                value={formFields.description.value}
+                placeholder={formFields.description.placeHolder}
+                error={formFields.description.error}
+                onChange={handleDescriptionChange}
+                helperText={
+                  formFields.description.error
+                    ? formFields.description.errorMessage
+                    : `A text description of your project. Do not exceed ${errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit} characters`
+                }
+                multiline
+              />
+            </MuiGrid>
             <MuiGrid item xs={12} sm={12} md={6}>
               <DatePicker
                 title="Start Date"
@@ -156,24 +174,6 @@ const ProjectForm = () => {
               />
             </MuiGrid>
             <MuiGrid item md={6}></MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={12}>
-              <TextField
-                name="Description"
-                title="Description"
-                type="text"
-                minRows={4}
-                value={formFields.description.value}
-                placeholder={formFields.description.placeHolder}
-                error={formFields.description.error}
-                onChange={handleDescriptionChange}
-                helperText={
-                  formFields.description.error
-                    ? formFields.description.errorMessage
-                    : `A text description of your project. Do not exceed ${errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit} characters`
-                }
-                multiline
-              />
-            </MuiGrid>
             <MuiGrid item>
               <Button
                 type="submit"

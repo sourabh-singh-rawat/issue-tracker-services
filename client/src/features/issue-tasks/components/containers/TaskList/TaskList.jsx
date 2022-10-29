@@ -5,6 +5,7 @@ import MuiTypography from "@mui/material/Typography";
 import MuiLinearProgress from "@mui/material/LinearProgress";
 
 import Task from "../Task";
+import AddTask from "../AddTask";
 
 const TaskList = ({ rows, rowCount, title, loading }) => {
   return (
@@ -27,6 +28,7 @@ const TaskList = ({ rows, rowCount, title, loading }) => {
           })}
         </Fragment>
       )}
+      <AddTask />
     </MuiGrid>
   );
 };

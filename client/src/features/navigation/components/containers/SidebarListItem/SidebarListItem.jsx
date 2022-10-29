@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 
+import { useTheme } from "@mui/material/styles";
 import MuiListItem from "@mui/material/ListItem";
 import MuiListItemButton from "@mui/material/ListItemButton";
 import MuiListItemIcon from "@mui/material/ListItemIcon";
 import MuiTypography from "@mui/material/Typography";
 
 const SidebarListItem = ({ open, text, icon, to }) => {
+  const theme = useTheme();
+
   const listItemTypographyStyles = {
-    color: "text.primary",
+    color: theme.palette.text.primary,
     opacity: open ? 1 : 0,
     fontWeight: 600,
   };
@@ -15,6 +18,7 @@ const SidebarListItem = ({ open, text, icon, to }) => {
   const listItemIconStyles = {
     minWidth: 0,
     mr: open ? 1.5 : "auto",
+    color: theme.palette.text.primary,
   };
 
   const listItemButtonStyles = {
@@ -23,7 +27,7 @@ const SidebarListItem = ({ open, text, icon, to }) => {
   };
 
   const listLinkStyles = {
-    color: "text.primary",
+    color: theme.palette.text.primary,
     textDecoration: "none",
   };
 
