@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { styled, useTheme } from "@mui/material/styles";
 import MuiMenu from "@mui/material/Menu";
 import MuiGrid from "@mui/material/Grid";
 import MuiAppBar from "@mui/material/AppBar";
@@ -17,14 +18,17 @@ import MuiAccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 
 import { signOutUser } from "../../../../../utils/firebase.utils";
 
-const appBarStyles = {
-  color: "white",
-  width: "100%",
-  boxShadow: 1,
-  zIndex: (theme) => theme.zIndex.drawer + 1,
-};
+const AppBar = styled(MuiAppBar)(({ theme }) => {
+  return {
+    color: theme.palette.primary.main,
+    width: "100%",
+    boxShadow: 1,
+    zIndex: (theme) => theme.zIndex.drawer + 1,
+  };
+});
 
 const Navbar = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -34,8 +38,11 @@ const Navbar = () => {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <MuiAppBar position="fixed" sx={appBarStyles}>
-      <MuiToolbar variant="dense" sx={{ backgroundColor: "secondary.main" }}>
+    <AppBar position="fixed" sx={{ boxShadow: "none" }}>
+      <MuiToolbar
+        variant="dense"
+        sx={{ backgroundColor: theme.palette.grey[900], boxShadow: 1 }}
+      >
         <MuiGrid container sx={{ alignItems: "center" }}>
           <MuiGrid item flexGrow={1}></MuiGrid>
           <MuiGrid item>
@@ -78,7 +85,7 @@ const Navbar = () => {
           </MuiGrid>
         </MuiGrid>
       </MuiToolbar>
-    </MuiAppBar>
+    </AppBar>
   );
 };
 

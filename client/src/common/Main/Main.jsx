@@ -38,7 +38,6 @@ const Main = () => {
 
   return (
     <Fragment>
-      <Navbar />
       <Sidebar />
       <MuiBox sx={{ flexGrow: 1 }}>
         <MuiToolbar variant="dense" />

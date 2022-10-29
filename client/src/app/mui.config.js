@@ -3,27 +3,30 @@ import { createTheme } from "@mui/material";
 const themeConfig = {
   palette: {
     primary: {
-      main: "#635DFF",
-      dark: "#030066",
+      main: "#772ce8",
+      dark: "#5c16c5",
     },
     secondary: {
       main: "#333333",
+      dark: "#1e212a",
     },
     text: {
       primary: "#080F0F",
       secondary: "#70757A",
-      disabled: "#080F0F",
     },
     warning: {
       main: "#FF6700",
       dark: "#F56200",
     },
+    error: {
+      main: "#eb0400",
+    },
     background: {
       paper: "#FFFFFF",
-      default: "#FFFFFF",
+      default: "#FAFAFA",
     },
     action: {
-      hover: "#EBEBEB",
+      hover: "#EEEEEE",
     },
   },
   typography: {

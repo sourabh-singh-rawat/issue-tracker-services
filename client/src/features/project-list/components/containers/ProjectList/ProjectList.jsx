@@ -117,7 +117,13 @@ const ProjectList = () => {
       minWidth: 125,
       flex: 0.15,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "P", { locale: enIN }) : "-",
+        value ? (
+          <MuiTypography variant="body2">
+            {format(parseISO(value), "P", { locale: enIN })}
+          </MuiTypography>
+        ) : (
+          "-"
+        ),
     },
     {
       field: "start_date",

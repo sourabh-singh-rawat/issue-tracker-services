@@ -8,10 +8,9 @@ import SignUp from "../features/auth/pages/Signup";
 import Dashboard from "../features/dashboard/pages/Dashboard";
 import Settings from "../features/settings/components/pages/Settings";
 
-import Collaborators from "../features/collaborator-list/pages/Collaborators";
-import CollaboratorList from "../features/collaborator-list/components/CollaboratorList";
+import Collaborators from "../features/collaborator-list/pages/Collaborators/Collaborators";
+import CollaboratorList from "../features/collaborator-list/components/containers/CollaboratorList";
 
-import Projects from "../features/project-list/pages/Projects";
 import Project from "../features/project/pages/Project";
 import ProjectOverview from "../features/project/pages/ProjectOverview";
 import ProjectIssues from "../features/project/pages/ProjectIssues";
@@ -19,6 +18,7 @@ import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
 import ProjectSetting from "../features/project/pages/ProjectSettings";
 import ProjectForm from "../features/project/pages/ProjectForm";
+import Projects from "../features/project-list/pages/Projects";
 import ProjectList from "../features/project-list/components/containers/ProjectList";
 
 import Issues from "../features/issue-list/pages/Issues";

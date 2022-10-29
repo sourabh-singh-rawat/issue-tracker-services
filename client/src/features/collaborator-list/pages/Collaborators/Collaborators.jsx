@@ -1,5 +1,4 @@
 import { useLocation, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
 import SectionHeader from "../../../../common/SectionHeader";

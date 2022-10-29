@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiTypography from "@mui/material/Typography";
 
-import List from "../../../../common/List";
+import List from "../../../../../common/List";
 
 import {
   setCollaboratorList,
   updateCollaboratorList,
-} from "../../collaborator-list.slice";
+} from "../../../collaborator-list.slice";
 
-import { useGetCollaboratorsQuery } from "../../collaborator-list.api";
+import { useGetCollaboratorsQuery } from "../../../collaborator-list.api";
 
 const CollaboratorList = () => {
   const dispatch = useDispatch();

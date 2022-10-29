@@ -1,11 +1,45 @@
 import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 
+import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
+import TextField from "../TextField";
+import { updateProjectQuick } from "../../features/project/project.slice";
+
+const TitleTextField = styled(TextField)(({ theme }) => {
+  return {
+    "& .MuiOutlinedInput-root ": {
+      fontSize: "30px",
+      fontWeight: 600,
+      backgroundColor: "#FFF",
+      paddingTop: 0,
+      paddingBottom: 0,
+      "& fieldset": {
+        borderRadius: "6px",
+        border: `2px solid #FFF`,
+      },
+      "&:hover": {
+        transitionDuration: "250ms",
+        backgroundColor: theme.palette.grey[200],
+        "& fieldset": {
+          border: `2px solid ${theme.palette.grey[200]}`,
+          transitionDuration: "250ms",
+        },
+      },
+      "&.Mui-focused": {
+        backgroundColor: theme.palette.background.default,
+        transitionDuration: "250ms",
+        "& fieldset": {
+          border: `2px solid ${theme.palette.primary.main}`,
+          transitionDuration: "250ms",
+        },
+      },
+    },
+  };
+});
 
 const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
   const dispatch = useDispatch();
@@ -26,24 +60,21 @@ const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
 
   return (
     <Fragment>
-      {nameSelected ? (
-        <MuiGrid container sx={{ marginLeft: "-14px", marginBottom: "4px" }}>
-          <MuiGrid item flexGrow={1}>
-            <MuiTextField
-              name="name"
-              value={page.name}
-              onChange={handleChange}
-              inputProps={{
-                style: {
-                  padding: "0 14px",
-                  fontSize: "30px",
-                  fontWeight: 600,
-                },
-              }}
-              autoFocus
-              fullWidth
-            />
-          </MuiGrid>
+      <MuiGrid container sx={{ marginLeft: "-14px", marginBottom: "4px" }}>
+        <MuiGrid item flexGrow={1}>
+          <TitleTextField
+            name="name"
+            value={page.name}
+            onChange={handleChange}
+            onClick={() => {
+              dispatch(
+                updateTitle({ previousName: page.name, nameSelected: true })
+              );
+            }}
+            fullWidth
+          />
+        </MuiGrid>
+        {nameSelected && (
           <MuiGrid item>
             <MuiButton
               variant="contained"
@@ -58,6 +89,8 @@ const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
               <MuiTypography variant="body2">Save</MuiTypography>
             </MuiButton>
           </MuiGrid>
+        )}
+        {nameSelected && (
           <MuiGrid item>
             <MuiButton
               onClick={() => {
@@ -76,44 +109,8 @@ const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
               <MuiTypography variant="body2">Cancel</MuiTypography>
             </MuiButton>
           </MuiGrid>
-        </MuiGrid>
-      ) : (
-        <Fragment>
-          {loading ? (
-            <MuiSkeleton />
-          ) : (
-            <MuiGrid container sx={{ marginBottom: "4px" }}>
-              <MuiGrid item flexGrow={1}>
-                <MuiTypography
-                  variant="h4"
-                  sx={{
-                    lineHeight: 1.5,
-                    padding: "0px 14px",
-                    marginLeft: "-14px",
-                    fontWeight: 600,
-                    borderRadius: "6px",
-                    transition: "250ms",
-                    ":hover": {
-                      cursor: "text",
-                      backgroundColor: "action.hover",
-                    },
-                  }}
-                  onClick={() => {
-                    dispatch(
-                      updateTitle({
-                        previousName: page.name,
-                        nameSelected: true,
-                      })
-                    );
-                  }}
-                >
-                  {page.name}
-                </MuiTypography>
-              </MuiGrid>
-            </MuiGrid>
-          )}
-        </Fragment>
-      )}
+        )}
+      </MuiGrid>
     </Fragment>
   );
 };

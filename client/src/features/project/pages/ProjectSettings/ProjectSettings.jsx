@@ -3,11 +3,12 @@ import { useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format, formatISO, parseISO } from "date-fns";
 
+import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
-import MuiDivider from "@mui/material/Divider";
 import MuiTypography from "@mui/material/Typography";
 
+import GridContainer from "../../../../common/GridContainer";
 import TabPanel from "../../../../common/TabPanel";
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
@@ -18,6 +19,7 @@ import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { useUpdateProjectMutation } from "../../project.api";
 
 const ProjectSettings = () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
@@ -44,14 +46,9 @@ const ProjectSettings = () => {
 
   return (
     <TabPanel selectedTab={selectedTab} index={4}>
-      <MuiGrid
-        container
-        component="form"
-        rowSpacing={2}
-        onSubmit={handleSubmit}
-      >
+      <MuiGrid container component="form" onSubmit={handleSubmit}>
         <MuiGrid item xs={12}>
-          <MuiGrid container rowSpacing={2}>
+          <GridContainer>
             <MuiGrid item xs={12} md={4}>
               <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
                 Basic Information
@@ -61,7 +58,7 @@ const ProjectSettings = () => {
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
-              <MuiGrid container spacing={2} rowSpacing={3}>
+              <MuiGrid container rowSpacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
                     name="name"
@@ -70,24 +67,6 @@ const ProjectSettings = () => {
                     loading={project.loading}
                     onChange={handleChange}
                     required
-                  />
-                </MuiGrid>
-                <MuiGrid item xs={12}>
-                  <TextField
-                    name="owner_id"
-                    title="Owner ID"
-                    value={project.owner_id}
-                    loading={project.loading}
-                    disabled
-                  />
-                </MuiGrid>
-                <MuiGrid item xs={12}>
-                  <TextField
-                    name="id"
-                    title="Project ID"
-                    value={project.id}
-                    loading={project.loading}
-                    disabled
                   />
                 </MuiGrid>
                 <MuiGrid item xs={12}>
@@ -102,13 +81,30 @@ const ProjectSettings = () => {
                     multiline
                   />
                 </MuiGrid>
+                <MuiGrid item xs={12}>
+                  <TextField
+                    name="owner_id"
+                    title="Owner id"
+                    value={project.owner_id}
+                    loading={project.loading}
+                    disabled
+                  />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                  <TextField
+                    name="id"
+                    title="Project id"
+                    value={project.id}
+                    loading={project.loading}
+                    disabled
+                  />
+                </MuiGrid>
               </MuiGrid>
             </MuiGrid>
-          </MuiGrid>
-          <MuiDivider />
+          </GridContainer>
         </MuiGrid>
         <MuiGrid item xs={12}>
-          <MuiGrid container rowSpacing={2}>
+          <GridContainer>
             <MuiGrid item xs={12} md={4}>
               <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
                 Detailed Information:
@@ -123,8 +119,8 @@ const ProjectSettings = () => {
                   <TextField
                     loading={project.loading}
                     name="creation_date"
-                    title="Creation Date"
-                    helperText="The day this project was created, this cannot be changed."
+                    title="Creation date"
+                    helperText="This project was created on this day."
                     value={
                       project.creation_date
                         ? format(parseISO(project.creation_date), "PPPPpppp")
@@ -172,7 +168,7 @@ const ProjectSettings = () => {
                 </MuiGrid>
               </MuiGrid>
             </MuiGrid>
-          </MuiGrid>
+          </GridContainer>
         </MuiGrid>
         <MuiGrid item xs={12} sx={{ marginBottom: 8 }}>
           <MuiGrid container>

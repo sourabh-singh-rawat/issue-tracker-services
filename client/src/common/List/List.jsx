@@ -1,19 +1,9 @@
 import MuiLinearProgress from "@mui/material/LinearProgress";
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
 
-const List = ({
-  rows,
-  rowCount,
-  columns,
-  loading,
-  page,
-  pageSize,
-  initialState,
-  onPageChange,
-  onPageSizeChange,
-  getRowId,
-}) => {
-  const styles = {
+const StyledDataGrid = styled(MuiDataGrid)(({}) => {
+  return {
     border: "none",
     ".MuiDataGrid-cell": {
       color: "text.primary",
@@ -33,9 +23,22 @@ const List = ({
       borderTop: "2px solid #DFE1E6",
     },
   };
+});
 
+const List = ({
+  rows,
+  rowCount,
+  columns,
+  loading,
+  page,
+  pageSize,
+  initialState,
+  onPageChange,
+  onPageSizeChange,
+  getRowId,
+}) => {
   return (
-    <MuiDataGrid
+    <StyledDataGrid
       rows={rows}
       rowCount={rowCount}
       columns={columns}
@@ -50,7 +53,6 @@ const List = ({
       onPageSizeChange={onPageSizeChange}
       getRowId={getRowId}
       initialState={initialState}
-      sx={styles}
       experimentalFeatures={{ newEditingApi: true }}
       autoHeight
       disableColumnMenu

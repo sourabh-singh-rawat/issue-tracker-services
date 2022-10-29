@@ -45,14 +45,11 @@ const IssueTasks = () => {
           rows={issueTasks.incompleted.rows}
           loading={issueTasks.incompleted.loading}
         />
-
-        <AddTask />
         <TaskList
           title="Completed:"
           rows={issueTasks.completed.rows}
           loading={issueTasks.completed.loading}
         />
-        <AddTask />
       </MuiGrid>
     </TabPanel>
   );

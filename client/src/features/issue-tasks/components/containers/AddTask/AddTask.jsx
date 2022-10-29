@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { formatISO } from "date-fns";
 
+import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTextField from "@mui/material/TextField";
@@ -13,6 +14,39 @@ import MuiAddIcon from "@mui/icons-material/Add";
 
 import { setLoadingTasks } from "../../../issue-tasks.slice";
 import { useCreateTaskMutation } from "../../../issue-tasks.api";
+
+const AddTaskButton = styled(MuiButton)(({ theme }) => {
+  return {
+    color: theme.palette.text.secondary,
+    textTransform: "none",
+    textAlign: "left",
+    justifyContent: "left",
+    "&:hover": {
+      color: theme.palette.text.primary,
+    },
+  };
+});
+
+const FocusedAddTaskTextField = styled(MuiTextField)(({ theme }) => {
+  return {
+    "& input": {
+      fontSize: "14px",
+    },
+  };
+});
+
+const CancelButton = styled(MuiButton)(({ theme }) => {
+  return {
+    boxShadow: "none",
+    textTransform: "none",
+    color: theme.palette.text.main,
+    backgroundColor: theme.palette.primary.main,
+    ":hover": { boxShadow: "none" },
+  };
+});
+const SaveButton = styled(CancelButton)((theme) => {
+  return {};
+});
 
 const AddTask = () => {
   const dispatch = useDispatch();
@@ -49,81 +83,43 @@ const AddTask = () => {
   };
 
   return (
-    <MuiGrid container columnSpacing={1}>
+    <MuiGrid container sx={{ marginTop: 1 }}>
       {task.selected ? (
         <MuiGrid item xs={12}>
           <MuiGrid container>
-            <MuiGrid item flexGrow={1}>
-              <MuiTextField
+            <MuiGrid item xs={12}>
+              <FocusedAddTaskTextField
                 size="small"
                 name="description"
                 placeholder="Add a Task"
                 onChange={handleChange}
-                sx={{ input: { fontSize: "14px" } }}
-                InputProps={{
-                  startAdornment: (
-                    <MuiInputAdornment position="start">
-                      <MuiAddIcon />
-                    </MuiInputAdornment>
-                  ),
-                }}
                 autoFocus
                 fullWidth
               />
             </MuiGrid>
             <MuiGrid item>
-              <MuiButton
-                onClick={handleSave}
-                sx={{
-                  color: "white",
-                  height: "100%",
-                  boxShadow: "none",
-                  marginLeft: "8px",
-                  textTransform: "none",
-                  backgroundColor: "primary.main",
-                  ":hover": {
-                    boxShadow: "none",
-                    backgroundColor: "primary.main",
-                  },
-                }}
-              >
+              <SaveButton onClick={handleSave}>
                 <MuiTypography variant="body2">Save</MuiTypography>
-              </MuiButton>
+              </SaveButton>
             </MuiGrid>
             <MuiGrid item>
-              <MuiButton
-                sx={{
-                  height: "100%",
-                  boxShadow: "none",
-                  marginLeft: "8px",
-                  textTransform: "none",
-                  ":hover": { boxShadow: "none" },
-                }}
-                onClick={handleCancel}
-              >
+              <CancelButton onClick={handleCancel}>
                 <MuiTypography variant="body2">Cancel</MuiTypography>
-              </MuiButton>
+              </CancelButton>
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>
       ) : (
         <MuiGrid item xs={12}>
-          <MuiTextField
-            size="small"
-            name="description"
-            placeholder="Add a Task"
-            sx={{ input: { fontSize: "14px" } }}
+          <AddTaskButton
             onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <MuiInputAdornment position="start">
-                  <MuiAddIcon />
-                </MuiInputAdornment>
-              ),
-            }}
             onClick={() => setTask({ ...task, selected: true })}
+            startIcon={<MuiAddIcon />}
             fullWidth
-          />
+            disableRipple
+          >
+            <MuiTypography variant="body2">Add a Task</MuiTypography>
+          </AddTaskButton>
         </MuiGrid>
       )}
     </MuiGrid>

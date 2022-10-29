@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
 import { useGridApiContext } from "@mui/x-data-grid";
-import Typography from "@mui/material/Typography";
+import MuiTypography from "@mui/material/Typography";
 
 import List from "../../../../../common/List/List";
 import IssueStatusSelector from "../../../../issue/components/containers/IssueStatusSelector";
@@ -82,7 +82,7 @@ const IssueList = ({ projectId }) => {
           to={`/issues/${params.row.id}/overview`}
           style={{ textDecoration: "none" }}
         >
-          <Typography
+          <MuiTypography
             variant="body2"
             sx={{
               fontWeight: 500,
@@ -94,7 +94,7 @@ const IssueList = ({ projectId }) => {
             }}
           >
             {params.row.name}
-          </Typography>
+          </MuiTypography>
         </Link>
       ),
     },
