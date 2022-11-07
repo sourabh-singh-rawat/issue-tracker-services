@@ -2,7 +2,7 @@ export const selectIssuesQuery = ({
   reporter_id,
   filterOptions,
   pagingOptions,
-  sortOptions: { field = "status", order = "asc" },
+  sortOptions: { field = "issues.status", order = "asc" },
 }) => {
   Object.keys(filterOptions).forEach((option) => {
     if (!filterOptions[option]) delete filterOptions[option];
@@ -13,7 +13,15 @@ export const selectIssuesQuery = ({
   });
 
   let index = 0;
-  let select = "SELECT * FROM issues ";
+  let select = `
+  SELECT *, 
+    issues.id as id, 
+    issues.name as "name", 
+    users.name as "reporter_name", 
+    users.id as "user_id",
+    issues.creation_date as "creation_date",
+    users.creation_date as "user_creation_date"
+  FROM issues INNER JOIN users ON issues.reporter_id = users.id `;
   let condition = `WHERE project_id IN (SELECT project_id FROM project_members WHERE user_id='${reporter_id}') `;
   let orderBy = "ORDER BY ";
   let pagination = "";

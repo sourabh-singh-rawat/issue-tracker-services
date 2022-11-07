@@ -13,8 +13,8 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Task"],
     }),
     getTasks: build.query({
-      query: ({ id, filters: { completed = false } }) => {
-        return `/issues/${id}/tasks?completed=${completed}`;
+      query: ({ id }) => {
+        return `/issues/${id}/tasks`;
       },
       providesTags: ["Task"],
     }),

@@ -91,14 +91,14 @@ const Description = ({
             <MuiTypography variant="body2">Save</MuiTypography>
           </MuiButton>
           <MuiButton
-            onClick={() => {
+            onClick={() =>
               dispatch(
                 updateDescription({
                   descriptionSelected: false,
                   description: page.previousDescription,
                 })
-              );
-            }}
+              )
+            }
             sx={{
               color: "text.main",
               marginLeft: "5px",

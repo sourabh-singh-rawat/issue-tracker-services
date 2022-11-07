@@ -5,6 +5,7 @@ import MuiListItem from "@mui/material/ListItem";
 import MuiListItemButton from "@mui/material/ListItemButton";
 import MuiListItemIcon from "@mui/material/ListItemIcon";
 import MuiTypography from "@mui/material/Typography";
+import TooltipWrapper from "../../../../../common/TooltipWrapper/TooltipWrapper";
 
 const SidebarListItem = ({ open, text, icon, to }) => {
   const theme = useTheme();
@@ -12,7 +13,7 @@ const SidebarListItem = ({ open, text, icon, to }) => {
   const listItemTypographyStyles = {
     color: theme.palette.text.primary,
     opacity: open ? 1 : 0,
-    fontWeight: 600,
+    fontWeight: 500,
   };
 
   const listItemIconStyles = {
@@ -34,12 +35,23 @@ const SidebarListItem = ({ open, text, icon, to }) => {
   return (
     <MuiListItem disablePadding sx={{ display: "block" }}>
       <Link to={to} style={listLinkStyles}>
-        <MuiListItemButton sx={listItemButtonStyles} disableRipple>
-          <MuiListItemIcon sx={listItemIconStyles}>{icon}</MuiListItemIcon>
-          <MuiTypography variant="body2" sx={listItemTypographyStyles}>
-            {text}
-          </MuiTypography>
-        </MuiListItemButton>
+        {open ? (
+          <MuiListItemButton sx={listItemButtonStyles} disableRipple>
+            <MuiListItemIcon sx={listItemIconStyles}>{icon}</MuiListItemIcon>
+            <MuiTypography variant="body2" sx={listItemTypographyStyles}>
+              {text}
+            </MuiTypography>
+          </MuiListItemButton>
+        ) : (
+          <TooltipWrapper title={text} placement={"left"}>
+            <MuiListItemButton sx={listItemButtonStyles} disableRipple>
+              <MuiListItemIcon sx={listItemIconStyles}>{icon}</MuiListItemIcon>
+              <MuiTypography variant="body2" sx={listItemTypographyStyles}>
+                {text}
+              </MuiTypography>
+            </MuiListItemButton>
+          </TooltipWrapper>
+        )}
       </Link>
     </MuiListItem>
   );

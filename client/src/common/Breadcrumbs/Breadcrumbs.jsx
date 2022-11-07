@@ -1,9 +1,12 @@
+import { useTheme } from "@mui/material/styles";
 import MuiLink from "@mui/material/Link";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
 const Breadcrumbs = ({ items, loading }) => {
+  const theme = useTheme();
+
   return (
     <MuiBreadcrumbs separator="/">
       {items.map(({ text, onClick }) => {
@@ -17,16 +20,14 @@ const Breadcrumbs = ({ items, loading }) => {
                 underline="hover"
                 sx={{
                   cursor: "pointer",
-                  color: "text.secondary",
+                  color: theme.palette.grey[700],
                 }}
               >
                 <MuiTypography
                   variant="body2"
                   sx={{
-                    fontWeight: 600,
-                    ":hover": {
-                      color: "text.main",
-                    },
+                    fontWeight: 400,
+                    ":hover": { color: "text.main" },
                   }}
                 >
                   {text}

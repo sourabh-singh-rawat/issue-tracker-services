@@ -12,6 +12,7 @@ import List from "../../../../../common/List";
 import ProjectStatusSelector from "../../../../project/components/containers/ProjectStatusSelector";
 import ActionButtons from "../../buttons/ActionButtons";
 
+import { theme } from "../../../../../app/mui.config";
 import { setStatus } from "../../../../project/project.slice";
 import { setSnackbarOpen } from "../../../../snackbar.reducer";
 import { setProjectList, updateProjectList } from "../../../project-list.slice";
@@ -88,12 +89,9 @@ const ProjectList = () => {
           <MuiTypography
             variant="body2"
             sx={{
-              color: "text.primary",
+              color: theme.palette.secondary.main,
               fontWeight: 500,
-              ":hover": {
-                color: "primary.main",
-                textDecoration: "none!important",
-              },
+              ":hover": { color: theme.palette.primary.main },
             }}
           >
             {params.row.name}
@@ -119,7 +117,7 @@ const ProjectList = () => {
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography variant="body2">
-            {format(parseISO(value), "P", { locale: enIN })}
+            {format(parseISO(value), "PP", { locale: enIN })}
           </MuiTypography>
         ) : (
           "-"
@@ -132,7 +130,7 @@ const ProjectList = () => {
       minWidth: 125,
       flex: 0.15,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "P", { locale: enIN }) : "-",
+        value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
     },
     {
       field: "end_date",
@@ -141,7 +139,7 @@ const ProjectList = () => {
       minWidth: 125,
       flex: 0.075,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "P", { locale: enIN }) : "-",
+        value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
     },
     {
       field: "action",

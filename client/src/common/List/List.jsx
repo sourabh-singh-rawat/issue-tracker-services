@@ -1,26 +1,27 @@
-import MuiLinearProgress from "@mui/material/LinearProgress";
-import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
+import { theme } from "../../app/mui.config";
 import { styled } from "@mui/material/styles";
+import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
+import MuiLinearProgress from "@mui/material/LinearProgress";
 
 const StyledDataGrid = styled(MuiDataGrid)(({}) => {
   return {
     border: "none",
     ".MuiDataGrid-cell": {
-      color: "text.primary",
-      border: "none",
+      color: theme.palette.secondary.main,
     },
     "& .MuiDataGrid-columnHeaderTitle": {
       fontSize: "14px",
-      fontWeight: 600,
+      fontWeight: 500,
     },
     ".MuiDataGrid-columnHeaders": {
-      borderBottom: "2px solid #DFE1E6",
+      color: theme.palette.secondary.dark,
+      borderBottom: `2px solid ${theme.palette.outline.surfaceVariant}`,
     },
     ".MuiDataGrid-columnSeparator": {
       display: "none",
     },
     ".MuiDataGrid-footerContainer": {
-      borderTop: "2px solid #DFE1E6",
+      borderTop: `2px solid ${theme.palette.outline.surfaceVariant}`,
     },
   };
 });
@@ -43,7 +44,9 @@ const List = ({
       rowCount={rowCount}
       columns={columns}
       loading={loading}
-      components={{ LoadingOverlay: MuiLinearProgress }}
+      components={{
+        LoadingOverlay: MuiLinearProgress,
+      }}
       rowsPerPageOptions={[10, 20, 50, 100]}
       pagination
       page={page}

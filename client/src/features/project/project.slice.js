@@ -80,6 +80,12 @@ const projectSlice = createSlice({
 
       return state;
     },
+    setMembers: (state, action) => {
+      state.members.rows = action.payload.rows;
+      state.members.rowCount = action.payload.rowCount;
+
+      return state;
+    },
     updateProject: (state, action) => {
       return {
         ...state,
@@ -88,12 +94,6 @@ const projectSlice = createSlice({
     },
     updateProjectQuick: (state, action) => {
       state.quick = { ...state.quick, ...action.payload };
-
-      return state;
-    },
-    setMembers: (state, action) => {
-      state.members.rows = action.payload.rows;
-      state.members.rowCount = action.payload.rowCount;
 
       return state;
     },

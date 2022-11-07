@@ -64,13 +64,13 @@ const Issue = () => {
       <MuiGrid item xs={12}>
         <TitleSection
           breadcrumbItems={[
-            { text: "projects", onClick: () => navigate(`/projects`) },
+            { text: "Projects", onClick: () => navigate(`/projects`) },
             {
-              text: issue.project_name?.toLowerCase(),
+              text: issue.project_name,
               onClick: () => navigate(`/projects/${issue.project_id}/overview`),
             },
             {
-              text: "issues",
+              text: "Issues",
               onClick: () => navigate(`/projects/${issue.project_id}/issues`),
             },
             {

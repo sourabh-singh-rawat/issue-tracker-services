@@ -1,10 +1,32 @@
 import { Fragment } from "react";
 
+import { styled } from "@mui/material/styles";
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
+
+const StyledSelect = styled(MuiSelect)(({ theme }) => {
+  return {
+    "&.MuiOutlinedInput-root": {
+      color: theme.palette.text.primary,
+      fontSize: "14px",
+      fontWeight: 500,
+      textTransform: "capitalize",
+      borderRadius: "4px",
+      backgroundColor: theme.palette.grey[200],
+      "& fieldset": {
+        border: `2px solid ${theme.palette.grey[200]}`,
+      },
+      "&:hover fieldset": {
+        backgroundColor: "transparent",
+        border: `2px solid ${theme.palette.grey[400]}`,
+        transitionDuration: "250ms",
+      },
+    },
+  };
+});
 
 const Select = ({ title, items, helperText, ...otherProps }) => {
   return (
@@ -19,7 +41,7 @@ const Select = ({ title, items, helperText, ...otherProps }) => {
         </MuiTypography>
       )}
       <MuiFormControl fullWidth>
-        <MuiSelect
+        <StyledSelect
           displayEmpty
           size="small"
           sx={{ color: "text.primary", fontSize: "14px", fontWeight: 600 }}
@@ -38,7 +60,7 @@ const Select = ({ title, items, helperText, ...otherProps }) => {
               {message.toUpperCase()}
             </MuiMenuItem>
           ))}
-        </MuiSelect>
+        </StyledSelect>
       </MuiFormControl>
       <MuiFormHelperText>
         <MuiTypography component="span" variant="body2">

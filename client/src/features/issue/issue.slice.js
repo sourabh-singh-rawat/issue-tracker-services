@@ -8,6 +8,7 @@ const initialState = {
     status: "0_OPEN",
     priority: "0_LOWEST",
     loading: true,
+    assignee_id: null,
   },
   options: {
     status: { loading: true, rows: [{ status: "0_OPEN", message: "open" }] },

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   rows: [],
   rowCount: [],
-  loading: true,
+  isLoading: true,
 };
 
 const issueCommentsSlice = createSlice({
@@ -13,21 +13,16 @@ const issueCommentsSlice = createSlice({
     setComments: (state, action) => {
       state.rows = action.payload.rows;
       state.rowCount = action.payload.rowCount;
-      state.loading = false;
+      state.isLoading = false;
 
       return state;
     },
     setLoadingComments: (state, action) => {
-      state.loading = true;
-      return state;
-    },
-    clearComments: (state) => {
-      state = initialState;
+      state.isLoading = true;
       return state;
     },
   },
 });
 
-export const { setComments, setLoadingComments, clearComments } =
-  issueCommentsSlice.actions;
+export const { setComments, setLoadingComments } = issueCommentsSlice.actions;
 export default issueCommentsSlice.reducer;

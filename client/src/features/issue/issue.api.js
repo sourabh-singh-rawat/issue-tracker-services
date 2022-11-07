@@ -44,5 +44,6 @@ export const {
   useGetIssueQuery,
   useGetIssuesStatusQuery,
   useGetIssuesPriorityQuery,
+  useCreateIssueAssigneeMutation,
   useUpdateIssueMutation,
 } = issueApiSlice;

@@ -1,21 +1,24 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
-import { useGridApiContext } from "@mui/x-data-grid";
+
+import { styled } from "@mui/material/styles";
+import MuiListItemIcon from "@mui/material/ListItemIcon";
+import MuiListItemText from "@mui/material/ListItemText";
+import MuiAvatar from "@mui/material/Avatar";
+import MuiGrid from "@mui/material/Grid";
+import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 
 import List from "../../../../../common/List/List";
-import IssueStatusSelector from "../../../../issue/components/containers/IssueStatusSelector";
-import IssuePrioritySelector from "../../../../issue/components/containers/IssuePrioritySelector";
 
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
 import { setIssueList, updateIssueList } from "../../../issue-list.slice";
 
-import { useUpdateIssueMutation } from "../../../../issue/issue.api";
 import { useGetIssuesQuery } from "../../../issue-list.api";
+import SelectAssigneeEditCell from "../SelectAssigneeEditCell";
+import SelectEditInputCell from "../SelectEditInputCell";
 
 const IssueList = ({ projectId }) => {
   const dispatch = useDispatch();
@@ -27,49 +30,13 @@ const IssueList = ({ projectId }) => {
     projectId,
     page,
     pageSize,
-    sortBy: "creation_date:desc",
+    sortBy: "issues.creation_date:desc",
     reporterId,
   });
-  const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
 
   useEffect(() => {
     if (getIssuesQuery.data) dispatch(setIssueList(getIssuesQuery.data));
   }, [pageSize, page, getIssuesQuery.data]);
-
-  const SelectEditInputCell = ({ id, value, field }) => {
-    const apiRef = useGridApiContext();
-
-    const handleChange = async (event) => {
-      apiRef.current.startCellEditMode({ id, field });
-      const isValid = await apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: event.target.value,
-      });
-
-      await updateIssueMutation({
-        id,
-        body: { [field]: event.target.value },
-      });
-
-      if (isValid) apiRef.current.stopCellEditMode({ id, field });
-    };
-
-    if (field === "status")
-      return <IssueStatusSelector value={value} handleChange={handleChange} />;
-    if (field === "priority")
-      return (
-        <IssuePrioritySelector value={value} handleChange={handleChange} />
-      );
-  };
-
-  const renderSelectEditInputCell = (params) => (
-    <SelectEditInputCell {...params} />
-  );
-
-  useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
-  }, [isSuccess]);
 
   const columns = [
     {
@@ -103,16 +70,46 @@ const IssueList = ({ projectId }) => {
       headerName: "Status",
       width: 150,
       editable: true,
-      renderCell: renderSelectEditInputCell,
-      renderEditCell: renderSelectEditInputCell,
+      renderCell: (params) => <SelectEditInputCell {...params} />,
+      renderEditCell: (params) => <SelectEditInputCell {...params} />,
     },
     {
       field: "priority",
       headerName: "Priority",
       width: 150,
       editable: true,
-      renderCell: renderSelectEditInputCell,
-      renderEditCell: renderSelectEditInputCell,
+      renderCell: (params) => <SelectEditInputCell {...params} />,
+      renderEditCell: (params) => <SelectEditInputCell {...params} />,
+    },
+    {
+      field: "assignee_id",
+      headerName: "Assignee",
+      width: 250,
+      editable: true,
+      renderCell: (params) => <SelectAssigneeEditCell {...params} />,
+      renderEditCell: (params) => <SelectAssigneeEditCell {...params} />,
+    },
+    {
+      field: "reporter_id",
+      headerName: "Reporter",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <MuiMenuItem disableGutters disableRipple>
+            <MuiListItemIcon>
+              <MuiAvatar
+                sx={{ width: "24px", height: "24px" }}
+                src={params.row.photo_url}
+              ></MuiAvatar>
+            </MuiListItemIcon>
+            <MuiListItemText>
+              <MuiTypography variant="body2" sx={{ fontWeight: 500 }}>
+                {params.row.reporter_name}
+              </MuiTypography>
+            </MuiListItemText>
+          </MuiMenuItem>
+        );
+      },
     },
     {
       field: "due_date",
@@ -122,14 +119,9 @@ const IssueList = ({ projectId }) => {
         value ? format(parseISO(value), "eee, PP") : "-",
     },
     {
-      field: "reporter_id",
-      headerName: "Reporter",
-      width: 150,
-    },
-    {
       field: "project_id",
       headerName: "Project Id",
-      width: 100,
+      width: 125,
     },
     {
       field: "creation_date",
@@ -137,11 +129,6 @@ const IssueList = ({ projectId }) => {
       width: 125,
       renderCell: ({ value }) =>
         value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
-    },
-    {
-      field: "assigned_to",
-      headerName: "Assigned To",
-      width: 250,
     },
     {
       flex: 0.14,
@@ -165,6 +152,7 @@ const IssueList = ({ projectId }) => {
       initialState={{
         sorting: { sortModel: [{ field: "status", sort: "desc" }] },
       }}
+      autoHeight
     />
   );
 };

@@ -1,6 +1,6 @@
 import MuiGrid from "@mui/material/Grid";
 
-import Comment from "../../../issue-comments/containers/CommentList";
+import Comment from "../../../issue-comments/containers/Comment";
 
 const CommentList = ({ rows }) => {
   return (

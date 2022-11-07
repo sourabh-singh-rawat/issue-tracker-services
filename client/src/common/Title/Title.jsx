@@ -4,19 +4,19 @@ import { useDispatch } from "react-redux";
 import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
-import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import TextField from "../TextField";
-import { updateProjectQuick } from "../../features/project/project.slice";
 
 const TitleTextField = styled(TextField)(({ theme }) => {
   return {
+    "& .MuiInputBase-input": {
+      paddingTop: "4px",
+      paddingBottom: "4px",
+    },
     "& .MuiOutlinedInput-root ": {
-      fontSize: "30px",
+      fontSize: theme.typography.h4.fontSize,
       fontWeight: 600,
       backgroundColor: "#FFF",
-      paddingTop: 0,
-      paddingBottom: 0,
       "& fieldset": {
         borderRadius: "6px",
         border: `2px solid #FFF`,

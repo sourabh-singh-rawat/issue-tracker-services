@@ -7,7 +7,7 @@ const issueListApiSlice = apiSlice.injectEndpoints({
         projectId = "",
         page = 0,
         pageSize = 10,
-        sortBy = "creation_date:desc",
+        sortBy = "issues.creation_date:desc",
         reporterId,
       }) => {
         return `/issues?projectId=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}&reporterId=${reporterId}`;

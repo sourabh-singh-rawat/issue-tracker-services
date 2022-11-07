@@ -2,18 +2,20 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import { format, parseISO } from "date-fns";
 import Typography from "@mui/material/Typography";
 
-import { setList } from "../../../team-list.slice";
-
 import { useGetTeamsQuery } from "../../../../team/team.api";
+import { setList } from "../../../team-list.slice";
+import List from "../../../../../common/List/List";
 
 const TeamList = () => {
   const dispatch = useDispatch();
   const { data, isSuccess } = useGetTeamsQuery();
   const teams = useSelector((store) => store.teamList.rows);
+  const theme = useTheme();
 
   useEffect(() => {
     if (data) dispatch(setList({ rows: data.rows, rowCount: data.rowCount }));
@@ -34,7 +36,7 @@ const TeamList = () => {
             variant="body2"
             sx={{
               color: "text.primary",
-              fontWeight: 600,
+              fontWeight: 500,
               "&:hover": {
                 color: "primary.main",
                 textDecoration: "none!important",
@@ -67,37 +69,8 @@ const TeamList = () => {
     },
   ];
 
-  console.log(teams);
-
   return (
-    <DataGrid
-      rows={teams}
-      columns={columns}
-      sx={{
-        border: 0,
-        fontSize: "inherit",
-        color: "primary.text2",
-        ".MuiDataGrid-cell": {
-          color: "text.primary",
-          border: "none",
-        },
-        "& .MuiDataGrid-columnHeaderTitle": {
-          fontSize: "14px",
-          fontWeight: 600,
-        },
-        ".MuiDataGrid-columnHeaders": {
-          borderBottom: "2px solid #DFE1E6",
-        },
-        ".MuiDataGrid-columnSeparator": {
-          display: "none",
-        },
-        ".MuiDataGrid-footerContainer": {
-          borderTop: "2px solid #DFE1E6",
-        },
-      }}
-      autoHeight
-      disableSelectionOnClick
-    />
+    <List rows={teams} columns={columns} autoHeight disableSelectionOnClick />
   );
 };
 

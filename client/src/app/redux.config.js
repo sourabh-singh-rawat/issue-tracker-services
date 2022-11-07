@@ -12,6 +12,7 @@ import profileSlice from "../features/profile/profile.slice";
 import projectSlice from "../features/project/project.slice";
 import projectListSlice from "../features/project-list/project-list.slice";
 import snackbarReducer from "../features/snackbar.reducer";
+import taskListSlice from "../features/task-list/task-list.slice.js";
 import teamSlice from "../features/team/team.slice";
 import teamListSlice from "../features/team-list/team-list.slice";
 
@@ -28,6 +29,7 @@ const storeConfig = {
     project: projectSlice,
     projectList: projectListSlice,
     snackbar: snackbarReducer,
+    taskList: taskListSlice,
     team: teamSlice,
     teamList: teamListSlice,
   },

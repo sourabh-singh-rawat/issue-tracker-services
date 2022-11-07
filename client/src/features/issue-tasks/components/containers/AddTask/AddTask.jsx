@@ -8,11 +8,9 @@ import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
-import MuiInputAdornment from "@mui/material/InputAdornment";
 
 import MuiAddIcon from "@mui/icons-material/Add";
 
-import { setLoadingTasks } from "../../../issue-tasks.slice";
 import { useCreateTaskMutation } from "../../../issue-tasks.api";
 
 const AddTaskButton = styled(MuiButton)(({ theme }) => {
@@ -29,27 +27,11 @@ const AddTaskButton = styled(MuiButton)(({ theme }) => {
 
 const FocusedAddTaskTextField = styled(MuiTextField)(({ theme }) => {
   return {
-    "& input": {
-      fontSize: "14px",
-    },
+    "& input": { fontSize: "14px" },
   };
-});
-
-const CancelButton = styled(MuiButton)(({ theme }) => {
-  return {
-    boxShadow: "none",
-    textTransform: "none",
-    color: theme.palette.text.main,
-    backgroundColor: theme.palette.primary.main,
-    ":hover": { boxShadow: "none" },
-  };
-});
-const SaveButton = styled(CancelButton)((theme) => {
-  return {};
 });
 
 const AddTask = () => {
-  const dispatch = useDispatch();
   const { id } = useParams();
   const [createTask] = useCreateTaskMutation();
 
@@ -77,7 +59,6 @@ const AddTask = () => {
     if (task.description.length > 0) {
       const { description, dueDate } = task;
       createTask({ issueId: id, description, dueDate, completed: false });
-      dispatch(setLoadingTasks());
     }
     setTask({ ...task, selected: false });
   };
@@ -98,14 +79,17 @@ const AddTask = () => {
               />
             </MuiGrid>
             <MuiGrid item>
-              <SaveButton onClick={handleSave}>
+              <MuiButton
+                onClick={handleSave}
+                sx={{ backgroundColor: "primary.main" }}
+              >
                 <MuiTypography variant="body2">Save</MuiTypography>
-              </SaveButton>
+              </MuiButton>
             </MuiGrid>
             <MuiGrid item>
-              <CancelButton onClick={handleCancel}>
+              <MuiButton onClick={handleCancel}>
                 <MuiTypography variant="body2">Cancel</MuiTypography>
-              </CancelButton>
+              </MuiButton>
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>

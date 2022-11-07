@@ -49,7 +49,7 @@ const IssueStatusSelector = ({
           ) : (
             <MuiTypography
               variant="body2"
-              fontWeight="bold"
+              fontWeight={500}
               sx={{ paddingBottom: 1 }}
             >
               {title}
@@ -70,13 +70,13 @@ const IssueStatusSelector = ({
               sx={{
                 color: "text.primary",
                 fontSize: "14px",
-                fontWeight: 600,
+                fontWeight: 500,
                 height: variant === "dense" ? "28px" : "auto",
                 textTransform: "capitalize",
               }}
               displayEmpty
             >
-              {issueStatus.map(({ status, message }) => {
+              {issueStatus.map(({ status, message, color }) => {
                 return (
                   <MuiMenuItem
                     key={message}
@@ -84,7 +84,7 @@ const IssueStatusSelector = ({
                     sx={{
                       color: "text.primary",
                       fontSize: "14px",
-                      fontWeight: 600,
+                      fontWeight: 500,
                       textTransform: "capitalize",
                     }}
                   >

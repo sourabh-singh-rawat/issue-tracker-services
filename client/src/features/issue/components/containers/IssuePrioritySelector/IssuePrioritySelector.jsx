@@ -50,7 +50,7 @@ const IssuePrioritySelector = ({
           ) : (
             <MuiTypography
               variant="body2"
-              fontWeight="bold"
+              fontWeight={500}
               sx={{ paddingBottom: 1 }}
             >
               {title}
@@ -71,7 +71,7 @@ const IssuePrioritySelector = ({
               sx={{
                 color: "text.primary",
                 fontSize: "14px",
-                fontWeight: 600,
+                fontWeight: 500,
                 textTransform: "capitalize",
                 height: variant == "dense" ? "28px" : "auto",
               }}
@@ -80,12 +80,12 @@ const IssuePrioritySelector = ({
               {issuePriority.map(({ priority, message }) => {
                 return (
                   <MuiMenuItem
-                    key={priority}
+                    key={priority + message}
                     value={priority}
                     sx={{
                       color: "text.primary",
                       fontSize: "14px",
-                      fontWeight: 600,
+                      fontWeight: 500,
                       textTransform: "capitalize",
                     }}
                   >

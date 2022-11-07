@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/esm/locale";
 
+import { useTheme } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 import MuiGrid from "@mui/material/Grid";
@@ -21,6 +22,7 @@ const TitleSection = ({
 }) => {
   const location = useLocation();
   const type = location.pathname.split("/")[1];
+  const theme = useTheme();
 
   return (
     <MuiGrid container>
@@ -35,7 +37,7 @@ const TitleSection = ({
           updateTitleQuery={updateTitleQuery}
         />
       </MuiGrid>
-      <MuiGrid item xs={12} sx={{ color: "text.secondary" }}>
+      <MuiGrid item xs={12} sx={{ color: theme.palette.grey[700] }}>
         <MuiBreadcrumbs separator="•">
           {loading ? <Skeleton width="80px" /> : statusSelector}
           {loading ? <Skeleton width="80px" /> : prioritySelector}
@@ -53,7 +55,7 @@ const TitleSection = ({
             <MuiTypography variant="body2" component="span" fontWeight={600}>
               {" "}
               {page.creation_date &&
-                format(parseISO(page.creation_date), "PPPP", {
+                format(parseISO(page.creation_date), "PP", {
                   locale: enIN,
                 })}
             </MuiTypography>
