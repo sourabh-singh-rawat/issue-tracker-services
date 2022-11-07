@@ -118,6 +118,7 @@ const index = async (req, res) => {
 
     res.send({ rows: issues, rowCount: rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -137,10 +138,9 @@ const indexComments = async (req, res) => {
 
 const indexTasks = async (req, res) => {
   const { id } = req.params;
-  const { completed } = req.query;
 
   // filtering
-  const filterOptions = { completed };
+  const filterOptions = {};
 
   // pagination
   const pagingOptions = {
@@ -195,7 +195,6 @@ const show = async (req, res) => {
 
     return res.send({ ...issue });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -207,6 +206,7 @@ const update = async (req, res) => {
     const issue = await (await Issue.updateOne(id, req.body)).rows[0];
     return res.send(issue);
   } catch (error) {
+    console.log(error);
     return res.status(500).send();
   }
 };

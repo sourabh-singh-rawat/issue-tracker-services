@@ -102,6 +102,8 @@ const IssueForm = () => {
                 title="Description"
                 onChange={handleChange}
                 helperText="A text description of the issue."
+                multiline
+                minRows={6}
                 fullWidth
               />
             </MuiGrid>

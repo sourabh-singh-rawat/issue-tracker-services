@@ -6,8 +6,11 @@ const index = async (req, res) => {
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const result = (await ProjectMember.findPeopleRelatedToUid(id)).rows;
-    res.send({ rows: result, rowCount: -1 });
+    const peopleRelatedToUid = await ProjectMember.findPeopleRelatedToUid(id);
+    res.send({
+      rows: peopleRelatedToUid.rows,
+      rowCount: peopleRelatedToUid.rowCount,
+    });
   } catch (error) {
     res.status(500).send();
   }

@@ -14,11 +14,6 @@ const TaskList = ({ rows, rowCount, title, loading }) => {
         <MuiLinearProgress />
       ) : (
         <Fragment>
-          {rows.length > 0 && (
-            <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
-              {title}
-            </MuiTypography>
-          )}
           {rows.map(({ id, ...otherProps }) => {
             return (
               <MuiGrid key={id} xs={12} item>

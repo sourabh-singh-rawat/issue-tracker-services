@@ -8,7 +8,7 @@ import MuiLinearProgress from "@mui/material/LinearProgress";
 import AddComment from "../../containers/AddComment";
 import CommentList from "../../containers/CommentList";
 
-import { clearComments, setComments } from "../../issue-comments.slice";
+import { setComments } from "../../issue-comments.slice";
 import { useGetIssueCommentsQuery } from "../../issue-comments.api";
 
 const IssueComments = () => {
@@ -18,13 +18,14 @@ const IssueComments = () => {
   const getIssueCommentsQuery = useGetIssueCommentsQuery(id);
 
   useEffect(() => {
-    if (getIssueCommentsQuery.isSuccess)
+    if (getIssueCommentsQuery.isSuccess) {
       dispatch(
         setComments({
           rows: getIssueCommentsQuery.data.rows,
           rowCount: getIssueCommentsQuery.data.rowCount,
         })
       );
+    }
   }, [getIssueCommentsQuery.data]);
 
   return (
@@ -32,7 +33,7 @@ const IssueComments = () => {
       <MuiGrid item xs={12}>
         <AddComment />
       </MuiGrid>
-      {comments.loading ? (
+      {comments.isLoading ? (
         <MuiGrid item xs={12}>
           <MuiLinearProgress />
         </MuiGrid>

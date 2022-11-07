@@ -1,7 +1,7 @@
-import { styleld, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 
-const Container = ({ children }) => {
+const GridContainer = ({ children }) => {
   const theme = useTheme();
 
   return (
@@ -19,4 +19,4 @@ const Container = ({ children }) => {
   );
 };
 
-export default Container;
+export default GridContainer;

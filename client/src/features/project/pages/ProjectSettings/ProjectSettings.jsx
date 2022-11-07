@@ -45,8 +45,13 @@ const ProjectSettings = () => {
   }, [isSuccess]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={4}>
-      <MuiGrid container component="form" onSubmit={handleSubmit}>
+    <TabPanel selectedTab={selectedTab} index={5}>
+      <MuiGrid
+        container
+        component="form"
+        onSubmit={handleSubmit}
+        rowSpacing={2}
+      >
         <MuiGrid item xs={12}>
           <GridContainer>
             <MuiGrid item xs={12} md={4}>

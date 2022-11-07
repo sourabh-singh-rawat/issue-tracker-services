@@ -19,6 +19,7 @@ import IssuePrioritySelector from "../../components/containers/IssuePrioritySele
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { updateIssue } from "../../issue.slice";
 import { useUpdateIssueMutation } from "../../issue.api";
+import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 
 const IssueSettings = () => {
   const { id } = useParams();
@@ -134,6 +135,9 @@ const IssueSettings = () => {
                     loading={issue.loading}
                     disabled
                   />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                  <IssueAssigneeSelector />
                 </MuiGrid>
                 <MuiGrid item xs={6}>
                   <IssueStatusSelector

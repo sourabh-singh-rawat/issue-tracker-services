@@ -9,8 +9,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
-import { setLoadingComments } from "../../../issueComments.slice";
-import { useDeleteCommentMutation } from "../../../issueComments.api";
+import { setLoadingComments } from "../../../issue-comments/issue-comments.slice";
+import { useDeleteCommentMutation } from "../../../issue-comments/issue-comments.api";
 
 const DeleteComment = ({ id, issue_id }) => {
   const dispatch = useDispatch();

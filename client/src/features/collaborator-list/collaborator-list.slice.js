@@ -6,6 +6,8 @@ const collaboratorListSlice = createSlice({
   reducers: {
     setCollaboratorList: (state, action) => {
       state.rows = action.payload.rows;
+      state.rowCount = action.payload.rowCount;
+
       return state;
     },
     updateCollaboratorList: (state, action) => {

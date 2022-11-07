@@ -9,7 +9,7 @@ const ProjectActivity = () => {
 
   return (
     <StyledTabPanel selectedTab={selectedTab} index={3}>
-      <Typography variant="body2">This is some text</Typography>
+      <Typography variant="body2">WIP</Typography>
     </StyledTabPanel>
   );
 };

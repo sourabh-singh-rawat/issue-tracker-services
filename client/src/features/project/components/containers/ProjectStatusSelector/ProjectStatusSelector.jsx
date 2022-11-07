@@ -80,7 +80,7 @@ const ProjectStatusSelector = ({
             size="small"
             value={value}
             onChange={handleChange}
-            sx={{ height: variant == "dense" ? "28px" : "auto" }}
+            sx={{ height: variant === "dense" ? "28px" : "auto" }}
             displayEmpty
           >
             {projectStatus.map(({ status, message }) => (

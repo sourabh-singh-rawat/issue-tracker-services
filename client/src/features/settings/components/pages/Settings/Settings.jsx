@@ -1,4 +1,5 @@
 import MuiGrid from "@mui/material/Grid";
+import MuiButton from "@mui/material/Button";
 
 import SectionHeader from "../../../../../common/SectionHeader/SectionHeader";
 
@@ -9,6 +10,7 @@ const Settings = () => {
         <SectionHeader
           title="Settings"
           subtitle="This section contains the settings."
+          noButton
         />
       </MuiGrid>
     </MuiGrid>

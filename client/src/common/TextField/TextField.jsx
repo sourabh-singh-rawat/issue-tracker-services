@@ -84,7 +84,7 @@ const TextField = ({
             value={value}
             error={error}
             helperText={helperText}
-            multiline
+            multiline={multiline}
             fullWidth
             {...otherProps}
           />

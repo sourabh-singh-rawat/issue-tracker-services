@@ -64,6 +64,9 @@ const MemberList = () => {
       field: "email",
       headerName: "Email",
       minWidth: 200,
+      renderCell: ({ value }) => {
+        return value[0].toUpperCase() + value.slice(1, value.length);
+      },
     },
     {
       field: "creation_date",

@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { theme } from "../../app/mui.config";
 
 import MuiBox from "@mui/material/Box";
 import MuiSkeleton from "@mui/material/Skeleton";
@@ -19,11 +20,11 @@ const IssueCard = ({ title, count, loading }) => {
             cursor: "pointer",
             padding: "16px",
             minHeight: "60px",
-            border: "1px solid #E3E4E6",
+            border: `1px solid ${theme.palette.outline.surfaceVariant}`,
             borderRadius: "6px",
             transition: "250ms",
+            backgroundColor: "#f7f2f9",
             ":hover": {
-              border: "1px solid #CABBA5",
               boxShadow: 4,
             },
           }}
@@ -32,7 +33,7 @@ const IssueCard = ({ title, count, loading }) => {
             variant="body2"
             fontWeight={600}
             sx={{
-              color: "text.primary",
+              color: theme.palette.text.primary,
               textTransform: "capitalize",
             }}
           >
@@ -41,7 +42,10 @@ const IssueCard = ({ title, count, loading }) => {
           <MuiTypography
             variant="h5"
             fontWeight={400}
-            sx={{ color: "secondary.main", fontFamily: "Roboto Mono" }}
+            sx={{
+              color: theme.palette.secondary.main,
+              fontFamily: "Roboto Mono",
+            }}
           >
             {count}
           </MuiTypography>

@@ -16,6 +16,7 @@ import ProjectOverview from "../features/project/pages/ProjectOverview";
 import ProjectIssues from "../features/project/pages/ProjectIssues";
 import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
+import ProjectAttatchment from "../features/project/pages/ProjectAttatchment";
 import ProjectSetting from "../features/project/pages/ProjectSettings";
 import ProjectForm from "../features/project/pages/ProjectForm";
 import Projects from "../features/project-list/pages/Projects";
@@ -67,6 +68,7 @@ const App = () => {
               <Route path="overview" element={<ProjectOverview />} />
               <Route path="issues" element={<ProjectIssues />} />
               <Route path="members" element={<ProjectMembers />} />
+              <Route path="attatchments" element={<ProjectAttatchment />} />
               <Route path="activity" element={<ProjectActivity />} />
               <Route path="settings" element={<ProjectSetting />} />
             </Route>

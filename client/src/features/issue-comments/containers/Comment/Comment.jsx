@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { parseISO, formatDistance } from "date-fns";
 
+import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiAvatar from "@mui/material/Avatar";
-import MuiTypography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import MuiTypography from "@mui/material/Typography";
 
 import DeleteCommentButton from "../../buttons/DeleteCommentButton";
 
@@ -16,40 +17,51 @@ const Comment = ({
   photo_url,
   creation_date,
 }) => {
+  const theme = useTheme();
+
   return (
     <MuiGrid
       container
       sx={{
-        padding: "12px",
-        border: "1px solid #E3E4E6",
-        borderRadius: "6px",
+        padding: "8px 0",
+        borderBottom: `1px solid ${theme.palette.grey[200]}`,
       }}
     >
-      <MuiGrid item sx={{ width: "60px", padding: "0 5px" }}>
+      <MuiGrid item sx={{ width: "55px", padding: "0 5px" }}>
         <MuiAvatar
           src={photo_url}
           sx={{
-            width: "40px",
-            height: "40px",
+            width: "34px",
+            height: "34px",
+            marginLeft: "5px",
             backgroundColor: "primary.main",
           }}
         >
           <MuiTypography variant="body2">{name.match(/\b(\w)/g)}</MuiTypography>
         </MuiAvatar>
       </MuiGrid>
-      <MuiGrid item width={"calc(100% - 60px)"}>
+      <MuiGrid item>
         <MuiGrid container>
           <MuiGrid item>
-            <Link to="/profile" style={{ color: "#080F0F" }}>
-              <MuiTypography variant="body2" fontWeight={600}>
-                {name}
-              </MuiTypography>
-            </Link>
-          </MuiGrid>
-          <MuiGrid item xs={12}>
-            <MuiTypography sx={{ color: "text.secondary", fontSize: "13px" }}>
-              {formatDistance(parseISO(creation_date), new Date())} ago
-            </MuiTypography>
+            <MuiGrid container spacing={1}>
+              <MuiGrid item>
+                <Link to="/profile" style={{ color: "#080F0F" }}>
+                  <MuiTypography variant="body2" fontWeight={600}>
+                    {name}
+                  </MuiTypography>
+                </Link>
+              </MuiGrid>
+              <MuiGrid item>
+                <MuiTypography
+                  sx={{ color: "text.secondary", fontSize: "13px" }}
+                >
+                  {formatDistance(parseISO(creation_date), new Date(), {
+                    includeSeconds: true,
+                    addSuffix: true,
+                  })}
+                </MuiTypography>
+              </MuiGrid>
+            </MuiGrid>
           </MuiGrid>
           <MuiGrid item xs={12}>
             <MuiGrid container>

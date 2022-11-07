@@ -32,7 +32,7 @@ const IssueOverview = () => {
     <TabPanel selectedTab={selectedTab} index={0}>
       <MuiGrid container columnSpacing={2} rowSpacing={2}>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={600}>
+          <MuiTypography variant="body1" fontWeight={500}>
             Description:
           </MuiTypography>
           <Description
@@ -43,13 +43,13 @@ const IssueOverview = () => {
           />
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={600}>
+          <MuiTypography variant="body1" fontWeight={500}>
             Assignee:
           </MuiTypography>
           <IssueAssignee />
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={600}>
+          <MuiTypography variant="body1" fontWeight={500}>
             Tasks:
           </MuiTypography>
         </MuiGrid>

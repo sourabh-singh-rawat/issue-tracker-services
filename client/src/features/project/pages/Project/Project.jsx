@@ -41,7 +41,8 @@ const Project = () => {
     issues: 1,
     members: 2,
     activity: 3,
-    settings: 4,
+    attatchments: 4,
+    settings: 5,
   };
 
   const mapIndexToTab = {
@@ -49,7 +50,8 @@ const Project = () => {
     1: `/projects/${id}/issues`,
     2: `/projects/${id}/members`,
     3: `/projects/${id}/activity`,
-    4: `/projects/${id}/settings`,
+    4: `/projects/${id}/attatchments`,
+    5: `/projects/${id}/settings`,
   };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tabName]);
@@ -92,23 +94,23 @@ const Project = () => {
           updateTitleQuery={updateTitleQuery}
           breadcrumbItems={[
             {
-              text: "projects",
+              text: "Projects",
               onClick: () => navigate("/projects"),
             },
             {
-              text: project.name?.toLowerCase(),
+              text: project.name,
               onClick: () => navigate(`/projects/${project.id}/overview`),
             },
           ]}
           statusSelector={
             <ProjectStatusSelector
+              variant="dense"
               value={project.status}
               handleChange={(e) => {
                 const { value } = e.target;
                 updateProjectMutation({ id, body: { status: value } });
                 dispatch(updateProject({ status: value }));
               }}
-              variant="dense"
             />
           }
         />
@@ -118,8 +120,9 @@ const Project = () => {
           <Tab label="Overview" value={0} />
           <Tab label="Issues" value={1} />
           <Tab label="Members" value={2} />
+          <Tab label="Attachments" value={4} />
           <Tab label="Activity" value={3} />
-          <Tab label="Settings" value={4} />
+          <Tab label="Settings" value={5} />
         </Tabs>
       </MuiGrid>
       <MuiGrid item xs={12}>

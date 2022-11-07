@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiCheckbox from "@mui/material/Checkbox";
@@ -15,8 +16,10 @@ import {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
 } from "../../../issue-tasks.api";
+import Checkbox from "../../../../../common/Checkbox";
 
 const Task = ({ taskId, due_date, description, completed }) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
@@ -68,20 +71,13 @@ const Task = ({ taskId, due_date, description, completed }) => {
       sx={{
         cursor: "pointer",
         alignItems: "center",
-        borderBottom: "1px solid #E3E4E6",
+        borderBottom: `1px solid ${theme.palette.grey[200]}`,
         transitionDuration: "250ms",
-        ":hover": {
-          boxShadow: 4,
-          backgroundColor: "action.hover",
-        },
+        ":hover": { boxShadow: 4, backgroundColor: "action.hover" },
       }}
     >
       <MuiGrid item>
-        <MuiCheckbox
-          checked={task.completed}
-          onClick={handleCheckBoxClick}
-          disableRipple
-        />
+        <Checkbox task={task} handleCheckBoxClick={handleCheckBoxClick} />
       </MuiGrid>
       <MuiGrid item sx={{ flexGrow: 1 }}>
         {editMode ? (
@@ -135,7 +131,10 @@ const Task = ({ taskId, due_date, description, completed }) => {
             <MuiGrid item flexGrow={1}>
               <MuiTypography
                 variant="body2"
-                sx={{ color: task.completed && "text.secondary" }}
+                sx={{
+                  color: task.completed && theme.palette.grey[500],
+                  textDecoration: task.completed && "line-through",
+                }}
               >
                 {task.description}
               </MuiTypography>
@@ -146,9 +145,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
                   color: "text.primary",
                   ":hover": { color: "primary.main" },
                 }}
-                onClick={() => {
-                  setEditMode(true);
-                }}
+                onClick={() => setEditMode(true)}
                 disableRipple
               >
                 <MuiEditIcon />

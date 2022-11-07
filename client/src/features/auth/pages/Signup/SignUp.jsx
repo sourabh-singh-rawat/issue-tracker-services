@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import signupImage from "../../../../assets/images/signup2.jpg";
 
+import { styled, useTheme } from "@mui/material/styles";
 import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
@@ -11,8 +13,23 @@ import GoogleIcon from "@mui/icons-material/Google";
 
 import { continueWithGoogle } from "../../../../utils/firebase.utils";
 import { onAuthStateChangedListener } from "../../../../app/firebase.config";
+import TextField from "../../../../common/TextField/TextField";
+import { Divider } from "@mui/material";
+
+const StyledButton = styled(MuiButton)(({ theme }) => {
+  return {
+    textTransform: "none",
+    padding: "8px 16px",
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.primary.main,
+    ":hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  };
+});
 
 const SignUp = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
@@ -29,94 +46,86 @@ const SignUp = () => {
   }, [loggedInUser]);
 
   return (
-    <MuiContainer component="main" maxWidth="xs">
-      <MuiGrid container spacing={2}>
-        <MuiGrid item xs={12}>
-          <MuiBox sx={{ marginTop: 8 }}>
-            <MuiTypography variant="h4" fontWeight="bold">
-              Sign up
-            </MuiTypography>
-            <MuiTypography variant="body2">
-              Create an account & help yourself track issues efficiently.
-            </MuiTypography>
-          </MuiBox>
-        </MuiGrid>
-        <MuiGrid item xs={12}>
-          <MuiButton
-            variant="outlined"
-            onClick={handleContinueWithGoogle}
-            startIcon={<GoogleIcon />}
-            sx={{
-              textTransform: "none",
-              fontWeight: 600,
-            }}
-            fullWidth
-          >
-            Continue with Google
-          </MuiButton>
-        </MuiGrid>
-        {/* <MuiGrid item xs={12}>
-          <MuiDivider>
-            <MuiTypography variant="body2" sx={{ color: "text.primary" }}>
-              Or sign up with your email
-            </MuiTypography>
-          </MuiDivider>
-        </MuiGrid> */}
-        {/* Signup form */}
-        {/* <MuiGrid item xs={12}>
-          <MuiBox component="form" onSubmit={handleSubmit}>
-            <MuiGrid container>
-              <MuiGrid item xs={12}>
-                <TextField
-                  title="Name"
-                  name="name"
-                  type="text"
-                  placeholder="your name"
-                  onChange={handleChange}
-                />
+    <MuiGrid container height={"100vh"}>
+      <MuiGrid item md={5} xs={12}>
+        <MuiContainer maxWidth="xs">
+          <MuiGrid container rowSpacing={4}>
+            {/* Sign up title */}
+            <MuiGrid item xs={12}>
+              <MuiGrid container sx={{ marginTop: 8 }} rowSpacing={1}>
+                <MuiGrid item>
+                  <MuiTypography variant="h3" fontWeight="bold">
+                    Create Account
+                  </MuiTypography>
+                </MuiGrid>
+                <MuiGrid item>
+                  <MuiTypography variant="body2">
+                    Create account & start creating projects to track issues.
+                  </MuiTypography>
+                </MuiGrid>
               </MuiGrid>
-              <MuiGrid item xs={12}>
-                <TextField
-                  title="Email"
-                  name="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  onChange={handleChange}
-                />
+            </MuiGrid>
+            {/* sign up with email */}
+            <MuiGrid item xs={12}>
+              <MuiGrid container component="form" rowSpacing={2}>
+                <MuiGrid item xs={12}>
+                  <TextField
+                    title="Name*"
+                    name="displayName"
+                    type="text"
+                    required
+                  />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                  <TextField title="Email*" name="email" required />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                  <TextField
+                    title="Password*"
+                    name="password"
+                    type="password"
+                    helperText="password should atleast be 8 characters long"
+                    required
+                  />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                  <StyledButton>
+                    <MuiTypography variant="body2">
+                      Create Account
+                    </MuiTypography>
+                  </StyledButton>
+                </MuiGrid>
               </MuiGrid>
-              <MuiGrid item xs={12}>
-                <TextField
-                  title="Password"
-                  name="Password"
-                  type="password"
-                  placeholder="password"
-                  onChange={handleChange}
-                />
-              </MuiGrid>
+            </MuiGrid>
+            {/* continue with google */}
+            <MuiGrid item xs={12}>
+              <Divider>
+                <MuiTypography variant="body2">or</MuiTypography>
+              </Divider>
+            </MuiGrid>
+            <MuiGrid item xs={12}>
               <MuiButton
-                variant="contained"
-                type="submit"
-                fullWidth
+                variant="outlined"
+                onClick={handleContinueWithGoogle}
+                startIcon={<GoogleIcon />}
                 sx={{
                   textTransform: "none",
-                  margin: "1em 0",
-                  fontWeight: 600,
+                  fontWeight: 500,
                 }}
+                fullWidth
               >
-                Create an account
+                Create account with Google
               </MuiButton>
             </MuiGrid>
-            <MuiGrid container>
-              <MuiGrid item>
-                <MuiTypography variant="body2">
-                  <Link to="/signin">Already have an account? Sign In</Link>
-                </MuiTypography>
-              </MuiGrid>
-            </MuiGrid>
-          </MuiBox>
-        </MuiGrid> */}
+          </MuiGrid>
+        </MuiContainer>
       </MuiGrid>
-    </MuiContainer>
+      <MuiGrid
+        md={7}
+        xs={12}
+        sx={{ background: `url(${signupImage})` }}
+      ></MuiGrid>
+    </MuiGrid>
   );
 };
 

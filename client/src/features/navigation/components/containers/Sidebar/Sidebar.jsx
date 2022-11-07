@@ -2,15 +2,14 @@ import { useState } from "react";
 
 import { styled, useTheme } from "@mui/material/styles";
 import MuiBox from "@mui/material/Box";
-import MuiIconButton from "@mui/material/IconButton";
 import MuiList from "@mui/material/List";
+import Divider from "@mui/material/Divider";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
-import MuiTypography from "@mui/material/Typography";
-
-import MuiListItem from "@mui/material/ListItem";
+import MuiIconButton from "@mui/material/IconButton";
 
 import MuiStartIcon from "@mui/icons-material/Start";
+import MuiTaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import MuiGridViewIcon from "@mui/icons-material/GridView";
 import MuiHandshakeIcon from "@mui/icons-material/HandshakeOutlined";
 import MuiGroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
@@ -26,17 +25,9 @@ export const drawerWidth = 220;
 const openedMixin = (theme) => ({
   width: drawerWidth,
   overflowX: "hidden",
-  // transition: theme.transitions.create("width", {
-  // easing: theme.transitions.easing.sharp,
-  // duration: theme.transitions.duration.enteringScreen,
-  // }),
 });
 
 const closedMixin = (theme) => ({
-  // transition: theme.transitions.create("width", {
-  // easing: theme.transitions.easing.sharp,
-  // duration: theme.transitions.duration.leavingScreen,
-  // }),
   overflowX: "hidden",
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
@@ -67,9 +58,7 @@ const Drawer = styled(MuiDrawer, {
 
 const StyledList = styled(MuiList)(({ theme }) => {
   return {
-    "&.MuiList-root": {
-      padding: 0,
-    },
+    "&.MuiList-root": { padding: 0 },
   };
 });
 
@@ -146,28 +135,30 @@ const Sidebar = () => {
               />
             );
           })}
-          {open && (
-            <MuiListItem sx={{ display: "block" }}>
-              <MuiTypography
-                variant="body2"
-                sx={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: theme.palette.text.primary,
-                }}
-              >
-                WORK:
-              </MuiTypography>
-            </MuiListItem>
-          )}
         </StyledList>
+        <Divider />
         <StyledList>
-          <SidebarListItem
-            open={open}
-            to="/issues"
-            text="Issues"
-            icon={<MuiBugReportOutlinedIcon sx={iconStyles} />}
-          />
+          {[
+            {
+              to: "/issues",
+              text: "Issues",
+              icon: <MuiBugReportOutlinedIcon sx={iconStyles} />,
+            },
+            {
+              to: "/tasks",
+              text: "Tasks",
+              icon: <MuiTaskOutlinedIcon sx={iconStyles} />,
+            },
+          ].map(({ text, ...otherProps }) => {
+            return (
+              <SidebarListItem
+                key={text}
+                open={open}
+                text={text}
+                {...otherProps}
+              />
+            );
+          })}
         </StyledList>
       </Drawer>
     </MuiBox>

@@ -1,19 +1,16 @@
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-const SectionHeader = ({ title, subtitle, actionButton }) => {
+const SectionHeader = ({ title, subtitle, actionButton, noButton }) => {
   return (
-    <MuiGrid container gap="12px">
+    <MuiGrid container>
       <MuiGrid item xs={12} sx={{ display: "flex" }}>
-        <MuiTypography
-          variant="h4"
-          sx={{ fontWeight: 600, paddingTop: "2px", flexGrow: 1 }}
-        >
+        <MuiTypography variant="h4" sx={{ fontWeight: 600, flexGrow: 1 }}>
           {title}
         </MuiTypography>
         {actionButton}
       </MuiGrid>
-      <MuiGrid item>
+      <MuiGrid item sx={{ paddingTop: noButton && "7px" }}>
         <MuiTypography variant="body2" sx={{ color: "text.primary" }}>
           {subtitle}
         </MuiTypography>
