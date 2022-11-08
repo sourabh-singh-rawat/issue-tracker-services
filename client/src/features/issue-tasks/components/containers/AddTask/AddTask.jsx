@@ -12,6 +12,8 @@ import MuiTypography from "@mui/material/Typography";
 import MuiAddIcon from "@mui/icons-material/Add";
 
 import { useCreateTaskMutation } from "../../../issue-tasks.api";
+import TextField from "../../../../../common/TextField";
+import DatePicker from "../../../../../common/DatePicker/DatePicker";
 
 const AddTaskButton = styled(MuiButton)(({ theme }) => {
   return {
@@ -19,15 +21,10 @@ const AddTaskButton = styled(MuiButton)(({ theme }) => {
     textTransform: "none",
     textAlign: "left",
     justifyContent: "left",
+    fontWeight: 500,
     "&:hover": {
       color: theme.palette.text.primary,
     },
-  };
-});
-
-const FocusedAddTaskTextField = styled(MuiTextField)(({ theme }) => {
-  return {
-    "& input": { fontSize: "14px" },
   };
 });
 
@@ -67,9 +64,9 @@ const AddTask = () => {
     <MuiGrid container sx={{ marginTop: 1 }}>
       {task.selected ? (
         <MuiGrid item xs={12}>
-          <MuiGrid container>
+          <MuiGrid container rowSpacing={1} columnSpacing={1}>
             <MuiGrid item xs={12}>
-              <FocusedAddTaskTextField
+              <TextField
                 size="small"
                 name="description"
                 placeholder="Add a Task"
@@ -81,13 +78,25 @@ const AddTask = () => {
             <MuiGrid item>
               <MuiButton
                 onClick={handleSave}
-                sx={{ backgroundColor: "primary.main" }}
+                sx={{
+                  backgroundColor: "primary.main",
+                  color: "#FFF",
+                  textTransform: "none",
+                  ":hover": {
+                    backgroundColor: "primary.dark",
+                  },
+                }}
               >
                 <MuiTypography variant="body2">Save</MuiTypography>
               </MuiButton>
             </MuiGrid>
             <MuiGrid item>
-              <MuiButton onClick={handleCancel}>
+              <MuiButton
+                onClick={handleCancel}
+                sx={{
+                  textTransform: "none",
+                }}
+              >
                 <MuiTypography variant="body2">Cancel</MuiTypography>
               </MuiButton>
             </MuiGrid>

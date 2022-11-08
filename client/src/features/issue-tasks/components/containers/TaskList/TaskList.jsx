@@ -1,13 +1,12 @@
 import { Fragment } from "react";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
 import MuiLinearProgress from "@mui/material/LinearProgress";
 
 import Task from "../Task";
 import AddTask from "../AddTask";
 
-const TaskList = ({ rows, rowCount, title, loading }) => {
+const TaskList = ({ rows, rowCount, loading }) => {
   return (
     <MuiGrid item xs={12}>
       {loading ? (
@@ -17,7 +16,7 @@ const TaskList = ({ rows, rowCount, title, loading }) => {
           {rows.map(({ id, ...otherProps }) => {
             return (
               <MuiGrid key={id} xs={12} item>
-                <Task key={id} taskId={id} {...otherProps} />
+                <Task taskId={id} {...otherProps} />
               </MuiGrid>
             );
           })}

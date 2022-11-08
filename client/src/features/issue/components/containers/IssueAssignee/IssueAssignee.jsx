@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 import MuiBox from "@mui/material/Box";
 
-import SelectAssignee from "../../../../../common/IssueAssigneeSelector/IssueAssigneeSelector";
+import IssueAssigneeSelector from "../../../../../common/IssueAssigneeSelector/IssueAssigneeSelector";
 
 import { useUpdateIssueMutation } from "../../../issue.api";
 import { useGetProjectMembersQuery } from "../../../../project/project.api";
@@ -37,8 +37,8 @@ const IssueAssignee = () => {
   };
 
   return (
-    <MuiBox sx={{ marginTop: "10px" }}>
-      <SelectAssignee
+    <MuiBox sx={{ marginTop: "8px" }}>
+      <IssueAssigneeSelector
         value={!issue.info.assignee_id ? 0 : issue.info.assignee_id}
         members={project.members.rows}
         handleChange={handleChange}

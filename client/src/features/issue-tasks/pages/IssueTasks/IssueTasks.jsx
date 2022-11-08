@@ -27,11 +27,16 @@ const IssueTasks = () => {
   return (
     <TabPanel selectedTab={selectedTab} index={1}>
       <MuiGrid container rowSpacing={3}>
-        <TaskList
-          title="To do:"
-          rows={issueTasks.rows}
-          loading={issueTasks.loading}
-        />
+        <MuiGrid item xs={12}>
+          <TaskList
+            title="To do:"
+            rows={issueTasks.rows}
+            rowCount={issueTasks.rowCount}
+            loading={issueTasks.isLoading}
+          />
+        </MuiGrid>
+        {/* Completed Issue Tasks */}
+        <MuiGrid item xs={12}></MuiGrid>
       </MuiGrid>
     </TabPanel>
   );

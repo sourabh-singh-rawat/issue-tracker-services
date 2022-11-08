@@ -51,7 +51,7 @@ const SignUp = () => {
         <MuiContainer maxWidth="xs">
           <MuiGrid container rowSpacing={4}>
             {/* Sign up title */}
-            <MuiGrid item xs={12}>
+            {/* <MuiGrid item xs={12}>
               <MuiGrid container sx={{ marginTop: 8 }} rowSpacing={1}>
                 <MuiGrid item>
                   <MuiTypography variant="h3" fontWeight="bold">
@@ -64,9 +64,9 @@ const SignUp = () => {
                   </MuiTypography>
                 </MuiGrid>
               </MuiGrid>
-            </MuiGrid>
+            </MuiGrid> */}
             {/* sign up with email */}
-            <MuiGrid item xs={12}>
+            {/* <MuiGrid item xs={12}>
               <MuiGrid container component="form" rowSpacing={2}>
                 <MuiGrid item xs={12}>
                   <TextField
@@ -96,7 +96,7 @@ const SignUp = () => {
                   </StyledButton>
                 </MuiGrid>
               </MuiGrid>
-            </MuiGrid>
+            </MuiGrid> */}
             {/* continue with google */}
             <MuiGrid item xs={12}>
               <Divider>
@@ -123,7 +123,7 @@ const SignUp = () => {
       <MuiGrid
         md={7}
         xs={12}
-        sx={{ background: `url(${signupImage})` }}
+        sx={{ backgroundColor: theme.palette.grey[100] }}
       ></MuiGrid>
     </MuiGrid>
   );

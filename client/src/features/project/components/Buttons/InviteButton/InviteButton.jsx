@@ -14,6 +14,7 @@ import Select from "../../../../../common/Select";
 
 import { setMemberRoles } from "../../../project.slice";
 import { useGetRolesQuery, useSendInviteMutation } from "../../../project.api";
+import TextField from "../../../../../common/TextField";
 
 const style = {
   position: "absolute",
@@ -87,12 +88,12 @@ const InviteButton = () => {
             <MuiGrid item xs={8}>
               <MuiTypography
                 variant="body2"
-                fontWeight="bold"
+                fontWeight={500}
                 sx={{ paddingBottom: 1 }}
               >
                 Email
               </MuiTypography>
-              <MuiTextField
+              <TextField
                 name="email"
                 size="small"
                 placeholder="contact@email.com"

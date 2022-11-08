@@ -1,10 +1,11 @@
 import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
+
 import TextField from "../TextField";
 
 const TitleTextField = styled(TextField)(({ theme }) => {
@@ -16,10 +17,10 @@ const TitleTextField = styled(TextField)(({ theme }) => {
     "& .MuiOutlinedInput-root ": {
       fontSize: theme.typography.h4.fontSize,
       fontWeight: 600,
-      backgroundColor: "#FFF",
+      backgroundColor: theme.palette.common.white,
       "& fieldset": {
         borderRadius: "6px",
-        border: `2px solid #FFF`,
+        border: `2px solid ${theme.palette.common.white}`,
       },
       "&:hover": {
         transitionDuration: "250ms",
@@ -41,8 +42,9 @@ const TitleTextField = styled(TextField)(({ theme }) => {
   };
 });
 
-const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
+const Title = ({ page, isLoading, updateTitle, updateTitleQuery }) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { nameSelected } = page;
 
   const handleChange = (e) => {
@@ -103,7 +105,7 @@ const Title = ({ page, loading, updateTitle, updateTitleQuery }) => {
                 height: "100%",
                 marginLeft: "8px",
                 textTransform: "none",
-                ":hover": { backgroundColor: "action.hover" },
+                ":hover": { backgroundColor: theme.palette.action.hover },
               }}
             >
               <MuiTypography variant="body2">Cancel</MuiTypography>

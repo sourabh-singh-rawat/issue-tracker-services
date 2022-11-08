@@ -9,11 +9,12 @@ const initialState = {
     priority: "0_LOWEST",
     loading: true,
     assignee_id: null,
+    project_id: null,
   },
   options: {
     status: { loading: true, rows: [{ status: "0_OPEN", message: "open" }] },
     priority: {
-      rows: [{ status: "0_LOWEST", message: "lowest" }],
+      rows: [{ priority: "0_LOWEST", message: "lowest" }],
       loading: true,
     },
   },

@@ -4,21 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
 
-import { styled } from "@mui/material/styles";
-import MuiListItemIcon from "@mui/material/ListItemIcon";
-import MuiListItemText from "@mui/material/ListItemText";
 import MuiAvatar from "@mui/material/Avatar";
-import MuiGrid from "@mui/material/Grid";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
+import MuiListItemIcon from "@mui/material/ListItemIcon";
+import MuiListItemText from "@mui/material/ListItemText";
 
-import List from "../../../../../common/List/List";
+import List from "../../../../../common/List";
+import SelectEditInputCell from "../SelectEditInputCell";
+import SelectAssigneeEditCell from "../SelectAssigneeEditCell";
 
 import { setIssueList, updateIssueList } from "../../../issue-list.slice";
 
 import { useGetIssuesQuery } from "../../../issue-list.api";
-import SelectAssigneeEditCell from "../SelectAssigneeEditCell";
-import SelectEditInputCell from "../SelectEditInputCell";
 
 const IssueList = ({ projectId }) => {
   const dispatch = useDispatch();

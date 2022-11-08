@@ -5,10 +5,11 @@ import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
-import MuiCheckbox from "@mui/material/Checkbox";
 import MuiTypography from "@mui/material/Typography";
 import MuiEditIcon from "@mui/icons-material/Edit";
 
+import DueDateTag from "../../DueDateTag";
+import Checkbox from "../../../../../common/Checkbox";
 import TextField from "../../../../../common/TextField";
 
 import { setSnackbarOpen } from "../../../../snackbar.reducer";
@@ -16,21 +17,21 @@ import {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
 } from "../../../issue-tasks.api";
-import Checkbox from "../../../../../common/Checkbox";
 
 const Task = ({ taskId, due_date, description, completed }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
-  const [deleteTask] = useDeleteTaskMutation();
-  const [updateTask, { isSuccess, data }] = useUpdateTaskMutation();
+  const [show, setShow] = useState(false);
   const [task, setTask] = useState({
     taskId,
     due_date,
     description,
     completed,
   });
+  const [deleteTask, deleteTaskQuery] = useDeleteTaskMutation();
+  const [updateTask, { isSuccess, data }] = useUpdateTaskMutation();
 
   const handleCancel = () => setEditMode(false);
 
@@ -59,11 +60,13 @@ const Task = ({ taskId, due_date, description, completed }) => {
     setEditMode(false);
   };
 
+  const handleMouseEnter = () => {};
+
   useEffect(() => {
     if (isSuccess) {
       dispatch(setSnackbarOpen(true));
     }
-  }, [isSuccess, data]);
+  }, [isSuccess]);
 
   return (
     <MuiGrid
@@ -75,9 +78,14 @@ const Task = ({ taskId, due_date, description, completed }) => {
         transitionDuration: "250ms",
         ":hover": { boxShadow: 4, backgroundColor: "action.hover" },
       }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
     >
       <MuiGrid item>
-        <Checkbox task={task} handleCheckBoxClick={handleCheckBoxClick} />
+        <Checkbox
+          checked={task.completed}
+          handleCheckBoxClick={handleCheckBoxClick}
+        />
       </MuiGrid>
       <MuiGrid item sx={{ flexGrow: 1 }}>
         {editMode ? (
@@ -86,6 +94,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
               <TextField
                 name="description"
                 size="small"
+                variant="standard"
                 value={task.description}
                 onChange={handleChange}
                 autoFocus
@@ -127,8 +136,8 @@ const Task = ({ taskId, due_date, description, completed }) => {
             </MuiGrid>
           </MuiGrid>
         ) : (
-          <MuiGrid container sx={{ alignItems: "center" }}>
-            <MuiGrid item flexGrow={1}>
+          <MuiGrid container sx={{ alignItems: "center" }} columnSpacing={1}>
+            <MuiGrid item>
               <MuiTypography
                 variant="body2"
                 sx={{
@@ -139,7 +148,18 @@ const Task = ({ taskId, due_date, description, completed }) => {
                 {task.description}
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item>
+            <MuiGrid item flexGrow={1}>
+              <MuiTypography
+                variant="body2"
+                sx={{
+                  color: task.completed && theme.palette.grey[500],
+                  textDecoration: task.completed && "line-through",
+                }}
+              >
+                <DueDateTag dueDate={due_date} />
+              </MuiTypography>
+            </MuiGrid>
+            <MuiGrid item sx={{ display: !show && "none" }}>
               <MuiButton
                 sx={{
                   color: "text.primary",

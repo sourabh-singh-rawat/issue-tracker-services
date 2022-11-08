@@ -1,16 +1,13 @@
 import { styled } from "@mui/material/styles";
 import MuiCheckbox from "@mui/material/Checkbox";
 
-const StyledCheckbox = styled(MuiCheckbox)(({ theme }) => {
-  return {
-    "&.MuiCheckbox-root": {},
-  };
-});
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-const Checkbox = ({ task, handleCheckBoxClick }) => {
+const Checkbox = ({ checked, handleCheckBoxClick }) => {
   return (
-    <StyledCheckbox
-      checked={task.completed}
+    <MuiCheckbox
+      checked={checked}
       onClick={handleCheckBoxClick}
       disableRipple
     />

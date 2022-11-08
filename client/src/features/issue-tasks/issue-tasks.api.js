@@ -26,7 +26,6 @@ const issueTasksApiSlice = apiSlice.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["Task"],
     }),
     deleteTask: build.mutation({
       query: ({ id, taskId }) => {
