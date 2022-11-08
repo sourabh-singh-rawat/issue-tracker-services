@@ -4,20 +4,17 @@ import MuiAvatar from "@mui/material/Avatar";
 import TooltipWrapper from "../TooltipWrapper/TooltipWrapper";
 
 const StyledAvatarGroup = styled(MuiAvatarGroup)(({ theme }) => {
-  return {
-    "& .MuiAvatar-root": { border: "none", marginRight: "4px" },
-  };
+  return {};
 });
 
-const AvatarGroup = ({ members = [], total }) => {
+const AvatarGroup = ({ members, total }) => {
   return (
-    <StyledAvatarGroup max={5} total={total}>
+    <StyledAvatarGroup max={5} total={total} spacing={-1}>
       {members.map((member) => {
         return (
-          <TooltipWrapper title={member.name}>
+          <TooltipWrapper title={member.name} key={member.user_id}>
             <MuiAvatar
               alt={member.name}
-              key={member.user_id}
               src={member.photo_url}
               sx={{ "&:hover": { cursor: "pointer" } }}
             >

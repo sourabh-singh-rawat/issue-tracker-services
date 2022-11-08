@@ -58,7 +58,6 @@ const updateOne = (id, document) => {
     .slice(0, -1);
 
   query += " WHERE id='" + id + "' RETURNING *";
-  console.log(query);
 
   return db.query(query, Object.values(document));
 };

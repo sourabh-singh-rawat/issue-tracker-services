@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS projects (
   name VARCHAR(60),
   description VARCHAR(4000),
   status VARCHAR(20) DEFAULT 'NOT_STARTED',
-  owner_id uuid NOT NULL, --global
+  owner_id uuid NOT NULL,
   owner_email VARCHAR(255),
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   start_date TIMESTAMP WITH TIME ZONE,

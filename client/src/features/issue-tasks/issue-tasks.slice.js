@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import startOfYesterday from "date-fns/esm/startOfYesterday/index";
 
 const initialState = {
   rows: [],
   rowCount: [],
-  loading: true,
+  isLoading: true,
+  completedTasks: {},
 };
 
 const issueTasksSlice = createSlice({
@@ -14,7 +14,7 @@ const issueTasksSlice = createSlice({
     setTasks: (state, action) => {
       state.rows = action.payload.rows;
       state.rowCount = action.payload.rowCount;
-      state.loading = false;
+      state.isLoading = false;
 
       return state;
     },

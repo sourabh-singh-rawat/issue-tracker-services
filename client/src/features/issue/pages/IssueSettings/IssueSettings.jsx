@@ -117,7 +117,7 @@ const IssueSettings = () => {
                 Issue Properties:
               </MuiTypography>
               <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
-                General information about your project.
+                Change your issue status, priority, etc.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
@@ -137,7 +137,19 @@ const IssueSettings = () => {
                   />
                 </MuiGrid>
                 <MuiGrid item xs={12}>
-                  <IssueAssigneeSelector />
+                  <IssueAssigneeSelector
+                    value={issue.assignee_id}
+                    projectId={issue.project_id}
+                    loading={issue.loading}
+                    handleChange={async (e) => {
+                      const userId = e.target.value;
+                      await updateIssueMutation({
+                        id: issue.id,
+                        body: { assignee_id: userId },
+                      });
+                      dispatch(updateIssue({ assignee_id: userId }));
+                    }}
+                  />
                 </MuiGrid>
                 <MuiGrid item xs={6}>
                   <IssueStatusSelector
