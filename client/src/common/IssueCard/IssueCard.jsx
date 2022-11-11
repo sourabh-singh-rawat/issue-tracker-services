@@ -5,10 +5,10 @@ import MuiBox from "@mui/material/Box";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 
-const IssueCard = ({ title, count, loading }) => {
+const IssueCard = ({ title, count, isLoading }) => {
   return (
     <Fragment>
-      {loading ? (
+      {isLoading ? (
         <MuiSkeleton
           variant="rectangular"
           height="90px"

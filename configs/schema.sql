@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS issue_status (
 );
 
 INSERT INTO issue_status 
-VALUES ('0_OPEN', 'open'), ('1_IN_PROGRESS', 'in progress'), ('2_IN_REVIEW', 'in review'), ('3_CLOSED', 'closed');
+VALUES ('0_OPEN', 'to do'), ('1_IN_PROGRESS', 'in progress'), ('2_IN_REVIEW', 'in review'), ('3_CLOSED', 'done');
 
 CREATE TABLE IF NOT EXISTS issue_priority (
   priority VARCHAR(20) UNIQUE,

@@ -36,7 +36,7 @@ const IssueStatusSelector = ({
   variant,
   helperText,
   handleChange,
-  loading,
+  isLoading,
 }) => {
   const issueStatus = useSelector((store) => store.issue.options.status.rows);
 
@@ -44,7 +44,7 @@ const IssueStatusSelector = ({
     <MuiGrid container>
       {title && (
         <MuiGrid item xs={12}>
-          {loading ? (
+          {isLoading ? (
             <MuiSkeleton width="20%" />
           ) : (
             <MuiTypography
@@ -58,7 +58,7 @@ const IssueStatusSelector = ({
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        {loading ? (
+        {isLoading ? (
           <MuiSkeleton />
         ) : (
           <MuiFormControl fullWidth>
@@ -97,7 +97,7 @@ const IssueStatusSelector = ({
         )}
       </MuiGrid>
       <MuiGrid item xs={12}>
-        {helperText && loading ? (
+        {helperText && isLoading ? (
           <MuiSkeleton width="50%" height="75%" />
         ) : (
           <MuiFormHelperText>

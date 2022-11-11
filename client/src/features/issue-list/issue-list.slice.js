@@ -6,6 +6,7 @@ const initialState = {
   page: 0,
   pageSize: 10,
   filters: [],
+  isLoading: true,
 };
 
 const issueListSlice = createSlice({

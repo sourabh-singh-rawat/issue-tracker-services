@@ -12,6 +12,15 @@ const issueApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["IssueList"],
     }),
+    createIssueAttachment: build.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `issues/${id}/attachments`,
+          method: "POST",
+          body,
+        };
+      },
+    }),
     getIssue: build.query({
       query: (id) => {
         return `/issues/${id}`;
@@ -25,6 +34,11 @@ const issueApiSlice = apiSlice.injectEndpoints({
     getIssuesPriority: build.query({
       query: () => {
         return `/issues/priority`;
+      },
+    }),
+    getIssueAttachments: build.query({
+      query: (id) => {
+        return `issues/${id}/attachments`;
       },
     }),
     updateIssue: build.mutation({
@@ -44,6 +58,7 @@ export const {
   useGetIssueQuery,
   useGetIssuesStatusQuery,
   useGetIssuesPriorityQuery,
+  useGetIssueAttachmentsQuery,
   useCreateIssueAssigneeMutation,
   useUpdateIssueMutation,
 } = issueApiSlice;

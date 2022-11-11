@@ -4,7 +4,7 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
-const Breadcrumbs = ({ items, loading }) => {
+const Breadcrumbs = ({ items, isLoading }) => {
   const theme = useTheme();
 
   return (
@@ -12,7 +12,7 @@ const Breadcrumbs = ({ items, loading }) => {
       {items.map(({ text, onClick }) => {
         return (
           <span key={onClick}>
-            {loading ? (
+            {isLoading ? (
               <MuiSkeleton variant="text" width="75px" height="20px" />
             ) : (
               <MuiLink

@@ -9,9 +9,13 @@ import TabPanel from "../../../../common/TabPanel";
 import Description from "../../../../common/Description";
 import IssueAssignee from "../../components/containers/IssueAssignee";
 
-import { updateIssue } from "../../issue.slice";
+import { setIssueAttachments, updateIssue } from "../../issue.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { useUpdateIssueMutation } from "../../issue.api";
+import {
+  useGetIssueAttachmentsQuery,
+  useUpdateIssueMutation,
+} from "../../issue.api";
+import { ImageList, ImageListItem } from "@mui/material";
 
 const IssueOverview = () => {
   const dispatch = useDispatch();
@@ -19,10 +23,17 @@ const IssueOverview = () => {
   const { id } = useParams();
   const [selectedTab] = useOutletContext();
   const issue = useSelector((store) => store.issue.info);
+  const attachments = useSelector((store) => store.issue.attachments);
 
+  const getIssueAttachments = useGetIssueAttachmentsQuery(id);
   const updatePageQuery = async () => {
     updateIssueMutation({ id, body: { description: issue.description } });
   };
+
+  useEffect(() => {
+    if (getIssueAttachments.isSuccess)
+      dispatch(setIssueAttachments(getIssueAttachments.data));
+  }, [getIssueAttachments.data]);
 
   useEffect(() => {
     if (isSuccess) dispatch(setSnackbarOpen(true));
@@ -37,7 +48,7 @@ const IssueOverview = () => {
           </MuiTypography>
           <Description
             page={issue}
-            loading={issue.loading}
+            isLoading={issue.isLoading}
             updateDescription={updateIssue}
             updateDescriptionQuery={updatePageQuery}
           />
@@ -52,6 +63,29 @@ const IssueOverview = () => {
           <MuiTypography variant="body1" fontWeight={500}>
             Tasks:
           </MuiTypography>
+        </MuiGrid>
+        <MuiGrid item xs={12}>
+          <MuiTypography variant="body1" fontWeight={500}>
+            Attachments:
+          </MuiTypography>
+          <ImageList
+            sx={{ width: "100%" }}
+            variant="quilted"
+            cols={8}
+            rowHeight={75}
+          >
+            {attachments.rows.map((attachment) => {
+              return (
+                <ImageListItem key={attachment}>
+                  <img
+                    src={`http://localhost:4000/attachments/issues/${id}/${attachment}`}
+                    srcSet={`http://localhost:4000/attachments/issues/${id}/${attachment}`}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+              );
+            })}
+          </ImageList>
         </MuiGrid>
       </MuiGrid>
     </TabPanel>

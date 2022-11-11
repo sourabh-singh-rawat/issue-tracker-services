@@ -6,6 +6,7 @@ const initialState = {
     email: "",
     photoURL: "",
     displayName: "",
+    isLoading: true,
   },
   settings: {},
   filters: {},
@@ -17,6 +18,8 @@ const profileSlice = createSlice({
   reducers: {
     setProfile: (state, action) => {
       state.info = action.payload;
+      state.info.isLoading = false;
+
       return state;
     },
   },

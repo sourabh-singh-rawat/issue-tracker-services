@@ -2,7 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const collaboratorListSlice = createSlice({
   name: "collaboratorList",
-  initialState: { filters: [], page: 0, pageSize: 10, rowCount: 0, rows: [] },
+  initialState: {
+    filters: [],
+    page: 0,
+    pageSize: 10,
+    rowCount: 0,
+    rows: [],
+    isLoading: true,
+  },
   reducers: {
     setCollaboratorList: (state, action) => {
       state.rows = action.payload.rows;

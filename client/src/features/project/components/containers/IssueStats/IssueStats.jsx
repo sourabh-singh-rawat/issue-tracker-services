@@ -2,7 +2,7 @@ import MuiGrid from "@mui/material/Grid";
 
 import IssueCard from "../../../../../common/IssueCard";
 
-const IssueStats = ({ issuesStatusCount, loading }) => {
+const IssueStats = ({ issuesStatusCount, isLoading }) => {
   const total = issuesStatusCount.reduce(
     (prev, cur) => prev + parseInt(cur.count),
     0
@@ -18,7 +18,7 @@ const IssueStats = ({ issuesStatusCount, loading }) => {
       }}
     >
       <MuiGrid item xs={12} md={2.4}>
-        <IssueCard title="Total Issues" count={total} loading={loading} />
+        <IssueCard title="Total Issues" count={total} isLoading={isLoading} />
       </MuiGrid>
       {issuesStatusCount.map(({ message, count, status }) => {
         return (
@@ -33,7 +33,7 @@ const IssueStats = ({ issuesStatusCount, loading }) => {
               key={message}
               title={message}
               count={count}
-              loading={loading}
+              isLoading={isLoading}
             />
           </MuiGrid>
         );

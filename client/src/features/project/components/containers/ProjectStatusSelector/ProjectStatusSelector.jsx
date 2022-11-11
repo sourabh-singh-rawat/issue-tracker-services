@@ -57,7 +57,9 @@ const ProjectStatusSelector = ({
   const projectStatus = useSelector(
     (store) => store.project.options.status.rows
   );
-  const loading = useSelector((store) => store.project.options.status.loading);
+  const isLoading = useSelector(
+    (store) => store.project.options.status.isLoading
+  );
 
   return (
     <MuiGrid container>
@@ -72,7 +74,7 @@ const ProjectStatusSelector = ({
         </MuiGrid>
       )}
       <MuiFormControl fullWidth>
-        {loading ? (
+        {isLoading ? (
           <CircularProgress />
         ) : (
           <StyledSelect

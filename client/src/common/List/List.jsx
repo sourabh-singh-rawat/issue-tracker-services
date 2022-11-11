@@ -6,6 +6,12 @@ import MuiLinearProgress from "@mui/material/LinearProgress";
 const StyledDataGrid = styled(MuiDataGrid)(({}) => {
   return {
     border: "none",
+    ".MuiDataGrid-row": {
+      transition: "ease-in-out 0.150s",
+      ":hover": {
+        backgroundColor: theme.palette.grey[100],
+      },
+    },
     ".MuiDataGrid-cell": {
       color: theme.palette.secondary.main,
     },
@@ -30,20 +36,22 @@ const List = ({
   rows,
   rowCount,
   columns,
-  loading,
+  isLoading,
   page,
   pageSize,
   initialState,
   onPageChange,
   onPageSizeChange,
   getRowId,
+  checkboxSelection,
+  disableSelectionOnClick,
 }) => {
   return (
     <StyledDataGrid
       rows={rows}
       rowCount={rowCount}
       columns={columns}
-      loading={loading}
+      loading={isLoading}
       components={{
         LoadingOverlay: MuiLinearProgress,
       }}
@@ -58,6 +66,7 @@ const List = ({
       initialState={initialState}
       experimentalFeatures={{ newEditingApi: true }}
       autoHeight
+      checkboxSelection={checkboxSelection}
       disableColumnMenu
       disableSelectionOnClick
     />

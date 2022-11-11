@@ -9,6 +9,7 @@ import issueRouter from "./routes/issues.route.js";
 import projectRouter from "./routes/projects.route.js";
 import teamRouter from "./routes/teams.route.js";
 import collaboratorRouter from "./routes/collaborators.route.js";
+import issueAttachmentRouter from "./routes/issue-attachments.route.js";
 
 const PORT = process.env.PORT || 4000;
 
@@ -29,6 +30,9 @@ app.use("/api", issueRouter);
 app.use("/api", projectRouter);
 app.use("/api", teamRouter);
 app.use("/api", collaboratorRouter);
+app.use("/api", issueAttachmentRouter);
+
+app.use(express.static("uploads"));
 
 app.listen(PORT, () => {
   console.log("Server is running at port 4000");

@@ -45,7 +45,7 @@ const ProjectSettings = () => {
   }, [isSuccess]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={5}>
+    <TabPanel selectedTab={selectedTab} index={4}>
       <MuiGrid
         container
         component="form"
@@ -69,7 +69,7 @@ const ProjectSettings = () => {
                     name="name"
                     title="Name"
                     value={project.name}
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     onChange={handleChange}
                     required
                   />
@@ -80,7 +80,7 @@ const ProjectSettings = () => {
                     title="Description"
                     helperText="A free text description of the project. Max character count is 150"
                     value={project.description}
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     onChange={handleChange}
                     minRows={6}
                     multiline
@@ -91,7 +91,7 @@ const ProjectSettings = () => {
                     name="owner_id"
                     title="Owner id"
                     value={project.owner_id}
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     disabled
                   />
                 </MuiGrid>
@@ -100,7 +100,7 @@ const ProjectSettings = () => {
                     name="id"
                     title="Project id"
                     value={project.id}
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     disabled
                   />
                 </MuiGrid>
@@ -122,7 +122,7 @@ const ProjectSettings = () => {
               <MuiGrid container columnSpacing={2} rowSpacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     name="creation_date"
                     title="Creation date"
                     helperText="This project was created on this day."
@@ -148,7 +148,7 @@ const ProjectSettings = () => {
                     title="Start Date"
                     name="start_date"
                     helperText="The day your project started."
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     value={parseISO(project.start_date)}
                     maxDate={parseISO(project.end_date)}
                     onChange={(date) =>
@@ -159,7 +159,7 @@ const ProjectSettings = () => {
                 </MuiGrid>
                 <MuiGrid item xs={12} md={6}>
                   <DatePicker
-                    loading={project.loading}
+                    isLoading={project.isLoading}
                     title="End Date"
                     name="end_date"
                     value={parseISO(project.end_date)}

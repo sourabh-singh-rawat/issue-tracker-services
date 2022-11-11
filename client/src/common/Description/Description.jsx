@@ -11,7 +11,7 @@ const Description = ({
   page,
   updateDescription,
   updateDescriptionQuery,
-  loading,
+  isLoading,
 }) => {
   const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ const Description = ({
           />
         ) : (
           <Fragment>
-            {loading ? (
+            {isLoading ? (
               <Fragment>
                 <MuiSkeleton variant="text" />
                 <MuiSkeleton variant="text" />

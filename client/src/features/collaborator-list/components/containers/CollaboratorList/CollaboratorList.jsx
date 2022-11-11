@@ -68,7 +68,7 @@ const CollaboratorList = () => {
       rows={rows}
       rowCount={rowCount}
       columns={columns}
-      loading={getCollaboratorsQuery.isLoading}
+      isLoading={getCollaboratorsQuery.isLoading}
       page={page}
       pageSize={pageSize}
       onPageChange={(newPage) =>

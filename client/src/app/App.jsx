@@ -16,7 +16,6 @@ import ProjectOverview from "../features/project/pages/ProjectOverview";
 import ProjectIssues from "../features/project/pages/ProjectIssues";
 import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
-import ProjectAttatchment from "../features/project/pages/ProjectAttatchment";
 import ProjectSetting from "../features/project/pages/ProjectSettings";
 import ProjectForm from "../features/project/pages/ProjectForm";
 import Projects from "../features/project-list/pages/Projects";
@@ -27,6 +26,7 @@ import Issue from "../features/issue/pages/Issue";
 import IssueOverview from "../features/issue/pages/IssueOverview";
 import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 import IssueComments from "../features/issue-comments/pages/IssueComments";
+import IssueAttachments from "../features/issue/pages/IssueAttachments";
 import IssueSettings from "../features/issue/pages/IssueSettings";
 import IssueForm from "../features/issue/pages/IssueForm";
 import IssueList from "../features/issue-list/components/containers/IssueList";
@@ -68,7 +68,6 @@ const App = () => {
               <Route path="overview" element={<ProjectOverview />} />
               <Route path="issues" element={<ProjectIssues />} />
               <Route path="members" element={<ProjectMembers />} />
-              <Route path="attatchments" element={<ProjectAttatchment />} />
               <Route path="activity" element={<ProjectActivity />} />
               <Route path="settings" element={<ProjectSetting />} />
             </Route>
@@ -89,6 +88,7 @@ const App = () => {
             <Route path=":id" element={<Issue />}>
               <Route path="overview" element={<IssueOverview />} />
               <Route path="tasks" element={<IssueTasks />} />
+              <Route path="attachments" element={<IssueAttachments />} />
               <Route path="comments" element={<IssueComments />} />
               <Route path="settings" element={<IssueSettings />} />
             </Route>

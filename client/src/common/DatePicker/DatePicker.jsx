@@ -27,19 +27,23 @@ const StyledDatePicker = styled(MuiDatePicker)(({ theme }) => {
 });
 
 const DatePicker = ({
-  loading,
   name,
   title,
   value,
   onChange,
+  isLoading,
   handleChange,
   helperText,
 }) => {
   return (
     <Fragment>
-      {title && loading ? <MuiSkeleton width="20%" /> : <Label title={title} />}
+      {title && isLoading ? (
+        <MuiSkeleton width="20%" />
+      ) : (
+        <Label title={title} />
+      )}
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
-        {loading ? (
+        {isLoading ? (
           <MuiCircularProgress />
         ) : (
           <StyledDatePicker
