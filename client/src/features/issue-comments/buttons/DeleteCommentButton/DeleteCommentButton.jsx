@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import MuiBox from "@mui/material/Box";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
 import Dialog from "@mui/material/Dialog";
@@ -24,7 +25,7 @@ const DeleteComment = ({ id, issue_id }) => {
   };
 
   return (
-    <Fragment>
+    <MuiBox component="span">
       <MuiTypography
         variant="body2"
         onClick={handleOpen}
@@ -38,11 +39,13 @@ const DeleteComment = ({ id, issue_id }) => {
       </MuiTypography>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          <MuiTypography variant="body1">Do you want to delete?</MuiTypography>
+          <MuiTypography variant="body1" component="span">
+            Do you want to delete?
+          </MuiTypography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <MuiTypography variant="body2">
+            <MuiTypography variant="body2" component="span">
               This action is irreversible
             </MuiTypography>
           </DialogContentText>
@@ -53,9 +56,7 @@ const DeleteComment = ({ id, issue_id }) => {
             sx={{
               textTransform: "none",
               color: "text.primary",
-              ":hover": {
-                backgroundColor: "action.hover",
-              },
+              ":hover": { backgroundColor: "action.hover" },
             }}
           >
             Cancel
@@ -77,7 +78,7 @@ const DeleteComment = ({ id, issue_id }) => {
           </MuiButton>
         </DialogActions>
       </Dialog>
-    </Fragment>
+    </MuiBox>
   );
 };
 

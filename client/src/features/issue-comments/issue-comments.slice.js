@@ -19,6 +19,7 @@ const issueCommentsSlice = createSlice({
     },
     setLoadingComments: (state, action) => {
       state.isLoading = true;
+
       return state;
     },
   },

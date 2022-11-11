@@ -50,18 +50,18 @@ const TextField = ({
   title,
   name,
   value,
-  loading,
   multiline,
   rows,
   error,
   helperText,
+  isLoading,
   ...otherProps
 }) => {
   return (
     <MuiGrid container>
       {title && (
         <MuiGrid item xs={12}>
-          {loading ? (
+          {isLoading ? (
             <MuiSkeleton width="20%" />
           ) : (
             <Label title={title} error={error} />
@@ -69,7 +69,7 @@ const TextField = ({
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        {loading ? (
+        {isLoading ? (
           <Fragment>
             <MuiSkeleton />
             {multiline && <MuiSkeleton />}

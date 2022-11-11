@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
 
+import { theme } from "../../../../../app/mui.config";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
@@ -11,11 +12,10 @@ import MuiListItemIcon from "@mui/material/ListItemIcon";
 import MuiListItemText from "@mui/material/ListItemText";
 
 import List from "../../../../../common/List";
-import SelectEditInputCell from "../SelectEditInputCell";
+import StatusAndPrioritySelectorEditCell from "../StatusAndPrioritySelectorEditCell";
 import SelectAssigneeEditCell from "../SelectAssigneeEditCell";
 
 import { setIssueList, updateIssueList } from "../../../issue-list.slice";
-
 import { useGetIssuesQuery } from "../../../issue-list.api";
 
 const IssueList = ({ projectId }) => {
@@ -51,9 +51,9 @@ const IssueList = ({ projectId }) => {
             variant="body2"
             sx={{
               fontWeight: 500,
-              color: "text.primary",
+              color: theme.palette.text.primary,
               "&:hover": {
-                color: "primary.main",
+                color: theme.palette.primary.main,
                 textDecoration: "none!important",
               },
             }}
@@ -68,16 +68,20 @@ const IssueList = ({ projectId }) => {
       headerName: "Status",
       width: 150,
       editable: true,
-      renderCell: (params) => <SelectEditInputCell {...params} />,
-      renderEditCell: (params) => <SelectEditInputCell {...params} />,
+      renderCell: (params) => <StatusAndPrioritySelectorEditCell {...params} />,
+      renderEditCell: (params) => (
+        <StatusAndPrioritySelectorEditCell {...params} />
+      ),
     },
     {
       field: "priority",
       headerName: "Priority",
       width: 150,
       editable: true,
-      renderCell: (params) => <SelectEditInputCell {...params} />,
-      renderEditCell: (params) => <SelectEditInputCell {...params} />,
+      renderCell: (params) => <StatusAndPrioritySelectorEditCell {...params} />,
+      renderEditCell: (params) => (
+        <StatusAndPrioritySelectorEditCell {...params} />
+      ),
     },
     {
       field: "assignee_id",
@@ -93,10 +97,20 @@ const IssueList = ({ projectId }) => {
       width: 200,
       renderCell: (params) => {
         return (
-          <MuiMenuItem disableGutters disableRipple>
+          <MuiMenuItem
+            disableGutters
+            disableRipple
+            sx={{
+              color: theme.palette.secondary.main,
+              ":hover": {
+                backgroundColor: "transparent",
+                color: theme.palette.primary.main,
+              },
+            }}
+          >
             <MuiListItemIcon>
               <MuiAvatar
-                sx={{ width: "24px", height: "24px" }}
+                sx={{ width: "20px", height: "20px" }}
                 src={params.row.photo_url}
               ></MuiAvatar>
             </MuiListItemIcon>
@@ -141,7 +155,7 @@ const IssueList = ({ projectId }) => {
       rows={rows}
       rowCount={rowCount}
       columns={columns}
-      loading={getIssuesQuery.isLoading}
+      isLoading={getIssuesQuery.isLoading}
       page={page}
       pageSize={pageSize}
       onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
@@ -151,6 +165,8 @@ const IssueList = ({ projectId }) => {
         sorting: { sortModel: [{ field: "status", sort: "desc" }] },
       }}
       autoHeight
+      // checkboxSelection
+      // disableSelectionOnClick
     />
   );
 };

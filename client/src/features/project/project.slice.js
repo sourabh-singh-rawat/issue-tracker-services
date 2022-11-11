@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   activty: {},
   quick: {
-    loading: true,
+    isLoading: true,
     name: "",
     nameSelected: false,
     description: "",
@@ -12,7 +12,7 @@ const initialState = {
     status: "0_NOT_STARTED",
   },
   settings: {
-    loading: true,
+    isLoading: true,
     name: "",
     description: "",
     descriptionSelected: false,
@@ -22,14 +22,14 @@ const initialState = {
     status: "0_NOT_STARTED",
   },
   members: {
-    loading: true,
+    isLoading: true,
     rows: [],
     rowCount: 0,
     page: 0,
     pageSize: 10,
   },
   issuesStatusCount: {
-    loading: true,
+    isLoading: true,
     rows: [
       { status: "0_NOT_STARTED", count: 0 },
       { status: "1_OPEN", count: 0 },
@@ -39,11 +39,11 @@ const initialState = {
   },
   options: {
     status: {
-      loading: true,
+      isLoading: true,
       rows: [{ code: "NOT_STARTED", message: "Not Started" }],
     },
     roles: {
-      loading: true,
+      isLoading: true,
       rows: [{ code: "MEMBER", message: "Member" }],
     },
   },
@@ -70,19 +70,24 @@ const projectSlice = createSlice({
         descriptionSelected,
         creation_date,
         status,
-        loading: false,
+        isLoading: false,
       };
 
       return state;
     },
     setProject: (state, action) => {
-      state.settings = { ...state.settings, ...action.payload, loading: false };
+      state.settings = {
+        ...state.settings,
+        ...action.payload,
+        isLoading: false,
+      };
 
       return state;
     },
     setMembers: (state, action) => {
       state.members.rows = action.payload.rows;
       state.members.rowCount = action.payload.rowCount;
+      state.members.isLoading = false;
 
       return state;
     },
@@ -105,12 +110,12 @@ const projectSlice = createSlice({
     },
     setIssueStatusCount: (state, action) => {
       state.issuesStatusCount.rows = action.payload;
-      state.issuesStatusCount.loading = false;
+      state.issuesStatusCount.isLoading = false;
 
       return state;
     },
     setStatus: (state, action) => {
-      state.options.status.loading = false;
+      state.options.status.isLoading = false;
       state.options.status.rows = action.payload.rows;
 
       return state;

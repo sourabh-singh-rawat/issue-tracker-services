@@ -5,7 +5,7 @@ import IssueStatusSelector from "../../../../issue/components/containers/IssueSt
 
 import { useUpdateIssueMutation } from "../../../../issue/issue.api";
 
-const SelectEditInputCell = ({ id, field, value }) => {
+const StatusAndPrioritySelectorEditCell = ({ id, field, value }) => {
   const apiRef = useGridApiContext();
   const [updateIssueMutation] = useUpdateIssueMutation();
 
@@ -31,4 +31,4 @@ const SelectEditInputCell = ({ id, field, value }) => {
     return <IssuePrioritySelector value={value} handleChange={handleChange} />;
 };
 
-export default SelectEditInputCell;
+export default StatusAndPrioritySelectorEditCell;

@@ -35,7 +35,7 @@ const IssuePrioritySelector = ({
   variant,
   helperText,
   handleChange,
-  loading,
+  isLoading,
 }) => {
   const issuePriority = useSelector(
     (store) => store.issue.options.priority.rows
@@ -45,7 +45,7 @@ const IssuePrioritySelector = ({
     <MuiGrid container>
       {title && (
         <MuiGrid item xs={12}>
-          {loading ? (
+          {isLoading ? (
             <MuiSkeleton width="20%" />
           ) : (
             <MuiTypography
@@ -59,7 +59,7 @@ const IssuePrioritySelector = ({
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
-        {loading ? (
+        {isLoading ? (
           <MuiSkeleton />
         ) : (
           <MuiFormControl fullWidth>
@@ -98,7 +98,7 @@ const IssuePrioritySelector = ({
         )}
       </MuiGrid>
       <MuiGrid item xs={12}>
-        {helperText && loading ? (
+        {helperText && isLoading ? (
           <MuiSkeleton width="50%" height="75%" />
         ) : (
           <MuiFormHelperText>

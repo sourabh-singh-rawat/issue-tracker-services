@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   rows: [],
   rowCount: [],
-  isLoading: true,
   completedTasks: {},
+  isLoading: true,
 };
 
 const issueTasksSlice = createSlice({

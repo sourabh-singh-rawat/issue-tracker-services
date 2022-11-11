@@ -1,5 +1,4 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Fragment } from "react";
 
 import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
@@ -9,9 +8,6 @@ import MuiAvatar from "@mui/material/Avatar";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiTypography from "@mui/material/Typography";
 import MuiSkeleton from "@mui/material/Skeleton";
-
-import { useGetProjectMembersQuery } from "../../features/project/project.api";
-import { setMembers } from "../../features/project/project.slice";
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => {
   return {
@@ -33,29 +29,38 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => {
   };
 });
 
-const IssueAssigneeSelector = ({ projectId, value, loading, handleChange }) => {
-  const dispatch = useDispatch();
-  const members = useSelector((store) => store.project.members.rows);
-  const getProjectMembers = useGetProjectMembersQuery(projectId);
-
-  useEffect(() => {
-    if (getProjectMembers.isSuccess) {
-      dispatch(setMembers(getProjectMembers.data));
-    }
-  }, [getProjectMembers.data]);
-
+const IssueAssigneeSelector = ({
+  title,
+  value,
+  projectMembers,
+  handleChange,
+  isLoading,
+}) => {
   return (
     <Fragment>
-      {loading ? (
-        <MuiSkeleton />
+      {isLoading ? (
+        <MuiGrid container>
+          <MuiGrid item xs={12}>
+            <MuiSkeleton />
+          </MuiGrid>
+        </MuiGrid>
       ) : (
         <MuiFormControl fullWidth>
+          {title && (
+            <MuiTypography
+              variant="body2"
+              fontWeight={500}
+              sx={{ paddingBottom: 1 }}
+            >
+              {title}
+            </MuiTypography>
+          )}
           <StyledSelect
             size="small"
             value={!value ? 0 : value}
             onChange={handleChange}
           >
-            {members.map(({ user_id, name, photo_url }) => {
+            {projectMembers.map(({ user_id, name, photo_url }) => {
               return (
                 <MuiMenuItem
                   key={user_id}
@@ -65,7 +70,7 @@ const IssueAssigneeSelector = ({ projectId, value, loading, handleChange }) => {
                   <MuiGrid container columnSpacing={1}>
                     <MuiGrid item>
                       <MuiAvatar
-                        sx={{ width: "24px", height: "24px" }}
+                        sx={{ width: "20px", height: "20px" }}
                         src={photo_url}
                       ></MuiAvatar>
                     </MuiGrid>
@@ -81,7 +86,7 @@ const IssueAssigneeSelector = ({ projectId, value, loading, handleChange }) => {
                 sx={{ alignItems: "center" }}
               >
                 <MuiGrid item>
-                  <MuiAvatar sx={{ width: "24px", height: "24px" }} />
+                  <MuiAvatar sx={{ width: "20px", height: "20px" }} />
                 </MuiGrid>
                 <MuiGrid item>
                   <MuiTypography variant="body2" fontWeight={500}>

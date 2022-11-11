@@ -6,7 +6,7 @@ const initialState = {
   page: 0,
   pageSize: 10,
   filters: [],
-  loading: true,
+  isLoading: true,
 };
 
 const projectListSlice = createSlice({
@@ -25,7 +25,7 @@ const projectListSlice = createSlice({
       };
     },
     setLoadingProjectList: (state) => {
-      state.loading = true;
+      state.isLoading = true;
       return state;
     },
   },

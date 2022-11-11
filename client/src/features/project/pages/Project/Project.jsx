@@ -35,14 +35,14 @@ const Project = () => {
   const tabName = location.pathname.split("/")[3];
 
   const project = useSelector((store) => store.project.quick);
+  const projectDetailed = useSelector((store) => store.project.settings);
 
   const mapPathToIndex = {
     overview: 0,
     issues: 1,
     members: 2,
     activity: 3,
-    attatchments: 4,
-    settings: 5,
+    settings: 4,
   };
 
   const mapIndexToTab = {
@@ -50,8 +50,7 @@ const Project = () => {
     1: `/projects/${id}/issues`,
     2: `/projects/${id}/members`,
     3: `/projects/${id}/activity`,
-    4: `/projects/${id}/attatchments`,
-    5: `/projects/${id}/settings`,
+    4: `/projects/${id}/settings`,
   };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tabName]);
@@ -80,7 +79,7 @@ const Project = () => {
   useEffect(() => {
     if (getProject.isSuccess) {
       dispatch(setProjectQuick(getProject.data));
-      dispatch(setProject({ ...getProject.data, loading: false }));
+      dispatch(setProject({ ...getProject.data, isLoading: false }));
     }
   }, [getProject.data]);
 
@@ -89,7 +88,7 @@ const Project = () => {
       <MuiGrid item xs={12}>
         <PageTitleSection
           page={project}
-          loading={project.loading}
+          isLoading={project.isLoading}
           updateTitle={updateProjectQuick}
           updateTitleQuery={updateTitleQuery}
           breadcrumbItems={[
@@ -99,7 +98,9 @@ const Project = () => {
             },
             {
               text: project.name,
-              onClick: () => navigate(`/projects/${project.id}/overview`),
+              onClick: () => {
+                navigate(`/projects/${projectDetailed.id}/overview`);
+              },
             },
           ]}
           statusSelector={
@@ -120,9 +121,8 @@ const Project = () => {
           <Tab label="Overview" value={0} />
           <Tab label="Issues" value={1} />
           <Tab label="Members" value={2} />
-          <Tab label="Attachments" value={4} />
           <Tab label="Activity" value={3} />
-          <Tab label="Settings" value={5} />
+          <Tab label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
       <MuiGrid item xs={12}>

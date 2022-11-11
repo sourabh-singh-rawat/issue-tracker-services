@@ -25,14 +25,17 @@ const Issue = () => {
 
   const issue = useSelector((store) => store.issue.info);
   const tabName = location.pathname.split("/")[3];
-  const mapTabToIndex = { overview: 0, tasks: 1, comments: 2, settings: 3 };
+  const mapTabToIndex = {
+    overview: 0,
+    tasks: 1,
+    comments: 2,
+    attachments: 3,
+    settings: 4,
+  };
   const [selectedTab, setSelectedTab] = useState(mapTabToIndex[tabName]);
 
   const updateTitleQuery = async () => {
-    updateIssueQuery({
-      id,
-      body: { name: issue.name },
-    });
+    updateIssueQuery({ id, body: { name: issue.name } });
   };
 
   useEffect(() => {
@@ -52,7 +55,8 @@ const Issue = () => {
       0: `/issues/${issue.id}/overview`,
       1: `/issues/${issue.id}/tasks`,
       2: `/issues/${issue.id}/comments`,
-      3: `/issues/${issue.id}/settings`,
+      3: `/issues/${issue.id}/attachments `,
+      4: `/issues/${issue.id}/settings`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -78,24 +82,36 @@ const Issue = () => {
               onClick: () => navigate(`/issues/${issue.id}/overview`),
             },
           ]}
-          loading={issue?.loading}
+          isLoading={issue.isLoading}
           page={issue}
           updateTitle={updateIssue}
           updateTitleQuery={updateTitleQuery}
-          onClick={() => navigate("/issues")}
+          onClick={() => navigate(`/issues`)}
           statusSelector={
             <IssueStatusSelector
               value={issue.status}
-              // handleChange={(e) => {
-              //   const { name, value } = e.target;
-              //   updateProjectMutation({ id, payload: { status: value } });
-              //   dispatch(updateProject({ status: value }));
-              // }}
+              handleChange={async (e) => {
+                const { name, value } = e.target;
+                dispatch(updateIssue({ status: value }));
+                await updateIssueQuery({ id, body: { status: value } });
+
+                if (isSuccess) dispatch(setSnackbarOpen(true));
+              }}
               variant="dense"
             />
           }
           prioritySelector={
-            <IssuePrioritySelector value={issue.priority} variant="dense" />
+            <IssuePrioritySelector
+              value={issue.priority}
+              handleChange={async (e) => {
+                const { name, value } = e.target;
+                dispatch(updateIssue({ priority: value }));
+                await updateIssueQuery({ id, body: { priority: value } });
+
+                if (isSuccess) dispatch(setSnackbarOpen(true));
+              }}
+              variant="dense"
+            />
           }
         />
       </MuiGrid>
@@ -103,8 +119,9 @@ const Issue = () => {
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab label="Overview" value={0} />
           <Tab label="Tasks" value={1} />
-          <Tab label={"Comments "} value={2} />
-          <Tab label="Settings" value={3} />
+          <Tab label="Comments" value={2} />
+          <Tab label="Attachments" value={3} />
+          <Tab label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
       <MuiGrid item xs={12}>

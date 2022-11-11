@@ -27,12 +27,12 @@ const Comment = ({
         borderBottom: `1px solid ${theme.palette.grey[200]}`,
       }}
     >
-      <MuiGrid item sx={{ width: "55px", padding: "0 5px" }}>
+      <MuiGrid item minWidth="45px">
         <MuiAvatar
           src={photo_url}
           sx={{
-            width: "34px",
-            height: "34px",
+            width: "30px",
+            height: "30px",
             marginLeft: "5px",
             backgroundColor: "primary.main",
           }}
@@ -40,7 +40,7 @@ const Comment = ({
           <MuiTypography variant="body2">{name.match(/\b(\w)/g)}</MuiTypography>
         </MuiAvatar>
       </MuiGrid>
-      <MuiGrid item>
+      <MuiGrid item width="90%">
         <MuiGrid container>
           <MuiGrid item>
             <MuiGrid container spacing={1}>

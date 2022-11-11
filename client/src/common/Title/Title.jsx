@@ -48,15 +48,12 @@ const Title = ({ page, isLoading, updateTitle, updateTitleQuery }) => {
   const { nameSelected } = page;
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
+    const { name, value } = e.target;
     dispatch(updateTitle({ [name]: value }));
   };
 
   const handleSave = () => {
     if (page.name !== page.previousName) updateTitleQuery();
-
     dispatch(updateTitle({ nameSelected: false }));
   };
 
@@ -68,11 +65,11 @@ const Title = ({ page, isLoading, updateTitle, updateTitleQuery }) => {
             name="name"
             value={page.name}
             onChange={handleChange}
-            onClick={() => {
+            onClick={() =>
               dispatch(
                 updateTitle({ previousName: page.name, nameSelected: true })
-              );
-            }}
+              )
+            }
             fullWidth
           />
         </MuiGrid>

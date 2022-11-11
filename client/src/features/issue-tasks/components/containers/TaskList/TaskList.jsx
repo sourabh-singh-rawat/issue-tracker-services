@@ -6,10 +6,10 @@ import MuiLinearProgress from "@mui/material/LinearProgress";
 import Task from "../Task";
 import AddTask from "../AddTask";
 
-const TaskList = ({ rows, rowCount, loading }) => {
+const TaskList = ({ rows, rowCount, isLoading }) => {
   return (
     <MuiGrid item xs={12}>
-      {loading ? (
+      {isLoading ? (
         <MuiLinearProgress />
       ) : (
         <Fragment>

@@ -32,7 +32,7 @@ const ProtectedRoutes = () => {
             user: { uid, email, displayName, photoURL },
             accessToken,
             refreshToken,
-            loading: false,
+            isLoading: false,
           })
         );
       }
@@ -41,7 +41,7 @@ const ProtectedRoutes = () => {
 
   return window.localStorage.getItem("loggedInUser") ? (
     <Fragment>
-      {auth.loading ? (
+      {auth.isLoading ? (
         <MuiGrid container>
           <MuiGrid item xs={12}>
             <LinearProgress />{" "}

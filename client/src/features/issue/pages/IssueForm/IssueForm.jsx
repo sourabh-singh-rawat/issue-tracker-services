@@ -41,7 +41,7 @@ const IssueForm = () => {
     description: "",
     status: "0_OPEN",
     priority: "0_LOWEST",
-    // assigned_to: null,
+    assigned_to: null,
     due_date: null,
     project_id: "",
     team_id: "",
@@ -70,7 +70,6 @@ const IssueForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
 
     const { data } = await createIssue({ body: formFields });
     navigate(`/issues/${data.id}/overview`);

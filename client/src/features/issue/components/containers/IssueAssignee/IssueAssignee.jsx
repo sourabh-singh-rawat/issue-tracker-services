@@ -40,7 +40,8 @@ const IssueAssignee = () => {
     <MuiBox sx={{ marginTop: "8px" }}>
       <IssueAssigneeSelector
         value={!issue.info.assignee_id ? 0 : issue.info.assignee_id}
-        members={project.members.rows}
+        projectMembers={project.members.rows}
+        isLoading={project.members.isLoading}
         handleChange={handleChange}
       />
     </MuiBox>

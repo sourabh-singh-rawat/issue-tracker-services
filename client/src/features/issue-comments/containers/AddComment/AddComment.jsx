@@ -22,20 +22,28 @@ const AddComment = () => {
 
   const [formFields, setFormFields] = useState({ description: "" });
 
-  const handleChange = (e) =>
-    setFormFields({ ...formFields, description: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormFields({
+      ...formFields,
+      description: value,
+    });
+  };
 
   const handleSave = (e) => {
     if (formFields.description.length > 0) {
       const { description } = formFields;
       createComment({ issue_id: id, description });
       dispatch(setLoadingComments());
-      formFields.description = "";
+      setFormFields({ description: "" });
     }
     setCommentBoxSelected(false);
   };
 
-  const handleCancel = (e) => setCommentBoxSelected(false);
+  const handleCancel = (e) => {
+    setCommentBoxSelected(false);
+    setFormFields({ description: "" });
+  };
 
   return (
     <Fragment>
@@ -44,6 +52,7 @@ const AddComment = () => {
           <TextField
             size="small"
             placeholder="Add Comment"
+            value={formFields.description}
             onChange={handleChange}
             onClick={() => setCommentBoxSelected(true)}
             InputProps={{
@@ -86,10 +95,10 @@ const AddComment = () => {
             <MuiGrid item>
               <MuiButton
                 sx={{
-                  boxShadow: "none",
-                  textTransform: "none",
                   height: "100%",
+                  boxShadow: "none",
                   marginLeft: "8px",
+                  textTransform: "none",
                   ":hover": { boxShadow: "none" },
                 }}
                 onClick={handleCancel}

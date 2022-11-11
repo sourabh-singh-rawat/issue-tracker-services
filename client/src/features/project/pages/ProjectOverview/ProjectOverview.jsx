@@ -55,7 +55,7 @@ const ProjectOverview = () => {
           </MuiTypography>
           <PageDescription
             page={project}
-            loading={project.loading}
+            isLoading={project.isLoading}
             updateDescription={updateProject}
             updateDescriptionQuery={updateDescriptionQuery}
           />
@@ -72,7 +72,7 @@ const ProjectOverview = () => {
             Issue Stats:
           </MuiTypography>
           <IssueStats
-            loading={issuesStatusCount.loading}
+            isLoading={issuesStatusCount.isLoading}
             issuesStatusCount={issuesStatusCount.rows}
           />
         </MuiGrid>

@@ -20,13 +20,24 @@ import { setSnackbarOpen } from "../../../snackbar.reducer";
 import { updateIssue } from "../../issue.slice";
 import { useUpdateIssueMutation } from "../../issue.api";
 import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
+import { useGetProjectMembersQuery } from "../../../project/project.api";
+import { setMembers } from "../../../project/project.slice";
 
 const IssueSettings = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
   const [updateIssueMutation, { isSuccess, data }] = useUpdateIssueMutation();
+
   const issue = useSelector((store) => store.issue.info);
+  const getProjectMembersQuery = useGetProjectMembersQuery(issue?.project_id);
+  const project = useSelector((store) => store.project);
+
+  useEffect(() => {
+    if (getProjectMembersQuery.isSuccess) {
+      dispatch(setMembers(getProjectMembersQuery.data));
+    }
+  }, [getProjectMembersQuery.data]);
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(updateIssue({ [name]: value }));
@@ -34,7 +45,6 @@ const IssueSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { name, description, status, priority, due_date, reporter } = issue;
     updateIssueMutation({
       id,
@@ -47,7 +57,7 @@ const IssueSettings = () => {
   }, [data]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={3}>
+    <TabPanel selectedTab={selectedTab} index={4}>
       <MuiGrid
         container
         component="form"
@@ -71,7 +81,7 @@ const IssueSettings = () => {
                     name="name"
                     title="Name"
                     value={issue.name}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     onChange={handleChange}
                   />
                 </MuiGrid>
@@ -80,7 +90,7 @@ const IssueSettings = () => {
                     name="id"
                     title="Issue ID"
                     value={issue.id}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     disabled
                   />
                 </MuiGrid>
@@ -89,7 +99,7 @@ const IssueSettings = () => {
                     name="id"
                     title="Project ID"
                     value={issue.project_id}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     disabled
                   />
                 </MuiGrid>
@@ -99,7 +109,7 @@ const IssueSettings = () => {
                     title="Description"
                     helperText="A text description of the project. Max character count is 150"
                     value={issue.description}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     onChange={handleChange}
                     minRows={6}
                     multiline
@@ -132,15 +142,15 @@ const IssueSettings = () => {
                         ? format(parseISO(issue.creation_date), "PPPPpppp")
                         : "loading"
                     }
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     disabled
                   />
                 </MuiGrid>
                 <MuiGrid item xs={12}>
                   <IssueAssigneeSelector
+                    title="Assignee"
                     value={issue.assignee_id}
-                    projectId={issue.project_id}
-                    loading={issue.loading}
+                    projectMembers={project.members.rows}
                     handleChange={async (e) => {
                       const userId = e.target.value;
                       await updateIssueMutation({
@@ -149,6 +159,7 @@ const IssueSettings = () => {
                       });
                       dispatch(updateIssue({ assignee_id: userId }));
                     }}
+                    isLoading={project.members.isLoading}
                   />
                 </MuiGrid>
                 <MuiGrid item xs={6}>
@@ -157,7 +168,7 @@ const IssueSettings = () => {
                     name="status"
                     helperText="The current status of issue."
                     value={issue.status}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     handleChange={handleChange}
                   />
                 </MuiGrid>
@@ -167,7 +178,7 @@ const IssueSettings = () => {
                     name="priority"
                     helperText="The current priority of issue."
                     value={issue.priority}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     handleChange={handleChange}
                   />
                 </MuiGrid>
@@ -176,7 +187,7 @@ const IssueSettings = () => {
                     title="Due Date"
                     name="due_date"
                     value={issue.due_date ? parseISO(issue.due_date) : null}
-                    loading={issue.loading}
+                    isLoading={issue.isLoading}
                     onChange={(date) => {
                       dispatch(updateIssue({ due_date: formatISO(date) }));
                     }}
@@ -191,7 +202,7 @@ const IssueSettings = () => {
           <MuiGrid container>
             <MuiGrid item md={4}></MuiGrid>
             <MuiGrid item xs={12} md={8}>
-              {issue.loading ? (
+              {issue.isLoading ? (
                 <MuiSkeleton width="20%" />
               ) : (
                 <MuiButton

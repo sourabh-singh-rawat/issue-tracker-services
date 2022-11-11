@@ -156,7 +156,7 @@ const ProjectList = () => {
       rows={rows}
       rowCount={rowCount}
       columns={columns}
-      loading={getProjectsQuery.isLoading}
+      isLoading={getProjectsQuery.isLoading}
       page={page}
       pageSize={pageSize}
       onPageChange={(newPage) => dispatch(updateProjectList({ page: newPage }))}

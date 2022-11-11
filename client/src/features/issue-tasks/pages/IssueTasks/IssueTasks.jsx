@@ -32,7 +32,7 @@ const IssueTasks = () => {
             title="To do:"
             rows={issueTasks.rows}
             rowCount={issueTasks.rowCount}
-            loading={issueTasks.isLoading}
+            isLoading={issueTasks.isLoading}
           />
         </MuiGrid>
         {/* Completed Issue Tasks */}
