@@ -85,9 +85,9 @@ const ProjectStatusSelector = ({
             sx={{ height: variant === "dense" ? "28px" : "auto" }}
             displayEmpty
           >
-            {projectStatus.map(({ status, message }) => (
-              <StyledMenuItem key={status} value={status} disableRipple>
-                <span>{message}</span>
+            {projectStatus.map(({ id, name }) => (
+              <StyledMenuItem key={id} value={id} disableRipple>
+                <span>{name}</span>
               </StyledMenuItem>
             ))}
           </StyledSelect>

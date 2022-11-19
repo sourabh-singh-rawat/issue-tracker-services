@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
@@ -18,42 +18,50 @@ import IssuePrioritySelector from "../../components/containers/IssuePrioritySele
 import { useCreateIssueMutation } from "../../issue.api";
 import { useGetProjectsQuery } from "../../../project-list/project-list.api";
 import { useGetCollaboratorsQuery } from "../../../collaborator-list/collaborator-list.api";
+import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
+import { useGetProjectMembersQuery } from "../../../project/project.api";
+import { setMembers } from "../../../project/project.slice";
+import { updateIssue } from "../../issue.slice";
 
 const IssueForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const user = useSelector((store) => store.auth.user);
   const project = useSelector((store) => store.project.settings);
+  const members = useSelector((store) => store.project.members);
+  const issue = useSelector((store) => store.issue.info);
 
   const allProjects = useGetProjectsQuery({
     page: 0,
     pageSize: 10,
-    sortBy: "creation_date:desc",
+    sortBy: "created_at:desc",
   });
-  const collaborators = useGetCollaboratorsQuery(user.uid);
   const [createIssue, { isSuccess }] = useCreateIssueMutation();
 
   const [projects, setProjects] = useState([]);
-  const [projectMembers, setProjectMembers] = useState([]);
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
-    status: "0_OPEN",
-    priority: "0_LOWEST",
-    assigned_to: null,
+    status: "",
+    priority: "",
     due_date: null,
+    assigned_to: null,
     project_id: "",
-    team_id: "",
   });
+
+  const getProjectMembersQuery = useGetProjectMembersQuery(project.id);
+
+  useEffect(() => {
+    if (getProjectMembersQuery.isSuccess) {
+      dispatch(setMembers(getProjectMembersQuery.data));
+    }
+  }, [getProjectMembersQuery.data]);
 
   useEffect(() => {
     if (allProjects.isSuccess) setProjects(allProjects.data.rows);
   }, [allProjects.data]);
-
-  useEffect(() => {
-    if (collaborators.isSuccess) setProjectMembers(collaborators.data.rows);
-  }, [collaborators.data]);
 
   useEffect(() => {
     setFormFields({
@@ -146,6 +154,18 @@ const IssueForm = () => {
                 </Fragment>
               )}
             </MuiGrid>
+            <MuiGrid item xs={12} sm={12}>
+              <IssueAssigneeSelector
+                title="Assignee"
+                value={issue.assignee_id}
+                isLoading={project.isLoading}
+                projectMembers={members.rows}
+                handleChange={(e) => {
+                  console.log(e.target);
+                  dispatch(updateIssue({ assignee_id: e.target.value }));
+                }}
+              />
+            </MuiGrid>
             <MuiGrid item xs={12} sm={12} md={6}>
               <TextField
                 name="reporter"
@@ -157,56 +177,6 @@ const IssueForm = () => {
                 disabled
               />
             </MuiGrid>
-            {/* <MuiGrid item xs={12} sm={6}>
-              <MuiTypography
-                variant="body2"
-                sx={{
-                  color: "primary.text",
-                  fontWeight: 600,
-                  paddingBottom: 1,
-                }}
-              >
-                Assigned To
-              </MuiTypography>
-              <MuiAutocomplete
-                disablePortal
-                size="small"
-                options={projectMembers}
-                onChange={(e, selectedMember) => {
-                  if (selectedMember) {
-                    setFormFields({
-                      ...formFields,
-                      assigned_to: selectedMember.user_id,
-                    });
-                  }
-                }}
-                renderOption={(props, option) => {
-                  return (
-                    <MuiGrid container {...props}>
-                      <MuiGrid item>
-                        <Avatar
-                          src={option.photo_url}
-                          sx={{ width: "24px", height: "24px" }}
-                        />
-                      </MuiGrid>
-                      <MuiGrid item sx={{ paddingLeft: "8px" }}>
-                        <MuiTypography variant="body2">
-                          {option.name}
-                        </MuiTypography>
-                      </MuiGrid>
-                    </MuiGrid>
-                  );
-                }}
-                getOptionLabel={(option) => {
-                  return option.name;
-                }}
-                renderInput={(params) => {
-                  return <TextField name="assigned_to" {...params} />;
-                }}
-                fullWidth
-                required
-              />
-            </MuiGrid> */}
             <MuiGrid item xs={12} sm={6}>
               <IssuePrioritySelector
                 title="Priority"

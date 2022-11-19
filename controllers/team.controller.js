@@ -4,10 +4,11 @@ import TeamUser from "../models/team-user/team-user.model.js";
 
 const create = async (req, res) => {
   const { uid } = req.user;
-  const { name } = req.body;
+  const { name, description } = req.body;
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const team = (await Team.insertOne({ name, leader: id })).rows[0];
+    const team = (await Team.insertOne({ name, description, team_leader: id }))
+      .rows[0];
 
     res.send(team);
   } catch (error) {

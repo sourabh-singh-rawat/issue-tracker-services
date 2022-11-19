@@ -7,14 +7,18 @@ const insertOne = ({
   status,
   priority,
   reporter_id,
+  assigned_to,
   due_date,
   project_id,
-  assignee_id,
 }) => {
   return db.query(
-    `INSERT INTO issues (name, description, status, priority, reporter_id, due_date, project_id, assignee_id)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-     RETURNING *`,
+    `
+    INSERT INTO
+      issues (name, description, status, priority, reporter_id, due_date, project_id, assignee_id)
+    VALUES
+      ($1, $2, $3, $4, $5, $6, $7, $8)
+    RETURNING *
+    `,
     [
       name,
       description,
@@ -23,7 +27,7 @@ const insertOne = ({
       reporter_id,
       due_date,
       project_id,
-      assignee_id,
+      assigned_to,
     ]
   );
 };
@@ -35,15 +39,20 @@ const find = async (options) => {
 
 const findOne = (id) => {
   return db.query(
-    `SELECT 
-     issues.id, issues.name, issues.description, issues.status,
-     issues.priority, issues.id,
-     issues.due_date, issues.project_id, issues.creation_date,
-     issues.assignee_id,
-     p.name as "project_name",
-     p.owner_id as "owner_id"
-     FROM issues JOIN projects AS p ON issues.project_id = p.id
-     WHERE issues.id = $1`,
+    `
+    SELECT 
+      issues.id, issues.name, issues.description, issues.status,
+      issues.priority, issues.id,
+      issues.due_date, issues.project_id, issues.created_at,
+      issues.assignee_id,
+      projects.name as "project_name",
+      projects.owner_id as "project_owner_id"
+    FROM 
+      issues 
+    JOIN 
+      projects ON issues.project_id = projects.id
+    WHERE
+      issues.id = $1`,
     [id]
   );
 };
@@ -58,7 +67,6 @@ const updateOne = (id, document) => {
     .slice(0, -1);
 
   query += " WHERE id='" + id + "' RETURNING *";
-
   return db.query(query, Object.values(document));
 };
 

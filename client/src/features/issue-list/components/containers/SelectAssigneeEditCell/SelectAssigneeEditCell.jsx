@@ -8,6 +8,7 @@ import { useUpdateIssueMutation } from "../../../../issue/issue.api";
 import { updateIssue } from "../../../../issue/issue.slice";
 import { useGetProjectMembersQuery } from "../../../../project/project.api";
 import { setMembers } from "../../../../project/project.slice";
+import { setSnackbarOpen } from "../../../../snackbar.reducer";
 
 const SelectAssigneeEditCell = ({ id, value, field, ...rest }) => {
   const dispatch = useDispatch();
@@ -31,8 +32,13 @@ const SelectAssigneeEditCell = ({ id, value, field, ...rest }) => {
     });
     await updateIssueMutation({ id, body: { assignee_id: e.target.value } });
     dispatch(updateIssue({ assignee_id: e.target.value }));
+
     if (isValid) apiRef.current.stopCellEditMode({ id, field });
   };
+
+  useEffect(() => {
+    if (isSuccess) dispatch(setSnackbarOpen(true));
+  }, [isSuccess]);
 
   return (
     <IssueAssigneeSelector

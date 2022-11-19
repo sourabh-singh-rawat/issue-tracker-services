@@ -1,5 +1,6 @@
 import User from "../models/user/user.model.js";
 import Issue from "../models/issue/issue.model.js";
+import ProjectMember from "../models/project-member/project-member.model.js";
 import IssueComment from "../models/issue-comment/issue-comment.model.js";
 import IssueTask from "../models/issue-task/issue-task.model.js";
 import IssueStatus from "../models/issue-status/issue-status.model.js";
@@ -17,7 +18,9 @@ const create = async (req, res) => {
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const issue = (await Issue.insertOne({ reporter_id: id, ...body })).rows[0];
+    const member = (await ProjectMember.findOne({ member_id: id })).rows[0];
+    const issue = (await Issue.insertOne({ reporter_id: member.id, ...body }))
+      .rows[0];
 
     res.send(issue);
   } catch (error) {
@@ -37,11 +40,13 @@ const createComment = async (req, res) => {
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const comment = (await IssueComment.insertOne({ user_id: id, ...req.body }))
-      .rows[0];
+    const comment = (
+      await IssueComment.insertOne({ member_id: id, ...req.body })
+    ).rows[0];
 
     res.send(comment);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -71,6 +76,12 @@ const createTask = async (req, res) => {
   }
 };
 
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns -- List of issues that are created along with their row count.
+ */
 const index = async (req, res) => {
   const { uid } = req.user;
   const { status, priority, assigned_to, projectId, limit, page, sort_by } =
@@ -80,7 +91,7 @@ const index = async (req, res) => {
     status,
     priority,
     assigned_to,
-    project_id: projectId,
+    ["issues.project_id"]: projectId,
   };
 
   const pagingOptions = {
@@ -96,11 +107,12 @@ const index = async (req, res) => {
   }
 
   try {
-    const reporter = (await User.findOne(uid)).rows[0];
+    const { id } = (await User.findOne(uid)).rows[0];
+    const member = (await ProjectMember.findOne({ member_id: id })).rows[0];
 
     const issues = (
       await Issue.find({
-        reporter_id: reporter.id,
+        reporter_id: member.member_id,
         filterOptions,
         pagingOptions,
         sortOptions,
@@ -109,7 +121,7 @@ const index = async (req, res) => {
 
     const rowCount = (
       await Issue.rowCount({
-        reporter_id: reporter.id,
+        reporter_id: member.id,
         filterOptions,
         pagingOptions: {},
         sortOptions: {},
@@ -123,15 +135,19 @@ const index = async (req, res) => {
   }
 };
 
+/**
+ * @param
+ */
 const indexComments = async (req, res) => {
-  const issueId = req.params.id;
+  const { id } = req.params;
 
   try {
-    const comments = (await IssueComment.find(issueId)).rows;
-    const rowCount = (await IssueComment.rowCount(issueId)).rows[0].count;
+    const comments = (await IssueComment.find({ issue_id: id })).rows;
+    const rowCount = (await IssueComment.rowCount(id)).rows[0].count;
 
     res.send({ rows: comments, rowCount: parseInt(rowCount) });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -170,6 +186,7 @@ const indexStatus = async (req, res) => {
     const issueStatus = await IssueStatus.find();
     res.send({ rows: issueStatus.rows, rowCount: issueStatus.rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -203,7 +220,7 @@ const update = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const issue = await (await Issue.updateOne(id, req.body)).rows[0];
+    const issue = (await Issue.updateOne(id, req.body)).rows[0];
     return res.send(issue);
   } catch (error) {
     console.log(error);

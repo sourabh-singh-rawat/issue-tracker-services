@@ -65,7 +65,7 @@ const IssueStatusSelector = ({
             <StyledSelect
               name="status"
               size="small"
-              value={value ? value : issueStatus[0].status}
+              value={value}
               onChange={handleChange}
               sx={{
                 color: "text.primary",
@@ -76,11 +76,11 @@ const IssueStatusSelector = ({
               }}
               displayEmpty
             >
-              {issueStatus.map(({ status, message, color }) => {
+              {issueStatus.map(({ id, name }) => {
                 return (
                   <MuiMenuItem
-                    key={message}
-                    value={status}
+                    key={id}
+                    value={id}
                     sx={{
                       color: "text.primary",
                       fontSize: "14px",
@@ -88,7 +88,7 @@ const IssueStatusSelector = ({
                       textTransform: "capitalize",
                     }}
                   >
-                    {message}
+                    {name}
                   </MuiMenuItem>
                 );
               })}

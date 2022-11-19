@@ -28,7 +28,7 @@ const IssueList = ({ projectId }) => {
     projectId,
     page,
     pageSize,
-    sortBy: "issues.creation_date:desc",
+    sortBy: "issues.created_at:desc",
     reporterId,
   });
 
@@ -98,8 +98,6 @@ const IssueList = ({ projectId }) => {
       renderCell: (params) => {
         return (
           <MuiMenuItem
-            disableGutters
-            disableRipple
             sx={{
               color: theme.palette.secondary.main,
               ":hover": {
@@ -107,11 +105,13 @@ const IssueList = ({ projectId }) => {
                 color: theme.palette.primary.main,
               },
             }}
+            disableRipple
+            disableGutters
           >
             <MuiListItemIcon>
               <MuiAvatar
                 sx={{ width: "20px", height: "20px" }}
-                src={params.row.photo_url}
+                src={params.row.reporter_photo_url}
               ></MuiAvatar>
             </MuiListItemIcon>
             <MuiListItemText>
@@ -136,8 +136,8 @@ const IssueList = ({ projectId }) => {
       width: 125,
     },
     {
-      field: "creation_date",
-      headerName: "Created",
+      field: "created_at",
+      headerName: "Created At",
       width: 125,
       renderCell: ({ value }) =>
         value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
@@ -165,8 +165,6 @@ const IssueList = ({ projectId }) => {
         sorting: { sortModel: [{ field: "status", sort: "desc" }] },
       }}
       autoHeight
-      // checkboxSelection
-      // disableSelectionOnClick
     />
   );
 };

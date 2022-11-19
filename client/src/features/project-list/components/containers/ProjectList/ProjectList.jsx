@@ -32,7 +32,7 @@ const ProjectList = () => {
   const getProjectsQuery = useGetProjectsQuery({
     page,
     pageSize,
-    sortBy: "creation_date:desc",
+    sortBy: "created_at:desc",
   });
 
   useEffect(() => {
@@ -109,19 +109,20 @@ const ProjectList = () => {
       renderEditCell: renderSelectEditInputCell,
     },
     {
-      field: "creation_date",
-      headerName: "Creation Date",
+      field: "created_at",
+      headerName: "Created At",
       type: "date",
       minWidth: 125,
       flex: 0.15,
-      renderCell: ({ value }) =>
-        value ? (
+      renderCell: ({ value }) => {
+        return value ? (
           <MuiTypography variant="body2">
             {format(parseISO(value), "PP", { locale: enIN })}
           </MuiTypography>
         ) : (
           "-"
-        ),
+        );
+      },
     },
     {
       field: "start_date",

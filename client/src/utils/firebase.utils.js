@@ -37,6 +37,7 @@ export const continueWithGoogle = async (inviteToken) => {
   } else {
     try {
       const { user } = await signInWithPopup(auth, provider);
+      console.log(user);
 
       await storeUserInfoInDatabase(user);
     } catch (error) {}

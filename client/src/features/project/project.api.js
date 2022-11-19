@@ -40,7 +40,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
         page = 0,
         pageSize = 10,
         projectId = "",
-        sortBy = "creation_date:desc",
+        sortBy = "created_at:desc",
       }) => {
         return `/issues?project_id=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}`;
       },

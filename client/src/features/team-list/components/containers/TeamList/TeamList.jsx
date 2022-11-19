@@ -55,7 +55,7 @@ const TeamList = () => {
       flex: 0.4,
     },
     {
-      field: "creation_date",
+      field: "created_at",
       headerName: "Created At",
       width: 200,
       flex: 0.2,

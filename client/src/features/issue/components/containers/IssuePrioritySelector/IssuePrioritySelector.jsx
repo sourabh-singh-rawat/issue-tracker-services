@@ -66,7 +66,7 @@ const IssuePrioritySelector = ({
             <StyledSelect
               name="priority"
               size="small"
-              value={value ? value : issuePriority[0].priority}
+              value={value}
               onChange={handleChange}
               sx={{
                 color: "text.primary",
@@ -77,11 +77,11 @@ const IssuePrioritySelector = ({
               }}
               displayEmpty
             >
-              {issuePriority.map(({ priority, message }) => {
+              {issuePriority.map(({ id, name }) => {
                 return (
                   <MuiMenuItem
-                    key={priority + message}
-                    value={priority}
+                    key={id}
+                    value={id}
                     sx={{
                       color: "text.primary",
                       fontSize: "14px",
@@ -89,7 +89,7 @@ const IssuePrioritySelector = ({
                       textTransform: "capitalize",
                     }}
                   >
-                    {message}
+                    {name}
                   </MuiMenuItem>
                 );
               })}

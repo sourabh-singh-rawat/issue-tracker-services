@@ -20,21 +20,10 @@ const IssueStats = ({ issuesStatusCount, isLoading }) => {
       <MuiGrid item xs={12} md={2.4}>
         <IssueCard title="Total Issues" count={total} isLoading={isLoading} />
       </MuiGrid>
-      {issuesStatusCount.map(({ message, count, status }) => {
+      {issuesStatusCount.map(({ id, name, count }) => {
         return (
-          <MuiGrid
-            item
-            key={message + status.toString()}
-            xs={6}
-            sm={6}
-            md={2.4}
-          >
-            <IssueCard
-              key={message}
-              title={message}
-              count={count}
-              isLoading={isLoading}
-            />
+          <MuiGrid item key={id} xs={6} sm={6} md={2.4}>
+            <IssueCard title={name} count={count} isLoading={isLoading} />
           </MuiGrid>
         );
       })}

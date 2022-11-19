@@ -8,18 +8,18 @@ const initialState = {
     nameSelected: false,
     description: "",
     descriptionSelected: false,
-    creation_date: null,
-    status: "0_NOT_STARTED",
+    created_at: null,
+    status: "b5148da1-e82f-439a-86ba-7b5dbf076277",
   },
   settings: {
     isLoading: true,
     name: "",
     description: "",
     descriptionSelected: false,
-    creation_date: null,
+    created_at: null,
     owner_id: null,
     id: "",
-    status: "0_NOT_STARTED",
+    status: "",
   },
   members: {
     isLoading: true,
@@ -40,11 +40,11 @@ const initialState = {
   options: {
     status: {
       isLoading: true,
-      rows: [{ code: "NOT_STARTED", message: "Not Started" }],
+      rows: [{ name: "", description: "" }],
     },
     roles: {
       isLoading: true,
-      rows: [{ code: "MEMBER", message: "Member" }],
+      rows: [{ name: "", description: "" }],
     },
   },
 };
@@ -59,7 +59,7 @@ const projectSlice = createSlice({
         nameSelected,
         description,
         descriptionSelected,
-        creation_date,
+        created_at,
         status,
       } = action.payload;
 
@@ -68,7 +68,7 @@ const projectSlice = createSlice({
         nameSelected,
         description,
         descriptionSelected,
-        creation_date,
+        created_at,
         status,
         isLoading: false,
       };

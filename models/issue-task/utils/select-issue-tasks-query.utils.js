@@ -4,7 +4,7 @@ export const selectIssueTasks = ({
   pagingOptions,
   sortOptions,
 }) => {
-  const { field = "creation_date", order = "asc" } = sortOptions;
+  const { field = "created_at", order = "asc" } = sortOptions;
 
   Object.keys(filterOptions).forEach((option) => {
     if (!option) delete filterOptions[option];

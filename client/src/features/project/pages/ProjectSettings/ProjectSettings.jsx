@@ -123,12 +123,12 @@ const ProjectSettings = () => {
                 <MuiGrid item xs={12}>
                   <TextField
                     isLoading={project.isLoading}
-                    name="creation_date"
+                    name="created_at"
                     title="Creation date"
                     helperText="This project was created on this day."
                     value={
-                      project.creation_date
-                        ? format(parseISO(project.creation_date), "PPPPpppp")
+                      project.created_at
+                        ? format(parseISO(project.created_at), "PPPPpppp")
                         : "loading"
                     }
                     disabled

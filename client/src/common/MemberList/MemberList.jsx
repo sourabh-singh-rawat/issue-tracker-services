@@ -69,14 +69,14 @@ const MemberList = () => {
       },
     },
     {
-      field: "creation_date",
+      field: "created_at",
       headerName: "Creation Date",
       minWidth: 200,
       renderCell: ({ value }) => {
         return format(parseISO(value), "PP", { locale: enIN });
       },
     },
-    { field: "role", headerName: "Role", minWidth: 200 },
+    { field: "project_member_role_name", headerName: "Role", minWidth: 200 },
   ];
 
   return (
@@ -85,7 +85,7 @@ const MemberList = () => {
       rowCount={rowCount}
       columns={columns}
       pageSize={pageSize}
-      getRowId={(row) => row.user_id}
+      getRowId={(row) => row.member_id}
       isLoading={projectMembers.isLoading}
       initialState={{
         sorting: { sortModel: [{ field: "name", sort: "asc" }] },
