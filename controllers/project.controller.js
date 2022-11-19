@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import sgMail from "../services/email.service.js";
 
 import User from "../models/user/user.model.js";
-import Role from "../models/roles/roles.model.js";
+import Role from "../models/project-member-roles/project-member-roles.model.js";
 import Project from "../models/project/project.model.js";
 import ProjectStatus from "../models/project-status/project-status.model.js";
 import ProjectMember from "../models/project-member/project-member.model.js";
@@ -13,23 +13,19 @@ import ProjectMember from "../models/project-member/project-member.model.js";
  * @returns -- the newly created project
  */
 const create = async (req, res) => {
-  const { uid, email } = req.user;
+  const { uid } = req.user;
   const { name, description, status, start_date, end_date } = req.body;
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const project = (
-      await Project.insertOne({
-        id,
-        email,
-        name,
-        description,
-        status,
-        start_date,
-        end_date,
-      })
-    ).rows[0];
-    await ProjectMember.insertOne(project.id, id);
+    const project = await Project.insertOne({
+      id,
+      name,
+      description,
+      status,
+      start_date,
+      end_date,
+    });
 
     return res.send(project);
   } catch (error) {
@@ -109,12 +105,7 @@ const confirmInvite = async (req, res) => {
  */
 const index = async (req, res) => {
   const { uid } = req.user;
-
-  // filtering
-  const { status } = req.query;
-
-  // sorting
-  const { sort_by } = req.query;
+  const { status, sort_by } = req.query;
   const sortOptions = {};
   if (sort_by) {
     const [field, order] = sort_by.split(":");
@@ -122,7 +113,6 @@ const index = async (req, res) => {
     sortOptions.order = order;
   }
 
-  // pagination
   const { limit, page } = req.query;
 
   try {
@@ -162,6 +152,7 @@ const indexMembers = async (req, res) => {
     const projectMembers = (await ProjectMember.findByProjectId(id)).rows;
     res.send({ rows: projectMembers, rowCount: projectMembers.length });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -212,6 +203,7 @@ const showIssuesStatusCount = async (req, res) => {
 
     res.send(statusCount);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -235,6 +227,7 @@ const destroy = async (req, res) => {
     if (!project) res.status(404);
     res.send(project);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };

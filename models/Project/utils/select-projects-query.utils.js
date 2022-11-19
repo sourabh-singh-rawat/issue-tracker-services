@@ -15,7 +15,7 @@ export const selectProjectsQuery = function createSelectQuery({
 
   let index = 0;
   let select = "SELECT * FROM projects ";
-  let condition = `WHERE id IN (SELECT project_id from project_members where user_id='${id}') `;
+  let condition = `WHERE id IN (SELECT project_id from project_members WHERE member_id='${id}') AND deleted_at IS NULL `;
   let orderBy = "ORDER BY ";
   let pagination = "";
 

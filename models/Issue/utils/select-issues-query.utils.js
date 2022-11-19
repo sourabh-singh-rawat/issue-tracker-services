@@ -14,15 +14,27 @@ export const selectIssuesQuery = ({
 
   let index = 0;
   let select = `
-  SELECT *, 
-    issues.id as id, 
-    issues.name as "name", 
-    users.name as "reporter_name", 
-    users.id as "user_id",
-    issues.creation_date as "creation_date",
-    users.creation_date as "user_creation_date"
-  FROM issues INNER JOIN users ON issues.reporter_id = users.id `;
-  let condition = `WHERE project_id IN (SELECT project_id FROM project_members WHERE user_id='${reporter_id}') `;
+  SELECT
+    issues.id,  issues.name, issues.status, issues.priority, issues.created_at, issues.reporter_id, issues.project_id, issues.assignee_id, issues.due_date,
+    users.id as "reporter_id", users.name as "reporter_name", users.photo_url as "reporter_photo_url"
+  FROM 
+    issues
+  JOIN 
+    project_members ON project_members.id = issues.reporter_id
+  JOIN
+      users ON users.id = project_members.member_id`;
+
+  let condition = `
+  WHERE 
+    issues.project_id IN (
+      SELECT
+        project_id
+      FROM 
+        project_members 
+      WHERE 
+        member_id='${reporter_id}'
+      )
+    `;
   let orderBy = "ORDER BY ";
   let pagination = "";
 

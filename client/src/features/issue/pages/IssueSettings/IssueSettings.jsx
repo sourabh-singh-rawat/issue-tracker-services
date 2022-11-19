@@ -134,12 +134,12 @@ const IssueSettings = () => {
               <MuiGrid container spacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
-                    name="creation_date"
-                    title="Creation Date"
+                    name="created_at"
+                    title="Created At"
                     helperText="The day this project was created, this cannot be changed."
                     value={
-                      issue.creation_date
-                        ? format(parseISO(issue.creation_date), "PPPPpppp")
+                      issue.created_at
+                        ? format(parseISO(issue.created_at), "PPPPpppp")
                         : "loading"
                     }
                     isLoading={issue.isLoading}

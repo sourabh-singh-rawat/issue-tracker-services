@@ -2,7 +2,6 @@ import express from "express";
 const router = express.Router();
 import multer from "multer";
 import fs from "fs/promises";
-// import fileType from "file-type";
 
 import AttachmentController from "../controllers/issue-attachment.controller.js";
 

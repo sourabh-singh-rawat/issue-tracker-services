@@ -23,8 +23,8 @@ import ProjectList from "../features/project-list/components/containers/ProjectL
 
 import Issues from "../features/issue-list/pages/Issues";
 import Issue from "../features/issue/pages/Issue";
+import IssueTasks from "../features/issue-tasks/pages/IssueTasks/IssueTasks";
 import IssueOverview from "../features/issue/pages/IssueOverview";
-import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 import IssueComments from "../features/issue-comments/pages/IssueComments";
 import IssueAttachments from "../features/issue/pages/IssueAttachments";
 import IssueSettings from "../features/issue/pages/IssueSettings";

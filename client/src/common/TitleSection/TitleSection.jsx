@@ -54,8 +54,8 @@ const TitleSection = ({
           ) : (
             <MuiTypography variant="body2" component="span" fontWeight={600}>
               {" "}
-              {page.creation_date &&
-                format(parseISO(page.creation_date), "PP", {
+              {page.created_at &&
+                format(parseISO(page.created_at), "PP", {
                   locale: enIN,
                 })}
             </MuiTypography>

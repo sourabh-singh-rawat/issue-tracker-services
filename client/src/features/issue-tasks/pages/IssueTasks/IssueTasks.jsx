@@ -5,7 +5,6 @@ import { useOutletContext, useParams } from "react-router-dom";
 import MuiGrid from "@mui/material/Grid";
 
 import TabPanel from "../../../../common/TabPanel";
-import AddTask from "../../components/containers/AddTask";
 import TaskList from "../../components/containers/TaskList";
 
 import { setTasks } from "../../issue-tasks.slice";

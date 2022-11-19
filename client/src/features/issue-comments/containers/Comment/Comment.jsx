@@ -15,7 +15,7 @@ const Comment = ({
   name,
   description,
   photo_url,
-  creation_date,
+  created_at,
 }) => {
   const theme = useTheme();
 
@@ -34,7 +34,7 @@ const Comment = ({
             width: "30px",
             height: "30px",
             marginLeft: "5px",
-            backgroundColor: "primary.main",
+            backgroundColor: theme.palette.primary.main,
           }}
         >
           <MuiTypography variant="body2">{name.match(/\b(\w)/g)}</MuiTypography>
@@ -55,7 +55,7 @@ const Comment = ({
                 <MuiTypography
                   sx={{ color: "text.secondary", fontSize: "13px" }}
                 >
-                  {formatDistance(parseISO(creation_date), new Date(), {
+                  {formatDistance(parseISO(created_at), new Date(), {
                     includeSeconds: true,
                     addSuffix: true,
                   })}

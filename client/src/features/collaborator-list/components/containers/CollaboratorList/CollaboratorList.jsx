@@ -80,7 +80,7 @@ const CollaboratorList = () => {
       initialState={{
         sorting: { sortModel: [{ field: "name", sort: "asc" }] },
       }}
-      getRowId={(params) => params.user_id}
+      getRowId={(params) => params.id}
     />
   );
 };

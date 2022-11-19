@@ -3,11 +3,11 @@ import { Fragment } from "react";
 import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
-import MuiMenuItem from "@mui/material/MenuItem";
 import MuiAvatar from "@mui/material/Avatar";
-import MuiFormControl from "@mui/material/FormControl";
-import MuiTypography from "@mui/material/Typography";
 import MuiSkeleton from "@mui/material/Skeleton";
+import MuiMenuItem from "@mui/material/MenuItem";
+import MuiTypography from "@mui/material/Typography";
+import MuiFormControl from "@mui/material/FormControl";
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => {
   return {
@@ -60,11 +60,11 @@ const IssueAssigneeSelector = ({
             value={!value ? 0 : value}
             onChange={handleChange}
           >
-            {projectMembers.map(({ user_id, name, photo_url }) => {
+            {projectMembers.map(({ id, name, photo_url }) => {
               return (
                 <MuiMenuItem
-                  key={user_id}
-                  value={user_id}
+                  key={id}
+                  value={id}
                   sx={{ fontSize: "14px", fontWeight: 500 }}
                 >
                   <MuiGrid container columnSpacing={1}>

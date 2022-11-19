@@ -43,7 +43,7 @@ const IssueAttachments = () => {
   }, [getIssueAttachments.data]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={3}>
+    <TabPanel selectedTab={selectedTab} index={2}>
       <MuiBox component="form">
         <MuiInput name="file" type="file" onChange={handleChange} />
         <MuiButton type="submit" onClick={handleSubmit}>
