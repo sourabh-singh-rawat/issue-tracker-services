@@ -45,7 +45,7 @@ const IssueAssigneeSelector = ({
           </MuiGrid>
         </MuiGrid>
       ) : (
-        <MuiFormControl fullWidth>
+        <MuiFormControl>
           {title && (
             <MuiTypography
               variant="body2"

@@ -121,7 +121,7 @@ const index = async (req, res) => {
 
     const rowCount = (
       await Issue.rowCount({
-        reporter_id: member.id,
+        reporter_id: member.member_id,
         filterOptions,
         pagingOptions: {},
         sortOptions: {},
@@ -207,7 +207,6 @@ const show = async (req, res) => {
     const issue = (await Issue.findOne(id)).rows[0];
     // const hexString = issue.id.replace(/-/g, "");
     // const newIssueId = Buffer.from(hexString, "hex").toString("base64");
-
     if (!issue) res.status(404).send();
 
     return res.send({ ...issue });

@@ -1,22 +1,20 @@
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Button, Menu, MenuItem, styled, Typography } from "@mui/material";
+import MuiBox from "@mui/material/Box";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 
 import DeleteProjectButton from "../DeleteProjectButton";
 
-const modalStyles = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  minWidth: 500,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  borderRadius: "6px",
-  p: 4,
-};
+const StyledButton = styled(Button)(({ theme }) => {
+  return {
+    "&.MuiButton-root": {
+      padding: 0,
+      margin: 0,
+    },
+  };
+});
 
 const ActionButtons = ({ id }) => {
   const navigate = useNavigate();
@@ -28,9 +26,9 @@ const ActionButtons = ({ id }) => {
 
   return (
     <Fragment>
-      <Button onClick={handleClick} disableRipple>
+      <StyledButton onClick={handleClick} disableRipple>
         <MoreHoriz sx={{ color: "text.primary" }} />
-      </Button>
+      </StyledButton>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem
           key="edit"

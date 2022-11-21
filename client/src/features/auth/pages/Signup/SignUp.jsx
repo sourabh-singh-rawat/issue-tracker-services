@@ -1,20 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import signupImage from "../../../../assets/images/signup2.jpg";
 
 import { styled, useTheme } from "@mui/material/styles";
-import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
 import MuiButton from "@mui/material/Button";
 import MuiContainer from "@mui/material/Container";
 import MuiTypography from "@mui/material/Typography";
 
 import GoogleIcon from "@mui/icons-material/Google";
 
-import { continueWithGoogle } from "../../../../utils/firebase.utils";
-import { onAuthStateChangedListener } from "../../../../app/firebase.config";
-import TextField from "../../../../common/TextField/TextField";
-import { Divider } from "@mui/material";
+import { continueWithGoogle } from "../../../../configs/firebase/utils/continue-with-google.utils";
+import { onAuthStateChangedListener } from "../../../../configs/firebase/firebase.config";
 
 const StyledButton = styled(MuiButton)(({ theme }) => {
   return {

@@ -6,7 +6,7 @@ import MuiGrid from "@mui/material/Grid";
 import { LinearProgress } from "@mui/material";
 
 import { setCredentials } from "../../auth.slice";
-import { onAuthStateChangedListener } from "../../../../app/firebase.config.js";
+import { onAuthStateChangedListener } from "../../../../configs/firebase/firebase.config";
 
 const ProtectedRoutes = () => {
   const dispatch = useDispatch();

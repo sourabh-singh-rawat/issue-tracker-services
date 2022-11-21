@@ -1,6 +1,6 @@
-import { signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../app/firebase.config.js";
-import { storeUserInfoInDatabase } from "./database.utils.js";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase.config";
+import { storeUserInfoInDatabase } from "./database.utils";
 import { verifyToken } from "./auth.utils";
 
 export const continueWithGoogle = async (inviteToken) => {
@@ -30,6 +30,8 @@ export const continueWithGoogle = async (inviteToken) => {
             body: JSON.stringify({ ...decodedToken, uid }),
           }
         );
+
+        return response;
       } else {
         console.log("Error signing in user");
       }
@@ -43,12 +45,3 @@ export const continueWithGoogle = async (inviteToken) => {
     } catch (error) {}
   }
 };
-
-export const signOutUser = async () => {
-  try {
-    await signOut(auth);
-    window.localStorage.clear();
-  } catch (error) {}
-};
-
-export default { continueWithGoogle, signOutUser };

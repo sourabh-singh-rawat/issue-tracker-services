@@ -27,7 +27,7 @@ const Team = () => {
 
   const mapPathToIndex = {
     overview: 0,
-    issues: 1,
+    projects: 1,
     people: 2,
     activity: 3,
     settings: 4,
@@ -35,7 +35,7 @@ const Team = () => {
 
   const mapIndexToTab = {
     0: `/teams/${id}/overview`,
-    1: `/teams/${id}/issues`,
+    1: `/teams/${id}/projects`,
     2: `/teams/${id}/people`,
     3: `/teams/${id}/activity`,
     4: `/teams/${id}/settings`,

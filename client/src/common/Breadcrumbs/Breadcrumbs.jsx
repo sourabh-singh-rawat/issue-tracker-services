@@ -26,7 +26,7 @@ const Breadcrumbs = ({ items, isLoading }) => {
                 <MuiTypography
                   variant="body2"
                   sx={{
-                    fontWeight: 400,
+                    fontWeight: 500,
                     ":hover": { color: "text.main" },
                   }}
                 >

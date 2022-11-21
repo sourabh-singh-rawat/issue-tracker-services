@@ -33,12 +33,15 @@ import IssueList from "../features/issue-list/components/containers/IssueList";
 
 import Teams from "../features/team-list/pages/Teams";
 import Team from "../features/team/pages/Team";
+import TeamActivity from "../features/team/pages/TeamActivity";
 import TeamOverview from "../features/team/pages/TeamOverview";
 import TeamSettings from "../features/team/pages/TeamSettings";
 import TeamForm from "../features/team/pages/TeamForm";
 import TeamList from "../features/team-list/components/containers/TeamList";
 
 import Profile from "../features/profile/pages/Profile";
+import TeamProjects from "../features/team/pages/TeamProjects";
+import TeamMembers from "../features/team/pages/TeamMembers";
 
 const NoComponent = () => {
   return <h1>404</h1>;
@@ -78,6 +81,9 @@ const App = () => {
             <Route path="new" element={<TeamForm />} />
             <Route path=":id" element={<Team />}>
               <Route path="overview" element={<TeamOverview />} />
+              <Route path="people" element={<TeamMembers />} />
+              <Route path="projects" element={<TeamProjects />} />
+              <Route path="activity" element={<TeamActivity />} />
               <Route path="settings" element={<TeamSettings />} />
             </Route>
           </Route>

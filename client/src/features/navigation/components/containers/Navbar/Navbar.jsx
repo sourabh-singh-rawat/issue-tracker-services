@@ -16,7 +16,7 @@ import MuiLogoutIcon from "@mui/icons-material/Logout";
 import MuiNotifications from "@mui/icons-material/Notifications";
 import MuiAccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 
-import { signOutUser } from "../../../../../utils/firebase.utils";
+import { logout } from "../../../../../configs/firebase/utils/logout.util";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => {
   return {
@@ -74,7 +74,7 @@ const Navbar = () => {
               <MuiMenuItem
                 onClick={async () => {
                   handleClose();
-                  await signOutUser();
+                  await logout();
                   navigate("/login");
                 }}
               >

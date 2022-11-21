@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { theme } from "../../../../app/mui.config";
 import MuiGrid from "@mui/material/Grid";
 
 import Tab from "../../../../common/Tab";

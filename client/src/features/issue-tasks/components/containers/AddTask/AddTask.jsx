@@ -14,6 +14,7 @@ import MuiAddIcon from "@mui/icons-material/Add";
 import { useCreateTaskMutation } from "../../../issue-tasks.api";
 import TextField from "../../../../../common/TextField";
 import DatePicker from "../../../../../common/DatePicker/DatePicker";
+import { setTasksLoading } from "../../../issue-tasks.slice";
 
 const AddTaskButton = styled(MuiButton)(({ theme }) => {
   return {
@@ -29,6 +30,7 @@ const AddTaskButton = styled(MuiButton)(({ theme }) => {
 });
 
 const AddTask = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [createTask] = useCreateTaskMutation();
 
@@ -56,6 +58,7 @@ const AddTask = () => {
     if (task.description.length > 0) {
       const { description, dueDate } = task;
       createTask({ issueId: id, description, dueDate, completed: false });
+      dispatch(setTasksLoading());
     }
     setTask({ ...task, selected: false });
   };
