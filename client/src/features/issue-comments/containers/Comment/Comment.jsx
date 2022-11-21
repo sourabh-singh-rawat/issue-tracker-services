@@ -37,7 +37,9 @@ const Comment = ({
             backgroundColor: theme.palette.primary.main,
           }}
         >
-          <MuiTypography variant="body2">{name.match(/\b(\w)/g)}</MuiTypography>
+          <MuiTypography variant="body2">
+            {name.match(/\b(\w)/g)[0]}
+          </MuiTypography>
         </MuiAvatar>
       </MuiGrid>
       <MuiGrid item width="90%">

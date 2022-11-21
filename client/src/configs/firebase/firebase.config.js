@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getStorage, ref } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {
@@ -10,9 +11,10 @@ const firebaseConfig = {
   appId: "1:579560355104:web:f5e6fdb13570f3dfffd345",
 };
 
-const app = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+export const auth = getAuth(firebaseApp);
+export const storage = getStorage(firebaseApp);
 
 export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);

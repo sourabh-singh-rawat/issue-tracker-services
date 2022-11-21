@@ -9,7 +9,6 @@ const Tabs = (props) => {
       {...props}
       textColor="inherit"
       sx={{
-        borderTop: `1px solid ${theme.palette.grey[300]}`,
         borderBottom: `1px solid ${theme.palette.grey[300]}`,
 
         ".MuiButtonBase-root": {

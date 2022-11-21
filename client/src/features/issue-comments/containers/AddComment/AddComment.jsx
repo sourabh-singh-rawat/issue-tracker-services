@@ -62,7 +62,7 @@ const AddComment = () => {
                     src={user.photoURL}
                     sx={{ width: "24px", height: "24px", fontSize: "14px" }}
                   >
-                    {user.displayName.match(/\b(\w)/g)}
+                    {user.displayName.match(/\b(\w)/g)[0]}
                   </MuiAvatar>
                 </InputAdornment>
               ),

@@ -14,6 +14,7 @@ const StyledDataGrid = styled(MuiDataGrid)(({}) => {
     },
     ".MuiDataGrid-cell": {
       color: theme.palette.secondary.main,
+      border: "none",
     },
     "& .MuiDataGrid-columnHeaderTitle": {
       fontSize: "14px",
@@ -44,7 +45,6 @@ const List = ({
   onPageSizeChange,
   getRowId,
   checkboxSelection,
-  disableSelectionOnClick,
 }) => {
   return (
     <StyledDataGrid

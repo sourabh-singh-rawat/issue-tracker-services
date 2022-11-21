@@ -43,7 +43,7 @@ const IssueOverview = () => {
     <TabPanel selectedTab={selectedTab} index={0}>
       <MuiGrid container columnSpacing={2} rowSpacing={2}>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Description:
           </MuiTypography>
           <Description
@@ -54,18 +54,18 @@ const IssueOverview = () => {
           />
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Assignee:
           </MuiTypography>
           <IssueAssignee />
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Tasks:
           </MuiTypography>
         </MuiGrid>
         <MuiGrid item xs={12}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Attachments:
           </MuiTypography>
           <ImageList
@@ -74,14 +74,10 @@ const IssueOverview = () => {
             cols={8}
             rowHeight={75}
           >
-            {attachments.rows.map((attachment) => {
+            {attachments.rows.map(({ id, url }) => {
               return (
-                <ImageListItem key={attachment}>
-                  <img
-                    src={`http://localhost:4000/attachments/issues/${id}/${attachment}`}
-                    srcSet={`http://localhost:4000/attachments/issues/${id}/${attachment}`}
-                    loading="lazy"
-                  />
+                <ImageListItem key={id}>
+                  <img src={url} srcSet={url} loading="lazy" />
                 </ImageListItem>
               );
             })}

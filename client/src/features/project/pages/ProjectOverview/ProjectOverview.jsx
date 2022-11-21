@@ -50,7 +50,7 @@ const ProjectOverview = () => {
     <TabPanel selectedTab={selectedTab} index={0}>
       <MuiGrid container spacing={2}>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Description:
           </MuiTypography>
           <PageDescription
@@ -61,14 +61,14 @@ const ProjectOverview = () => {
           />
         </MuiGrid>
         <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Members:
           </MuiTypography>
           <MembersCard />
         </MuiGrid>
 
         <MuiGrid item sm={12}>
-          <MuiTypography variant="body1" fontWeight={500}>
+          <MuiTypography variant="body2" fontWeight={500}>
             Issue Stats:
           </MuiTypography>
           <IssueStats

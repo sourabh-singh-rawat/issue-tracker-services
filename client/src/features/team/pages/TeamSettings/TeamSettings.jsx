@@ -32,7 +32,7 @@ const TeamSettings = () => {
   };
 
   return (
-    <TabPanel selectedTab={selectedTab} index={3}>
+    <TabPanel selectedTab={selectedTab} index={4}>
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container sx={{ marginTop: 3 }}>
           <Grid item xs={12} md={4}>

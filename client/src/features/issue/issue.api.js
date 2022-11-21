@@ -12,15 +12,6 @@ const issueApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["IssueList"],
     }),
-    createIssueAttachment: build.mutation({
-      query: ({ id, body }) => {
-        return {
-          url: `issues/${id}/attachments`,
-          method: "POST",
-          body,
-        };
-      },
-    }),
     getIssue: build.query({
       query: (id) => {
         return `/issues/${id}`;

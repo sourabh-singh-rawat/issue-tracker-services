@@ -8,7 +8,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
 
-import GridContainer from "../../../../common/GridContainer";
+import MuiDivider from "@mui/material/Divider";
 import TabPanel from "../../../../common/TabPanel";
 import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
@@ -50,10 +50,10 @@ const ProjectSettings = () => {
         container
         component="form"
         onSubmit={handleSubmit}
-        rowSpacing={2}
+        rowSpacing={3}
       >
         <MuiGrid item xs={12}>
-          <GridContainer>
+          <MuiGrid container>
             <MuiGrid item xs={12} md={4}>
               <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
                 Basic Information
@@ -106,10 +106,13 @@ const ProjectSettings = () => {
                 </MuiGrid>
               </MuiGrid>
             </MuiGrid>
-          </GridContainer>
+          </MuiGrid>
         </MuiGrid>
         <MuiGrid item xs={12}>
-          <GridContainer>
+          <MuiDivider />
+        </MuiGrid>
+        <MuiGrid item xs={12}>
+          <MuiGrid container>
             <MuiGrid item xs={12} md={4}>
               <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
                 Detailed Information:
@@ -173,7 +176,7 @@ const ProjectSettings = () => {
                 </MuiGrid>
               </MuiGrid>
             </MuiGrid>
-          </GridContainer>
+          </MuiGrid>
         </MuiGrid>
         <MuiGrid item xs={12} sx={{ marginBottom: 8 }}>
           <MuiGrid container>

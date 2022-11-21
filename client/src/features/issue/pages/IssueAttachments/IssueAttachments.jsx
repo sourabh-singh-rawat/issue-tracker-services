@@ -8,17 +8,24 @@ import MuiButton from "@mui/material/Button";
 
 import TabPanel from "../../../../common/TabPanel";
 
-import { useGetIssueAttachmentsQuery } from "../../issue.api";
 import { setIssueAttachments } from "../../issue.slice";
 import { ImageList, ImageListItem } from "@mui/material";
+import { uploadImage } from "../../../../configs/firebase/utils/upload-image.utils";
+import {
+  getImages,
+  getImageURL,
+} from "../../../../configs/firebase/utils/get-images.utils";
+import { useGetIssueAttachmentsQuery } from "../../issue.api";
+import { setSnackbarOpen } from "../../../snackbar.reducer";
 
 const IssueAttachments = () => {
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
   const { id } = useParams();
   const [file, setFile] = useState();
+  const getIssueAttachmentsQuery = useGetIssueAttachmentsQuery(id);
+  const accessToken = useSelector((store) => store.auth.accessToken);
   const attachments = useSelector((store) => store.issue.attachments);
-  const getIssueAttachments = useGetIssueAttachmentsQuery(id);
 
   const handleChange = async (e) => {
     setFile(e.target.files[0]);
@@ -27,20 +34,14 @@ const IssueAttachments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append("file", file);
-
-    await fetch(`http://localhost:4000/api/issues/${id}/attachments`, {
-      body: data,
-      method: "POST",
-    });
+    const uploadedImage = await uploadImage({ file, issueId: id, accessToken });
+    if (uploadedImage.status === 200) dispatch(setSnackbarOpen(true));
   };
 
   useEffect(() => {
-    if (getIssueAttachments.isSuccess) {
-      dispatch(setIssueAttachments(getIssueAttachments.data));
-    }
-  }, [getIssueAttachments.data]);
+    if (getIssueAttachmentsQuery.isSuccess)
+      dispatch(setIssueAttachments(getIssueAttachmentsQuery.data));
+  }, [getIssueAttachmentsQuery.data]);
 
   return (
     <TabPanel selectedTab={selectedTab} index={2}>
@@ -49,25 +50,21 @@ const IssueAttachments = () => {
         <MuiButton type="submit" onClick={handleSubmit}>
           Upload
         </MuiButton>
-        <ImageList
-          sx={{ width: "100%" }}
-          variant="quilted"
-          cols={4}
-          rowHeight={164}
-        >
-          {attachments.rows.map((attachment) => {
-            return (
-              <ImageListItem key={attachment}>
-                <img
-                  src={`http://localhost:4000/attachments/issues/${id}/${attachment}`}
-                  srcSet={`http://localhost:4000/attachments/issues/${id}/${attachment}`}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            );
-          })}
-        </ImageList>
       </MuiBox>
+      <ImageList
+        variant="quilted"
+        rowHeight={170}
+        cols={4}
+        sx={{ width: "100%", height: 450 }}
+      >
+        {attachments.rows.map(({ id, url }) => {
+          return (
+            <ImageListItem key={id}>
+              <img src={url} srcSet={url} loading="lazy" />
+            </ImageListItem>
+          );
+        })}
+      </ImageList>
     </TabPanel>
   );
 };

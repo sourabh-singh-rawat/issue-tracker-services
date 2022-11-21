@@ -1,24 +1,40 @@
-import { upload } from "../routes/issue-attachments.route.js";
-import fs from "fs/promises";
+import IssueAttachment from "../models/issue-attachment/issue-attachment.model.js";
 
-const uploadImage = async (req, res) => {
-  upload(req, res, (error) => {
-    if (error) return res.status(500).send();
-
-    return res.send("Image successfully uploaded");
-  });
-};
-
-const indexImages = async (req, res) => {
+const create = async (req, res) => {
   const { id } = req.params;
-  const dir = `uploads/attachments/issues/${id}`;
+  const { bucket, fullPath, name, size, contentType, url } = req.body;
 
   try {
-    const files = await fs.readdir(dir);
-    if (files.length > 0) res.send({ rows: files, rowCount: files.length });
+    const attachment = (
+      await IssueAttachment.insertOne({
+        bucket,
+        full_path: fullPath,
+        name,
+        size,
+        content_type: contentType,
+        issue_id: id,
+        url,
+      })
+    ).rows[0];
+
+    res.send(attachment);
   } catch (error) {
-    res.status(404).send();
+    console.log(error);
+    res.status(500).send();
   }
 };
 
-export default { uploadImage, indexImages };
+const index = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const attachments = await IssueAttachment.find(id);
+
+    res.send({ rows: attachments.rows, rowCount: attachments.rows.length });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send();
+  }
+};
+
+export default { create, index };
