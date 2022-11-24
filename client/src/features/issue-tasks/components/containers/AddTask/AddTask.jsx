@@ -13,7 +13,7 @@ import MuiAddIcon from "@mui/icons-material/Add";
 
 import { useCreateTaskMutation } from "../../../issue-tasks.api";
 import TextField from "../../../../../common/TextField";
-import DatePicker from "../../../../../common/DatePicker/DatePicker";
+import DatePicker from "../../../../../common/DatePicker";
 import { setTasksLoading } from "../../../issue-tasks.slice";
 
 const AddTaskButton = styled(MuiButton)(({ theme }) => {
@@ -79,6 +79,9 @@ const AddTask = () => {
               />
             </MuiGrid>
             <MuiGrid item>
+              <DatePicker name="due_date" onChange={() => {}} />
+            </MuiGrid>
+            <MuiGrid item>
               <MuiButton
                 onClick={handleSave}
                 sx={{
@@ -90,7 +93,7 @@ const AddTask = () => {
                   },
                 }}
               >
-                <MuiTypography variant="body2">Save</MuiTypography>
+                <MuiTypography variant="body2">Create a Task</MuiTypography>
               </MuiButton>
             </MuiGrid>
             <MuiGrid item>

@@ -203,7 +203,6 @@ const showIssuesStatusCount = async (req, res) => {
 
     res.send(statusCount);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -215,6 +214,7 @@ const update = async (req, res) => {
     const project = (await Project.updateOne(id, req.body)).rows[0];
     res.send(project);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -227,7 +227,6 @@ const destroy = async (req, res) => {
     if (!project) res.status(404);
     res.send(project);
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };

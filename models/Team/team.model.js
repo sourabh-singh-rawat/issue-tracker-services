@@ -2,9 +2,12 @@ import db from "../../services/db.service.js";
 
 const insertOne = ({ name, team_leader }) => {
   return db.query(
-    `INSERT INTO teams (name, team_leader) 
-     VALUES ($1, $2)
-     RETURNING *`,
+    `INSERT INTO 
+      teams (name, team_leader) 
+     VALUES 
+      ($1, $2)
+     RETURNING 
+      *`,
     [name, team_leader]
   );
 };

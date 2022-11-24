@@ -11,10 +11,6 @@ import TabPanel from "../../../../common/TabPanel";
 import { setIssueAttachments } from "../../issue.slice";
 import { ImageList, ImageListItem } from "@mui/material";
 import { uploadImage } from "../../../../configs/firebase/utils/upload-image.utils";
-import {
-  getImages,
-  getImageURL,
-} from "../../../../configs/firebase/utils/get-images.utils";
 import { useGetIssueAttachmentsQuery } from "../../issue.api";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 

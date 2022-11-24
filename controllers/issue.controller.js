@@ -24,7 +24,6 @@ const create = async (req, res) => {
 
     res.send(issue);
   } catch (error) {
-    console.log(error);
     return res.status(500).send();
   }
 };
@@ -46,7 +45,6 @@ const createComment = async (req, res) => {
 
     res.send(comment);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -130,7 +128,6 @@ const index = async (req, res) => {
 
     res.send({ rows: issues, rowCount: rowCount });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -176,7 +173,6 @@ const indexTasks = async (req, res) => {
     });
     res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -186,7 +182,6 @@ const indexStatus = async (req, res) => {
     const issueStatus = await IssueStatus.find();
     res.send({ rows: issueStatus.rows, rowCount: issueStatus.rowCount });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -222,7 +217,6 @@ const update = async (req, res) => {
     const issue = (await Issue.updateOne(id, req.body)).rows[0];
     return res.send(issue);
   } catch (error) {
-    console.log(error);
     return res.status(500).send();
   }
 };

@@ -2,19 +2,39 @@ import db from "../../services/db.service.js";
 
 const insertOne = (name, email, uid) => {
   return db.query(
-    `INSERT INTO users (name, email, uid) 
-     VALUES ($1, $2, $3)
+    `INSERT INTO 
+      users (name, email, uid) 
+     VALUES 
+      ($1, $2, $3)
      RETURNING *`,
     [name, email, uid]
   );
 };
 
 const findOne = (uid) => {
-  return db.query(`SELECT * FROM users WHERE uid=$1`, [uid]);
+  return db.query(
+    `
+    SELECT 
+      * 
+    FROM 
+      users 
+    WHERE 
+      uid=$1`,
+    [uid]
+  );
 };
 
 const findOneByEmail = (email) => {
-  return db.query(`SELECT * FROM users WHERE email ILIKE $1`, [email]);
+  return db.query(
+    `
+    SELECT 
+      * 
+    FROM 
+      users 
+    WHERE 
+      email ILIKE $1`,
+    [email]
+  );
 };
 
 const updateOne = ({ id, document }) => {
@@ -30,7 +50,15 @@ const updateOne = ({ id, document }) => {
 };
 
 const deleteOne = (uid) => {
-  return db.query(`DELETE FROM users WHERE uid = $1 RETURNING *`, [uid]);
+  return db.query(
+    `
+    DELETE FROM
+      users 
+    WHERE 
+      uid = $1
+    RETURNING *`,
+    [uid]
+  );
 };
 
 export default {

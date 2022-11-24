@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS users (
 -- Creates a table for projects
 CREATE TABLE IF NOT EXISTS projects (
   id UUID DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) NOT NULL,
-  description VARCHAR(255) NOT NULL,
+  name VARCHAR(255) DEFAULT 'Untitled Project',
+  description VARCHAR(4000),
   status UUID,
   owner_id UUID,
   start_date TIMESTAMP WITH TIME ZONE,
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS project_members (
 -- Creates a table for issues
 CREATE TABLE IF NOT EXISTS issues (
   id UUID DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) 'Untitled Issue',
   description VARCHAR(4000),
   status UUID,
   priority UUID,

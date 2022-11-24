@@ -35,15 +35,23 @@ const find = ({ issue_id }) => {
     JOIN
       users ON users.id = project_members.member_id
     WHERE issue_id=$1
-    ORDER BY issue_comments.created_at DESC`,
+    ORDER BY issue_comments.created_at DESC
+    `,
     [issue_id]
   );
 };
 
 const rowCount = (issueId) => {
-  return db.query(`SELECT COUNT(id) FROM issue_comments WHERE issue_id=$1`, [
-    issueId,
-  ]);
+  return db.query(
+    `
+    SELECT 
+      COUNT(id) 
+    FROM 
+      issue_comments 
+    WHERE 
+      issue_id=$1`,
+    [issueId]
+  );
 };
 
 const updateOne = ({ commentId, description }) => {
