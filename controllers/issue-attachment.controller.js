@@ -19,7 +19,6 @@ const create = async (req, res) => {
 
     res.send(attachment);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -32,7 +31,6 @@ const index = async (req, res) => {
 
     res.send({ rows: attachments.rows, rowCount: attachments.rows.length });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

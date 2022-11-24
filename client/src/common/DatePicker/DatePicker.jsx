@@ -37,10 +37,10 @@ const DatePicker = ({
 }) => {
   return (
     <Fragment>
-      {title && isLoading ? (
+      {isLoading ? (
         <MuiSkeleton width="20%" />
       ) : (
-        <Label title={title} />
+        title && <Label title={title} />
       )}
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
         {isLoading ? (

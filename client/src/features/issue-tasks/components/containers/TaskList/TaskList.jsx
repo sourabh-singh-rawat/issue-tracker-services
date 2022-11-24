@@ -6,7 +6,7 @@ import MuiLinearProgress from "@mui/material/LinearProgress";
 import Task from "../Task";
 import AddTask from "../AddTask";
 
-const TaskList = ({ rows, rowCount, isLoading }) => {
+const TaskList = ({ rows, isLoading }) => {
   return (
     <MuiGrid item xs={12}>
       {isLoading ? (

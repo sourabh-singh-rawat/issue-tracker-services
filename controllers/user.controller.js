@@ -19,7 +19,6 @@ const create = async (req, res) => {
     const createdUser = (await User.insertOne(name, email, uid)).rows[0];
     res.send(createdUser);
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };

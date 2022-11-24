@@ -1,7 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase.config";
+import { verifyToken } from "./verify-token.utils";
 import { storeUserInfoInDatabase } from "./database.utils";
-import { verifyToken } from "./auth.utils";
 
 export const continueWithGoogle = async (inviteToken) => {
   const provider = new GoogleAuthProvider();

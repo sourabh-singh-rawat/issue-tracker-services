@@ -12,7 +12,6 @@ const create = async (req, res) => {
 
     res.send(team);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
@@ -54,7 +53,7 @@ const show = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const team = (await Team.findOne(id)).rows[0];
+    const team = (await Team.findOne(id)).rows[w0];
 
     if (!team) res.status(404).send();
 

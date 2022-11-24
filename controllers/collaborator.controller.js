@@ -12,7 +12,6 @@ const index = async (req, res) => {
       rowCount: peopleRelatedToUid.rowCount,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };
