@@ -20,8 +20,8 @@ const StyledDatePicker = styled(MuiDatePicker)(({ theme }) => {
       fontSize: "14px",
       fontWeight: 500,
       textTransform: "capitalize",
-      borderRadius: "6px",
       backgroundColor: theme.palette.grey[200],
+      borderRadius: "2em",
     },
   };
 });

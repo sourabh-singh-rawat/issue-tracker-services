@@ -13,7 +13,7 @@ const findOne = ({ member_id }) => {
   );
 };
 
-const insertOne = ({ project_id, member_id, member_role }) => {
+const insertOne = ({ projectId, memberId, roleId }) => {
   return db.query(
     `
     INSERT INTO 
@@ -21,7 +21,7 @@ const insertOne = ({ project_id, member_id, member_role }) => {
     VALUES 
       ($1, $2, $3)
     RETURNING *`,
-    [project_id, member_id, member_role]
+    [projectId, memberId, roleId]
   );
 };
 

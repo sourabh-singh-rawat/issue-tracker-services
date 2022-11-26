@@ -34,7 +34,7 @@ const index = async (req, res) => {
 
     res.send({ rows: teams, rowCount: 0 });
   } catch (error) {
-    res.send(500);
+    res.status(500).send();
   }
 };
 
@@ -53,13 +53,13 @@ const show = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const team = (await Team.findOne(id)).rows[w0];
+    const team = (await Team.findOne(id)).rows[0];
 
     if (!team) res.status(404).send();
 
     res.send(team);
   } catch (error) {
-    res.send(500);
+    res.status(500).send();
   }
 };
 

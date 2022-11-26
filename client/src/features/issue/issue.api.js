@@ -40,6 +40,7 @@ const issueApiSlice = apiSlice.injectEndpoints({
           body,
         };
       },
+      invalidatesTags: ["IssueList"],
     }),
   }),
 });

@@ -47,17 +47,18 @@ const Select = ({ title, items, helperText, ...otherProps }) => {
           sx={{ color: "text.primary", fontSize: "14px", fontWeight: 600 }}
           {...otherProps}
         >
-          {items.map(({ code, message }, index) => (
+          {items.map(({ id, name }, index) => (
             <MuiMenuItem
-              key={code}
-              value={code}
+              key={id}
+              value={id}
               sx={{
                 color: "text.primary",
+                textTransform: "capitalize",
                 fontSize: "14px",
                 fontWeight: 600,
               }}
             >
-              {message.toUpperCase()}
+              {name}
             </MuiMenuItem>
           ))}
         </StyledSelect>

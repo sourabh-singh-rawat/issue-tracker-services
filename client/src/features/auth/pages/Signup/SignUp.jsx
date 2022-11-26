@@ -47,54 +47,6 @@ const SignUp = () => {
       <MuiGrid item md={5} xs={12}>
         <MuiContainer maxWidth="xs">
           <MuiGrid container rowSpacing={4}>
-            {/* Sign up title */}
-            {/* <MuiGrid item xs={12}>
-              <MuiGrid container sx={{ marginTop: 8 }} rowSpacing={1}>
-                <MuiGrid item>
-                  <MuiTypography variant="h3" fontWeight="bold">
-                    Create Account
-                  </MuiTypography>
-                </MuiGrid>
-                <MuiGrid item>
-                  <MuiTypography variant="body2">
-                    Create account & start creating projects to track issues.
-                  </MuiTypography>
-                </MuiGrid>
-              </MuiGrid>
-            </MuiGrid> */}
-            {/* sign up with email */}
-            {/* <MuiGrid item xs={12}>
-              <MuiGrid container component="form" rowSpacing={2}>
-                <MuiGrid item xs={12}>
-                  <TextField
-                    title="Name*"
-                    name="displayName"
-                    type="text"
-                    required
-                  />
-                </MuiGrid>
-                <MuiGrid item xs={12}>
-                  <TextField title="Email*" name="email" required />
-                </MuiGrid>
-                <MuiGrid item xs={12}>
-                  <TextField
-                    title="Password*"
-                    name="password"
-                    type="password"
-                    helperText="password should atleast be 8 characters long"
-                    required
-                  />
-                </MuiGrid>
-                <MuiGrid item xs={12}>
-                  <StyledButton>
-                    <MuiTypography variant="body2">
-                      Create Account
-                    </MuiTypography>
-                  </StyledButton>
-                </MuiGrid>
-              </MuiGrid>
-            </MuiGrid> */}
-            {/* continue with google */}
             <MuiGrid item xs={12}>
               <Divider>
                 <MuiTypography variant="body2">or</MuiTypography>

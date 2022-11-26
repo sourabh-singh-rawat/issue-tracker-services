@@ -30,9 +30,9 @@ const style = {
 
 const InviteButton = () => {
   const dispatch = useDispatch();
-  const roles = useGetRolesQuery();
-  const memberRoles = useSelector((store) => store.project.options.roles.rows);
   const { id } = useParams();
+  const memberRoles = useSelector((store) => store.project.options.roles.rows);
+  const roles = useGetRolesQuery();
   const [sendInvite] = useSendInviteMutation();
 
   const [open, setOpen] = useState(false);
@@ -41,7 +41,11 @@ const InviteButton = () => {
 
   const [members, setMembers] = useState([]);
 
-  const [formFields, setFormFields] = useState({ email: "", role: "MEMBER" });
+  const [formFields, setFormFields] = useState({
+    email: "",
+    role_id: "",
+  });
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setMembers([value]);
@@ -104,7 +108,7 @@ const InviteButton = () => {
             </MuiGrid>
             <MuiGrid item xs={4}>
               <Select
-                name="role"
+                name="role_id"
                 title="Role"
                 items={memberRoles}
                 value={formFields.role}

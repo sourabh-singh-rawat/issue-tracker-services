@@ -14,16 +14,16 @@ const ProjectMembers = () => {
   return (
     <TabPanel index={2} selectedTab={selectedTab}>
       <MuiGrid container>
-        <MuiGrid item>
+        <MuiGrid item xs={12}>
           <MuiGrid container spacing={2}>
-            <MuiGrid item xs={8} md={10} display="flex">
+            <MuiGrid item flexGrow={1}>
               <Typography variant="body2">
                 Project Members have varying levels of access to projects based
                 on their Roles, which are set when adding new members and can be
                 edited any time.
               </Typography>
             </MuiGrid>
-            <MuiGrid item xs={4} md={2}>
+            <MuiGrid item>
               <InviteButton />
             </MuiGrid>
           </MuiGrid>

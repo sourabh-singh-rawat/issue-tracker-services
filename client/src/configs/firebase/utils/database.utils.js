@@ -1,4 +1,5 @@
 export const storeUserInfoInDatabase = async (user) => {
+  console.log(user);
   const { uid, name, displayName, email, photoURL } = user;
 
   try {

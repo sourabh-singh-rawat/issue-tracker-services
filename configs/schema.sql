@@ -9,7 +9,8 @@ DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 GRANT ALL ON SCHEMA public TO postgres;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   
+-- [x] Create extension for uuid generation  
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- [ ] user_notification_types
 -- [ ] user_achievement_types
@@ -138,7 +139,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Creates a table for projects
 CREATE TABLE IF NOT EXISTS projects (
   id UUID DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) DEFAULT 'Untitled Project',
+  name VARCHAR(255) DEFAULT 'Untitled',
   description VARCHAR(4000),
   status UUID,
   owner_id UUID,
@@ -166,13 +167,15 @@ CREATE TABLE IF NOT EXISTS project_members (
   PRIMARY KEY (id),
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
   FOREIGN KEY (member_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (member_role) REFERENCES project_member_roles(id)
+  FOREIGN KEY (member_role) REFERENCES project_member_roles(id),
+  
+  UNIQUE (project_id, member_id)
 );
 
 -- Creates a table for issues
 CREATE TABLE IF NOT EXISTS issues (
   id UUID DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) 'Untitled Issue',
+  name VARCHAR(255) DEFAULT 'Untitled',
   description VARCHAR(4000),
   status UUID,
   priority UUID,

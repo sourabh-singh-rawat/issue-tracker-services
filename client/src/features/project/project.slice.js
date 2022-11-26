@@ -40,11 +40,11 @@ const initialState = {
   options: {
     status: {
       isLoading: true,
-      rows: [{ name: "", description: "" }],
+      rows: [{ id: "", name: "", description: "" }],
     },
     roles: {
       isLoading: true,
-      rows: [{ name: "", description: "" }],
+      rows: [{ id: "", name: "", description: "" }],
     },
   },
 };

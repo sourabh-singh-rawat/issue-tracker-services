@@ -120,11 +120,6 @@ const Sidebar = () => {
               text: "People",
               icon: <MuiHandshakeIcon sx={iconStyles} />,
             },
-            {
-              to: "/settings",
-              text: "Settings",
-              icon: <MuiSettingsOutlinedIcon sx={iconStyles} />,
-            },
           ].map(({ text, ...otherProps }) => {
             return (
               <SidebarListItem
@@ -148,6 +143,11 @@ const Sidebar = () => {
               to: "/tasks",
               text: "Tasks",
               icon: <MuiTaskOutlinedIcon sx={iconStyles} />,
+            },
+            {
+              to: "/settings",
+              text: "Settings",
+              icon: <MuiSettingsOutlinedIcon sx={iconStyles} />,
             },
           ].map(({ text, ...otherProps }) => {
             return (
