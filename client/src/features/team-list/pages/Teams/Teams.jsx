@@ -5,6 +5,7 @@ import MuiGrid from "@mui/material/Grid";
 import Add from "@mui/icons-material/Add";
 
 import SectionHeader from "../../../../common/SectionHeader";
+import PrimaryButton from "../../../../common/PrimaryButton";
 
 const Teams = () => {
   const { pathname } = useLocation();
@@ -18,14 +19,10 @@ const Teams = () => {
             title="Teams"
             subtitle="Create teams to organize people involved with your project."
             actionButton={
-              <MuiButton
-                variant="contained"
-                sx={{ textTransform: "none", fontWeight: 600 }}
-                startIcon={<Add />}
+              <PrimaryButton
+                label="Create Team"
                 onClick={() => navigate("/teams/new")}
-              >
-                Create Team
-              </MuiButton>
+              />
             }
           />
         </MuiGrid>

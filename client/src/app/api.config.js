@@ -5,9 +5,9 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const store = getState();
-    const token = store.auth.accessToken;
+    const accessToken = store.auth.accessToken;
 
-    if (token) headers.set("Authorization", `Bearer ${token}`);
+    if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
     return headers;
   },
 });

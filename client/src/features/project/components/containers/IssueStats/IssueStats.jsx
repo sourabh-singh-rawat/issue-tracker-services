@@ -1,4 +1,5 @@
 import MuiGrid from "@mui/material/Grid";
+import { theme } from "../../../../../app/mui.config";
 
 import IssueCard from "../../../../../common/IssueCard";
 
@@ -11,14 +12,21 @@ const IssueStats = ({ issuesStatusCount, isLoading }) => {
   return (
     <MuiGrid
       container
-      spacing={1}
+      rowSpacing={1}
+      columnSpacing={2}
       sx={{
         marginTop: "10px",
         borderRadius: "6px",
       }}
     >
       <MuiGrid item xs={12} md={2.4}>
-        <IssueCard title="Total Issues" count={total} isLoading={isLoading} />
+        <IssueCard
+          title="Total Issues"
+          count={total}
+          isLoading={isLoading}
+          color={theme.palette.common.white}
+          backgroundColor={theme.palette.primary.main}
+        />
       </MuiGrid>
       {issuesStatusCount.map(({ id, name, count }) => {
         return (

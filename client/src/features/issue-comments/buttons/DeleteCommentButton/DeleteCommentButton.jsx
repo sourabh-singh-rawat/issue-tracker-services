@@ -10,6 +10,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
+import SecondaryButton from "../../../../common/SecondaryButton";
+
 import { setLoadingComments } from "../../../issue-comments/issue-comments.slice";
 import { useDeleteCommentMutation } from "../../../issue-comments/issue-comments.api";
 
@@ -61,21 +63,13 @@ const DeleteComment = ({ id, issue_id }) => {
           >
             Cancel
           </MuiButton>
-          <MuiButton
+          <SecondaryButton
             onClick={() => {
               handleClose();
               dispatch(setLoadingComments());
               handleDelete();
             }}
-            sx={{
-              textTransform: "none",
-              backgroundColor: "warning.main",
-              color: "white",
-              ":hover": { backgroundColor: "warning.dark" },
-            }}
-          >
-            Delete
-          </MuiButton>
+          />
         </DialogActions>
       </Dialog>
     </MuiBox>

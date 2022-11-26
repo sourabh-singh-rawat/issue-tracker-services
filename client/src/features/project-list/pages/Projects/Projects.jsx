@@ -5,6 +5,7 @@ import MuiButton from "@mui/material/Button";
 
 import MuiAddIcon from "@mui/icons-material/Add";
 
+import PrimaryButton from "../../../../common/PrimaryButton";
 import SectionHeader from "../../../../common/SectionHeader";
 
 const Projects = () => {
@@ -20,14 +21,10 @@ const Projects = () => {
             subtitle="This section contains all the projects that you have created. You can
           go to individual project to edit."
             actionButton={
-              <MuiButton
-                variant="contained"
-                startIcon={<MuiAddIcon />}
+              <PrimaryButton
+                label="Create Project"
                 onClick={() => navigate("/projects/new")}
-                sx={{ textTransform: "none", fontWeight: 600 }}
-              >
-                Create Project
-              </MuiButton>
+              />
             }
           />
         </MuiGrid>
