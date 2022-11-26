@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import errors from "../../../../app/errors";
@@ -21,6 +21,9 @@ const ProjectForm = () => {
   const navigate = useNavigate();
   const getProjectStatusQuery = useGetStatusQuery();
   const [createProject, { isSuccess, data }] = useCreateProjectMutation();
+  const defaultStatus = useSelector(
+    (store) => store.project.options.status.rows[0]
+  );
 
   const [formFields, setFormFields] = useState({
     name: {
@@ -33,10 +36,15 @@ const ProjectForm = () => {
       error: false,
       errorMessage: errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.message,
     },
-    status: "0_NOT_STARTED",
+    status: "",
     start_date: null,
     end_date: null,
   });
+
+  // running a sife effect when the defaultStatus is changed from "" to some id
+  useEffect(() => {
+    setFormFields({ ...formFields, status: defaultStatus.id });
+  }, [defaultStatus]);
 
   const handleNameChange = (e) => {
     const { name, value } = e.target;
@@ -77,8 +85,10 @@ const ProjectForm = () => {
   };
 
   useEffect(() => {
-    if (getProjectStatusQuery.isSuccess)
+    if (getProjectStatusQuery.isSuccess) {
+      setFormFields({ ...formFields, status: defaultStatus.id });
       dispatch(setStatus(getProjectStatusQuery.data));
+    }
   }, [getProjectStatusQuery.data]);
 
   useEffect(() => {
@@ -88,8 +98,10 @@ const ProjectForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formFields.name.error || formFields.description.error)
+    if (formFields.name.error || formFields.description.error) {
       return console.log("Form Field Errors");
+    }
+
     createProject({ body: formFields });
   };
 
@@ -117,7 +129,6 @@ const ProjectForm = () => {
                     ? formFields.name.errorMessage
                     : `A name for your project. Do not exceed ${errors.form.project.NAME_MAX_LENGTH_ERROR.limit} characters`
                 }
-                required
               />
             </MuiGrid>
             <MuiGrid item xs={12} sm={12} md={12}>
@@ -173,7 +184,7 @@ const ProjectForm = () => {
                 helperText="Current status of your project."
               />
             </MuiGrid>
-            <MuiGrid item md={6}></MuiGrid>
+            <MuiGrid item xs={12}></MuiGrid>
             <MuiGrid item>
               <Button
                 type="submit"

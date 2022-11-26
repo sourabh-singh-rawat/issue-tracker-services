@@ -7,7 +7,7 @@ const insertOne = ({
   status,
   priority,
   reporter_id,
-  assigned_to,
+  assignee_id,
   due_date,
   project_id,
 }) => {
@@ -27,7 +27,7 @@ const insertOne = ({
       reporter_id,
       due_date,
       project_id,
-      assigned_to,
+      assignee_id,
     ]
   );
 };

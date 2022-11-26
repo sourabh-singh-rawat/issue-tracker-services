@@ -13,10 +13,11 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => {
   return {
     "&.MuiOutlinedInput-root": {
       color: theme.palette.text.primary,
-      fontSize: "14px",
+      fontSize: "13px",
       fontWeight: 500,
       textTransform: "capitalize",
       backgroundColor: theme.palette.grey[200],
+      borderRadius: "2em",
       "& fieldset": {
         border: `2px solid ${theme.palette.grey[200]}`,
       },
@@ -56,6 +57,7 @@ const IssueAssigneeSelector = ({
             </MuiTypography>
           )}
           <StyledSelect
+            name="assignee_id"
             size="small"
             value={!value ? 0 : value}
             onChange={handleChange}
@@ -65,7 +67,7 @@ const IssueAssigneeSelector = ({
                 <MuiMenuItem
                   key={id}
                   value={id}
-                  sx={{ fontSize: "14px", fontWeight: 500 }}
+                  sx={{ fontSize: "13px", fontWeight: 500 }}
                 >
                   <MuiGrid container columnSpacing={1}>
                     <MuiGrid item>
@@ -89,7 +91,10 @@ const IssueAssigneeSelector = ({
                   <MuiAvatar sx={{ width: "20px", height: "20px" }} />
                 </MuiGrid>
                 <MuiGrid item>
-                  <MuiTypography variant="body2" fontWeight={500}>
+                  <MuiTypography
+                    variant="body2"
+                    sx={{ fontWeight: 500, fontSize: "13px" }}
+                  >
                     Unassigned
                   </MuiTypography>
                 </MuiGrid>

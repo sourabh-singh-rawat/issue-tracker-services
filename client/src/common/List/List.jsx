@@ -2,6 +2,9 @@ import { theme } from "../../app/mui.config";
 import { styled } from "@mui/material/styles";
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 import MuiLinearProgress from "@mui/material/LinearProgress";
+import suprise from "../../assets/images/astronot.mp4";
+
+import { Container } from "@mui/material";
 
 const StyledDataGrid = styled(MuiDataGrid)(({}) => {
   return {
@@ -33,6 +36,25 @@ const StyledDataGrid = styled(MuiDataGrid)(({}) => {
   };
 });
 
+function CustomNoRowsOverlay() {
+  return (
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+      }}
+    >
+      <video width="150" autoPlay muted loop>
+        <source src={suprise} type="video/mp4" />
+      </video>
+    </Container>
+  );
+}
+
 const List = ({
   rows,
   rowCount,
@@ -54,6 +76,7 @@ const List = ({
       loading={isLoading}
       components={{
         LoadingOverlay: MuiLinearProgress,
+        NoRowsOverlay: CustomNoRowsOverlay,
       }}
       rowsPerPageOptions={[10, 20, 50, 100]}
       pagination

@@ -18,9 +18,9 @@ export const continueWithGoogle = async (inviteToken) => {
         const { uid, accessToken } = user;
 
         // user signed in so add the user to project_member
-        const { toProject } = decodedToken;
+        const { projectId } = decodedToken;
         const response = await fetch(
-          `http://localhost:4000/api/projects/${toProject}/members`,
+          `http://localhost:4000/api/projects/${projectId}/members`,
           {
             method: "POST",
             headers: {
@@ -39,9 +39,9 @@ export const continueWithGoogle = async (inviteToken) => {
   } else {
     try {
       const { user } = await signInWithPopup(auth, provider);
-      console.log(user);
-
       await storeUserInfoInDatabase(user);
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error signing in user");
+    }
   }
 };

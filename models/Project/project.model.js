@@ -29,9 +29,9 @@ const insertOne = async ({
     ).rows[0];
 
     await ProjectMember.insertOne({
-      member_role: "8b9ee047-bbdd-4ebe-a2d0-81449cda0fb7",
-      project_id: project.id,
-      member_id: id,
+      roleId: "4ec42643-5f08-4ed2-8f39-b4ab2e969a1d",
+      projectId: project.id,
+      memberId: id,
     });
 
     await db.query("COMMIT");

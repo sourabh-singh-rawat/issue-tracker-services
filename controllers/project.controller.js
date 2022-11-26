@@ -39,14 +39,17 @@ const create = async (req, res) => {
  * @returns -- newly created member
  */
 const createMember = async (req, res) => {
-  const { uid, toProject } = req.body;
+  const { uid, projectId, roleId } = req.body;
 
   try {
     const { id } = (await User.findOne(uid)).rows[0];
-    const response = (await ProjectMember.insertOne(toProject, id)).rows[0];
+    const response = (
+      await ProjectMember.insertOne({ projectId, memberId: id, roleId })
+    ).rows[0];
 
     res.send(response);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };
@@ -57,14 +60,23 @@ const createMember = async (req, res) => {
  */
 const invite = async (req, res) => {
   const { user_id } = req.user;
-  const { email, role } = req.body;
+  const { email, role_id } = req.body;
   const { id } = req.params;
 
+  const tokenMessage = {
+    invitationTo: email,
+    projectId: id,
+    invitedBy: user_id,
+    roleId: role_id,
+  };
+
+  const tokenOptions = {
+    algorithm: "HS256",
+    expiresIn: "1d",
+  };
+
   try {
-    const token = jwt.sign(
-      { inviteEmail: email, assignRole: role, toProject: id, by: user_id },
-      process.env.JWT_SECRET
-    );
+    const token = jwt.sign(tokenMessage, process.env.JWT_SECRET, tokenOptions);
 
     // send invite link to email
     const msg = {
@@ -72,7 +84,14 @@ const invite = async (req, res) => {
       from: "sourabh.rawatcc@gmail.com", // Change to your verified sender
       subject: "Test: Issue Tracker Member Invitation",
       text: `You are invited to ${id} by ${email}`,
-      html: `<strong>Click the link to accept invite: <a href="http://localhost:4000/api/projects/${id}/members/confirm?inviteToken=${token}">${token}</a></strong>`,
+      html: `
+        <strong>
+          <p>You are invited to Project: ${id} by ${email}</p>
+        </strong>
+        <a href="http://localhost:4000/api/projects/${id}/members/confirm?inviteToken=${token}">
+          Click to Accept Invite
+        </a>
+      `,
     };
 
     await sgMail.send(msg);

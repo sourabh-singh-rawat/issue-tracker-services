@@ -35,4 +35,8 @@ const index = async (req, res) => {
   }
 };
 
-export default { create, index };
+const destroy = async (req, res) => {
+  // TO DO
+};
+
+export default { create, index, destroy };

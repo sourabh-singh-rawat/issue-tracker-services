@@ -47,7 +47,7 @@ const IssueForm = () => {
     status: "",
     priority: "",
     due_date: null,
-    assigned_to: null,
+    assignee_id: null,
     project_id: "",
   });
 
@@ -82,6 +82,8 @@ const IssueForm = () => {
     const { data } = await createIssue({ body: formFields });
     navigate(`/issues/${data.id}/overview`);
   };
+
+  console.log(formFields);
 
   return (
     <MuiGrid container gap="20px">
@@ -161,8 +163,9 @@ const IssueForm = () => {
                 isLoading={project.isLoading}
                 projectMembers={members.rows}
                 handleChange={(e) => {
-                  console.log(e.target);
-                  dispatch(updateIssue({ assignee_id: e.target.value }));
+                  const { value } = e.target;
+                  setFormFields({ ...formFields, assignee_id: value });
+                  dispatch(updateIssue({ assignee_id: value }));
                 }}
               />
             </MuiGrid>
