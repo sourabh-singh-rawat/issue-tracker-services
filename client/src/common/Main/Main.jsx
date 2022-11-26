@@ -39,10 +39,9 @@ const Main = () => {
   return (
     <Fragment>
       <Sidebar />
-      <MuiBox sx={{ flexGrow: 1, padding: "30px" }}>
+      <MuiBox sx={{ flexGrow: 1, padding: "30px", height: "100%" }}>
         <MuiToolbar variant="dense" />
         <Outlet />
-
         <SnackBar />
       </MuiBox>
     </Fragment>

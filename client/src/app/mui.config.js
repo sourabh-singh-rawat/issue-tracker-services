@@ -3,10 +3,10 @@ import { createTheme } from "@mui/material";
 const themeConfig = {
   palette: {
     primary: {
-      main: "#3a3ece",
+      main: "#2559f8",
       onPrimary: "#FFFFFF",
       container: "#EADDFF",
-      dark: "#21005D",
+      dark: "#0d309a",
     },
     secondary: {
       main: "#625B71",
@@ -34,16 +34,16 @@ const themeConfig = {
     },
     outline: {
       main: "#79747E",
-      surfaceVariant: "#E7E0EC",
+      surfaceVariant: "#e1edfe",
       onSurfaceVariant: "#49454F",
     },
     warning: {
-      main: "#FF6700",
-      dark: "#F56200",
+      main: "#f6381f",
+      dark: "#c32c18",
     },
     background: {
       paper: "#FFF",
-      default: "#FFF",
+      default: "#f2f5fa",
     },
     action: {
       hover: "#EEEEEE",

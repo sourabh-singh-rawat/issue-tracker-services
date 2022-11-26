@@ -5,6 +5,7 @@ import MuiButton from "@mui/material/Button";
 import MuiAddIcon from "@mui/icons-material/Add";
 
 import SectionHeader from "../../../../common/SectionHeader";
+import PrimaryButton from "../../../../common/PrimaryButton";
 
 const Issues = () => {
   const navigate = useNavigate();
@@ -18,14 +19,10 @@ const Issues = () => {
             title="Issues"
             subtitle="All the issues assgined to you or created by you."
             actionButton={
-              <MuiButton
-                variant="contained"
-                startIcon={<MuiAddIcon />}
+              <PrimaryButton
+                label="Create Issue"
                 onClick={() => navigate("/issues/new")}
-                sx={{ textTransform: "none", fontWeight: 600 }}
-              >
-                Create Issue
-              </MuiButton>
+              />
             }
           />
         </MuiGrid>

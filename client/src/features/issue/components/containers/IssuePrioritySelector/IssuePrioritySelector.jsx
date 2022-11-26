@@ -16,7 +16,7 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => {
       fontSize: "13px",
       fontWeight: 500,
       textTransform: "capitalize",
-      borderRadius: "2em",
+      borderRadius: "8px",
       backgroundColor: theme.palette.grey[200],
       "& fieldset": {
         border: `2px solid ${theme.palette.grey[200]}`,

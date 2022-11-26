@@ -5,6 +5,7 @@ import MuiButton from "@mui/material/Button";
 import MuiAddIcon from "@mui/icons-material/Add";
 
 import SectionHeader from "../../../../common/SectionHeader";
+import PrimaryButton from "../../../../common/PrimaryButton";
 
 const Collaborators = () => {
   const navigate = useNavigate();
@@ -18,14 +19,10 @@ const Collaborators = () => {
             title="Colaborators"
             subtitle="This section contains all the collaborators that work with you."
             actionButton={
-              <MuiButton
-                variant="contained"
-                startIcon={<MuiAddIcon />}
+              <PrimaryButton
+                label="Invite"
                 onClick={() => navigate("/projects/new")}
-                sx={{ textTransform: "none", fontWeight: 600 }}
-              >
-                Invite
-              </MuiButton>
+              />
             }
           />
         </MuiGrid>

@@ -21,7 +21,6 @@ const StyledDatePicker = styled(MuiDatePicker)(({ theme }) => {
       fontWeight: 500,
       textTransform: "capitalize",
       backgroundColor: theme.palette.grey[200],
-      borderRadius: "2em",
     },
   };
 });
