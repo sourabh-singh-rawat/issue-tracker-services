@@ -1,7 +1,7 @@
 import MuiButton from "@mui/material/Button";
 import { theme } from "../../app/mui.config";
 
-const DeleteButton = ({ onClick }) => {
+const SecondaryButton = ({ label, onClick }) => {
   return (
     <MuiButton
       onClick={onClick}
@@ -12,9 +12,9 @@ const DeleteButton = ({ onClick }) => {
         ":hover": { backgroundColor: theme.palette.warning.dark },
       }}
     >
-      Delete
+      {label}
     </MuiButton>
   );
 };
 
-export default DeleteButton;
+export default SecondaryButton;
