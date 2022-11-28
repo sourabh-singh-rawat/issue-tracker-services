@@ -10,7 +10,7 @@ const issueApiSlice = apiSlice.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["IssueList"],
+      invalidatesTags: ["IssueStats", "IssueList"],
     }),
     getIssue: build.query({
       query: (id) => {
@@ -40,7 +40,7 @@ const issueApiSlice = apiSlice.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["IssueList"],
+      invalidatesTags: ["IssueList", "IssueStats"],
     }),
   }),
 });

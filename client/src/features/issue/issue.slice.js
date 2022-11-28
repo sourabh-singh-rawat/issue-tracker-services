@@ -19,11 +19,11 @@ const initialState = {
   },
   options: {
     status: {
-      rows: [{ id: "3afb292b-64b1-4bda-9218-6ce799cb41bf", name: "Lowest" }],
+      rows: [{ id: "" }],
       isLoading: true,
     },
     priority: {
-      rows: [{ id: "250c0236-5729-44a9-990a-6d56f882ba9d", name: "To Do" }],
+      rows: [{ id: "" }],
       isLoading: true,
     },
   },
