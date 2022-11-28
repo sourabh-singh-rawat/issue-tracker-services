@@ -13,12 +13,16 @@ import MuiMenuItem from "@mui/material/MenuItem";
 import { setSnackbarOpen } from "../../../../snackbar.reducer";
 import { useDeleteProjectMutation } from "../../../../project/project.api";
 import { setLoadingProjectList } from "../../../project-list.slice";
+import SecondaryButton from "../../../../../common/SecondaryButton/SecondaryButton";
+import CancelButton from "../../../../../common/CancelButton";
 
 const DeleteProject = ({ id }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const [deleteProject, { isSuccess }] = useDeleteProjectMutation();
 
@@ -32,28 +36,24 @@ const DeleteProject = ({ id }) => {
         <MuiTypography variant="body2">Delete</MuiTypography>
       </MuiMenuItem>
       <MuiDialog open={open} onClose={handleClose}>
-        <MuiDialogTitle>
-          Are you sure you want to delete this project?
-        </MuiDialogTitle>
+        <MuiDialogTitle>Delete Project?</MuiDialogTitle>
         <MuiDialogContent>
           <MuiDialogContentText component="div">
             <MuiTypography variant="body2">
-              Deleting a project is irreversible
+              Once the project is deleted, it cannot be recovered.
             </MuiTypography>
           </MuiDialogContentText>
         </MuiDialogContent>
         <MuiDialogActions>
-          <MuiButton onClick={handleClose}>Cancel</MuiButton>
-          <MuiButton
+          <CancelButton label="Cancel" onClick={handleClose} />
+          <SecondaryButton
+            label="Delete"
             onClick={() => {
               handleClose();
               dispatch(setLoadingProjectList());
               deleteProject({ id });
             }}
-            autoFocus
-          >
-            Delete
-          </MuiButton>
+          />
         </MuiDialogActions>
       </MuiDialog>
     </Fragment>

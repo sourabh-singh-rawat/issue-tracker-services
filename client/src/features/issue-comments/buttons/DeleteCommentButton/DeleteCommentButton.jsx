@@ -14,6 +14,7 @@ import SecondaryButton from "../../../../common/SecondaryButton";
 
 import { setLoadingComments } from "../../../issue-comments/issue-comments.slice";
 import { useDeleteCommentMutation } from "../../../issue-comments/issue-comments.api";
+import CancelButton from "../../../../common/CancelButton/CancelButton";
 
 const DeleteComment = ({ id, issue_id }) => {
   const dispatch = useDispatch();
@@ -48,22 +49,14 @@ const DeleteComment = ({ id, issue_id }) => {
         <DialogContent>
           <DialogContentText>
             <MuiTypography variant="body2" component="span">
-              This action is irreversible
+              Once the comments is deleted, it cannot be recovered.
             </MuiTypography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <MuiButton
-            onClick={handleClose}
-            sx={{
-              textTransform: "none",
-              color: "text.primary",
-              ":hover": { backgroundColor: "action.hover" },
-            }}
-          >
-            Cancel
-          </MuiButton>
+          <CancelButton label="Cancel" onClick={handleClose} />
           <SecondaryButton
+            label="Detete"
             onClick={() => {
               handleClose();
               dispatch(setLoadingComments());
