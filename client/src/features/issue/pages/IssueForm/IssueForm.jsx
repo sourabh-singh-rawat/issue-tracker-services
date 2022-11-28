@@ -12,13 +12,14 @@ import TextField from "../../../../common/TextField";
 import DatePicker from "../../../../common/DatePicker";
 import SectionHeader from "../../../../common/SectionHeader";
 
+import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
 import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
-import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 
 import { useCreateIssueMutation } from "../../issue.api";
 import { useGetProjectMembersQuery } from "../../../project/project.api";
 import { useGetProjectsQuery } from "../../../project-list/project-list.api";
+
 import { updateIssue } from "../../issue.slice";
 import { setMembers } from "../../../project/project.slice";
 
@@ -26,24 +27,6 @@ const IssueForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const user = useSelector((store) => store.auth.user);
-  const project = useSelector((store) => store.project.settings);
-  const members = useSelector((store) => store.project.members);
-  const issue = useSelector((store) => store.issue.info);
-  const defaultStatus = useSelector(
-    (store) => store.issue.options.status.rows[0]
-  );
-  const defaultPriority = useSelector(
-    (store) => store.issue.options.priority.rows[0]
-  );
-
-  const getProjectsQuery = useGetProjectsQuery({
-    page: 0,
-    pageSize: 10,
-    sortBy: "created_at:desc",
-  });
-  const [createIssue] = useCreateIssueMutation();
 
   const [projects, setProjects] = useState([]);
   const [formFields, setFormFields] = useState({
@@ -56,39 +39,26 @@ const IssueForm = () => {
     project_id: "",
   });
 
+  const user = useSelector((store) => store.auth.user);
+  const status = useSelector((store) => store.issue.options.status);
+  const priority = useSelector((store) => store.issue.options.priority);
+  const project = useSelector((store) => store.project.settings);
+  const members = useSelector((store) => store.project.members);
+
+  const [createIssue] = useCreateIssueMutation();
+  const getProjectsQuery = useGetProjectsQuery({
+    page: 0,
+    pageSize: 10,
+    sortBy: "created_at:desc",
+  });
   const getProjectMembersQuery = useGetProjectMembersQuery(
     formFields.project_id
   );
 
-  // Side Effects
-  useEffect(() => {
-    setFormFields({
-      ...formFields,
-      status: defaultStatus.id,
-      priority: defaultPriority.id,
-    });
-  }, [defaultPriority, defaultStatus, formFields]);
-
-  useEffect(() => {
-    if (getProjectMembersQuery.isSuccess) {
-      dispatch(setMembers(getProjectMembersQuery.data));
-    }
-  }, [getProjectMembersQuery.data]);
-
-  useEffect(() => {
-    if (getProjectsQuery.isSuccess) setProjects(getProjectsQuery.data.rows);
-  }, [getProjectsQuery.data]);
-
-  useEffect(() => {
-    setFormFields({
-      ...formFields,
-      project_id: project.id,
-    });
-  }, [project]);
-
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+
     setFormFields({ ...formFields, [name]: value, uid: user.uid });
   };
 
@@ -98,6 +68,43 @@ const IssueForm = () => {
     const { data } = await createIssue({ body: formFields });
     navigate(`/issues/${data.id}/overview`);
   };
+
+  // once the project(s) are recieved from the server,
+  // store the project(s) in the redux store.
+  useEffect(() => {
+    if (getProjectsQuery.isSuccess) {
+      setProjects(getProjectsQuery.data.rows);
+    }
+  }, [getProjectsQuery.data]);
+
+  // once the project members are recieved from the server,
+  // store the project members in the redux store.
+  useEffect(() => {
+    if (getProjectMembersQuery.isSuccess) {
+      dispatch(setMembers(getProjectMembersQuery.data));
+    }
+  }, [getProjectMembersQuery.data]);
+
+  // once the project is recieved from the server,
+  // store the project in the redux store.
+  useEffect(() => {
+    setFormFields({
+      ...formFields,
+      project_id: project.id,
+    });
+  }, [project]);
+
+  // once the values of the formFields are updated,
+  // store the default status and priority in the formFields.
+  // this is done to ensure that the status and priority are
+  // not null when the Form is initially rendered.
+  useEffect(() => {
+    setFormFields({
+      ...formFields,
+      status: status.rows[0].id,
+      priority: priority.rows[0].id,
+    });
+  }, [formFields]);
 
   return (
     <MuiGrid container gap="20px">

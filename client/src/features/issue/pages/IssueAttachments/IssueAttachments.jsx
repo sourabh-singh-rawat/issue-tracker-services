@@ -2,16 +2,19 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext, useParams } from "react-router-dom";
 
+import { uploadImage } from "../../../../configs/firebase/utils/upload-image.utils";
+
 import MuiBox from "@mui/material/Box";
 import MuiInput from "@mui/material/Input";
 import MuiButton from "@mui/material/Button";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 import TabPanel from "../../../../common/TabPanel";
 
-import { setIssueAttachments } from "../../issue.slice";
-import { ImageList, ImageListItem } from "@mui/material";
-import { uploadImage } from "../../../../configs/firebase/utils/upload-image.utils";
 import { useGetIssueAttachmentsQuery } from "../../issue.api";
+
+import { setIssueAttachments } from "../../issue.slice";
 import { setSnackbarOpen } from "../../../snackbar.reducer";
 
 const IssueAttachments = () => {
@@ -34,6 +37,8 @@ const IssueAttachments = () => {
     if (uploadedImage.status === 200) dispatch(setSnackbarOpen(true));
   };
 
+  // once the issue attachments are retrived from the server
+  // store them in the redux store
   useEffect(() => {
     if (getIssueAttachmentsQuery.isSuccess)
       dispatch(setIssueAttachments(getIssueAttachmentsQuery.data));

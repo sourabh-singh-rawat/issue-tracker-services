@@ -10,14 +10,16 @@ import { onAuthStateChangedListener } from "../../../../configs/firebase/firebas
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
   const inviteToken = searchParams.get("inviteToken");
 
   const handleContinueWithGoogle = async () => {
     await continueWithGoogle(inviteToken);
   };
 
+  // If the user is already loggen in, redirect to the dashboard
   useEffect(() => {
-    onAuthStateChangedListener((user) => {
+    return onAuthStateChangedListener((user) => {
       if (user) navigate("/");
     });
   }, []);
