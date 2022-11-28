@@ -30,7 +30,7 @@ const IssueStats = ({ issuesStatusCount, isLoading }) => {
       </MuiGrid>
       {issuesStatusCount.map(({ id, name, count }) => {
         return (
-          <MuiGrid item key={id} xs={6} sm={6} md={2.4}>
+          <MuiGrid item key={id} xs={6} sm={4} md={2.4}>
             <IssueCard title={name} count={count} isLoading={isLoading} />
           </MuiGrid>
         );

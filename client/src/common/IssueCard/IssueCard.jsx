@@ -37,18 +37,16 @@ const IssueCard = ({
               : theme.palette.common.white,
 
             border: `2px solid ${
-              backgroundColor
-                ? backgroundColor
-                : theme.palette.outline.surfaceVariant
+              backgroundColor ? backgroundColor : theme.palette.grey[200]
             }`,
             ":hover": {
               backgroundColor: backgroundColor
                 ? theme.palette.primary.dark
-                : theme.palette.outline.surfaceVariant,
+                : theme.palette.grey[100],
               border: `2px solid ${
                 backgroundColor
                   ? theme.palette.primary.dark
-                  : theme.palette.outline.surfaceVariant
+                  : theme.palette.grey[100]
               }`,
               boxShadow: 4,
             },
@@ -69,7 +67,7 @@ const IssueCard = ({
             </MuiTypography>
             <MuiPestControlIcon
               sx={{
-                opacity: 0.6,
+                opacity: color ? 0.6 : 0.2,
                 color: color ? color : theme.palette.text.primary,
               }}
             />
@@ -77,10 +75,10 @@ const IssueCard = ({
           <MuiGrid item xs={12}>
             <MuiTypography
               variant="h4"
-              fontWeight={400}
               sx={{
-                color: color ? color : theme.palette.text.primary,
                 fontFamily: "Roboto Mono",
+                fontWeight: 500,
+                color: color ? color : theme.palette.text.primary,
               }}
             >
               {count}

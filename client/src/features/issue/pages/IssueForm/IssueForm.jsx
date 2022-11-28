@@ -14,14 +14,13 @@ import SectionHeader from "../../../../common/SectionHeader";
 
 import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
 import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
+import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 
 import { useCreateIssueMutation } from "../../issue.api";
-import { useGetProjectsQuery } from "../../../project-list/project-list.api";
-import { useGetCollaboratorsQuery } from "../../../collaborator-list/collaborator-list.api";
-import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 import { useGetProjectMembersQuery } from "../../../project/project.api";
-import { setMembers } from "../../../project/project.slice";
+import { useGetProjectsQuery } from "../../../project-list/project-list.api";
 import { updateIssue } from "../../issue.slice";
+import { setMembers } from "../../../project/project.slice";
 
 const IssueForm = () => {
   const { id } = useParams();
@@ -32,13 +31,19 @@ const IssueForm = () => {
   const project = useSelector((store) => store.project.settings);
   const members = useSelector((store) => store.project.members);
   const issue = useSelector((store) => store.issue.info);
+  const defaultStatus = useSelector(
+    (store) => store.issue.options.status.rows[0]
+  );
+  const defaultPriority = useSelector(
+    (store) => store.issue.options.priority.rows[0]
+  );
 
-  const allProjects = useGetProjectsQuery({
+  const getProjectsQuery = useGetProjectsQuery({
     page: 0,
     pageSize: 10,
     sortBy: "created_at:desc",
   });
-  const [createIssue, { isSuccess }] = useCreateIssueMutation();
+  const [createIssue] = useCreateIssueMutation();
 
   const [projects, setProjects] = useState([]);
   const [formFields, setFormFields] = useState({
@@ -51,7 +56,18 @@ const IssueForm = () => {
     project_id: "",
   });
 
-  const getProjectMembersQuery = useGetProjectMembersQuery(project.id);
+  const getProjectMembersQuery = useGetProjectMembersQuery(
+    formFields.project_id
+  );
+
+  // Side Effects
+  useEffect(() => {
+    setFormFields({
+      ...formFields,
+      status: defaultStatus.id,
+      priority: defaultPriority.id,
+    });
+  }, [defaultPriority, defaultStatus, formFields]);
 
   useEffect(() => {
     if (getProjectMembersQuery.isSuccess) {
@@ -60,8 +76,8 @@ const IssueForm = () => {
   }, [getProjectMembersQuery.data]);
 
   useEffect(() => {
-    if (allProjects.isSuccess) setProjects(allProjects.data.rows);
-  }, [allProjects.data]);
+    if (getProjectsQuery.isSuccess) setProjects(getProjectsQuery.data.rows);
+  }, [getProjectsQuery.data]);
 
   useEffect(() => {
     setFormFields({
@@ -82,8 +98,6 @@ const IssueForm = () => {
     const { data } = await createIssue({ body: formFields });
     navigate(`/issues/${data.id}/overview`);
   };
-
-  console.log(formFields);
 
   return (
     <MuiGrid container gap="20px">
@@ -143,7 +157,7 @@ const IssueForm = () => {
                     onChange={(e, selectedProject) => {
                       setFormFields({
                         ...formFields,
-                        project_id: selectedProject.id,
+                        project_id: selectedProject?.id,
                       });
                     }}
                     getOptionLabel={(option) => {
@@ -159,8 +173,8 @@ const IssueForm = () => {
             <MuiGrid item xs={12} sm={12}>
               <IssueAssigneeSelector
                 title="Assignee"
-                value={issue.assignee_id}
-                isLoading={project.isLoading}
+                value={formFields.assignee_id}
+                isLoading={members.isLoading}
                 projectMembers={members.rows}
                 handleChange={(e) => {
                   const { value } = e.target;

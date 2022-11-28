@@ -12,7 +12,7 @@ const AvatarGroup = ({ members, total }) => {
     <StyledAvatarGroup max={5} total={total} spacing={-1}>
       {members.map((member) => {
         return (
-          <TooltipWrapper title={member.name} key={member.user_id}>
+          <TooltipWrapper title={member.name} key={member.id}>
             <MuiAvatar
               alt={member.name}
               src={member.photo_url}

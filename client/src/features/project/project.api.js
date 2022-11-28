@@ -44,7 +44,6 @@ const projectApiSlice = apiSlice.injectEndpoints({
       }) => {
         return `/issues?project_id=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}`;
       },
-      // providesTags: ["ProjectIssues"],
     }),
     getProjectMembers: build.query({
       query: (id) => {
@@ -55,6 +54,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
       query: (id) => {
         return `/projects/${id}/issuesStatusCount`;
       },
+      providesTags: ["IssueStats"],
     }),
     updateProject: build.mutation({
       query: ({ id, body }) => {
