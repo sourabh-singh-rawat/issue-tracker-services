@@ -1,5 +1,8 @@
 import dotenv from "dotenv/config";
+import sgMail from "@sendgrid/mail";
 
 const sendGridConfig = process.env.SENDGRID_API_KEY;
 
-export default sendGridConfig;
+sgMail.setApiKey(sendGridConfig);
+
+export default sgMail;

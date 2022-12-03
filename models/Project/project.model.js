@@ -1,50 +1,74 @@
-import db from "../../services/db.service.js";
+import db from "../../configs/db.config.js";
 import { selectProjectsQuery } from "./utils/select-projects-query.utils.js";
 import ProjectMember from "../../models/project-member/project-member.model.js";
+import projectMemberRole from "../project-member-roles/project-member-roles.model.js";
 
+/**
+ * Adds a new project to the database
+ * @param {Object} project - The project to be added. Takes the following properties:
+ * - id: the id of the user creating the project
+ * - name: the name of the project
+ * - description: the description of the project
+ * - status: the status of the project
+ * - start_date: the start date of the project
+ * - end_date: the end date of the project
+ * @returns {Promise} A promise that resolves to the newly added project.
+ */
 const insertOne = async ({
   id,
   name,
   description,
-  start_date,
-  end_date,
   status,
+  startDate,
+  endDate,
 }) => {
   const pool = await db.connect();
   try {
     await db.query("BEGIN");
 
-    const project = (
+    // Insert project into projects table
+    // TODO: Add a check to make sure the user is not already a member of the project
+    const createdProject = (
       await db.query(
         ` 
         INSERT INTO projects
-          (name, description, status, owner_id, start_date, end_date)
+          (owner_id, name, description, status, start_date, end_date)
         VALUES
           ($1, $2, $3, $4, $5, $6)
         RETURNING
           *
         `,
-        [name, description, status, id, start_date, end_date]
+        [id, name, description, status, startDate, endDate]
       )
     ).rows[0];
 
+    // Select default project member role
+    const defaultRole = (await projectMemberRole.find()).rows[0].id;
+
+    // Insert project owner into project_members table
     await ProjectMember.insertOne({
-      roleId: "4ec42643-5f08-4ed2-8f39-b4ab2e969a1d",
-      projectId: project.id,
+      roleId: defaultRole,
+      projectId: createdProject.id,
       memberId: id,
     });
 
     await db.query("COMMIT");
 
-    return project;
+    return createdProject;
   } catch (error) {
     await db.query("ROLLBACK");
-    throw error;
+
+    return error;
   } finally {
     pool.release();
   }
 };
 
+/**
+ * Finds all projects in the database
+ * @param {Object} options
+ * @returns {Promise} A promise that resolves to an array of projects
+ */
 const find = (options) => {
   const { query, colValues } = selectProjectsQuery(options);
   return db.query(query, colValues);
@@ -72,6 +96,11 @@ const updateOne = (id, project) => {
   return db.query(query, Object.values(project));
 };
 
+/**
+ * Deletes a project from the database
+ * @param {*} id
+ * @returns {Promise} A promise that resolves to the deleted project
+ */
 const deleteOne = (id) => {
   return db.query(
     `

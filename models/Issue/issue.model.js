@@ -1,4 +1,4 @@
-import db from "../../services/db.service.js";
+import db from "../../configs/db.config.js";
 import { selectIssuesQuery } from "./utils/select-issues-query.utils.js";
 
 const insertOne = ({
@@ -17,7 +17,8 @@ const insertOne = ({
       issues (name, description, status, priority, reporter_id, due_date, project_id, assignee_id)
     VALUES
       ($1, $2, $3, $4, $5, $6, $7, $8)
-    RETURNING *
+    RETURNING 
+      *
     `,
     [
       name,

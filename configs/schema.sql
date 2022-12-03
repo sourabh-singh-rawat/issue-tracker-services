@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS issue_tasks (
   deleted_at TIMESTAMP WITH TIME ZONE,
 
   PRIMARY KEY (id),
-  FOREIGN KEY (issue_id) REFERENCES issues(id),
+  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,
   FOREIGN KEY (member_id) REFERENCES project_members(id)
 );
 
@@ -221,8 +221,8 @@ CREATE TABLE IF NOT EXISTS issue_comments (
   deleted_at TIMESTAMP WITH TIME ZONE,
 
   PRIMARY KEY (id),
-  FOREIGN KEY (issue_id) REFERENCES issues(id),
-  FOREIGN KEY (member_id) REFERENCES project_members(id)
+  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,
+  FOREIGN KEY (member_id) REFERENCES project_members(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS team_members (

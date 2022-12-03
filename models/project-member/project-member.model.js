@@ -1,4 +1,4 @@
-import db from "../../services/db.service.js";
+import db from "../../configs/db.config.js";
 
 const findOne = ({ member_id }) => {
   return db.query(

@@ -32,8 +32,6 @@ app.use("/api", teamRouter);
 app.use("/api", collaboratorRouter);
 app.use("/api", issueAttachmentRouter);
 
-app.use(express.static("uploads"));
-
 app.listen(PORT, () => {
   console.log("Server is running at port 4000");
 });

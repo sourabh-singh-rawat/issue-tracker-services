@@ -1,4 +1,4 @@
-import db from "../../services/db.service.js";
+import db from "../../configs/db.config.js";
 
 const insertOne = ({ name, team_leader }) => {
   return db.query(
