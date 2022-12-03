@@ -1,4 +1,4 @@
-import db from "../../services/db.service.js";
+import db from "../../configs/db.config.js";
 import { selectIssueTasks } from "./utils/select-issue-tasks-query.utils.js";
 
 const insertOne = ({ issueId, dueDate, description, completed }) => {

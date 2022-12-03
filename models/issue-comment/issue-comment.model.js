@@ -1,4 +1,4 @@
-import db from "../../services/db.service.js";
+import db from "../../configs/db.config.js";
 import ProjectMember from "../../models/project-member/project-member.model.js";
 
 const insertOne = async ({ description, member_id, issue_id }) => {
