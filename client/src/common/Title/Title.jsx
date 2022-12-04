@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 
 import { styled, useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
-import MuiTypography from "@mui/material/Typography";
 
 import TextField from "../TextField";
+import SaveButton from "../SaveButton";
+import CancelButton from "../CancelButton";
 
 const TitleTextField = styled(TextField)(({ theme }) => {
   return {
@@ -42,9 +42,8 @@ const TitleTextField = styled(TextField)(({ theme }) => {
   };
 });
 
-const Title = ({ page, isLoading, updateTitle, updateTitleQuery }) => {
+const Title = ({ page, updateTitle, updateTitleQuery }) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
   const { nameSelected } = page;
 
   const handleChange = (e) => {
@@ -59,7 +58,11 @@ const Title = ({ page, isLoading, updateTitle, updateTitleQuery }) => {
 
   return (
     <Fragment>
-      <MuiGrid container sx={{ marginLeft: "-14px", marginBottom: "4px" }}>
+      <MuiGrid
+        container
+        columnSpacing={1}
+        sx={{ marginLeft: "-24px", marginBottom: "4px" }}
+      >
         <MuiGrid item flexGrow={1}>
           <TitleTextField
             name="name"
@@ -75,38 +78,19 @@ const Title = ({ page, isLoading, updateTitle, updateTitleQuery }) => {
         </MuiGrid>
         {nameSelected && (
           <MuiGrid item>
-            <MuiButton
-              variant="contained"
-              onClick={handleSave}
-              sx={{
-                height: "100%",
-                marginLeft: "8px",
-                textTransform: "none",
-                ":hover": { boxShadow: "none" },
-              }}
-            >
-              <MuiTypography variant="body2">Save</MuiTypography>
-            </MuiButton>
+            <SaveButton label="Save" onClick={handleSave} />
           </MuiGrid>
         )}
         {nameSelected && (
           <MuiGrid item>
-            <MuiButton
+            <CancelButton
+              label="Cancel"
               onClick={() => {
                 dispatch(
                   updateTitle({ name: page.previousName, nameSelected: false })
                 );
               }}
-              sx={{
-                color: "primary.text",
-                height: "100%",
-                marginLeft: "8px",
-                textTransform: "none",
-                ":hover": { backgroundColor: theme.palette.action.hover },
-              }}
-            >
-              <MuiTypography variant="body2">Cancel</MuiTypography>
-            </MuiButton>
+            />
           </MuiGrid>
         )}
       </MuiGrid>

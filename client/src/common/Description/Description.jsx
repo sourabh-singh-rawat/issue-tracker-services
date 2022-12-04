@@ -2,10 +2,12 @@ import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
 import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTextField from "@mui/material/TextField";
 import MuiTypography from "@mui/material/Typography";
+
+import SaveButton from "../SaveButton";
+import TextField from "../TextField";
+import CancelButton from "../CancelButton/CancelButton";
 
 const Description = ({
   page,
@@ -26,10 +28,10 @@ const Description = ({
   };
 
   return (
-    <MuiGrid container>
+    <MuiGrid container rowSpacing={1}>
       <MuiGrid item xs={12}>
         {page.descriptionSelected ? (
-          <MuiTextField
+          <TextField
             size="small"
             value={page.description}
             onChange={handleChange}
@@ -78,38 +80,25 @@ const Description = ({
         )}
       </MuiGrid>
       {page.descriptionSelected && (
-        <MuiGrid item sm={12} sx={{ padding: "8px 0" }}>
-          <MuiButton
-            variant="contained"
-            onClick={handleSave}
-            sx={{
-              boxShadow: "none",
-              textTransform: "none",
-              ":hover": { boxShadow: "none" },
-            }}
-          >
-            <MuiTypography variant="body2">Save</MuiTypography>
-          </MuiButton>
-          <MuiButton
-            onClick={() =>
-              dispatch(
-                updateDescription({
-                  descriptionSelected: false,
-                  description: page.previousDescription,
-                })
-              )
-            }
-            sx={{
-              color: "text.main",
-              marginLeft: "5px",
-              textTransform: "none",
-              ":hover": { backgroundColor: "background.edit" },
-            }}
-          >
-            <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
-              Cancel
-            </MuiTypography>
-          </MuiButton>
+        <MuiGrid item sm={12}>
+          <MuiGrid container spacing={1}>
+            <MuiGrid item>
+              <SaveButton label="Save" onClick={handleSave} />
+            </MuiGrid>
+            <MuiGrid item>
+              <CancelButton
+                label="Cancel"
+                onClick={() =>
+                  dispatch(
+                    updateDescription({
+                      descriptionSelected: false,
+                      description: page.previousDescription,
+                    })
+                  )
+                }
+              />
+            </MuiGrid>
+          </MuiGrid>
         </MuiGrid>
       )}
     </MuiGrid>

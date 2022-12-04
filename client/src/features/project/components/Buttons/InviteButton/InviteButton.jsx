@@ -15,6 +15,7 @@ import Select from "../../../../../common/Select";
 import { setMemberRoles } from "../../../project.slice";
 import { useGetRolesQuery, useSendInviteMutation } from "../../../project.api";
 import TextField from "../../../../../common/TextField";
+import PrimaryButton from "../../../../../common/PrimaryButton/PrimaryButton";
 
 const style = {
   position: "absolute",
@@ -29,25 +30,26 @@ const style = {
 };
 
 const InviteButton = () => {
-  const dispatch = useDispatch();
   const { id } = useParams();
-  const memberRoles = useSelector((store) => store.project.options.roles.rows);
-  const roles = useGetRolesQuery();
-  const [sendInvite] = useSendInviteMutation();
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
 
   const [members, setMembers] = useState([]);
-
   const [formFields, setFormFields] = useState({
     email: "",
     role_id: "",
   });
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const memberRoles = useSelector((store) => store.project.options.roles.rows);
+
+  const roles = useGetRolesQuery();
+  const [sendInvite] = useSendInviteMutation();
 
   const onChange = (e) => {
     const { name, value } = e.target;
+
     setMembers([value]);
     setFormFields({ ...formFields, [name]: value });
   };
@@ -63,15 +65,7 @@ const InviteButton = () => {
 
   return (
     <Fragment>
-      <MuiButton
-        variant="contained"
-        onClick={handleOpen}
-        sx={{ textTransform: "none" }}
-        startIcon={<MuiAddIcon />}
-        fullWidth
-      >
-        Add Member
-      </MuiButton>
+      <PrimaryButton label="Add Member" onClick={handleOpen} />
       <MuiModal
         open={open}
         onClose={handleClose}
@@ -117,13 +111,7 @@ const InviteButton = () => {
               />
             </MuiGrid>
             <MuiGrid item xs={12}>
-              <MuiButton
-                variant="contained"
-                sx={{ textTransform: "none" }}
-                type="submit"
-              >
-                Send Invite
-              </MuiButton>
+              <PrimaryButton label="Send Invite" type="submit" />
             </MuiGrid>
           </MuiGrid>
         </MuiBox>
