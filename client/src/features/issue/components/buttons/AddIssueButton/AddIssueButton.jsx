@@ -4,20 +4,20 @@ import { useParams } from "react-router-dom";
 
 import MuiBox from "@mui/material/Box";
 import MuiModal from "@mui/material/Modal";
-import MuiButton from "@mui/material/Button";
-import MuiAddIcon from "@mui/icons-material/Add";
 
 import IssueForm from "../../../pages/IssueForm";
+import PrimaryButton from "../../../../../common/PrimaryButton/PrimaryButton";
 
 import { useGetProjectMembersQuery } from "../../../../project/project.api";
 import { setMembers } from "../../../../project/project.slice";
 
 const AddIssueButton = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { id } = useParams();
 
   const getProjectMembersQuery = useGetProjectMembersQuery(id);
 
@@ -29,14 +29,7 @@ const AddIssueButton = () => {
 
   return (
     <Fragment>
-      <MuiButton
-        variant="contained"
-        onClick={handleOpen}
-        sx={{ textTransform: "none" }}
-        startIcon={<MuiAddIcon />}
-      >
-        Add Issue
-      </MuiButton>
+      <PrimaryButton label="Add Issue" onClick={handleOpen} />
       <MuiModal
         open={open}
         onClose={handleClose}

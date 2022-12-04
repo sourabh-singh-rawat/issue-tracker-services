@@ -9,30 +9,28 @@ export const uploadImage = async ({ file, issueId, accessToken }) => {
   try {
     const uploadedImage = await uploadBytes(fileReference, file);
     const metadata = uploadedImage.metadata;
-    const { bucket, fullPath, name, size, contentType } = metadata;
     const url = await getDownloadURL(fileReference);
 
-    const response = await fetch(
-      `http://localhost:4000/api/issues/${issueId}/attachments`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          bucket,
-          fullPath,
-          name,
-          size,
-          contentType,
-          url,
-        }),
-      }
-    );
+    // const response = await fetch(
+    //   `http://localhost:4000/api/issues/${issueId}/attachments`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //     body: JSON.stringify({
+    //       bucket,
+    //       fullPath,
+    //       name,
+    //       size,
+    //       contentType,
+    //       url,
+    //     }),
+    //   }
+    // );
 
-    const data = await response.json();
-    return response;
+    return { ...metadata, url };
   } catch (error) {
     console.log("Error uploading the image. Please try again", error);
   }

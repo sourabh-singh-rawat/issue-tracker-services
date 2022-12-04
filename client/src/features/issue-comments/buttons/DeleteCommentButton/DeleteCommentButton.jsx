@@ -1,28 +1,29 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import MuiBox from "@mui/material/Box";
-import MuiButton from "@mui/material/Button";
-import MuiTypography from "@mui/material/Typography";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
+import MuiTypography from "@mui/material/Typography";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
 import SecondaryButton from "../../../../common/SecondaryButton";
 
-import { setLoadingComments } from "../../../issue-comments/issue-comments.slice";
-import { useDeleteCommentMutation } from "../../../issue-comments/issue-comments.api";
+import { setLoadingComments } from "../../issue-comments.slice";
+import { useDeleteCommentMutation } from "../../issue-comments.api";
 import CancelButton from "../../../../common/CancelButton/CancelButton";
 
-const DeleteComment = ({ id, issue_id }) => {
+const DeleteCommentButton = ({ id, issue_id }) => {
   const dispatch = useDispatch();
-  const [deleteCommentMutation, { isSuccess }] = useDeleteCommentMutation();
+
   const [open, setOpen] = useState(false);
+
+  const [deleteCommentMutation, { isSuccess }] = useDeleteCommentMutation();
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const handleDelete = async () => {
     await deleteCommentMutation({ issue_id, commentId: id });
   };
@@ -56,7 +57,7 @@ const DeleteComment = ({ id, issue_id }) => {
         <DialogActions>
           <CancelButton label="Cancel" onClick={handleClose} />
           <SecondaryButton
-            label="Detete"
+            label="Delete"
             onClick={() => {
               handleClose();
               dispatch(setLoadingComments());
@@ -69,4 +70,4 @@ const DeleteComment = ({ id, issue_id }) => {
   );
 };
 
-export default DeleteComment;
+export default DeleteCommentButton;

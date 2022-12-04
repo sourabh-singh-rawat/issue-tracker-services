@@ -1,18 +1,19 @@
+import MuiCircularProgress from "@mui/material/CircularProgress";
 import MuiButton from "@mui/material/Button";
-import MuiAddIcon from "@mui/icons-material/Add";
 
-const PrimaryButton = ({ type, label, onClick }) => {
+const UploadButton = ({ label, onClick, open }) => {
   return (
     <MuiButton
-      type={type}
       variant="contained"
-      startIcon={type === "submit" ? null : <MuiAddIcon />}
       onClick={onClick}
       sx={{
         fontWeight: 600,
         borderRadius: "8px",
         textTransform: "none",
       }}
+      endIcon={
+        open && <MuiCircularProgress size={20} sx={{ color: "white" }} />
+      }
       disableRipple
     >
       {label}
@@ -20,4 +21,4 @@ const PrimaryButton = ({ type, label, onClick }) => {
   );
 };
 
-export default PrimaryButton;
+export default UploadButton;

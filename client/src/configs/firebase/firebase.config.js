@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getStorage, ref } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {

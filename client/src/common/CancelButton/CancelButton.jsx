@@ -1,3 +1,4 @@
+import { theme } from "../../app/mui.config";
 import MuiButton from "@mui/material/Button";
 
 const CancelButton = ({ label, onClick }) => {
@@ -5,12 +6,16 @@ const CancelButton = ({ label, onClick }) => {
     <MuiButton
       onClick={onClick}
       sx={{
+        color: theme.palette.grey[900],
+        height: "100%",
+        borderRadius: "8px",
         textTransform: "none",
-        color: "text.primary",
-        ":hover": {
-          backgroundColor: "action.hover",
+        "&:hover": {
+          boxShadow: 4,
+          backgroundColor: theme.palette.grey[300],
         },
       }}
+      disableRipple
     >
       {label}
     </MuiButton>
