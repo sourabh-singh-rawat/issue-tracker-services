@@ -10,8 +10,8 @@ import MuiTypography from "@mui/material/Typography";
 
 import GoogleIcon from "@mui/icons-material/Google";
 
-import { continueWithGoogle } from "../../../../configs/firebase/utils/continue-with-google.utils";
-import { onAuthStateChangedListener } from "../../../../configs/firebase/firebase.config";
+import { continueWithGoogle } from "../../../../utils/firebase/continue-with-google.utils";
+import { onAuthStateChangedListener } from "../../../../config/firebase.config";
 
 const StyledButton = styled(MuiButton)(({ theme }) => {
   return {

@@ -7,15 +7,16 @@ import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
+
 import MuiAddIcon from "@mui/icons-material/Add";
 
-import TextField from "../../../../../common/TextField";
-import DatePicker from "../../../../../common/DatePicker";
-import SaveButton from "../../../../../common/SaveButton";
-import CancelButton from "../../../../../common/CancelButton";
+import DatePicker from "../../../../../common/dates/DatePicker";
+import TextField from "../../../../../common/textfields/TextField";
+import SaveButton from "../../../../../common/buttons/SaveButton";
+import CancelButton from "../../../../../common/buttons/CancelButton";
 
-import { useCreateTaskMutation } from "../../../issue-tasks.api";
-import { setTasksLoading } from "../../../issue-tasks.slice";
+import { useCreateTaskMutation } from "../../../api/issue-tasks.api";
+import { setTasksLoading } from "../../../slice/issue-tasks.slice";
 
 const AddTaskButton = styled(MuiButton)(({ theme }) => {
   return {

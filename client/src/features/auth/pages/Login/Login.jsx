@@ -4,8 +4,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 
-import { continueWithGoogle } from "../../../../configs/firebase/utils/continue-with-google.utils";
-import { onAuthStateChangedListener } from "../../../../configs/firebase/firebase.config";
+import { continueWithGoogle } from "../../../../utils/firebase/continue-with-google.utils";
+import { onAuthStateChangedListener } from "../../../../config/firebase.config";
 
 const Login = () => {
   const navigate = useNavigate();

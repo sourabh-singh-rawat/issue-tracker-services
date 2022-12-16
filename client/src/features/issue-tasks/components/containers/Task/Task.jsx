@@ -6,22 +6,24 @@ import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
-import MuiEditIcon from "@mui/icons-material/Edit";
 
-import DueDateTag from "../../DueDateTag";
-import Checkbox from "../../../../../common/Checkbox";
-import TextField from "../../../../../common/TextField";
+import EditTaskButton from "../../button/EditTaskButton";
+import DeleteTaskButton from "../../button/DeleteTaskButton";
+import DueDateTag from "../../../../../common/tags/DueDateTag";
+import Checkbox from "../../../../../common/utilities/Checkbox";
+import TextField from "../../../../../common/textfields/TextField";
 
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
+import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
 import {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
-} from "../../../issue-tasks.api";
+} from "../../../api/issue-tasks.api";
 
 const Task = ({ taskId, due_date, description, completed }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
   const { id } = useParams();
+  const dispatch = useDispatch();
+
   const [editMode, setEditMode] = useState(false);
   const [show, setShow] = useState(false);
   const [task, setTask] = useState({
@@ -30,11 +32,11 @@ const Task = ({ taskId, due_date, description, completed }) => {
     description,
     completed,
   });
+
   const [deleteTask, deleteTaskQuery] = useDeleteTaskMutation();
   const [updateTask, { isSuccess, data }] = useUpdateTaskMutation();
 
   const handleCancel = () => setEditMode(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTask({ ...task, [name]: value });
@@ -60,11 +62,9 @@ const Task = ({ taskId, due_date, description, completed }) => {
     setEditMode(false);
   };
 
-  const handleMouseEnter = () => {};
-
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setSnackbarOpen(true));
+      dispatch(setMessageBarOpen(true));
     }
   }, [isSuccess]);
 
@@ -159,17 +159,11 @@ const Task = ({ taskId, due_date, description, completed }) => {
                 <DueDateTag dueDate={due_date} />
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item sx={{ display: !show && "none" }}>
-              <MuiButton
-                sx={{
-                  color: "text.primary",
-                  ":hover": { color: "primary.main" },
-                }}
-                onClick={() => setEditMode(true)}
-                disableRipple
-              >
-                <MuiEditIcon />
-              </MuiButton>
+            <MuiGrid item sx={{ display: show ? "block" : "none" }}>
+              <EditTaskButton onClick={() => setEditMode(true)} />
+            </MuiGrid>
+            <MuiGrid item sx={{ display: show ? "block" : "none" }}>
+              <DeleteTaskButton onClick={() => deleteTask({ id, taskId })} />
             </MuiGrid>
           </MuiGrid>
         )}

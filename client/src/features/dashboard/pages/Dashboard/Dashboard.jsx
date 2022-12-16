@@ -8,8 +8,8 @@ const Dashboard = () => {
       <MuiGrid container spacing={3}>
         <MuiGrid item>
           <MuiTypography variant="body2">
-            This project is work in progress. Not all parts will work. I keep
-            updating things when i get time. Thanks for spending your time here
+            This project is a work in progress. Not all parts will work. I keep
+            updating things when I get time. Thanks for spending your time here
           </MuiTypography>
         </MuiGrid>
       </MuiGrid>

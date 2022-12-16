@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
 
-import SectionHeader from "../../../../common/SectionHeader";
+import SectionHeader from "../../../../common/headers/SectionHeader";
 
 const Profile = () => {
   const profile = useSelector((store) => store.profile);

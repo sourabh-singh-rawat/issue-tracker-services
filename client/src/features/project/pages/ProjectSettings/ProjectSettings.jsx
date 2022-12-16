@@ -5,25 +5,28 @@ import { format, formatISO, parseISO } from "date-fns";
 
 import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
+import MuiDivider from "@mui/material/Divider";
 import MuiTypography from "@mui/material/Typography";
 
-import MuiDivider from "@mui/material/Divider";
-import TabPanel from "../../../../common/TabPanel";
-import TextField from "../../../../common/TextField";
-import DatePicker from "../../../../common/DatePicker";
+import TabPanel from "../../../../common/tabs/TabPanel";
+import DatePicker from "../../../../common/dates/DatePicker";
+import TextField from "../../../../common/textfields/TextField";
+
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
 
-import { updateProject } from "../../project.slice";
-import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { useUpdateProjectMutation } from "../../project.api";
+import { updateProject } from "../../slice/project.slice";
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { useUpdateProjectMutation } from "../../api/project.api";
 
 const ProjectSettings = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
-  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
+
   const project = useSelector((store) => store.project.settings);
+
+  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(updateProject({ [name]: value }));
@@ -41,7 +44,7 @@ const ProjectSettings = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
+    if (isSuccess) dispatch(setMessageBarOpen(true));
   }, [isSuccess]);
 
   return (
@@ -55,11 +58,8 @@ const ProjectSettings = () => {
         <MuiGrid item xs={12}>
           <MuiGrid container>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
                 Basic Information
-              </MuiTypography>
-              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
-                General information about your project.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
@@ -114,11 +114,8 @@ const ProjectSettings = () => {
         <MuiGrid item xs={12}>
           <MuiGrid container>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
                 Detailed Information:
-              </MuiTypography>
-              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
-                General information about your project.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
@@ -182,13 +179,7 @@ const ProjectSettings = () => {
           <MuiGrid container>
             <MuiGrid item md={4}></MuiGrid>
             <MuiGrid item md={8}>
-              <MuiButton
-                type="submit"
-                variant="contained"
-                sx={{ textTransform: "none", fontWeight: 600 }}
-              >
-                Save Changes
-              </MuiButton>
+              <PrimaryButton type="submit" label="Save Changes" />
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>

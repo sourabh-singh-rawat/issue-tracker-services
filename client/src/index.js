@@ -4,9 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@emotion/react";
-import { theme } from "./app/mui.config.js";
-import { store } from "./app/redux.config.js";
-import App from "./app/App";
+import { theme } from "./config/mui.config.js";
+import { store } from "./config/redux.config.js";
+import App from "./App";
 import "./index.css";
 
 const root = createRoot(document.getElementById("root"));

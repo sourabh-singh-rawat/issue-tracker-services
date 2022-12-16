@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 
-import StyledTabPanel from "../../../../common/TabPanel";
+import StyledTabPanel from "../../../../common/tabs/TabPanel";
 
 const TeamOverview = () => {
   const [selectedTab] = useOutletContext();

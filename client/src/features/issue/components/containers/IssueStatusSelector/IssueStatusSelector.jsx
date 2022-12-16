@@ -96,17 +96,19 @@ const IssueStatusSelector = ({
           </MuiFormControl>
         )}
       </MuiGrid>
-      <MuiGrid item xs={12}>
-        {helperText && isLoading ? (
-          <MuiSkeleton width="50%" height="75%" />
-        ) : (
-          <MuiFormHelperText>
-            <MuiTypography component="span" sx={{ fontSize: "13px" }}>
-              {helperText}
-            </MuiTypography>
-          </MuiFormHelperText>
-        )}
-      </MuiGrid>
+      {helperText && (
+        <MuiGrid item xs={12}>
+          {isLoading ? (
+            <MuiSkeleton width="50%" height="75%" />
+          ) : (
+            <MuiFormHelperText>
+              <MuiTypography component="span" sx={{ fontSize: "13px" }}>
+                {helperText}
+              </MuiTypography>
+            </MuiFormHelperText>
+          )}
+        </MuiGrid>
+      )}
     </MuiGrid>
   );
 };

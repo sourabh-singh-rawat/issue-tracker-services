@@ -6,10 +6,10 @@ import MuiBox from "@mui/material/Box";
 import MuiModal from "@mui/material/Modal";
 
 import IssueForm from "../../../pages/IssueForm";
-import PrimaryButton from "../../../../../common/PrimaryButton/PrimaryButton";
+import PrimaryButton from "../../../../../common/buttons/PrimaryButton";
 
-import { useGetProjectMembersQuery } from "../../../../project/project.api";
-import { setMembers } from "../../../../project/project.slice";
+import { useGetProjectMembersQuery } from "../../../../project/api/project.api";
+import { setMembers } from "../../../../project/slice/project.slice";
 
 const AddIssueButton = () => {
   const { id } = useParams();

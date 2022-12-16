@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
-import TabPanel from "../../../../common/TabPanel";
+
+import TabPanel from "../../../../common/tabs/TabPanel";
 
 const TeamProjects = () => {
   const [selectedTab] = useOutletContext();

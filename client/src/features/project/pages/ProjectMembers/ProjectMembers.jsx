@@ -3,10 +3,10 @@ import { useOutletContext } from "react-router-dom";
 import MuiGrid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
-import TabPanel from "../../../../common/TabPanel";
-import MemberList from "../../../../common/MemberList";
+import TabPanel from "../../../../common/tabs/TabPanel";
+import MemberList from "../../components/containers/MemberList";
 
-import InviteButton from "../../components/buttons/InviteButton";
+import InviteButton from "../../components/buttons/AddMemberButton";
 
 const ProjectMembers = () => {
   const [selectedTab] = useOutletContext();

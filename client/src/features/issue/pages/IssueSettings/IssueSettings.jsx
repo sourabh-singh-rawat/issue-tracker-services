@@ -4,24 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, formatISO, parseISO } from "date-fns";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
 import MuiDivider from "@mui/material/Divider";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 
-import TabPanel from "../../../../common/TabPanel";
-import TextField from "../../../../common/TextField";
-import DatePicker from "../../../../common/DatePicker";
-
+import TabPanel from "../../../../common/tabs/TabPanel";
+import DatePicker from "../../../../common/dates/DatePicker";
+import TextField from "../../../../common/textfields/TextField";
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
+import IssueAssigneeSelector from "../../../../common/selects/IssueAssigneeSelector";
 import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
 
-import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { updateIssue } from "../../issue.slice";
-import { useUpdateIssueMutation } from "../../issue.api";
-import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
-import { useGetProjectMembersQuery } from "../../../project/project.api";
-import { setMembers } from "../../../project/project.slice";
+import { updateIssue } from "../../slice/issue.slice";
+import { setMembers } from "../../../project/slice/project.slice";
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+
+import { useUpdateIssueMutation } from "../../api/issue.api";
+import { useGetProjectMembersQuery } from "../../../project/api/project.api";
 
 const IssueSettings = () => {
   const { id } = useParams();
@@ -39,6 +39,10 @@ const IssueSettings = () => {
     }
   }, [getProjectMembersQuery.data]);
 
+  useEffect(() => {
+    if (isSuccess) dispatch(setMessageBarOpen(true));
+  }, [data]);
+
   const handleChange = ({ target: { name, value } }) => {
     dispatch(updateIssue({ [name]: value }));
   };
@@ -52,10 +56,6 @@ const IssueSettings = () => {
     });
   };
 
-  useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
-  }, [data]);
-
   return (
     <TabPanel selectedTab={selectedTab} index={4}>
       <MuiGrid
@@ -67,11 +67,8 @@ const IssueSettings = () => {
         <MuiGrid item xs={12}>
           <MuiGrid container rowSpacing={2}>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
                 Basic Information:
-              </MuiTypography>
-              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
-                General information about your project.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
@@ -123,11 +120,8 @@ const IssueSettings = () => {
         <MuiGrid item xs={12}>
           <MuiGrid container rowSpacing={2}>
             <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body1" sx={{ fontWeight: 600 }}>
+              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
                 Issue Properties:
-              </MuiTypography>
-              <MuiTypography variant="body2" sx={{ fontWeight: 400 }}>
-                Change your issue status, priority, etc.
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12} md={8}>
@@ -205,13 +199,7 @@ const IssueSettings = () => {
               {issue.isLoading ? (
                 <MuiSkeleton width="20%" />
               ) : (
-                <MuiButton
-                  type="submit"
-                  variant="contained"
-                  sx={{ textTransform: "none", fontWeight: 600 }}
-                >
-                  Save Changes
-                </MuiButton>
+                <PrimaryButton label="Save Changes" type="submit" />
               )}
             </MuiGrid>
           </MuiGrid>

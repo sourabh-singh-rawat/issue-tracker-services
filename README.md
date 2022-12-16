@@ -1,10 +1,11 @@
 # Issue Tracker
 
-The Issue Tracker is a web application that tracks issues in a project. Once installed, you can:
+The Issue Tracker is a Web Application that tracks issues in a project. Once installed, you can:
 
 - Create projects that act as a container for issues
-- Create issues with tasks and attachments.
+- Create issues with tasks, comments and attachments.
 - Collaborate with other people by inviting them your project
+- Assign issues to other people
 
 ## Installation
 
@@ -102,5 +103,5 @@ In case you missed we need the following environment variables to run the applic
 
 ## Usage
 
-- Go to root and type `npm run dev` to start the backend server.
+- Go to root and type `npm start` to start the backend server.
 - Go to `/client` and type `npm start` to start the frontend server.

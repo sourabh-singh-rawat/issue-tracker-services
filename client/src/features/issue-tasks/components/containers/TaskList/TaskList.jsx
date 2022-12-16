@@ -4,7 +4,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiLinearProgress from "@mui/material/LinearProgress";
 
 import Task from "../Task";
-import AddTask from "../AddTask";
+import AddTaskButton from "../../button/AddTaskButton";
 
 const TaskList = ({ rows, isLoading }) => {
   return (
@@ -22,7 +22,7 @@ const TaskList = ({ rows, isLoading }) => {
           })}
         </Fragment>
       )}
-      <AddTask />
+      <AddTaskButton />
     </MuiGrid>
   );
 };

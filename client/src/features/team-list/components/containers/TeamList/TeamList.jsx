@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useTheme } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
 import { format, parseISO } from "date-fns";
+
 import Typography from "@mui/material/Typography";
 
-import { useGetTeamsQuery } from "../../../../team/team.api";
-import { setList } from "../../../team-list.slice";
-import List from "../../../../../common/List/List";
+import { useGetTeamsQuery } from "../../../../team/api/team.api";
+
+import { setList } from "../../../slice/team-list.slice";
+
+import List from "../../../../../common/lists/List";
 
 const TeamList = () => {
   const dispatch = useDispatch();

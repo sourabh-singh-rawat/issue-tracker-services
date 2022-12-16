@@ -4,29 +4,43 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
 import MuiAutocomplete from "@mui/material/Autocomplete";
 
-import TextField from "../../../../common/TextField";
-import DatePicker from "../../../../common/DatePicker";
-import SectionHeader from "../../../../common/SectionHeader";
+import DatePicker from "../../../../common/dates/DatePicker";
+import TextField from "../../../../common/textfields/TextField";
+import SectionHeader from "../../../../common/headers/SectionHeader";
 
-import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
+import IssueAssigneeSelector from "../../../../common/selects/IssueAssigneeSelector";
 import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
 
-import { useCreateIssueMutation } from "../../issue.api";
-import { useGetProjectMembersQuery } from "../../../project/project.api";
-import { useGetProjectsQuery } from "../../../project-list/project-list.api";
+import {
+  useCreateIssueMutation,
+  useGetIssuesPriorityQuery,
+  useGetIssuesStatusQuery,
+} from "../../api/issue.api";
+import { useGetProjectMembersQuery } from "../../../project/api/project.api";
+import { useGetProjectsQuery } from "../../../project-list/api/project-list.api";
 
-import { updateIssue } from "../../issue.slice";
-import { setMembers } from "../../../project/project.slice";
+import {
+  setIssuePriority,
+  setIssueStatus,
+  updateIssue,
+} from "../../slice/issue.slice";
+import { setMembers } from "../../../project/slice/project.slice";
 
 const IssueForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const user = useSelector((store) => store.auth.user);
+  const status = useSelector((store) => store.issue.options.status);
+  const priority = useSelector((store) => store.issue.options.priority);
+  const project = useSelector((store) => store.project.settings);
+  const members = useSelector((store) => store.project.members);
 
   const [projects, setProjects] = useState([]);
   const [formFields, setFormFields] = useState({
@@ -36,16 +50,12 @@ const IssueForm = () => {
     priority: "",
     due_date: null,
     assignee_id: null,
-    project_id: "",
+    project_id: project.id,
   });
 
-  const user = useSelector((store) => store.auth.user);
-  const status = useSelector((store) => store.issue.options.status);
-  const priority = useSelector((store) => store.issue.options.priority);
-  const project = useSelector((store) => store.project.settings);
-  const members = useSelector((store) => store.project.members);
-
   const [createIssue] = useCreateIssueMutation();
+  const issueStatus = useGetIssuesStatusQuery();
+  const issuePriority = useGetIssuesPriorityQuery();
   const getProjectsQuery = useGetProjectsQuery({
     page: 0,
     pageSize: 10,
@@ -55,11 +65,26 @@ const IssueForm = () => {
     formFields.project_id
   );
 
+  useEffect(() => {
+    if (issueStatus.isSuccess) {
+      dispatch(setIssueStatus(issueStatus.data));
+    }
+  }, [issueStatus]);
+
+  useEffect(() => {
+    if (issuePriority.isSuccess) {
+      dispatch(setIssuePriority(issuePriority.data));
+    }
+  }, [issuePriority]);
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setFormFields({ ...formFields, [name]: value, uid: user.uid });
+    setFormFields({
+      ...formFields,
+      [name]: value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -85,15 +110,6 @@ const IssueForm = () => {
     }
   }, [getProjectMembersQuery.data]);
 
-  // once the project is recieved from the server,
-  // store the project in the redux store.
-  useEffect(() => {
-    setFormFields({
-      ...formFields,
-      project_id: project.id,
-    });
-  }, [project]);
-
   // once the values of the formFields are updated,
   // store the default status and priority in the formFields.
   // this is done to ensure that the status and priority are
@@ -104,7 +120,7 @@ const IssueForm = () => {
       status: status.rows[0].id,
       priority: priority.rows[0].id,
     });
-  }, [formFields]);
+  }, [priority.rows[0].id, status.rows[0].id]);
 
   return (
     <MuiGrid container gap="20px">
@@ -142,7 +158,7 @@ const IssueForm = () => {
                 <TextField
                   name="project_id"
                   title="Project"
-                  value={project ? project.name : "loading"}
+                  value={project.isLoading ? "loading" : project.name}
                   disabled
                 />
               ) : (
@@ -164,7 +180,7 @@ const IssueForm = () => {
                     onChange={(e, selectedProject) => {
                       setFormFields({
                         ...formFields,
-                        project_id: selectedProject?.id,
+                        project_id: selectedProject.id,
                       });
                     }}
                     getOptionLabel={(option) => {
@@ -185,7 +201,11 @@ const IssueForm = () => {
                 projectMembers={members.rows}
                 handleChange={(e) => {
                   const { value } = e.target;
-                  setFormFields({ ...formFields, assignee_id: value });
+
+                  setFormFields({
+                    ...formFields,
+                    assignee_id: value,
+                  });
                   dispatch(updateIssue({ assignee_id: value }));
                 }}
               />
@@ -230,14 +250,11 @@ const IssueForm = () => {
               />
             </MuiGrid>
             <MuiGrid item xs={12}>
-              <MuiButton
-                variant="contained"
+              <PrimaryButton
                 type="submit"
-                size="large"
-                fullWidth
-              >
-                Create Issue
-              </MuiButton>
+                label="Create Issue"
+                onClick={handleSubmit}
+              />
             </MuiGrid>
           </MuiGrid>
         </MuiBox>
