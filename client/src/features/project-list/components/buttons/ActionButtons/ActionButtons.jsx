@@ -1,17 +1,16 @@
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Menu, MenuItem, styled, Typography } from "@mui/material";
-import MuiBox from "@mui/material/Box";
+import { Menu, MenuItem, styled, Typography } from "@mui/material";
+import MuiIconButton from "@mui/material/IconButton";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 
 import DeleteProjectButton from "../DeleteProjectButton";
 
-const StyledButton = styled(Button)(({ theme }) => {
+const StyledIconButton = styled(MuiIconButton)(({ theme }) => {
   return {
-    "&.MuiButton-root": {
-      padding: 0,
-      margin: 0,
+    "&:hover": {
+      backgroundColor: theme.palette.grey[200],
     },
   };
 });
@@ -21,14 +20,15 @@ const ActionButtons = ({ id }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
   return (
     <Fragment>
-      <StyledButton onClick={handleClick} disableRipple>
+      <StyledIconButton onClick={handleClick} disableRipple>
         <MoreHoriz sx={{ color: "text.primary" }} />
-      </StyledButton>
+      </StyledIconButton>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem
           key="edit"

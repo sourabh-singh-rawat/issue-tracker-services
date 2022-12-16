@@ -3,27 +3,42 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
 import { enIN } from "date-fns/locale";
+import { theme } from "../../../../../config/mui.config";
 
-import { theme } from "../../../../../app/mui.config";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiListItemIcon from "@mui/material/ListItemIcon";
 import MuiListItemText from "@mui/material/ListItemText";
 
-import List from "../../../../../common/List";
-import StatusAndPrioritySelectorEditCell from "../StatusAndPrioritySelectorEditCell";
+import List from "../../../../../common/lists/List";
 import SelectAssigneeEditCell from "../SelectAssigneeEditCell";
+import StatusAndPrioritySelectorEditCell from "../StatusAndPrioritySelectorEditCell";
 
-import { setIssueList, updateIssueList } from "../../../issue-list.slice";
-import { useGetIssuesQuery } from "../../../issue-list.api";
+import {
+  resetIssueList,
+  setIssueList,
+  updateIssueList,
+} from "../../../slice/issue-list.slice";
+import { useGetIssuesQuery } from "../../../api/issue-list.api";
+import {
+  setIssuePriority,
+  setIssueStatus,
+} from "../../../../issue/slice/issue.slice";
+import {
+  useGetIssuesPriorityQuery,
+  useGetIssuesStatusQuery,
+} from "../../../../issue/api/issue.api";
 
 const IssueList = ({ projectId }) => {
   const dispatch = useDispatch();
-  const reporterId = useSelector((store) => store.auth.user.uid);
+  const reporterId = useSelector((store) => {
+    return store.auth.user.uid;
+  });
   const { rows, rowCount, page, pageSize } = useSelector(
     (store) => store.issueList
   );
+
   const getIssuesQuery = useGetIssuesQuery({
     projectId,
     page,
@@ -31,10 +46,31 @@ const IssueList = ({ projectId }) => {
     sortBy: "issues.created_at:desc",
     reporterId,
   });
+  const issueStatus = useGetIssuesStatusQuery();
+  const issuePriority = useGetIssuesPriorityQuery();
 
   useEffect(() => {
     if (getIssuesQuery.data) dispatch(setIssueList(getIssuesQuery.data));
   }, [pageSize, page, getIssuesQuery.data]);
+
+  useEffect(() => {
+    if (issueStatus.isSuccess) {
+      dispatch(setIssueStatus(issueStatus.data));
+    }
+  }, [issueStatus]);
+
+  useEffect(() => {
+    if (issuePriority.isSuccess) {
+      dispatch(setIssuePriority(issuePriority.data));
+    }
+  }, [issuePriority]);
+
+  // on component unmount reset the issue list slice
+  useEffect(() => {
+    return () => {
+      dispatch(resetIssueList());
+    };
+  }, []);
 
   const columns = [
     {

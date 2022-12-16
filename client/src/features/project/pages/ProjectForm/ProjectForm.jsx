@@ -2,28 +2,26 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import errors from "../../../../app/errors";
+import errors from "../../../../errors";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import MuiGrid from "@mui/material/Grid";
 
-import TextField from "../../../../common/TextField";
-import DatePicker from "../../../../common/DatePicker";
-import SectionHeader from "../../../../common/SectionHeader";
+import DatePicker from "../../../../common/dates/DatePicker";
+import TextField from "../../../../common/textfields/TextField";
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
+import SectionHeader from "../../../../common/headers/SectionHeader";
 import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
 
-import { setStatus } from "../../project.slice";
-import { useGetStatusQuery, useCreateProjectMutation } from "../../project.api";
+import { setStatus } from "../../slice/project.slice";
+import {
+  useGetStatusQuery,
+  useCreateProjectMutation,
+} from "../../api/project.api";
 
 const ProjectForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const getProjectStatusQuery = useGetStatusQuery();
-  const [createProject, { isSuccess, data }] = useCreateProjectMutation();
-  const defaultStatus = useSelector(
-    (store) => store.project.options.status.rows[0]
-  );
 
   const [formFields, setFormFields] = useState({
     name: {
@@ -37,11 +35,17 @@ const ProjectForm = () => {
       errorMessage: errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.message,
     },
     status: "",
-    start_date: null,
-    end_date: null,
+    startDate: null,
+    endDate: null,
   });
 
-  // running a sife effect when the defaultStatus is changed from "" to some id
+  const defaultStatus = useSelector(
+    (store) => store.project.options.status.rows[0]
+  );
+
+  const getProjectStatusQuery = useGetStatusQuery();
+  const [createProject, { isSuccess, data }] = useCreateProjectMutation();
+
   useEffect(() => {
     setFormFields({ ...formFields, status: defaultStatus.id });
   }, [defaultStatus]);
@@ -152,11 +156,11 @@ const ProjectForm = () => {
             <MuiGrid item xs={12} sm={12} md={6}>
               <DatePicker
                 title="Start Date"
-                name="start_date"
-                value={formFields.start_date}
-                maxDate={formFields.end_date}
-                onChange={(date) =>
-                  setFormFields({ ...formFields, start_date: date })
+                name="startDate"
+                value={formFields.startDate}
+                maxDate={formFields.endDate}
+                onChange={(selectedDate) =>
+                  setFormFields({ ...formFields, startDate: selectedDate })
                 }
                 helperText="Set a start date for your project"
                 handleChange={handleChange}
@@ -165,11 +169,11 @@ const ProjectForm = () => {
             <MuiGrid item xs={12} sm={12} md={6}>
               <DatePicker
                 title="End Date"
-                name="end_date"
-                value={formFields.end_date}
-                minDate={formFields.start_date}
-                onChange={(date) =>
-                  setFormFields({ ...formFields, end_date: date })
+                name="endDate"
+                value={formFields.endDate}
+                minDate={formFields.startDate}
+                onChange={(selectedDate) =>
+                  setFormFields({ ...formFields, endDate: selectedDate })
                 }
                 helperText="Set an end date for your project"
                 handleChange={handleChange}
@@ -186,14 +190,7 @@ const ProjectForm = () => {
             </MuiGrid>
             <MuiGrid item xs={12}></MuiGrid>
             <MuiGrid item>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                sx={{ textTransform: "none", fontWeight: 600 }}
-              >
-                Create Project
-              </Button>
+              <PrimaryButton label="Create Project" type="submit" />
             </MuiGrid>
           </MuiGrid>
         </Box>

@@ -6,11 +6,12 @@ import MuiBox from "@mui/material/Box";
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 
-import TextField from "../../../../common/TextField";
-import SectionHeader from "../../../../common/SectionHeader/SectionHeader";
+import TextField from "../../../../common/textfields/TextField";
+import SectionHeader from "../../../../common/headers/SectionHeader";
 
-import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { useCreateTeamMutation } from "../../team.api";
+import { useCreateTeamMutation } from "../../api/team.api";
+
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
 
 const TeamForm = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const TeamForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setSnackbarOpen(true));
+      dispatch(setMessageBarOpen(true));
       navigate(`/teams/${data.id}/overview`);
     }
   }, [isSuccess]);

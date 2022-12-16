@@ -4,13 +4,14 @@ import { useParams } from "react-router-dom";
 
 import MuiBox from "@mui/material/Box";
 
-import IssueAssigneeSelector from "../../../../../common/IssueAssigneeSelector/IssueAssigneeSelector";
+import IssueAssigneeSelector from "../../../../../common/selects/IssueAssigneeSelector";
 
-import { useUpdateIssueMutation } from "../../../issue.api";
-import { useGetProjectMembersQuery } from "../../../../project/project.api";
-import { updateIssue } from "../../../issue.slice";
-import { setMembers } from "../../../../project/project.slice";
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
+import { useUpdateIssueMutation } from "../../../api/issue.api";
+import { useGetProjectMembersQuery } from "../../../../project/api/project.api";
+
+import { updateIssue } from "../../../slice/issue.slice";
+import { setMembers } from "../../../../project/slice/project.slice";
+import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
 
 const IssueAssignee = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const IssueAssignee = () => {
   }, [getProjectMembers.data]);
 
   useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
+    if (isSuccess) dispatch(setMessageBarOpen(true));
   }, [isSuccess]);
 
   const handleChange = async (e) => {

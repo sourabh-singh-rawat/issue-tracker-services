@@ -1,12 +1,9 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
 
-import MuiAddIcon from "@mui/icons-material/Add";
-
-import PrimaryButton from "../../../../common/PrimaryButton";
-import SectionHeader from "../../../../common/SectionHeader";
+import SectionHeader from "../../../../common/headers/SectionHeader";
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 
 const Projects = () => {
   const navigate = useNavigate();

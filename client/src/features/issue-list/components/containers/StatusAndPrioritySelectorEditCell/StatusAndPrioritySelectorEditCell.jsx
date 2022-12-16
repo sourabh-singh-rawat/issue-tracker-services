@@ -5,8 +5,8 @@ import { useGridApiContext } from "@mui/x-data-grid";
 import IssuePrioritySelector from "../../../../issue/components/containers/IssuePrioritySelector/IssuePrioritySelector";
 import IssueStatusSelector from "../../../../issue/components/containers/IssueStatusSelector/IssueStatusSelector";
 
-import { useUpdateIssueMutation } from "../../../../issue/issue.api";
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
+import { useUpdateIssueMutation } from "../../../../issue/api/issue.api";
+import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
 
 const StatusAndPrioritySelectorEditCell = ({ id, field, value }) => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const StatusAndPrioritySelectorEditCell = ({ id, field, value }) => {
   };
 
   useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
+    if (isSuccess) dispatch(setMessageBarOpen(true));
   }, [isSuccess]);
 
   if (field === "status")

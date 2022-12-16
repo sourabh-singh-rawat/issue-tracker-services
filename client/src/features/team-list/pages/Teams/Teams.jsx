@@ -1,11 +1,9 @@
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 
-import MuiButton from "@mui/material/Button";
 import MuiGrid from "@mui/material/Grid";
-import Add from "@mui/icons-material/Add";
 
-import SectionHeader from "../../../../common/SectionHeader";
-import PrimaryButton from "../../../../common/PrimaryButton";
+import SectionHeader from "../../../../common/headers/SectionHeader";
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 
 const Teams = () => {
   const { pathname } = useLocation();

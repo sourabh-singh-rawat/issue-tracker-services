@@ -1,7 +1,7 @@
 import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 
-import SectionHeader from "../../../../../common/SectionHeader/SectionHeader";
+import SectionHeader from "../../../../../common/headers/SectionHeader";
 
 const Settings = () => {
   return (

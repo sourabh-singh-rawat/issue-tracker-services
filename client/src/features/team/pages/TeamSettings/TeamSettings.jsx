@@ -1,13 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 
-import { Box, Button, Grid, Typography } from "@mui/material";
+import MuiBox from "@mui/material/Box";
+import MuiGrid from "@mui/material/Grid";
+import MuiButton from "@mui/material/Button";
+import MuiTypography from "@mui/material/Typography";
 
-import TextField from "../../../../common/TextField";
-import TabPanel from "../../../../common/TabPanel";
+import TabPanel from "../../../../common/tabs/TabPanel";
+import TextField from "../../../../common/textfields/TextField";
 
-import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { updateList } from "../../team.slice";
+import { updateList } from "../../slice/team.slice";
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
 
 const TeamSettings = () => {
   const [selectedTab] = useOutletContext();
@@ -28,21 +31,21 @@ const TeamSettings = () => {
       body: JSON.stringify({ name, description }),
     });
 
-    if (response.status === 200) dispatch(setSnackbarOpen(true));
+    if (response.status === 200) dispatch(setMessageBarOpen(true));
   };
 
   return (
     <TabPanel selectedTab={selectedTab} index={4}>
-      <Box component="form" onSubmit={handleSubmit}>
-        <Grid container sx={{ marginTop: 3 }}>
-          <Grid item xs={12} md={4}>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+      <MuiBox component="form" onSubmit={handleSubmit}>
+        <MuiGrid container sx={{ marginTop: 3 }}>
+          <MuiGrid item xs={12} md={4}>
+            <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
               basic Information
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Grid container>
-              <Grid item xs={12}>
+            </MuiTypography>
+          </MuiGrid>
+          <MuiGrid item xs={12} md={8}>
+            <MuiGrid container>
+              <MuiGrid item xs={12}>
                 <TextField
                   name="name"
                   title="Name"
@@ -50,8 +53,8 @@ const TeamSettings = () => {
                   onChange={handleChange}
                   helperText="A name for your team"
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </MuiGrid>
+              <MuiGrid item xs={12}>
                 <TextField
                   name="id"
                   title="team ID"
@@ -59,8 +62,8 @@ const TeamSettings = () => {
                   helperText="This is the UID of the team owner"
                   disabled
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </MuiGrid>
+              <MuiGrid item xs={12}>
                 <TextField
                   name="description"
                   title="Description"
@@ -70,23 +73,23 @@ const TeamSettings = () => {
                   rows={4}
                   multiline
                 />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ marginTop: 3, marginBottom: 8 }}>
-            <Grid item md={4} />
-            <Grid item md={8}>
-              <Button
+              </MuiGrid>
+            </MuiGrid>
+          </MuiGrid>
+          <MuiGrid container sx={{ marginTop: 3, marginBottom: 8 }}>
+            <MuiGrid item md={4} />
+            <MuiGrid item md={8}>
+              <MuiButton
                 variant="contained"
                 type="submit"
                 sx={{ textTransform: "none", fontWeight: 600 }}
               >
                 Save Changes
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Box>
+              </MuiButton>
+            </MuiGrid>
+          </MuiGrid>
+        </MuiGrid>
+      </MuiBox>
     </TabPanel>
   );
 };

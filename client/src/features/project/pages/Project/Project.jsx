@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { theme } from "../../../../app/mui.config";
 import MuiGrid from "@mui/material/Grid";
 
-import Tab from "../../../../common/Tab";
-import Tabs from "../../../../common/Tabs";
-import PageTitleSection from "../../../../common/TitleSection";
+import Tab from "../../../../common/tabs/Tab";
+import Tabs from "../../../../common/tabs/Tabs";
+import PageTitleSection from "../../../../common/headers/TitleSection";
 import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
 
 import {
@@ -15,29 +14,31 @@ import {
   setProjectQuick,
   setStatus,
   updateProject,
+  resetProjectSlice,
   updateProjectQuick,
-} from "../../project.slice";
-import { setSnackbarOpen } from "../../../snackbar.reducer";
+} from "../../slice/project.slice";
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
 
 import {
   useGetStatusQuery,
   useGetProjectQuery,
   useUpdateProjectMutation,
-} from "../../project.api";
+} from "../../api/project.api";
 
 const Project = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const status = useGetStatusQuery();
-  const { id } = useParams();
-  const getProject = useGetProjectQuery(id);
-  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
-  const tabName = location.pathname.split("/")[3];
 
   const project = useSelector((store) => store.project.quick);
   const projectDetailed = useSelector((store) => store.project.settings);
 
+  const status = useGetStatusQuery();
+  const getProject = useGetProjectQuery(id);
+  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
+
+  const tabName = location.pathname.split("/")[3];
   const mapPathToIndex = {
     overview: 0,
     issues: 1,
@@ -66,7 +67,7 @@ const Project = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
+    if (isSuccess) dispatch(setMessageBarOpen(true));
   }, [isSuccess]);
 
   useEffect(() => {
@@ -83,6 +84,13 @@ const Project = () => {
       dispatch(setProject({ ...getProject.data, isLoading: false }));
     }
   }, [getProject.data]);
+
+  // when component dismounts: reset project state
+  useEffect(() => {
+    return () => {
+      dispatch(resetProjectSlice());
+    };
+  }, []);
 
   return (
     <MuiGrid container spacing={2}>

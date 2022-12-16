@@ -5,16 +5,18 @@ import { useParams } from "react-router-dom";
 import MuiGrid from "@mui/material/Grid";
 import MuiLinearProgress from "@mui/material/LinearProgress";
 
-import AddComment from "../../containers/AddComment";
-import CommentList from "../../containers/CommentList";
+import AddComment from "../../components/containers/AddComment";
+import CommentList from "../../components/containers/CommentList";
 
-import { setComments } from "../../issue-comments.slice";
-import { useGetIssueCommentsQuery } from "../../issue-comments.api";
+import { setComments } from "../../slice/issue-comments.slice";
+import { useGetIssueCommentsQuery } from "../../api/issue-comments.api";
 
 const IssueComments = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const comments = useSelector((store) => store.issueComments);
+
   const getIssueCommentsQuery = useGetIssueCommentsQuery(id);
 
   useEffect(() => {

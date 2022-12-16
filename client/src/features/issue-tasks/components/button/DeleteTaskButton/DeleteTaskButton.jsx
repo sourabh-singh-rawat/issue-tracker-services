@@ -1,4 +1,4 @@
-import { theme } from "../../../../../app/mui.config";
+import { theme } from "../../../../../config/mui.config";
 import MuiIconButton from "@mui/material/IconButton";
 import MuiDeleteIcon from "@mui/icons-material/Delete";
 

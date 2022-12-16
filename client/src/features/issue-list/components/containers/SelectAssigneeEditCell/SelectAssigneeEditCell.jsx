@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useGridApiContext } from "@mui/x-data-grid";
 
-import IssueAssigneeSelector from "../../../../../common/IssueAssigneeSelector";
+import IssueAssigneeSelector from "../../../../../common/selects/IssueAssigneeSelector";
 
-import { useUpdateIssueMutation } from "../../../../issue/issue.api";
-import { updateIssue } from "../../../../issue/issue.slice";
-import { useGetProjectMembersQuery } from "../../../../project/project.api";
-import { setMembers } from "../../../../project/project.slice";
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
+import { useUpdateIssueMutation } from "../../../../issue/api/issue.api";
+import { useGetProjectMembersQuery } from "../../../../project/api/project.api";
+
+import { updateIssue } from "../../../../issue/slice/issue.slice";
+import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
 
 const SelectAssigneeEditCell = ({ id, value, field, ...rest }) => {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const SelectAssigneeEditCell = ({ id, value, field, ...rest }) => {
   };
 
   useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
+    if (isSuccess) dispatch(setMessageBarOpen(true));
   }, [isSuccess]);
 
   return (

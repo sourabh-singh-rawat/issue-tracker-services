@@ -3,18 +3,14 @@ import { useLocation, useNavigate, Outlet, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiTypography from "@mui/material/Typography";
 
-import MuiArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Tab from "../../../../common/tabs/Tab";
+import Tabs from "../../../../common/tabs/Tabs";
 
-import Tab from "../../../../common/Tab";
-import Tabs from "../../../../common/Tabs";
-
-import { setTeam } from "../../team.slice";
-
-import { useGetTeamQuery } from "../../team.api";
+import { useGetTeamQuery } from "../../api/team.api";
+import { setTeam } from "../../slice/team.slice";
 
 const Team = () => {
   const navigate = useNavigate();
@@ -43,14 +39,14 @@ const Team = () => {
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[path]);
 
+  useEffect(() => {
+    if (getTeamQuery.isSuccess) dispatch(setTeam(getTeamQuery.data));
+  }, [getTeamQuery.data]);
+
   const handleChange = (e, newValue) => {
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
   };
-
-  useEffect(() => {
-    if (getTeamQuery.isSuccess) dispatch(setTeam(getTeamQuery.data));
-  }, [getTeamQuery.data]);
 
   return (
     <MuiGrid container>

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext, useParams } from "react-router-dom";
 
-import { uploadImage } from "../../../../configs/firebase/utils/upload-image.utils";
-import { theme } from "../../../../app/mui.config";
+import { uploadImage } from "../../../../utils/firebase/upload-image.utils.js";
+import { theme } from "../../../../config/mui.config";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiInput from "@mui/material/Input";
@@ -11,16 +11,16 @@ import MuiButton from "@mui/material/Button";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
-import TabPanel from "../../../../common/TabPanel";
+import TabPanel from "../../../../common/tabs/TabPanel";
 import UploadButton from "../../components/buttons/UploadButton";
 
 import {
   useGetIssueAttachmentsQuery,
   useCreateIssueAttachmentMutation,
-} from "../../issue.api";
+} from "../../api/issue.api";
 
-import { setIssueAttachments } from "../../issue.slice";
-import { setSnackbarOpen } from "../../../snackbar.reducer";
+import { setIssueAttachments } from "../../slice/issue.slice";
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
 
 const IssueAttachments = () => {
   const { id } = useParams();
@@ -64,7 +64,7 @@ const IssueAttachments = () => {
   useEffect(() => {
     if (createIssueQuery.isSuccess) {
       setOpen(false);
-      dispatch(setSnackbarOpen({ message: "Image uploaded successfully" }));
+      dispatch(setMessageBarOpen({ message: "Image uploaded successfully" }));
     }
   }, [createIssueQuery.isSuccess]);
 

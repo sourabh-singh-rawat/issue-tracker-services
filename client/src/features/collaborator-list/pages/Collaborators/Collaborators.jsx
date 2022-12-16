@@ -1,11 +1,9 @@
 import { useLocation, Outlet, useNavigate } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
-import MuiAddIcon from "@mui/icons-material/Add";
 
-import SectionHeader from "../../../../common/SectionHeader";
-import PrimaryButton from "../../../../common/PrimaryButton";
+import SectionHeader from "../../../../common/headers/SectionHeader";
+import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 
 const Collaborators = () => {
   const navigate = useNavigate();
@@ -18,12 +16,7 @@ const Collaborators = () => {
           <SectionHeader
             title="Colaborators"
             subtitle="This section contains all the collaborators that work with you."
-            actionButton={
-              <PrimaryButton
-                label="Invite"
-                onClick={() => navigate("/projects/new")}
-              />
-            }
+            actionButton={<PrimaryButton label="Invite" onClick={() => ""} />}
           />
         </MuiGrid>
       )}

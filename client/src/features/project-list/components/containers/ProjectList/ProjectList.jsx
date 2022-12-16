@@ -8,20 +8,23 @@ import { useGridApiContext } from "@mui/x-data-grid";
 
 import MuiTypography from "@mui/material/Typography";
 
-import List from "../../../../../common/List";
-import ProjectStatusSelector from "../../../../project/components/containers/ProjectStatusSelector";
+import List from "../../../../../common/lists/List";
 import ActionButtons from "../../buttons/ActionButtons";
-
-import { theme } from "../../../../../app/mui.config";
-import { setStatus } from "../../../../project/project.slice";
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
-import { setProjectList, updateProjectList } from "../../../project-list.slice";
+import ProjectStatusSelector from "../../../../project/components/containers/ProjectStatusSelector";
 
 import {
   useGetStatusQuery,
   useUpdateProjectMutation,
-} from "../../../../project/project.api";
-import { useGetProjectsQuery } from "../../../project-list.api";
+} from "../../../../project/api/project.api";
+import { useGetProjectsQuery } from "../../../api/project-list.api";
+
+import { theme } from "../../../../../config/mui.config";
+import { setStatus } from "../../../../project/slice/project.slice";
+import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
+import {
+  setProjectList,
+  updateProjectList,
+} from "../../../slice/project-list.slice";
 
 const ProjectList = () => {
   const dispatch = useDispatch();
@@ -65,7 +68,7 @@ const ProjectList = () => {
     };
 
     useEffect(() => {
-      if (isSuccess) dispatch(setSnackbarOpen(true));
+      if (isSuccess) dispatch(setMessageBarOpen(true));
     }, [isSuccess]);
 
     return <ProjectStatusSelector value={value} handleChange={handleChange} />;

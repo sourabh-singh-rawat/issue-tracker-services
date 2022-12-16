@@ -1,20 +1,20 @@
 import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import MuiButton from "@mui/material/Button";
 import MuiDialog from "@mui/material/Dialog";
+import MuiMenuItem from "@mui/material/MenuItem";
+import MuiTypography from "@mui/material/Typography";
+import MuiDialogTitle from "@mui/material/DialogTitle";
 import MuiDialogActions from "@mui/material/DialogActions";
 import MuiDialogContent from "@mui/material/DialogContent";
 import MuiDialogContentText from "@mui/material/DialogContentText";
-import MuiDialogTitle from "@mui/material/DialogTitle";
-import MuiTypography from "@mui/material/Typography";
-import MuiMenuItem from "@mui/material/MenuItem";
 
-import { setSnackbarOpen } from "../../../../snackbar.reducer";
-import { useDeleteProjectMutation } from "../../../../project/project.api";
-import { setLoadingProjectList } from "../../../project-list.slice";
-import SecondaryButton from "../../../../../common/SecondaryButton/SecondaryButton";
-import CancelButton from "../../../../../common/CancelButton";
+import CancelButton from "../../../../../common/buttons/CancelButton";
+import SecondaryButton from "../../../../../common/buttons/SecondaryButton";
+
+import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
+import { useDeleteProjectMutation } from "../../../../project/api/project.api";
+import { setLoadingProjectList } from "../../../slice/project-list.slice";
 
 const DeleteProject = ({ id }) => {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const DeleteProject = ({ id }) => {
   const [deleteProject, { isSuccess }] = useDeleteProjectMutation();
 
   useEffect(() => {
-    if (isSuccess) setSnackbarOpen(true);
+    if (isSuccess) setMessageBarOpen(true);
   }, [isSuccess]);
 
   return (

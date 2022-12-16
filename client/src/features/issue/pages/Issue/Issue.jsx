@@ -4,15 +4,26 @@ import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
 
-import Tab from "../../../../common/Tab/Tab";
-import Tabs from "../../../../common/Tabs/Tabs";
-import TitleSection from "../../../../common/TitleSection";
+import Tab from "../../../../common/tabs/Tab";
+import Tabs from "../../../../common/tabs/Tabs";
+import TitleSection from "../../../../common/headers/TitleSection";
 import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
 import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
 
-import { setSnackbarOpen } from "../../../snackbar.reducer";
-import { setIssue, updateIssue } from "../../issue.slice";
-import { useGetIssueQuery, useUpdateIssueMutation } from "../../issue.api";
+import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import {
+  resetIssueSlice,
+  setIssue,
+  setIssuePriority,
+  setIssueStatus,
+  updateIssue,
+} from "../../slice/issue.slice";
+import {
+  useGetIssueQuery,
+  useGetIssuesPriorityQuery,
+  useGetIssuesStatusQuery,
+  useUpdateIssueMutation,
+} from "../../api/issue.api";
 
 const Issue = () => {
   const { id } = useParams();
@@ -21,6 +32,8 @@ const Issue = () => {
   const location = useLocation();
 
   const { data } = useGetIssueQuery(id);
+  const issueStatus = useGetIssuesStatusQuery();
+  const issuePriority = useGetIssuesPriorityQuery();
   const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
 
   const issue = useSelector((store) => store.issue.info);
@@ -39,6 +52,18 @@ const Issue = () => {
   };
 
   useEffect(() => {
+    if (issueStatus.isSuccess) {
+      dispatch(setIssueStatus(issueStatus.data));
+    }
+  }, [issueStatus]);
+
+  useEffect(() => {
+    if (issuePriority.isSuccess) {
+      dispatch(setIssuePriority(issuePriority.data));
+    }
+  }, [issuePriority]);
+
+  useEffect(() => {
     setSelectedTab(mapTabToIndex[tabName]);
   }, [id, tabName]);
 
@@ -47,7 +72,7 @@ const Issue = () => {
   }, [data]);
 
   useEffect(() => {
-    if (isSuccess) dispatch(setSnackbarOpen(true));
+    if (isSuccess) dispatch(setMessageBarOpen(true));
   }, [isSuccess]);
 
   const handleChange = (e, newValue) => {
@@ -62,6 +87,13 @@ const Issue = () => {
     navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
   };
+
+  // On component unmount: clear issue info
+  useEffect(() => {
+    return () => {
+      dispatch(resetIssueSlice());
+    };
+  }, []);
 
   return (
     <MuiGrid container spacing={2}>
@@ -95,7 +127,7 @@ const Issue = () => {
                 dispatch(updateIssue({ status: value }));
                 await updateIssueQuery({ id, body: { status: value } });
 
-                if (isSuccess) dispatch(setSnackbarOpen(true));
+                if (isSuccess) dispatch(setMessageBarOpen(true));
               }}
               variant="dense"
             />
@@ -108,7 +140,7 @@ const Issue = () => {
                 dispatch(updateIssue({ priority: value }));
                 await updateIssueQuery({ id, body: { priority: value } });
 
-                if (isSuccess) dispatch(setSnackbarOpen(true));
+                if (isSuccess) dispatch(setMessageBarOpen(true));
               }}
               variant="dense"
             />

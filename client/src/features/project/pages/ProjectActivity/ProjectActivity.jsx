@@ -1,8 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
-import StyledTabPanel from "../../../../common/TabPanel";
+import StyledTabPanel from "../../../../common/tabs/TabPanel";
 
 const ProjectActivity = () => {
   const [selectedTab] = useOutletContext();
