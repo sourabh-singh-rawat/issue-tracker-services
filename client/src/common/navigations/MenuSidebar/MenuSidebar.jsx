@@ -62,7 +62,7 @@ const StyledList = styled(MuiList)(({ theme }) => {
   };
 });
 
-const Sidebar = () => {
+const MenuSidebar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const toggleDrawerOpen = () => setOpen(!open);
@@ -89,7 +89,7 @@ const Sidebar = () => {
               transform: open && "rotate(180deg)",
               borderRadius: "4px",
               "&:hover": {
-                backgroundColor: theme.palette.grey[300],
+                backgroundColor: theme.palette.background.paper,
               },
             }}
             disableRipple
@@ -100,69 +100,54 @@ const Sidebar = () => {
         <StyledList>
           <MenuSidebarItem
             open={open}
-            to="/"
+            href="/"
             text="Dashboard"
             icon={<MuiGridViewIcon sx={iconStyles} />}
+            active={true}
           />
-          {[
-            {
-              to: "/projects",
-              text: "Projects",
-              icon: <MuiAssignmentOutlinedIcon sx={iconStyles} />,
-            },
-            {
-              to: "/teams",
-              text: "Teams",
-              icon: <MuiGroupsOutlinedIcon sx={iconStyles} />,
-            },
-            {
-              to: "/collaborators",
-              text: "People",
-              icon: <MuiHandshakeIcon sx={iconStyles} />,
-            },
-          ].map(({ text, ...otherProps }) => {
-            return (
-              <MenuSidebarItem
-                key={text}
-                open={open}
-                text={text}
-                {...otherProps}
-              />
-            );
-          })}
+          <MenuSidebarItem
+            open={open}
+            icon={<MuiGroupsOutlinedIcon sx={iconStyles} />}
+            text="Teams"
+            href="/teams"
+          />
+          <MenuSidebarItem
+            open={open}
+            href={"/collaborators"}
+            text={"People"}
+            icon={<MuiHandshakeIcon sx={iconStyles} />}
+          />
         </StyledList>
         <Divider />
-        <StyledList>
-          {[
-            {
-              to: "/issues",
-              text: "Issues",
-              icon: <MuiBugReportOutlinedIcon sx={iconStyles} />,
-            },
-            {
-              to: "/tasks",
-              text: "Tasks",
-              icon: <MuiTaskOutlinedIcon sx={iconStyles} />,
-            },
-            {
-              to: "/settings",
-              text: "Settings",
-              icon: <MuiSettingsOutlinedIcon sx={iconStyles} />,
-            },
-          ].map(({ text, ...otherProps }) => {
-            return (
-              <MenuSidebarItem
-                key={text}
-                open={open}
-                text={text}
-                {...otherProps}
-              />
-            );
-          })}
+        <StyledList sx={{ flexGrow: 1 }}>
+          <MenuSidebarItem
+            open={open}
+            href={"/projects"}
+            text={"Projects"}
+            icon={<MuiAssignmentOutlinedIcon sx={iconStyles} />}
+          />
+          <MenuSidebarItem
+            open={open}
+            href={"/issues"}
+            text={"Issues"}
+            icon={<MuiBugReportOutlinedIcon sx={iconStyles} />}
+          />
+          <MenuSidebarItem
+            open={open}
+            href={"/tasks"}
+            text={"Tasks"}
+            icon={<MuiTaskOutlinedIcon sx={iconStyles} />}
+          />
         </StyledList>
+        <MenuSidebarItem
+          open={open}
+          href={"/settings"}
+          text={"Settings"}
+          icon={<MuiSettingsOutlinedIcon sx={iconStyles} />}
+        />
       </Drawer>
     </MuiBox>
   );
 };
 
-export default Sidebar;
+export default MenuSidebar;

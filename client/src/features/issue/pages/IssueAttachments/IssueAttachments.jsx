@@ -90,7 +90,7 @@ const IssueAttachments = () => {
             }}
             sx={{
               color: theme.palette.grey[900],
-              borderRadius: "8px",
+              borderRadius: "6px",
               textTransform: "none",
               backgroundColor: theme.palette.grey[100],
               "&:hover": {

@@ -8,7 +8,7 @@ const SaveButton = ({ label, onClick }) => {
       sx={{
         height: "100%",
         textTransform: "none",
-        borderRadius: "8px",
+        borderRadius: "6px",
       }}
       disableRipple
     >

@@ -8,7 +8,7 @@ const CancelButton = ({ label, onClick }) => {
       sx={{
         color: theme.palette.grey[900],
         height: "100%",
-        borderRadius: "8px",
+        borderRadius: "6px",
         textTransform: "none",
         "&:hover": {
           boxShadow: 4,

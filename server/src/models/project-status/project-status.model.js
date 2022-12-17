@@ -5,7 +5,9 @@ const find = () => {
     SELECT 
       * 
     FROM 
-      project_status_types`);
+      project_status_types
+    ORDER BY 
+      rank_order ASC`);
 };
 
 export default { find };

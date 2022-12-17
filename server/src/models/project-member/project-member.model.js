@@ -29,8 +29,8 @@ const findByProjectId = (projectId) => {
   return db.query(
     `
     SELECT
-      users.name, users.email, users.photo_url, project_members.id, member_id, member_role, project_members.created_at, 
-      project_member_roles.name as "project_member_role_name"
+      users.name, users.email, users.photo_url, project_members.id, member_id, member_role, 
+      project_members.created_at, project_member_roles.name as "project_member_role_name"
     FROM 
       project_members 
     JOIN 

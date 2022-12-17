@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS project_status_types (
   rank_order INTEGER UNIQUE NOT NULL,
   name VARCHAR(32) UNIQUE NOT NULL,
   description VARCHAR(255),
+  color VARCHAR(32) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE,
   deleted_at TIMESTAMP WITH TIME ZONE,
@@ -33,12 +34,15 @@ CREATE TABLE IF NOT EXISTS project_status_types (
   PRIMARY KEY (id)
 );
 
-INSERT INTO project_status_types (rank_order, name, description) 
+INSERT INTO project_status_types (rank_order, name, description, color) 
 VALUES
-  (0, 'Not Started', 'Currently not started'),
-  (1, 'Open', 'Currently open'),
-  (2, 'Paused', 'Project paused'),
-  (3, 'Completed', 'Project complete');
+  (0, 'Not Started', 'Currently not started', '#000'),
+  (1, 'Open', 'Currently open', '#2559f8'),
+  (2, 'Paused', 'Project paused', '#f76c05'),
+  (3, 'Completed', 'Project complete', '#009250');
+
+-- UPDATE project_status_types 
+-- SET color = '#2559f8' WHERE name = 'Open';
 
 -- Creates a table for project activity types
 CREATE TABLE IF NOT EXISTS project_activity_types (
@@ -67,6 +71,7 @@ CREATE TABLE IF NOT EXISTS issue_status_types (
   rank_order INTEGER UNIQUE NOT NULL,
   name VARCHAR(32) UNIQUE NOT NULL,
   description VARCHAR(255),
+  color VARCHAR(32) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE,
   deleted_at TIMESTAMP WITH TIME ZONE,
@@ -74,12 +79,12 @@ CREATE TABLE IF NOT EXISTS issue_status_types (
   PRIMARY KEY (id)
 );
 
-INSERT INTO issue_status_types (rank_order, name, description) 
+INSERT INTO issue_status_types (rank_order, name, description, color) 
 VALUES
-  (0, 'To Do', 'You still have to do issues'),
-  (1, 'In Progress', 'Issue is currently in progress'),
-  (2, 'In Review', 'Issue is In Review'),
-  (3, 'Done', 'Issue is resolved and done');
+  (0, 'To Do', 'You still have to do issues', '#8e241b'),
+  (1, 'In Progress', 'Issue is currently in progress', '#2559f8'),
+  (2, 'In Review', 'Issue is In Review', '#2559f8'),
+  (3, 'Done', 'Issue is resolved and done', '#009250');
 
 -- Creates a table for issue priority types
 CREATE TABLE IF NOT EXISTS issue_priority_types (

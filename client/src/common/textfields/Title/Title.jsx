@@ -11,16 +11,18 @@ import CancelButton from "../../buttons/CancelButton";
 const TitleTextField = styled(TextField)(({ theme }) => {
   return {
     "& .MuiInputBase-input": {
+      overflow: "hidden",
       paddingTop: "4px",
+      textOverflow: "ellipsis",
       paddingBottom: "4px",
     },
     "& .MuiOutlinedInput-root ": {
       fontSize: theme.typography.h4.fontSize,
       fontWeight: 600,
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: "transparent",
       "& fieldset": {
+        border: `2px solid transparent`,
         borderRadius: "6px",
-        border: `2px solid ${theme.palette.common.white}`,
       },
       "&:hover": {
         transitionDuration: "250ms",

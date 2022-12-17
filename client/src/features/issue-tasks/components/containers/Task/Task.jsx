@@ -7,9 +7,9 @@ import MuiGrid from "@mui/material/Grid";
 import MuiButton from "@mui/material/Button";
 import MuiTypography from "@mui/material/Typography";
 
-import EditTaskButton from "../../button/EditTaskButton";
-import DeleteTaskButton from "../../button/DeleteTaskButton";
-import DueDateTag from "../../../../../common/tags/DueDateTag";
+import EditTaskButton from "../../buttons/EditTaskButton";
+import DeleteTaskButton from "../../buttons/DeleteTaskButton";
+import DateLabel from "../../../../../common/tags/DateLabel";
 import Checkbox from "../../../../../common/utilities/Checkbox";
 import TextField from "../../../../../common/textfields/TextField";
 
@@ -156,7 +156,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
                   textDecoration: task.completed && "line-through",
                 }}
               >
-                <DueDateTag dueDate={due_date} />
+                <DateLabel dueDate={due_date} />
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item sx={{ display: show ? "block" : "none" }}>

@@ -8,7 +8,7 @@ const UploadButton = ({ label, onClick, open }) => {
       onClick={onClick}
       sx={{
         fontWeight: 600,
-        borderRadius: "8px",
+        borderRadius: "6px",
         textTransform: "none",
       }}
       endIcon={

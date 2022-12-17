@@ -1,13 +1,16 @@
 import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import { theme } from "../../../../../config/mui.config";
 import MuiDialog from "@mui/material/Dialog";
-import MuiMenuItem from "@mui/material/MenuItem";
+import MuiIconButton from "@mui/material/IconButton";
 import MuiTypography from "@mui/material/Typography";
 import MuiDialogTitle from "@mui/material/DialogTitle";
 import MuiDialogActions from "@mui/material/DialogActions";
 import MuiDialogContent from "@mui/material/DialogContent";
 import MuiDialogContentText from "@mui/material/DialogContentText";
+
+import MuiDeleteIcon from "@mui/icons-material/Delete";
 
 import CancelButton from "../../../../../common/buttons/CancelButton";
 import SecondaryButton from "../../../../../common/buttons/SecondaryButton";
@@ -16,13 +19,11 @@ import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.sli
 import { useDeleteProjectMutation } from "../../../../project/api/project.api";
 import { setLoadingProjectList } from "../../../slice/project-list.slice";
 
-const DeleteProject = ({ id }) => {
+const ProjectDeleteButton = ({ id }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
   const [deleteProject, { isSuccess }] = useDeleteProjectMutation();
 
@@ -32,9 +33,18 @@ const DeleteProject = ({ id }) => {
 
   return (
     <Fragment>
-      <MuiMenuItem disableRipple onClick={handleClickOpen}>
-        <MuiTypography variant="body2">Delete</MuiTypography>
-      </MuiMenuItem>
+      <MuiIconButton
+        size="small"
+        onClick={handleClickOpen}
+        sx={{
+          color: theme.palette.grey[300],
+          transition: "ease-in-out 0.2s",
+          "&:hover": { color: theme.palette.primary.main },
+        }}
+        disableRipple
+      >
+        <MuiDeleteIcon />
+      </MuiIconButton>
       <MuiDialog open={open} onClose={handleClose}>
         <MuiDialogTitle>Delete Project?</MuiDialogTitle>
         <MuiDialogContent>
@@ -60,4 +70,4 @@ const DeleteProject = ({ id }) => {
   );
 };
 
-export default DeleteProject;
+export default ProjectDeleteButton;

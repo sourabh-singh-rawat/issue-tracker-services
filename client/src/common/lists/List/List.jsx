@@ -7,28 +7,30 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => {
   return {
     border: "none",
     ".MuiDataGrid-row": {
+      color: theme.palette.text.primary,
       transition: "ease-in-out 0.150s",
       ":hover": {
-        backgroundColor: theme.palette.grey[100],
+        backgroundColor: theme.palette.grey[50],
       },
     },
     ".MuiDataGrid-cell": {
-      color: theme.palette.secondary.main,
-      border: "none",
+      color: theme.palette.text.primary,
+      borderColor: theme.palette.grey[200],
     },
     "& .MuiDataGrid-columnHeaderTitle": {
+      color: theme.palette.grey[600],
       fontSize: "14px",
       fontWeight: 500,
     },
     ".MuiDataGrid-columnHeaders": {
       color: theme.palette.secondary.dark,
-      borderBottom: `2px solid ${theme.palette.outline.surfaceVariant}`,
+      borderBottom: `2px solid ${theme.palette.grey[300]}`,
     },
     ".MuiDataGrid-columnSeparator": {
       display: "none",
     },
     ".MuiDataGrid-footerContainer": {
-      borderTop: `2px solid ${theme.palette.outline.surfaceVariant}`,
+      borderTop: `2px solid ${theme.palette.grey[300]}`,
     },
   };
 });

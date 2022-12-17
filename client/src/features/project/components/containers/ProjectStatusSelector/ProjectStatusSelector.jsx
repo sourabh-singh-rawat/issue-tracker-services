@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { styled } from "@mui/material";
+import { styled, lighten, darken } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
 import MuiMenuItem from "@mui/material/MenuItem";
@@ -9,21 +9,21 @@ import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const StyledSelect = styled(MuiSelect)(({ theme }) => {
+const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = "#000" }) => {
   return {
     "&.MuiOutlinedInput-root": {
       color: theme.palette.text.primary,
       fontSize: "13px",
       fontWeight: 500,
       textTransform: "capitalize",
-      borderRadius: "8px",
-      backgroundColor: theme.palette.grey[200],
+      borderRadius: "6px",
+      backgroundColor: lighten(statuscolor, 0.95),
       "& fieldset": {
-        border: `2px solid ${theme.palette.grey[200]}`,
+        border: `2px solid ${lighten(statuscolor, 0.85)}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${theme.palette.grey[400]}`,
+        border: `2px solid ${lighten(statuscolor, 0.2)}`,
         transitionDuration: "250ms",
       },
     },
@@ -33,10 +33,6 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => {
 const StyledMenuItem = styled(MuiMenuItem)(({ theme }) => {
   return {
     "&.MuiMenuItem-root": {
-      color: "text.primary",
-      fontSize: "13px",
-      fontWeight: 500,
-      textTransform: "capitalize",
       ":hover": {
         backgroundColor: "action.hover",
       },
@@ -61,6 +57,8 @@ const ProjectStatusSelector = ({
     (store) => store.project.options.status.isLoading
   );
 
+  console.log();
+
   return (
     <MuiGrid container>
       {title && (
@@ -82,12 +80,29 @@ const ProjectStatusSelector = ({
             size="small"
             value={value}
             onChange={handleChange}
-            sx={{ height: variant === "dense" ? "28px" : "auto" }}
+            statuscolor={
+              projectStatus.find((status) => status.id === value)?.color
+            }
+            sx={{
+              height: variant === "dense" ? "28px" : "auto",
+            }}
           >
-            {projectStatus.map(({ id, name }) => {
+            {projectStatus.map(({ id, name, color }) => {
               return (
-                <StyledMenuItem key={id} value={id} disableRipple>
-                  <span>{name}</span>
+                <StyledMenuItem key={id} value={id}>
+                  <MuiTypography
+                    variant="body2"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    sx={{
+                      color,
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {name}
+                  </MuiTypography>
                 </StyledMenuItem>
               );
             })}

@@ -12,18 +12,18 @@ import MuiFormHelperText from "@mui/material/FormHelperText";
 const StyledSelect = styled(MuiSelect)(({ theme }) => {
   return {
     "&.MuiOutlinedInput-root": {
-      color: theme.palette.text.primary,
+      color: theme.palette.grey[700],
       fontSize: "13px",
-      fontWeight: 500,
+      fontWeight: 600,
       textTransform: "capitalize",
-      borderRadius: "8px",
-      backgroundColor: theme.palette.grey[200],
+      borderRadius: "6px",
+      backgroundColor: theme.palette.grey[50],
       "& fieldset": {
-        border: `2px solid ${theme.palette.grey[200]}`,
+        border: `2px solid ${theme.palette.grey[300]}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${theme.palette.grey[400]}`,
+        border: `2px solid ${theme.palette.grey[600]}`,
         transitionDuration: "250ms",
       },
     },
