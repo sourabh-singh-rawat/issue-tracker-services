@@ -9,6 +9,10 @@ const SaveButton = ({ label, onClick }) => {
         height: "100%",
         textTransform: "none",
         borderRadius: "6px",
+        boxShadow: "none",
+        "&:hover": {
+          boxShadow: "none",
+        },
       }}
       disableRipple
     >

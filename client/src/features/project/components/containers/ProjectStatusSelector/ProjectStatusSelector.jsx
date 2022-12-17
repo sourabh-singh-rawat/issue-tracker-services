@@ -9,6 +9,8 @@ import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import Label from "../../../../../common/utilities/Label";
+
 const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = "#000" }) => {
   return {
     "&.MuiOutlinedInput-root": {
@@ -63,12 +65,7 @@ const ProjectStatusSelector = ({
     <MuiGrid container>
       {title && (
         <MuiGrid item xs={12}>
-          <MuiTypography
-            variant="body2"
-            sx={{ fontWeight: 500, paddingBottom: 1 }}
-          >
-            {title}
-          </MuiTypography>
+          <Label title={title} />
         </MuiGrid>
       )}
       <MuiFormControl fullWidth>

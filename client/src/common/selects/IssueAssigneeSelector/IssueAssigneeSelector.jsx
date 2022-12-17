@@ -68,7 +68,7 @@ const IssueAssigneeSelector = ({
                 <MuiMenuItem
                   key={id}
                   value={id}
-                  sx={{ fontSize: "13px", fontWeight: 500 }}
+                  sx={{ fontSize: "13px", fontWeight: 600 }}
                 >
                   <MuiGrid container columnSpacing={1}>
                     <MuiGrid item>

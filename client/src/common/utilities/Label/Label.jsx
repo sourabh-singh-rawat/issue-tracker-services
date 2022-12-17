@@ -8,9 +8,11 @@ const Label = ({ title, error }) => {
     <MuiTypography
       variant="body2"
       sx={{
-        color: error ? "error.main" : theme.palette.grey[700],
-        fontWeight: 500,
+        color: error ? "error.main" : theme.palette.grey[600],
+        fontWeight: 600,
         paddingBottom: 1,
+        // // textTransform: "uppercase",
+        // // fontSize: "12px",
       }}
     >
       {title}
