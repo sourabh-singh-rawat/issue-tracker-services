@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
-import { enIN } from "date-fns/locale";
+import { enIN, hi } from "date-fns/locale";
 import { theme } from "../../../../../config/mui.config";
 
 import MuiAvatar from "@mui/material/Avatar";
@@ -81,12 +81,17 @@ const IssueList = ({ projectId }) => {
       renderCell: (params) => (
         <Link
           to={`/issues/${params.row.id}/overview`}
-          style={{ textDecoration: "none" }}
+          style={{
+            overflow: "hidden",
+            textDecoration: "none",
+          }}
         >
           <MuiTypography
             variant="body2"
             sx={{
               fontWeight: 500,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               color: theme.palette.text.primary,
               "&:hover": {
                 color: theme.palette.primary.main,

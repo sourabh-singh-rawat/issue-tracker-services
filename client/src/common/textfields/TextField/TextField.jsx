@@ -11,14 +11,15 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => {
   return {
     "& .MuiOutlinedInput-root ": {
       fontSize: "14px",
+      color: theme.palette.text.primary,
       borderRadius: "6px",
-      backgroundColor: theme.palette.grey[200],
+      // backgroundColor: theme.palette.grey[50],
       "& fieldset": {
         borderRadius: "6px",
-        border: `2px solid ${theme.palette.grey[200]}`,
+        border: `2px solid ${theme.palette.grey[300]}`,
       },
       "&:hover fieldset": {
-        border: `2px solid ${theme.palette.grey[400]}`,
+        border: `2px solid ${theme.palette.grey[700]}`,
         transitionDuration: "250ms",
       },
       "&.Mui-focused": {
@@ -33,7 +34,7 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => {
       },
       "&.Mui-disabled": {
         fontWeight: 500,
-        backgroundColor: theme.palette.grey[50],
+        backgroundColor: theme.palette.grey[200],
         "& fieldset": {
           border: `2px solid ${theme.palette.grey[300]}`,
         },

@@ -2,14 +2,13 @@
   "name": "issue-tracker",
   "version": "0.0.1",
   "description": "Web application to track issues in your projects",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
   },
   "type": "module",
   "author": "Sourabh Singh Rawat",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
   },

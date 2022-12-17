@@ -1,20 +1,21 @@
 import dotenv from "dotenv/config";
-import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
+
+import sgMail from "../../config/sendgrid.config.js";
 
 /**
  * Sends an email to the given email address
  * @return confirmation that the email is sent
  */
 const invite = async (req, res) => {
-  const { user_id } = req.user;
+  const { uid } = req.user;
   const { email, role_id } = req.body;
   const { id } = req.params;
 
   const tokenMessage = {
     invitationTo: email,
     projectId: id,
-    invitedBy: user_id,
+    invitedBy: uid,
     roleId: role_id,
   };
 

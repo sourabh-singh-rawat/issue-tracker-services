@@ -20,7 +20,7 @@ import { logout } from "../../../utils/firebase/logout.util";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => {
   return {
-    color: theme.palette.primary.main,
+    color: theme.palette.grey[500],
     width: "100%",
     boxShadow: 1,
     zIndex: (theme) => theme.zIndex.drawer + 1,

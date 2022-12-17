@@ -119,7 +119,7 @@ const ProjectForm = () => {
       </MuiGrid>
       <MuiGrid item xs={12}>
         <Box component="form" onSubmit={handleSubmit}>
-          <MuiGrid container rowSpacing={2} columnSpacing={4}>
+          <MuiGrid container rowSpacing={3} columnSpacing={4}>
             <MuiGrid item xs={12}>
               <TextField
                 title="Name"

@@ -132,7 +132,7 @@ const IssueForm = () => {
       </MuiGrid>
       <MuiGrid item xs={12}>
         <MuiBox component="form" onSubmit={handleSubmit}>
-          <MuiGrid container rowSpacing="20px" columnSpacing={4}>
+          <MuiGrid container rowSpacing={3} columnSpacing={4}>
             <MuiGrid item xs={12} sm={12}>
               <TextField
                 name="name"

@@ -90,7 +90,6 @@ const ProjectList = () => {
             to={`/projects/${params.row.id}/overview`}
             style={{
               overflow: "hidden",
-              textOverflow: "ellipsis",
               textDecoration: "none",
             }}
           >
