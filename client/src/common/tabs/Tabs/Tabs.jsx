@@ -1,9 +1,7 @@
-import { useTheme } from "@mui/material/styles";
-
 import MuiTabs from "@mui/material/Tabs";
+import { theme } from "../../../config/mui.config";
 
 const Tabs = (props) => {
-  const theme = useTheme();
   return (
     <MuiTabs
       {...props}
@@ -16,11 +14,11 @@ const Tabs = (props) => {
           opacity: 1,
           minWidth: "auto",
           marginRight: 4,
-          color: `${theme.palette.text.secondary}`,
+          color: `${theme.palette.grey[700]}`,
           fontWeight: 600,
         },
         ".Mui-selected": {
-          color: `primary.main`,
+          color: theme.palette.primary.main,
         },
       }}
     />

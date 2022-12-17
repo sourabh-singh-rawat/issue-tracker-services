@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 
+import { theme } from "../../../config/mui.config";
 import { styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
@@ -12,18 +13,18 @@ import MuiFormControl from "@mui/material/FormControl";
 const StyledSelect = styled(MuiSelect)(({ theme }) => {
   return {
     "&.MuiOutlinedInput-root": {
-      color: theme.palette.text.primary,
+      color: theme.palette.grey[700],
       fontSize: "13px",
-      fontWeight: 500,
+      fontWeight: 600,
       textTransform: "capitalize",
-      backgroundColor: theme.palette.grey[200],
-      borderRadius: "8px",
+      backgroundColor: theme.palette.grey[50],
+      borderRadius: "6px",
       "& fieldset": {
-        border: `2px solid ${theme.palette.grey[200]}`,
+        border: `2px solid ${theme.palette.grey[300]}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${theme.palette.grey[400]}`,
+        border: `2px solid ${theme.palette.grey[600]}`,
         transitionDuration: "250ms",
       },
     },
@@ -88,12 +89,18 @@ const IssueAssigneeSelector = ({
                 sx={{ alignItems: "center" }}
               >
                 <MuiGrid item>
-                  <MuiAvatar sx={{ width: "20px", height: "20px" }} />
+                  <MuiAvatar
+                    sx={{
+                      width: "20px",
+                      height: "20px",
+                      backgroundColor: theme.palette.grey[500],
+                    }}
+                  />
                 </MuiGrid>
                 <MuiGrid item>
                   <MuiTypography
                     variant="body2"
-                    sx={{ fontWeight: 500, fontSize: "13px" }}
+                    sx={{ fontWeight: 600, fontSize: "13px" }}
                   >
                     Unassigned
                   </MuiTypography>

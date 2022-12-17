@@ -8,7 +8,7 @@ const SecondaryButton = ({ label, onClick }) => {
       sx={{
         textTransform: "none",
         backgroundColor: theme.palette.warning.main,
-        borderRadius: "8px",
+        borderRadius: "6px",
         color: "white",
         ":hover": {
           backgroundColor: theme.palette.warning.dark,

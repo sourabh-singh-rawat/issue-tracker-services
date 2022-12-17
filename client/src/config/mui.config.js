@@ -4,20 +4,14 @@ const themeConfig = {
   palette: {
     primary: {
       main: "#2559f8",
-      onPrimary: "#FFFFFF",
-      container: "#EADDFF",
       dark: "#0d309a",
     },
     secondary: {
       main: "#625B71",
-      onSecondary: "##FFFFFF",
-      container: "#E8DEF8",
       dark: "#1D192B",
     },
     tertiary: {
       main: "#7D5260",
-      onTertiary: "#FFFFFF",
-      contaienr: "#FFD8E4",
       dark: "#31111D",
     },
     error: {
@@ -43,7 +37,7 @@ const themeConfig = {
     },
     background: {
       paper: "#FFF",
-      default: "#f2f5fa",
+      default: "#f5f7f9",
     },
     action: {
       hover: "#EEEEEE",

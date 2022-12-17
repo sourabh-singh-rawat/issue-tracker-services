@@ -23,7 +23,7 @@ const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
             padding: "16px",
             minHeight: "60px",
             border: `none`,
-            borderRadius: "8px",
+            borderRadius: "6px",
             transition: "250ms",
             backgroundColor: backgroundColor
               ? backgroundColor
@@ -41,7 +41,7 @@ const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
                   ? theme.palette.primary.dark
                   : theme.palette.grey[100]
               }`,
-              boxShadow: 2,
+              boxShadow: `0 1px 7px 0 ${theme.palette.grey[400]}`,
             },
           }}
         >

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { styled } from "@mui/material/styles";
+import { lighten, styled } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 import MuiSelect from "@mui/material/Select";
 import MuiSkeleton from "@mui/material/Skeleton";
@@ -9,23 +9,36 @@ import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 
-const StyledSelect = styled(MuiSelect)(({ theme }) => {
+const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = "#000" }) => {
   return {
     "&.MuiOutlinedInput-root": {
       color: theme.palette.text.primary,
       fontSize: "13px",
       fontWeight: 500,
       textTransform: "capitalize",
-      borderRadius: "8px",
-      backgroundColor: theme.palette.grey[200],
+      borderRadius: "6px",
+      backgroundColor: lighten(statuscolor, 0.95),
       "& fieldset": {
-        border: `2px solid ${theme.palette.grey[200]}`,
+        border: `2px solid ${lighten(statuscolor, 0.85)}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${theme.palette.grey[400]}`,
+        border: `2px solid ${lighten(statuscolor, 0.2)}`,
         transitionDuration: "250ms",
       },
+    },
+  };
+});
+
+const StyledMenuItem = styled(MuiMenuItem)(({ theme }) => {
+  return {
+    "&.MuiMenuItem-root": {
+      ":hover": {
+        backgroundColor: "action.hover",
+      },
+    },
+    "&.Mui-selected": {
+      color: theme.palette.primary.main,
     },
   };
 });
@@ -67,6 +80,9 @@ const IssueStatusSelector = ({
               size="small"
               value={value}
               onChange={handleChange}
+              statuscolor={
+                issueStatus.find((status) => status.id === value)?.color
+              }
               sx={{
                 color: "text.primary",
                 fontSize: "13px",
@@ -76,20 +92,23 @@ const IssueStatusSelector = ({
               }}
               displayEmpty
             >
-              {issueStatus.map(({ id, name }) => {
+              {issueStatus.map(({ id, name, color }) => {
                 return (
-                  <MuiMenuItem
-                    key={id}
-                    value={id}
-                    sx={{
-                      color: "text.primary",
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    {name}
-                  </MuiMenuItem>
+                  <StyledMenuItem key={id} value={id}>
+                    <MuiTypography
+                      variant="body2"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                      sx={{
+                        color,
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {name}
+                    </MuiTypography>
+                  </StyledMenuItem>
                 );
               })}
             </StyledSelect>

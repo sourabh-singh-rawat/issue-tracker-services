@@ -11,10 +11,10 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => {
   return {
     "& .MuiOutlinedInput-root ": {
       fontSize: "14px",
-      borderRadius: "8px",
+      borderRadius: "6px",
       backgroundColor: theme.palette.grey[200],
       "& fieldset": {
-        borderRadius: "8px",
+        borderRadius: "6px",
         border: `2px solid ${theme.palette.grey[200]}`,
       },
       "&:hover fieldset": {

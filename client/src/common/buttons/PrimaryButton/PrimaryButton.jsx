@@ -10,8 +10,12 @@ const PrimaryButton = ({ type, label, onClick }) => {
       onClick={onClick}
       sx={{
         fontWeight: 600,
-        borderRadius: "8px",
+        borderRadius: "6px",
         textTransform: "none",
+        boxShadow: "none",
+        "&:hover": {
+          boxShadow: "none",
+        },
       }}
       disableRipple
     >

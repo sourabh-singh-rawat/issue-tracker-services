@@ -9,7 +9,7 @@ import MuiListItemIcon from "@mui/material/ListItemIcon";
 
 import TooltipWrapper from "../../utilities/Tooltip";
 
-const MenuSidebarItem = ({ open, text, icon, to }) => {
+const MenuSidebarItem = ({ open, text, icon, href }) => {
   const theme = useTheme();
 
   const listItemTypographyStyles = {
@@ -35,8 +35,14 @@ const MenuSidebarItem = ({ open, text, icon, to }) => {
   };
 
   return (
-    <MuiListItem disablePadding sx={{ display: "block" }}>
-      <Link to={to} style={listLinkStyles}>
+    <MuiListItem
+      disablePadding
+      sx={{
+        display: "block",
+        // backgroundColor: active && "red",
+      }}
+    >
+      <Link to={href} style={listLinkStyles}>
         {open ? (
           <MuiListItemButton sx={listItemButtonStyles} disableRipple>
             <MuiListItemIcon sx={listItemIconStyles}>{icon}</MuiListItemIcon>

@@ -24,6 +24,7 @@ import {
   useGetProjectQuery,
   useUpdateProjectMutation,
 } from "../../api/project.api";
+import { Chip } from "@mui/material";
 
 const Project = () => {
   const { id } = useParams();

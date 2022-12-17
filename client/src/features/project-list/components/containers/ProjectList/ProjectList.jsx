@@ -9,7 +9,7 @@ import { useGridApiContext } from "@mui/x-data-grid";
 import MuiTypography from "@mui/material/Typography";
 
 import List from "../../../../../common/lists/List";
-import ActionButtons from "../../buttons/ActionButtons";
+import ProjectActionsButton from "../../buttons/ProjectActionsButton";
 import ProjectStatusSelector from "../../../../project/components/containers/ProjectStatusSelector";
 
 import {
@@ -84,23 +84,31 @@ const ProjectList = () => {
       headerName: "Name",
       minWidth: 300,
       flex: 0.45,
-      renderCell: (params) => (
-        <Link
-          to={`/projects/${params.row.id}/overview`}
-          style={{ textDecoration: "none" }}
-        >
-          <MuiTypography
-            variant="body2"
-            sx={{
-              color: theme.palette.secondary.main,
-              fontWeight: 500,
-              ":hover": { color: theme.palette.primary.main },
+      renderCell: (params) => {
+        return (
+          <Link
+            to={`/projects/${params.row.id}/overview`}
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              textDecoration: "none",
             }}
           >
-            {params.row.name}
-          </MuiTypography>
-        </Link>
-      ),
+            <MuiTypography
+              variant="body2"
+              sx={{
+                color: theme.palette.text.primary,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                fontWeight: 500,
+                ":hover": { color: theme.palette.primary.main },
+              }}
+            >
+              {params.row.name}
+            </MuiTypography>
+          </Link>
+        );
+      },
     },
     {
       field: "status",
@@ -117,10 +125,13 @@ const ProjectList = () => {
       type: "date",
       minWidth: 125,
       flex: 0.15,
-      renderCell: ({ value }) => {
+      renderCell: ({ value, ...params }) => {
         return value ? (
-          <MuiTypography variant="body2">
-            {format(parseISO(value), "PP", { locale: enIN })}
+          <MuiTypography
+            variant="body2"
+            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            {format(parseISO(value), "dd MMMM yyyy", { locale: enIN })}
           </MuiTypography>
         ) : (
           "-"
@@ -134,23 +145,40 @@ const ProjectList = () => {
       minWidth: 125,
       flex: 0.15,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
+        value ? (
+          <MuiTypography
+            variant="body2"
+            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            {format(parseISO(value), "dd MMMM yyyy", { locale: enIN })}
+          </MuiTypography>
+        ) : (
+          "-"
+        ),
     },
     {
       field: "end_date",
       headerName: "End Date",
       type: "date",
-      minWidth: 125,
+      minWidth: 150,
       flex: 0.075,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
+        value ? (
+          <MuiTypography
+            variant="body2"
+            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            {format(parseISO(value), "dd MMMM yyyy", { locale: enIN })}
+          </MuiTypography>
+        ) : (
+          "-"
+        ),
     },
     {
       field: "action",
-      headerName: "Action",
-      flex: 0.075,
+      headerName: "Actions",
       renderCell: ({ id }) => {
-        return <ActionButtons id={id} />;
+        return <ProjectActionsButton id={id} />;
       },
     },
   ];
