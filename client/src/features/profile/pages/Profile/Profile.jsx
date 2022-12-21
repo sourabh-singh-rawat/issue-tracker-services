@@ -6,7 +6,6 @@ import SectionHeader from "../../../../common/headers/SectionHeader";
 
 const Profile = () => {
   const profile = useSelector((store) => store.profile);
-  console.log(profile);
 
   return (
     <MuiGrid>

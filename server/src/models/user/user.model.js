@@ -11,17 +11,19 @@ const insertOne = (name, email, uid) => {
   );
 };
 
-const findOne = (uid) => {
-  return db.query(
-    `
+const findOne = async (uid) => {
+  return (
+    await db.query(
+      `
     SELECT 
       * 
     FROM 
       users 
     WHERE 
       uid=$1`,
-    [uid]
-  );
+      [uid]
+    )
+  ).rows[0];
 };
 
 const findOneByEmail = (email) => {

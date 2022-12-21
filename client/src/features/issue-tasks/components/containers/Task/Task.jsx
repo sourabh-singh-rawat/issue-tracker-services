@@ -19,7 +19,7 @@ import {
   useDeleteTaskMutation,
 } from "../../../api/issue-tasks.api";
 
-const Task = ({ taskId, due_date, description, completed }) => {
+const Task = ({ taskId, dueDate, description, completed }) => {
   const theme = useTheme();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
   const [show, setShow] = useState(false);
   const [task, setTask] = useState({
     taskId,
-    due_date,
+    dueDate,
     description,
     completed,
   });
@@ -156,7 +156,7 @@ const Task = ({ taskId, due_date, description, completed }) => {
                   textDecoration: task.completed && "line-through",
                 }}
               >
-                <DateLabel dueDate={due_date} />
+                <DateLabel dueDate={dueDate} />
               </MuiTypography>
             </MuiGrid>
             <MuiGrid item sx={{ display: show ? "block" : "none" }}>

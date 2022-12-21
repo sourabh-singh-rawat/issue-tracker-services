@@ -19,7 +19,19 @@ export const selectIssueTasks = ({
   });
 
   let index = 0;
-  let select = "SELECT * FROM issue_tasks ";
+  let select = `
+    SELECT 
+      id,
+      description,
+      completed,
+      due_date as "dueDate",
+      issue_id as "issueId",
+      member_id as "memberId",
+      created_at as "createdAt",
+      updated_at as "updatedAt",
+      deleted_at as "deletedAt"
+    FROM issue_tasks
+    `;
   let condition = `WHERE issue_id='${id}'::uuid `;
   let orderBy = "ORDER BY ";
   let pagination = "";

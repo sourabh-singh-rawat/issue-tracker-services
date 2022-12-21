@@ -114,7 +114,7 @@ const MenuSidebar = () => {
           <MenuSidebarItem
             open={open}
             href={"/collaborators"}
-            text={"People"}
+            text={"Collaborators"}
             icon={<MuiHandshakeIcon sx={iconStyles} />}
           />
         </StyledList>

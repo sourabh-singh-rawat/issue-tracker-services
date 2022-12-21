@@ -8,6 +8,7 @@ import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
+import Label from "../../../../../common/utilities/Label/Label";
 
 const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = "#000" }) => {
   return {
@@ -19,11 +20,11 @@ const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = "#000" }) => {
       borderRadius: "6px",
       backgroundColor: lighten(statuscolor, 0.95),
       "& fieldset": {
-        border: `2px solid ${lighten(statuscolor, 0.85)}`,
+        border: `1px solid ${lighten(statuscolor, 0.85)}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${lighten(statuscolor, 0.2)}`,
+        border: `1px solid ${lighten(statuscolor, 0.2)}`,
         transitionDuration: "250ms",
       },
     },
@@ -57,17 +58,7 @@ const IssueStatusSelector = ({
     <MuiGrid container>
       {title && (
         <MuiGrid item xs={12}>
-          {isLoading ? (
-            <MuiSkeleton width="20%" />
-          ) : (
-            <MuiTypography
-              variant="body2"
-              fontWeight={500}
-              sx={{ paddingBottom: 1 }}
-            >
-              {title}
-            </MuiTypography>
-          )}
+          {isLoading ? <MuiSkeleton width="20%" /> : <Label title={title} />}
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>

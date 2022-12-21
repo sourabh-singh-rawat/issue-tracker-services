@@ -6,10 +6,10 @@ const insertOne = ({
   description,
   status,
   priority,
-  reporter_id,
-  assignee_id,
-  due_date,
-  project_id,
+  reporterId,
+  assigneeId,
+  dueDate,
+  projectId,
 }) => {
   return db.query(
     `
@@ -25,10 +25,10 @@ const insertOne = ({
       description,
       status,
       priority,
-      reporter_id,
-      due_date,
-      project_id,
-      assignee_id,
+      reporterId,
+      dueDate,
+      projectId,
+      assigneeId,
     ]
   );
 };
@@ -42,12 +42,17 @@ const findOne = (id) => {
   return db.query(
     `
     SELECT 
-      issues.id, issues.name, issues.description, issues.status,
-      issues.priority, issues.id,
-      issues.due_date, issues.project_id, issues.created_at,
-      issues.assignee_id,
-      projects.name as "project_name",
-      projects.owner_id as "project_owner_id"
+      issues.id as "id",
+      issues.name as "name",
+      issues.description as "description",
+      issues.status as "status",
+      issues.priority as "priority",
+      issues.due_date as "dueDate",
+      issues.project_id as "projectId",
+      issues.created_at as "createdAt",
+      issues.assignee_id as "assigneeId",
+      projects.name as "projectName",
+      projects.owner_id as "projectOwnerId"
     FROM 
       issues 
     JOIN 
@@ -60,6 +65,12 @@ const findOne = (id) => {
 
 const updateOne = (id, document) => {
   if (document.assignee_id === 0) document.assignee_id = null;
+
+  // remove undefined values from document
+  Object.keys(document).forEach((key) => {
+    if (document[key] === undefined) delete document[key];
+  });
+
   let query = Object.keys(document)
     .reduce(
       (prev, cur, index) => prev + " " + cur + "=$" + (index + 1) + ",",
@@ -68,6 +79,7 @@ const updateOne = (id, document) => {
     .slice(0, -1);
 
   query += " WHERE id='" + id + "' RETURNING *";
+
   return db.query(query, Object.values(document));
 };
 

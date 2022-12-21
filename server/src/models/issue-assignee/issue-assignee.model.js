@@ -6,7 +6,7 @@ const insertOne = ({ issueId, assigneeId }) => {
   return db.query(
     `
     INSERT INTO 
-      issue_assignee (issue_id, assignee_id) 
+      issue_assignee (issue_id, assigneeId) 
     VALUES
       ($1, $2)
     RETURNING

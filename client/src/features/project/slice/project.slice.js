@@ -1,46 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  activty: {},
+  activity: { rows: [], rowCount: 0, page: 0, pageSize: 0, isLoading: true },
   quick: {
     isLoading: true,
     name: "",
     nameSelected: false,
     description: "",
     descriptionSelected: false,
-    created_at: null,
+    createdAt: null,
     status: "b5148da1-e82f-439a-86ba-7b5dbf076277",
   },
   settings: {
     name: "",
     description: "",
     descriptionSelected: false,
-    created_at: null,
-    owner_id: null,
+    createdAt: null,
+    ownerId: null,
     id: "",
     status: "",
     isLoading: true,
   },
-  members: {
-    isLoading: true,
-    rows: [],
-    rowCount: 0,
-    page: 0,
-    pageSize: 10,
-  },
-  issuesStatusCount: {
-    isLoading: true,
-    rows: [],
-  },
+  members: { rows: [], rowCount: 0, page: 0, pageSize: 10, isLoading: true },
+  issuesStatusCount: { isLoading: true, rows: [] },
   options: {
-    status: {
-      isLoading: true,
-      rows: [{ id: "", name: "", description: "" }],
-    },
-    roles: {
-      isLoading: true,
-      rows: [{ id: "", name: "", description: "" }],
-    },
+    status: { rows: [{ id: "", name: "", description: "" }], isLoading: true },
+    roles: { rows: [{ id: "", name: "", description: "" }], isLoading: true },
   },
 };
 
@@ -54,7 +39,7 @@ const projectSlice = createSlice({
         nameSelected,
         description,
         descriptionSelected,
-        created_at,
+        createdAt,
         status,
       } = action.payload;
 
@@ -63,7 +48,7 @@ const projectSlice = createSlice({
         nameSelected,
         description,
         descriptionSelected,
-        created_at,
+        createdAt,
         status,
         isLoading: false,
       };
@@ -121,15 +106,18 @@ const projectSlice = createSlice({
 
       return state;
     },
-    resetProjectSlice: (state) => {
-      state = initialState;
-
-      return state;
+    setActivity: (state, action) => {
+      return {
+        ...state,
+        activity: { ...state.activity, ...action.payload, isLoading: false },
+      };
     },
+    resetProjectSlice: () => initialState,
   },
 });
 
 export const {
+  setActivity,
   setStatus,
   setMemberRoles,
   setList,

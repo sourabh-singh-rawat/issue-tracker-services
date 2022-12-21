@@ -18,7 +18,7 @@ const IssueAssignee = () => {
   const dispatch = useDispatch();
   const issue = useSelector((store) => store.issue);
   const project = useSelector((store) => store.project);
-  const getProjectMembers = useGetProjectMembersQuery(issue.info.project_id);
+  const getProjectMembers = useGetProjectMembersQuery(issue.info.projectId);
   const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
 
   useEffect(() => {
@@ -33,14 +33,14 @@ const IssueAssignee = () => {
 
   const handleChange = async (e) => {
     const userId = e.target.value;
-    await updateIssueMutation({ id, body: { assignee_id: userId } });
-    dispatch(updateIssue({ assignee_id: userId }));
+    await updateIssueMutation({ id, body: { assigneeId: userId } });
+    dispatch(updateIssue({ assigneeId: userId }));
   };
 
   return (
     <MuiBox sx={{ marginTop: "8px" }}>
       <IssueAssigneeSelector
-        value={!issue.info.assignee_id ? 0 : issue.info.assignee_id}
+        value={!issue.info.assigneeId ? 0 : issue.info.assigneeId}
         projectMembers={project.members.rows}
         isLoading={project.members.isLoading}
         handleChange={handleChange}

@@ -9,7 +9,7 @@ const createMember = async (req, res) => {
   const { uid, projectId, roleId } = req.body;
 
   try {
-    const { id } = (await User.findOne(uid)).rows[0];
+    const { id } = await User.findOne(uid);
     const response = (
       await ProjectMember.insertOne({ projectId, memberId: id, roleId })
     ).rows[0];

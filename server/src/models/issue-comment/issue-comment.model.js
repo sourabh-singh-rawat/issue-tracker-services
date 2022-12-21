@@ -1,9 +1,9 @@
 import db from "../../config/db.config.js";
 import ProjectMember from "../../models/project-member/project-member.model.js";
 
-const insertOne = async ({ description, member_id, issue_id }) => {
+const insertOne = async ({ description, memberId, issue_id }) => {
   try {
-    const project_member = (await ProjectMember.findOne({ member_id })).rows[0];
+    const projectMemberId = await ProjectMember.findOne({ memberId });
 
     const created_comment = await db.query(
       `
@@ -13,7 +13,7 @@ const insertOne = async ({ description, member_id, issue_id }) => {
         ($1, $2, $3)
       RETURNING *
       `,
-      [description, project_member.id, issue_id]
+      [description, projectMemberId, issue_id]
     );
 
     return created_comment;

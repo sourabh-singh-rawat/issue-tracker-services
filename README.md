@@ -2,33 +2,52 @@
 
 The Issue Tracker is a Web Application that tracks issues in a project. Once installed, you can:
 
-- Create projects that act as a container for issues
-- Create issues with tasks, comments and attachments.
-- Collaborate with other people by inviting them your project
-- Assign issues to other people
+- 📄 **Create and manage projects**, which act as a container for issues.
+- 🐞 **Create and track issues**, including tasks, comments, and attachments, within a project.
+- ✌️ **Invite others** to collaborate on your project by adding them as members.
+- 🔔 **Use Activity Feed** to stay up-to-date on the status of your project and issues. (Current)
+- 🔔 **Use Notifications and alerts** to stay up-to-date on the status of your project. (Coming Soon)
+- 📊 **Use labels, milestones, and other metadata** to organize and categorize issues. (Coming Soon)
+- 🔒 **Use permissions and access controls** to manage who can view and edit issues within a project. (Coming Soon)
+- 🔒 **Use security controls**, such as two-factor authentication and data encryption, to protect your data and secure access to your projects. (Coming Soon)
+- 💬 **Collaborate with others in real-time** through built-in chat and communication features. (Coming Soon)
+- 📈 **Use reports and charts** to track the progress of your project. (Coming Soon)
+- 📈 **Use integration with other tools**, such as project management or code repository platforms, to streamline your workflow. (Coming Soon)
+- 📈 **Use dashboards** to track the progress of your project and current open issues. (Coming Soon)
+- 💾 **Use version control** to track changes to issues and restore previous versions if needed. (Coming Soon)
 
 ## Installation
 
-- [Download and install node along with npm](https://nodejs.org/en/)
+1. **Download and install Node.js and npm**:
 
-  - Check the installation status of node by running `node --version` in cmd.
-  - Check the installation status of npm by running `npm --version` in cmd.
+   - Go to https://nodejs.org and download LTS version.
+   - Run the installer and follow the prompts to install Node.js and npm.
+   - Check the installation by running `node --version` and `npm --version` in a command prompt.
 
-- [Download and install postgres](https://www.postgresql.org/download/)
+2. **Download and install PostgreSQL**:
 
-  - Open cmd and connect to postgres using `psql -U postgres`, enter your password (eg. `root`)
-  - Copy the contents of `/configs/schema.sql` and paste them in psql console, press enter
-  - Type `/d` to see all the tables created
+   - Go to https://www.postgresql.org/download and download the installer.
+   - Follow the prompts to install PostgreSQL on your system.
+   - Check the installation by running `psql --version` in a command prompt.
 
-- [Download and install git](https://git-scm.com/downloads)
+3. **Connect to PostgreSQL and run the schema SQL file**:
 
-  - Check the installation status of git by running `git --version` in cmd.
+   - Open a command prompt and connect to PostgreSQL using the following command:
+     `psql -U postgres`
+   - Enter your password when prompted.
+   - Copy the contents of `/server/src/configs/db.schema.sql` and paste them in the psql console, then press enter to execute the SQL commands.
+   - To view all the tables that were created, type `\d` in the psql console.
 
-- Clone the git repo using `git clone https://github.com/sourabh-singh-rawat/issue-tracker.git`
+4. **Download and install Git**:
 
-- Install Backend dependencies by going to root and using `npm i`
+   - Go to the Git website (https://git-scm.com/downloads) and download the installer:
+   - Check the installation status of git by running `git --version` in cmd.
 
-- Install Frontend dependencies going to `/client` and using `npm i`
+5. **Clone the git repo and install dependencies**:
+
+   - Clone the git repo using `git clone https://github.com/sourabh-singh-rawat/issue-tracker.git`
+   - Install backend dependencies by going to root and using `npm install`
+   - Install frontend dependencies going to `/client` and using `npm install`
 
 - Install Firebase services for Auth and Storage in frontend
 

@@ -21,11 +21,11 @@ const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = "#000" }) => {
       borderRadius: "6px",
       backgroundColor: lighten(statuscolor, 0.95),
       "& fieldset": {
-        border: `2px solid ${lighten(statuscolor, 0.85)}`,
+        border: `1px solid ${lighten(statuscolor, 0.85)}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${lighten(statuscolor, 0.2)}`,
+        border: `1px solid ${lighten(statuscolor, 0.2)}`,
         transitionDuration: "250ms",
       },
     },
@@ -58,8 +58,6 @@ const ProjectStatusSelector = ({
   const isLoading = useSelector(
     (store) => store.project.options.status.isLoading
   );
-
-  console.log();
 
   return (
     <MuiGrid container>

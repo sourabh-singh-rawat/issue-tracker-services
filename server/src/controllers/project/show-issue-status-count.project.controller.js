@@ -1,13 +1,21 @@
 import Project from "../../models/project/project.model.js";
+import User from "../../models/user/user.model.js";
 
 const showIssuesStatusCount = async (req, res) => {
   const { id } = req.params;
+  const { uid } = req.user;
 
   try {
-    let statusCount = (await Project.statusCount(id)).rows;
+    const { id: userId } = await User.findOne(uid);
+    if (!userId) return res.status(404).send();
+
+    const statusCount = (
+      await Project.statusCount({ projectId: id, memberId: userId })
+    ).rows;
 
     res.send(statusCount);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

@@ -43,7 +43,7 @@ const IssueList = ({ projectId }) => {
     projectId,
     page,
     pageSize,
-    sortBy: "issues.created_at:desc",
+    sortBy: "issues.createdAt:desc",
     reporterId,
   });
   const issueStatus = useGetIssuesStatusQuery();
@@ -125,7 +125,7 @@ const IssueList = ({ projectId }) => {
       ),
     },
     {
-      field: "assignee_id",
+      field: "assigneeId",
       headerName: "Assignee",
       width: 250,
       editable: true,
@@ -133,7 +133,7 @@ const IssueList = ({ projectId }) => {
       renderEditCell: (params) => <SelectAssigneeEditCell {...params} />,
     },
     {
-      field: "reporter_id",
+      field: "reporterId",
       headerName: "Reporter",
       width: 200,
       renderCell: (params) => {
@@ -152,12 +152,12 @@ const IssueList = ({ projectId }) => {
             <MuiListItemIcon>
               <MuiAvatar
                 sx={{ width: "20px", height: "20px" }}
-                src={params.row.reporter_photo_url}
+                src={params.row.reporterPhotoUrl}
               ></MuiAvatar>
             </MuiListItemIcon>
             <MuiListItemText>
               <MuiTypography variant="body2" sx={{ fontWeight: 500 }}>
-                {params.row.reporter_name}
+                {params.row.reporterName}
               </MuiTypography>
             </MuiListItemText>
           </MuiMenuItem>
@@ -165,19 +165,19 @@ const IssueList = ({ projectId }) => {
       },
     },
     {
-      field: "due_date",
+      field: "dueDate",
       headerName: "Due Date",
       width: 150,
       renderCell: ({ value }) =>
         value ? format(parseISO(value), "eee, PP") : "-",
     },
     {
-      field: "project_id",
+      field: "projectId",
       headerName: "Project Id",
       width: 125,
     },
     {
-      field: "created_at",
+      field: "createdAt",
       headerName: "Created At",
       width: 125,
       renderCell: ({ value }) =>

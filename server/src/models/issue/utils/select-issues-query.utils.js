@@ -1,5 +1,5 @@
 export const selectIssuesQuery = ({
-  reporter_id,
+  reporterId,
   filterOptions,
   pagingOptions,
   sortOptions: { field = "issues.status", order = "asc" },
@@ -15,8 +15,18 @@ export const selectIssuesQuery = ({
   let index = 0;
   let select = `
   SELECT
-    issues.id,  issues.name, issues.status, issues.priority, issues.created_at, issues.reporter_id, issues.project_id, issues.assignee_id, issues.due_date,
-    users.id as "reporter_id", users.name as "reporter_name", users.photo_url as "reporter_photo_url"
+    issues.id,
+    issues.name,
+    issues.status,
+    issues.priority, 
+    issues.reporter_id as "reporterId",
+    issues.project_id as "projectId",
+    issues.assignee_id as "assigneeId",
+    issues.due_date as "dueDate",
+    issues.created_at as "createdAt",
+    users.id as "reporterId",
+    users.name as "reporterName",
+    users.photo_url as "reporterPhotoUrl"
   FROM 
     issues
   JOIN 
@@ -32,7 +42,7 @@ export const selectIssuesQuery = ({
       FROM 
         project_members 
       WHERE 
-        member_id='${reporter_id}'
+        id='${reporterId}'
       )
     `;
   let orderBy = "ORDER BY ";

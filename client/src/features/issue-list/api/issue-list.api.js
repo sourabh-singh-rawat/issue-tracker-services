@@ -9,9 +9,9 @@ const issueListApiSlice = apiSlice.injectEndpoints({
         pageSize = 10,
         sortBy = "issues.created_at:desc",
         reporterId,
-        assignee_id = "",
+        assigneeId = "",
       }) => {
-        return `/issues?projectId=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}&reporter_id=${reporterId}&assignee_id=${assignee_id}`;
+        return `/issues?projectId=${projectId}&page=${page}&limit=${pageSize}&sortBy=${sortBy}&reporterId=${reporterId}&assigneeId=${assigneeId}`;
       },
       providesTags: ["IssueList"],
     }),

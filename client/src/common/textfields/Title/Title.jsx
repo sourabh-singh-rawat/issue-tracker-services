@@ -21,14 +21,14 @@ const TitleTextField = styled(TextField)(({ theme }) => {
       fontWeight: 600,
       backgroundColor: "transparent",
       "& fieldset": {
-        border: `2px solid transparent`,
+        border: `1px solid transparent`,
         borderRadius: "6px",
       },
       "&:hover": {
         transitionDuration: "250ms",
         backgroundColor: theme.palette.grey[200],
         "& fieldset": {
-          border: `2px solid ${theme.palette.grey[200]}`,
+          border: `1px solid ${theme.palette.grey[200]}`,
           transitionDuration: "250ms",
         },
       },
@@ -36,7 +36,7 @@ const TitleTextField = styled(TextField)(({ theme }) => {
         backgroundColor: theme.palette.background.default,
         transitionDuration: "250ms",
         "& fieldset": {
-          border: `2px solid ${theme.palette.primary.main}`,
+          border: `1px solid ${theme.palette.primary.main}`,
           transitionDuration: "250ms",
         },
       },

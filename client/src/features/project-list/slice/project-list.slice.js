@@ -28,9 +28,14 @@ const projectListSlice = createSlice({
       state.isLoading = true;
       return state;
     },
+    resetProjectListSlice: () => initialState,
   },
 });
 
-export const { setProjectList, updateProjectList, setLoadingProjectList } =
-  projectListSlice.actions;
+export const {
+  setProjectList,
+  updateProjectList,
+  setLoadingProjectList,
+  restProjectListSlice,
+} = projectListSlice.actions;
 export default projectListSlice.reducer;

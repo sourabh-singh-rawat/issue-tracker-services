@@ -1,10 +1,11 @@
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { enIN } from "date-fns/locale";
 import { format, parseISO } from "date-fns";
 
+import MuiGrid from "@mui/material/Grid";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiTypography from "@mui/material/Typography";
 
@@ -32,31 +33,45 @@ const MemberList = () => {
       field: "name",
       headerName: "Name",
       minWidth: 200,
-      renderCell: ({ id, value, row: { photo_url } }) => {
+      renderCell: ({ id, value, row: { photoUrl } }) => {
         return (
-          <Fragment>
-            <MuiAvatar
-              src={photo_url}
-              sx={{ width: "32px", height: "32px", marginRight: "10px" }}
-            >
-              {value.match(/\b(\w)/g)[0]}
-            </MuiAvatar>
-            <Link to={`/profile/${id}`} style={{ textDecoration: "none" }}>
-              <MuiTypography
-                variant="body2"
+          <MuiGrid
+            container
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <MuiGrid item>
+              <MuiAvatar
+                src={photoUrl}
                 sx={{
-                  color: "text.primary",
-                  fontWeight: 500,
-                  "&:hover": {
-                    color: "primary.main",
-                    textDecoration: "none !important",
-                  },
+                  width: "24px",
+                  height: "24px",
+                  marginRight: "8px",
                 }}
               >
-                {value}
-              </MuiTypography>
-            </Link>
-          </Fragment>
+                {value.match(/\b(\w)/g)[0]}
+              </MuiAvatar>
+            </MuiGrid>
+            <MuiGrid item>
+              <Link to={`/profile/${id}`} style={{ textDecoration: "none" }}>
+                <MuiTypography
+                  variant="body2"
+                  sx={{
+                    color: "text.primary",
+                    fontWeight: 500,
+                    "&:hover": {
+                      color: "primary.main",
+                      textDecoration: "none !important",
+                    },
+                  }}
+                >
+                  {value}
+                </MuiTypography>
+              </Link>
+            </MuiGrid>
+          </MuiGrid>
         );
       },
     },
@@ -66,18 +81,25 @@ const MemberList = () => {
       headerName: "Email",
       minWidth: 200,
       renderCell: ({ value }) => {
-        return value[0].toUpperCase() + value.slice(1, value.length);
+        return (
+          <MuiTypography
+            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            variant="body2"
+          >
+            {value[0].toUpperCase() + value.slice(1, value.length)}
+          </MuiTypography>
+        );
       },
     },
     {
-      field: "created_at",
+      field: "createdAt",
       headerName: "Creation Date",
       minWidth: 200,
       renderCell: ({ value }) => {
         return format(parseISO(value), "PP", { locale: enIN });
       },
     },
-    { field: "project_member_role_name", headerName: "Role", minWidth: 200 },
+    { field: "projectMemberRoleName", headerName: "Role", minWidth: 200 },
   ];
 
   return (
@@ -86,7 +108,7 @@ const MemberList = () => {
       rowCount={rowCount}
       columns={columns}
       pageSize={pageSize}
-      getRowId={(row) => row.member_id}
+      getRowId={(row) => row.memberId}
       isLoading={projectMembers.isLoading}
       initialState={{
         sorting: { sortModel: [{ field: "name", sort: "asc" }] },

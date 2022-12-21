@@ -102,12 +102,12 @@ const Issue = () => {
           breadcrumbItems={[
             { text: "Projects", onClick: () => navigate(`/projects`) },
             {
-              text: issue.project_name,
-              onClick: () => navigate(`/projects/${issue.project_id}/overview`),
+              text: issue.projectName,
+              onClick: () => navigate(`/projects/${issue.projectId}/overview`),
             },
             {
               text: "Issues",
-              onClick: () => navigate(`/projects/${issue.project_id}/issues`),
+              onClick: () => navigate(`/projects/${issue.projectId}/issues`),
             },
             {
               text: issue.id,

@@ -29,14 +29,14 @@ const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
               ? backgroundColor
               : theme.palette.common.white,
 
-            border: `2px solid ${
+            border: `1px solid ${
               backgroundColor ? backgroundColor : theme.palette.grey[200]
             }`,
             ":hover": {
               backgroundColor: backgroundColor
                 ? theme.palette.primary.dark
                 : theme.palette.grey[100],
-              border: `2px solid ${
+              border: `1px solid ${
                 backgroundColor
                   ? theme.palette.primary.dark
                   : theme.palette.grey[100]

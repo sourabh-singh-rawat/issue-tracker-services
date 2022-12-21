@@ -1,12 +1,17 @@
 import ProjectMemberRole from "../../models/project-member-roles/project-member-roles.model.js";
 
 /**
- * Lists roles available to project members
+ * Get all project member roles
+ * @param {*} req
+ * @param {*} res
+ * @returns - all project member roles
  */
 const indexMemberRoles = async (req, res) => {
   try {
-    const role = await ProjectMemberRole.find();
-    res.send({ rows: role.rows, rowCount: role.rowCount });
+    const projectMemberRoles = await ProjectMemberRole.find();
+    if (projectMemberRoles.length === 0) res.status(404).send();
+
+    res.send({ rows: projectMemberRoles, rowCount: projectMemberRoles.length });
   } catch (error) {
     res.status(500).send();
   }

@@ -9,6 +9,7 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiMenuItem from "@mui/material/MenuItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
+import Label from "../../utilities/Label";
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => {
   return {
@@ -20,11 +21,11 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => {
       backgroundColor: theme.palette.grey[50],
       borderRadius: "6px",
       "& fieldset": {
-        border: `2px solid ${theme.palette.grey[300]}`,
+        border: `1px solid ${theme.palette.grey[300]}`,
       },
       "&:hover fieldset": {
         backgroundColor: "transparent",
-        border: `2px solid ${theme.palette.grey[600]}`,
+        border: `1px solid ${theme.palette.grey[600]}`,
         transitionDuration: "250ms",
       },
     },
@@ -48,33 +49,25 @@ const IssueAssigneeSelector = ({
         </MuiGrid>
       ) : (
         <MuiFormControl>
-          {title && (
-            <MuiTypography
-              variant="body2"
-              fontWeight={500}
-              sx={{ paddingBottom: 1 }}
-            >
-              {title}
-            </MuiTypography>
-          )}
+          {title && <Label title={title} />}
           <StyledSelect
-            name="assignee_id"
+            name="assigneeId"
             size="small"
             value={!value ? 0 : value}
             onChange={handleChange}
           >
-            {projectMembers.map(({ id, name, photo_url }) => {
+            {projectMembers.map(({ memberId, name, photoUrl }) => {
               return (
                 <MuiMenuItem
-                  key={id}
-                  value={id}
+                  key={memberId}
+                  value={memberId}
                   sx={{ fontSize: "13px", fontWeight: 600 }}
                 >
                   <MuiGrid container columnSpacing={1}>
                     <MuiGrid item>
                       <MuiAvatar
                         sx={{ width: "20px", height: "20px" }}
-                        src={photo_url}
+                        src={photoUrl}
                       ></MuiAvatar>
                     </MuiGrid>
                     <MuiGrid item>{name}</MuiGrid>
