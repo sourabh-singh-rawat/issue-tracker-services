@@ -14,7 +14,7 @@ const initialState = {
     descriptionSelected: false,
     status: "",
     priority: "",
-    assignee_id: 0,
+    assigneeId: 0,
     project_id: null,
     isLoading: true,
   },
@@ -62,11 +62,7 @@ const issueSlice = createSlice({
       state.info = { ...state.info, ...action.payload };
       return state;
     },
-    resetIssueSlice: (state) => {
-      state = initialState;
-
-      return state;
-    },
+    resetIssueSlice: () => initialState,
   },
 });
 

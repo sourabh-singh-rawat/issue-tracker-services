@@ -17,7 +17,7 @@ const index = async (req, res) => {
   }
 
   try {
-    const { id } = (await User.findOne(uid)).rows[0];
+    const { id } = await User.findOne(uid);
 
     const projects = (
       await Project.find({

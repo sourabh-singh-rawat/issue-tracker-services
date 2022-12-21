@@ -1,36 +1,32 @@
 import db from "../../config/db.config.js";
-import { selectProjectsQuery } from "./utils/select-projects-query.utils.js";
+import { buildProjectsQuery } from "./utils/build-projects-query.utils.js";
 import ProjectMember from "../../models/project-member/project-member.model.js";
-import projectMemberRole from "../project-member-roles/project-member-roles.model.js";
+import ProjectMemberRoles from "../project-member-roles/project-member-roles.model.js";
+import ProjectActivity from "../project-activity/project-activity.model.js";
+import ProjectActivityTypes from "../project-activity-types/project-activity-types.model.js";
 
 /**
  * Adds a new project to the database
  * @param {Object} project - The project to be added. Takes the following properties:
- * - id: the id of the user creating the project
- * - name: the name of the project
- * - description: the description of the project
- * - status: the status of the project
- * - start_date: the start date of the project
- * - end_date: the end date of the project
+ *  - ownerId: the id of the user creating the project
+ *  - name: the name of the project
+ *  - description: the description of the project
+ *  - status: the status of the project
+ *  - start_date: the start date of the project
+ *  - end_date: the end date of the project
  * @returns {Promise} A promise that resolves to the newly added project.
  */
 const insertOne = async ({
-  id,
+  ownerId,
   name,
   description,
   status,
   startDate,
   endDate,
 }) => {
-  const pool = await db.connect();
-  try {
-    await db.query("BEGIN");
-
-    // Insert project into projects table
-    // TODO: Add a check to make sure the user is not already a member of the project
-    const createdProject = (
-      await db.query(
-        ` 
+  return (
+    await db.query(
+      ` 
         INSERT INTO projects
           (owner_id, name, description, status, start_date, end_date)
         VALUES
@@ -38,30 +34,9 @@ const insertOne = async ({
         RETURNING
           *
         `,
-        [id, name, description, status, startDate, endDate]
-      )
-    ).rows[0];
-
-    // Select default project member role
-    const defaultRole = (await projectMemberRole.find()).rows[0].id;
-
-    // Insert project owner into project_members table
-    await ProjectMember.insertOne({
-      roleId: defaultRole,
-      projectId: createdProject.id,
-      memberId: id,
-    });
-
-    await db.query("COMMIT");
-
-    return createdProject;
-  } catch (error) {
-    await db.query("ROLLBACK");
-
-    return error;
-  } finally {
-    pool.release();
-  }
+      [ownerId, name, description, status, startDate, endDate]
+    )
+  ).rows[0];
 };
 
 /**
@@ -70,30 +45,55 @@ const insertOne = async ({
  * @returns {Promise} A promise that resolves to an array of projects
  */
 const find = (options) => {
-  const { query, colValues } = selectProjectsQuery(options);
+  const { query, colValues } = buildProjectsQuery(options);
   return db.query(query, colValues);
 };
 
-const findOne = (id) => {
+//
+const findOne = ({ projectId, memberId }) => {
   return db.query(
-    `SELECT 
-      * 
-    FROM 
-      projects 
+    `
+    SELECT 
+      id,
+      name,
+      owner_id as "ownerId",
+      description,
+      start_date as "startDate",
+      status,
+      updated_at as "updatedAt",
+      end_date as "endDate",
+      created_at as "createdAt",
+      deleted_at as "deletedAt"
+    FROM projects
     WHERE 
-      id = $1`,
-    [id]
+      id = $1 
+      AND 
+      $2 IN (
+              SELECT member_id
+              FROM   project_members
+              WHERE  project_id = $1
+            )
+    `,
+    [projectId, memberId]
   );
 };
 
-const updateOne = (id, project) => {
-  let query = Object.keys(project).reduce((prev, cur, index) => {
-    return prev + " " + cur + "=$" + (index + 1) + ",";
-  }, "UPDATE projects SET");
-  query = query.slice(0, -1);
-  query += " WHERE id='" + id + "' RETURNING *";
+const updateOne = ({ id, body }) => {
+  const columns = Object.keys(body);
+  const values = Object.values(body);
 
-  return db.query(query, Object.values(project));
+  const setClause = columns
+    .map((column, index) => `${column} = $${index + 1}`)
+    .join(", ");
+
+  const query = `
+    UPDATE projects   
+    SET ${setClause}
+    WHERE id = '${id}'
+    RETURNING *
+  `;
+
+  return db.query(query, values);
 };
 
 /**
@@ -113,13 +113,23 @@ const deleteOne = (id) => {
   );
 };
 
-const statusCount = (id) => {
+const statusCount = ({ projectId, memberId }) => {
   return db.query(
     `
     SELECT
-      issue_status_types.id, issue_status_types.name, issue_status_types.description, COUNT(issues.status) 
+      issue_status_types.id, issue_status_types.name, issue_status_types.description, COUNT(issues.status)
     FROM
-      (SELECT * FROM issues where project_id = $1) as issues
+      (
+        SELECT * 
+        FROM issues 
+        WHERE 
+          project_id = $1 AND 
+          $2 IN (
+                  SELECT member_id
+                  FROM   project_members
+                  WHERE  project_id = $1
+                ) 
+      ) as issues
     RIGHT OUTER JOIN
       issue_status_types ON issue_status_types.id = issues.status
     GROUP BY
@@ -127,12 +137,12 @@ const statusCount = (id) => {
     ORDER BY
       issue_status_types.rank_order
     `,
-    [id]
+    [projectId, memberId]
   );
 };
 
 const rowCount = (options) => {
-  const { query, colValues } = selectProjectsQuery(options, "projects");
+  const { query, colValues } = buildProjectsQuery(options, "projects");
   return db.query(query, colValues);
 };
 

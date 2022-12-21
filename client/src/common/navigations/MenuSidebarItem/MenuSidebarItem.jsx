@@ -15,7 +15,7 @@ const MenuSidebarItem = ({ open, text, icon, href }) => {
   const listItemTypographyStyles = {
     color: theme.palette.text.primary,
     opacity: open ? 1 : 0,
-    fontWeight: 500,
+    fontWeight: 600,
   };
 
   const listItemIconStyles = {

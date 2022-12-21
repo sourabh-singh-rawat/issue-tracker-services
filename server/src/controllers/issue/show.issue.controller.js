@@ -11,8 +11,6 @@ const show = async (req, res) => {
 
   try {
     const issue = (await Issue.findOne(id)).rows[0];
-    // const hexString = issue.id.replace(/-/g, "");
-    // const newIssueId = Buffer.from(hexString, "hex").toString("base64");
     if (!issue) res.status(404).send();
 
     return res.send({ ...issue });

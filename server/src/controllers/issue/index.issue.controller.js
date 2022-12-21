@@ -10,13 +10,21 @@ import ProjectMember from "../../models/project-member/project-member.model.js";
  */
 const index = async (req, res) => {
   const { uid } = req.user;
-  const { status, priority, assigned_to, projectId, limit, page, sort_by } =
-    req.query;
+  const {
+    status,
+    priority,
+    assigneeId,
+    projectId,
+    limit,
+    page,
+    sortBy,
+    createdAt,
+  } = req.query;
 
   const filterOptions = {
     status,
     priority,
-    assigned_to,
+    assignee_id: assigneeId,
     ["issues.project_id"]: projectId,
   };
 
@@ -26,19 +34,19 @@ const index = async (req, res) => {
   };
 
   const sortOptions = {};
-  if (sort_by) {
-    const [field, order] = sort_by.split(":");
-    sortOptions.field = field;
+  if (sortBy) {
+    const [field, order] = sortBy.split(":");
+    sortOptions.field = field.replace(/([A-Z])/g, "_$1").toLowerCase();
     sortOptions.order = order;
   }
 
   try {
-    const { id } = (await User.findOne(uid)).rows[0];
-    const member = (await ProjectMember.findOne({ member_id: id })).rows[0];
+    const { id } = await User.findOne(uid);
+    const reporterId = await ProjectMember.findOne({ memberId: id });
 
     const issues = (
       await Issue.find({
-        reporter_id: member.member_id,
+        reporterId,
         filterOptions,
         pagingOptions,
         sortOptions,
@@ -47,7 +55,7 @@ const index = async (req, res) => {
 
     const rowCount = (
       await Issue.rowCount({
-        reporter_id: member.member_id,
+        reporterId,
         filterOptions,
         pagingOptions: {},
         sortOptions: {},
@@ -56,6 +64,7 @@ const index = async (req, res) => {
 
     res.send({ rows: issues, rowCount: rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

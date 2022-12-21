@@ -57,6 +57,11 @@ const projectApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: ["IssueStats"],
     }),
+    getProjectActivity: build.query({
+      query: (id) => {
+        return `/projects/${id}/activity`;
+      },
+    }),
     updateProject: build.mutation({
       query: ({ id, body }) => {
         return {
@@ -97,6 +102,7 @@ export const {
   useGetProjectIssuesQuery,
   useGetProjectMembersQuery,
   useGetProjectIssuesStatusCountQuery,
+  useGetProjectActivityQuery,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
   useSendInviteMutation,

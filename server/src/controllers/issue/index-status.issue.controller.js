@@ -11,6 +11,7 @@ const indexStatus = async (req, res) => {
     const issueStatus = await IssueStatus.find();
     res.send({ rows: issueStatus.rows, rowCount: issueStatus.rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

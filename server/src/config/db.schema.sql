@@ -47,23 +47,60 @@ VALUES
 -- Creates a table for project activity types
 CREATE TABLE IF NOT EXISTS project_activity_types (
   id UUID DEFAULT uuid_generate_v4(),
-  rank_order INTEGER UNIQUE NOT NULL,
   name varchar(32) UNIQUE NOT NULL, 
   description varchar(255) NOT NULL,
 
   PRIMARY KEY (id)
 );
 
-INSERT INTO project_activity_types (rank_order, name, description)
+INSERT INTO project_activity_types (name, description)
 VALUES
-  (0, 'CREATED_PROJECT', 'created project'), 
-  (1, 'UPDATED_PROJECT_NAME', 'updated project name'), 
-  (2, 'UPDATED_PROJECT_DESCRIPTION', 'updated project description'), 
-  (3, 'UPDATED_PROJECT_STATUS', 'updated project status'), 
-  (4, 'UPDATED_PROJECT_START_DATE', 'updated project start date'),
-  (5, 'UPDATED_PROJECT_END_DATE', 'updated project end date'),
-  (6, 'CREATED_PROJECT_MEMBER', 'created project member'),
-  (7, 'DELETED_PROJECT_MEMBER', 'deleted project member');
+  ('CREATED', 'created this project'), 
+  ('UPDATED_NAME', 'changed the name of the project'), 
+  ('UPDATED_DESCRIPTION', 'changed the description of the project'), 
+  ('UPDATED_STATUS', 'changed the status of the project'), 
+  ('UPDATED_START_DATE', 'changed the start date of the project'),
+  ('UPDATED_END_DATE', 'updated the end date of the project'),
+  ('CREATED_ISSUE', 'created a new issue'),
+  ('UPDATED_ISSUE', 'updated an issue'),
+  ('DELETED_ISSUE', 'deleted an issue'),
+  ('CREATED_ISSUE_ATTACHMENT', 'added an attachment to an issue'),
+  ('DELETED_ISSUE_ATTACHMENT', 'deleted an attachment from an issue'),
+  ('CREATED_ISSUE_COMMENT', 'added a comment to an issue'),
+  ('UPDATED_ISSUE_COMMENT', 'updated a comment on an issue'),
+  ('DELETED_ISSUE_COMMENT', 'deleted a comment from an issue'),
+  ('CREATED_TASK', 'created a new task'),
+  ('UPDATED_TASK', 'updated a task'),
+  ('DELETED_TASK', 'deleted a task'),
+  ('CREATED_MEMBER', 'added a new member'),
+  ('DELETED_MEMBER', 'removed project member');
+
+CREATE TABLE IF NOT EXISTS issue_activity_types (
+  id UUID DEFAULT uuid_generate_v4(),
+  name varchar(32) UNIQUE NOT NULL, 
+  description varchar(255) NOT NULL,
+
+  PRIMARY KEY (id)
+);
+
+INSERT INTO issue_activity_types (name, description)
+VALUES
+  ('CREATED_ISSUE', 'user created issue'), 
+  ('UPDATED_ISSUE_NAME', 'updated issue name'), 
+  ('UPDATED_ISSUE_DESCRIPTION', 'updated issue description'), 
+  ('UPDATED_ISSUE_STATUS', 'updated issue status'), 
+  ('UPDATED_ISSUE_PRIORITY', 'updated issue priority'),
+  ('UPDATED_ISSUE_DUE_DATE', 'updated issue due date'),
+  ('UPDATED_REPORTER', 'updated reporter'),
+  ('UPDATED_ASSIGNEE', 'updated assignee'),
+  ('CREATED_TASK', 'created task'),
+  ('UPDATED_TASK', 'updated task'),
+  ('DELETED_TASK', 'deleted task'),
+  ('CREATED_ISSUE_ATTACHMENT', 'created issue attachment'),
+  ('DELETED_ISSUE_ATTACHMENT', 'deleted issue attachment'),
+  ('CREATED_ISSUE_COMMENT', 'created issue comment'),
+  ('UPDATED_ISSUE_COMMENT', 'updated issue comment'),
+  ('DELETED_ISSUE_COMMENT', 'deleted issue comment');
 
 -- Creates a table for issue status types
 CREATE TABLE IF NOT EXISTS issue_status_types (
@@ -175,6 +212,21 @@ CREATE TABLE IF NOT EXISTS project_members (
   UNIQUE (project_id, member_id)
 );
 
+CREATE TABLE IF NOT EXISTS project_activities (
+  id UUID DEFAULT uuid_generate_v4(),
+  type_id UUID NOT NULL,
+  project_id UUID NOT NULL,
+  user_id UUID NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE,
+  deleted_at TIMESTAMP WITH TIME ZONE,
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+  FOREIGN KEY (type_id) REFERENCES project_activity_types(id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- Creates a table for issues
 CREATE TABLE IF NOT EXISTS issues (
   id UUID DEFAULT uuid_generate_v4(),
@@ -228,6 +280,20 @@ CREATE TABLE IF NOT EXISTS issue_comments (
   FOREIGN KEY (member_id) REFERENCES project_members(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS issue_attachments (
+  id UUID DEFAULT uuid_generate_v4(),
+  bucket VARCHAR(255),
+  content_type VARCHAR(255),
+  full_path VARCHAR(255),
+  name VARCHAR(255),
+  issue_id UUID,
+  size INTEGER,
+  url VARCHAR(1000),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS team_members (
   id UUID DEFAULT uuid_generate_v4(),
   member_role UUID,
@@ -248,18 +314,4 @@ CREATE TABLE IF NOT EXISTS teams (
   deleted_at TIMESTAMP WITH TIME ZONE,
 
   PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS issue_attachments (
-  id UUID DEFAULT uuid_generate_v4(),
-  bucket VARCHAR(255),
-  content_type VARCHAR(255),
-  full_path VARCHAR(255),
-  name VARCHAR(255),
-  issue_id UUID,
-  size INTEGER,
-  url VARCHAR(1000),
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
 );

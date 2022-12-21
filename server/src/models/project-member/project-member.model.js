@@ -1,16 +1,20 @@
 import db from "../../config/db.config.js";
 
-const findOne = ({ member_id }) => {
-  return db.query(
-    `
-  SELECT 
-    *
-  FROM
-    project_members
-  WHERE 
-    member_id=$1`,
-    [member_id]
-  );
+const findOne = async ({ memberId }) => {
+  try {
+    const id = (
+      await db.query(
+        `
+        SELECT id 
+        FROM project_members WHERE member_id=$1`,
+        [memberId]
+      )
+    ).rows[0].id;
+
+    return id;
+  } catch (error) {
+    return error;
+  }
 };
 
 const insertOne = ({ projectId, memberId, roleId }) => {
@@ -25,21 +29,33 @@ const insertOne = ({ projectId, memberId, roleId }) => {
   );
 };
 
-const findByProjectId = (projectId) => {
+const findByProjectId = ({ projectId, memberId }) => {
   return db.query(
     `
-    SELECT
-      users.name, users.email, users.photo_url, project_members.id, member_id, member_role, 
-      project_members.created_at, project_member_roles.name as "project_member_role_name"
-    FROM 
+    SELECT 
+      users.name, 
+      users.email, 
+      users.photo_url as "photoUrl",
+      project_members.member_id as "userId", 
+      project_members.member_role as "memberRole",
+      project_members.id as "memberId",
+      project_members.created_at as "createdAt", 
+      project_member_roles.name as "projectMemberRoleName"
+    FROM
       project_members 
     JOIN 
       users ON project_members.member_id = users.id 
     JOIN
       project_member_roles ON project_member_roles.id = project_members.member_role
     WHERE 
-      project_id=$1`,
-    [projectId]
+      project_id=$1
+      AND
+      $2 IN (
+        SELECT member_id
+        FROM   project_members
+        WHERE  project_id = $1
+        )`,
+    [projectId, memberId]
   );
 };
 

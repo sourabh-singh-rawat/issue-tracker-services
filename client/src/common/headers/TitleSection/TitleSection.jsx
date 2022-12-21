@@ -53,8 +53,8 @@ const TitleSection = ({
             <MuiSkeleton width="80px" />
           ) : (
             <MuiTypography variant="body2" component="span" fontWeight={600}>
-              {page.created_at &&
-                format(parseISO(page.created_at), "dd MMMM yyyy", {
+              {page.createdAt &&
+                format(parseISO(page.createdAt), "dd MMMM yyyy", {
                   locale: enIN,
                 })}
             </MuiTypography>

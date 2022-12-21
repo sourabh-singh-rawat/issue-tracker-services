@@ -5,7 +5,7 @@ const index = async (req, res) => {
   const { uid } = req.user;
 
   try {
-    const { id } = (await User.findOne(uid)).rows[0];
+    const { id } = await User.findOne(uid);
     const peopleRelatedToUid = await ProjectMember.findPeopleRelatedToUid(id);
 
     res.send({

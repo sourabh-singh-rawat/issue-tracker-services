@@ -6,7 +6,7 @@ const create = async (req, res) => {
     const { uid } = req.user;
     const { name, description } = req.body;
 
-    const { id } = (await User.findOne(uid)).rows[0];
+    const { id } = await User.findOne(uid);
     const team = (await Team.insertOne({ name, description, team_leader: id }))
       .rows[0];
 

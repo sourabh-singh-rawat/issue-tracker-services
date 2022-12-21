@@ -30,6 +30,7 @@ import {
   updateIssue,
 } from "../../slice/issue.slice";
 import { setMembers } from "../../../project/slice/project.slice";
+import Label from "../../../../common/utilities/Label";
 
 const IssueForm = () => {
   const { id } = useParams();
@@ -48,9 +49,9 @@ const IssueForm = () => {
     description: "",
     status: "",
     priority: "",
-    due_date: null,
-    assignee_id: null,
-    project_id: project.id,
+    dueDate: null,
+    assigneeId: null,
+    projectId: project.id,
   });
 
   const [createIssue] = useCreateIssueMutation();
@@ -156,23 +157,14 @@ const IssueForm = () => {
             <MuiGrid item xs={12} sm={12}>
               {id ? (
                 <TextField
-                  name="project_id"
+                  name="projectId"
                   title="Project"
                   value={project.isLoading ? "loading" : project.name}
                   disabled
                 />
               ) : (
                 <Fragment>
-                  <MuiTypography
-                    variant="body2"
-                    sx={{
-                      color: "primary.text",
-                      paddingBottom: 1,
-                      fontWeight: 600,
-                    }}
-                  >
-                    Project
-                  </MuiTypography>
+                  <Label title="Project" />
                   <MuiAutocomplete
                     disablePortal
                     size="small"
@@ -196,7 +188,7 @@ const IssueForm = () => {
             <MuiGrid item xs={12} sm={12}>
               <IssueAssigneeSelector
                 title="Assignee"
-                value={formFields.assignee_id}
+                value={formFields.assigneeId}
                 isLoading={members.isLoading}
                 projectMembers={members.rows}
                 handleChange={(e) => {
@@ -204,9 +196,9 @@ const IssueForm = () => {
 
                   setFormFields({
                     ...formFields,
-                    assignee_id: value,
+                    assigneeId: value,
                   });
-                  dispatch(updateIssue({ assignee_id: value }));
+                  dispatch(updateIssue({ assigneeId: value }));
                 }}
               />
             </MuiGrid>
@@ -230,10 +222,10 @@ const IssueForm = () => {
             </MuiGrid>
             <MuiGrid item xs={12} sm={6}>
               <DatePicker
-                name="due_date"
+                name="dueDate"
                 title="Due Date"
                 minDate={new Date()}
-                value={formFields.due_date}
+                value={formFields.dueDate}
                 getOptionLabel={(option) => {
                   return `${option.name}`;
                 }}

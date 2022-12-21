@@ -10,6 +10,7 @@ import indexStatus from "./index-status.project.controller.js";
 import indexMembers from "./index-members.project.controller.js";
 import indexMemberRoles from "./index-member-roles.project.controller.js";
 import showIssuesStatusCount from "./show-issue-status-count.project.controller.js";
+import indexActivity from "./index-activity.project.controller.js";
 
 const ProjectController = {
   create,
@@ -24,6 +25,7 @@ const ProjectController = {
   indexStatus,
   indexMembers,
   showIssuesStatusCount,
+  indexActivity,
 };
 
 export default ProjectController;

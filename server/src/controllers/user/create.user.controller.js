@@ -4,7 +4,7 @@ const create = async (req, res) => {
   const { name, email, uid, photoURL } = req.body;
 
   try {
-    const user = (await User.findOne(uid)).rows[0];
+    const user = await User.findOne(uid);
     if (user) {
       const updatedUser = (
         await User.updateOne({

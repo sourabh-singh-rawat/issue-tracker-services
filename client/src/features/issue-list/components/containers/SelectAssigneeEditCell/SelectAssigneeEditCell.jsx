@@ -14,7 +14,7 @@ const SelectAssigneeEditCell = ({ id, value, field, ...rest }) => {
   const dispatch = useDispatch();
   const apiRef = useGridApiContext();
   const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
-  const projectId = rest.row.project_id;
+  const projectId = rest.row.projectId;
   const [projectMembers, setProjectMembers] = useState([]);
   const getProjectMembersQuery = useGetProjectMembersQuery(projectId);
 
@@ -30,8 +30,8 @@ const SelectAssigneeEditCell = ({ id, value, field, ...rest }) => {
       field,
       value: e.target.value,
     });
-    await updateIssueMutation({ id, body: { assignee_id: e.target.value } });
-    dispatch(updateIssue({ assignee_id: e.target.value }));
+    await updateIssueMutation({ id, body: { assigneeId: e.target.value } });
+    dispatch(updateIssue({ assigneeId: e.target.value }));
 
     if (isValid) apiRef.current.stopCellEditMode({ id, field });
   };

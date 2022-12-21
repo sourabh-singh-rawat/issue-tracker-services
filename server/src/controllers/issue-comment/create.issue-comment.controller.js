@@ -11,13 +11,14 @@ const create = async (req, res) => {
   const { uid } = req.user;
 
   try {
-    const { id } = (await User.findOne(uid)).rows[0];
+    const { id } = await User.findOne(uid);
     const createdComment = (
-      await IssueComment.insertOne({ member_id: id, ...req.body })
+      await IssueComment.insertOne({ memberId: id, ...req.body })
     ).rows[0];
 
     res.send(createdComment);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

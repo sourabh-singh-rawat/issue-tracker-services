@@ -5,7 +5,13 @@ import MuiAvatar from "@mui/material/Avatar";
 import Tooltip from "../../utilities/Tooltip";
 
 const StyledAvatarGroup = styled(MuiAvatarGroup)(({ theme }) => {
-  return {};
+  return {
+    "& .MuiAvatar-root": {
+      fontWeight: theme.typography.fontWeightBold,
+      border: "none",
+      marginRight: "4px",
+    },
+  };
 });
 
 const AvatarGroup = ({ members, total }) => {
@@ -16,8 +22,10 @@ const AvatarGroup = ({ members, total }) => {
           <Tooltip title={member.name} key={member.id}>
             <MuiAvatar
               alt={member.name}
-              src={member.photo_url}
-              sx={{ "&:hover": { cursor: "pointer" } }}
+              src={member.photoUrl}
+              sx={{
+                "&:hover": { cursor: "pointer" },
+              }}
             >
               {member.name.match(/\b(\w)/g)[0]}
             </MuiAvatar>

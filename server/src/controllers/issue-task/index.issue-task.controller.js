@@ -30,6 +30,7 @@ const index = async (req, res) => {
     });
     res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 };

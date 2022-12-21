@@ -20,7 +20,6 @@ import {
 
 const IssueOverview = () => {
   const { id } = useParams();
-  console.log(id);
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
 

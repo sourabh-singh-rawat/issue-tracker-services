@@ -47,6 +47,10 @@ const AddMemberButton = () => {
   const roles = useGetRolesQuery();
   const [sendInvite] = useSendInviteMutation();
 
+  useEffect(() => {
+    if (roles.data) dispatch(setMemberRoles(roles.data));
+  }, [roles.data]);
+
   const onChange = (e) => {
     const { name, value } = e.target;
 
@@ -58,10 +62,6 @@ const AddMemberButton = () => {
     e.preventDefault();
     sendInvite({ id, payload: formFields });
   };
-
-  useEffect(() => {
-    if (roles.data) dispatch(setMemberRoles(roles.data));
-  }, [roles.data]);
 
   return (
     <Fragment>

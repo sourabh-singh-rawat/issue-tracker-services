@@ -30,7 +30,7 @@ const IssueSettings = () => {
   const [updateIssueMutation, { isSuccess, data }] = useUpdateIssueMutation();
 
   const issue = useSelector((store) => store.issue.info);
-  const getProjectMembersQuery = useGetProjectMembersQuery(issue?.project_id);
+  const getProjectMembersQuery = useGetProjectMembersQuery(issue?.projectId);
   const project = useSelector((store) => store.project);
 
   useEffect(() => {
@@ -49,10 +49,10 @@ const IssueSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, description, status, priority, due_date, reporter } = issue;
+    const { name, description, status, priority, dueDate, reporter } = issue;
     updateIssueMutation({
       id,
-      body: { name, description, status, priority, due_date, reporter },
+      body: { name, description, status, priority, dueDate, reporter },
     });
   };
 
@@ -95,7 +95,7 @@ const IssueSettings = () => {
                   <TextField
                     name="id"
                     title="Project ID"
-                    value={issue.project_id}
+                    value={issue.projectId}
                     isLoading={issue.isLoading}
                     disabled
                   />
@@ -128,12 +128,12 @@ const IssueSettings = () => {
               <MuiGrid container spacing={3}>
                 <MuiGrid item xs={12}>
                   <TextField
-                    name="created_at"
+                    name="createdAt"
                     title="Created At"
                     helperText="The day this project was created, this cannot be changed."
                     value={
-                      issue.created_at
-                        ? format(parseISO(issue.created_at), "PPPPpppp")
+                      issue.createdAt
+                        ? format(parseISO(issue.createdAt), "PPPPpppp")
                         : "loading"
                     }
                     isLoading={issue.isLoading}
@@ -143,15 +143,15 @@ const IssueSettings = () => {
                 <MuiGrid item xs={12}>
                   <IssueAssigneeSelector
                     title="Assignee"
-                    value={issue.assignee_id}
+                    value={issue.assigneeId}
                     projectMembers={project.members.rows}
                     handleChange={async (e) => {
                       const userId = e.target.value;
                       await updateIssueMutation({
                         id: issue.id,
-                        body: { assignee_id: userId },
+                        body: { assigneeId: userId },
                       });
-                      dispatch(updateIssue({ assignee_id: userId }));
+                      dispatch(updateIssue({ assigneeId: userId }));
                     }}
                     isLoading={project.members.isLoading}
                   />
@@ -179,11 +179,11 @@ const IssueSettings = () => {
                 <MuiGrid item xs={12} md={6}>
                   <DatePicker
                     title="Due Date"
-                    name="due_date"
-                    value={issue.due_date ? parseISO(issue.due_date) : null}
+                    name="dueDate"
+                    value={issue.dueDate ? parseISO(issue.dueDate) : null}
                     isLoading={issue.isLoading}
                     onChange={(date) => {
-                      dispatch(updateIssue({ due_date: formatISO(date) }));
+                      dispatch(updateIssue({ dueDate: formatISO(date) }));
                     }}
                     handleChange={handleChange}
                   />
