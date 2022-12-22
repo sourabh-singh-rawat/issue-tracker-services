@@ -1,4 +1,5 @@
-import IssueTask from "../../models/issue-task/issue-task.model.js";
+/* eslint-disable import/extensions */
+import IssueTask from '../../models/issue-task/issue-task.model.js';
 
 /**
  * Deletes a particular Task

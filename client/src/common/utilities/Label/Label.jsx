@@ -1,14 +1,16 @@
-import { useTheme } from "@mui/material/styles";
-import MuiTypography from "@mui/material/Typography";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useTheme } from '@mui/material/styles';
+import MuiTypography from '@mui/material/Typography';
 
-const Label = ({ title, error }) => {
+function Label({ title, error }) {
   const theme = useTheme();
 
   return (
     <MuiTypography
       variant="body2"
       sx={{
-        color: error ? "error.main" : theme.palette.grey[600],
+        color: error ? 'error.main' : theme.palette.grey[600],
         fontWeight: 600,
         paddingBottom: 1,
         // // textTransform: "uppercase",
@@ -18,6 +20,6 @@ const Label = ({ title, error }) => {
       {title}
     </MuiTypography>
   );
-};
+}
 
 export default Label;

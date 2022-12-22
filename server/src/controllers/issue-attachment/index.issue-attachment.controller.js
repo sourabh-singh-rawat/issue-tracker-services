@@ -1,4 +1,5 @@
-import IssueAttachment from "../../models/issue-attachment/issue-attachment.model.js";
+/* eslint-disable import/extensions */
+import IssueAttachment from '../../models/issue-attachment/issue-attachment.model.js';
 
 /**
  * Lists all attachments for a given issue

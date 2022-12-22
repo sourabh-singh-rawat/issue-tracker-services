@@ -1,5 +1,6 @@
-import db from "../../config/db.config.js";
-import { selectIssuesQuery } from "./utils/select-issues-query.utils.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+import { selectIssuesQuery } from './utils/select-issues-query.utils.js';
 
 const insertOne = ({
   name,
@@ -10,8 +11,9 @@ const insertOne = ({
   assigneeId,
   dueDate,
   projectId,
-}) => {
-  return db.query(
+}) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     INSERT INTO
       issues (name, description, status, priority, reporter_id, due_date, project_id, assignee_id)
@@ -29,17 +31,17 @@ const insertOne = ({
       dueDate,
       projectId,
       assigneeId,
-    ]
+    ],
   );
-};
 
 const find = async (options) => {
   const { query, colValues } = selectIssuesQuery(options);
   return db.query(query, colValues);
 };
 
-const findOne = (id) => {
-  return db.query(
+const findOne = (id) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT 
       issues.id as "id",
@@ -59,37 +61,45 @@ const findOne = (id) => {
       projects ON issues.project_id = projects.id
     WHERE
       issues.id = $1`,
-    [id]
+    [id],
   );
-};
 
 const updateOne = (id, document) => {
+  // eslint-disable-next-line no-param-reassign
   if (document.assignee_id === 0) document.assignee_id = null;
 
   // remove undefined values from document
   Object.keys(document).forEach((key) => {
+    // eslint-disable-next-line no-param-reassign
     if (document[key] === undefined) delete document[key];
   });
 
   let query = Object.keys(document)
     .reduce(
-      (prev, cur, index) => prev + " " + cur + "=$" + (index + 1) + ",",
-      "UPDATE issues SET "
+      (prev, cur, index) => `${prev} ${cur}=$${index + 1},`,
+      'UPDATE issues SET ',
     )
     .slice(0, -1);
 
-  query += " WHERE id='" + id + "' RETURNING *";
+  query += ` WHERE id='${id}' RETURNING *`;
 
   return db.query(query, Object.values(document));
 };
 
-const deleteOne = (id) => {
-  return db.query(`DELETE FROM issues WHERE id=$1 RETURNING *`, [id]);
-};
+const deleteOne = (id) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query('DELETE FROM issues WHERE id=$1 RETURNING *', [id]);
 
 const rowCount = (options) => {
   const { query, colValues } = selectIssuesQuery(options);
   return db.query(query, colValues);
 };
 
-export default { insertOne, findOne, find, updateOne, deleteOne, rowCount };
+export default {
+  insertOne,
+  findOne,
+  find,
+  updateOne,
+  deleteOne,
+  rowCount,
+};

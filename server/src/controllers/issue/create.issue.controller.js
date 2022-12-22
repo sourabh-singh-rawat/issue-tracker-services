@@ -1,9 +1,10 @@
-import User from "../../models/user/user.model.js";
-import Issue from "../../models/issue/issue.model.js";
-import ProjectMember from "../../models/project-member/project-member.model.js";
-import db from "../../config/db.config.js";
-import ProjectActivity from "../../models/project-activity/project-activity.model.js";
-import ProjectActivityTypes from "../../models/project-activity-types/project-activity-types.model.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+import User from '../../models/user/user.model.js';
+import Issue from '../../models/issue/issue.model.js';
+import ProjectMember from '../../models/project-member/project-member.model.js';
+import ProjectActivity from '../../models/project-activity/project-activity.model.js';
+import ProjectActivityTypes from '../../models/project-activity-types/project-activity-types.model.js';
 
 /**
  * Creates an issue
@@ -13,10 +14,10 @@ import ProjectActivityTypes from "../../models/project-activity-types/project-ac
  */
 const create = async (req, res) => {
   const { uid } = req.user;
-  const body = req.body;
+  const { body } = req;
 
   try {
-    db.query("BEGIN");
+    db.query('BEGIN');
     const { id: userId } = await User.findOne(uid);
     const reporterId = await ProjectMember.findOne({ memberId: userId });
     const createdIssue = (await Issue.insertOne({ reporterId, ...body }))
@@ -24,22 +25,21 @@ const create = async (req, res) => {
 
     // Add created activity to project activity
     const createdIssueActivityTypeId = await ProjectActivityTypes.findOne({
-      name: "CREATED_ISSUE",
+      name: 'CREATED_ISSUE',
     });
     await ProjectActivity.insertOne({
       projectId: body.projectId,
       typeId: createdIssueActivityTypeId,
-      userId: userId,
+      userId,
     });
 
     // TODO: Add created activity to issue activity
 
-    db.query("COMMIT");
+    db.query('COMMIT');
 
-    res.send(createdIssue);
+    return res.send(createdIssue);
   } catch (error) {
-    db.query("ROLLBACK");
-    console.log(error);
+    db.query('ROLLBACK');
     return res.status(500).send();
   }
 };

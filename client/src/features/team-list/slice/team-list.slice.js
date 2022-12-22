@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   filters: [],
@@ -9,16 +9,15 @@ const initialState = {
 };
 
 const teamListSlice = createSlice({
-  name: "teamList",
+  name: 'teamList',
   initialState,
   reducers: {
     setList: (state, action) => {
-      state.rows = action.payload.rows;
-      state.rowCount = action.payload.rowCount;
+      const { rows, rowCount } = action.payload;
 
-      return state;
+      return { ...state, rows, rowCount };
     },
-    updateList: (state, action) => {},
+    updateList: () => {},
   },
 });
 

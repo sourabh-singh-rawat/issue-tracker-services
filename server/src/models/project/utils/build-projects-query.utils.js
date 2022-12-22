@@ -1,8 +1,11 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-param-reassign */
+
 export const buildProjectsQuery = ({
   id,
   options,
   pagingOptions,
-  sortOptions: { field = "name", order = "asc" },
+  sortOptions: { field = 'name', order = 'asc' },
 }) => {
   // Remove all the props with falsey values
   Object.keys(options).forEach((option) => {
@@ -27,24 +30,24 @@ export const buildProjectsQuery = ({
   if (Object.keys(options).length > 0) {
     whereClause += Object.keys(options)
       .map((column) => {
-        index++;
+        index += 1;
         return `${column.toUpperCase()} $${index}`;
       })
-      .join(" AND ");
+      .join(' AND ');
   }
 
   // ORDER BY
   const orderByClause = `ORDER BY ${field} ${order}`;
 
   // LIMIT and OFFSET
-  let limitClause = "";
+  let limitClause = '';
   if (Object.keys(pagingOptions).length !== 0) {
     limitClause = Object.keys(pagingOptions)
       .map((column) => {
-        index++;
+        index += 1;
         return `${column.toUpperCase()} $${index}`;
       })
-      .join(" ");
+      .join(' ');
   }
 
   const query = `

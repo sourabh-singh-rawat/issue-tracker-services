@@ -1,4 +1,5 @@
-import User from "../../models/User/user.model.js";
+/* eslint-disable import/extensions */
+import User from '../../models/user/user.model.js';
 
 const destroy = async (req, res) => {
   const { id } = req.params;
@@ -6,9 +7,9 @@ const destroy = async (req, res) => {
   try {
     const user = (await User.deleteOne(id)).rows[0];
     if (!user) res.status(404).send();
-    res.send(user);
+    return res.send(user);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 };
 

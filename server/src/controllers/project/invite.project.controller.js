@@ -1,7 +1,8 @@
-import dotenv from "dotenv/config";
-import jwt from "jsonwebtoken";
-
-import sgMail from "../../config/sendgrid.config.js";
+/* eslint-disable import/extensions */
+import jwt from 'jsonwebtoken';
+// eslint-disable-next-line no-unused-vars
+import dotenv from 'dotenv/config';
+import sgMail from '../../config/sendgrid.config.js';
 
 /**
  * Sends an email to the given email address
@@ -9,19 +10,19 @@ import sgMail from "../../config/sendgrid.config.js";
  */
 const invite = async (req, res) => {
   const { uid } = req.user;
-  const { email, role_id } = req.body;
+  const { email, roleId } = req.body;
   const { id } = req.params;
 
   const tokenMessage = {
     invitationTo: email,
     projectId: id,
     invitedBy: uid,
-    roleId: role_id,
+    roleId,
   };
 
   const tokenOptions = {
-    algorithm: "HS256",
-    expiresIn: "1d",
+    algorithm: 'HS256',
+    expiresIn: '1d',
   };
 
   try {
@@ -30,8 +31,8 @@ const invite = async (req, res) => {
     // send invite link to email
     const msg = {
       to: email,
-      from: "sourabh.rawatcc@gmail.com", // Change to your verified sender
-      subject: "Test: Issue Tracker Member Invitation",
+      from: 'sourabh.rawatcc@gmail.com', // Change to your verified sender
+      subject: 'Test: Issue Tracker Member Invitation',
       text: `You are invited to ${id} by ${email}`,
       html: `
         <strong>
@@ -45,9 +46,9 @@ const invite = async (req, res) => {
 
     await sgMail.send(msg);
 
-    res.send("Email sent!");
+    return res.send('Email sent!');
   } catch (error) {
-    res.status(500).send("Cannot send email");
+    return res.status(500).send('Cannot send email');
   }
 };
 

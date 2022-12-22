@@ -1,9 +1,7 @@
-import db from "../../config/db.config.js";
-import { buildProjectsQuery } from "./utils/build-projects-query.utils.js";
-import ProjectMember from "../../models/project-member/project-member.model.js";
-import ProjectMemberRoles from "../project-member-roles/project-member-roles.model.js";
-import ProjectActivity from "../project-activity/project-activity.model.js";
-import ProjectActivityTypes from "../project-activity-types/project-activity-types.model.js";
+/* eslint-disable import/named */
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+import { buildProjectsQuery } from './utils/build-projects-query.utils.js';
 
 /**
  * Adds a new project to the database
@@ -23,8 +21,9 @@ const insertOne = async ({
   status,
   startDate,
   endDate,
-}) => {
-  return (
+}) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  (
     await db.query(
       ` 
         INSERT INTO projects
@@ -34,10 +33,9 @@ const insertOne = async ({
         RETURNING
           *
         `,
-      [ownerId, name, description, status, startDate, endDate]
+      [ownerId, name, description, status, startDate, endDate],
     )
   ).rows[0];
-};
 
 /**
  * Finds all projects in the database
@@ -50,8 +48,9 @@ const find = (options) => {
 };
 
 //
-const findOne = ({ projectId, memberId }) => {
-  return db.query(
+const findOne = ({ projectId, memberId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT 
       id,
@@ -74,9 +73,8 @@ const findOne = ({ projectId, memberId }) => {
               WHERE  project_id = $1
             )
     `,
-    [projectId, memberId]
+    [projectId, memberId],
   );
-};
 
 const updateOne = ({ id, body }) => {
   const columns = Object.keys(body);
@@ -84,7 +82,7 @@ const updateOne = ({ id, body }) => {
 
   const setClause = columns
     .map((column, index) => `${column} = $${index + 1}`)
-    .join(", ");
+    .join(', ');
 
   const query = `
     UPDATE projects   
@@ -101,20 +99,21 @@ const updateOne = ({ id, body }) => {
  * @param {*} id
  * @returns {Promise} A promise that resolves to the deleted project
  */
-const deleteOne = (id) => {
-  return db.query(
+const deleteOne = (id) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     DELETE FROM 
       projects 
     WHERE
       id=$1
     RETURNING *`,
-    [id]
+    [id],
   );
-};
 
-const statusCount = ({ projectId, memberId }) => {
-  return db.query(
+const statusCount = ({ projectId, memberId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT
       issue_status_types.id, issue_status_types.name, issue_status_types.description, COUNT(issues.status)
@@ -137,12 +136,11 @@ const statusCount = ({ projectId, memberId }) => {
     ORDER BY
       issue_status_types.rank_order
     `,
-    [projectId, memberId]
+    [projectId, memberId],
   );
-};
 
 const rowCount = (options) => {
-  const { query, colValues } = buildProjectsQuery(options, "projects");
+  const { query, colValues } = buildProjectsQuery(options, 'projects');
   return db.query(query, colValues);
 };
 

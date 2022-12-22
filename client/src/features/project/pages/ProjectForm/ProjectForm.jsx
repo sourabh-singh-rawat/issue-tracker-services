@@ -1,46 +1,49 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable consistent-return */
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import errors from "../../../../errors";
+import Box from '@mui/material/Box';
+import MuiGrid from '@mui/material/Grid';
+import errors from '../../../../errors';
 
-import Box from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
+import DatePicker from '../../../../common/dates/DatePicker';
+import TextField from '../../../../common/textfields/TextField';
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import SectionHeader from '../../../../common/headers/SectionHeader';
+import ProjectStatusSelector from '../../components/containers/ProjectStatusSelector';
 
-import DatePicker from "../../../../common/dates/DatePicker";
-import TextField from "../../../../common/textfields/TextField";
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
-import SectionHeader from "../../../../common/headers/SectionHeader";
-import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
-
-import { setStatus } from "../../slice/project.slice";
+import { setStatus } from '../../slice/project.slice';
 import {
   useGetStatusQuery,
   useCreateProjectMutation,
-} from "../../api/project.api";
+} from '../../api/project.api';
 
-const ProjectForm = () => {
+function ProjectForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [formFields, setFormFields] = useState({
     name: {
-      value: "",
+      value: '',
       error: false,
       errorMessage: errors.form.project.NAME_MAX_LENGTH_ERROR.message,
     },
     description: {
-      value: "",
+      value: '',
       error: false,
       errorMessage: errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.message,
     },
-    status: "",
+    status: '',
     startDate: null,
     endDate: null,
   });
 
   const defaultStatus = useSelector(
-    (store) => store.project.options.status.rows[0]
+    (store) => store.project.options.status.rows[0],
   );
 
   const getProjectStatusQuery = useGetStatusQuery();
@@ -51,7 +54,7 @@ const ProjectForm = () => {
   }, [defaultStatus]);
 
   const handleNameChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
     if (value.length > errors.form.project.NAME_MAX_LENGTH_ERROR.limit) {
       return setFormFields({
@@ -66,7 +69,7 @@ const ProjectForm = () => {
   };
 
   const handleDescriptionChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
     if (value.length > errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit) {
       return setFormFields({
@@ -103,7 +106,7 @@ const ProjectForm = () => {
     e.preventDefault();
 
     if (formFields.name.error || formFields.description.error) {
-      return console.log("Form Field Errors");
+      return;
     }
 
     createProject({ body: formFields });
@@ -188,7 +191,7 @@ const ProjectForm = () => {
                 helperText="Current status of your project."
               />
             </MuiGrid>
-            <MuiGrid item xs={12}></MuiGrid>
+            <MuiGrid item xs={12} />
             <MuiGrid item>
               <PrimaryButton label="Create Project" type="submit" />
             </MuiGrid>
@@ -197,6 +200,6 @@ const ProjectForm = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default ProjectForm;

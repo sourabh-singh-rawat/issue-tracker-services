@@ -1,4 +1,5 @@
-import IssueComment from "../../models/issue-comment/issue-comment.model.js";
+/* eslint-disable import/extensions */
+import IssueComment from '../../models/issue-comment/issue-comment.model.js';
 
 /**
  * List all the comments of an issue
@@ -13,9 +14,8 @@ const index = async (req, res) => {
     const comments = (await IssueComment.find({ issue_id: id })).rows;
     const rowCount = (await IssueComment.rowCount(id)).rows[0].count;
 
-    res.send({ rows: comments, rowCount: parseInt(rowCount) });
+    res.send({ rows: comments, rowCount: parseInt(rowCount, 10) });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

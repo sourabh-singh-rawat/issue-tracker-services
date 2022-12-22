@@ -1,20 +1,22 @@
-import MuiButton from "@mui/material/Button";
-import MuiAddIcon from "@mui/icons-material/Add";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import MuiButton from '@mui/material/Button';
+import MuiAddIcon from '@mui/icons-material/Add';
 
-const PrimaryButton = ({ type, label, onClick }) => {
+function PrimaryButton({ type, label, onClick }) {
   return (
     <MuiButton
       type={type}
       variant="contained"
-      startIcon={type === "submit" ? null : <MuiAddIcon />}
+      startIcon={type === 'submit' ? null : <MuiAddIcon />}
       onClick={onClick}
       sx={{
         fontWeight: 600,
-        borderRadius: "6px",
-        textTransform: "none",
-        boxShadow: "none",
-        "&:hover": {
-          boxShadow: "none",
+        borderRadius: '6px',
+        textTransform: 'none',
+        boxShadow: 'none',
+        '&:hover': {
+          boxShadow: 'none',
         },
       }}
       disableRipple
@@ -22,6 +24,6 @@ const PrimaryButton = ({ type, label, onClick }) => {
       {label}
     </MuiButton>
   );
-};
+}
 
 export default PrimaryButton;

@@ -1,5 +1,6 @@
-import User from "../../models/user/user.model.js";
-import ProjectMember from "../../models/project-member/project-member.model.js";
+/* eslint-disable import/extensions */
+import User from '../../models/user/user.model.js';
+import ProjectMember from '../../models/project-member/project-member.model.js';
 
 /**
  * Creates a new project member
@@ -16,7 +17,6 @@ const createMember = async (req, res) => {
 
     res.send(response);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

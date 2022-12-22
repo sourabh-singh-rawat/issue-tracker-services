@@ -1,15 +1,16 @@
-import db from "../../config/db.config.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
 const findOne = async ({ memberId }) => {
   try {
-    const id = (
+    const { id } = (
       await db.query(
         `
         SELECT id 
         FROM project_members WHERE member_id=$1`,
-        [memberId]
+        [memberId],
       )
-    ).rows[0].id;
+    ).rows[0];
 
     return id;
   } catch (error) {
@@ -17,20 +18,21 @@ const findOne = async ({ memberId }) => {
   }
 };
 
-const insertOne = ({ projectId, memberId, roleId }) => {
-  return db.query(
+const insertOne = ({ projectId, memberId, roleId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     INSERT INTO 
       project_members (project_id, member_id, member_role)
     VALUES 
       ($1, $2, $3)
     RETURNING *`,
-    [projectId, memberId, roleId]
+    [projectId, memberId, roleId],
   );
-};
 
-const findByProjectId = ({ projectId, memberId }) => {
-  return db.query(
+const findByProjectId = ({ projectId, memberId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT 
       users.name, 
@@ -55,12 +57,12 @@ const findByProjectId = ({ projectId, memberId }) => {
         FROM   project_members
         WHERE  project_id = $1
         )`,
-    [projectId, memberId]
+    [projectId, memberId],
   );
-};
 
-const findPeopleRelatedToUid = (id) => {
-  return db.query(
+const findPeopleRelatedToUid = (id) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT DISTINCT 
       users.id, users.name, users.email, users.photo_url, project_members.member_id, project_members.member_role, project_members.created_at 
@@ -78,8 +80,12 @@ const findPeopleRelatedToUid = (id) => {
           member_id=$1
       )
     `,
-    [id]
+    [id],
   );
-};
 
-export default { findOne, insertOne, findByProjectId, findPeopleRelatedToUid };
+export default {
+  findOne,
+  insertOne,
+  findByProjectId,
+  findPeopleRelatedToUid,
+};

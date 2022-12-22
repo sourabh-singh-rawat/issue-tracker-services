@@ -1,4 +1,5 @@
-import IssueTask from "../../models/issue-task/issue-task.model.js";
+/* eslint-disable import/extensions */
+import IssueTask from '../../models/issue-task/issue-task.model.js';
 
 /**
  * Creates a task inside an issue
@@ -7,7 +8,7 @@ import IssueTask from "../../models/issue-task/issue-task.model.js";
  * @returns Task that is created.
  */
 const create = async (req, res) => {
-  const { uid } = req.user;
+  // eslint-disable-next-line object-curly-newline
   const { issueId, description, dueDate, completed } = req.body;
 
   try {

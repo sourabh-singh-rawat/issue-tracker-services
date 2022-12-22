@@ -1,4 +1,5 @@
-import db from "../../config/db.config.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 /**
  *
  * @param {string} name
@@ -12,7 +13,7 @@ const findOne = async ({ name }) => {
         SELECT id FROM project_activity_types
         WHERE name=$1;
       `,
-        [name]
+        [name],
       )
     ).rows[0];
 

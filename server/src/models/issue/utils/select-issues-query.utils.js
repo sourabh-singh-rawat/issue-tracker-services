@@ -1,19 +1,24 @@
+/* eslint-disable import/prefer-default-export */
+// eslint-disable-next-line import/prefer-default-export
+
 export const selectIssuesQuery = ({
   reporterId,
   filterOptions,
   pagingOptions,
-  sortOptions: { field = "issues.status", order = "asc" },
+  sortOptions: { field = 'issues.status', order = 'asc' },
 }) => {
   Object.keys(filterOptions).forEach((option) => {
+    // eslint-disable-next-line no-param-reassign
     if (!filterOptions[option]) delete filterOptions[option];
   });
 
   Object.keys(pagingOptions).forEach((option) => {
+    // eslint-disable-next-line no-param-reassign
     if (!pagingOptions[option]) delete pagingOptions[option];
   });
 
   let index = 0;
-  let select = `
+  const select = `
   SELECT
     issues.id,
     issues.name,
@@ -45,28 +50,28 @@ export const selectIssuesQuery = ({
         id='${reporterId}'
       )
     `;
-  let orderBy = "ORDER BY ";
-  let pagination = "";
+  let orderBy = 'ORDER BY ';
+  let pagination = '';
 
   // WHERE CONDITION
   if (Object.keys(filterOptions).length !== 0) {
     condition += Object.keys(filterOptions)
       .reduce((prev, cur) => {
-        index++;
-        return prev + cur + "=$" + index + " AND ";
-      }, "AND ")
+        index += 1;
+        return `${prev + cur}=$${index} AND `;
+      }, 'AND ')
       .slice(0, -4);
   }
 
   // ORDER BY
-  orderBy += field + " " + order + " ";
+  orderBy += `${field} ${order} `;
 
   // LIMIT and OFFSET
   if (Object.keys(pagingOptions).length !== 0) {
     pagination = Object.keys(pagingOptions).reduce((prev, cur) => {
-      index++;
-      return prev + cur.toUpperCase() + " $" + index + " ";
-    }, " ");
+      index += 1;
+      return `${prev + cur.toUpperCase()} $${index} `;
+    }, ' ');
   }
 
   // FINAL QUERY

@@ -1,7 +1,8 @@
-import dotenv from "dotenv/config";
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+// eslint-disable-next-line
+import dotenv from 'dotenv/config';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { JWT_SECRET } = process.env;
 
 const verifyToken = async (req, res) => {
   const { inviteToken } = req.body;

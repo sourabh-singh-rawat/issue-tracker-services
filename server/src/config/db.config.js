@@ -1,5 +1,6 @@
-import dotenv from "dotenv/config";
-import pg from "pg";
+/* eslint-disable no-unused-vars */
+import dotenv from 'dotenv/config';
+import pg from 'pg';
 
 const dbConfig = {
   host: process.env.DB_HOST,

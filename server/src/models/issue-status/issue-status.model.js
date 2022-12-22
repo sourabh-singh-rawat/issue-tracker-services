@@ -1,7 +1,9 @@
-import db from "../../config/db.config.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
-const find = () => {
-  return db.query(`
+const find = () =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(`
     SELECT 
       id,
       name,
@@ -12,6 +14,5 @@ const find = () => {
       deleted_at as "deletedAt"
     FROM 
       issue_status_types`);
-};
 
 export default { find };

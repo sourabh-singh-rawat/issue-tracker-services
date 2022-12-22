@@ -1,16 +1,18 @@
-import { theme } from "../../../config/mui.config";
-import MuiButton from "@mui/material/Button";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import MuiButton from '@mui/material/Button';
+import theme from '../../../config/mui.config';
 
-const CancelButton = ({ label, onClick }) => {
+function CancelButton({ label, onClick }) {
   return (
     <MuiButton
       onClick={onClick}
       sx={{
         color: theme.palette.grey[900],
-        height: "100%",
-        borderRadius: "6px",
-        textTransform: "none",
-        "&:hover": {
+        height: '100%',
+        borderRadius: '6px',
+        textTransform: 'none',
+        '&:hover': {
           boxShadow: 4,
           backgroundColor: theme.palette.grey[300],
         },
@@ -20,6 +22,6 @@ const CancelButton = ({ label, onClick }) => {
       {label}
     </MuiButton>
   );
-};
+}
 
 export default CancelButton;

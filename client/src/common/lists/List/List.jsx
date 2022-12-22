@@ -1,40 +1,40 @@
-import { styled } from "@mui/material/styles";
-import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { styled } from '@mui/material/styles';
+import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 
-import MuiLinearProgress from "@mui/material/LinearProgress";
+import MuiLinearProgress from '@mui/material/LinearProgress';
 
-const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => {
-  return {
-    border: "none",
-    ".MuiDataGrid-row": {
-      color: theme.palette.text.primary,
-      transition: "ease-in-out 0.150s",
-      ":hover": {
-        backgroundColor: theme.palette.grey[50],
-      },
+const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
+  border: 'none',
+  '.MuiDataGrid-row': {
+    color: theme.palette.text.primary,
+    transition: 'ease-in-out 0.150s',
+    ':hover': {
+      backgroundColor: theme.palette.grey[50],
     },
-    ".MuiDataGrid-cell": {
-      color: theme.palette.text.primary,
-      borderColor: theme.palette.grey[200],
-    },
-    ".MuiDataGrid-columnHeaders": {
-      // border: `1px solid ${theme.palette.grey[300]}`,
-    },
-    "& .MuiDataGrid-columnHeaderTitle": {
-      color: theme.palette.grey[600],
-      fontSize: "14px",
-      fontWeight: 500,
-    },
-    ".MuiDataGrid-columnSeparator": {
-      display: "none",
-    },
-    ".MuiDataGrid-footerContainer": {
-      borderTop: `1px solid ${theme.palette.grey[300]}`,
-    },
-  };
-});
+  },
+  '.MuiDataGrid-cell': {
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.grey[200],
+  },
+  '.MuiDataGrid-columnHeaders': {
+    // border: `1px solid ${theme.palette.grey[300]}`,
+  },
+  '& .MuiDataGrid-columnHeaderTitle': {
+    color: theme.palette.grey[600],
+    fontSize: '14px',
+    fontWeight: 500,
+  },
+  '.MuiDataGrid-columnSeparator': {
+    display: 'none',
+  },
+  '.MuiDataGrid-footerContainer': {
+    borderTop: `1px solid ${theme.palette.grey[300]}`,
+  },
+}));
 
-const List = ({
+function List({
   rows,
   rowCount,
   columns,
@@ -46,7 +46,7 @@ const List = ({
   onPageSizeChange,
   getRowId,
   checkboxSelection,
-}) => {
+}) {
   return (
     <StyledDataGrid
       rows={rows}
@@ -72,6 +72,6 @@ const List = ({
       disableSelectionOnClick
     />
   );
-};
+}
 
 export default List;

@@ -1,8 +1,10 @@
-import { formatRelative, parseISO } from "date-fns";
-import { enIN } from "date-fns/locale";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { formatRelative, parseISO } from 'date-fns';
+import { enIN } from 'date-fns/locale';
 
-import { useTheme } from "@mui/material/styles";
-import MuiChip from "@mui/material/Chip";
+import { useTheme } from '@mui/material/styles';
+import MuiChip from '@mui/material/Chip';
 
 const formatRelativeLocale = {
   lastWeek: "'Last' eeee",
@@ -10,7 +12,7 @@ const formatRelativeLocale = {
   today: "'Today'",
   tomorrow: "'Tomorrow'",
   nextWeek: "'Next' eeee",
-  other: "dd.MM.yyyy",
+  other: 'dd.MM.yyyy',
 };
 
 const locale = {
@@ -18,7 +20,7 @@ const locale = {
   formatRelative: (token) => formatRelativeLocale[token],
 };
 
-const DueDateTag = ({ dueDate }) => {
+function DueDateTag({ dueDate }) {
   const theme = useTheme();
 
   return (
@@ -30,13 +32,13 @@ const DueDateTag = ({ dueDate }) => {
           locale,
         })}
         sx={{
-          borderRadius: "4px",
+          borderRadius: '4px',
           fontWeight: 500,
           color: theme.palette.grey[600],
         }}
       />
     )
   );
-};
+}
 
 export default DueDateTag;

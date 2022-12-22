@@ -1,49 +1,39 @@
-import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable implicit-arrow-linebreak */
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { styled, useTheme } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
-import MuiButton from "@mui/material/Button";
-import MuiContainer from "@mui/material/Container";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import MuiButton from '@mui/material/Button';
+import MuiContainer from '@mui/material/Container';
+import MuiTypography from '@mui/material/Typography';
+import GoogleIcon from '@mui/icons-material/Google';
+import theme from '../../../../config/mui.config';
 
-import GoogleIcon from "@mui/icons-material/Google";
+import { continueWithGoogle } from '../../../../utils/firebase/continue-with-google.utils';
+import { onAuthStateChangedListener } from '../../../../config/firebase.config';
 
-import { continueWithGoogle } from "../../../../utils/firebase/continue-with-google.utils";
-import { onAuthStateChangedListener } from "../../../../config/firebase.config";
-
-const StyledButton = styled(MuiButton)(({ theme }) => {
-  return {
-    textTransform: "none",
-    padding: "8px 16px",
-    color: theme.palette.common.white,
-    backgroundColor: theme.palette.primary.main,
-    ":hover": {
-      backgroundColor: theme.palette.primary.dark,
-    },
-  };
-});
-
-const SignUp = () => {
-  const theme = useTheme();
+function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const inviteToken = searchParams.get("inviteToken");
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const inviteToken = searchParams.get('inviteToken');
+  const loggedInUser = localStorage.getItem('loggedInUser');
 
   const handleContinueWithGoogle = async () => {
     await continueWithGoogle(inviteToken);
   };
 
-  useEffect(() => {
-    return onAuthStateChangedListener((user) => {
-      if (loggedInUser || user) navigate("/");
-    });
-  }, [loggedInUser]);
+  useEffect(
+    () =>
+      onAuthStateChangedListener((user) => {
+        if (loggedInUser || user) navigate('/');
+      }),
+    [loggedInUser],
+  );
 
   return (
-    <MuiGrid container height={"100vh"}>
+    <MuiGrid container height="100vh">
       <MuiGrid item md={5} xs={12}>
         <MuiContainer maxWidth="xs">
           <MuiGrid container rowSpacing={4}>
@@ -58,7 +48,7 @@ const SignUp = () => {
                 onClick={handleContinueWithGoogle}
                 startIcon={<GoogleIcon />}
                 sx={{
-                  textTransform: "none",
+                  textTransform: 'none',
                   fontWeight: 500,
                 }}
                 fullWidth
@@ -73,9 +63,9 @@ const SignUp = () => {
         md={7}
         xs={12}
         sx={{ backgroundColor: theme.palette.grey[100] }}
-      ></MuiGrid>
+      />
     </MuiGrid>
   );
-};
+}
 
 export default SignUp;

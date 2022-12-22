@@ -1,10 +1,11 @@
-import db from "../../config/db.config.js";
-import User from "../../models/user/user.model.js";
-import Project from "../../models/project/project.model.js";
-import ProjectActivity from "../../models/project-activity/project-activity.model.js";
-import ProjectActivityTypes from "../../models/project-activity-types/project-activity-types.model.js";
-import ProjectMember from "../../models/project-member/project-member.model.js";
-import ProjectMemberRoles from "../../models/project-member-roles/project-member-roles.model.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+import User from '../../models/user/user.model.js';
+import Project from '../../models/project/project.model.js';
+import ProjectActivity from '../../models/project-activity/project-activity.model.js';
+import ProjectActivityTypes from '../../models/project-activity-types/project-activity-types.model.js';
+import ProjectMember from '../../models/project-member/project-member.model.js';
+import ProjectMemberRoles from '../../models/project-member-roles/project-member-roles.model.js';
 
 /**
  * Creates a new project member
@@ -14,11 +15,12 @@ import ProjectMemberRoles from "../../models/project-member-roles/project-member
  */
 const create = async (req, res) => {
   const { uid } = req.user;
+  // eslint-disable-next-line object-curly-newline
   const { name, description, status, startDate, endDate } = req.body;
 
   try {
     // Begin transaction
-    db.query("BEGIN");
+    db.query('BEGIN');
 
     // Get user id
     const { id } = await User.findOne(uid);
@@ -34,7 +36,7 @@ const create = async (req, res) => {
     });
 
     const projectActivityTypeId = await ProjectActivityTypes.findOne({
-      name: "CREATED",
+      name: 'CREATED',
     });
 
     // Create project created activity
@@ -55,14 +57,13 @@ const create = async (req, res) => {
     });
 
     // Commit transaction
-    await db.query("COMMIT");
+    await db.query('COMMIT');
 
     return res.send(createdProject);
   } catch (error) {
-    console.log(error);
     // Rollback transaction
-    await db.query("ROLLBACK");
-    res.status(500).send();
+    await db.query('ROLLBACK');
+    return res.status(500).send();
   }
 };
 

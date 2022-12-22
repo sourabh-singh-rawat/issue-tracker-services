@@ -1,49 +1,54 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { format, parseISO } from "date-fns";
-import { enIN, hi } from "date-fns/locale";
-import { theme } from "../../../../../config/mui.config";
+/* eslint-disable no-shadow */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/prop-types */
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { format, parseISO } from 'date-fns';
+import { enIN } from 'date-fns/locale';
 
-import MuiAvatar from "@mui/material/Avatar";
-import MuiMenuItem from "@mui/material/MenuItem";
-import MuiTypography from "@mui/material/Typography";
-import MuiListItemIcon from "@mui/material/ListItemIcon";
-import MuiListItemText from "@mui/material/ListItemText";
+import MuiAvatar from '@mui/material/Avatar';
+import MuiMenuItem from '@mui/material/MenuItem';
+import MuiTypography from '@mui/material/Typography';
+import MuiListItemIcon from '@mui/material/ListItemIcon';
+import MuiListItemText from '@mui/material/ListItemText';
+import theme from '../../../../../config/mui.config';
 
-import List from "../../../../../common/lists/List";
-import SelectAssigneeEditCell from "../SelectAssigneeEditCell";
-import StatusAndPrioritySelectorEditCell from "../StatusAndPrioritySelectorEditCell";
+import List from '../../../../../common/lists/List';
+import SelectAssigneeEditCell from '../SelectAssigneeEditCell';
+import StatusAndPrioritySelectorEditCell from '../StatusAndPrioritySelectorEditCell';
 
 import {
   resetIssueList,
   setIssueList,
   updateIssueList,
-} from "../../../slice/issue-list.slice";
-import { useGetIssuesQuery } from "../../../api/issue-list.api";
+} from '../../../slice/issue-list.slice';
+import { useGetIssuesQuery } from '../../../api/issue-list.api';
 import {
   setIssuePriority,
   setIssueStatus,
-} from "../../../../issue/slice/issue.slice";
+} from '../../../../issue/slice/issue.slice';
 import {
   useGetIssuesPriorityQuery,
   useGetIssuesStatusQuery,
-} from "../../../../issue/api/issue.api";
+} from '../../../../issue/api/issue.api';
 
-const IssueList = ({ projectId }) => {
+function IssueList({ projectId }) {
   const dispatch = useDispatch();
-  const reporterId = useSelector((store) => {
-    return store.auth.user.uid;
-  });
+  const reporterId = useSelector((store) => store.auth.user.uid);
   const { rows, rowCount, page, pageSize } = useSelector(
-    (store) => store.issueList
+    (store) => store.issueList,
   );
 
   const getIssuesQuery = useGetIssuesQuery({
     projectId,
     page,
     pageSize,
-    sortBy: "issues.createdAt:desc",
+    sortBy: 'issues.createdAt:desc',
     reporterId,
   });
   const issueStatus = useGetIssuesStatusQuery();
@@ -66,36 +71,37 @@ const IssueList = ({ projectId }) => {
   }, [issuePriority]);
 
   // on component unmount reset the issue list slice
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       dispatch(resetIssueList());
-    };
-  }, []);
+    },
+    [],
+  );
 
   const columns = [
     {
-      field: "name",
-      headerName: "Name",
+      field: 'name',
+      headerName: 'Name',
       flex: 0.3,
-      minWidth: 450,
+      minWidth: 350,
       renderCell: (params) => (
         <Link
           to={`/issues/${params.row.id}/overview`}
           style={{
-            overflow: "hidden",
-            textDecoration: "none",
+            overflow: 'hidden',
+            textDecoration: 'none',
           }}
         >
           <MuiTypography
             variant="body2"
             sx={{
               fontWeight: 500,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
               color: theme.palette.text.primary,
-              "&:hover": {
+              '&:hover': {
                 color: theme.palette.primary.main,
-                textDecoration: "none!important",
+                textDecoration: 'none!important',
               },
             }}
           >
@@ -105,8 +111,8 @@ const IssueList = ({ projectId }) => {
       ),
     },
     {
-      field: "status",
-      headerName: "Status",
+      field: 'status',
+      headerName: 'Status',
       width: 150,
       editable: true,
       renderCell: (params) => <StatusAndPrioritySelectorEditCell {...params} />,
@@ -115,8 +121,8 @@ const IssueList = ({ projectId }) => {
       ),
     },
     {
-      field: "priority",
-      headerName: "Priority",
+      field: 'priority',
+      headerName: 'Priority',
       width: 150,
       editable: true,
       renderCell: (params) => <StatusAndPrioritySelectorEditCell {...params} />,
@@ -125,68 +131,66 @@ const IssueList = ({ projectId }) => {
       ),
     },
     {
-      field: "assigneeId",
-      headerName: "Assignee",
+      field: 'assigneeId',
+      headerName: 'Assignee',
       width: 250,
       editable: true,
       renderCell: (params) => <SelectAssigneeEditCell {...params} />,
       renderEditCell: (params) => <SelectAssigneeEditCell {...params} />,
     },
     {
-      field: "reporterId",
-      headerName: "Reporter",
+      field: 'reporterId',
+      headerName: 'Reporter',
       width: 200,
-      renderCell: (params) => {
-        return (
-          <MuiMenuItem
-            sx={{
-              color: theme.palette.secondary.main,
-              ":hover": {
-                backgroundColor: "transparent",
-                color: theme.palette.primary.main,
-              },
-            }}
-            disableRipple
-            disableGutters
-          >
-            <MuiListItemIcon>
-              <MuiAvatar
-                sx={{ width: "20px", height: "20px" }}
-                src={params.row.reporterPhotoUrl}
-              ></MuiAvatar>
-            </MuiListItemIcon>
-            <MuiListItemText>
-              <MuiTypography variant="body2" sx={{ fontWeight: 500 }}>
-                {params.row.reporterName}
-              </MuiTypography>
-            </MuiListItemText>
-          </MuiMenuItem>
-        );
-      },
+      renderCell: (params) => (
+        <MuiMenuItem
+          sx={{
+            color: theme.palette.secondary.main,
+            ':hover': {
+              backgroundColor: 'transparent',
+              color: theme.palette.primary.main,
+            },
+          }}
+          disableRipple
+          disableGutters
+        >
+          <MuiListItemIcon>
+            <MuiAvatar
+              sx={{ width: '20px', height: '20px' }}
+              src={params.row.reporterPhotoUrl}
+            />
+          </MuiListItemIcon>
+          <MuiListItemText>
+            <MuiTypography variant="body2" sx={{ fontWeight: 500 }}>
+              {params.row.reporterName}
+            </MuiTypography>
+          </MuiListItemText>
+        </MuiMenuItem>
+      ),
     },
     {
-      field: "dueDate",
-      headerName: "Due Date",
+      field: 'dueDate',
+      headerName: 'Due Date',
       width: 150,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "eee, PP") : "-",
+        value ? format(parseISO(value), 'eee, PP') : '-',
     },
     {
-      field: "projectId",
-      headerName: "Project Id",
+      field: 'projectId',
+      headerName: 'Project Id',
       width: 125,
     },
     {
-      field: "createdAt",
-      headerName: "Created At",
+      field: 'createdAt',
+      headerName: 'Created At',
       width: 125,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), "PP", { locale: enIN }) : "-",
+        value ? format(parseISO(value), 'PP', { locale: enIN }) : '-',
     },
     {
       flex: 0.14,
-      field: "id",
-      headerName: "Issue Id",
+      field: 'id',
+      headerName: 'Issue Id',
       minWidth: 100,
     },
   ];
@@ -203,11 +207,11 @@ const IssueList = ({ projectId }) => {
       onPageSizeChange={(pageSize) => dispatch(updateIssueList({ pageSize }))}
       getRowId={(row) => row.id}
       initialState={{
-        sorting: { sortModel: [{ field: "status", sort: "desc" }] },
+        sorting: { sortModel: [{ field: 'status', sort: 'desc' }] },
       }}
       autoHeight
     />
   );
-};
+}
 
 export default IssueList;

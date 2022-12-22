@@ -1,12 +1,14 @@
-import MuiGrid from "@mui/material/Grid";
-import { theme } from "../../../../../config/mui.config";
+/* eslint-disable react/prop-types */
+/* eslint-disable react/react-in-jsx-scope */
+import MuiGrid from '@mui/material/Grid';
+import theme from '../../../../../config/mui.config';
 
-import IssueCard from "../../cards/IssueCard";
+import IssueCard from '../../cards/IssueCard';
 
-const IssueStats = ({ issuesStatusCount }) => {
+function IssueStats({ issuesStatusCount }) {
   const total = issuesStatusCount.reduce(
-    (prev, cur) => prev + parseInt(cur.count),
-    0
+    (prev, cur) => prev + parseInt(cur.count, 10),
+    0,
   );
 
   return (
@@ -15,8 +17,8 @@ const IssueStats = ({ issuesStatusCount }) => {
       rowSpacing={1}
       columnSpacing={2}
       sx={{
-        marginTop: "10px",
-        borderRadius: "6px",
+        marginTop: '10px',
+        borderRadius: '6px',
       }}
     >
       <MuiGrid item xs={12} md={2.4}>
@@ -27,15 +29,13 @@ const IssueStats = ({ issuesStatusCount }) => {
           backgroundColor={theme.palette.primary.main}
         />
       </MuiGrid>
-      {issuesStatusCount.map(({ id, name, count }) => {
-        return (
-          <MuiGrid item key={id} xs={6} sm={4} md={2.4}>
-            <IssueCard title={name} count={count} />
-          </MuiGrid>
-        );
-      })}
+      {issuesStatusCount.map(({ id, name, count }) => (
+        <MuiGrid item key={id} xs={6} sm={4} md={2.4}>
+          <IssueCard title={name} count={count} />
+        </MuiGrid>
+      ))}
     </MuiGrid>
   );
-};
+}
 
 export default IssueStats;

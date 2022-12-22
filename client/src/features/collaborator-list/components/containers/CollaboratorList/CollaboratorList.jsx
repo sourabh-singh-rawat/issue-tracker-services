@@ -1,66 +1,69 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-shadow */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable import/named */
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import MuiAvatar from "@mui/material/Avatar";
-import MuiTypography from "@mui/material/Typography";
+import MuiAvatar from '@mui/material/Avatar';
+import MuiTypography from '@mui/material/Typography';
 
-import List from "../../../../../common/lists/List";
+import List from '../../../../../common/lists/List';
 
-import { useGetCollaboratorsQuery } from "../../../api/collaborator-list.api";
+import { useGetCollaboratorsQuery } from '../../../api/collaborator-list.api';
 
 import {
   setCollaboratorList,
   updateCollaboratorList,
-} from "../../../slice/collaborator-list.slice";
+} from '../../../slice/collaborator-list.slice';
 
-const CollaboratorList = () => {
+function CollaboratorList() {
   const dispatch = useDispatch();
   const { rows } = useSelector((store) => store.collaboratorList);
-  const user = useSelector((store) => store.auth.user);
   const { page, pageSize, rowCount } = useSelector(
-    (store) => store.collaboratorList
+    (store) => store.collaboratorList,
   );
   const getCollaboratorsQuery = useGetCollaboratorsQuery();
   const columns = [
     {
-      field: "name",
-      headerName: "Name",
+      field: 'name',
+      headerName: 'Name',
       flex: 0.45,
-      renderCell: ({ id, value, row: { photo_url } }) => {
-        return (
-          <Fragment>
-            <MuiAvatar
-              src={photo_url}
-              sx={{ width: "32px", height: "32px", marginRight: "10px" }}
+      renderCell: ({ id, value, row: { photoUrl } }) => (
+        <>
+          <MuiAvatar
+            src={photoUrl}
+            sx={{ width: '24px', height: '24px', marginRight: '10px' }}
+          >
+            {value.match(/\b(\w)/g)[0]}
+          </MuiAvatar>
+          <Link to={`/profile/${id}`} style={{ textDecoration: 'none' }}>
+            <MuiTypography
+              variant="body2"
+              sx={{
+                color: 'text.primary',
+                fontWeight: 500,
+                '&:hover': {
+                  color: 'primary.main',
+                  textDecoration: 'none!important',
+                },
+              }}
             >
-              {value.match(/\b(\w)/g)[0]}
-            </MuiAvatar>
-            <Link to={`/profile/${id}`} style={{ textDecoration: "none" }}>
-              <MuiTypography
-                variant="body2"
-                sx={{
-                  color: "text.primary",
-                  fontWeight: 500,
-                  "&:hover": {
-                    color: "primary.main",
-                    textDecoration: "none!important",
-                  },
-                }}
-              >
-                {value}
-              </MuiTypography>
-            </Link>
-          </Fragment>
-        );
-      },
+              {value}
+            </MuiTypography>
+          </Link>
+        </>
+      ),
     },
-    { field: "email", headerName: "Email", flex: 0.3 },
+    { field: 'email', headerName: 'Email', flex: 0.3 },
   ];
 
   useEffect(() => {
-    if (getCollaboratorsQuery.data)
+    if (getCollaboratorsQuery.data) {
       dispatch(setCollaboratorList(getCollaboratorsQuery.data));
+    }
   }, [getCollaboratorsQuery.isSuccess]);
 
   return (
@@ -78,11 +81,11 @@ const CollaboratorList = () => {
         dispatch(updateCollaboratorList({ pageSize }))
       }
       initialState={{
-        sorting: { sortModel: [{ field: "name", sort: "asc" }] },
+        sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
       }}
       getRowId={(params) => params.id}
     />
   );
-};
+}
 
 export default CollaboratorList;

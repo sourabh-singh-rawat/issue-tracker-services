@@ -1,5 +1,7 @@
-import User from "../../models/user/user.model.js";
-import Project from "../../models/project/project.model.js";
+/* eslint-disable-next-line import/extensions */
+import User from '../../models/user/user.model.js';
+/* eslint-disable-next-line import/extensions */
+import Project from '../../models/project/project.model.js';
 
 const show = async (req, res) => {
   const { uid } = req.user;
@@ -13,9 +15,9 @@ const show = async (req, res) => {
       .rows[0];
     if (!project) return res.status(403).send();
 
-    res.send(project);
+    return res.send(project);
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

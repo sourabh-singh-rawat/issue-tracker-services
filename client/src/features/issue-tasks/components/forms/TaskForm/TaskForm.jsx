@@ -1,29 +1,32 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import { formatISO } from "date-fns";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { formatISO } from 'date-fns';
 
-import { theme } from "../../../../../config/mui.config";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiTypography from '@mui/material/Typography';
+import theme from '../../../../../config/mui.config';
 
-import DatePicker from "../../../../../common/dates/DatePicker";
-import TextField from "../../../../../common/textfields/TextField";
+import DatePicker from '../../../../../common/dates/DatePicker';
+import TextField from '../../../../../common/textfields/TextField';
 
-import SaveButton from "../../../../../common/buttons/SaveButton";
-import CancelButton from "../../../../../common/buttons/CancelButton";
+import SaveButton from '../../../../../common/buttons/SaveButton';
+import CancelButton from '../../../../../common/buttons/CancelButton';
 
-import { useCreateTaskMutation } from "../../../api/issue-tasks.api";
+import { useCreateTaskMutation } from '../../../api/issue-tasks.api';
 
-import { resetTasks } from "../../../slice/issue-tasks.slice";
+import { resetTasks } from '../../../slice/issue-tasks.slice';
 
-const TaskForm = ({ setOpen }) => {
+function TaskForm({ setOpen }) {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const defaultDueDate = formatISO(new Date());
   const [task, setTask] = useState({
-    description: "",
+    description: '',
     dueDate: defaultDueDate,
   });
 
@@ -38,7 +41,7 @@ const TaskForm = ({ setOpen }) => {
     setTask({ ...task, dueDate: selectedDate });
   };
 
-  const handleCancel = (e) => {
+  const handleCancel = () => {
     setOpen(false);
   };
 
@@ -49,7 +52,7 @@ const TaskForm = ({ setOpen }) => {
       dispatch(resetTasks());
     }
     // Resetting the task state after saving
-    setTask({ ...task, dueDate: defaultDueDate, description: "" });
+    setTask({ ...task, dueDate: defaultDueDate, description: '' });
     setOpen(false);
   };
 
@@ -58,10 +61,10 @@ const TaskForm = ({ setOpen }) => {
       item
       xs={12}
       sx={{
-        padding: "1rem",
-        borderRadius: "6px",
-        marginTop: "1rem",
-        boxShadow: "0px 0px 7px 0px rgba(0,0,0,0.3)",
+        padding: '1rem',
+        borderRadius: '6px',
+        marginTop: '1rem',
+        boxShadow: '0px 0px 7px 0px rgba(0,0,0,0.3)',
       }}
     >
       <MuiGrid container rowSpacing={2} columnSpacing={1}>
@@ -116,6 +119,6 @@ const TaskForm = ({ setOpen }) => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default TaskForm;

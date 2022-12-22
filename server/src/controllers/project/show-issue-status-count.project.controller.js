@@ -1,5 +1,7 @@
-import Project from "../../models/project/project.model.js";
-import User from "../../models/user/user.model.js";
+// eslint-disable-next-line import/extensions
+import User from '../../models/user/user.model.js';
+// eslint-disable-next-line import/extensions
+import Project from '../../models/project/project.model.js';
 
 const showIssuesStatusCount = async (req, res) => {
   const { id } = req.params;
@@ -13,10 +15,9 @@ const showIssuesStatusCount = async (req, res) => {
       await Project.statusCount({ projectId: id, memberId: userId })
     ).rows;
 
-    res.send(statusCount);
+    return res.send(statusCount);
   } catch (error) {
-    console.log(error);
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

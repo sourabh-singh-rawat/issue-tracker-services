@@ -1,19 +1,21 @@
-import db from "../../config/db.config.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
-const insertOne = async ({ typeId, projectId, userId }) => {
-  return db.query(
+const insertOne = async ({ typeId, projectId, userId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
       INSERT INTO 
         project_activities (type_id, project_id, user_id)
       VALUES
         ($1, $2, $3);
     `,
-    [typeId, projectId, userId]
+    [typeId, projectId, userId],
   );
-};
 
-const find = async ({ projectId, memberId }) => {
-  return db.query(
+const find = async ({ projectId, memberId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
       SELECT
         pa.id, 
@@ -45,8 +47,7 @@ const find = async ({ projectId, memberId }) => {
       ORDER BY
         pa.created_at DESC;
     `,
-    [projectId, memberId]
+    [projectId, memberId],
   );
-};
 
 export default { insertOne, find };

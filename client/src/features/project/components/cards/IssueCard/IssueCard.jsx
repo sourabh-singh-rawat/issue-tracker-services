@@ -1,38 +1,36 @@
-import { Fragment } from "react";
-import { theme } from "../../../../../config/mui.config";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-no-useless-fragment */
+import { Fragment } from 'react';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTypography from "@mui/material/Typography";
-import MuiPestControlIcon from "@mui/icons-material/PestControl";
+import MuiGrid from '@mui/material/Grid';
+import MuiSkeleton from '@mui/material/Skeleton';
+import MuiTypography from '@mui/material/Typography';
+import MuiPestControlIcon from '@mui/icons-material/PestControl';
+import theme from '../../../../../config/mui.config';
 
-const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
+function IssueCard({ title, count, isLoading, color, backgroundColor }) {
   return (
-    <Fragment>
+    <>
       {isLoading ? (
         <MuiSkeleton
           variant="rectangular"
           height="90px"
-          sx={{ borderRadius: "6px" }}
+          sx={{ borderRadius: '6px' }}
         />
       ) : (
         <MuiGrid
           container
           sx={{
-            cursor: "pointer",
-            padding: "16px",
-            minHeight: "60px",
-            border: `none`,
-            borderRadius: "6px",
-            transition: "250ms",
-            backgroundColor: backgroundColor
-              ? backgroundColor
-              : theme.palette.common.white,
-
-            border: `1px solid ${
-              backgroundColor ? backgroundColor : theme.palette.grey[200]
-            }`,
-            ":hover": {
+            cursor: 'pointer',
+            padding: '16px',
+            minHeight: '60px',
+            borderRadius: '6px',
+            transition: '250ms',
+            backgroundColor: backgroundColor || theme.palette.common.white,
+            border: `1px solid ${backgroundColor || theme.palette.grey[200]}`,
+            ':hover': {
               backgroundColor: backgroundColor
                 ? theme.palette.primary.dark
                 : theme.palette.grey[100],
@@ -50,18 +48,18 @@ const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
               variant="body2"
               fontWeight={600}
               sx={{
-                color: color ? color : theme.palette.text.primary,
+                color: color || theme.palette.text.primary,
                 opacity: 0.6,
-                textTransform: "capitalize",
+                textTransform: 'capitalize',
                 flexGrow: 1,
               }}
             >
-              {title}:
+              {title}
             </MuiTypography>
             <MuiPestControlIcon
               sx={{
                 opacity: color ? 0.6 : 0.2,
-                color: color ? color : theme.palette.text.primary,
+                color: color || theme.palette.text.primary,
               }}
             />
           </MuiGrid>
@@ -69,9 +67,9 @@ const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
             <MuiTypography
               variant="h4"
               sx={{
-                fontFamily: "Roboto Mono",
+                fontFamily: 'Roboto Mono',
                 fontWeight: 500,
-                color: color ? color : theme.palette.text.primary,
+                color: color || theme.palette.text.primary,
               }}
             >
               {count}
@@ -79,8 +77,8 @@ const IssueCard = ({ title, count, isLoading, color, backgroundColor }) => {
           </MuiGrid>
         </MuiGrid>
       )}
-    </Fragment>
+    </>
   );
-};
+}
 
 export default IssueCard;

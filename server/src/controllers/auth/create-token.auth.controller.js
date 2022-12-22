@@ -1,9 +1,8 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv/config";
+import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { JWT_SECRET } = process.env;
 
-const createToken = async (req, res) => {
+const createToken = async (req) => {
   const { payload } = req.body;
 
   try {

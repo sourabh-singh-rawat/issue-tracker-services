@@ -1,7 +1,9 @@
-import { useTheme } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useTheme } from '@mui/material/styles';
+import MuiGrid from '@mui/material/Grid';
 
-const GridContainer = ({ children }) => {
+function GridContainer({ children }) {
   const theme = useTheme();
 
   return (
@@ -9,14 +11,14 @@ const GridContainer = ({ children }) => {
       container
       sx={{
         border: `1px solid ${theme.palette.grey[200]}`,
-        borderRadius: "4px",
-        padding: "16px 24px",
+        borderRadius: '4px',
+        padding: '16px 24px',
         backgroundColor: theme.palette.background.paper,
       }}
     >
       {children}
     </MuiGrid>
   );
-};
+}
 
 export default GridContainer;

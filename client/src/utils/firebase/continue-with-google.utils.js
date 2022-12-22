@@ -1,9 +1,9 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../config/firebase.config";
-import { verifyToken } from "./verify-token.utils";
-import { storeUserInfoInDatabase } from "./database.utils";
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../config/firebase.config';
+import verifyToken from './verify-token.utils';
+import storeUserInfoInDatabase from './database.utils';
 
-export const continueWithGoogle = async (inviteToken) => {
+const continueWithGoogle = async (inviteToken) => {
   const provider = new GoogleAuthProvider();
 
   if (inviteToken) {
@@ -19,29 +19,33 @@ export const continueWithGoogle = async (inviteToken) => {
 
         // user signed in so add the user to project_member
         const { projectId } = decodedToken;
-        const response = await fetch(
+        const finalResponse = await fetch(
           `http://localhost:4000/api/projects/${projectId}/members`,
           {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({ ...decodedToken, uid }),
-          }
+          },
         );
 
-        return response;
-      } else {
-        console.log("Error signing in user");
+        return finalResponse;
       }
-    } catch (error) {}
+
+      return;
+    } catch (error) {
+      return error;
+    }
   } else {
     try {
       const { user } = await signInWithPopup(auth, provider);
-      await storeUserInfoInDatabase(user);
+      return await storeUserInfoInDatabase(user);
     } catch (error) {
-      console.log("Error signing in user");
+      return error;
     }
   }
 };
+
+export default { continueWithGoogle };

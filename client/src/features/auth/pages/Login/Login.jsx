@@ -1,33 +1,38 @@
-import { useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable object-curly-newline */
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
+import { Button, Container, Grid, Typography } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
 
-import { continueWithGoogle } from "../../../../utils/firebase/continue-with-google.utils";
-import { onAuthStateChangedListener } from "../../../../config/firebase.config";
+import { continueWithGoogle } from '../../../../utils/firebase/continue-with-google.utils';
+import { onAuthStateChangedListener } from '../../../../config/firebase.config';
 
-const Login = () => {
+function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const inviteToken = searchParams.get("inviteToken");
+  const inviteToken = searchParams.get('inviteToken');
 
   const handleContinueWithGoogle = async () => {
     await continueWithGoogle(inviteToken);
   };
 
   // If the user is already loggen in, redirect to the dashboard
-  useEffect(() => {
-    return onAuthStateChangedListener((user) => {
-      if (user) navigate("/");
-    });
-  }, []);
+  useEffect(
+    () =>
+      onAuthStateChangedListener((user) => {
+        if (user) navigate('/');
+      }),
+    [],
+  );
 
   return (
     <Container component="main" maxWidth="xs">
       <Grid container spacing={2}>
-        <Grid item xs={12} sx={{ textAlign: "center", marginTop: 8 }}>
+        <Grid item xs={12} sx={{ textAlign: 'center', marginTop: 8 }}>
           <Typography variant="h4" fontWeight="bold">
             Log In
           </Typography>
@@ -38,8 +43,8 @@ const Login = () => {
             onClick={handleContinueWithGoogle}
             startIcon={<GoogleIcon />}
             sx={{
-              color: "text.primary",
-              textTransform: "none",
+              color: 'text.primary',
+              textTransform: 'none',
             }}
             fullWidth
           >
@@ -49,6 +54,6 @@ const Login = () => {
       </Grid>
     </Container>
   );
-};
+}
 
 export default Login;

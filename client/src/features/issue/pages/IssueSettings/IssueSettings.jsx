@@ -1,29 +1,31 @@
-import { useEffect } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { format, formatISO, parseISO } from "date-fns";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/react-in-jsx-scope */
+import { useEffect } from 'react';
+import { useOutletContext, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { format, formatISO, parseISO } from 'date-fns';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiDivider from "@mui/material/Divider";
-import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiDivider from '@mui/material/Divider';
+import MuiSkeleton from '@mui/material/Skeleton';
+import MuiTypography from '@mui/material/Typography';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import DatePicker from "../../../../common/dates/DatePicker";
-import TextField from "../../../../common/textfields/TextField";
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
-import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
-import IssueAssigneeSelector from "../../../../common/selects/IssueAssigneeSelector";
-import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import DatePicker from '../../../../common/dates/DatePicker';
+import TextField from '../../../../common/textfields/TextField';
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import IssueStatusSelector from '../../components/containers/IssueStatusSelector';
+import IssueAssigneeSelector from '../../../../common/selects/IssueAssigneeSelector';
+import IssuePrioritySelector from '../../components/containers/IssuePrioritySelector';
 
-import { updateIssue } from "../../slice/issue.slice";
-import { setMembers } from "../../../project/slice/project.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { updateIssue } from '../../slice/issue.slice';
+import { setMembers } from '../../../project/slice/project.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
-import { useUpdateIssueMutation } from "../../api/issue.api";
-import { useGetProjectMembersQuery } from "../../../project/api/project.api";
+import { useUpdateIssueMutation } from '../../api/issue.api';
+import { useGetProjectMembersQuery } from '../../../project/api/project.api';
 
-const IssueSettings = () => {
+function IssueSettings() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
@@ -133,8 +135,8 @@ const IssueSettings = () => {
                     helperText="The day this project was created, this cannot be changed."
                     value={
                       issue.createdAt
-                        ? format(parseISO(issue.createdAt), "PPPPpppp")
-                        : "loading"
+                        ? format(parseISO(issue.createdAt), 'PPPPpppp')
+                        : 'loading'
                     }
                     isLoading={issue.isLoading}
                     disabled
@@ -194,7 +196,7 @@ const IssueSettings = () => {
         </MuiGrid>
         <MuiGrid item xs={12} sx={{ marginBottom: 8 }}>
           <MuiGrid container>
-            <MuiGrid item md={4}></MuiGrid>
+            <MuiGrid item md={4} />
             <MuiGrid item xs={12} md={8}>
               {issue.isLoading ? (
                 <MuiSkeleton width="20%" />
@@ -207,6 +209,6 @@ const IssueSettings = () => {
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default IssueSettings;

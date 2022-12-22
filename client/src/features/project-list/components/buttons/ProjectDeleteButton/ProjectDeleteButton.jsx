@@ -1,25 +1,27 @@
-import { Fragment, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { Fragment, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { theme } from "../../../../../config/mui.config";
-import MuiDialog from "@mui/material/Dialog";
-import MuiIconButton from "@mui/material/IconButton";
-import MuiTypography from "@mui/material/Typography";
-import MuiDialogTitle from "@mui/material/DialogTitle";
-import MuiDialogActions from "@mui/material/DialogActions";
-import MuiDialogContent from "@mui/material/DialogContent";
-import MuiDialogContentText from "@mui/material/DialogContentText";
+import MuiDialog from '@mui/material/Dialog';
+import MuiIconButton from '@mui/material/IconButton';
+import MuiTypography from '@mui/material/Typography';
+import MuiDialogTitle from '@mui/material/DialogTitle';
+import MuiDialogActions from '@mui/material/DialogActions';
+import MuiDialogContent from '@mui/material/DialogContent';
+import MuiDialogContentText from '@mui/material/DialogContentText';
 
-import MuiDeleteIcon from "@mui/icons-material/Delete";
+import MuiDeleteIcon from '@mui/icons-material/Delete';
+import theme from '../../../../../config/mui.config';
 
-import CancelButton from "../../../../../common/buttons/CancelButton";
-import SecondaryButton from "../../../../../common/buttons/SecondaryButton";
+import CancelButton from '../../../../../common/buttons/CancelButton';
+import SecondaryButton from '../../../../../common/buttons/SecondaryButton';
 
-import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
-import { useDeleteProjectMutation } from "../../../../project/api/project.api";
-import { setLoadingProjectList } from "../../../slice/project-list.slice";
+import { setMessageBarOpen } from '../../../../message-bar/slice/message-bar.slice';
+import { useDeleteProjectMutation } from '../../../../project/api/project.api';
+import { setLoadingProjectList } from '../../../slice/project-list.slice';
 
-const ProjectDeleteButton = ({ id }) => {
+function ProjectDeleteButton({ id }) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
@@ -32,14 +34,14 @@ const ProjectDeleteButton = ({ id }) => {
   }, [isSuccess]);
 
   return (
-    <Fragment>
+    <>
       <MuiIconButton
         size="small"
         onClick={handleClickOpen}
         sx={{
           color: theme.palette.grey[300],
-          transition: "ease-in-out 0.2s",
-          "&:hover": { color: theme.palette.primary.main },
+          transition: 'ease-in-out 0.2s',
+          '&:hover': { color: theme.palette.primary.main },
         }}
         disableRipple
       >
@@ -66,8 +68,8 @@ const ProjectDeleteButton = ({ id }) => {
           />
         </MuiDialogActions>
       </MuiDialog>
-    </Fragment>
+    </>
   );
-};
+}
 
 export default ProjectDeleteButton;

@@ -1,17 +1,19 @@
-import MuiButton from "@mui/material/Button";
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import MuiButton from '@mui/material/Button';
 
-const SaveButton = ({ label, onClick }) => {
+function SaveButton({ label, onClick }) {
   return (
     <MuiButton
       onClick={onClick}
       variant="contained"
       sx={{
-        height: "100%",
-        textTransform: "none",
-        borderRadius: "6px",
-        boxShadow: "none",
-        "&:hover": {
-          boxShadow: "none",
+        height: '100%',
+        textTransform: 'none',
+        borderRadius: '6px',
+        boxShadow: 'none',
+        '&:hover': {
+          boxShadow: 'none',
         },
       }}
       disableRipple
@@ -19,6 +21,6 @@ const SaveButton = ({ label, onClick }) => {
       {label}
     </MuiButton>
   );
-};
+}
 
 export default SaveButton;

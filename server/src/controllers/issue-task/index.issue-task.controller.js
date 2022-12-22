@@ -1,4 +1,5 @@
-import IssueTask from "../../models/issue-task/issue-task.model.js";
+/* eslint-disable import/extensions */
+import IssueTask from '../../models/issue-task/issue-task.model.js';
 
 /**
  * List all the tasks of an issue
@@ -30,7 +31,6 @@ const index = async (req, res) => {
     });
     res.send({ rows: tasks.rows, rowCount: tasks.rowCount });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

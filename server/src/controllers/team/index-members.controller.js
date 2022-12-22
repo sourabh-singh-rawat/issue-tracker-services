@@ -1,4 +1,5 @@
-import TeamUser from "../../models/team-user/team-user.model.js";
+/* eslint-disable import/extensions */
+import TeamUser from '../../models/team-user/team-user.model.js';
 
 const indexMembers = async (req, res) => {
   try {
@@ -6,9 +7,9 @@ const indexMembers = async (req, res) => {
 
     const teamMembers = (await TeamUser.find(id)).rows;
 
-    res.send(teamMembers);
+    return res.send(teamMembers);
   } catch (error) {
-    res.stats(500).send();
+    return res.stats(500).send();
   }
 };
 

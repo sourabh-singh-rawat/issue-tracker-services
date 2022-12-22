@@ -1,8 +1,10 @@
-import db from "../../config/db.config.js";
-import User from "../../models/user/user.model.js";
-import Project from "../../models/project/project.model.js";
-import ProjectActivityTypes from "../../models/project-activity-types/project-activity-types.model.js";
-import ProjectActivity from "../../models/project-activity/project-activity.model.js";
+/* eslint-disable object-curly-newline */
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+import User from '../../models/user/user.model.js';
+import Project from '../../models/project/project.model.js';
+import ProjectActivityTypes from '../../models/project-activity-types/project-activity-types.model.js';
+import ProjectActivity from '../../models/project-activity/project-activity.model.js';
 
 const update = async (req, res) => {
   const { uid } = req.user;
@@ -10,7 +12,7 @@ const update = async (req, res) => {
   const { name, description, status, startDate, endDate } = req.body;
 
   try {
-    db.query("BEGIN");
+    db.query('BEGIN');
 
     const { id: userId } = await User.findOne(uid);
     const updatedProject = (
@@ -22,69 +24,67 @@ const update = async (req, res) => {
 
     if (name) {
       const updatedNameActivityTypeId = await ProjectActivityTypes.findOne({
-        name: "UPDATED_NAME",
+        name: 'UPDATED_NAME',
       });
       await ProjectActivity.insertOne({
         projectId: id,
         typeId: updatedNameActivityTypeId,
-        userId: userId,
+        userId,
       });
     }
 
     if (description) {
+      // eslint-disable-next-line operator-linebreak
       const updatedDescriptionActivityTypeId =
         await ProjectActivityTypes.findOne({
-          name: "UPDATED_DESCRIPTION",
+          name: 'UPDATED_DESCRIPTION',
         });
       await ProjectActivity.insertOne({
         projectId: id,
         typeId: updatedDescriptionActivityTypeId,
-        userId: userId,
+        userId,
       });
     }
 
     if (status) {
       const updatedStatusActivityTypeId = await ProjectActivityTypes.findOne({
-        name: "UPDATED_STATUS",
+        name: 'UPDATED_STATUS',
       });
       await ProjectActivity.insertOne({
         projectId: id,
         typeId: updatedStatusActivityTypeId,
-        userId: userId,
+        userId,
       });
     }
 
     if (startDate) {
       const updatedStartDateActivityTypeId = await ProjectActivityTypes.findOne(
-        {
-          name: "UPDATED_START_DATE",
-        }
+        { name: 'UPDATED_START_DATE' },
       );
       await ProjectActivity.insertOne({
         projectId: id,
         typeId: updatedStartDateActivityTypeId,
-        userId: userId,
+        userId,
       });
     }
 
     if (endDate) {
       const updatedEndDateActivityTypeId = await ProjectActivityTypes.findOne({
-        name: "UPDATED_END_DATE",
+        name: 'UPDATED_END_DATE',
       });
       await ProjectActivity.insertOne({
         projectId: id,
         typeId: updatedEndDateActivityTypeId,
-        userId: userId,
+        userId,
       });
     }
 
-    db.query("COMMIT");
+    db.query('COMMIT');
 
-    res.send(updatedProject);
+    return res.send(updatedProject);
   } catch (error) {
-    console.log(error);
-    db.query("ROLLBACK");
-    res.status(500).send();
+    db.query('ROLLBACK');
+    return res.status(500).send();
   }
 };
 

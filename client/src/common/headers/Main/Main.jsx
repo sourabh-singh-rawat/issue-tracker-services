@@ -1,32 +1,32 @@
-import { Fragment } from "react";
-import { useDispatch } from "react-redux";
-import { Outlet } from "react-router-dom";
+/* eslint-disable react/react-in-jsx-scope */
+import { Fragment } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import MuiBox from "@mui/material/Box";
-import MuiToolbar from "@mui/material/Toolbar";
+import MuiBox from '@mui/material/Box';
+import MuiToolbar from '@mui/material/Toolbar';
 
-import MessageBar from "../../../common/notifications/MessageBar";
-import MenuSidebar from "../../../common/navigations/MenuSidebar";
+import MessageBar from '../../notifications/MessageBar';
+import MenuSidebar from '../../navigations/MenuSidebar';
 
-const Main = () => {
+function Main() {
   return (
-    <Fragment>
+    <>
       <MenuSidebar />
       <MuiBox
         sx={{
           flexGrow: 1,
-          paddingTop: "20px",
-          paddingLeft: "30px",
-          paddingRight: "30px",
-          height: "100%",
+          paddingTop: '20px',
+          paddingLeft: '30px',
+          paddingRight: '30px',
+          height: '100%',
         }}
       >
         <MuiToolbar variant="dense" />
         <Outlet />
         <MessageBar />
       </MuiBox>
-    </Fragment>
+    </>
   );
-};
+}
 
 export default Main;

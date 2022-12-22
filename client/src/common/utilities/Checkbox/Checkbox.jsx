@@ -1,10 +1,8 @@
-import { styled } from "@mui/material/styles";
-import MuiCheckbox from "@mui/material/Checkbox";
+/* eslint-disable react/prop-types */
+/* eslint-disable react/react-in-jsx-scope */
+import MuiCheckbox from '@mui/material/Checkbox';
 
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-
-const Checkbox = ({ checked, handleCheckBoxClick }) => {
+function Checkbox({ checked, handleCheckBoxClick }) {
   return (
     <MuiCheckbox
       checked={checked}
@@ -12,6 +10,6 @@ const Checkbox = ({ checked, handleCheckBoxClick }) => {
       disableRipple
     />
   );
-};
+}
 
 export default Checkbox;

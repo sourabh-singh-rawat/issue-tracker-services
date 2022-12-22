@@ -1,9 +1,11 @@
-import express from "express";
+/* eslint-disable import/extensions */
+import express from 'express';
+
+import IssueAttachmentController from '../controllers/issue-attachment/index.js';
+
 const router = express.Router();
 
-import IssueAttachmentController from "../../src/controllers/issue-attachment/index.js";
-
-router.post("/issues/:id/attachments", IssueAttachmentController.create);
-router.get("/issues/:id/attachments", IssueAttachmentController.index);
+router.post('/issues/:id/attachments', IssueAttachmentController.create);
+router.get('/issues/:id/attachments', IssueAttachmentController.index);
 
 export default router;

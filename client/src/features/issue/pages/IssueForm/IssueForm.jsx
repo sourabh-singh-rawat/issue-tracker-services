@@ -1,38 +1,41 @@
-import { Fragment, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/react-in-jsx-scope */
+import { Fragment, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import MuiBox from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
-import MuiAutocomplete from "@mui/material/Autocomplete";
+import MuiBox from '@mui/material/Box';
+import MuiGrid from '@mui/material/Grid';
+import MuiAutocomplete from '@mui/material/Autocomplete';
 
-import DatePicker from "../../../../common/dates/DatePicker";
-import TextField from "../../../../common/textfields/TextField";
-import SectionHeader from "../../../../common/headers/SectionHeader";
+import DatePicker from '../../../../common/dates/DatePicker';
+import TextField from '../../../../common/textfields/TextField';
+import SectionHeader from '../../../../common/headers/SectionHeader';
 
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
-import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
-import IssueAssigneeSelector from "../../../../common/selects/IssueAssigneeSelector";
-import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import IssueStatusSelector from '../../components/containers/IssueStatusSelector';
+import IssueAssigneeSelector from '../../../../common/selects/IssueAssigneeSelector';
+import IssuePrioritySelector from '../../components/containers/IssuePrioritySelector';
 
 import {
   useCreateIssueMutation,
   useGetIssuesPriorityQuery,
   useGetIssuesStatusQuery,
-} from "../../api/issue.api";
-import { useGetProjectMembersQuery } from "../../../project/api/project.api";
-import { useGetProjectsQuery } from "../../../project-list/api/project-list.api";
+} from '../../api/issue.api';
+import { useGetProjectMembersQuery } from '../../../project/api/project.api';
+import { useGetProjectsQuery } from '../../../project-list/api/project-list.api';
 
 import {
   setIssuePriority,
   setIssueStatus,
   updateIssue,
-} from "../../slice/issue.slice";
-import { setMembers } from "../../../project/slice/project.slice";
-import Label from "../../../../common/utilities/Label";
+} from '../../slice/issue.slice';
+import { setMembers } from '../../../project/slice/project.slice';
+import Label from '../../../../common/utilities/Label';
 
-const IssueForm = () => {
+function IssueForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,10 +48,10 @@ const IssueForm = () => {
 
   const [projects, setProjects] = useState([]);
   const [formFields, setFormFields] = useState({
-    name: "",
-    description: "",
-    status: "",
-    priority: "",
+    name: '',
+    description: '',
+    status: '',
+    priority: '',
     dueDate: null,
     assigneeId: null,
     projectId: project.id,
@@ -60,10 +63,10 @@ const IssueForm = () => {
   const getProjectsQuery = useGetProjectsQuery({
     page: 0,
     pageSize: 10,
-    sortBy: "created_at:desc",
+    sortBy: 'created_at:desc',
   });
   const getProjectMembersQuery = useGetProjectMembersQuery(
-    formFields.project_id
+    formFields.project_id,
   );
 
   useEffect(() => {
@@ -79,8 +82,7 @@ const IssueForm = () => {
   }, [issuePriority]);
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
 
     setFormFields({
       ...formFields,
@@ -159,11 +161,11 @@ const IssueForm = () => {
                 <TextField
                   name="projectId"
                   title="Project"
-                  value={project.isLoading ? "loading" : project.name}
+                  value={project.isLoading ? 'loading' : project.name}
                   disabled
                 />
               ) : (
-                <Fragment>
+                <>
                   <Label title="Project" />
                   <MuiAutocomplete
                     disablePortal
@@ -175,14 +177,12 @@ const IssueForm = () => {
                         project_id: selectedProject.id,
                       });
                     }}
-                    getOptionLabel={(option) => {
-                      return `${option.name}`;
-                    }}
+                    getOptionLabel={(option) => `${option.name}`}
                     renderInput={(params) => <TextField {...params} />}
                     fullWidth
                     required
                   />
-                </Fragment>
+                </>
               )}
             </MuiGrid>
             <MuiGrid item xs={12} sm={12}>
@@ -206,7 +206,7 @@ const IssueForm = () => {
               <TextField
                 name="reporter"
                 title="Reporter"
-                value={user ? user.email : "none"}
+                value={user ? user.email : 'none'}
                 onChange={handleChange}
                 helperText="This is the person who created this issue."
                 fullWidth
@@ -226,12 +226,10 @@ const IssueForm = () => {
                 title="Due Date"
                 minDate={new Date()}
                 value={formFields.dueDate}
-                getOptionLabel={(option) => {
-                  return `${option.name}`;
-                }}
-                onChange={(date) => {
-                  return setFormFields({ ...formFields, due_date: date });
-                }}
+                getOptionLabel={(option) => `${option.name}`}
+                onChange={(date) =>
+                  setFormFields({ ...formFields, due_date: date })
+                }
               />
             </MuiGrid>
             <MuiGrid item xs={12} sm={6}>
@@ -253,6 +251,6 @@ const IssueForm = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default IssueForm;

@@ -1,40 +1,44 @@
-import db from "../../config/db.config.js";
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
-const insertOne = ({ name, team_leader }) => {
-  return db.query(
+const insertOne = ({ name, teamLeader }) =>
+  db.query(
     `INSERT INTO 
-      teams (name, team_leader) 
+      teams (name, teamLeader) 
      VALUES 
       ($1, $2)
      RETURNING 
       *`,
-    [name, team_leader]
+    [name, teamLeader],
   );
-};
 
-const find = () => {
-  return db.query(`SELECT * FROM teams`);
-};
+const find = () => db.query('SELECT * FROM teams');
 
 const findOne = function findOneTeam(id) {
   return db.query(
     `SELECT * FROM teams
      WHERE id = $1`,
-    [id]
+    [id],
   );
 };
 
 const updateOne = (id, document) => {
   let query = Object.keys(document)
     .reduce(
-      (prev, cur, index) => prev + " " + cur + "=$" + (index + 1) + ",",
-      "UPDATE teams SET"
+      (prev, cur, index) => `${prev} ${cur}=$${index + 1},`,
+      'UPDATE teams SET',
     )
     .slice(0, -1);
 
-  query += " WHERE id='" + id + "' RETURNING *";
+  query += ` WHERE id='${id}' RETURNING *`;
 
   return db.query(query, Object.values(document));
 };
 
-export default { insertOne, find, findOne, updateOne };
+export default {
+  insertOne,
+  find,
+  findOne,
+  updateOne,
+};

@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   open: false,
-  message: "Updated!",
+  message: 'Updated!',
 };
 
 const messageBarSlice = createSlice({
-  name: "snackbar",
+  name: 'snackbar',
   initialState,
   reducers: {
     setMessageBarOpen: (state, action) => ({

@@ -1,4 +1,5 @@
-import Team from "../../models/Team/team.model.js";
+/* eslint-disable import/extensions */
+import Team from '../../models/team/team.model.js';
 
 const update = async (req, res) => {
   try {
@@ -8,9 +9,9 @@ const update = async (req, res) => {
 
     if (!team) res.status(404).send();
 
-    res.send(team);
+    return res.send(team);
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

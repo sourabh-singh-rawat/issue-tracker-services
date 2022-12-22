@@ -1,4 +1,5 @@
-import index from "./index.collaborator.controller.js";
+// eslint-disable-next-line
+import index from './index.collaborator.controller.js';
 
 const CollaboratorController = {
   index,

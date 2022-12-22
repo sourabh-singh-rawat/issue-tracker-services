@@ -1,6 +1,8 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv/config";
-import User from "../../models/user/user.model.js";
+/* eslint-disable import/extensions */
+import jwt from 'jsonwebtoken';
+// eslint-disable-next-line
+import dotenv from 'dotenv/config';
+import User from '../../models/user/user.model.js';
 
 const confirmInvite = async (req, res) => {
   const { inviteToken } = req.query;

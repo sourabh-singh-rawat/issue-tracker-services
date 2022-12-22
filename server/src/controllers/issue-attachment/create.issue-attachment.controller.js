@@ -1,4 +1,5 @@
-import IssueAttachment from "../../models/issue-attachment/issue-attachment.model.js";
+/* eslint-disable import/extensions */
+import IssueAttachment from '../../models/issue-attachment/issue-attachment.model.js';
 
 /**
  * Creates a new attachment entry
@@ -7,6 +8,7 @@ import IssueAttachment from "../../models/issue-attachment/issue-attachment.mode
  */
 const create = async (req, res) => {
   const { id } = req.params;
+  // eslint-disable-next-line
   const { bucket, fullPath, name, size, contentType, url } = req.body;
 
   try {

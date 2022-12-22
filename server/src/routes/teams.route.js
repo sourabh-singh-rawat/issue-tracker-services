@@ -1,14 +1,17 @@
-import express from "express";
+/* eslint-disable import/named */
+/* eslint-disable import/extensions */
+import express from 'express';
+import { auth } from '../middlewares/auth.middleware.js';
+
+import TeamController from '../controllers/team/index.js';
+
 const router = express.Router();
-import { auth } from "../../src/middlewares/auth.middleware.js";
 
-import TeamController from "../../src/controllers/team/index.js";
-
-router.post("/teams", auth, TeamController.create);
-router.post("/teams/:id/members", TeamController.createMember);
-router.get("/teams", TeamController.index);
-router.get("/teams/:id", TeamController.show);
-router.get("/teams/:id/members", TeamController.indexMembers);
-router.patch("/teams/:id", TeamController.update);
+router.post('/teams', auth, TeamController.create);
+router.post('/teams/:id/members', TeamController.createMember);
+router.get('/teams', TeamController.index);
+router.get('/teams/:id', TeamController.show);
+router.get('/teams/:id/members', TeamController.indexMembers);
+router.patch('/teams/:id', TeamController.update);
 
 export default router;

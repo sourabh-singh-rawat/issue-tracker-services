@@ -1,4 +1,5 @@
-import ProjectStatus from "../../models/project-status/project-status.model.js";
+/* eslint-disable import/extensions */
+import ProjectStatus from '../../models/project-status/project-status.model.js';
 
 /**
  * List project status available to projects
@@ -6,9 +7,9 @@ import ProjectStatus from "../../models/project-status/project-status.model.js";
 const indexStatus = async (req, res) => {
   try {
     const status = await ProjectStatus.find();
-    res.send({ rows: status.rows, rowCount: status.rowCount });
+    return res.send({ rows: status.rows, rowCount: status.rowCount });
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 
