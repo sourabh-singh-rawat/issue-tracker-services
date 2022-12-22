@@ -1,24 +1,29 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams, useOutletContext, Link } from "react-router-dom";
+/* eslint-disable no-shadow */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable curly */
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useOutletContext, Link } from 'react-router-dom';
 
-import { theme } from "../../../../config/mui.config";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
-import { ImageList, ImageListItem } from "@mui/material";
+import MuiGrid from '@mui/material/Grid';
+import MuiTypography from '@mui/material/Typography';
+import { ImageList, ImageListItem } from '@mui/material';
+import theme from '../../../../config/mui.config';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import Description from "../../../../common/textfields/Description";
-import IssueAssignee from "../../components/containers/IssueAssignee";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import Description from '../../../../common/textfields/Description';
+import IssueAssignee from '../../components/containers/IssueAssignee';
 
-import { setIssueAttachments, updateIssue } from "../../slice/issue.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { setIssueAttachments, updateIssue } from '../../slice/issue.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 import {
   useGetIssueAttachmentsQuery,
   useUpdateIssueMutation,
-} from "../../api/issue.api";
+} from '../../api/issue.api';
 
-const IssueOverview = () => {
+function IssueOverview() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
@@ -33,8 +38,9 @@ const IssueOverview = () => {
   };
 
   useEffect(() => {
-    if (getIssueAttachments.isSuccess)
+    if (getIssueAttachments.isSuccess) {
       dispatch(setIssueAttachments(getIssueAttachments.data));
+    }
   }, [getIssueAttachments.data]);
 
   useEffect(() => {
@@ -62,17 +68,17 @@ const IssueOverview = () => {
           <MuiTypography variant="body2" fontWeight={600}>
             Tasks:
           </MuiTypography>
-          <MuiTypography variant="body2" sx={{ marginTop: "6px" }}>
-            No current incomplete taks.{" "}
-            <Link to={`/issues/${id}/tasks`} style={{ textDecoration: "none" }}>
+          <MuiTypography variant="body2" sx={{ marginTop: '6px' }}>
+            No current incomplete taks.{' '}
+            <Link to={`/issues/${id}/tasks`} style={{ textDecoration: 'none' }}>
               <MuiTypography
                 variant="body2"
                 component="span"
                 sx={{
                   color: theme.palette.primary.main,
                   fontWeight: 600,
-                  "&:hover": {
-                    transitionDuration: "0.5s",
+                  '&:hover': {
+                    transitionDuration: '0.5s',
                     color: theme.palette.primary.dark,
                   },
                 }}
@@ -87,12 +93,12 @@ const IssueOverview = () => {
             Attachments:
           </MuiTypography>
           {attachments.rowCount <= 0 ? (
-            <MuiTypography variant="body2" sx={{ marginTop: "6px" }}>
+            <MuiTypography variant="body2" sx={{ marginTop: '6px' }}>
               <MuiTypography variant="body2">
-                No attachments.{" "}
+                No attachments.{' '}
                 <Link
                   to={`/issues/${id}/attachments`}
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: 'none' }}
                 >
                   <MuiTypography
                     variant="body2"
@@ -100,8 +106,8 @@ const IssueOverview = () => {
                     sx={{
                       color: theme.palette.primary.main,
                       fontWeight: 600,
-                      "&:hover": {
-                        transitionDuration: "0.5s",
+                      '&:hover': {
+                        transitionDuration: '0.5s',
                         color: theme.palette.primary.dark,
                       },
                     }}
@@ -116,21 +122,19 @@ const IssueOverview = () => {
               variant="quilted"
               cols={8}
               rowHeight={75}
-              sx={{ width: "100%" }}
+              sx={{ width: '100%' }}
             >
-              {attachments.rows.map(({ id, url }) => {
-                return (
-                  <ImageListItem key={id}>
-                    <img src={url} srcSet={url} loading="lazy" />
-                  </ImageListItem>
-                );
-              })}
+              {attachments.rows.map(({ id, url }) => (
+                <ImageListItem key={id}>
+                  <img src={url} srcSet={url} loading="lazy" />
+                </ImageListItem>
+              ))}
             </ImageList>
           )}
         </MuiGrid>
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default IssueOverview;

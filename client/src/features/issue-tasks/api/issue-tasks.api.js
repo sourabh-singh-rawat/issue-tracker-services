@@ -1,40 +1,33 @@
-import { apiSlice } from "../../../config/api.config.js";
+/* eslint-disable import/extensions */
+import apiSlice from '../../../config/api.config.js';
 
 const issueTasksApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     createTask: build.mutation({
-      query: (body) => {
-        return {
-          url: "/issues/tasks",
-          method: "POST",
-          body,
-        };
-      },
-      invalidatesTags: ["Task"],
+      query: (body) => ({
+        url: '/issues/tasks',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Task'],
     }),
     getTasks: build.query({
-      query: ({ id }) => {
-        return `/issues/${id}/tasks`;
-      },
-      providesTags: ["Task"],
+      query: ({ id }) => `/issues/${id}/tasks`,
+      providesTags: ['Task'],
     }),
     updateTask: build.mutation({
-      query: ({ id, taskId, body }) => {
-        return {
-          url: `/issues/${id}/tasks/${taskId}`,
-          method: "PATCH",
-          body,
-        };
-      },
+      query: ({ id, taskId, body }) => ({
+        url: `/issues/${id}/tasks/${taskId}`,
+        method: 'PATCH',
+        body,
+      }),
     }),
     deleteTask: build.mutation({
-      query: ({ id, taskId }) => {
-        return {
-          url: `/issues/${id}/tasks/${taskId}`,
-          method: "DELETE",
-        };
-      },
-      invalidatesTags: ["Task"],
+      query: ({ id, taskId }) => ({
+        url: `/issues/${id}/tasks/${taskId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Task'],
     }),
   }),
 });

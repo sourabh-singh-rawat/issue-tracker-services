@@ -1,41 +1,50 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+/* eslint-disable nonblock-statement-body-position */
+/* eslint-disable object-curly-newline */
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { enIN } from "date-fns/esm/locale";
-import { format, parseISO } from "date-fns";
-import { useGridApiContext } from "@mui/x-data-grid";
+import { enIN } from 'date-fns/esm/locale';
+import { format, parseISO } from 'date-fns';
+import { useGridApiContext } from '@mui/x-data-grid';
 
-import MuiTypography from "@mui/material/Typography";
+import MuiTypography from '@mui/material/Typography';
 
-import List from "../../../../../common/lists/List";
-import ProjectActionsButton from "../../buttons/ProjectActionsButton";
-import ProjectStatusSelector from "../../../../project/components/containers/ProjectStatusSelector";
+import List from '../../../../../common/lists/List';
+import ProjectActionsButton from '../../buttons/ProjectActionsButton';
+import ProjectStatusSelector from '../../../../project/components/containers/ProjectStatusSelector';
 
 import {
   useGetStatusQuery,
   useUpdateProjectMutation,
-} from "../../../../project/api/project.api";
-import { useGetProjectsQuery } from "../../../api/project-list.api";
+} from '../../../../project/api/project.api';
+import { useGetProjectsQuery } from '../../../api/project-list.api';
 
-import { theme } from "../../../../../config/mui.config";
-import { setStatus } from "../../../../project/slice/project.slice";
-import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
+import theme from '../../../../../config/mui.config';
+import { setStatus } from '../../../../project/slice/project.slice';
+import { setMessageBarOpen } from '../../../../message-bar/slice/message-bar.slice';
 import {
   setProjectList,
   updateProjectList,
-} from "../../../slice/project-list.slice";
+} from '../../../slice/project-list.slice';
 
-const ProjectList = () => {
+function ProjectList() {
   const dispatch = useDispatch();
   const { rows, rowCount, page, pageSize } = useSelector(
-    (store) => store.projectList
+    (store) => store.projectList,
   );
   const getStatusQuery = useGetStatusQuery();
   const getProjectsQuery = useGetProjectsQuery({
     page,
     pageSize,
-    sortBy: "created_at:desc",
+    sortBy: 'created_at:desc',
   });
 
   useEffect(() => {
@@ -43,11 +52,13 @@ const ProjectList = () => {
   }, [getStatusQuery.data]);
 
   useEffect(() => {
-    if (getProjectsQuery.isSuccess)
+    if (getProjectsQuery.isSuccess) {
       dispatch(setProjectList(getProjectsQuery.data));
+    }
   }, [pageSize, page, getProjectsQuery.data]);
 
-  const SelectEditInputCell = ({ id, value, field }) => {
+  // eslint-disable-next-line react/no-unstable-nested-components
+  function SelectEditInputCell({ id, value, field }) {
     const apiRef = useGridApiContext();
     const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
 
@@ -72,7 +83,7 @@ const ProjectList = () => {
     }, [isSuccess]);
 
     return <ProjectStatusSelector value={value} handleChange={handleChange} />;
-  };
+  }
 
   const renderSelectEditInputCell = (params) => (
     <SelectEditInputCell {...params} />
@@ -80,38 +91,36 @@ const ProjectList = () => {
 
   const columns = [
     {
-      field: "name",
-      headerName: "Name",
+      field: 'name',
+      headerName: 'Name',
       minWidth: 300,
       flex: 0.45,
-      renderCell: (params) => {
-        return (
-          <Link
-            to={`/projects/${params.row.id}/overview`}
-            style={{
-              overflow: "hidden",
-              textDecoration: "none",
+      renderCell: (params) => (
+        <Link
+          to={`/projects/${params.row.id}/overview`}
+          style={{
+            overflow: 'hidden',
+            textDecoration: 'none',
+          }}
+        >
+          <MuiTypography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.primary,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontWeight: 500,
+              ':hover': { color: theme.palette.primary.main },
             }}
           >
-            <MuiTypography
-              variant="body2"
-              sx={{
-                color: theme.palette.text.primary,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                fontWeight: 500,
-                ":hover": { color: theme.palette.primary.main },
-              }}
-            >
-              {params.row.name}
-            </MuiTypography>
-          </Link>
-        );
-      },
+            {params.row.name}
+          </MuiTypography>
+        </Link>
+      ),
     },
     {
-      field: "status",
-      headerName: "Status",
+      field: 'status',
+      headerName: 'Status',
       minWidth: 125,
       editable: true,
       flex: 0.15,
@@ -119,66 +128,63 @@ const ProjectList = () => {
       renderEditCell: renderSelectEditInputCell,
     },
     {
-      field: "created_at",
-      headerName: "Created At",
-      type: "date",
+      field: 'created_at',
+      headerName: 'Created At',
+      type: 'date',
       minWidth: 125,
       flex: 0.15,
-      renderCell: ({ value, ...params }) => {
-        return value ? (
+      renderCell: ({ value, ...params }) =>
+        value ? (
           <MuiTypography
             variant="body2"
-            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
           >
-            {format(parseISO(value), "dd MMMM yyyy", { locale: enIN })}
+            {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
           </MuiTypography>
         ) : (
-          "-"
-        );
-      },
+          '-'
+        ),
     },
     {
-      field: "start_date",
-      headerName: "Start Date",
-      type: "date",
+      field: 'start_date',
+      headerName: 'Start Date',
+      type: 'date',
       minWidth: 125,
       flex: 0.15,
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography
             variant="body2"
-            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
           >
-            {format(parseISO(value), "dd MMMM yyyy", { locale: enIN })}
+            {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
           </MuiTypography>
         ) : (
-          "-"
+          '-'
         ),
     },
     {
-      field: "end_date",
-      headerName: "End Date",
-      type: "date",
+      field: 'end_date',
+      headerName: 'End Date',
+      type: 'date',
       minWidth: 150,
       flex: 0.075,
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography
             variant="body2"
-            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
           >
-            {format(parseISO(value), "dd MMMM yyyy", { locale: enIN })}
+            {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
           </MuiTypography>
         ) : (
-          "-"
+          '-'
         ),
     },
     {
-      field: "action",
-      headerName: "Actions",
-      renderCell: ({ id }) => {
-        return <ProjectActionsButton id={id} />;
-      },
+      field: 'action',
+      headerName: 'Actions',
+      renderCell: ({ id }) => <ProjectActionsButton id={id} />,
     },
   ];
 
@@ -194,10 +200,10 @@ const ProjectList = () => {
       onPageSizeChange={(pageSize) => dispatch(updateProjectList({ pageSize }))}
       getRowId={(row) => row.id}
       initialState={{
-        sorting: { sortModel: [{ field: "name", sort: "asc" }] },
+        sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
       }}
     />
   );
-};
+}
 
 export default ProjectList;

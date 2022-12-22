@@ -1,4 +1,5 @@
-import TeamUser from "../../models/team-user/team-user.model.js";
+/* eslint-disable import/extensions */
+import TeamUser from '../../models/team-user/team-user.model.js';
 
 const createMember = async (req, res) => {
   try {
@@ -9,7 +10,6 @@ const createMember = async (req, res) => {
 
     res.send(teamUser);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

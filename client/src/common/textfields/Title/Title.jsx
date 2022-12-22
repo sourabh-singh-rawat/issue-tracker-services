@@ -1,50 +1,51 @@
-import { Fragment } from "react";
-import { useDispatch } from "react-redux";
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useDispatch } from 'react-redux';
 
-import { styled } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
+import { styled } from '@mui/material/styles';
+import MuiGrid from '@mui/material/Grid';
 
-import TextField from "../TextField";
-import SaveButton from "../../buttons/SaveButton";
-import CancelButton from "../../buttons/CancelButton";
+import TextField from '../TextField';
+import SaveButton from '../../buttons/SaveButton';
+import CancelButton from '../../buttons/CancelButton';
 
-const TitleTextField = styled(TextField)(({ theme }) => {
-  return {
-    "& .MuiInputBase-input": {
-      overflow: "hidden",
-      paddingTop: "4px",
-      textOverflow: "ellipsis",
-      paddingBottom: "4px",
+const TitleTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    overflow: 'hidden',
+    paddingTop: '4px',
+    textOverflow: 'ellipsis',
+    paddingBottom: '4px',
+  },
+  '& .MuiOutlinedInput-root ': {
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 600,
+    backgroundColor: 'transparent',
+    '& fieldset': {
+      border: '1px solid transparent',
+      borderRadius: '6px',
     },
-    "& .MuiOutlinedInput-root ": {
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: 600,
-      backgroundColor: "transparent",
-      "& fieldset": {
-        border: `1px solid transparent`,
-        borderRadius: "6px",
-      },
-      "&:hover": {
-        transitionDuration: "250ms",
-        backgroundColor: theme.palette.grey[200],
-        "& fieldset": {
-          border: `1px solid ${theme.palette.grey[200]}`,
-          transitionDuration: "250ms",
-        },
-      },
-      "&.Mui-focused": {
-        backgroundColor: theme.palette.background.default,
-        transitionDuration: "250ms",
-        "& fieldset": {
-          border: `1px solid ${theme.palette.primary.main}`,
-          transitionDuration: "250ms",
-        },
+    '&:hover': {
+      transitionDuration: '250ms',
+      backgroundColor: theme.palette.grey[200],
+      '& fieldset': {
+        border: `1px solid ${theme.palette.grey[200]}`,
+        transitionDuration: '250ms',
       },
     },
-  };
-});
+    '&.Mui-focused': {
+      backgroundColor: theme.palette.background.default,
+      transitionDuration: '250ms',
+      '& fieldset': {
+        border: `1px solid ${theme.palette.primary.main}`,
+        transitionDuration: '250ms',
+      },
+    },
+  },
+}));
 
-const Title = ({ page, updateTitle, updateTitleQuery }) => {
+function Title({ page, updateTitle, updateTitleQuery }) {
   const dispatch = useDispatch();
   const { nameSelected } = page;
 
@@ -59,45 +60,43 @@ const Title = ({ page, updateTitle, updateTitleQuery }) => {
   };
 
   return (
-    <Fragment>
-      <MuiGrid
-        container
-        columnSpacing={1}
-        sx={{ marginLeft: "-24px", marginBottom: "4px" }}
-      >
-        <MuiGrid item flexGrow={1}>
-          <TitleTextField
-            name="name"
-            value={page.name}
-            onChange={handleChange}
-            onClick={() =>
+    <MuiGrid
+      container
+      columnSpacing={1}
+      sx={{ marginLeft: '-24px', marginBottom: '4px' }}
+    >
+      <MuiGrid item flexGrow={1}>
+        <TitleTextField
+          name="name"
+          value={page.name}
+          onChange={handleChange}
+          onClick={() =>
+            dispatch(
+              updateTitle({ previousName: page.name, nameSelected: true }),
+            )
+          }
+          fullWidth
+        />
+      </MuiGrid>
+      {nameSelected && (
+        <MuiGrid item>
+          <SaveButton label="Save" onClick={handleSave} />
+        </MuiGrid>
+      )}
+      {nameSelected && (
+        <MuiGrid item>
+          <CancelButton
+            label="Cancel"
+            onClick={() => {
               dispatch(
-                updateTitle({ previousName: page.name, nameSelected: true })
-              )
-            }
-            fullWidth
+                updateTitle({ name: page.previousName, nameSelected: false }),
+              );
+            }}
           />
         </MuiGrid>
-        {nameSelected && (
-          <MuiGrid item>
-            <SaveButton label="Save" onClick={handleSave} />
-          </MuiGrid>
-        )}
-        {nameSelected && (
-          <MuiGrid item>
-            <CancelButton
-              label="Cancel"
-              onClick={() => {
-                dispatch(
-                  updateTitle({ name: page.previousName, nameSelected: false })
-                );
-              }}
-            />
-          </MuiGrid>
-        )}
-      </MuiGrid>
-    </Fragment>
+      )}
+    </MuiGrid>
   );
-};
+}
 
 export default Title;

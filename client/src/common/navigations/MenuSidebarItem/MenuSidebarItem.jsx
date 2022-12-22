@@ -1,15 +1,18 @@
-import { Link } from "react-router-dom";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { Link } from 'react-router-dom';
 
-import { useTheme } from "@mui/material/styles";
-import MuiListItem from "@mui/material/ListItem";
-import MuiTypography from "@mui/material/Typography";
-import MuiListItemButton from "@mui/material/ListItemButton";
+import { useTheme } from '@mui/material/styles';
+import MuiListItem from '@mui/material/ListItem';
+import MuiTypography from '@mui/material/Typography';
+import MuiListItemButton from '@mui/material/ListItemButton';
 
-import MuiListItemIcon from "@mui/material/ListItemIcon";
+import MuiListItemIcon from '@mui/material/ListItemIcon';
 
-import TooltipWrapper from "../../utilities/Tooltip";
+import TooltipWrapper from '../../utilities/Tooltip';
 
-const MenuSidebarItem = ({ open, text, icon, href }) => {
+function MenuSidebarItem({ open, text, icon, href }) {
   const theme = useTheme();
 
   const listItemTypographyStyles = {
@@ -20,25 +23,26 @@ const MenuSidebarItem = ({ open, text, icon, href }) => {
 
   const listItemIconStyles = {
     minWidth: 0,
-    mr: open ? 1.5 : "auto",
+    mr: open ? 1.5 : 'auto',
     color: theme.palette.text.primary,
   };
 
   const listItemButtonStyles = {
     px: (open && 2.5) || (!open && 2.5),
-    height: "40px",
+    height: '40px',
   };
 
   const listLinkStyles = {
     color: theme.palette.text.primary,
-    textDecoration: "none",
+    textDecoration: 'none',
   };
 
   return (
+    // eslint-disable-next-line react/react-in-jsx-scope
     <MuiListItem
       disablePadding
       sx={{
-        display: "block",
+        display: 'block',
         // backgroundColor: active && "red",
       }}
     >
@@ -51,7 +55,7 @@ const MenuSidebarItem = ({ open, text, icon, href }) => {
             </MuiTypography>
           </MuiListItemButton>
         ) : (
-          <TooltipWrapper title={text} placement={"left"}>
+          <TooltipWrapper title={text} placement="left">
             <MuiListItemButton sx={listItemButtonStyles} disableRipple>
               <MuiListItemIcon sx={listItemIconStyles}>{icon}</MuiListItemIcon>
               <MuiTypography variant="body2" sx={listItemTypographyStyles}>
@@ -63,6 +67,6 @@ const MenuSidebarItem = ({ open, text, icon, href }) => {
       </Link>
     </MuiListItem>
   );
-};
+}
 
 export default MenuSidebarItem;

@@ -1,4 +1,5 @@
-import Issue from "../../models/issue/issue.model.js";
+/* eslint-disable import/extensions */
+import Issue from '../../models/issue/issue.model.js';
 
 /**
  * Update an issue

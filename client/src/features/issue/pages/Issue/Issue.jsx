@@ -1,31 +1,34 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable react/react-in-jsx-scope */
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import Tab from "../../../../common/tabs/Tab";
-import Tabs from "../../../../common/tabs/Tabs";
-import TitleSection from "../../../../common/headers/TitleSection";
-import IssueStatusSelector from "../../components/containers/IssueStatusSelector";
-import IssuePrioritySelector from "../../components/containers/IssuePrioritySelector";
+import Tab from '../../../../common/tabs/Tab';
+import Tabs from '../../../../common/tabs/Tabs';
+import TitleSection from '../../../../common/headers/TitleSection';
+import IssueStatusSelector from '../../components/containers/IssueStatusSelector';
+import IssuePrioritySelector from '../../components/containers/IssuePrioritySelector';
 
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 import {
   resetIssueSlice,
   setIssue,
   setIssuePriority,
   setIssueStatus,
   updateIssue,
-} from "../../slice/issue.slice";
+} from '../../slice/issue.slice';
 import {
   useGetIssueQuery,
   useGetIssuesPriorityQuery,
   useGetIssuesStatusQuery,
   useUpdateIssueMutation,
-} from "../../api/issue.api";
+} from '../../api/issue.api';
 
-const Issue = () => {
+function Issue() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +40,7 @@ const Issue = () => {
   const [updateIssueQuery, { isSuccess }] = useUpdateIssueMutation();
 
   const issue = useSelector((store) => store.issue.info);
-  const tabName = location.pathname.split("/")[3];
+  const tabName = location.pathname.split('/')[3];
   const mapTabToIndex = {
     overview: 0,
     tasks: 1,
@@ -89,24 +92,25 @@ const Issue = () => {
   };
 
   // On component unmount: clear issue info
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       dispatch(resetIssueSlice());
-    };
-  }, []);
+    },
+    [],
+  );
 
   return (
     <MuiGrid container spacing={2}>
       <MuiGrid item xs={12}>
         <TitleSection
           breadcrumbItems={[
-            { text: "Projects", onClick: () => navigate(`/projects`) },
+            { text: 'Projects', onClick: () => navigate('/projects') },
             {
               text: issue.projectName,
               onClick: () => navigate(`/projects/${issue.projectId}/overview`),
             },
             {
-              text: "Issues",
+              text: 'Issues',
               onClick: () => navigate(`/projects/${issue.projectId}/issues`),
             },
             {
@@ -118,12 +122,12 @@ const Issue = () => {
           page={issue}
           updateTitle={updateIssue}
           updateTitleQuery={updateTitleQuery}
-          onClick={() => navigate(`/issues`)}
+          onClick={() => navigate('/issues')}
           statusSelector={
             <IssueStatusSelector
               value={issue.status}
               handleChange={async (e) => {
-                const { name, value } = e.target;
+                const { value } = e.target;
                 dispatch(updateIssue({ status: value }));
                 await updateIssueQuery({ id, body: { status: value } });
 
@@ -136,7 +140,7 @@ const Issue = () => {
             <IssuePrioritySelector
               value={issue.priority}
               handleChange={async (e) => {
-                const { name, value } = e.target;
+                const { value } = e.target;
                 dispatch(updateIssue({ priority: value }));
                 await updateIssueQuery({ id, body: { priority: value } });
 
@@ -161,6 +165,6 @@ const Issue = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Issue;

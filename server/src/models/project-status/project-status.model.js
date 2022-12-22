@@ -1,7 +1,9 @@
-import db from "../../config/db.config.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
-const find = () => {
-  return db.query(`
+const find = () =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(`
     SELECT 
       id,
       name,
@@ -15,6 +17,5 @@ const find = () => {
       project_status_types
     ORDER BY 
       rank_order ASC`);
-};
 
 export default { find };

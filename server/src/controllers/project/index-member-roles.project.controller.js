@@ -1,4 +1,5 @@
-import ProjectMemberRole from "../../models/project-member-roles/project-member-roles.model.js";
+/* eslint-disable import/extensions */
+import ProjectMemberRole from '../../models/project-member-roles/project-member-roles.model.js';
 
 /**
  * Get all project member roles
@@ -11,9 +12,12 @@ const indexMemberRoles = async (req, res) => {
     const projectMemberRoles = await ProjectMemberRole.find();
     if (projectMemberRoles.length === 0) res.status(404).send();
 
-    res.send({ rows: projectMemberRoles, rowCount: projectMemberRoles.length });
+    return res.send({
+      rows: projectMemberRoles,
+      rowCount: projectMemberRoles.length,
+    });
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

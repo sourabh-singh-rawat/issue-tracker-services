@@ -1,17 +1,20 @@
-import { useLocation } from "react-router-dom";
-import { format, parseISO } from "date-fns";
-import { enIN } from "date-fns/esm/locale";
+/* eslint-disable operator-linebreak */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useLocation } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
+import { enIN } from 'date-fns/esm/locale';
 
-import { useTheme } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
-import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTypography from "@mui/material/Typography";
-import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
+import { useTheme } from '@mui/material/styles';
+import MuiGrid from '@mui/material/Grid';
+import MuiSkeleton from '@mui/material/Skeleton';
+import MuiTypography from '@mui/material/Typography';
+import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
 
-import Title from "../../textfields/Title";
-import Breadcrumbs from "../../navigations/Breadcrumbs";
+import Title from '../../textfields/Title';
+import Breadcrumbs from '../../navigations/Breadcrumbs';
 
-const TitleSection = ({
+function TitleSection({
   page,
   updateTitle,
   updateTitleQuery,
@@ -19,10 +22,10 @@ const TitleSection = ({
   statusSelector,
   prioritySelector,
   isLoading,
-}) => {
+}) {
   const theme = useTheme();
   const location = useLocation();
-  const type = location.pathname.split("/")[1];
+  const type = location.pathname.split('/')[1];
 
   return (
     <MuiGrid container>
@@ -54,7 +57,7 @@ const TitleSection = ({
           ) : (
             <MuiTypography variant="body2" component="span" fontWeight={600}>
               {page.createdAt &&
-                format(parseISO(page.createdAt), "dd MMMM yyyy", {
+                format(parseISO(page.createdAt), 'dd MMMM yyyy', {
                   locale: enIN,
                 })}
             </MuiTypography>
@@ -63,6 +66,6 @@ const TitleSection = ({
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default TitleSection;

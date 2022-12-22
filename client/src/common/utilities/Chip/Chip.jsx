@@ -1,15 +1,17 @@
-import MuiChip from "@mui/material/Chip";
+/* eslint-disable react/prop-types */
+/* eslint-disable react/react-in-jsx-scope */
+import MuiChip from '@mui/material/Chip';
 
-const Chip = ({ id }) => {
+function Chip({ id }) {
   return (
     <MuiChip
       label={id}
       size="small"
       sx={{
-        borderRadius: "6px",
+        borderRadius: '6px',
       }}
     />
   );
-};
+}
 
 export default Chip;

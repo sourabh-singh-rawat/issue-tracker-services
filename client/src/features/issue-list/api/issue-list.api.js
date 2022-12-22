@@ -1,21 +1,26 @@
-import { apiSlice } from "../../../config/api.config.js";
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/extensions */
+import apiSlice from '../../../config/api.config.js';
 
 const issueListApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getIssues: build.query({
       query: ({
-        projectId = "",
+        projectId = '',
         page = 0,
         pageSize = 10,
-        sortBy = "issues.created_at:desc",
+        sortBy = 'issues.created_at:desc',
         reporterId,
-        assigneeId = "",
-      }) => {
-        return `/issues?projectId=${projectId}&page=${page}&limit=${pageSize}&sortBy=${sortBy}&reporterId=${reporterId}&assigneeId=${assigneeId}`;
-      },
-      providesTags: ["IssueList"],
+        assigneeId = '',
+      }) =>
+        `/issues?projectId=${projectId}&page=${page}&limit=${pageSize}&sortBy=${sortBy}&reporterId=${reporterId}&assigneeId=${assigneeId}`,
+      providesTags: ['IssueList'],
+    }),
+    getIssueStats: build.query({
+      query: ({ projectId }) => `/issues/stats?projectId=${projectId}`,
+      providesTags: ['IssueStats'],
     }),
   }),
 });
 
-export const { useGetIssuesQuery } = issueListApiSlice;
+export const { useGetIssuesQuery, useGetIssueStatsQuery } = issueListApiSlice;

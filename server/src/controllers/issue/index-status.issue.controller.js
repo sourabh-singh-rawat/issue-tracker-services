@@ -1,4 +1,5 @@
-import IssueStatus from "../../models/issue-status/issue-status.model.js";
+/* eslint-disable import/extensions */
+import IssueStatus from '../../models/issue-status/issue-status.model.js';
 
 /**
  * List all the statuses of an issue
@@ -11,7 +12,6 @@ const indexStatus = async (req, res) => {
     const issueStatus = await IssueStatus.find();
     res.send({ rows: issueStatus.rows, rowCount: issueStatus.rowCount });
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

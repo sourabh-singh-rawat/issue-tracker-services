@@ -1,20 +1,24 @@
-import { Fragment } from "react";
-import { useDispatch } from "react-redux";
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useDispatch } from 'react-redux';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiSkeleton from '@mui/material/Skeleton';
+import MuiTypography from '@mui/material/Typography';
 
-import SaveButton from "../../buttons/SaveButton";
-import TextField from "../TextField";
-import CancelButton from "../../buttons/CancelButton/CancelButton";
+import SaveButton from '../../buttons/SaveButton';
+import TextField from '../TextField';
+import CancelButton from '../../buttons/CancelButton/CancelButton';
 
-const Description = ({
+function Description({
   page,
   updateDescription,
   updateDescriptionQuery,
   isLoading,
-}) => {
+}) {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -39,7 +43,7 @@ const Description = ({
             value={page.description}
             onChange={handleChange}
             inputProps={{
-              style: { fontSize: "14px", lineHeight: 1.5 },
+              style: { fontSize: '14px', lineHeight: 1.5 },
             }}
             minRows={4}
             autoFocus
@@ -47,14 +51,14 @@ const Description = ({
             fullWidth
           />
         ) : (
-          <Fragment>
+          <>
             {isLoading ? (
-              <Fragment>
+              <>
                 <MuiSkeleton variant="text" />
                 <MuiSkeleton variant="text" />
                 <MuiSkeleton variant="text" />
                 <MuiSkeleton variant="text" width="20%" />
-              </Fragment>
+              </>
             ) : (
               <MuiTypography
                 variant="body2"
@@ -63,23 +67,23 @@ const Description = ({
                     updateDescription({
                       descriptionSelected: true,
                       previousDescription: page.description,
-                    })
+                    }),
                   );
                 }}
                 sx={{
                   lineHeight: 1.5,
-                  padding: "8px 14px",
-                  marginLeft: "-14px",
-                  borderRadius: "6px",
-                  color: "text.primary",
-                  transition: "250ms",
-                  ":hover": { backgroundColor: "action.hover" },
+                  padding: '8px 14px',
+                  marginLeft: '-14px',
+                  borderRadius: '6px',
+                  color: 'text.primary',
+                  transition: '250ms',
+                  ':hover': { backgroundColor: 'action.hover' },
                 }}
               >
-                {page.description ? page.description : "Add a description..."}
+                {page.description ? page.description : 'Add a description...'}
               </MuiTypography>
             )}
-          </Fragment>
+          </>
         )}
       </MuiGrid>
       {page.descriptionSelected && (
@@ -96,7 +100,7 @@ const Description = ({
                     updateDescription({
                       descriptionSelected: false,
                       description: page.previousDescription,
-                    })
+                    }),
                   )
                 }
               />
@@ -106,6 +110,6 @@ const Description = ({
       )}
     </MuiGrid>
   );
-};
+}
 
 export default Description;

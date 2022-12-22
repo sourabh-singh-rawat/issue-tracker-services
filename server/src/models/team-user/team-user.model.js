@@ -1,7 +1,9 @@
-import db from "../../config/db.config.js";
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
 const insertOne = (document) => {
-  const { user_id, team_id, role } = document;
+  const { userId, teamId, role } = document;
 
   return db.query(
     `
@@ -11,12 +13,12 @@ const insertOne = (document) => {
       ($1, $2, $3)
     RETURNING *
     `,
-    [user_id, team_id, role]
+    [userId, teamId, role],
   );
 };
 
-const find = (id) => {
-  return db.query(
+const find = (id) =>
+  db.query(
     `
   SELECT 
     * 
@@ -24,8 +26,7 @@ const find = (id) => {
     team_members 
   WHERE 
     team_id = $1`,
-    [id]
+    [id],
   );
-};
 
 export default { insertOne, find };

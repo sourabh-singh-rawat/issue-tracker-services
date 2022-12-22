@@ -1,15 +1,18 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable implicit-arrow-linebreak */
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-import { onAuthStateChangedListener } from "../../config/firebase.config";
+import MuiGrid from '@mui/material/Grid';
+import MuiLinearProgress from '@mui/material/LinearProgress';
+import { onAuthStateChangedListener } from '../../config/firebase.config';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiLinearProgress from "@mui/material/LinearProgress";
+import { setCredentials } from '../../features/auth/slice/auth.slice';
 
-import { setCredentials } from "../../features/auth/slice/auth.slice";
-
-const ProtectedRoutes = () => {
+function ProtectedRoutes() {
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -21,27 +24,29 @@ const ProtectedRoutes = () => {
   // We can set the loggedInUser prop of localStorage to true
   // This will make sure that our app's ProtectedRoute component
   // will not redirect the user to the login page
-  if (token) window.localStorage.setItem("loggedInUser", true);
+  if (token) window.localStorage.setItem('loggedInUser', true);
 
-  useEffect(() => {
-    return onAuthStateChangedListener(async (user) => {
-      if (user) {
-        const { uid, email, displayName, photoURL } = user;
-        const accessToken = await user.getIdToken();
+  useEffect(
+    () =>
+      onAuthStateChangedListener(async (user) => {
+        if (user) {
+          const { uid, email, displayName, photoURL } = user;
+          const accessToken = await user.getIdToken();
 
-        dispatch(
-          setCredentials({
-            user: { uid, email, displayName, photoURL },
-            accessToken,
-            isLoading: false,
-          })
-        );
-      }
-    });
-  }, []);
+          dispatch(
+            setCredentials({
+              user: { uid, email, displayName, photoURL },
+              accessToken,
+              isLoading: false,
+            }),
+          );
+        }
+      }),
+    [],
+  );
 
-  return window.localStorage.getItem("loggedInUser") ? (
-    <Fragment>
+  return window.localStorage.getItem('loggedInUser') ? (
+    <>
       {auth.isLoading ? (
         <MuiGrid container>
           <MuiGrid item xs={12}>
@@ -51,10 +56,10 @@ const ProtectedRoutes = () => {
       ) : (
         <Outlet />
       )}
-    </Fragment>
+    </>
   ) : (
     <Navigate to="/login" replace state={{ from: location }} />
   );
-};
+}
 
 export default ProtectedRoutes;

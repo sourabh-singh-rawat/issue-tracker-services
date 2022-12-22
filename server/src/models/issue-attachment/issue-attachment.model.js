@@ -1,15 +1,17 @@
-import db from "../../config/db.config.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
 const insertOne = ({
   bucket,
-  content_type,
-  full_path,
+  contentType,
+  fullPath,
   name,
-  issue_id,
+  issueId,
   size,
   url,
-}) => {
-  return db.query(
+}) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     INSERT INTO
       issue_attachments (bucket, content_type, full_path, name, issue_id, size, url)
@@ -17,13 +19,13 @@ const insertOne = ({
       ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *
   `,
-    [bucket, content_type, full_path, name, issue_id, size, url]
+    [bucket, contentType, fullPath, name, issueId, size, url],
   );
-};
 
 // finds all attachments
-const find = (issueId) => {
-  return db.query(
+const find = (issueId) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT
       * 
@@ -31,8 +33,7 @@ const find = (issueId) => {
       issue_attachments
     WHERE 
       issue_id=$1`,
-    [issueId]
+    [issueId],
   );
-};
 
 export default { insertOne, find };

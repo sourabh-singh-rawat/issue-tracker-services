@@ -1,9 +1,9 @@
-import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
+/* eslint-disable react/react-in-jsx-scope */
+import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from "../../../../../common/headers/SectionHeader";
+import SectionHeader from '../../../../../common/headers/SectionHeader';
 
-const Settings = () => {
+function Settings() {
   return (
     <MuiGrid container gap="40px">
       <MuiGrid item xs={12}>
@@ -15,6 +15,6 @@ const Settings = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Settings;

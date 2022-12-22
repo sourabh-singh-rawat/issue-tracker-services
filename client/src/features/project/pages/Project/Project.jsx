@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/react-in-jsx-scope */
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams, Outlet } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import Tab from "../../../../common/tabs/Tab";
-import Tabs from "../../../../common/tabs/Tabs";
-import PageTitleSection from "../../../../common/headers/TitleSection";
-import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
+import Tab from '../../../../common/tabs/Tab';
+import Tabs from '../../../../common/tabs/Tabs';
+import PageTitleSection from '../../../../common/headers/TitleSection';
+import ProjectStatusSelector from '../../components/containers/ProjectStatusSelector';
 
 import {
   setProject,
@@ -16,16 +20,16 @@ import {
   updateProject,
   resetProjectSlice,
   updateProjectQuick,
-} from "../../slice/project.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+} from '../../slice/project.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
 import {
   useGetStatusQuery,
   useGetProjectQuery,
   useUpdateProjectMutation,
-} from "../../api/project.api";
+} from '../../api/project.api';
 
-const Project = () => {
+function Project() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,7 +42,7 @@ const Project = () => {
   const getProject = useGetProjectQuery(id);
   const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
 
-  const tabName = location.pathname.split("/")[3];
+  const tabName = location.pathname.split('/')[3];
   const mapPathToIndex = {
     overview: 0,
     issues: 1,
@@ -86,11 +90,12 @@ const Project = () => {
   }, [getProject.data]);
 
   // when component dismounts: reset project state
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       dispatch(resetProjectSlice());
-    };
-  }, []);
+    },
+    [],
+  );
 
   return (
     <MuiGrid container spacing={2}>
@@ -102,8 +107,8 @@ const Project = () => {
           updateTitleQuery={updateTitleQuery}
           breadcrumbItems={[
             {
-              text: "Projects",
-              onClick: () => navigate("/projects"),
+              text: 'Projects',
+              onClick: () => navigate('/projects'),
             },
             {
               text: project.name,
@@ -138,6 +143,6 @@ const Project = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Project;

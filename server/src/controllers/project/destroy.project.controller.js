@@ -1,4 +1,5 @@
-import Project from "../../models/project/project.model.js";
+/* eslint-disable import/extensions */
+import Project from '../../models/project/project.model.js';
 
 const destroy = async (req, res) => {
   const { id } = req.params;
@@ -8,7 +9,6 @@ const destroy = async (req, res) => {
     if (!project) res.status(404);
     res.send(project);
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };

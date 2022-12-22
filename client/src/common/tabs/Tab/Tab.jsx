@@ -1,18 +1,18 @@
-import { Chip } from "@mui/material";
-import MuiTab from "@mui/material/Tab";
-import { Fragment } from "react";
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/react-in-jsx-scope */
+import MuiTab from '@mui/material/Tab';
 
-const Tab = (props) => {
+function Tab(props) {
   return (
     <MuiTab
       {...props}
       sx={{
-        color: "text.main",
-        textTransform: "none",
+        color: 'text.main',
+        textTransform: 'none',
       }}
       disableRipple
     />
   );
-};
+}
 
 export default Tab;

@@ -1,7 +1,9 @@
-import db from "../../config/db.service.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
 const insertOne = ({ issueId, assigneeId }) => {
-  if (assigneeId == "Unassigned") assigneeId = null;
+  // eslint-disable-next-line no-param-reassign
+  if (assigneeId === 'Unassigned') assigneeId = null;
 
   return db.query(
     `
@@ -11,7 +13,7 @@ const insertOne = ({ issueId, assigneeId }) => {
       ($1, $2)
     RETURNING
       *`,
-    [issueId, assigneeId]
+    [issueId, assigneeId],
   );
 };
 

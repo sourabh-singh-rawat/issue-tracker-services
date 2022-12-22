@@ -1,4 +1,8 @@
-import { apiSlice } from "../../../config/api.config.js";
+/* eslint-disable object-curly-newline */
+/* eslint-disable quotes */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/extensions */
+import apiSlice from '../../../config/api.config.js';
 
 const projectApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -7,8 +11,8 @@ const projectApiSlice = apiSlice.injectEndpoints({
         const { name, description, status, endDate, startDate } = body;
 
         return {
-          url: "/projects",
-          method: "POST",
+          url: '/projects',
+          method: 'POST',
           body: {
             name: name.value,
             description: description.value,
@@ -18,78 +22,59 @@ const projectApiSlice = apiSlice.injectEndpoints({
           },
         };
       },
-      invalidatesTags: ["Project"],
+      invalidatesTags: ['Project'],
     }),
     getStatus: build.query({
-      query: () => {
-        return `/projects/status`;
-      },
+      query: () => `/projects/status`,
     }),
     getRoles: build.query({
-      query: () => {
-        return `/projects/members/roles`;
-      },
+      query: () => `/projects/members/roles`,
     }),
     getProject: build.query({
-      query: (id) => {
-        return `/projects/${id}`;
-      },
-      providesTags: ["Project"],
+      query: (id) => `/projects/${id}`,
+      providesTags: ['Project'],
     }),
     getProjectIssues: build.query({
       query: ({
         page = 0,
         pageSize = 10,
-        projectId = "",
-        sortBy = "created_at:desc",
-      }) => {
-        return `/issues?project_id=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}`;
-      },
+        projectId = '',
+        sortBy = 'created_at:desc',
+      }) =>
+        `/issues?project_id=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}`,
     }),
     getProjectMembers: build.query({
-      query: (id) => {
-        return `/projects/${id}/members`;
-      },
+      query: (id) => `/projects/${id}/members`,
     }),
     getProjectIssuesStatusCount: build.query({
-      query: (id) => {
-        return `/projects/${id}/issuesStatusCount`;
-      },
-      providesTags: ["IssueStats"],
+      query: (id) => `/projects/${id}/issuesStatusCount`,
+      providesTags: ['IssueStats'],
     }),
     getProjectActivity: build.query({
-      query: (id) => {
-        return `/projects/${id}/activity`;
-      },
+      query: (id) => `/projects/${id}/activity`,
     }),
     updateProject: build.mutation({
-      query: ({ id, body }) => {
-        return {
-          url: `/projects/${id}`,
-          method: "PATCH",
-          body,
-        };
-      },
+      query: ({ id, body }) => ({
+        url: `/projects/${id}`,
+        method: 'PATCH',
+        body,
+      }),
       transformResponse: (response) => response.data,
-      invalidatesTags: ["Project"],
+      invalidatesTags: ['Project'],
     }),
     deleteProject: build.mutation({
-      query: ({ id }) => {
-        return {
-          url: `/projects/${id}`,
-          method: "DELETE",
-        };
-      },
-      invalidatesTags: ["Project"],
+      query: ({ id }) => ({
+        url: `/projects/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Project'],
     }),
     sendInvite: build.mutation({
-      query: ({ id, payload }) => {
-        return {
-          url: `/projects/${id}/members/invite`,
-          method: "POST",
-          body: payload,
-        };
-      },
+      query: ({ id, payload }) => ({
+        url: `/projects/${id}/members/invite`,
+        method: 'POST',
+        body: payload,
+      }),
     }),
   }),
 });

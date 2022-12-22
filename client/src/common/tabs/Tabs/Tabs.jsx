@@ -1,7 +1,9 @@
-import MuiTabs from "@mui/material/Tabs";
-import { theme } from "../../../config/mui.config";
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/react-in-jsx-scope */
+import MuiTabs from '@mui/material/Tabs';
+import theme from '../../../config/mui.config';
 
-const Tabs = (props) => {
+function Tabs(props) {
   return (
     <MuiTabs
       {...props}
@@ -9,20 +11,20 @@ const Tabs = (props) => {
       sx={{
         borderBottom: `1px solid ${theme.palette.grey[300]}`,
 
-        ".MuiButtonBase-root": {
+        '.MuiButtonBase-root': {
           padding: 0,
           opacity: 1,
-          minWidth: "auto",
+          minWidth: 'auto',
           marginRight: 4,
           color: `${theme.palette.grey[700]}`,
           fontWeight: 600,
         },
-        ".Mui-selected": {
+        '.Mui-selected': {
           color: theme.palette.primary.main,
         },
       }}
     />
   );
-};
+}
 
 export default Tabs;

@@ -1,9 +1,11 @@
-import express from "express";
+/* eslint-disable import/named */
+/* eslint-disable import/extensions */
+import express from 'express';
+import { auth } from '../middlewares/auth.middleware.js';
+import CollaboratorController from '../controllers/collaborator/index.js';
+
 const router = express.Router();
-import { auth } from "../../src/middlewares/auth.middleware.js";
 
-import CollaboratorController from "../../src/controllers/collaborator/index.js";
-
-router.get("/collaborators", auth, CollaboratorController.index);
+router.get('/collaborators', auth, CollaboratorController.index);
 
 export default router;

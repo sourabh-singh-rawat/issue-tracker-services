@@ -1,4 +1,5 @@
-import Issue from "../../models/issue/issue.model.js";
+/* eslint-disable import/extensions */
+import Issue from '../../models/issue/issue.model.js';
 
 /**
  * Delete an issue
@@ -12,9 +13,10 @@ const destroy = async (req, res) => {
   try {
     const issue = (await Issue.deleteOne(id)).rows[0];
     if (!issue) res.status(404);
-    res.send(issue);
+
+    return res.send(issue);
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

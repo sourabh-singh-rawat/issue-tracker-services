@@ -1,4 +1,5 @@
-import Issue from "../../models/issue/issue.model.js";
+/* eslint-disable import/extensions */
+import Issue from '../../models/issue/issue.model.js';
 
 /**
  * Show an issue
@@ -15,7 +16,7 @@ const show = async (req, res) => {
 
     return res.send({ ...issue });
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

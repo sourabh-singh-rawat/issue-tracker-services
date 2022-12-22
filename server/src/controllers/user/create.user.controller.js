@@ -1,6 +1,8 @@
-import User from "../../models/User/user.model.js";
+/* eslint-disable import/extensions */
+import User from '../../models/user/user.model.js';
 
 const create = async (req, res) => {
+  // eslint-disable-next-line object-curly-newline
   const { name, email, uid, photoURL } = req.body;
 
   try {
@@ -18,9 +20,9 @@ const create = async (req, res) => {
 
     const createdUser = (await User.insertOne(name, email, uid)).rows[0];
 
-    res.send(createdUser);
+    return res.send(createdUser);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 };
 

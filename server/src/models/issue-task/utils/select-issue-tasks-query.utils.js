@@ -1,10 +1,13 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-param-reassign */
+
 export const selectIssueTasks = ({
   id,
   filterOptions,
   pagingOptions,
   sortOptions,
 }) => {
-  const { field = "created_at", order = "asc" } = sortOptions;
+  const { field = 'created_at', order = 'asc' } = sortOptions;
 
   Object.keys(filterOptions).forEach((option) => {
     if (!option) delete filterOptions[option];
@@ -19,7 +22,7 @@ export const selectIssueTasks = ({
   });
 
   let index = 0;
-  let select = `
+  const select = `
     SELECT 
       id,
       description,
@@ -30,31 +33,32 @@ export const selectIssueTasks = ({
       created_at as "createdAt",
       updated_at as "updatedAt",
       deleted_at as "deletedAt"
-    FROM issue_tasks
+    FROM 
+      issue_tasks
     `;
   let condition = `WHERE issue_id='${id}'::uuid `;
-  let orderBy = "ORDER BY ";
-  let pagination = "";
+  let orderBy = 'ORDER BY ';
+  let pagination = '';
 
   // WHERE CONDITION
   if (Object.keys(filterOptions).length !== 0) {
     condition += Object.keys(filterOptions)
       .reduce((prev, cur) => {
-        index++;
-        return prev + cur + "=$" + index + " AND ";
-      }, "AND ")
+        index += 1;
+        return `${prev + cur}=$${index} AND `;
+      }, 'AND ')
       .slice(0, -4);
   }
 
   // ORDER BY
-  orderBy += field + " " + order + " ";
+  orderBy += `${field} ${order} `;
 
   // LIMIT and OFFSET
   if (Object.keys(pagingOptions).length !== 0) {
     pagination = Object.keys(pagingOptions).reduce((prev, cur) => {
-      index++;
-      return prev + cur.toUpperCase() + " $" + index + " ";
-    }, " ");
+      index += 1;
+      return `${prev + cur.toUpperCase()} $${index} `;
+    }, ' ');
   }
 
   // FINAL QUERY

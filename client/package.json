@@ -1,6 +1,6 @@
 {
   "name": "issue-tracker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^2.14.0",
@@ -26,6 +26,12 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.1",
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "react-scripts": "^5.0.1",
     "redux-logger": "^3.0.6"
   },

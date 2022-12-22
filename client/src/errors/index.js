@@ -1,3 +1,3 @@
-import formErrors from "./form.errors";
+import formErrors from './form.errors';
 
 export default { form: formErrors };

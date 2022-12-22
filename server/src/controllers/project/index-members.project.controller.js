@@ -1,5 +1,6 @@
-import ProjectMember from "../../models/project-member/project-member.model.js";
-import User from "../../models/user/user.model.js";
+/* eslint-disable import/extensions */
+import ProjectMember from '../../models/project-member/project-member.model.js';
+import User from '../../models/user/user.model.js';
 
 const indexMembers = async (req, res) => {
   const { id } = req.params;
@@ -15,9 +16,9 @@ const indexMembers = async (req, res) => {
 
     if (!projectMembers.length) return res.status(403).send();
 
-    res.send({ rows: projectMembers, rowCount: projectMembers.length });
+    return res.send({ rows: projectMembers, rowCount: projectMembers.length });
   } catch (error) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

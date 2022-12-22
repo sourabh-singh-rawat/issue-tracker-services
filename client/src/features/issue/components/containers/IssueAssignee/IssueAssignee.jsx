@@ -1,19 +1,20 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+/* eslint-disable react/react-in-jsx-scope */
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import MuiBox from "@mui/material/Box";
+import MuiBox from '@mui/material/Box';
 
-import IssueAssigneeSelector from "../../../../../common/selects/IssueAssigneeSelector";
+import IssueAssigneeSelector from '../../../../../common/selects/IssueAssigneeSelector';
 
-import { useUpdateIssueMutation } from "../../../api/issue.api";
-import { useGetProjectMembersQuery } from "../../../../project/api/project.api";
+import { useUpdateIssueMutation } from '../../../api/issue.api';
+import { useGetProjectMembersQuery } from '../../../../project/api/project.api';
 
-import { updateIssue } from "../../../slice/issue.slice";
-import { setMembers } from "../../../../project/slice/project.slice";
-import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
+import { updateIssue } from '../../../slice/issue.slice';
+import { setMembers } from '../../../../project/slice/project.slice';
+import { setMessageBarOpen } from '../../../../message-bar/slice/message-bar.slice';
 
-const IssueAssignee = () => {
+function IssueAssignee() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const issue = useSelector((store) => store.issue);
@@ -38,7 +39,7 @@ const IssueAssignee = () => {
   };
 
   return (
-    <MuiBox sx={{ marginTop: "8px" }}>
+    <MuiBox sx={{ marginTop: '8px' }}>
       <IssueAssigneeSelector
         value={!issue.info.assigneeId ? 0 : issue.info.assigneeId}
         projectMembers={project.members.rows}
@@ -47,6 +48,6 @@ const IssueAssignee = () => {
       />
     </MuiBox>
   );
-};
+}
 
 export default IssueAssignee;

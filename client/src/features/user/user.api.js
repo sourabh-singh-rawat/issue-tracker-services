@@ -1,4 +1,5 @@
-import { apiSlice } from "../../configs/rtk.config.js";
+/* eslint-disable import/prefer-default-export */
+import apiSlice from '../../config/api.config';
 
 const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({

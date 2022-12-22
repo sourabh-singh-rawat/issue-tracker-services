@@ -1,12 +1,14 @@
-export const verifyToken = async (inviteToken) => {
+const verifyToken = async (inviteToken) => {
   const verifiedToken = await fetch(
-    `http://localhost:4000/api/auth/verifyToken`,
+    'http://localhost:4000/api/auth/verifyToken',
     {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ inviteToken }),
-    }
+    },
   );
 
   return verifiedToken;
 };
+
+export default verifyToken;

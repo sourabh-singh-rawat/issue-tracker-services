@@ -1,6 +1,7 @@
-import db from "../../config/db.config.js";
-import ProjectActivity from "../../models/project-activity/project-activity.model.js";
-import User from "../../models/user/user.model.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+import ProjectActivity from '../../models/project-activity/project-activity.model.js';
+import User from '../../models/user/user.model.js';
 
 const indexActivity = async (req, res) => {
   const { id } = req.params;
@@ -8,7 +9,7 @@ const indexActivity = async (req, res) => {
 
   try {
     // Start a transaction
-    db.query("BEGIN");
+    db.query('BEGIN');
     const { id: userId } = await User.findOne(uid);
 
     const projectActivity = await ProjectActivity.find({
@@ -17,16 +18,15 @@ const indexActivity = async (req, res) => {
     });
 
     // Commit the transaction
-    db.query("COMMIT");
+    db.query('COMMIT');
 
-    res.send({
+    return res.send({
       rows: projectActivity.rows,
       rowCount: projectActivity.rowCount,
     });
   } catch (error) {
-    console.log(error);
     // Rollback the transaction
-    db.query("ROLLBACK");
+    db.query('ROLLBACK');
     return res.status(500).send();
   }
 };

@@ -1,28 +1,32 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useOutletContext, useParams } from "react-router-dom";
+/* eslint-disable object-curly-newline */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable no-shadow */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable import/extensions */
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useOutletContext, useParams } from 'react-router-dom';
 
-import { uploadImage } from "../../../../utils/firebase/upload-image.utils.js";
-import { theme } from "../../../../config/mui.config";
+import MuiGrid from '@mui/material/Grid';
+import MuiInput from '@mui/material/Input';
+import MuiButton from '@mui/material/Button';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import theme from '../../../../config/mui.config';
+import { uploadImage } from '../../../../utils/firebase/upload-image.utils.js';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiInput from "@mui/material/Input";
-import MuiButton from "@mui/material/Button";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-
-import TabPanel from "../../../../common/tabs/TabPanel";
-import UploadButton from "../../components/buttons/UploadButton";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import UploadButton from '../../components/buttons/UploadButton';
 
 import {
   useGetIssueAttachmentsQuery,
   useCreateIssueAttachmentMutation,
-} from "../../api/issue.api";
+} from '../../api/issue.api';
 
-import { setIssueAttachments } from "../../slice/issue.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { setIssueAttachments } from '../../slice/issue.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
-const IssueAttachments = () => {
+function IssueAttachments() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
@@ -64,7 +68,7 @@ const IssueAttachments = () => {
   useEffect(() => {
     if (createIssueQuery.isSuccess) {
       setOpen(false);
-      dispatch(setMessageBarOpen({ message: "Image uploaded successfully" }));
+      dispatch(setMessageBarOpen({ message: 'Image uploaded successfully' }));
     }
   }, [createIssueQuery.isSuccess]);
 
@@ -79,7 +83,7 @@ const IssueAttachments = () => {
   return (
     <TabPanel selectedTab={selectedTab} index={2}>
       <MuiGrid component="form" spacing={1} container>
-        <MuiGrid item sx={{ display: "none" }}>
+        <MuiGrid item sx={{ display: 'none' }}>
           <MuiInput name="file" type="file" onChange={handleChange} />
         </MuiGrid>
         <MuiGrid item>
@@ -90,10 +94,10 @@ const IssueAttachments = () => {
             }}
             sx={{
               color: theme.palette.grey[900],
-              borderRadius: "6px",
-              textTransform: "none",
+              borderRadius: '6px',
+              textTransform: 'none',
               backgroundColor: theme.palette.grey[100],
-              "&:hover": {
+              '&:hover': {
                 backgroundColor: theme.palette.grey[300],
               },
             }}
@@ -110,18 +114,16 @@ const IssueAttachments = () => {
         variant="quilted"
         rowHeight={170}
         cols={5}
-        sx={{ width: "100%" }}
+        sx={{ width: '100%' }}
       >
-        {attachments.rows.map(({ id, url }) => {
-          return (
-            <ImageListItem key={id}>
-              <img src={url} srcSet={url} loading="lazy" />
-            </ImageListItem>
-          );
-        })}
+        {attachments.rows.map(({ id, url }) => (
+          <ImageListItem key={id}>
+            <img src={url} srcSet={url} loading="lazy" />
+          </ImageListItem>
+        ))}
       </ImageList>
     </TabPanel>
   );
-};
+}
 
 export default IssueAttachments;

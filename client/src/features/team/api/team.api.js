@@ -1,4 +1,6 @@
-import { apiSlice } from "../../../config/api.config.js";
+/* eslint-disable operator-linebreak */
+/* eslint-disable import/extensions */
+import apiSlice from '../../../config/api.config.js';
 
 const teamApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -6,16 +8,14 @@ const teamApiSlice = apiSlice.injectEndpoints({
       query: (id) => `teams/${id}`,
     }),
     getTeams: build.query({
-      query: () => `teams`,
+      query: () => 'teams',
     }),
     createTeam: build.mutation({
-      query: ({ body }) => {
-        return {
-          url: `teams`,
-          method: "POST",
-          body,
-        };
-      },
+      query: ({ body }) => ({
+        url: 'teams',
+        method: 'POST',
+        body,
+      }),
     }),
   }),
 });

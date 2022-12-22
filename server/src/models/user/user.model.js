@@ -1,18 +1,19 @@
-import db from "../../config/db.config.js";
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
 
-const insertOne = (name, email, uid) => {
-  return db.query(
+const insertOne = (name, email, uid) =>
+  db.query(
     `INSERT INTO 
       users (name, email, uid) 
      VALUES 
       ($1, $2, $3)
      RETURNING *`,
-    [name, email, uid]
+    [name, email, uid],
   );
-};
 
-const findOne = async (uid) => {
-  return (
+const findOne = async (uid) =>
+  (
     await db.query(
       `
     SELECT 
@@ -21,13 +22,12 @@ const findOne = async (uid) => {
       users 
     WHERE 
       uid=$1`,
-      [uid]
+      [uid],
     )
   ).rows[0];
-};
 
-const findOneByEmail = (email) => {
-  return db.query(
+const findOneByEmail = (email) =>
+  db.query(
     `
     SELECT 
       * 
@@ -35,33 +35,32 @@ const findOneByEmail = (email) => {
       users 
     WHERE 
       email ILIKE $1`,
-    [email]
+    [email],
   );
-};
 
 const updateOne = ({ id, document }) => {
   let query = Object.keys(document)
-    .reduce((prev, cur, index) => {
-      return prev + " " + cur + "=$" + (index + 1) + ",";
-    }, "UPDATE users SET")
+    .reduce(
+      (prev, cur, index) => `${prev} ${cur}=$${index + 1},`,
+      'UPDATE users SET',
+    )
     .slice(0, -1); // removing last ,
 
-  query += " WHERE id='" + id + "' RETURNING *";
+  query += ` WHERE id='${id}' RETURNING *`;
 
   return db.query(query, Object.values(document));
 };
 
-const deleteOne = (uid) => {
-  return db.query(
+const deleteOne = (uid) =>
+  db.query(
     `
     DELETE FROM
       users 
     WHERE 
       uid = $1
     RETURNING *`,
-    [uid]
+    [uid],
   );
-};
 
 export default {
   insertOne,

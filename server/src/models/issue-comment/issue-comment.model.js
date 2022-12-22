@@ -1,11 +1,13 @@
-import db from "../../config/db.config.js";
-import ProjectMember from "../../models/project-member/project-member.model.js";
+/* eslint-disable import/extensions */
+import db from '../../config/db.config.js';
+// eslint-disable-next-line import/no-useless-path-segments
+import ProjectMember from '../../models/project-member/project-member.model.js';
 
-const insertOne = async ({ description, memberId, issue_id }) => {
+const insertOne = async ({ description, memberId, issueId }) => {
   try {
     const projectMemberId = await ProjectMember.findOne({ memberId });
 
-    const created_comment = await db.query(
+    const createdComment = await db.query(
       `
       INSERT INTO 
         issue_comments (description, member_id, issue_id) 
@@ -13,17 +15,18 @@ const insertOne = async ({ description, memberId, issue_id }) => {
         ($1, $2, $3)
       RETURNING *
       `,
-      [description, projectMemberId, issue_id]
+      [description, projectMemberId, issueId],
     );
 
-    return created_comment;
+    return createdComment;
   } catch (error) {
     return error;
   }
 };
 
-const find = ({ issue_id }) => {
-  return db.query(
+const find = ({ issueId }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT
       issue_comments.id, issue_comments.description, issue_comments.created_at, 
@@ -37,12 +40,12 @@ const find = ({ issue_id }) => {
     WHERE issue_id=$1
     ORDER BY issue_comments.created_at DESC
     `,
-    [issue_id]
+    [issueId],
   );
-};
 
-const rowCount = (issueId) => {
-  return db.query(
+const rowCount = (issueId) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     SELECT 
       COUNT(id) 
@@ -50,12 +53,12 @@ const rowCount = (issueId) => {
       issue_comments 
     WHERE 
       issue_id=$1`,
-    [issueId]
+    [issueId],
   );
-};
 
-const updateOne = ({ commentId, description }) => {
-  return db.query(
+const updateOne = ({ commentId, description }) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  db.query(
     `
     UPDATE 
       issue_comments 
@@ -64,10 +67,10 @@ const updateOne = ({ commentId, description }) => {
     WHERE 
       id=$2::uuid
     RETURNING *`,
-    [description, commentId]
+    [description, commentId],
   );
-};
 
+// eslint-disable-next-line arrow-body-style
 const deleteOne = (commentId) => {
   return db.query(
     `DELETE FROM 
@@ -75,7 +78,7 @@ const deleteOne = (commentId) => {
     WHERE 
       id=$1::uuid
     RETURNING *`,
-    [commentId]
+    [commentId],
   );
 };
 

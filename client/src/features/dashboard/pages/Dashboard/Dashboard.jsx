@@ -1,8 +1,9 @@
-import MuiBox from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+/* eslint-disable react/react-in-jsx-scope */
+import MuiBox from '@mui/material/Box';
+import MuiGrid from '@mui/material/Grid';
+import MuiTypography from '@mui/material/Typography';
 
-const Dashboard = () => {
+function Dashboard() {
   return (
     <MuiBox sx={{ marginLeft: 3, marginRight: 3 }}>
       <MuiGrid container spacing={3}>
@@ -15,6 +16,6 @@ const Dashboard = () => {
       </MuiGrid>
     </MuiBox>
   );
-};
+}
 
 export default Dashboard;

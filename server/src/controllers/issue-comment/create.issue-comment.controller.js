@@ -1,5 +1,6 @@
-import User from "../../models/user/user.model.js";
-import IssueComment from "../../models/issue-comment/issue-comment.model.js";
+/* eslint-disable import/extensions */
+import User from '../../models/user/user.model.js';
+import IssueComment from '../../models/issue-comment/issue-comment.model.js';
 
 /**
  * Create a comment inside an issue
@@ -18,7 +19,6 @@ const create = async (req, res) => {
 
     res.send(createdComment);
   } catch (error) {
-    console.log(error);
     res.status(500).send();
   }
 };

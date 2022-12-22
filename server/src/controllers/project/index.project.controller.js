@@ -1,5 +1,6 @@
-import User from "../../models/user/user.model.js";
-import Project from "../../models/project/project.model.js";
+/* eslint-disable import/extensions */
+import User from '../../models/user/user.model.js';
+import Project from '../../models/project/project.model.js';
 
 /**
  * List projects created by the user
@@ -7,11 +8,12 @@ import Project from "../../models/project/project.model.js";
  */
 const index = async (req, res) => {
   const { uid } = req.user;
-  const { status, sort_by, limit, page } = req.query;
+  // eslint-disable-next-line
+  const { status, sortBy, limit, page } = req.query;
 
   const sortOptions = {};
-  if (sort_by) {
-    const [field, order] = sort_by.split(":");
+  if (sortBy) {
+    const [field, order] = sortBy.split(':');
     sortOptions.field = field;
     sortOptions.order = order;
   }
@@ -24,26 +26,23 @@ const index = async (req, res) => {
         id,
         options: { status },
         pagingOptions: {
-          limit: parseInt(limit),
-          offset: parseInt(limit) * parseInt(page),
+          limit: parseInt(limit, 10),
+          offset: parseInt(limit, 10) * parseInt(page, 10),
         },
         sortOptions,
       })
     ).rows;
 
-    const rowCount = (
-      await Project.rowCount({
-        id,
-        options: { status },
-        pagingOptions: {},
-        sortOptions,
-      })
-    ).rowCount;
+    const { rowCount } = await Project.rowCount({
+      id,
+      options: { status },
+      pagingOptions: {},
+      sortOptions,
+    });
 
-    res.send({ rows: projects, rowCount: parseInt(rowCount) });
+    return res.send({ rows: projects, rowCount: parseInt(rowCount, 10) });
   } catch (error) {
-    console.log(error);
-    res.status(500).send();
+    return res.status(500).send();
   }
 };
 

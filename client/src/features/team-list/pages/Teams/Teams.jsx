@@ -1,17 +1,19 @@
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+/* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable react/react-in-jsx-scope */
+import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from "../../../../common/headers/SectionHeader";
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
+import SectionHeader from '../../../../common/headers/SectionHeader';
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
 
-const Teams = () => {
+function Teams() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   return (
     <MuiGrid container gap="40px">
-      {pathname === "/teams" && (
+      {pathname === '/teams' && (
         <MuiGrid item xs={12}>
           <SectionHeader
             title="Teams"
@@ -19,7 +21,7 @@ const Teams = () => {
             actionButton={
               <PrimaryButton
                 label="Create Team"
-                onClick={() => navigate("/teams/new")}
+                onClick={() => navigate('/teams/new')}
               />
             }
           />
@@ -30,6 +32,6 @@ const Teams = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Teams;

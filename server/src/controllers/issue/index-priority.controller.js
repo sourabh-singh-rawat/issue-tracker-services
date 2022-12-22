@@ -1,4 +1,5 @@
-import IssuePriority from "../../models/Issue-priority/issue-priority.model.js";
+/* eslint-disable import/extensions */
+import IssuePriority from '../../models/issue-priority/issue-priority.model.js';
 
 /**
  * List all the priorities of an issue
