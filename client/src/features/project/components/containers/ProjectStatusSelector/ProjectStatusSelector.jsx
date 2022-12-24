@@ -11,44 +11,42 @@ import MuiFormControl from '@mui/material/FormControl';
 import MuiFormHelperText from '@mui/material/FormHelperText';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import theme from '../../../../../config/mui.config';
 import Label from '../../../../../common/utilities/Label';
 
-const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = '#000' }) => ({
+const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
   '&.MuiOutlinedInput-root': {
     color: theme.palette.text.primary,
     fontSize: '13px',
     fontWeight: 500,
-    textTransform: 'capitalize',
     borderRadius: '6px',
+    textTransform: 'capitalize',
     backgroundColor: lighten(statuscolor, 0.95),
+    transitionDuration: '350ms',
     '& fieldset': {
-      border: `1px solid ${lighten(statuscolor, 0.85)}`,
+      transitionDuration: '350ms',
+      border: `2px solid ${lighten(statuscolor, 0.8)}`,
     },
     '&:hover fieldset': {
       backgroundColor: 'transparent',
-      border: `1px solid ${lighten(statuscolor, 0.2)}`,
-      transitionDuration: '250ms',
+      border: `2px solid ${lighten(statuscolor, 0.2)}`,
     },
   },
 }));
 
-const StyledMenuItem = styled(MuiMenuItem)(({ theme }) => ({
+const StyledMenuItem = styled(MuiMenuItem)(() => ({
   '&.MuiMenuItem-root': {
-    ':hover': {
-      backgroundColor: 'action.hover',
-    },
+    ':hover': { backgroundColor: 'action.hover' },
   },
-  '&.Mui-selected': {
-    color: theme.palette.primary.main,
-  },
+  '&.Mui-selected': { color: theme.palette.primary.main },
 }));
 
 function ProjectStatusSelector({
   title,
-  helperText,
   value,
-  handleChange,
   variant,
+  helperText,
+  handleChange,
 }) {
   const projectStatus = useSelector(
     (store) => store.project.options.status.rows,
@@ -78,6 +76,9 @@ function ProjectStatusSelector({
             }
             sx={{
               height: variant === 'dense' ? '28px' : 'auto',
+              '&:hover': {
+                boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
+              },
             }}
           >
             {projectStatus.map(({ id, name, color }) => (

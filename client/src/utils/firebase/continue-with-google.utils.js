@@ -30,10 +30,9 @@ const continueWithGoogle = async (inviteToken) => {
             body: JSON.stringify({ ...decodedToken, uid }),
           },
         );
-
         return finalResponse;
       }
-
+      // eslint-disable-next-line consistent-return
       return;
     } catch (error) {
       return error;
@@ -48,4 +47,4 @@ const continueWithGoogle = async (inviteToken) => {
   }
 };
 
-export default { continueWithGoogle };
+export default continueWithGoogle;

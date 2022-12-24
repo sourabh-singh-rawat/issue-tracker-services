@@ -18,10 +18,10 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => ({
     // backgroundColor: theme.palette.grey[50],
     '& fieldset': {
       borderRadius: '6px',
-      border: `1px solid ${theme.palette.grey[300]}`,
+      border: `2px solid ${theme.palette.grey[300]}`,
     },
     '&:hover fieldset': {
-      border: `1px solid ${theme.palette.grey[700]}`,
+      border: `2px solid ${theme.palette.grey[700]}`,
       transitionDuration: '250ms',
     },
     '&.Mui-focused': {
@@ -29,8 +29,8 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => ({
       transitionDuration: '250ms',
       '& fieldset': {
         border: error
-          ? `1px solid ${theme.palette.error.main}`
-          : `1px solid ${theme.palette.primary.main}`,
+          ? `2px solid ${theme.palette.error.main}`
+          : `2px solid ${theme.palette.primary.main}`,
         transitionDuration: '250ms',
       },
     },
@@ -38,7 +38,7 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => ({
       fontWeight: 500,
       backgroundColor: theme.palette.grey[200],
       '& fieldset': {
-        border: `1px solid ${theme.palette.grey[300]}`,
+        border: `2px solid ${theme.palette.grey[300]}`,
       },
     },
   },
@@ -53,8 +53,8 @@ function TextField({
   value,
   title,
   rows,
-  multiline,
   error,
+  multiline,
   helperText,
   isLoading,
   ...otherProps

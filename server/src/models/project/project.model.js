@@ -1,6 +1,7 @@
 /* eslint-disable import/named */
 /* eslint-disable import/extensions */
 import db from '../../config/db.config.js';
+import toSnakeCase from '../../utils/toSnakeCase.util.js';
 import { buildProjectsQuery } from './utils/build-projects-query.utils.js';
 
 /**
@@ -81,7 +82,7 @@ const updateOne = ({ id, body }) => {
   const values = Object.values(body);
 
   const setClause = columns
-    .map((column, index) => `${column} = $${index + 1}`)
+    .map((column, index) => `${toSnakeCase(column)} = $${index + 1}`)
     .join(', ');
 
   const query = `
@@ -90,6 +91,8 @@ const updateOne = ({ id, body }) => {
     WHERE id = '${id}'
     RETURNING *
   `;
+
+  console.log(query);
 
   return db.query(query, values);
 };

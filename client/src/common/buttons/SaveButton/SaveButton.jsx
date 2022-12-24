@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import MuiButton from '@mui/material/Button';
 
-function SaveButton({ label, onClick }) {
+export default function SaveButton({ label, onClick }) {
   return (
     <MuiButton
       onClick={onClick}
@@ -22,5 +22,3 @@ function SaveButton({ label, onClick }) {
     </MuiButton>
   );
 }
-
-export default SaveButton;

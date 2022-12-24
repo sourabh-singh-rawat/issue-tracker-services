@@ -2,7 +2,7 @@
 import MuiButton from '@mui/material/Button';
 import theme from '../../../config/mui.config';
 
-function SecondaryButton({ label, onClick }) {
+export default function SecondaryButton({ label, onClick }) {
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <MuiButton
@@ -23,5 +23,3 @@ function SecondaryButton({ label, onClick }) {
     </MuiButton>
   );
 }
-
-export default SecondaryButton;

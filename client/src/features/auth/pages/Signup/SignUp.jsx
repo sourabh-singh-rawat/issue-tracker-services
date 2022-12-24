@@ -11,7 +11,7 @@ import MuiTypography from '@mui/material/Typography';
 import GoogleIcon from '@mui/icons-material/Google';
 import theme from '../../../../config/mui.config';
 
-import { continueWithGoogle } from '../../../../utils/firebase/continue-with-google.utils';
+import continueWithGoogle from '../../../../utils/firebase/continue-with-google.utils';
 import { onAuthStateChangedListener } from '../../../../config/firebase.config';
 
 function SignUp() {

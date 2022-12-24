@@ -15,8 +15,7 @@
       "error",
       "always",
       {
-        "js": "never",
-        "jsx": "never"
+        "js": "never"
       }
     ],
     "no-console": "warn"

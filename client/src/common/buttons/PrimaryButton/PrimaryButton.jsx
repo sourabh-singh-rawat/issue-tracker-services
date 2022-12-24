@@ -3,7 +3,7 @@
 import MuiButton from '@mui/material/Button';
 import MuiAddIcon from '@mui/icons-material/Add';
 
-function PrimaryButton({ type, label, onClick }) {
+export default function PrimaryButton({ type, label, onClick }) {
   return (
     <MuiButton
       type={type}
@@ -25,5 +25,3 @@ function PrimaryButton({ type, label, onClick }) {
     </MuiButton>
   );
 }
-
-export default PrimaryButton;

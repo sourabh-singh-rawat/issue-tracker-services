@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable import/extensions */
 import User from '../../models/user/user.model.js';
 import Issue from '../../models/issue/issue.model.js';
-import ProjectMember from '../../models/project-member/project-member.model.js';
+import toSnakeCase from '../../utils/toSnakeCase.util.js';
 
 /**
  * Lists all the issues of project
@@ -18,8 +19,8 @@ const index = async (req, res) => {
   const filterOptions = {
     status,
     priority,
-    assignee_id: assigneeId,
-    'issues.project_id': projectId,
+    'issues.projectId': projectId,
+    assigneeId,
   };
 
   const pagingOptions = {
@@ -30,17 +31,16 @@ const index = async (req, res) => {
   const sortOptions = {};
   if (sortBy) {
     const [field, order] = sortBy.split(':');
-    sortOptions.field = field.replace(/([A-Z])/g, '_$1').toLowerCase();
+    sortOptions.field = toSnakeCase(field);
     sortOptions.order = order;
   }
 
   try {
     const { id } = await User.findOne(uid);
-    const reporterId = await ProjectMember.findOne({ memberId: id });
 
     const issues = (
       await Issue.find({
-        reporterId,
+        reporterId: id,
         filterOptions,
         pagingOptions,
         sortOptions,
@@ -48,15 +48,16 @@ const index = async (req, res) => {
     ).rows;
 
     const { rowCount } = await Issue.rowCount({
-      reporterId,
+      reporterId: id,
       filterOptions,
       pagingOptions: {},
       sortOptions: {},
     });
 
-    res.send({ rows: issues, rowCount });
+    return res.send({ rows: issues, rowCount });
   } catch (error) {
-    res.status(500).send();
+    console.log(error);
+    return res.status(500).send();
   }
 };
 

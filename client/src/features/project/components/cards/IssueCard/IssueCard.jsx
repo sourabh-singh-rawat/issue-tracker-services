@@ -2,7 +2,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-no-useless-fragment */
-import { Fragment } from 'react';
 
 import MuiGrid from '@mui/material/Grid';
 import MuiSkeleton from '@mui/material/Skeleton';
@@ -10,7 +9,7 @@ import MuiTypography from '@mui/material/Typography';
 import MuiPestControlIcon from '@mui/icons-material/PestControl';
 import theme from '../../../../../config/mui.config';
 
-function IssueCard({ title, count, isLoading, color, backgroundColor }) {
+function IssueCard({ title, count, color, backgroundColor, isLoading }) {
   return (
     <>
       {isLoading ? (
@@ -24,17 +23,17 @@ function IssueCard({ title, count, isLoading, color, backgroundColor }) {
           container
           sx={{
             cursor: 'pointer',
+            border: `2px solid ${backgroundColor || theme.palette.grey[200]}`,
             padding: '16px',
             minHeight: '60px',
-            borderRadius: '6px',
             transition: '250ms',
+            borderRadius: '1vh',
             backgroundColor: backgroundColor || theme.palette.common.white,
-            border: `1px solid ${backgroundColor || theme.palette.grey[200]}`,
             ':hover': {
               backgroundColor: backgroundColor
                 ? theme.palette.primary.dark
                 : theme.palette.grey[100],
-              border: `1px solid ${
+              border: `2px solid ${
                 backgroundColor
                   ? theme.palette.primary.dark
                   : theme.palette.grey[100]

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable import/extensions */
 import IssueAttachment from '../../models/issue-attachment/issue-attachment.model.js';
 
@@ -8,19 +9,18 @@ import IssueAttachment from '../../models/issue-attachment/issue-attachment.mode
  */
 const create = async (req, res) => {
   const { id } = req.params;
-  // eslint-disable-next-line
   const { bucket, fullPath, name, size, contentType, url } = req.body;
 
   try {
     const createdAttachment = (
       await IssueAttachment.insertOne({
-        bucket,
-        full_path: fullPath,
+        issueId: id,
+        url,
         name,
         size,
-        content_type: contentType,
-        issue_id: id,
-        url,
+        bucket,
+        fullPath,
+        contentType,
       })
     ).rows[0];
 

@@ -5,12 +5,17 @@ import MuiLink from '@mui/material/Link';
 import MuiSkeleton from '@mui/material/Skeleton';
 import MuiTypography from '@mui/material/Typography';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
+import MuiKeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 function Breadcrumbs({ items, isLoading }) {
   const theme = useTheme();
 
   return (
-    <MuiBreadcrumbs separator="/">
+    <MuiBreadcrumbs
+      separator={
+        <MuiKeyboardArrowRightIcon sx={{ color: theme.palette.grey[400] }} />
+      }
+    >
       {items.map(({ text, onClick }) => (
         <span key={onClick}>
           {isLoading ? (

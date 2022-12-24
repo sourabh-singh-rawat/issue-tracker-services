@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable object-curly-newline */
@@ -7,7 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Container, Grid, Typography } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 
-import { continueWithGoogle } from '../../../../utils/firebase/continue-with-google.utils';
+import continueWithGoogle from '../../../../utils/firebase/continue-with-google.utils';
 import { onAuthStateChangedListener } from '../../../../config/firebase.config';
 
 function Login() {

@@ -69,7 +69,7 @@ function MenuSidebar() {
   const iconStyles = { width: '20px' };
 
   return (
-    <MuiBox sx={{ display: 'flex' }}>
+    <MuiBox>
       <Drawer variant="permanent" open={open}>
         <Navbar />
         <MuiToolbar variant="dense" />

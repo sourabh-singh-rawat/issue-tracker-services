@@ -228,7 +228,7 @@ function IssueForm() {
                 value={formFields.dueDate}
                 getOptionLabel={(option) => `${option.name}`}
                 onChange={(date) =>
-                  setFormFields({ ...formFields, due_date: date })
+                  setFormFields({ ...formFields, dueDate: date })
                 }
               />
             </MuiGrid>

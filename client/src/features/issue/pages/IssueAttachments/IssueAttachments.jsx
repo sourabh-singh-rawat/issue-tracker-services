@@ -13,7 +13,7 @@ import MuiButton from '@mui/material/Button';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import theme from '../../../../config/mui.config';
-import { uploadImage } from '../../../../utils/firebase/upload-image.utils.js';
+import uploadImage from '../../../../utils/firebase/upload-image.utils.js';
 
 import TabPanel from '../../../../common/tabs/TabPanel';
 import UploadButton from '../../components/buttons/UploadButton';
