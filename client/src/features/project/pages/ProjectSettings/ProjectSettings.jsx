@@ -1,26 +1,25 @@
-import { useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { format, formatISO, parseISO } from "date-fns";
+/* eslint-disable react/react-in-jsx-scope */
+import { useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { format, formatISO, parseISO } from 'date-fns';
 
-import { useTheme } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
-import MuiDivider from "@mui/material/Divider";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiDivider from '@mui/material/Divider';
+import MuiTypography from '@mui/material/Typography';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import DatePicker from "../../../../common/dates/DatePicker";
-import TextField from "../../../../common/textfields/TextField";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import DatePicker from '../../../../common/dates/DatePicker';
+import TextField from '../../../../common/textfields/TextField';
 
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
-import ProjectStatusSelector from "../../components/containers/ProjectStatusSelector";
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import ProjectStatusSelector from '../../components/containers/ProjectStatusSelector';
 
-import { updateProject } from "../../slice/project.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
-import { useUpdateProjectMutation } from "../../api/project.api";
+import { updateProject } from '../../slice/project.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import { useUpdateProjectMutation } from '../../api/project.api';
 
-const ProjectSettings = () => {
-  const theme = useTheme();
+function ProjectSettings() {
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
 
@@ -35,11 +34,13 @@ const ProjectSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, description, status, end_date, start_date } = project;
+    // eslint-disable-next-line object-curly-newline
+    const { name, description, status, endDate, startDate } = project;
 
     await updateProjectMutation({
       id: project.id,
-      body: { name, description, status, end_date, start_date },
+      // eslint-disable-next-line object-curly-newline
+      body: { name, description, status, endDate, startDate },
     });
   };
 
@@ -88,9 +89,9 @@ const ProjectSettings = () => {
                 </MuiGrid>
                 <MuiGrid item xs={12}>
                   <TextField
-                    name="owner_id"
+                    name="ownerId"
                     title="Owner id"
-                    value={project.owner_id}
+                    value={project.ownerId}
                     isLoading={project.isLoading}
                     disabled
                   />
@@ -123,13 +124,13 @@ const ProjectSettings = () => {
                 <MuiGrid item xs={12}>
                   <TextField
                     isLoading={project.isLoading}
-                    name="created_at"
+                    name="createdAt"
                     title="Creation date"
                     helperText="This project was created on this day."
                     value={
-                      project.created_at
-                        ? format(parseISO(project.created_at), "PPPPpppp")
-                        : "loading"
+                      project.createdAt
+                        ? format(parseISO(project.createdAt), 'PPPPpppp')
+                        : 'loading'
                     }
                     disabled
                   />
@@ -142,17 +143,19 @@ const ProjectSettings = () => {
                     handleChange={handleChange}
                   />
                 </MuiGrid>
-                <MuiGrid item xs={6}></MuiGrid>
+                <MuiGrid item xs={6} />
                 <MuiGrid item xs={12} md={6}>
                   <DatePicker
                     title="Start Date"
-                    name="start_date"
+                    name="startDate"
                     helperText="The day your project started."
                     isLoading={project.isLoading}
-                    value={parseISO(project.start_date)}
-                    maxDate={parseISO(project.end_date)}
-                    onChange={(date) =>
-                      dispatch(updateProject({ start_date: formatISO(date) }))
+                    value={parseISO(project.startDate)}
+                    maxDate={parseISO(project.endDate)}
+                    onChange={
+                      (date) =>
+                        dispatch(updateProject({ startDate: formatISO(date) }))
+                      // eslint-disable-next-line react/jsx-curly-newline
                     }
                     handleChange={handleChange}
                   />
@@ -161,12 +164,14 @@ const ProjectSettings = () => {
                   <DatePicker
                     isLoading={project.isLoading}
                     title="End Date"
-                    name="end_date"
-                    value={parseISO(project.end_date)}
-                    minDate={parseISO(project.start_date)}
+                    name="endDate"
+                    value={parseISO(project.endDate)}
+                    minDate={parseISO(project.startDate)}
                     helperText="The day your project will end. (due date)"
-                    onChange={(date) =>
-                      dispatch(updateProject({ end_date: formatISO(date) }))
+                    onChange={
+                      (date) =>
+                        dispatch(updateProject({ endDate: formatISO(date) }))
+                      // eslint-disable-next-line react/jsx-curly-newline
                     }
                     handleChange={handleChange}
                   />
@@ -177,7 +182,7 @@ const ProjectSettings = () => {
         </MuiGrid>
         <MuiGrid item xs={12} sx={{ marginBottom: 8 }}>
           <MuiGrid container>
-            <MuiGrid item md={4}></MuiGrid>
+            <MuiGrid item md={4} />
             <MuiGrid item md={8}>
               <PrimaryButton type="submit" label="Save Changes" />
             </MuiGrid>
@@ -186,6 +191,6 @@ const ProjectSettings = () => {
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default ProjectSettings;

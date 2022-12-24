@@ -11,6 +11,8 @@
   },
   "plugins": ["react"],
   "rules": {
-    "no-console": "warn"
+    "no-console": "error",
+    "no-restricted-exports": "off",
+    "implicit-arrow-linebreak": "off"
   }
 }

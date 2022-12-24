@@ -11,27 +11,30 @@ import MuiTypography from '@mui/material/Typography';
 import MuiFormControl from '@mui/material/FormControl';
 import MuiFormHelperText from '@mui/material/FormHelperText';
 import Label from '../../../../../common/utilities/Label/Label';
+import theme from '../../../../../config/mui.config';
 
-const StyledSelect = styled(MuiSelect)(({ theme, statuscolor = '#000' }) => ({
+const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
   '&.MuiOutlinedInput-root': {
     color: theme.palette.text.primary,
     fontSize: '13px',
     fontWeight: 500,
     textTransform: 'capitalize',
     borderRadius: '6px',
-    backgroundColor: lighten(statuscolor, 0.95),
+    transitionDuration: '350ms',
+    backgroundColor: lighten(statuscolor, 0.9),
     '& fieldset': {
-      border: `1px solid ${lighten(statuscolor, 0.85)}`,
+      transitionDuration: '350ms',
+      border: `2px solid ${lighten(statuscolor, 0.8)}`,
     },
     '&:hover fieldset': {
       backgroundColor: 'transparent',
-      border: `1px solid ${lighten(statuscolor, 0.2)}`,
-      transitionDuration: '250ms',
+      border: `2px solid ${lighten(statuscolor, 0.2)}`,
+      transitionDuration: '350ms',
     },
   },
 }));
 
-const StyledMenuItem = styled(MuiMenuItem)(({ theme }) => ({
+const StyledMenuItem = styled(MuiMenuItem)(() => ({
   '&.MuiMenuItem-root': {
     ':hover': {
       backgroundColor: 'action.hover',
@@ -73,11 +76,14 @@ function IssueStatusSelector({
                 issueStatus.find((status) => status.id === value)?.color
               }
               sx={{
-                color: 'text.primary',
-                fontSize: '13px',
-                fontWeight: 500,
+                color: theme.palette.grey[700],
                 height: variant === 'dense' ? '28px' : 'auto',
+                fontSize: '13px',
+                fontWeight: 600,
                 textTransform: 'capitalize',
+                '&:hover': {
+                  boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
+                },
               }}
               displayEmpty
             >

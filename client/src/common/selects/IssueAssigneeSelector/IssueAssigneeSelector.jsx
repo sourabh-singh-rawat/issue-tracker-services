@@ -2,8 +2,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable react/prop-types */
-import { Fragment } from 'react';
-
 import { styled } from '@mui/material/styles';
 import MuiGrid from '@mui/material/Grid';
 import MuiSelect from '@mui/material/Select';
@@ -20,16 +18,17 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
     color: theme.palette.grey[700],
     fontSize: '13px',
     fontWeight: 600,
+    borderRadius: '6px',
     textTransform: 'capitalize',
     backgroundColor: theme.palette.grey[50],
-    borderRadius: '6px',
+    transitionDuration: '350ms',
     '& fieldset': {
-      border: `1px solid ${theme.palette.grey[300]}`,
+      transitionDuration: '350ms',
+      border: `2px solid ${theme.palette.grey[300]}`,
     },
     '&:hover fieldset': {
+      border: `2px solid ${theme.palette.grey[600]}`,
       backgroundColor: 'transparent',
-      border: `1px solid ${theme.palette.grey[600]}`,
-      transitionDuration: '250ms',
     },
   },
 }));
@@ -37,9 +36,9 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
 function IssueAssigneeSelector({
   title,
   value,
-  projectMembers,
-  handleChange,
   isLoading,
+  handleChange,
+  projectMembers,
 }) {
   return (
     <>
@@ -53,12 +52,17 @@ function IssueAssigneeSelector({
         <MuiFormControl>
           {title && <Label title={title} />}
           <StyledSelect
-            name="assigneeId"
             size="small"
+            name="assigneeId"
             value={!value ? 0 : value}
             onChange={handleChange}
+            sx={{
+              '&:hover': {
+                boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
+              },
+            }}
           >
-            {projectMembers.map(({ memberId, name, photoUrl }) => (
+            {projectMembers.map(({ name, memberId, photoUrl }) => (
               <MuiMenuItem
                 key={memberId}
                 value={memberId}
@@ -67,11 +71,17 @@ function IssueAssigneeSelector({
                 <MuiGrid container columnSpacing={1}>
                   <MuiGrid item>
                     <MuiAvatar
-                      sx={{ width: '20px', height: '20px' }}
+                      sx={{
+                        width: '20px',
+                        height: '20px',
+                        backgroundColor: theme.palette.grey[500],
+                      }}
                       src={photoUrl}
                     />
                   </MuiGrid>
-                  <MuiGrid item>{name}</MuiGrid>
+                  <MuiGrid item sx={{ color: theme.palette.grey[700] }}>
+                    {name}
+                  </MuiGrid>
                 </MuiGrid>
               </MuiMenuItem>
             ))}
@@ -93,7 +103,11 @@ function IssueAssigneeSelector({
                 <MuiGrid item>
                   <MuiTypography
                     variant="body2"
-                    sx={{ fontWeight: 600, fontSize: '13px' }}
+                    sx={{
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      color: theme.palette.grey[700],
+                    }}
                   >
                     Unassigned
                   </MuiTypography>

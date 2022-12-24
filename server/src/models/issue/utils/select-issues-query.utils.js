@@ -1,5 +1,8 @@
+/* eslint-disable import/extensions */
 /* eslint-disable import/prefer-default-export */
 // eslint-disable-next-line import/prefer-default-export
+
+import toSnakeCase from '../../../utils/toSnakeCase.util.js';
 
 export const selectIssuesQuery = ({
   reporterId,
@@ -37,7 +40,7 @@ export const selectIssuesQuery = ({
   JOIN 
     project_members ON project_members.id = issues.reporter_id
   JOIN
-      users ON users.id = project_members.member_id`;
+    users ON users.id = project_members.member_id`;
 
   let condition = `
   WHERE 
@@ -47,7 +50,7 @@ export const selectIssuesQuery = ({
       FROM 
         project_members 
       WHERE 
-        id='${reporterId}'
+        member_id='${reporterId}'
       )
     `;
   let orderBy = 'ORDER BY ';
@@ -58,7 +61,7 @@ export const selectIssuesQuery = ({
     condition += Object.keys(filterOptions)
       .reduce((prev, cur) => {
         index += 1;
-        return `${prev + cur}=$${index} AND `;
+        return `${prev + toSnakeCase(cur)}=$${index} AND `;
       }, 'AND ')
       .slice(0, -4);
   }

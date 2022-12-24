@@ -17,6 +17,7 @@ import MuiLogoutIcon from '@mui/icons-material/Logout';
 import MuiNotifications from '@mui/icons-material/Notifications';
 import MuiAccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 
+// eslint-disable-next-line import/named
 import { logout } from '../../../utils/firebase/logout.util';
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({

@@ -11,11 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { format, parseISO } from 'date-fns';
 import { enIN } from 'date-fns/locale';
 
+import MuiGrid from '@mui/material/Grid';
 import MuiAvatar from '@mui/material/Avatar';
 import MuiMenuItem from '@mui/material/MenuItem';
 import MuiTypography from '@mui/material/Typography';
-import MuiListItemIcon from '@mui/material/ListItemIcon';
-import MuiListItemText from '@mui/material/ListItemText';
 import theme from '../../../../../config/mui.config';
 
 import List from '../../../../../common/lists/List';
@@ -147,24 +146,31 @@ function IssueList({ projectId }) {
           sx={{
             color: theme.palette.secondary.main,
             ':hover': {
-              backgroundColor: 'transparent',
               color: theme.palette.primary.main,
+              backgroundColor: 'transparent',
             },
           }}
           disableRipple
           disableGutters
         >
-          <MuiListItemIcon>
-            <MuiAvatar
-              sx={{ width: '20px', height: '20px' }}
-              src={params.row.reporterPhotoUrl}
-            />
-          </MuiListItemIcon>
-          <MuiListItemText>
-            <MuiTypography variant="body2" sx={{ fontWeight: 500 }}>
-              {params.row.reporterName}
-            </MuiTypography>
-          </MuiListItemText>
+          <MuiGrid container>
+            <MuiGrid item>
+              <MuiAvatar
+                sx={{
+                  width: '20px',
+                  height: '20px',
+                  marginRight: 1,
+                  backgroundColor: theme.palette.grey[500],
+                }}
+                src={params.row.reporterPhotoUrl}
+              />
+            </MuiGrid>
+            <MuiGrid item>
+              <MuiTypography sx={{ fontSize: '13px', fontWeight: 600 }}>
+                {params.row.reporterName}
+              </MuiTypography>
+            </MuiGrid>
+          </MuiGrid>
         </MuiMenuItem>
       ),
     },

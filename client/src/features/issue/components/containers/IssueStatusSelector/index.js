@@ -1,1 +1,1 @@
-export { default } from "./IssueStatusSelector";
+export { default } from './IssueStatusSelector';

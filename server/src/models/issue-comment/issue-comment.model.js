@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable import/extensions */
 import db from '../../config/db.config.js';
 // eslint-disable-next-line import/no-useless-path-segments
@@ -25,12 +26,13 @@ const insertOne = async ({ description, memberId, issueId }) => {
 };
 
 const find = ({ issueId }) =>
-  // eslint-disable-next-line implicit-arrow-linebreak
   db.query(
     `
     SELECT
-      issue_comments.id, issue_comments.description, issue_comments.created_at, 
-      users.name, users.photo_url
+      issue_comments.id, 
+      issue_comments.description, 
+      issue_comments.created_at as "createdAt", 
+      users.name, users.photo_url as "photoUrl"
     FROM
       issue_comments
     JOIN 
@@ -44,7 +46,6 @@ const find = ({ issueId }) =>
   );
 
 const rowCount = (issueId) =>
-  // eslint-disable-next-line implicit-arrow-linebreak
   db.query(
     `
     SELECT 
@@ -57,7 +58,6 @@ const rowCount = (issueId) =>
   );
 
 const updateOne = ({ commentId, description }) =>
-  // eslint-disable-next-line implicit-arrow-linebreak
   db.query(
     `
     UPDATE 
@@ -70,9 +70,8 @@ const updateOne = ({ commentId, description }) =>
     [description, commentId],
   );
 
-// eslint-disable-next-line arrow-body-style
-const deleteOne = (commentId) => {
-  return db.query(
+const deleteOne = (commentId) =>
+  db.query(
     `DELETE FROM 
       issue_comments 
     WHERE 
@@ -80,7 +79,6 @@ const deleteOne = (commentId) => {
     RETURNING *`,
     [commentId],
   );
-};
 
 export default {
   insertOne,

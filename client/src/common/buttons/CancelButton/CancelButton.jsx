@@ -3,7 +3,7 @@ import React from 'react';
 import MuiButton from '@mui/material/Button';
 import theme from '../../../config/mui.config';
 
-function CancelButton({ label, onClick }) {
+export default function CancelButton({ label, onClick }) {
   return (
     <MuiButton
       onClick={onClick}
@@ -23,5 +23,3 @@ function CancelButton({ label, onClick }) {
     </MuiButton>
   );
 }
-
-export default CancelButton;

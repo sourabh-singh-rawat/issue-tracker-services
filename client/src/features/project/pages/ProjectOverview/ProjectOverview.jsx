@@ -1,32 +1,33 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useOutletContext, useParams } from "react-router-dom";
+/* eslint-disable react/react-in-jsx-scope */
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useOutletContext, useParams } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiTypography from '@mui/material/Typography';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import MembersCard from "../../../../common/cards/MembersCard";
-import PageDescription from "../../../../common/textfields/Description";
-import IssueStats from "../../components/containers/IssueStats";
+import { CircularProgress } from '@mui/material';
+import TabPanel from '../../../../common/tabs/TabPanel';
+import MembersCard from '../../../../common/cards/MembersCard';
+import PageDescription from '../../../../common/textfields/Description';
+import IssueStats from '../../components/containers/IssueStats';
 
-import { setIssueStatusCount, updateProject } from "../../slice/project.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { setIssueStatusCount, updateProject } from '../../slice/project.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
 import {
   useUpdateProjectMutation,
   useGetProjectIssuesStatusCountQuery,
-} from "../../api/project.api";
-import { CircularProgress } from "@mui/material";
+} from '../../api/project.api';
 
-const ProjectOverview = () => {
+function ProjectOverview() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
 
   const project = useSelector((store) => store.project.settings);
   const issuesStatusCount = useSelector(
-    (store) => store.project.issuesStatusCount
+    (store) => store.project.issuesStatusCount,
   );
 
   const projectIssueStatusCount = useGetProjectIssuesStatusCountQuery(id);
@@ -71,17 +72,17 @@ const ProjectOverview = () => {
           {issuesStatusCount.isLoading ? (
             <CircularProgress />
           ) : (
-            <Fragment>
+            <>
               <MuiTypography variant="body2" fontWeight={600}>
                 Issue Stats:
               </MuiTypography>
               <IssueStats issuesStatusCount={issuesStatusCount.rows} />
-            </Fragment>
+            </>
           )}
         </MuiGrid>
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default ProjectOverview;

@@ -11,7 +11,7 @@ const index = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const comments = (await IssueComment.find({ issue_id: id })).rows;
+    const comments = (await IssueComment.find({ issueId: id })).rows;
     const rowCount = (await IssueComment.rowCount(id)).rows[0].count;
 
     res.send({ rows: comments, rowCount: parseInt(rowCount, 10) });

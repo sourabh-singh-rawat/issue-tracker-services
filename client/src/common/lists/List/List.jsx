@@ -18,9 +18,7 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
     color: theme.palette.text.primary,
     borderColor: theme.palette.grey[200],
   },
-  '.MuiDataGrid-columnHeaders': {
-    // border: `1px solid ${theme.palette.grey[300]}`,
-  },
+  '.MuiDataGrid-columnHeaders': {},
   '& .MuiDataGrid-columnHeaderTitle': {
     color: theme.palette.grey[600],
     fontSize: '14px',
