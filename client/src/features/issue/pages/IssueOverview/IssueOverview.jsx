@@ -48,31 +48,30 @@ function IssueOverview() {
   }, [isSuccess]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={0}>
-      <MuiGrid container columnSpacing={2} rowSpacing={2}>
-        <MuiGrid item xs={12} sm={12} md={6}>
+    <TabPanel index={0} selectedTab={selectedTab}>
+      <MuiGrid columnSpacing={2} rowSpacing={2} container>
+        <MuiGrid md={6} sm={12} xs={12} item>
           <Description
-            page={issue}
             isLoading={issue.isLoading}
+            page={issue}
             updateDescription={updateIssue}
             updateDescriptionQuery={updatePageQuery}
           />
         </MuiGrid>
-        <MuiGrid item xs={12} sm={12} md={12}>
-          <MuiTypography variant="body2" fontWeight={600}>
+        <MuiGrid md={12} sm={6} xs={12} item>
+          <MuiTypography fontWeight={600} variant="body2">
             Assignee:
           </MuiTypography>
           <IssueAssignee />
         </MuiGrid>
         <MuiGrid item>
-          <MuiTypography variant="body2" fontWeight={600}>
+          <MuiTypography fontWeight={600} variant="body2">
             Tasks:
           </MuiTypography>
-          <MuiTypography variant="body2" sx={{ marginTop: '6px' }}>
+          <MuiTypography sx={{ marginTop: '6px' }} variant="body2">
             No current incomplete taks.{' '}
-            <Link to={`/issues/${id}/tasks`} style={{ textDecoration: 'none' }}>
+            <Link style={{ textDecoration: 'none' }} to={`/issues/${id}/tasks`}>
               <MuiTypography
-                variant="body2"
                 component="span"
                 sx={{
                   color: theme.palette.primary.main,
@@ -82,26 +81,26 @@ function IssueOverview() {
                     color: theme.palette.primary.dark,
                   },
                 }}
+                variant="body2"
               >
                 Add task.
               </MuiTypography>
             </Link>
           </MuiTypography>
         </MuiGrid>
-        <MuiGrid item xs={12}>
-          <MuiTypography variant="body2" fontWeight={600}>
+        <MuiGrid xs={12} item>
+          <MuiTypography fontWeight={600} variant="body2">
             Attachments:
           </MuiTypography>
           {attachments.rowCount <= 0 ? (
-            <MuiTypography variant="body2" sx={{ marginTop: '6px' }}>
+            <MuiTypography sx={{ marginTop: '6px' }} variant="body2">
               <MuiTypography variant="body2">
                 No attachments.{' '}
                 <Link
-                  to={`/issues/${id}/attachments`}
                   style={{ textDecoration: 'none' }}
+                  to={`/issues/${id}/attachments`}
                 >
                   <MuiTypography
-                    variant="body2"
                     component="span"
                     sx={{
                       color: theme.palette.primary.main,
@@ -111,6 +110,7 @@ function IssueOverview() {
                         color: theme.palette.primary.dark,
                       },
                     }}
+                    variant="body2"
                   >
                     Click to add.
                   </MuiTypography>
@@ -119,14 +119,14 @@ function IssueOverview() {
             </MuiTypography>
           ) : (
             <ImageList
-              variant="quilted"
               cols={8}
               rowHeight={75}
               sx={{ width: '100%' }}
+              variant="quilted"
             >
               {attachments.rows.map(({ id, url }) => (
                 <ImageListItem key={id}>
-                  <img src={url} srcSet={url} loading="lazy" />
+                  <img loading="lazy" src={url} srcSet={url} />
                 </ImageListItem>
               ))}
             </ImageList>

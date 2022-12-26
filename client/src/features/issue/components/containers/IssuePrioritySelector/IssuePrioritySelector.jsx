@@ -34,6 +34,17 @@ const StyledSelect = styled(MuiSelect)(() => ({
   },
 }));
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 32 * 6.5 + 8,
+      borderRadius: '6px',
+      marginTop: '6px',
+      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+    },
+  },
+};
+
 function IssuePrioritySelector({
   title,
   value,
@@ -49,20 +60,19 @@ function IssuePrioritySelector({
   return (
     <MuiGrid container>
       {title && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           {isLoading ? <MuiSkeleton width="20%" /> : <Label title={title} />}
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         {isLoading ? (
           <MuiSkeleton />
         ) : (
           <MuiFormControl fullWidth>
             <StyledSelect
+              MenuProps={MenuProps}
               name="priority"
               size="small"
-              value={value}
-              onChange={handleChange}
               sx={{
                 color: theme.palette.text.primary,
                 height: variant === 'dense' ? '28px' : 'auto',
@@ -72,18 +82,20 @@ function IssuePrioritySelector({
                   boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
                 },
               }}
+              value={value}
               displayEmpty
+              onChange={handleChange}
             >
               {issuePriority.map(({ id, name }) => (
                 <MuiMenuItem
                   key={id}
-                  value={id}
                   sx={{
                     color: theme.palette.grey[700],
                     fontSize: '13px',
                     fontWeight: 600,
                     textTransform: 'capitalize',
                   }}
+                  value={id}
                 >
                   {name}
                 </MuiMenuItem>
@@ -93,9 +105,9 @@ function IssuePrioritySelector({
         )}
       </MuiGrid>
       {helperText && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           {isLoading ? (
-            <MuiSkeleton width="50%" height="75%" />
+            <MuiSkeleton height="75%" width="50%" />
           ) : (
             <MuiFormHelperText>
               <MuiTypography component="span" sx={{ fontSize: '13px' }}>

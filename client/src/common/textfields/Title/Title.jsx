@@ -20,7 +20,7 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
   },
   '& .MuiOutlinedInput-root ': {
     fontSize: theme.typography.h4.fontSize,
-    fontWeight: 600,
+    fontWeight: 'bold',
     backgroundColor: 'transparent',
     '& fieldset': {
       border: '2px solid transparent',
