@@ -41,6 +41,17 @@ const StyledMenuItem = styled(MuiMenuItem)(() => ({
   '&.Mui-selected': { color: theme.palette.primary.main },
 }));
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 32 * 6.5 + 8,
+      borderRadius: '6px',
+      marginTop: '6px',
+      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+    },
+  },
+};
+
 function ProjectStatusSelector({
   title,
   value,
@@ -58,7 +69,7 @@ function ProjectStatusSelector({
   return (
     <MuiGrid container>
       {title && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           <Label title={title} />
         </MuiGrid>
       )}
@@ -67,10 +78,9 @@ function ProjectStatusSelector({
           <CircularProgress />
         ) : (
           <StyledSelect
+            MenuProps={MenuProps}
             name="status"
             size="small"
-            value={value}
-            onChange={handleChange}
             statuscolor={
               projectStatus.find((status) => status.id === value)?.color
             }
@@ -80,19 +90,21 @@ function ProjectStatusSelector({
                 boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
               },
             }}
+            value={value}
+            onChange={handleChange}
           >
             {projectStatus.map(({ id, name, color }) => (
               <StyledMenuItem key={id} value={id}>
                 <MuiTypography
-                  variant="body2"
                   overflow="hidden"
-                  textOverflow="ellipsis"
                   sx={{
                     color,
                     fontSize: '13px',
                     fontWeight: 600,
                     textTransform: 'capitalize',
                   }}
+                  textOverflow="ellipsis"
+                  variant="body2"
                 >
                   {name}
                 </MuiTypography>

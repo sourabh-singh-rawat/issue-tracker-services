@@ -85,14 +85,13 @@ function IssueList({ projectId }) {
       minWidth: 350,
       renderCell: (params) => (
         <Link
-          to={`/issues/${params.row.id}/overview`}
           style={{
             overflow: 'hidden',
             textDecoration: 'none',
           }}
+          to={`/issues/${params.row.id}/overview`}
         >
           <MuiTypography
-            variant="body2"
             sx={{
               fontWeight: 500,
               overflow: 'hidden',
@@ -103,6 +102,7 @@ function IssueList({ projectId }) {
                 textDecoration: 'none!important',
               },
             }}
+            variant="body2"
           >
             {params.row.name}
           </MuiTypography>
@@ -150,19 +150,19 @@ function IssueList({ projectId }) {
               backgroundColor: 'transparent',
             },
           }}
-          disableRipple
           disableGutters
+          disableRipple
         >
           <MuiGrid container>
             <MuiGrid item>
               <MuiAvatar
+                src={params.row.reporterPhotoUrl}
                 sx={{
                   width: '20px',
                   height: '20px',
                   marginRight: 1,
                   backgroundColor: theme.palette.grey[500],
                 }}
-                src={params.row.reporterPhotoUrl}
               />
             </MuiGrid>
             <MuiGrid item>
@@ -203,19 +203,19 @@ function IssueList({ projectId }) {
 
   return (
     <List
-      rows={rows}
-      rowCount={rowCount}
       columns={columns}
-      isLoading={getIssuesQuery.isLoading}
-      page={page}
-      pageSize={pageSize}
-      onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
-      onPageSizeChange={(pageSize) => dispatch(updateIssueList({ pageSize }))}
       getRowId={(row) => row.id}
       initialState={{
         sorting: { sortModel: [{ field: 'status', sort: 'desc' }] },
       }}
+      isLoading={getIssuesQuery.isLoading}
+      page={page}
+      pageSize={pageSize}
+      rowCount={rowCount}
+      rows={rows}
       autoHeight
+      onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
+      onPageSizeChange={(pageSize) => dispatch(updateIssueList({ pageSize }))}
     />
   );
 }

@@ -1,33 +1,51 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import React from 'react';
+import { useOutletContext, useParams } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
-import IssueList from "../../../issue-list/components/containers/IssueList";
-import AddIssueButton from "../../../issue/components/buttons/AddIssueButton/AddIssueButton";
-import TabPanel from "../../../../common/tabs/TabPanel";
+import MuiGrid from '@mui/material/Grid';
+import IssueList from '../../../issue-list/components/containers/IssueList';
+import AddIssueButton from '../../../issue/components/buttons/AddIssueButton/AddIssueButton';
+import TabPanel from '../../../../common/tabs/TabPanel';
+import IssueStatusFilter from '../../../../common/selects/IssueStatusFilter';
+import IssuePriorityFilter from '../../../../common/selects/IssuePriorityFilter';
+import theme from '../../../../config/mui.config';
 
-const ProjectIssues = () => {
+function ProjectIssues() {
   const [selectedTab] = useOutletContext();
   const { id } = useParams();
 
   return (
     <TabPanel index={1} selectedTab={selectedTab}>
-      <MuiGrid container spacing={1}>
-        <MuiGrid item xs={12} sx={{ display: "flex" }}>
-          <MuiGrid container sx={{ flexGrow: 1 }}>
-            <MuiGrid item>{/* TODO: SortSelector */}</MuiGrid>
-            <MuiGrid item>{/* TODO: FilterSector */}</MuiGrid>
-            <MuiGrid item sx={{ flexGrow: 1 }}></MuiGrid>
+      <MuiGrid spacing={1} container>
+        <MuiGrid
+          sx={{
+            display: 'flex',
+            backgroundColor: theme.palette.grey[100],
+            borderRadius: '6px',
+            paddingBottom: '8px',
+          }}
+          xs={12}
+          item
+        >
+          <MuiGrid columnSpacing={1} container>
+            <MuiGrid item>
+              <IssuePriorityFilter />
+            </MuiGrid>
+            <MuiGrid item>
+              <IssueStatusFilter />
+            </MuiGrid>
+            <MuiGrid sx={{ flexGrow: 1 }} item />
             <MuiGrid item>
               <AddIssueButton />
             </MuiGrid>
+            <MuiGrid item />
           </MuiGrid>
         </MuiGrid>
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           <IssueList projectId={id} />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default ProjectIssues;

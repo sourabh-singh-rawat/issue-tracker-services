@@ -33,10 +33,22 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
   },
 }));
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 32 * 6.5 + 8,
+      borderRadius: '6px',
+      marginTop: '6px',
+      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+    },
+  },
+};
+
 function IssueAssigneeSelector({
   title,
   value,
   isLoading,
+  fullWidth,
   handleChange,
   projectMembers,
 }) {
@@ -44,42 +56,43 @@ function IssueAssigneeSelector({
     <>
       {isLoading ? (
         <MuiGrid container>
-          <MuiGrid item xs={12}>
+          <MuiGrid xs={12} item>
             <MuiSkeleton />
           </MuiGrid>
         </MuiGrid>
       ) : (
-        <MuiFormControl>
+        <MuiFormControl fullWidth={fullWidth}>
           {title && <Label title={title} />}
           <StyledSelect
-            size="small"
+            MenuProps={MenuProps}
             name="assigneeId"
-            value={!value ? 0 : value}
-            onChange={handleChange}
+            size="small"
             sx={{
               '&:hover': {
                 boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
               },
             }}
+            value={!value ? 0 : value}
+            onChange={handleChange}
           >
             {projectMembers.map(({ name, memberId, photoUrl }) => (
               <MuiMenuItem
                 key={memberId}
-                value={memberId}
                 sx={{ fontSize: '13px', fontWeight: 600 }}
+                value={memberId}
               >
-                <MuiGrid container columnSpacing={1}>
+                <MuiGrid columnSpacing={1} container>
                   <MuiGrid item>
                     <MuiAvatar
+                      src={photoUrl}
                       sx={{
                         width: '20px',
                         height: '20px',
                         backgroundColor: theme.palette.grey[500],
                       }}
-                      src={photoUrl}
                     />
                   </MuiGrid>
-                  <MuiGrid item sx={{ color: theme.palette.grey[700] }}>
+                  <MuiGrid sx={{ color: theme.palette.grey[700] }} item>
                     {name}
                   </MuiGrid>
                 </MuiGrid>
@@ -87,9 +100,9 @@ function IssueAssigneeSelector({
             ))}
             <MuiMenuItem value={0}>
               <MuiGrid
-                container
                 columnSpacing={1}
                 sx={{ alignItems: 'center' }}
+                container
               >
                 <MuiGrid item>
                   <MuiAvatar
@@ -102,12 +115,12 @@ function IssueAssigneeSelector({
                 </MuiGrid>
                 <MuiGrid item>
                   <MuiTypography
-                    variant="body2"
                     sx={{
                       fontSize: '13px',
                       fontWeight: 600,
                       color: theme.palette.grey[700],
                     }}
+                    variant="body2"
                   >
                     Unassigned
                   </MuiTypography>

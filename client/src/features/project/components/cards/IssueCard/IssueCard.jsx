@@ -14,13 +14,12 @@ function IssueCard({ title, count, color, backgroundColor, isLoading }) {
     <>
       {isLoading ? (
         <MuiSkeleton
-          variant="rectangular"
           height="90px"
           sx={{ borderRadius: '6px' }}
+          variant="rectangular"
         />
       ) : (
         <MuiGrid
-          container
           sx={{
             cursor: 'pointer',
             border: `2px solid ${backgroundColor || theme.palette.grey[200]}`,
@@ -41,10 +40,10 @@ function IssueCard({ title, count, color, backgroundColor, isLoading }) {
               boxShadow: `0 1px 7px 0 ${theme.palette.grey[400]}`,
             },
           }}
+          container
         >
-          <MuiGrid item xs={12} display="flex">
+          <MuiGrid display="flex" xs={12} item>
             <MuiTypography
-              variant="body2"
               fontWeight={600}
               sx={{
                 color: color || theme.palette.text.primary,
@@ -52,6 +51,7 @@ function IssueCard({ title, count, color, backgroundColor, isLoading }) {
                 textTransform: 'capitalize',
                 flexGrow: 1,
               }}
+              variant="body2"
             >
               {title}
             </MuiTypography>
@@ -62,14 +62,14 @@ function IssueCard({ title, count, color, backgroundColor, isLoading }) {
               }}
             />
           </MuiGrid>
-          <MuiGrid item xs={12}>
+          <MuiGrid xs={12} item>
             <MuiTypography
-              variant="h4"
               sx={{
                 fontFamily: 'Roboto Mono',
                 fontWeight: 500,
                 color: color || theme.palette.text.primary,
               }}
+              variant="h4"
             >
               {count}
             </MuiTypography>

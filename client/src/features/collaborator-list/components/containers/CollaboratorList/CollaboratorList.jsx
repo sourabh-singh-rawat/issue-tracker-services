@@ -39,9 +39,8 @@ function CollaboratorList() {
           >
             {value.match(/\b(\w)/g)[0]}
           </MuiAvatar>
-          <Link to={`/profile/${id}`} style={{ textDecoration: 'none' }}>
+          <Link style={{ textDecoration: 'none' }} to={`/profile/${id}`}>
             <MuiTypography
-              variant="body2"
               sx={{
                 color: 'text.primary',
                 fontWeight: 500,
@@ -50,6 +49,7 @@ function CollaboratorList() {
                   textDecoration: 'none!important',
                 },
               }}
+              variant="body2"
             >
               {value}
             </MuiTypography>
@@ -68,22 +68,22 @@ function CollaboratorList() {
 
   return (
     <List
-      rows={rows}
-      rowCount={rowCount}
       columns={columns}
+      getRowId={(params) => params.id}
+      initialState={{
+        sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
+      }}
       isLoading={getCollaboratorsQuery.isLoading}
       page={page}
       pageSize={pageSize}
+      rowCount={rowCount}
+      rows={rows}
       onPageChange={(newPage) =>
         dispatch(updateCollaboratorList({ page: newPage }))
       }
       onPageSizeChange={(pageSize) =>
         dispatch(updateCollaboratorList({ pageSize }))
       }
-      initialState={{
-        sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
-      }}
-      getRowId={(params) => params.id}
     />
   );
 }

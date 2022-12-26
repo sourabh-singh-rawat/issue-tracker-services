@@ -65,7 +65,13 @@ const findPeopleRelatedToUid = (id) =>
   db.query(
     `
     SELECT DISTINCT 
-      users.id, users.name, users.email, users.photo_url, project_members.member_id, project_members.member_role, project_members.created_at 
+      users.id, 
+      users.name, 
+      users.email, 
+      users.photo_url as "photoUrl", 
+      project_members.member_id as "userId", 
+      project_members.member_role as "memberRole",
+      project_members.created_at as "createdAt" 
     FROM 
       project_members
     INNER JOIN 

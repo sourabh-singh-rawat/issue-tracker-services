@@ -1,5 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams } from 'react-router-dom';
 

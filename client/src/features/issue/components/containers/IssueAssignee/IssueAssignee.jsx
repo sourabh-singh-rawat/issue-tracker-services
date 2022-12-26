@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +15,7 @@ import { updateIssue } from '../../../slice/issue.slice';
 import { setMembers } from '../../../../project/slice/project.slice';
 import { setMessageBarOpen } from '../../../../message-bar/slice/message-bar.slice';
 
-function IssueAssignee() {
+function IssueAssignee({ fullWidth }) {
   const { id } = useParams();
   const dispatch = useDispatch();
   const issue = useSelector((store) => store.issue);
@@ -41,10 +42,11 @@ function IssueAssignee() {
   return (
     <MuiBox sx={{ marginTop: '8px' }}>
       <IssueAssigneeSelector
-        value={!issue.info.assigneeId ? 0 : issue.info.assigneeId}
-        projectMembers={project.members.rows}
-        isLoading={project.members.isLoading}
+        fullWidth={fullWidth}
         handleChange={handleChange}
+        isLoading={project.members.isLoading}
+        projectMembers={project.members.rows}
+        value={!issue.info.assigneeId ? 0 : issue.info.assigneeId}
       />
     </MuiBox>
   );

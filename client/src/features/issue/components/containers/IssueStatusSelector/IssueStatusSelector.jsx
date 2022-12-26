@@ -45,6 +45,17 @@ const StyledMenuItem = styled(MuiMenuItem)(() => ({
   },
 }));
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 32 * 6.5 + 8,
+      borderRadius: '6px',
+      marginTop: '6px',
+      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+    },
+  },
+};
+
 function IssueStatusSelector({
   title,
   value,
@@ -58,20 +69,19 @@ function IssueStatusSelector({
   return (
     <MuiGrid container>
       {title && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           {isLoading ? <MuiSkeleton width="20%" /> : <Label title={title} />}
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         {isLoading ? (
           <MuiSkeleton />
         ) : (
           <MuiFormControl fullWidth>
             <StyledSelect
+              MenuProps={MenuProps}
               name="status"
               size="small"
-              value={value}
-              onChange={handleChange}
               statuscolor={
                 issueStatus.find((status) => status.id === value)?.color
               }
@@ -85,20 +95,22 @@ function IssueStatusSelector({
                   boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
                 },
               }}
+              value={value}
               displayEmpty
+              onChange={handleChange}
             >
               {issueStatus.map(({ id, name, color }) => (
                 <StyledMenuItem key={id} value={id}>
                   <MuiTypography
-                    variant="body2"
                     overflow="hidden"
-                    textOverflow="ellipsis"
                     sx={{
                       color,
                       fontSize: '13px',
                       fontWeight: 600,
                       textTransform: 'capitalize',
                     }}
+                    textOverflow="ellipsis"
+                    variant="body2"
                   >
                     {name}
                   </MuiTypography>
@@ -109,9 +121,9 @@ function IssueStatusSelector({
         )}
       </MuiGrid>
       {helperText && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           {isLoading ? (
-            <MuiSkeleton width="50%" height="75%" />
+            <MuiSkeleton height="75%" width="50%" />
           ) : (
             <MuiFormHelperText>
               <MuiTypography component="span" sx={{ fontSize: '13px' }}>
