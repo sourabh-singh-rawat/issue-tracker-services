@@ -51,58 +51,58 @@ function NoComponent() {
 function App() {
   return (
     <Routes>
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/login" element={<Login />} />
+      <Route element={<SignUp />} path="/signup" />
+      <Route element={<Login />} path="/login" />
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Main />}>
-          <Route index element={<Dashboard />} />
-          <Route path="settings" element={<Settings />} />
+        <Route element={<Main />} path="/">
+          <Route element={<Dashboard />} index />
+          <Route element={<Settings />} path="settings" />
           <Route path="profile">
-            <Route path=":id" element={<Profile />} />
+            <Route element={<Profile />} path=":id" />
           </Route>
           {/* collaborator route */}
-          <Route path="collaborators" element={<Collaborators />}>
-            <Route index element={<CollaboratorList />} />
+          <Route element={<Collaborators />} path="collaborators">
+            <Route element={<CollaboratorList />} index />
           </Route>
           {/* project route */}
-          <Route path="projects" element={<Projects />}>
-            <Route index element={<ProjectList />} />
-            <Route path="new" element={<ProjectForm />} />
-            <Route path=":id" element={<Project />}>
-              <Route path="overview" element={<ProjectOverview />} />
-              <Route path="issues" element={<ProjectIssues />} />
-              <Route path="members" element={<ProjectMembers />} />
-              <Route path="activity" element={<ProjectActivity />} />
-              <Route path="settings" element={<ProjectSetting />} />
+          <Route element={<Projects />} path="projects">
+            <Route element={<ProjectList />} index />
+            <Route element={<ProjectForm />} path="new" />
+            <Route element={<Project />} path=":id">
+              <Route element={<ProjectOverview />} path="overview" />
+              <Route element={<ProjectIssues />} path="issues" />
+              <Route element={<ProjectMembers />} path="members" />
+              <Route element={<ProjectActivity />} path="activity" />
+              <Route element={<ProjectSetting />} path="settings" />
             </Route>
           </Route>
           {/* team route */}
-          <Route path="teams" element={<Teams />}>
-            <Route index element={<TeamList />} />
-            <Route path="new" element={<TeamForm />} />
-            <Route path=":id" element={<Team />}>
-              <Route path="overview" element={<TeamOverview />} />
-              <Route path="people" element={<TeamMembers />} />
-              <Route path="projects" element={<TeamProjects />} />
-              <Route path="activity" element={<TeamActivity />} />
-              <Route path="settings" element={<TeamSettings />} />
+          <Route element={<Teams />} path="teams">
+            <Route element={<TeamList />} index />
+            <Route element={<TeamForm />} path="new" />
+            <Route element={<Team />} path=":id">
+              <Route element={<TeamOverview />} path="overview" />
+              <Route element={<TeamMembers />} path="people" />
+              <Route element={<TeamProjects />} path="projects" />
+              <Route element={<TeamActivity />} path="activity" />
+              <Route element={<TeamSettings />} path="settings" />
             </Route>
           </Route>
           {/* issue route */}
-          <Route path="issues" element={<Issues />}>
-            <Route index element={<IssueList />} />
-            <Route path="new" element={<IssueForm />} />
-            <Route path=":id" element={<Issue />}>
-              <Route path="overview" element={<IssueOverview />} />
-              <Route path="tasks" element={<IssueTasks />} />
-              <Route path="attachments" element={<IssueAttachments />} />
-              <Route path="comments" element={<IssueComments />} />
-              <Route path="settings" element={<IssueSettings />} />
+          <Route element={<Issues />} path="issues">
+            <Route element={<IssueList />} index />
+            <Route element={<IssueForm />} path="new" />
+            <Route element={<Issue />} path=":id">
+              <Route element={<IssueOverview />} path="overview" />
+              <Route element={<IssueTasks />} path="tasks" />
+              <Route element={<IssueAttachments />} path="attachments" />
+              <Route element={<IssueComments />} path="comments" />
+              <Route element={<IssueSettings />} path="settings" />
             </Route>
           </Route>
         </Route>
       </Route>
-      <Route path="*" element={<NoComponent />} />
+      <Route element={<NoComponent />} path="*" />
     </Routes>
   );
 }

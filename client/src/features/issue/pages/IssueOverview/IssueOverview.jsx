@@ -59,13 +59,21 @@ function IssueOverview() {
           />
         </MuiGrid>
         <MuiGrid md={12} sm={6} xs={12} item>
-          <MuiTypography fontWeight={600} variant="body2">
+          <MuiTypography
+            fontWeight={600}
+            sx={{ color: theme.palette.grey[900] }}
+            variant="body1"
+          >
             Assignee:
           </MuiTypography>
           <IssueAssignee />
         </MuiGrid>
         <MuiGrid item>
-          <MuiTypography fontWeight={600} variant="body2">
+          <MuiTypography
+            fontWeight={600}
+            sx={{ color: theme.palette.grey[900] }}
+            variant="body1"
+          >
             Tasks:
           </MuiTypography>
           <MuiTypography sx={{ marginTop: '6px' }} variant="body2">
@@ -89,7 +97,11 @@ function IssueOverview() {
           </MuiTypography>
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <MuiTypography fontWeight={600} variant="body2">
+          <MuiTypography
+            fontWeight={600}
+            sx={{ color: theme.palette.grey[900] }}
+            variant="body1"
+          >
             Attachments:
           </MuiTypography>
           {attachments.rowCount <= 0 ? (

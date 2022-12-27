@@ -11,7 +11,7 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
     color: theme.palette.text.primary,
     transition: 'ease-in-out 0.150s',
     ':hover': {
-      backgroundColor: theme.palette.grey[50],
+      backgroundColor: theme.palette.grey[200],
     },
   },
   '.MuiDataGrid-cell': {
@@ -47,27 +47,27 @@ function List({
 }) {
   return (
     <StyledDataGrid
-      rows={rows}
-      rowCount={rowCount}
+      checkboxSelection={checkboxSelection}
       columns={columns}
-      loading={isLoading}
       components={{
         LoadingOverlay: MuiLinearProgress,
       }}
-      rowsPerPageOptions={[10, 20, 50, 100]}
-      pagination
+      experimentalFeatures={{ newEditingApi: true }}
+      getRowId={getRowId}
+      initialState={initialState}
+      loading={isLoading}
       page={page}
       pageSize={pageSize}
       paginationMode="server"
-      onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
-      getRowId={getRowId}
-      initialState={initialState}
-      experimentalFeatures={{ newEditingApi: true }}
+      rowCount={rowCount}
+      rows={rows}
+      rowsPerPageOptions={[10, 20, 50, 100]}
       autoHeight
-      checkboxSelection={checkboxSelection}
       disableColumnMenu
       disableSelectionOnClick
+      pagination
+      onPageChange={onPageChange}
+      onPageSizeChange={onPageSizeChange}
     />
   );
 }

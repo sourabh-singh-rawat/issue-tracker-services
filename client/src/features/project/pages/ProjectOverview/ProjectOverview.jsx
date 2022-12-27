@@ -18,6 +18,7 @@ import {
   useUpdateProjectMutation,
   useGetProjectIssuesStatusCountQuery,
 } from '../../api/project.api';
+import theme from '../../../../config/mui.config';
 
 function ProjectOverview() {
   const { id } = useParams();
@@ -50,29 +51,37 @@ function ProjectOverview() {
   }, [isSuccess]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={0}>
-      <MuiGrid container spacing={2}>
-        <MuiGrid item xs={12} sm={12} md={6}>
+    <TabPanel index={0} selectedTab={selectedTab}>
+      <MuiGrid spacing={2} container>
+        <MuiGrid md={6} sm={12} xs={12} item>
           <PageDescription
-            page={project}
             isLoading={project.isLoading}
+            page={project}
             updateDescription={updateProject}
             updateDescriptionQuery={updateDescriptionQuery}
           />
         </MuiGrid>
-        <MuiGrid item xs={12} sm={12} md={6}>
-          <MuiTypography variant="body2" fontWeight={600}>
+        <MuiGrid md={6} sm={12} xs={12} item>
+          <MuiTypography
+            fontWeight={600}
+            sx={{ color: theme.palette.grey[900] }}
+            variant="body1"
+          >
             Members:
           </MuiTypography>
           <MembersCard />
         </MuiGrid>
 
-        <MuiGrid item sm={12}>
+        <MuiGrid sm={12} item>
           {issuesStatusCount.isLoading ? (
             <CircularProgress />
           ) : (
             <>
-              <MuiTypography variant="body2" fontWeight={600}>
+              <MuiTypography
+                fontWeight={600}
+                sx={{ color: theme.palette.grey[900] }}
+                variant="body1"
+              >
                 Issue Stats:
               </MuiTypography>
               <IssueStats issuesStatusCount={issuesStatusCount.rows} />
