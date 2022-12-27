@@ -26,7 +26,7 @@ function IssueCard({ title, count, color, backgroundColor, isLoading }) {
             padding: '16px',
             minHeight: '60px',
             transition: '250ms',
-            borderRadius: '1vh',
+            borderRadius: '10px',
             backgroundColor: backgroundColor || theme.palette.common.white,
             ':hover': {
               backgroundColor: backgroundColor

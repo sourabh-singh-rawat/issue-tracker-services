@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 import { styled } from '@mui/material/styles';
 import MuiGrid from '@mui/material/Grid';
@@ -15,17 +14,17 @@ const StyledTextField = styled(MuiTextField)(({ theme, error }) => ({
     fontSize: '14px',
     color: theme.palette.text.primary,
     borderRadius: '6px',
-    // backgroundColor: theme.palette.grey[50],
+    backgroundColor: theme.palette.grey[200],
     '& fieldset': {
       borderRadius: '6px',
-      border: `2px solid ${theme.palette.grey[300]}`,
+      border: `2px solid ${theme.palette.grey[200]}`,
     },
     '&:hover fieldset': {
-      border: `2px solid ${theme.palette.grey[700]}`,
+      border: `2px solid ${theme.palette.grey[600]}`,
       transitionDuration: '250ms',
     },
     '&.Mui-focused': {
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.common.white,
       transitionDuration: '250ms',
       '& fieldset': {
         border: error
@@ -62,15 +61,15 @@ function TextField({
   return (
     <MuiGrid container>
       {title && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           {isLoading ? (
             <MuiSkeleton width="20%" />
           ) : (
-            <Label title={title} error={error} />
+            <Label error={error} title={title} />
           )}
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         {isLoading ? (
           <>
             <MuiSkeleton />
@@ -80,13 +79,16 @@ function TextField({
           </>
         ) : (
           <StyledTextField
-            size="small"
-            name={name && name.toLowerCase()}
-            rows={rows}
-            value={value}
+            autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
             error={error}
             helperText={helperText}
             multiline={multiline}
+            name={name && name.toLowerCase()}
+            rows={rows}
+            size="small"
+            value={value}
             fullWidth
             {...otherProps}
           />

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useSelector } from 'react-redux';
@@ -9,10 +10,9 @@ import MuiMenuItem from '@mui/material/MenuItem';
 import MuiTypography from '@mui/material/Typography';
 import MuiFormControl from '@mui/material/FormControl';
 import MuiFormHelperText from '@mui/material/FormHelperText';
-import CircularProgress from '@mui/material/CircularProgress';
+import MuiSkeleton from '@mui/material/Skeleton';
 
 import theme from '../../../../../config/mui.config';
-import Label from '../../../../../common/utilities/Label';
 
 const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
   '&.MuiOutlinedInput-root': {
@@ -52,13 +52,7 @@ const MenuProps = {
   },
 };
 
-function ProjectStatusSelector({
-  title,
-  value,
-  variant,
-  helperText,
-  handleChange,
-}) {
+function ProjectStatusSelector({ value, variant, helperText, handleChange }) {
   const projectStatus = useSelector(
     (store) => store.project.options.status.rows,
   );
@@ -68,14 +62,9 @@ function ProjectStatusSelector({
 
   return (
     <MuiGrid container>
-      {title && (
-        <MuiGrid xs={12} item>
-          <Label title={title} />
-        </MuiGrid>
-      )}
       <MuiFormControl fullWidth>
         {isLoading ? (
-          <CircularProgress />
+          <MuiSkeleton />
         ) : (
           <StyledSelect
             MenuProps={MenuProps}
@@ -113,12 +102,16 @@ function ProjectStatusSelector({
           </StyledSelect>
         )}
       </MuiFormControl>
-      {helperText && (
-        <MuiFormHelperText>
-          <MuiTypography component="span" sx={{ fontSize: '13px' }}>
-            {helperText}
-          </MuiTypography>
-        </MuiFormHelperText>
+      {isLoading ? (
+        <MuiSkeleton width="200px" />
+      ) : (
+        helperText && (
+          <MuiFormHelperText>
+            <MuiTypography component="span" sx={{ fontSize: '13px' }}>
+              {helperText}
+            </MuiTypography>
+          </MuiFormHelperText>
+        )
       )}
     </MuiGrid>
   );

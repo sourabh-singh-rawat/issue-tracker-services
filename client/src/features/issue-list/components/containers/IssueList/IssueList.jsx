@@ -2,14 +2,12 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, parseISO } from 'date-fns';
-import { enIN } from 'date-fns/locale';
 
 import MuiGrid from '@mui/material/Grid';
 import MuiAvatar from '@mui/material/Avatar';
@@ -177,27 +175,84 @@ function IssueList({ projectId }) {
     {
       field: 'dueDate',
       headerName: 'Due Date',
-      width: 150,
+      width: 125,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), 'eee, PP') : '-',
+        value ? (
+          <MuiTypography
+            sx={{
+              color: theme.palette.grey[700],
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontWeight: 600,
+              fontSize: '13px',
+            }}
+            variant="body2"
+          >
+            {format(parseISO(value), 'PP')}
+          </MuiTypography>
+        ) : (
+          '-'
+        ),
     },
     {
       field: 'projectId',
       headerName: 'Project Id',
       width: 125,
+      renderCell: ({ value }) => (
+        <MuiTypography
+          sx={{
+            color: theme.palette.grey[700],
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            fontWeight: 600,
+            fontSize: '13px',
+          }}
+          variant="body2"
+        >
+          {value}
+        </MuiTypography>
+      ),
     },
     {
       field: 'createdAt',
       headerName: 'Created At',
       width: 125,
       renderCell: ({ value }) =>
-        value ? format(parseISO(value), 'PP', { locale: enIN }) : '-',
+        value ? (
+          <MuiTypography
+            sx={{
+              color: theme.palette.grey[700],
+              fontSize: '13px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontWeight: 600,
+            }}
+            variant="body2"
+          >
+            {format(parseISO(value), 'PP')}
+          </MuiTypography>
+        ) : (
+          '-'
+        ),
     },
     {
-      flex: 0.14,
       field: 'id',
       headerName: 'Issue Id',
-      minWidth: 100,
+      minWidth: 125,
+      renderCell: ({ value }) => (
+        <MuiTypography
+          sx={{
+            color: theme.palette.grey[700],
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            fontWeight: 600,
+            fontSize: '13px',
+          }}
+          variant="body2"
+        >
+          {value}
+        </MuiTypography>
+      ),
     },
   ];
 

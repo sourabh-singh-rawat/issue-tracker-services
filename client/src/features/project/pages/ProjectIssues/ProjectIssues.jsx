@@ -19,7 +19,7 @@ function ProjectIssues() {
         <MuiGrid
           sx={{
             display: 'flex',
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grey[200],
             borderRadius: '6px',
             paddingBottom: '8px',
           }}

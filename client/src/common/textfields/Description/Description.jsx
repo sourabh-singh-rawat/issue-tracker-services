@@ -12,6 +12,7 @@ import MuiTypography from '@mui/material/Typography';
 import SaveButton from '../../buttons/SaveButton';
 import TextField from '../TextField';
 import CancelButton from '../../buttons/CancelButton/CancelButton';
+import theme from '../../../config/mui.config';
 
 function Description({
   page,
@@ -32,23 +33,27 @@ function Description({
   };
 
   return (
-    <MuiGrid container rowSpacing={1}>
-      <MuiGrid item xs={12}>
-        <MuiTypography variant="body2" fontWeight={600}>
+    <MuiGrid rowSpacing={1} container>
+      <MuiGrid xs={12} item>
+        <MuiTypography
+          fontWeight={600}
+          sx={{ color: theme.palette.grey[900] }}
+          variant="body1"
+        >
           Description:
         </MuiTypography>
         {page.descriptionSelected ? (
           <TextField
-            size="small"
-            value={page.description}
-            onChange={handleChange}
             inputProps={{
               style: { fontSize: '14px', lineHeight: 1.5 },
             }}
             minRows={4}
+            size="small"
+            value={page.description}
             autoFocus
-            multiline
             fullWidth
+            multiline
+            onChange={handleChange}
           />
         ) : (
           <>
@@ -61,15 +66,6 @@ function Description({
               </>
             ) : (
               <MuiTypography
-                variant="body2"
-                onClick={() => {
-                  dispatch(
-                    updateDescription({
-                      descriptionSelected: true,
-                      previousDescription: page.description,
-                    }),
-                  );
-                }}
                 sx={{
                   lineHeight: 1.5,
                   padding: '8px 14px',
@@ -79,6 +75,15 @@ function Description({
                   transition: '250ms',
                   ':hover': { backgroundColor: 'action.hover' },
                 }}
+                variant="body2"
+                onClick={() => {
+                  dispatch(
+                    updateDescription({
+                      descriptionSelected: true,
+                      previousDescription: page.description,
+                    }),
+                  );
+                }}
               >
                 {page.description ? page.description : 'Add a description...'}
               </MuiTypography>
@@ -87,8 +92,8 @@ function Description({
         )}
       </MuiGrid>
       {page.descriptionSelected && (
-        <MuiGrid item sm={12}>
-          <MuiGrid container spacing={1}>
+        <MuiGrid sm={12} item>
+          <MuiGrid spacing={1} container>
             <MuiGrid item>
               <SaveButton label="Save" onClick={handleSave} />
             </MuiGrid>

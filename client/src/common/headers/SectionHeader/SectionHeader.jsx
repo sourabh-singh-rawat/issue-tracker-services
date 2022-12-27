@@ -7,14 +7,20 @@ import MuiTypography from '@mui/material/Typography';
 function SectionHeader({ title, subtitle, actionButton, noButton }) {
   return (
     <MuiGrid container>
-      <MuiGrid item xs={12} sx={{ display: 'flex' }}>
-        <MuiTypography variant="h4" sx={{ fontWeight: 600, flexGrow: 1 }}>
+      <MuiGrid sx={{ display: 'flex' }} xs={12} item>
+        <MuiTypography
+          sx={{
+            flexGrow: 1,
+            fontWeight: 600,
+          }}
+          variant="h4"
+        >
           {title}
         </MuiTypography>
         {actionButton}
       </MuiGrid>
-      <MuiGrid item sx={{ paddingTop: noButton && '7px' }}>
-        <MuiTypography variant="body2" sx={{ color: 'text.primary' }}>
+      <MuiGrid sx={{ paddingTop: noButton && '7px' }} item>
+        <MuiTypography sx={{ color: 'text.primary' }} variant="body2">
           {subtitle}
         </MuiTypography>
       </MuiGrid>

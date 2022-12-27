@@ -3,11 +3,10 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 /* eslint-disable nonblock-statement-body-position */
 /* eslint-disable object-curly-newline */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -82,7 +81,7 @@ function ProjectList() {
       if (isSuccess) dispatch(setMessageBarOpen(true));
     }, [isSuccess]);
 
-    return <ProjectStatusSelector value={value} handleChange={handleChange} />;
+    return <ProjectStatusSelector handleChange={handleChange} value={value} />;
   }
 
   const renderSelectEditInputCell = (params) => (
@@ -97,14 +96,13 @@ function ProjectList() {
       flex: 0.45,
       renderCell: (params) => (
         <Link
-          to={`/projects/${params.row.id}/overview`}
           style={{
             overflow: 'hidden',
             textDecoration: 'none',
           }}
+          to={`/projects/${params.row.id}/overview`}
         >
           <MuiTypography
-            variant="body2"
             sx={{
               color: theme.palette.text.primary,
               overflow: 'hidden',
@@ -112,6 +110,7 @@ function ProjectList() {
               fontWeight: 500,
               ':hover': { color: theme.palette.primary.main },
             }}
+            variant="body2"
           >
             {params.row.name}
           </MuiTypography>
@@ -136,8 +135,8 @@ function ProjectList() {
       renderCell: ({ value, ...params }) =>
         value ? (
           <MuiTypography
-            variant="body2"
             sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            variant="body2"
           >
             {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
           </MuiTypography>
@@ -154,8 +153,8 @@ function ProjectList() {
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography
-            variant="body2"
             sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            variant="body2"
           >
             {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
           </MuiTypography>
@@ -172,8 +171,8 @@ function ProjectList() {
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography
-            variant="body2"
             sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            variant="body2"
           >
             {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
           </MuiTypography>
@@ -190,18 +189,18 @@ function ProjectList() {
 
   return (
     <List
-      rows={rows}
-      rowCount={rowCount}
       columns={columns}
-      isLoading={getProjectsQuery.isLoading}
-      page={page}
-      pageSize={pageSize}
-      onPageChange={(newPage) => dispatch(updateProjectList({ page: newPage }))}
-      onPageSizeChange={(pageSize) => dispatch(updateProjectList({ pageSize }))}
       getRowId={(row) => row.id}
       initialState={{
         sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
       }}
+      isLoading={getProjectsQuery.isLoading}
+      page={page}
+      pageSize={pageSize}
+      rowCount={rowCount}
+      rows={rows}
+      onPageChange={(newPage) => dispatch(updateProjectList({ page: newPage }))}
+      onPageSizeChange={(pageSize) => dispatch(updateProjectList({ pageSize }))}
     />
   );
 }
