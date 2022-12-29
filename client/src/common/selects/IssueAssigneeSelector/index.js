@@ -1,1 +1,1 @@
-export { default } from "./IssueAssigneeSelector";
+export { default } from './IssueAssigneeSelector';

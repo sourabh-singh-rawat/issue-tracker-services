@@ -282,16 +282,18 @@ CREATE TABLE IF NOT EXISTS issue_comments (
 
 CREATE TABLE IF NOT EXISTS issue_attachments (
   id UUID DEFAULT uuid_generate_v4(),
-  bucket VARCHAR(255),
+  filename VARCHAR(255),
+  original_filename VARCHAR(255),
   content_type VARCHAR(255),
-  full_path VARCHAR(255),
-  name VARCHAR(255),
+  path VARCHAR(1000),
+  bucket VARCHAR(255),
+  variant VARCHAR(255),
+  owner_id UUID,
   issue_id UUID,
-  size INTEGER,
-  url VARCHAR(1000),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
+  FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,
+  FOREIGN KEY (owner_id) REFERENCES project_members(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS team_members (

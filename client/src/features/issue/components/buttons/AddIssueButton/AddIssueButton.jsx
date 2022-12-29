@@ -33,10 +33,10 @@ function AddIssueButton() {
       <PrimaryButton label="Add Issue" onClick={handleOpen} />
       <MuiModal
         open={open}
-        onClose={handleClose}
         sx={{
           '.MuiBackdrop-root': { backgroundColor: 'rgba(9, 30, 66, 0.54)' },
         }}
+        onClose={handleClose}
       >
         <MuiBox
           sx={{

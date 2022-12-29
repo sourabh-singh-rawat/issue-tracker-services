@@ -1,1 +1,1 @@
-export { default } from "./IssuePrioritySelector";
+export { default } from './IssuePrioritySelector';

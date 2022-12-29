@@ -12,17 +12,17 @@ function Collaborators() {
   const { pathname } = useLocation();
 
   return (
-    <MuiGrid container gap="40px">
+    <MuiGrid gap="40px" container>
       {pathname === '/collaborators' && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           <SectionHeader
-            title="Colaborators"
-            subtitle="This section contains all the collaborators that work with you."
             actionButton={<PrimaryButton label="Invite" onClick={() => ''} />}
+            subtitle="This section contains all the collaborators that work with you."
+            title="Colaborators"
           />
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet />
       </MuiGrid>
     </MuiGrid>

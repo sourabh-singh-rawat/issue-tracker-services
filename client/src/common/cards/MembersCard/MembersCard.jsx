@@ -26,8 +26,8 @@ function MembersCard() {
 
   return (
     <MuiGrid container>
-      <MuiGrid item sx={{ marginTop: '8px' }}>
-        <AvatarGroup total={members.rowCount} members={members.rows} />
+      <MuiGrid sx={{ marginTop: '8px' }} item>
+        <AvatarGroup members={members.rows} total={members.rowCount} />
       </MuiGrid>
     </MuiGrid>
   );

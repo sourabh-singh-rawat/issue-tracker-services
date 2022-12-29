@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   info: {
-    uid: "",
-    email: "",
-    photoURL: "",
-    displayName: "",
+    uid: '',
+    email: '',
+    photoURL: '',
+    displayName: '',
     isLoading: true,
   },
   settings: {},
@@ -13,15 +13,13 @@ const initialState = {
 };
 
 const profileSlice = createSlice({
-  name: "profile",
+  name: 'profile',
   initialState,
   reducers: {
-    setProfile: (state, action) => {
-      state.info = action.payload;
-      state.info.isLoading = false;
-
-      return state;
-    },
+    setProfile: (state, action) => ({
+      ...state,
+      info: { ...action.payload, isLoading: false },
+    }),
   },
 });
 

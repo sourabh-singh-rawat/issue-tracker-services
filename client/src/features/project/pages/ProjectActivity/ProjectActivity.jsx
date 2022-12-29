@@ -25,9 +25,9 @@ function ProjectActivity() {
   }, [data]);
 
   return (
-    <StyledTabPanel selectedTab={selectedTab} index={3}>
+    <StyledTabPanel index={3} selectedTab={selectedTab}>
       {projectActivities.rows.map((activity) => (
-        <MuiTypography variant="body2" key={activity.id}>
+        <MuiTypography key={activity.id} variant="body2">
           <b>{activity.userName}</b> {activity.activityDescription}{' '}
           <b>
             {formatDistance(parseISO(activity.createdAt), new Date(), {

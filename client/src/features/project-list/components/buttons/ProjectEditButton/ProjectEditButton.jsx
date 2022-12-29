@@ -13,13 +13,13 @@ function ProjectEditButton({ id }) {
   return (
     <MuiIconButton
       size="small"
-      onClick={() => navigate(`/projects/${id}/settings`)}
       sx={{
         color: theme.palette.grey[300],
         transition: 'ease-in-out 0.2s',
         '&:hover': { color: theme.palette.primary.main },
       }}
       disableRipple
+      onClick={() => navigate(`/projects/${id}/settings`)}
     >
       <MuiEditIcon />
     </MuiIconButton>

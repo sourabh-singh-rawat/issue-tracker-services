@@ -33,25 +33,25 @@ function SignUp() {
   );
 
   return (
-    <MuiGrid container height="100vh">
-      <MuiGrid item md={5} xs={12}>
+    <MuiGrid height="100vh" container>
+      <MuiGrid md={5} xs={12} item>
         <MuiContainer maxWidth="xs">
-          <MuiGrid container rowSpacing={4}>
-            <MuiGrid item xs={12}>
+          <MuiGrid rowSpacing={4} container>
+            <MuiGrid xs={12} item>
               <Divider>
                 <MuiTypography variant="body2">or</MuiTypography>
               </Divider>
             </MuiGrid>
-            <MuiGrid item xs={12}>
+            <MuiGrid xs={12} item>
               <MuiButton
-                variant="outlined"
-                onClick={handleContinueWithGoogle}
                 startIcon={<GoogleIcon />}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 500,
                 }}
+                variant="outlined"
                 fullWidth
+                onClick={handleContinueWithGoogle}
               >
                 Create account with Google
               </MuiButton>
@@ -61,8 +61,8 @@ function SignUp() {
       </MuiGrid>
       <MuiGrid
         md={7}
-        xs={12}
         sx={{ backgroundColor: theme.palette.grey[100] }}
+        xs={12}
       />
     </MuiGrid>
   );

@@ -6,7 +6,6 @@ export default function SecondaryButton({ label, onClick }) {
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <MuiButton
-      onClick={onClick}
       sx={{
         textTransform: 'none',
         backgroundColor: theme.palette.warning.main,
@@ -18,6 +17,7 @@ export default function SecondaryButton({ label, onClick }) {
         },
       }}
       disableRipple
+      onClick={onClick}
     >
       {label}
     </MuiButton>

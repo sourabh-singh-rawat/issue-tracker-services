@@ -18,8 +18,8 @@ function EditTaskButton({ onClick }) {
           backgroundColor: 'transparent',
         },
       }}
-      onClick={onClick}
       disableRipple
+      onClick={onClick}
     >
       <MuiEditIcon />
     </MuiIconButton>

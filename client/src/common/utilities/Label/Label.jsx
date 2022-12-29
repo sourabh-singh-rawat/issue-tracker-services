@@ -1,5 +1,5 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import MuiTypography from '@mui/material/Typography';
 
@@ -8,7 +8,6 @@ function Label({ title, error }) {
 
   return (
     <MuiTypography
-      variant="body2"
       sx={{
         color: error ? 'error.main' : theme.palette.grey[600],
         fontWeight: 600,
@@ -16,6 +15,7 @@ function Label({ title, error }) {
         // // textTransform: "uppercase",
         // // fontSize: "12px",
       }}
+      variant="body2"
     >
       {title}
     </MuiTypography>

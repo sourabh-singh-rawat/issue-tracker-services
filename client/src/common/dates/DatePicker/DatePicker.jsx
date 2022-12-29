@@ -43,23 +43,23 @@ function DatePicker({
       ) : (
         title && <Label title={title} />
       )}
-      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en_IN}>
+      <LocalizationProvider adapterLocale={en_IN} dateAdapter={AdapterDateFns}>
         {isLoading ? (
           <MuiCircularProgress />
         ) : (
           <StyledDatePicker
-            onChange={onChange}
-            value={value}
             renderInput={(params) => (
               <TextField
+                name={name}
                 size="small"
                 variant="outlined"
-                name={name}
-                onChange={handleChange}
                 fullWidth
+                onChange={handleChange}
                 {...params}
               />
             )}
+            value={value}
+            onChange={onChange}
           />
         )}
       </LocalizationProvider>

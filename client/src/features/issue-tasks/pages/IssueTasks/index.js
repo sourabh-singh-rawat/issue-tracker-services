@@ -1,1 +1,1 @@
-export { default } from "./IssueTasks";
+export { default } from './IssueTasks';

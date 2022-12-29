@@ -6,17 +6,17 @@ import MuiButton from '@mui/material/Button';
 function UploadButton({ label, onClick, open }) {
   return (
     <MuiButton
-      variant="contained"
-      onClick={onClick}
+      endIcon={
+        open && <MuiCircularProgress size={20} sx={{ color: 'white' }} />
+      }
       sx={{
         fontWeight: 600,
         borderRadius: '6px',
         textTransform: 'none',
       }}
-      endIcon={
-        open && <MuiCircularProgress size={20} sx={{ color: 'white' }} />
-      }
+      variant="contained"
       disableRipple
+      onClick={onClick}
     >
       {label}
     </MuiButton>

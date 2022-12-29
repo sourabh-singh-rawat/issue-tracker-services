@@ -1,39 +1,37 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch } from "react-redux";
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiLinearProgress from "@mui/material/LinearProgress";
+import MuiGrid from '@mui/material/Grid';
+import MuiLinearProgress from '@mui/material/LinearProgress';
 
-import Task from "../Task";
-import AddTaskButton from "../../buttons/AddTaskButton";
+import Task from '../Task';
+import AddTaskButton from '../../buttons/AddTaskButton';
 
-import { resetTasks } from "../../../slice/issue-tasks.slice";
+import { resetTasks } from '../../../slice/issue-tasks.slice';
 
-const TaskList = ({ rows, isLoading }) => {
+function TaskList({ rows, isLoading }) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    return () => dispatch(resetTasks());
-  }, []);
+  useEffect(() => () => dispatch(resetTasks()), []);
 
   return (
-    <MuiGrid item xs={12}>
+    <MuiGrid xs={12} item>
       {isLoading ? (
         <MuiLinearProgress />
       ) : (
-        <Fragment>
+        <>
           {/* <MuiLinearProgress /> */}
-          {rows.map(({ id, ...otherProps }) => {
-            return (
-              <MuiGrid key={id} xs={12} item>
-                <Task taskId={id} {...otherProps} />
-              </MuiGrid>
-            );
-          })}
+          {rows.map(({ id, ...otherProps }) => (
+            <MuiGrid key={id} xs={12} item>
+              <Task taskId={id} {...otherProps} />
+            </MuiGrid>
+          ))}
           <AddTaskButton />
-        </Fragment>
+        </>
       )}
     </MuiGrid>
   );
-};
+}
 
 export default TaskList;

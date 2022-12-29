@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   rows: [],
@@ -10,24 +10,20 @@ const initialState = {
 };
 
 const projectListSlice = createSlice({
-  name: "projectList",
+  name: 'projectList',
   initialState,
   reducers: {
-    setProjectList: (state, action) => {
-      state.rows = action.payload.rows;
-      state.rowCount = action.payload.rowCount;
-      return state;
-    },
-    updateProjectList: (state, action) => {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    },
-    setLoadingProjectList: (state) => {
-      state.isLoading = true;
-      return state;
-    },
+    setProjectList: (state, action) => ({
+      ...state,
+      rows: action.payload.rows,
+      rowCount: action.payload.rowCount,
+      isLoading: false,
+    }),
+    updateProjectList: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    setLoadingProjectList: (state) => ({ ...state, isLoading: true }),
     resetProjectListSlice: () => initialState,
   },
 });

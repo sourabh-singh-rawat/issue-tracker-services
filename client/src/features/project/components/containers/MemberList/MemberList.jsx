@@ -38,11 +38,11 @@ function MemberList() {
       minWidth: 200,
       renderCell: ({ id, value, row: { photoUrl } }) => (
         <MuiGrid
-          container
           sx={{
             display: 'flex',
             alignItems: 'center',
           }}
+          container
         >
           <MuiGrid item>
             <MuiAvatar
@@ -57,9 +57,8 @@ function MemberList() {
             </MuiAvatar>
           </MuiGrid>
           <MuiGrid item>
-            <Link to={`/profile/${id}`} style={{ textDecoration: 'none' }}>
+            <Link style={{ textDecoration: 'none' }} to={`/profile/${id}`}>
               <MuiTypography
-                variant="body2"
                 sx={{
                   color: 'text.primary',
                   fontWeight: 500,
@@ -68,6 +67,7 @@ function MemberList() {
                     textDecoration: 'none !important',
                   },
                 }}
+                variant="body2"
               >
                 {value}
               </MuiTypography>
@@ -102,15 +102,15 @@ function MemberList() {
 
   return (
     <List
-      rows={rows}
-      rowCount={rowCount}
       columns={columns}
-      pageSize={pageSize}
       getRowId={(row) => row.memberId}
-      isLoading={projectMembers.isLoading}
       initialState={{
         sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
       }}
+      isLoading={projectMembers.isLoading}
+      pageSize={pageSize}
+      rowCount={rowCount}
+      rows={rows}
     />
   );
 }

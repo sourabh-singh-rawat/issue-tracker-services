@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   activity: {},
@@ -8,30 +9,30 @@ const initialState = {
     isLoading: true,
   },
   info: {
-    name: "",
+    name: '',
     nameSelected: false,
-    description: "",
+    description: '',
     descriptionSelected: false,
-    status: "",
-    priority: "",
+    status: '',
+    priority: '',
     assigneeId: 0,
     project_id: null,
     isLoading: true,
   },
   options: {
     status: {
-      rows: [{ id: "" }],
+      rows: [{ id: '' }],
       isLoading: true,
     },
     priority: {
-      rows: [{ id: "" }],
+      rows: [{ id: '' }],
       isLoading: true,
     },
   },
 };
 
 const issueSlice = createSlice({
-  name: "issue",
+  name: 'issue',
   initialState,
   reducers: {
     setIssue: (state, action) => {

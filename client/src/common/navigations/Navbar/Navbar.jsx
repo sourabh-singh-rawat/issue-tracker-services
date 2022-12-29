@@ -24,7 +24,6 @@ import theme from '../../../config/mui.config';
 
 const AppBar = styled(MuiAppBar)(() => ({
   width: '100%',
-  boxShadow: 1,
   zIndex: () => theme.zIndex.drawer + 1,
 }));
 
@@ -38,12 +37,10 @@ function Navbar() {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <AppBar position="fixed" sx={{ boxShadow: 'none' }}>
+    <AppBar position="fixed" sx={{ boxShadow: 3 }}>
       <MuiToolbar
         sx={{
           backgroundColor: theme.palette.background.navbar,
-          boxShadow:
-            'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px',
         }}
         variant="dense"
       >

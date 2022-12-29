@@ -1,1 +1,1 @@
-export { default } from "./AddIssueButton";
+export { default } from './AddIssueButton';

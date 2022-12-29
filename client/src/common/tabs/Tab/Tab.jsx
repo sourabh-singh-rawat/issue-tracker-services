@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import MuiTab from '@mui/material/Tab';
 
 function Tab(props) {

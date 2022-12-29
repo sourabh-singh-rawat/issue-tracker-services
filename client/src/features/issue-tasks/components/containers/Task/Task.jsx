@@ -1,26 +1,27 @@
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+/* eslint-disable object-curly-newline */
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import { useTheme } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiButton from '@mui/material/Button';
+import MuiTypography from '@mui/material/Typography';
 
-import EditTaskButton from "../../buttons/EditTaskButton";
-import DeleteTaskButton from "../../buttons/DeleteTaskButton";
-import DateLabel from "../../../../../common/tags/DateLabel";
-import Checkbox from "../../../../../common/utilities/Checkbox";
-import TextField from "../../../../../common/textfields/TextField";
+import EditTaskButton from '../../buttons/EditTaskButton';
+import DeleteTaskButton from '../../buttons/DeleteTaskButton';
+import DateLabel from '../../../../../common/tags/DateLabel';
+import Checkbox from '../../../../../common/utilities/Checkbox';
+import TextField from '../../../../../common/textfields/TextField';
 
-import { setMessageBarOpen } from "../../../../message-bar/slice/message-bar.slice";
+import { setMessageBarOpen } from '../../../../message-bar/slice/message-bar.slice';
 import {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
-} from "../../../api/issue-tasks.api";
+} from '../../../api/issue-tasks.api';
+import theme from '../../../../../config/mui.config';
 
-const Task = ({ taskId, dueDate, description, completed }) => {
-  const theme = useTheme();
+function Task({ taskId, dueDate, description, completed }) {
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -33,8 +34,8 @@ const Task = ({ taskId, dueDate, description, completed }) => {
     completed,
   });
 
-  const [deleteTask, deleteTaskQuery] = useDeleteTaskMutation();
-  const [updateTask, { isSuccess, data }] = useUpdateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
+  const [updateTask, { isSuccess }] = useUpdateTaskMutation();
 
   const handleCancel = () => setEditMode(false);
   const handleChange = (e) => {
@@ -51,7 +52,7 @@ const Task = ({ taskId, dueDate, description, completed }) => {
     setTask({ ...task, completed: !task.completed });
   };
 
-  const handleSave = (e) => {
+  const handleSave = () => {
     if (description !== task.description) {
       updateTask({
         id,
@@ -70,14 +71,14 @@ const Task = ({ taskId, dueDate, description, completed }) => {
 
   return (
     <MuiGrid
-      container
       sx={{
-        cursor: "pointer",
-        alignItems: "center",
+        cursor: 'pointer',
+        alignItems: 'center',
         borderBottom: `1px solid ${theme.palette.grey[200]}`,
-        transitionDuration: "250ms",
-        ":hover": { boxShadow: 4, backgroundColor: "action.hover" },
+        transitionDuration: '250ms',
+        ':hover': { boxShadow: 4, backgroundColor: 'action.hover' },
       }}
+      container
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
@@ -87,82 +88,82 @@ const Task = ({ taskId, dueDate, description, completed }) => {
           handleCheckBoxClick={handleCheckBoxClick}
         />
       </MuiGrid>
-      <MuiGrid item sx={{ flexGrow: 1 }}>
+      <MuiGrid sx={{ flexGrow: 1 }} item>
         {editMode ? (
           <MuiGrid container>
-            <MuiGrid item flexGrow={1}>
+            <MuiGrid flexGrow={1} item>
               <TextField
                 name="description"
                 size="small"
-                variant="standard"
                 value={task.description}
-                onChange={handleChange}
+                variant="standard"
                 autoFocus
                 fullWidth
+                onChange={handleChange}
               />
             </MuiGrid>
             <MuiGrid item>
               <MuiButton
-                onClick={handleSave}
                 sx={{
-                  color: "white",
-                  height: "100%",
-                  boxShadow: "none",
-                  marginLeft: "8px",
-                  textTransform: "none",
-                  backgroundColor: "primary.main",
-                  ":hover": {
-                    boxShadow: "none",
-                    backgroundColor: "primary.main",
+                  color: 'white',
+                  height: '100%',
+                  boxShadow: 'none',
+                  marginLeft: '8px',
+                  textTransform: 'none',
+                  backgroundColor: 'primary.main',
+                  ':hover': {
+                    boxShadow: 'none',
+                    backgroundColor: 'primary.main',
                   },
                 }}
+                onClick={handleSave}
               >
                 <MuiTypography variant="body2">Save</MuiTypography>
               </MuiButton>
             </MuiGrid>
             <MuiGrid item>
               <MuiButton
-                onClick={handleCancel}
                 sx={{
-                  height: "100%",
-                  boxShadow: "none",
-                  marginLeft: "8px",
-                  textTransform: "none",
-                  ":hover": { boxShadow: "none" },
+                  height: '100%',
+                  boxShadow: 'none',
+                  marginLeft: '8px',
+                  textTransform: 'none',
+                  ':hover': { boxShadow: 'none' },
                 }}
+                onClick={handleCancel}
               >
                 <MuiTypography variant="body2">Cancel</MuiTypography>
               </MuiButton>
             </MuiGrid>
           </MuiGrid>
         ) : (
-          <MuiGrid container sx={{ alignItems: "center" }} columnSpacing={1}>
+          <MuiGrid columnSpacing={1} sx={{ alignItems: 'center' }} container>
             <MuiGrid item>
               <MuiTypography
-                variant="body2"
                 sx={{
                   color: task.completed && theme.palette.grey[500],
-                  textDecoration: task.completed && "line-through",
+                  textDecoration: task.completed && 'line-through',
                 }}
+                variant="body2"
               >
                 {task.description}
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item flexGrow={1}>
+            <MuiGrid flexGrow={1} item>
               <MuiTypography
-                variant="body2"
                 sx={{
                   color: task.completed && theme.palette.grey[500],
-                  textDecoration: task.completed && "line-through",
+                  textDecoration: task.completed && 'line-through',
                 }}
+                variant="body2"
               >
                 <DateLabel dueDate={dueDate} />
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item sx={{ display: show ? "block" : "none" }}>
+            <MuiGrid sx={{ display: show ? 'block' : 'none' }} item>
               <EditTaskButton onClick={() => setEditMode(true)} />
             </MuiGrid>
-            <MuiGrid item sx={{ display: show ? "block" : "none" }}>
+            <MuiGrid sx={{ display: show ? 'block' : 'none' }} item>
               <DeleteTaskButton onClick={() => deleteTask({ id, taskId })} />
             </MuiGrid>
           </MuiGrid>
@@ -170,6 +171,6 @@ const Task = ({ taskId, dueDate, description, completed }) => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Task;

@@ -1,15 +1,14 @@
 /* eslint-disable no-shadow */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable curly */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useOutletContext, Link } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
 import MuiTypography from '@mui/material/Typography';
-import { ImageList, ImageListItem } from '@mui/material';
+import { ImageList } from '@mui/material';
 import theme from '../../../../config/mui.config';
 
 import TabPanel from '../../../../common/tabs/TabPanel';
@@ -18,10 +17,9 @@ import IssueAssignee from '../../components/containers/IssueAssignee';
 
 import { setIssueAttachments, updateIssue } from '../../slice/issue.slice';
 import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
-import {
-  useGetIssueAttachmentsQuery,
-  useUpdateIssueMutation,
-} from '../../api/issue.api';
+import { useUpdateIssueMutation } from '../../api/issue.api';
+import { useGetIssueAttachmentsQuery } from '../../../issue-attachments/api/issue-attachments.api';
+import ImageCard from '../../../issue-attachments/components/ImageCard/ImageCard';
 
 function IssueOverview() {
   const { id } = useParams();
@@ -136,10 +134,12 @@ function IssueOverview() {
               sx={{ width: '100%' }}
               variant="quilted"
             >
-              {attachments.rows.map(({ id, url }) => (
-                <ImageListItem key={id}>
-                  <img loading="lazy" src={url} srcSet={url} />
-                </ImageListItem>
+              {attachments.rows.map(({ id: attachmentId }) => (
+                <ImageCard
+                  key={attachmentId}
+                  attachmentId={attachmentId}
+                  issueId={id}
+                />
               ))}
             </ImageList>
           )}

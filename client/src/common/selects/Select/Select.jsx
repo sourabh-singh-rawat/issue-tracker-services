@@ -49,9 +49,9 @@ export default function Select({
       <MuiFormControl fullWidth>
         <StyledSelect
           defaultValue={defaultValue}
-          displayEmpty
           size="small"
           sx={{ color: 'text.primary', fontSize: '14px', fontWeight: 600 }}
+          displayEmpty
           {...otherProps}
         >
           {items.map(({ id, name }) => (

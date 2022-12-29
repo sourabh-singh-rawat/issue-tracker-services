@@ -1,13 +1,20 @@
-/* eslint-disable import/extensions */
 import db from '../../config/db.config.js';
-
+/**
+ *
+ * @param {Object} Object containing the member's user id
+ * @returns {Promise} A Promise object that contains the project member's id
+ */
 const findOne = async ({ memberId }) => {
   try {
     const { id } = (
       await db.query(
         `
-        SELECT id 
-        FROM project_members WHERE member_id=$1`,
+        SELECT 
+          id 
+        FROM 
+          project_members 
+        WHERE 
+          member_id=$1`,
         [memberId],
       )
     ).rows[0];

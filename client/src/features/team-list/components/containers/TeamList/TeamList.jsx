@@ -30,11 +30,10 @@ function TeamList() {
       flex: 0.3,
       renderCell: (params) => (
         <Link
-          to={`/teams/${params.row.id}/overview`}
           style={{ textDecoration: 'none' }}
+          to={`/teams/${params.row.id}/overview`}
         >
           <Typography
-            variant="body2"
             sx={{
               color: 'text.primary',
               fontWeight: 500,
@@ -43,6 +42,7 @@ function TeamList() {
                 textDecoration: 'none!important',
               },
             }}
+            variant="body2"
           >
             {params.row.name}
           </Typography>
@@ -69,7 +69,7 @@ function TeamList() {
   ];
 
   return (
-    <List rows={teams} columns={columns} autoHeight disableSelectionOnClick />
+    <List columns={columns} rows={teams} autoHeight disableSelectionOnClick />
   );
 }
 

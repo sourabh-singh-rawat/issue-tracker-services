@@ -92,8 +92,6 @@ const updateOne = ({ id, body }) => {
     RETURNING *
   `;
 
-  console.log(query);
-
   return db.query(query, values);
 };
 

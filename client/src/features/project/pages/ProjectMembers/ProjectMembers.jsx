@@ -1,32 +1,33 @@
-import { useOutletContext } from "react-router-dom";
+import React from 'react';
+import { useOutletContext } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import MemberList from "../../components/containers/MemberList";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import MemberList from '../../components/containers/MemberList';
 
-import InviteButton from "../../components/buttons/AddMemberButton";
+import InviteButton from '../../components/buttons/AddMemberButton';
 
-const ProjectMembers = () => {
+function ProjectMembers() {
   const [selectedTab] = useOutletContext();
 
   return (
     <TabPanel index={2} selectedTab={selectedTab}>
-      <MuiGrid container spacing={1}>
-        <MuiGrid item xs={12}>
-          <MuiGrid container spacing={2}>
-            <MuiGrid item flexGrow={1}></MuiGrid>
+      <MuiGrid spacing={1} container>
+        <MuiGrid xs={12} item>
+          <MuiGrid spacing={2} container>
+            <MuiGrid flexGrow={1} item />
             <MuiGrid item>
               <InviteButton />
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           <MemberList />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default ProjectMembers;

@@ -1,16 +1,16 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useOutletContext, useParams } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useOutletContext, useParams } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import TaskList from "../../components/containers/TaskList";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import TaskList from '../../components/containers/TaskList';
 
-import { setTasks } from "../../slice/issue-tasks.slice";
-import { useGetTasksQuery } from "../../api/issue-tasks.api";
+import { setTasks } from '../../slice/issue-tasks.slice';
+import { useGetTasksQuery } from '../../api/issue-tasks.api';
 
-const IssueTasks = () => {
+function IssueTasks() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
@@ -26,21 +26,21 @@ const IssueTasks = () => {
   }, [getTasksQuery.data]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={1}>
-      <MuiGrid container rowSpacing={3}>
-        <MuiGrid item xs={12}>
+    <TabPanel index={1} selectedTab={selectedTab}>
+      <MuiGrid rowSpacing={3} container>
+        <MuiGrid xs={12} item>
           <TaskList
-            title="To do:"
-            rows={issueTasks.rows}
-            rowCount={issueTasks.rowCount}
             isLoading={issueTasks.isLoading}
+            rowCount={issueTasks.rowCount}
+            rows={issueTasks.rows}
+            title="To do:"
           />
         </MuiGrid>
         {/* Completed Issue Tasks */}
-        <MuiGrid item xs={12}></MuiGrid>
+        <MuiGrid xs={12} item />
       </MuiGrid>
     </TabPanel>
   );
-};
+}
 
 export default IssueTasks;

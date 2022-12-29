@@ -17,13 +17,13 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <MuiGrid
-      container
       sx={{
         padding: '8px 0',
         borderBottom: `1px solid ${theme.palette.grey[200]}`,
       }}
+      container
     >
-      <MuiGrid item minWidth="45px">
+      <MuiGrid minWidth="45px" item>
         <MuiAvatar
           src={photoUrl}
           sx={{
@@ -38,13 +38,13 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
           </MuiTypography>
         </MuiAvatar>
       </MuiGrid>
-      <MuiGrid item width="90%">
+      <MuiGrid width="90%" item>
         <MuiGrid container>
           <MuiGrid item>
-            <MuiGrid container spacing={1}>
+            <MuiGrid spacing={1} container>
               <MuiGrid item>
-                <Link to="/profile" style={{ color: '#080F0F' }}>
-                  <MuiTypography variant="body2" fontWeight={600}>
+                <Link style={{ color: '#080F0F' }} to="/profile">
+                  <MuiTypography fontWeight={600} variant="body2">
                     {name}
                   </MuiTypography>
                 </Link>
@@ -61,12 +61,12 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
               </MuiGrid>
             </MuiGrid>
           </MuiGrid>
-          <MuiGrid item xs={12}>
+          <MuiGrid xs={12} item>
             <MuiGrid container>
-              <MuiGrid item xs={12} sx={{ paddingTop: '4px' }}>
+              <MuiGrid sx={{ paddingTop: '4px' }} xs={12} item>
                 <MuiTypography variant="body2">{description}</MuiTypography>
               </MuiGrid>
-              <MuiGrid item xs={12}>
+              <MuiGrid xs={12} item>
                 <Breadcrumbs separator="•">
                   <MuiTypography
                     sx={{

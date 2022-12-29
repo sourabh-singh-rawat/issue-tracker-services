@@ -5,8 +5,6 @@ import MuiButton from '@mui/material/Button';
 export default function SaveButton({ label, onClick }) {
   return (
     <MuiButton
-      onClick={onClick}
-      variant="contained"
       sx={{
         height: '100%',
         textTransform: 'none',
@@ -16,7 +14,9 @@ export default function SaveButton({ label, onClick }) {
           boxShadow: 'none',
         },
       }}
+      variant="contained"
       disableRipple
+      onClick={onClick}
     >
       {label}
     </MuiButton>

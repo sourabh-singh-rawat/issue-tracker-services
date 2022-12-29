@@ -29,25 +29,25 @@ function TitleSection({
 
   return (
     <MuiGrid container>
-      <MuiGrid item xs={12}>
-        <Breadcrumbs items={breadcrumbItems} isLoading={isLoading} />
+      <MuiGrid xs={12} item>
+        <Breadcrumbs isLoading={isLoading} items={breadcrumbItems} />
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Title
-          page={page}
           isLoading={isLoading}
+          page={page}
           updateTitle={updateTitle}
           updateTitleQuery={updateTitleQuery}
         />
       </MuiGrid>
-      <MuiGrid item xs={12} sx={{ color: theme.palette.grey[700] }}>
+      <MuiGrid sx={{ color: theme.palette.grey[700] }} xs={12} item>
         <MuiBreadcrumbs separator="•">
           {isLoading ? <MuiSkeleton width="80px" /> : statusSelector}
           {isLoading ? <MuiSkeleton width="80px" /> : prioritySelector}
           {isLoading ? (
             <MuiSkeleton width="80px" />
           ) : (
-            <MuiTypography variant="body2" component="span" fontWeight={600}>
+            <MuiTypography component="span" fontWeight={600} variant="body2">
               {type[0].toUpperCase()}
               {type.slice(1, -1)}
             </MuiTypography>
@@ -55,7 +55,7 @@ function TitleSection({
           {isLoading ? (
             <MuiSkeleton width="80px" />
           ) : (
-            <MuiTypography variant="body2" component="span" fontWeight={600}>
+            <MuiTypography component="span" fontWeight={600} variant="body2">
               {page.createdAt &&
                 format(parseISO(page.createdAt), 'dd MMMM yyyy', {
                   locale: enIN,

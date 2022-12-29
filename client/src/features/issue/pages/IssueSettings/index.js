@@ -1,1 +1,1 @@
-export { default } from "./IssueSettings";
+export { default } from './IssueSettings';

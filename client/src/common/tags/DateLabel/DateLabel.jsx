@@ -26,11 +26,11 @@ function DueDateTag({ dueDate }) {
   return (
     dueDate && (
       <MuiChip
-        size="small"
         component="span"
         label={formatRelative(parseISO(dueDate), new Date(), {
           locale,
         })}
+        size="small"
         sx={{
           borderRadius: '4px',
           fontWeight: 500,

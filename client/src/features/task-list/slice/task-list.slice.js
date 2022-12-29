@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   rows: [],
@@ -8,10 +8,11 @@ const initialState = {
 };
 
 const taskListSlice = createSlice({
-  name: "taskList",
+  name: 'taskList',
   initialState,
   reducers: {},
 });
 
 export default taskListSlice.reducer;
+// eslint-disable-next-line no-empty-pattern
 export const {} = taskListSlice.actions;

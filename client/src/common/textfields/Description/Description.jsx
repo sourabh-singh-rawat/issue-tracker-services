@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import MuiGrid from '@mui/material/Grid';

@@ -25,7 +25,7 @@ function ProjectOverview() {
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
 
-  const project = useSelector((store) => store.project.settings);
+  const projectSettings = useSelector((store) => store.project.settings);
   const issuesStatusCount = useSelector(
     (store) => store.project.issuesStatusCount,
   );
@@ -36,7 +36,7 @@ function ProjectOverview() {
   const updateDescriptionQuery = () => {
     updateProjectMutation({
       id,
-      body: { description: project.description },
+      body: { description: projectSettings.description },
     });
   };
 
@@ -55,8 +55,8 @@ function ProjectOverview() {
       <MuiGrid spacing={2} container>
         <MuiGrid md={6} sm={12} xs={12} item>
           <PageDescription
-            isLoading={project.isLoading}
-            page={project}
+            isLoading={projectSettings.isLoading}
+            page={projectSettings}
             updateDescription={updateProject}
             updateDescriptionQuery={updateDescriptionQuery}
           />

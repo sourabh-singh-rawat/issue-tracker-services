@@ -1,1 +1,1 @@
-export { default } from "./IssueList";
+export { default } from './IssueList';

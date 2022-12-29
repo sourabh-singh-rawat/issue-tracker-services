@@ -1,1 +1,1 @@
-export { default } from "./EditTaskButton";
+export { default } from './EditTaskButton';

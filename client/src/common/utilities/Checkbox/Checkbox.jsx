@@ -6,8 +6,8 @@ function Checkbox({ checked, handleCheckBoxClick }) {
   return (
     <MuiCheckbox
       checked={checked}
-      onClick={handleCheckBoxClick}
       disableRipple
+      onClick={handleCheckBoxClick}
     />
   );
 }

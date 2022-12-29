@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import MuiListItem from '@mui/material/ListItem';

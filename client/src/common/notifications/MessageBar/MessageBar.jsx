@@ -23,8 +23,8 @@ function MessageBar() {
 
   const action = (
     <MuiIconButton
-      size="small"
       color="inherit"
+      size="small"
       onClick={() => dispatch(setMessageBarOpen(false))}
     >
       <MuiCloseIcon fontSize="small" />
@@ -33,13 +33,13 @@ function MessageBar() {
 
   return (
     <MuiSnackbar
-      open={messageBar.open}
-      autoHideDuration={6000}
-      onClose={handleClose}
       action={action}
-      message={messageBar.message}
-      TransitionComponent={SlideTransition}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      autoHideDuration={6000}
+      message={messageBar.message}
+      open={messageBar.open}
+      TransitionComponent={SlideTransition}
+      onClose={handleClose}
     />
   );
 }

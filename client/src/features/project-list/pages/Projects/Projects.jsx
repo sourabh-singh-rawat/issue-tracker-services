@@ -1,44 +1,43 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+/* eslint-disable react/jsx-wrap-multilines */
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from "../../../../common/headers/SectionHeader";
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
-import { resetProjectSlice } from "../../../project/slice/project.slice";
+import SectionHeader from '../../../../common/headers/SectionHeader';
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import { resetProjectSlice } from '../../../project/slice/project.slice';
 
-const Projects = () => {
+function Projects() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    return () => dispatch(resetProjectSlice());
-  }, []);
+  useEffect(() => () => dispatch(resetProjectSlice()), []);
 
   return (
-    <MuiGrid container gap="40px">
-      {pathname === "/projects" && (
-        <MuiGrid item xs={12}>
+    <MuiGrid gap="40px" container>
+      {pathname === '/projects' && (
+        <MuiGrid xs={12} item>
           <SectionHeader
-            title="Projects"
-            subtitle="This section contains all the projects that you have created. You can
-          go to individual project to edit."
             actionButton={
               <PrimaryButton
                 label="Create Project"
-                onClick={() => navigate("/projects/new")}
+                onClick={() => navigate('/projects/new')}
               />
             }
+            subtitle="This section contains all the projects that you have created. You can
+          go to individual project to edit."
+            title="Projects"
           />
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet />
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Projects;

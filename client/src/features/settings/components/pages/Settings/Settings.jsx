@@ -5,11 +5,11 @@ import SectionHeader from '../../../../../common/headers/SectionHeader';
 
 function Settings() {
   return (
-    <MuiGrid container gap="40px">
-      <MuiGrid item xs={12}>
+    <MuiGrid gap="40px" container>
+      <MuiGrid xs={12} item>
         <SectionHeader
-          title="Settings"
           subtitle="This section contains the settings."
+          title="Settings"
           noButton
         />
       </MuiGrid>

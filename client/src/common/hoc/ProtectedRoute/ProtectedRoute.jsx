@@ -8,9 +8,9 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
 import MuiLinearProgress from '@mui/material/LinearProgress';
-import { onAuthStateChangedListener } from '../../config/firebase.config';
+import { onAuthStateChangedListener } from '../../../config/firebase.config';
 
-import { setCredentials } from '../../features/auth/slice/auth.slice';
+import { setCredentials } from '../../../features/auth/slice/auth.slice';
 
 function ProtectedRoutes() {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ function ProtectedRoutes() {
       onAuthStateChangedListener(async (user) => {
         if (user) {
           const { uid, email, displayName, photoURL } = user;
-          const accessToken = await user.getIdToken();
+          const accessToken = await user.getIdToken(true);
 
           dispatch(
             setCredentials({
@@ -49,7 +49,7 @@ function ProtectedRoutes() {
     <>
       {auth.isLoading ? (
         <MuiGrid container>
-          <MuiGrid item xs={12}>
+          <MuiGrid xs={12} item>
             <MuiLinearProgress />
           </MuiGrid>
         </MuiGrid>
@@ -58,7 +58,7 @@ function ProtectedRoutes() {
       )}
     </>
   ) : (
-    <Navigate to="/login" replace state={{ from: location }} />
+    <Navigate state={{ from: location }} to="/login" replace />
   );
 }
 
