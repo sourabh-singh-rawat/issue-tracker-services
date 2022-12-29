@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { lighten, styled } from '@mui/material/styles';

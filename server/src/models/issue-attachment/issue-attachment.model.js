@@ -3,38 +3,73 @@
 import db from '../../config/db.config.js';
 
 const insertOne = ({
-  url,
-  size,
-  name,
-  bucket,
-  fullPath,
-  issueId,
+  filename,
+  originalFilename,
   contentType,
+  path,
+  bucket,
+  variant,
+  ownerId,
+  issueId,
 }) =>
   // eslint-disable-next-line implicit-arrow-linebreak
   db.query(
     `
     INSERT INTO
-      issue_attachments (bucket, content_type, full_path, name, issue_id, size, url)
+      issue_attachments (filename, original_filename, content_type, path, bucket, variant, owner_id, issue_id)
     VALUES
-      ($1, $2, $3, $4, $5, $6, $7)
+      ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *
   `,
-    [bucket, contentType, fullPath, name, issueId, size, url],
+    [
+      filename,
+      originalFilename,
+      contentType,
+      path,
+      bucket,
+      variant,
+      ownerId,
+      issueId,
+    ],
   );
 
 // finds all attachments
-const find = (issueId) => {
-  return db.query(
-    `
-    SELECT
-      * 
-    FROM 
-      issue_attachments
-    WHERE 
-      issue_id=$1`,
-    [issueId],
-  );
+const find = async (issueId) => {
+  const issueAttachments = (
+    await db.query(
+      `
+      SELECT
+        *
+      FROM
+        issue_attachments
+      WHERE 
+        issue_id=$1 AND variant='small'
+      LIMIT 10
+      `,
+      [issueId],
+    )
+  ).rows;
+
+  return issueAttachments;
 };
 
-export default { insertOne, find };
+// find one
+const findOne = async (id) => {
+  const issueAttachment = (
+    await db.query(
+      `
+      SELECT
+        *
+      FROM
+        issue_attachments
+      WHERE
+        id=$1
+      `,
+      [id],
+    )
+  ).rows[0];
+
+  return issueAttachment;
+};
+
+export default { insertOne, find, findOne };

@@ -1,15 +1,16 @@
-import { useOutletContext } from "react-router-dom";
+/* eslint-disable react/react-in-jsx-scope */
+import { useOutletContext } from 'react-router-dom';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
+import TabPanel from '../../../../common/tabs/TabPanel';
 
-const TeamActivity = () => {
+function TeamActivity() {
   const [selectedTab] = useOutletContext();
 
   return (
-    <TabPanel selectedTab={selectedTab} index={3}>
+    <TabPanel index={3} selectedTab={selectedTab}>
       Team Activity
     </TabPanel>
   );
-};
+}
 
 export default TeamActivity;

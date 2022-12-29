@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-curly-newline */
-/* eslint-disable react/react-in-jsx-scope */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatISO } from 'date-fns';
@@ -8,7 +7,6 @@ import { formatISO } from 'date-fns';
 import MuiGrid from '@mui/material/Grid';
 
 import TabPanel from '../../../../common/tabs/TabPanel';
-
 import PrimaryButton from '../../../../common/buttons/PrimaryButton';
 
 import { updateProject } from '../../slice/project.slice';

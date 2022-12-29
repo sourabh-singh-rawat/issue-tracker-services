@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import MuiBox from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
+import MuiBox from '@mui/material/Box';
+import MuiGrid from '@mui/material/Grid';
+import MuiButton from '@mui/material/Button';
 
-import TextField from "../../../../common/textfields/TextField";
-import SectionHeader from "../../../../common/headers/SectionHeader";
+import TextField from '../../../../common/textfields/TextField';
+import SectionHeader from '../../../../common/headers/SectionHeader';
 
-import { useCreateTeamMutation } from "../../api/team.api";
+import { useCreateTeamMutation } from '../../api/team.api';
 
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
-const TeamForm = () => {
+function TeamForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [createTeamMutation, { isSuccess, data }] = useCreateTeamMutation();
-  const [formFields, setFormFields] = useState({ name: "", description: "" });
+  const [formFields, setFormFields] = useState({ name: '', description: '' });
 
   const handleChange = (e) => {
     const fieldName = e.target.name;
@@ -40,44 +40,44 @@ const TeamForm = () => {
   }, [isSuccess]);
 
   return (
-    <MuiGrid container gap="20px">
-      <MuiGrid item xs={12}>
+    <MuiGrid gap="20px" container>
+      <MuiGrid xs={12} item>
         <SectionHeader
-          title="Create Team"
           subtitle="Create teams to organize people involved with your project."
+          title="Create Team"
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <MuiBox component="form">
-          <MuiGrid container rowSpacing="20px" columnSpacing={4}>
-            <MuiGrid item xs={12}>
+          <MuiGrid columnSpacing={4} rowSpacing="20px" container>
+            <MuiGrid xs={12} item>
               <TextField
+                helperText="The name for your team."
                 name="name"
                 title="Name"
-                helperText="The name for your team."
-                onChange={handleChange}
                 required
-              />
-            </MuiGrid>
-            <MuiGrid item xs={12}>
-              <TextField
-                name="description"
-                title="Description"
-                helperText="A text description of your team. Max character count is 150."
                 onChange={handleChange}
-                rows={4}
-                multiline
               />
             </MuiGrid>
-            <MuiGrid item xs={12}>
-              <MuiGrid container marginTop={2}>
+            <MuiGrid xs={12} item>
+              <TextField
+                helperText="A text description of your team. Max character count is 150."
+                name="description"
+                rows={4}
+                title="Description"
+                multiline
+                onChange={handleChange}
+              />
+            </MuiGrid>
+            <MuiGrid xs={12} item>
+              <MuiGrid marginTop={2} container>
                 <MuiGrid item>
                   <MuiButton
+                    sx={{ textTransform: 'none', fontWeight: 600 }}
                     type="submit"
                     variant="contained"
-                    sx={{ textTransform: "none", fontWeight: 600 }}
-                    onClick={handleSubmit}
                     fullWidth
+                    onClick={handleSubmit}
                   >
                     Create Team
                   </MuiButton>
@@ -89,6 +89,6 @@ const TeamForm = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default TeamForm;

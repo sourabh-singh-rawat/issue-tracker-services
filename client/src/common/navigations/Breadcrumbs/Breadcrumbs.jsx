@@ -19,22 +19,22 @@ function Breadcrumbs({ items, isLoading }) {
       {items.map(({ text, onClick }) => (
         <span key={onClick}>
           {isLoading ? (
-            <MuiSkeleton variant="text" width="75px" height="20px" />
+            <MuiSkeleton height="20px" variant="text" width="75px" />
           ) : (
             <MuiLink
-              onClick={onClick}
-              underline="hover"
               sx={{
                 cursor: 'pointer',
                 color: theme.palette.grey[700],
               }}
+              underline="hover"
+              onClick={onClick}
             >
               <MuiTypography
-                variant="body2"
                 sx={{
                   fontWeight: 500,
                   ':hover': { color: 'text.main' },
                 }}
+                variant="body2"
               >
                 {text}
               </MuiTypography>

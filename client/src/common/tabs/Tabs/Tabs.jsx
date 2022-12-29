@@ -7,7 +7,6 @@ function Tabs(props) {
   return (
     <MuiTabs
       {...props}
-      textColor="inherit"
       sx={{
         borderBottom: `1px solid ${theme.palette.grey[300]}`,
 
@@ -23,6 +22,7 @@ function Tabs(props) {
           color: theme.palette.primary.main,
         },
       }}
+      textColor="inherit"
     />
   );
 }

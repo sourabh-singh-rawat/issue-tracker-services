@@ -1,6 +1,5 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import MuiDialog from '@mui/material/Dialog';
@@ -37,13 +36,13 @@ function ProjectDeleteButton({ id }) {
     <>
       <MuiIconButton
         size="small"
-        onClick={handleClickOpen}
         sx={{
           color: theme.palette.grey[300],
           transition: 'ease-in-out 0.2s',
           '&:hover': { color: theme.palette.primary.main },
         }}
         disableRipple
+        onClick={handleClickOpen}
       >
         <MuiDeleteIcon />
       </MuiIconButton>

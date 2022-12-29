@@ -1,6 +1,4 @@
-// eslint-disable-next-line
-import User from '../../models/User/user.model.js';
-// eslint-disable-next-line
+import User from '../../models/user/user.model.js';
 import ProjectMember from '../../models/project-member/project-member.model.js';
 
 const index = async (req, res) => {

@@ -1,8 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,11 +13,9 @@ import ProjectStatusSelector from '../../components/containers/ProjectStatusSele
 
 import {
   setProject,
-  setProjectQuick,
   setStatus,
   updateProject,
   resetProjectSlice,
-  updateProjectQuick,
 } from '../../slice/project.slice';
 import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
@@ -35,8 +31,7 @@ function Project() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const project = useSelector((store) => store.project.quick);
-  const projectDetailed = useSelector((store) => store.project.settings);
+  const projectSettings = useSelector((store) => store.project.settings);
 
   const status = useGetStatusQuery();
   const getProject = useGetProjectQuery(id);
@@ -66,9 +61,8 @@ function Project() {
     setSelectedTab(newValue);
   };
 
-  const updateTitleQuery = () => {
-    updateProjectMutation({ id, body: { name: project.name } });
-  };
+  const updateTitleQuery = () =>
+    updateProjectMutation({ id, body: { name: projectSettings.name } });
 
   useEffect(() => {
     if (isSuccess) dispatch(setMessageBarOpen(true));
@@ -78,58 +72,50 @@ function Project() {
     if (status.data) dispatch(setStatus(status.data));
   }, [status]);
 
-  useEffect(() => {
-    setSelectedTab(mapPathToIndex[tabName]);
-  }, [tabName, id]);
+  useEffect(() => setSelectedTab(mapPathToIndex[tabName]), [tabName, id]);
 
   useEffect(() => {
     if (getProject.isSuccess) {
-      dispatch(setProjectQuick(getProject.data));
       dispatch(setProject({ ...getProject.data, isLoading: false }));
     }
   }, [getProject.data]);
 
   // when component dismounts: reset project state
-  useEffect(
-    () => () => {
-      dispatch(resetProjectSlice());
-    },
-    [],
-  );
+  useEffect(() => () => dispatch(resetProjectSlice()), []);
 
   return (
-    <MuiGrid container spacing={2}>
-      <MuiGrid item xs={12}>
+    <MuiGrid spacing={2} container>
+      <MuiGrid xs={12} item>
         <PageTitleSection
-          page={project}
-          isLoading={project.isLoading}
-          updateTitle={updateProjectQuick}
-          updateTitleQuery={updateTitleQuery}
           breadcrumbItems={[
             {
               text: 'Projects',
               onClick: () => navigate('/projects'),
             },
             {
-              text: project.name,
+              text: projectSettings.name,
               onClick: () =>
-                navigate(`/projects/${projectDetailed.id}/overview`),
+                navigate(`/projects/${projectSettings.id}/overview`),
             },
           ]}
+          isLoading={projectSettings.isLoading}
+          page={projectSettings}
           statusSelector={
             <ProjectStatusSelector
-              variant="dense"
-              value={project.status}
               handleChange={(e) => {
                 const { value } = e.target;
                 updateProjectMutation({ id, body: { status: value } });
                 dispatch(updateProject({ status: value }));
               }}
+              value={projectSettings.status}
+              variant="dense"
             />
           }
+          updateTitle={updateProject}
+          updateTitleQuery={updateTitleQuery}
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab label="Overview" value={0} />
           <Tab label="Issues" value={1} />
@@ -138,7 +124,7 @@ function Project() {
           <Tab label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet context={[selectedTab, id]} />
       </MuiGrid>
     </MuiGrid>

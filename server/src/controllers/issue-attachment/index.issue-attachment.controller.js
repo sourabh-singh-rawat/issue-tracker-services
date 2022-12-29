@@ -12,7 +12,7 @@ const index = async (req, res) => {
   try {
     const attachments = await IssueAttachment.find(id);
 
-    res.send({ rows: attachments.rows, rowCount: attachments.rows.length });
+    res.send({ rows: attachments, rowCount: attachments.length });
   } catch (error) {
     res.status(500).send();
   }

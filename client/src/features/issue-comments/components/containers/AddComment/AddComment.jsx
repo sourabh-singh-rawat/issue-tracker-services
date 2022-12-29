@@ -1,5 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -52,14 +51,9 @@ function AddComment() {
   };
 
   return (
-    <MuiGrid container columnSpacing={1}>
-      <MuiGrid item flexGrow={1}>
+    <MuiGrid columnSpacing={1} container>
+      <MuiGrid flexGrow={1} item>
         <TextField
-          size="small"
-          placeholder="Add Comment"
-          value={formFields.description}
-          onChange={handleChange}
-          onClick={() => setCommentBoxSelected(true)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -72,7 +66,12 @@ function AddComment() {
               </InputAdornment>
             ),
           }}
+          placeholder="Add Comment"
+          size="small"
+          value={formFields.description}
           fullWidth
+          onChange={handleChange}
+          onClick={() => setCommentBoxSelected(true)}
         />
       </MuiGrid>
       {commentBoxSelected && (

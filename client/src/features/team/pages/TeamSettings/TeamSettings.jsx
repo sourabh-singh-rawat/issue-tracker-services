@@ -1,18 +1,19 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useOutletContext } from "react-router-dom";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useOutletContext } from 'react-router-dom';
 
-import MuiBox from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
-import MuiButton from "@mui/material/Button";
-import MuiTypography from "@mui/material/Typography";
+import MuiBox from '@mui/material/Box';
+import MuiGrid from '@mui/material/Grid';
+import MuiButton from '@mui/material/Button';
+import MuiTypography from '@mui/material/Typography';
 
-import TabPanel from "../../../../common/tabs/TabPanel";
-import TextField from "../../../../common/textfields/TextField";
+import TabPanel from '../../../../common/tabs/TabPanel';
+import TextField from '../../../../common/textfields/TextField';
 
-import { updateList } from "../../slice/team.slice";
-import { setMessageBarOpen } from "../../../message-bar/slice/message-bar.slice";
+import { updateList } from '../../slice/team.slice';
+import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
 
-const TeamSettings = () => {
+function TeamSettings() {
   const [selectedTab] = useOutletContext();
   const team = useSelector((store) => store.team);
   const dispatch = useDispatch();
@@ -26,8 +27,8 @@ const TeamSettings = () => {
     const { name, description } = team;
 
     const response = await fetch(`http://localhost:4000/api/teams/${team.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, description }),
     });
 
@@ -35,54 +36,54 @@ const TeamSettings = () => {
   };
 
   return (
-    <TabPanel selectedTab={selectedTab} index={4}>
+    <TabPanel index={4} selectedTab={selectedTab}>
       <MuiBox component="form" onSubmit={handleSubmit}>
-        <MuiGrid container sx={{ marginTop: 3 }}>
-          <MuiGrid item xs={12} md={4}>
-            <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
+        <MuiGrid sx={{ marginTop: 3 }} container>
+          <MuiGrid md={4} xs={12} item>
+            <MuiTypography sx={{ fontWeight: 600 }} variant="body2">
               basic Information
             </MuiTypography>
           </MuiGrid>
-          <MuiGrid item xs={12} md={8}>
+          <MuiGrid md={8} xs={12} item>
             <MuiGrid container>
-              <MuiGrid item xs={12}>
+              <MuiGrid xs={12} item>
                 <TextField
+                  helperText="A name for your team"
                   name="name"
                   title="Name"
                   value={team.name}
                   onChange={handleChange}
-                  helperText="A name for your team"
                 />
               </MuiGrid>
-              <MuiGrid item xs={12}>
+              <MuiGrid xs={12} item>
                 <TextField
+                  helperText="This is the UID of the team owner"
                   name="id"
                   title="team ID"
                   value={team.id}
-                  helperText="This is the UID of the team owner"
                   disabled
                 />
               </MuiGrid>
-              <MuiGrid item xs={12}>
+              <MuiGrid xs={12} item>
                 <TextField
+                  helperText="A text description of the project. Max character count is 150"
                   name="description"
+                  rows={4}
                   title="Description"
                   value={team.description}
-                  onChange={handleChange}
-                  helperText="A text description of the project. Max character count is 150"
-                  rows={4}
                   multiline
+                  onChange={handleChange}
                 />
               </MuiGrid>
             </MuiGrid>
           </MuiGrid>
-          <MuiGrid container sx={{ marginTop: 3, marginBottom: 8 }}>
-            <MuiGrid item md={4} />
-            <MuiGrid item md={8}>
+          <MuiGrid sx={{ marginTop: 3, marginBottom: 8 }} container>
+            <MuiGrid md={4} item />
+            <MuiGrid md={8} item>
               <MuiButton
-                variant="contained"
+                sx={{ textTransform: 'none', fontWeight: 600 }}
                 type="submit"
-                sx={{ textTransform: "none", fontWeight: 600 }}
+                variant="contained"
               >
                 Save Changes
               </MuiButton>
@@ -92,6 +93,6 @@ const TeamSettings = () => {
       </MuiBox>
     </TabPanel>
   );
-};
+}
 
 export default TeamSettings;

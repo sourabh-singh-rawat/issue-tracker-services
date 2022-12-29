@@ -8,7 +8,6 @@ import theme from '../../../../../config/mui.config';
 function DeleteTaskButton({ onClick }) {
   return (
     <MuiIconButton
-      variant="text"
       size="small"
       sx={{
         color: theme.palette.grey[400],
@@ -21,6 +20,7 @@ function DeleteTaskButton({ onClick }) {
           backgroundColor: 'transparent',
         },
       }}
+      variant="text"
       onClick={onClick}
     >
       <MuiDeleteIcon />

@@ -1,7 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const collaboratorListSlice = createSlice({
-  name: "collaboratorList",
+  name: 'collaboratorList',
   initialState: {
     filters: [],
     page: 0,
@@ -17,9 +19,10 @@ const collaboratorListSlice = createSlice({
 
       return state;
     },
-    updateCollaboratorList: (state, action) => {
-      return { ...state, ...action.payload };
-    },
+    updateCollaboratorList: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
 });
 

@@ -1,6 +1,5 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable react/react-in-jsx-scope */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, formatISO, parseISO } from 'date-fns';
@@ -59,59 +58,59 @@ function IssueSettings() {
   };
 
   return (
-    <TabPanel selectedTab={selectedTab} index={4}>
+    <TabPanel index={4} selectedTab={selectedTab}>
       <MuiGrid
-        container
         component="form"
         rowSpacing={2}
+        container
         onSubmit={handleSubmit}
       >
-        <MuiGrid item xs={12}>
-          <MuiGrid container rowSpacing={2}>
-            <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
+        <MuiGrid xs={12} item>
+          <MuiGrid rowSpacing={2} container>
+            <MuiGrid md={4} xs={12} item>
+              <MuiTypography sx={{ fontWeight: 600 }} variant="body2">
                 Basic Information:
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item xs={12} md={8}>
-              <MuiGrid container rowSpacing={3}>
-                <MuiGrid item xs={12}>
+            <MuiGrid md={8} xs={12} item>
+              <MuiGrid rowSpacing={3} container>
+                <MuiGrid xs={12} item>
                   <TextField
+                    isLoading={issue.isLoading}
                     name="name"
                     title="Name"
                     value={issue.name}
-                    isLoading={issue.isLoading}
                     onChange={handleChange}
                   />
                 </MuiGrid>
-                <MuiGrid item xs={12}>
+                <MuiGrid xs={12} item>
                   <TextField
+                    isLoading={issue.isLoading}
                     name="id"
                     title="Issue ID"
                     value={issue.id}
-                    isLoading={issue.isLoading}
                     disabled
                   />
                 </MuiGrid>
-                <MuiGrid item xs={12}>
+                <MuiGrid xs={12} item>
                   <TextField
+                    isLoading={issue.isLoading}
                     name="id"
                     title="Project ID"
                     value={issue.projectId}
-                    isLoading={issue.isLoading}
                     disabled
                   />
                 </MuiGrid>
-                <MuiGrid item xs={12}>
+                <MuiGrid xs={12} item>
                   <TextField
+                    helperText="A text description of the project. Max character count is 150"
+                    isLoading={issue.isLoading}
+                    minRows={6}
                     name="description"
                     title="Description"
-                    helperText="A text description of the project. Max character count is 150"
                     value={issue.description}
-                    isLoading={issue.isLoading}
-                    onChange={handleChange}
-                    minRows={6}
                     multiline
+                    onChange={handleChange}
                   />
                 </MuiGrid>
               </MuiGrid>
@@ -119,34 +118,31 @@ function IssueSettings() {
           </MuiGrid>
           <MuiDivider sx={{ marginTop: 2 }} />
         </MuiGrid>
-        <MuiGrid item xs={12}>
-          <MuiGrid container rowSpacing={2}>
-            <MuiGrid item xs={12} md={4}>
-              <MuiTypography variant="body2" sx={{ fontWeight: 600 }}>
+        <MuiGrid xs={12} item>
+          <MuiGrid rowSpacing={2} container>
+            <MuiGrid md={4} xs={12} item>
+              <MuiTypography sx={{ fontWeight: 600 }} variant="body2">
                 Issue Properties:
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item xs={12} md={8}>
-              <MuiGrid container spacing={3}>
-                <MuiGrid item xs={12}>
+            <MuiGrid md={8} xs={12} item>
+              <MuiGrid spacing={3} container>
+                <MuiGrid xs={12} item>
                   <TextField
+                    helperText="The day this project was created, this cannot be changed."
+                    isLoading={issue.isLoading}
                     name="createdAt"
                     title="Created At"
-                    helperText="The day this project was created, this cannot be changed."
                     value={
                       issue.createdAt
                         ? format(parseISO(issue.createdAt), 'PPPPpppp')
                         : 'loading'
                     }
-                    isLoading={issue.isLoading}
                     disabled
                   />
                 </MuiGrid>
-                <MuiGrid item xs={12}>
+                <MuiGrid xs={12} item>
                   <IssueAssigneeSelector
-                    title="Assignee"
-                    value={issue.assigneeId}
-                    projectMembers={project.members.rows}
                     handleChange={async (e) => {
                       const userId = e.target.value;
                       await updateIssueMutation({
@@ -156,48 +152,51 @@ function IssueSettings() {
                       dispatch(updateIssue({ assigneeId: userId }));
                     }}
                     isLoading={project.members.isLoading}
+                    projectMembers={project.members.rows}
+                    title="Assignee"
+                    value={issue.assigneeId}
                   />
                 </MuiGrid>
-                <MuiGrid item xs={6}>
+                <MuiGrid xs={6} item>
                   <IssueStatusSelector
-                    title="Status"
-                    name="status"
+                    handleChange={handleChange}
                     helperText="The current status of issue."
+                    isLoading={issue.isLoading}
+                    name="status"
+                    title="Status"
                     value={issue.status}
-                    isLoading={issue.isLoading}
-                    handleChange={handleChange}
                   />
                 </MuiGrid>
-                <MuiGrid item xs={6}>
+                <MuiGrid xs={6} item>
                   <IssuePrioritySelector
-                    title="Priority"
-                    name="priority"
-                    helperText="The current priority of issue."
-                    value={issue.priority}
-                    isLoading={issue.isLoading}
                     handleChange={handleChange}
+                    helperText="The current priority of issue."
+                    isLoading={issue.isLoading}
+                    name="priority"
+                    title="Priority"
+                    value={issue.priority}
                   />
                 </MuiGrid>
-                <MuiGrid item xs={12} md={6}>
+                <MuiGrid md={6} xs={12} item>
                   <DatePicker
-                    title="Due Date"
-                    name="dueDate"
-                    value={issue.dueDate ? parseISO(issue.dueDate) : null}
+                    handleChange={handleChange}
                     isLoading={issue.isLoading}
+                    name="dueDate"
+                    title="Due Date"
+                    value={issue.dueDate ? parseISO(issue.dueDate) : null}
                     onChange={(date) => {
                       dispatch(updateIssue({ dueDate: formatISO(date) }));
                     }}
-                    handleChange={handleChange}
                   />
                 </MuiGrid>
               </MuiGrid>
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>
-        <MuiGrid item xs={12} sx={{ marginBottom: 8 }}>
+        <MuiGrid sx={{ marginBottom: 8 }} xs={12} item>
           <MuiGrid container>
-            <MuiGrid item md={4} />
-            <MuiGrid item xs={12} md={8}>
+            <MuiGrid md={4} item />
+            <MuiGrid md={8} xs={12} item>
               {issue.isLoading ? (
                 <MuiSkeleton width="20%" />
               ) : (

@@ -13,25 +13,25 @@ function IssueStats({ issuesStatusCount }) {
 
   return (
     <MuiGrid
-      container
-      rowSpacing={1}
       columnSpacing={2}
+      rowSpacing={1}
       sx={{
         marginTop: '10px',
         borderRadius: '6px',
       }}
+      container
     >
-      <MuiGrid item xs={12} md={2.4}>
+      <MuiGrid md={2.4} xs={12} item>
         <IssueCard
-          title="Total Issues"
-          count={total}
-          color={theme.palette.common.white}
           backgroundColor={theme.palette.primary.main}
+          color={theme.palette.common.white}
+          count={total}
+          title="Total Issues"
         />
       </MuiGrid>
       {issuesStatusCount.map(({ id, name, count }) => (
-        <MuiGrid item key={id} xs={6} sm={4} md={2.4}>
-          <IssueCard title={name} count={count} />
+        <MuiGrid key={id} md={2.4} sm={4} xs={6} item>
+          <IssueCard count={count} title={name} />
         </MuiGrid>
       ))}
     </MuiGrid>

@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const teamSlice = createSlice({
-  name: "team",
+  name: 'team',
   initialState: {
     info: {},
     options: {},

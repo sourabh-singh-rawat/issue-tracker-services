@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import MuiChip from '@mui/material/Chip';
 
 function Chip({ id }) {

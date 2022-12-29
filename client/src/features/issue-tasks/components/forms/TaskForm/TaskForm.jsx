@@ -58,58 +58,58 @@ function TaskForm({ setOpen }) {
 
   return (
     <MuiGrid
-      item
-      xs={12}
       sx={{
         padding: '1rem',
         borderRadius: '6px',
         marginTop: '1rem',
         boxShadow: '0px 0px 7px 0px rgba(0,0,0,0.3)',
       }}
+      xs={12}
+      item
     >
-      <MuiGrid container rowSpacing={2} columnSpacing={1}>
-        <MuiGrid item xs={12}>
+      <MuiGrid columnSpacing={1} rowSpacing={2} container>
+        <MuiGrid xs={12} item>
           <MuiTypography
-            variant="h6"
             sx={{ color: theme.palette.text.primary }}
+            variant="h6"
           >
             Create Task
           </MuiTypography>
         </MuiGrid>
-        <MuiGrid item xs={12} lg={6}>
+        <MuiGrid lg={6} xs={12} item>
           <TextField
-            title="Title"
-            size="small"
             name="title"
             placeholder="Title"
-            onChange={handleChange}
+            size="small"
+            title="Title"
             autoFocus
             fullWidth
+            onChange={handleChange}
           />
         </MuiGrid>
-        <MuiGrid item xs={0} lg={6} />
-        <MuiGrid item xs={12} lg={6}>
+        <MuiGrid lg={6} xs={0} item />
+        <MuiGrid lg={6} xs={12} item>
           <TextField
-            title="Description"
-            size="small"
             name="description"
             placeholder="Description"
-            onChange={handleChange}
-            multiline
             rows={4}
+            size="small"
+            title="Description"
             fullWidth
+            multiline
+            onChange={handleChange}
           />
         </MuiGrid>
-        <MuiGrid item xs={0} lg={6} />
-        <MuiGrid item xs={12} lg={2}>
+        <MuiGrid lg={6} xs={0} item />
+        <MuiGrid lg={2} xs={12} item>
           <DatePicker
-            title="Due Date"
             name="dueDate"
+            title="Due Date"
             value={task.dueDate}
             onChange={handleDateChange}
           />
         </MuiGrid>
-        <MuiGrid item xs={12} lg={10} />
+        <MuiGrid lg={10} xs={12} item />
         <MuiGrid item>
           <SaveButton label="Create" onClick={handleSave} />
         </MuiGrid>

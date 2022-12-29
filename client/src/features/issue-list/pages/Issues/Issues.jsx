@@ -1,35 +1,37 @@
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
+/* eslint-disable react/jsx-wrap-multilines */
+import React from 'react';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 
-import MuiGrid from "@mui/material/Grid";
+import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from "../../../../common/headers/SectionHeader";
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
+import SectionHeader from '../../../../common/headers/SectionHeader';
+import PrimaryButton from '../../../../common/buttons/PrimaryButton';
 
-const Issues = () => {
+function Issues() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   return (
-    <MuiGrid container gap="40px">
-      {pathname === "/issues" && (
-        <MuiGrid item xs={12}>
+    <MuiGrid gap="40px" container>
+      {pathname === '/issues' && (
+        <MuiGrid xs={12} item>
           <SectionHeader
-            title="Issues"
-            subtitle="All the issues assgined to you or created by you."
             actionButton={
               <PrimaryButton
                 label="Create Issue"
-                onClick={() => navigate("/issues/new")}
+                onClick={() => navigate('/issues/new')}
               />
             }
+            subtitle="All the issues assgined to you or created by you."
+            title="Issues"
           />
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet />
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Issues;

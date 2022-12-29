@@ -10,12 +10,11 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '../config/.env' });
 
 const firebaseConfig = {
+  storageBucket: process.env.STORAGE_BUCKET,
   credential: cert(process.env.GOOGLE_APPLICATION_CREDENTIALS_PATH),
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
 
 export const adminAuth = getAuth(firebaseApp);
-export const adminStorage = getStorage(firebaseApp);
-
-export default firebaseConfig;
+export const adminStorage = getStorage(firebaseApp).bucket();

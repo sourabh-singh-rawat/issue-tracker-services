@@ -1,15 +1,16 @@
-import { Fragment, useState } from "react";
+/* eslint-disable react/prop-types */
+import React from 'react';
 
-import ProjectEditButton from "../ProjectEditButton";
-import ProjectDeleteButton from "../ProjectDeleteButton";
+import ProjectEditButton from '../ProjectEditButton';
+import ProjectDeleteButton from '../ProjectDeleteButton';
 
-const ActionButtons = ({ id }) => {
+function ActionButtons({ id }) {
   return (
-    <Fragment>
+    <>
       <ProjectEditButton id={id} />
       <ProjectDeleteButton id={id} />
-    </Fragment>
+    </>
   );
-};
+}
 
 export default ActionButtons;

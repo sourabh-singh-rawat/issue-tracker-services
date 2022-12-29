@@ -1,1 +1,1 @@
-export { default } from "./StatusAndPrioritySelectorEditCell";
+export { default } from './StatusAndPrioritySelectorEditCell';

@@ -9,15 +9,8 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [],
+  "plugins": ["react"],
   "rules": {
-    "import/extensions": [
-      "error",
-      "always",
-      {
-        "js": "never"
-      }
-    ],
-    "no-console": "warn"
+    "import/extensions": "off"
   }
 }

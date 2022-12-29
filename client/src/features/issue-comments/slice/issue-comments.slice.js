@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   rows: [],
@@ -7,21 +7,16 @@ const initialState = {
 };
 
 const issueCommentsSlice = createSlice({
-  name: "issueComments",
+  name: 'issueComments',
   initialState,
   reducers: {
-    setComments: (state, action) => {
-      state.rows = action.payload.rows;
-      state.rowCount = action.payload.rowCount;
-      state.isLoading = false;
-
-      return state;
-    },
-    setLoadingComments: (state, action) => {
-      state.isLoading = true;
-
-      return state;
-    },
+    setComments: (state, action) => ({
+      ...state,
+      rows: action.payload.rows,
+      rowCount: action.payload.rowCount,
+      isLoading: false,
+    }),
+    setLoadingComments: (state) => ({ ...state, isLoading: true }),
   },
 });
 

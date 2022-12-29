@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable operator-linebreak */
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   rows: [],
@@ -10,23 +11,17 @@ const initialState = {
 };
 
 const issueListSlice = createSlice({
-  name: "issueList",
+  name: 'issueList',
   initialState,
   reducers: {
-    setIssueList: (state, action) => {
-      state.rows = action.payload.rows;
-      state.rowCount = action.payload.rowCount;
-
-      return state;
-    },
-    updateIssueList: (state, action) => {
-      return { ...state, ...action.payload };
-    },
-    resetIssueList: (state) => {
-      state = initialState;
-
-      return state;
-    },
+    setIssueList: (state, action) => ({
+      ...state,
+      rows: action.payload.rows,
+      rowCount: action.payload.rowCount,
+      isLoading: false,
+    }),
+    updateIssueList: (state, action) => ({ ...state, ...action.payload }),
+    resetIssueList: () => initialState,
   },
 });
 

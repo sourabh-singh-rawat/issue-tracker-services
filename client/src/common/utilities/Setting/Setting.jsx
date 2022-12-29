@@ -7,7 +7,7 @@ import theme from '../../../config/mui.config';
 
 export default function Setting({ title, children }) {
   return (
-    <MuiGrid sx={{ padding: '16px' }} xs={12} container>
+    <MuiGrid sx={{ padding: '16px' }} container>
       <MuiGrid xs={2} item>
         <MuiTypography
           color={theme.palette.grey[900]}

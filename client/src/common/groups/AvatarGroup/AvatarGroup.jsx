@@ -16,9 +16,9 @@ const StyledAvatarGroup = styled(MuiAvatarGroup)(({ theme }) => ({
 
 function AvatarGroup({ members, total }) {
   return (
-    <StyledAvatarGroup max={5} total={total} spacing={-1}>
+    <StyledAvatarGroup max={5} spacing={-1} total={total}>
       {members.map((member) => (
-        <Tooltip title={member.name} key={member.id}>
+        <Tooltip key={member.id} title={member.name}>
           <MuiAvatar
             alt={member.name}
             src={member.photoUrl}

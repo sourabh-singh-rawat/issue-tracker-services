@@ -1,6 +1,5 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useGridApiContext } from '@mui/x-data-grid';
@@ -33,10 +32,10 @@ function StatusAndPrioritySelectorEditCell({ id, field, value }) {
   }, [isSuccess]);
 
   if (field === 'status') {
-    return <IssueStatusSelector value={value} handleChange={handleChange} />;
+    return <IssueStatusSelector handleChange={handleChange} value={value} />;
   }
   if (field === 'priority') {
-    return <IssuePrioritySelector value={value} handleChange={handleChange} />;
+    return <IssuePrioritySelector handleChange={handleChange} value={value} />;
   }
 }
 

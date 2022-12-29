@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/react-in-jsx-scope */
-import { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -126,37 +125,37 @@ function IssueForm() {
   }, [priority.rows[0].id, status.rows[0].id]);
 
   return (
-    <MuiGrid container gap="20px">
-      <MuiGrid item xs={12}>
+    <MuiGrid gap="20px" container>
+      <MuiGrid xs={12} item>
         <SectionHeader
-          title="New Issue"
           subtitle="Issues are problem you need to solve"
+          title="New Issue"
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <MuiBox component="form" onSubmit={handleSubmit}>
-          <MuiGrid container rowSpacing={3} columnSpacing={4}>
-            <MuiGrid item xs={12} sm={12}>
+          <MuiGrid columnSpacing={4} rowSpacing={3} container>
+            <MuiGrid sm={12} xs={12} item>
               <TextField
                 name="name"
                 title="Name"
-                onChange={handleChange}
                 fullWidth
                 required
+                onChange={handleChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12}>
+            <MuiGrid sm={12} xs={12} item>
               <TextField
+                helperText="A text description of the issue."
+                minRows={6}
                 name="description"
                 title="Description"
-                onChange={handleChange}
-                helperText="A text description of the issue."
-                multiline
-                minRows={6}
                 fullWidth
+                multiline
+                onChange={handleChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12}>
+            <MuiGrid sm={12} xs={12} item>
               {id ? (
                 <TextField
                   name="projectId"
@@ -168,29 +167,25 @@ function IssueForm() {
                 <>
                   <Label title="Project" />
                   <MuiAutocomplete
-                    disablePortal
-                    size="small"
+                    getOptionLabel={(option) => `${option.name}`}
                     options={projects}
+                    renderInput={(params) => <TextField {...params} />}
+                    size="small"
+                    disablePortal
+                    fullWidth
+                    required
                     onChange={(e, selectedProject) => {
                       setFormFields({
                         ...formFields,
                         project_id: selectedProject.id,
                       });
                     }}
-                    getOptionLabel={(option) => `${option.name}`}
-                    renderInput={(params) => <TextField {...params} />}
-                    fullWidth
-                    required
                   />
                 </>
               )}
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12}>
+            <MuiGrid sm={12} xs={12} item>
               <IssueAssigneeSelector
-                title="Assignee"
-                value={formFields.assigneeId}
-                isLoading={members.isLoading}
-                projectMembers={members.rows}
                 handleChange={(e) => {
                   const { value } = e.target;
 
@@ -200,49 +195,53 @@ function IssueForm() {
                   });
                   dispatch(updateIssue({ assigneeId: value }));
                 }}
+                isLoading={members.isLoading}
+                projectMembers={members.rows}
+                title="Assignee"
+                value={formFields.assigneeId}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={6}>
+            <MuiGrid md={6} sm={12} xs={12} item>
               <TextField
+                helperText="This is the person who created this issue."
                 name="reporter"
                 title="Reporter"
                 value={user ? user.email : 'none'}
-                onChange={handleChange}
-                helperText="This is the person who created this issue."
-                fullWidth
                 disabled
+                fullWidth
+                onChange={handleChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={6}>
+            <MuiGrid sm={6} xs={12} item>
               <IssuePrioritySelector
-                title="Priority"
                 handleChange={handleChange}
+                title="Priority"
                 value={formFields.priority}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={6}>
+            <MuiGrid sm={6} xs={12} item>
               <DatePicker
+                getOptionLabel={(option) => `${option.name}`}
+                minDate={new Date()}
                 name="dueDate"
                 title="Due Date"
-                minDate={new Date()}
                 value={formFields.dueDate}
-                getOptionLabel={(option) => `${option.name}`}
                 onChange={(date) =>
                   setFormFields({ ...formFields, dueDate: date })
                 }
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={6}>
+            <MuiGrid sm={6} xs={12} item>
               <IssueStatusSelector
-                title="Status"
                 handleChange={handleChange}
+                title="Status"
                 value={formFields.status}
               />
             </MuiGrid>
-            <MuiGrid item xs={12}>
+            <MuiGrid xs={12} item>
               <PrimaryButton
-                type="submit"
                 label="Create Issue"
+                type="submit"
                 onClick={handleSubmit}
               />
             </MuiGrid>

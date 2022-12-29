@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { styled } from '@mui/material/styles';
@@ -61,21 +61,21 @@ function Title({ page, updateTitle, updateTitleQuery }) {
 
   return (
     <MuiGrid
-      container
       columnSpacing={1}
       sx={{ marginLeft: '-24px', marginBottom: '4px' }}
+      container
     >
-      <MuiGrid item flexGrow={1}>
+      <MuiGrid flexGrow={1} item>
         <TitleTextField
           name="name"
           value={page.name}
+          fullWidth
           onChange={handleChange}
           onClick={() =>
             dispatch(
               updateTitle({ previousName: page.name, nameSelected: true }),
             )
           }
-          fullWidth
         />
       </MuiGrid>
       {nameSelected && (

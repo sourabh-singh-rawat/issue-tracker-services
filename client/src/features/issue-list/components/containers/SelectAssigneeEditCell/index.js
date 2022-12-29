@@ -1,1 +1,1 @@
-export { default } from "./SelectAssigneeEditCell";
+export { default } from './SelectAssigneeEditCell';

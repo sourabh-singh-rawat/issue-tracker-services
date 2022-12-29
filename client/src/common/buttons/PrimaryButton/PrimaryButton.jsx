@@ -6,10 +6,7 @@ import MuiAddIcon from '@mui/icons-material/Add';
 export default function PrimaryButton({ type, label, onClick }) {
   return (
     <MuiButton
-      type={type}
-      variant="contained"
       startIcon={type === 'submit' ? null : <MuiAddIcon />}
-      onClick={onClick}
       sx={{
         fontWeight: 600,
         borderRadius: '6px',
@@ -19,7 +16,10 @@ export default function PrimaryButton({ type, label, onClick }) {
           boxShadow: 'none',
         },
       }}
+      type={type}
+      variant="contained"
       disableRipple
+      onClick={onClick}
     >
       {label}
     </MuiButton>

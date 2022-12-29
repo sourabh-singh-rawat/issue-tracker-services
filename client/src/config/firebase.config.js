@@ -16,6 +16,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
-export const onAuthStateChangedListener = (callback) =>
+export const onAuthStateChangedListener = (callback) => {
   // eslint-disable-next-line implicit-arrow-linebreak
   onAuthStateChanged(auth, callback);
+};

@@ -113,85 +113,85 @@ function ProjectForm() {
   };
 
   return (
-    <MuiGrid container rowSpacing={2}>
-      <MuiGrid item xs={12}>
+    <MuiGrid rowSpacing={2} container>
+      <MuiGrid xs={12} item>
         <SectionHeader
-          title="New Project"
           subtitle="Projects are container for storing issues."
+          title="New Project"
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Box component="form" onSubmit={handleSubmit}>
-          <MuiGrid container rowSpacing={3} columnSpacing={4}>
-            <MuiGrid item xs={12}>
+          <MuiGrid columnSpacing={4} rowSpacing={3} container>
+            <MuiGrid xs={12} item>
               <TextField
-                title="Name"
-                name="name"
-                type="text"
-                value={formFields.name.value}
-                onChange={handleNameChange}
                 error={formFields.name.error}
                 helperText={
                   formFields.name.error
                     ? formFields.name.errorMessage
                     : `A name for your project. Do not exceed ${errors.form.project.NAME_MAX_LENGTH_ERROR.limit} characters`
                 }
+                name="name"
+                title="Name"
+                type="text"
+                value={formFields.name.value}
+                onChange={handleNameChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={12}>
+            <MuiGrid md={12} sm={12} xs={12} item>
               <TextField
-                name="Description"
-                title="Description"
-                type="text"
-                minRows={4}
-                value={formFields.description.value}
-                placeholder={formFields.description.placeHolder}
                 error={formFields.description.error}
-                onChange={handleDescriptionChange}
                 helperText={
                   formFields.description.error
                     ? formFields.description.errorMessage
                     : `A text description of your project. Do not exceed ${errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit} characters`
                 }
+                minRows={4}
+                name="Description"
+                placeholder={formFields.description.placeHolder}
+                title="Description"
+                type="text"
+                value={formFields.description.value}
                 multiline
+                onChange={handleDescriptionChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={6}>
+            <MuiGrid md={6} sm={12} xs={12} item>
               <DatePicker
-                title="Start Date"
-                name="startDate"
-                value={formFields.startDate}
+                handleChange={handleChange}
+                helperText="Set a start date for your project"
                 maxDate={formFields.endDate}
+                name="startDate"
+                title="Start Date"
+                value={formFields.startDate}
                 onChange={(selectedDate) =>
                   setFormFields({ ...formFields, startDate: selectedDate })
                 }
-                helperText="Set a start date for your project"
-                handleChange={handleChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={6}>
+            <MuiGrid md={6} sm={12} xs={12} item>
               <DatePicker
-                title="End Date"
-                name="endDate"
-                value={formFields.endDate}
+                handleChange={handleChange}
+                helperText="Set an end date for your project"
                 minDate={formFields.startDate}
+                name="endDate"
+                title="End Date"
+                value={formFields.endDate}
                 onChange={(selectedDate) =>
                   setFormFields({ ...formFields, endDate: selectedDate })
                 }
-                helperText="Set an end date for your project"
-                handleChange={handleChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} sm={12} md={6}>
+            <MuiGrid md={6} sm={12} xs={12} item>
               <ProjectStatusSelector
-                title="Status"
-                name="status"
-                value={formFields.status}
                 handleChange={handleChange}
                 helperText="Current status of your project."
+                name="status"
+                title="Status"
+                value={formFields.status}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} />
+            <MuiGrid xs={12} item />
             <MuiGrid item>
               <PrimaryButton label="Create Project" type="submit" />
             </MuiGrid>

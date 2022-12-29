@@ -41,7 +41,6 @@ export default function ProjectDetailSetting({
         <MuiGrid xs={12} item>
           <Setting title="Name">
             <TextField
-              handleChange={handleChange}
               helperText="The name of your project. Max character count is 50"
               isLoading={isLoading}
               name="name"

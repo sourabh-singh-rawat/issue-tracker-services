@@ -69,49 +69,49 @@ function AddMemberButton() {
       <PrimaryButton label="Add Member" onClick={handleOpen} />
       <MuiModal
         open={open}
-        onClose={handleClose}
         sx={{
           '.MuiBackdrop-root': { backgroundColor: 'rgba(9, 30, 66, 0.54)' },
         }}
+        onClose={handleClose}
       >
-        <MuiBox sx={style} component="form" onSubmit={handleSubmit}>
-          <MuiGrid container spacing={2}>
-            <MuiGrid item xs={12}>
-              <MuiTypography variant="h5" fontWeight="bold">
+        <MuiBox component="form" sx={style} onSubmit={handleSubmit}>
+          <MuiGrid spacing={2} container>
+            <MuiGrid xs={12} item>
+              <MuiTypography fontWeight="bold" variant="h5">
                 Invite new members
               </MuiTypography>
               <MuiTypography variant="body2">
                 Send invitation links to team members
               </MuiTypography>
             </MuiGrid>
-            <MuiGrid item xs={8}>
+            <MuiGrid xs={8} item>
               <MuiTypography
-                variant="body2"
                 fontWeight={500}
                 sx={{ paddingBottom: 1 }}
+                variant="body2"
               >
                 Email
               </MuiTypography>
               <TextField
                 name="email"
-                size="small"
                 placeholder="contact@email.com"
-                onChange={onChange}
+                size="small"
                 sx={{ input: { fontSize: '14px' } }}
                 fullWidth
+                onChange={onChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={4}>
+            <MuiGrid xs={4} item>
               <Select
+                items={memberRoles}
                 name="role_id"
                 title="Role"
-                items={memberRoles}
                 value={formFields.role}
-                onChange={onChange}
                 displayEmpty
+                onChange={onChange}
               />
             </MuiGrid>
-            <MuiGrid item xs={12}>
+            <MuiGrid xs={12} item>
               <PrimaryButton label="Send Invite" type="submit" />
             </MuiGrid>
           </MuiGrid>

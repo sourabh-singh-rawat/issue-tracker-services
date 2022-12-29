@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-// eslint-disable-next-line import/extensions
 import { adminAuth } from '../config/firebase.config.js';
 
 /**
@@ -12,12 +10,23 @@ import { adminAuth } from '../config/firebase.config.js';
 export const auth = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
+    if (!authorization) {
+      return res
+        .status(401)
+        .send('Authentication failed: missing authorization header');
+    }
+
     const token = authorization.replace('Bearer ', '');
     const decodedToken = await adminAuth.verifyIdToken(token);
 
     req.user = decodedToken;
     return next();
   } catch (error) {
-    return res.status(401).send('Unauthorized');
+    if (error.code === 'auth/id-token-expired') {
+      return res.status(423).send('Auth token expired. Please login again');
+    }
+    return res.status(401).send('Authentication failed');
   }
 };
+
+export default auth;

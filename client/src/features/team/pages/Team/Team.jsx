@@ -1,25 +1,26 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate, Outlet, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable object-curly-newline */
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate, Outlet, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import MuiGrid from "@mui/material/Grid";
-import MuiToolbar from "@mui/material/Toolbar";
-import MuiTypography from "@mui/material/Typography";
+import MuiGrid from '@mui/material/Grid';
+import MuiToolbar from '@mui/material/Toolbar';
+import MuiTypography from '@mui/material/Typography';
 
-import Tab from "../../../../common/tabs/Tab";
-import Tabs from "../../../../common/tabs/Tabs";
+import Tab from '../../../../common/tabs/Tab';
+import Tabs from '../../../../common/tabs/Tabs';
 
-import { useGetTeamQuery } from "../../api/team.api";
-import { setTeam } from "../../slice/team.slice";
+import { useGetTeamQuery } from '../../api/team.api';
+import { setTeam } from '../../slice/team.slice';
 
-const Team = () => {
+function Team() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const getTeamQuery = useGetTeamQuery(id);
   const team = useSelector((store) => store.team.info);
   const { pathname } = useLocation();
-  const path = pathname.split("/")[3];
+  const path = pathname.split('/')[3];
 
   const mapPathToIndex = {
     overview: 0,
@@ -50,14 +51,14 @@ const Team = () => {
 
   return (
     <MuiGrid container>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <MuiToolbar disableGutters>
-          <MuiTypography variant="h4" sx={{ fontWeight: 600 }}>
+          <MuiTypography sx={{ fontWeight: 600 }} variant="h4">
             {team.name}
           </MuiTypography>
         </MuiToolbar>
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab label="Overview" value={0} />
           <Tab label="Projects" value={1} />
@@ -66,11 +67,11 @@ const Team = () => {
           <Tab label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet context={[selectedTab]} />
       </MuiGrid>
     </MuiGrid>
   );
-};
+}
 
 export default Team;

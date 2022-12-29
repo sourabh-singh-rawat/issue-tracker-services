@@ -7,7 +7,7 @@ import SectionHeader from '../../../../common/headers/SectionHeader';
 function Profile() {
   return (
     <MuiGrid>
-      <SectionHeader title="Your Profile" subtitle="" />
+      <SectionHeader subtitle="" title="Your Profile" />
     </MuiGrid>
   );
 }

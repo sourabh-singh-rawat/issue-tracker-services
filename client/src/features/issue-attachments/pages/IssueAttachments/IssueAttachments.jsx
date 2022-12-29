@@ -1,9 +1,7 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable consistent-return */
 /* eslint-disable no-shadow */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/extensions */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams } from 'react-router-dom';
 
@@ -11,20 +9,19 @@ import MuiGrid from '@mui/material/Grid';
 import MuiInput from '@mui/material/Input';
 import MuiButton from '@mui/material/Button';
 import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import theme from '../../../../config/mui.config';
-import uploadImage from '../../../../utils/firebase/upload-image.utils.js';
 
 import TabPanel from '../../../../common/tabs/TabPanel';
-import UploadButton from '../../components/buttons/UploadButton';
+import UploadButton from '../../../issue/components/buttons/UploadButton';
 
 import {
   useGetIssueAttachmentsQuery,
   useCreateIssueAttachmentMutation,
-} from '../../api/issue.api';
+} from '../../api/issue-attachments.api';
 
-import { setIssueAttachments } from '../../slice/issue.slice';
+import { setIssueAttachments } from '../../../issue/slice/issue.slice';
 import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import ImageCard from '../../components/ImageCard/ImageCard';
 
 function IssueAttachments() {
   const { id } = useParams();
@@ -34,13 +31,12 @@ function IssueAttachments() {
   const [file, setFile] = useState();
   const [open, setOpen] = useState(false);
 
-  const accessToken = useSelector((store) => store.auth.accessToken);
   const attachments = useSelector((store) => store.issue.attachments);
 
   const getIssueAttachmentsQuery = useGetIssueAttachmentsQuery({
     issueId: id,
   });
-  const [createIssue, createIssueQuery] = useCreateIssueAttachmentMutation();
+  const [createIssue, { isSuccess }] = useCreateIssueAttachmentMutation();
 
   const handleChange = async (e) => {
     setFile(e.target.files[0]);
@@ -49,28 +45,26 @@ function IssueAttachments() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!file) return;
     // starting loading animation on the Upload button
     setOpen(true);
 
-    // upload image to firebase storage
-    const uploadedImage = await uploadImage({ file, issueId: id, accessToken });
+    // store file in FormData Object
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // upload image metadata to the database
-    const { bucket, fullPath, name, size, contentType, url } = uploadedImage;
-    createIssue({
-      issueId: id,
-      body: { bucket, fullPath, name, size, contentType, url },
-    });
+    // send the image to server
+    return createIssue({ issueId: id, body: formData });
   };
 
   // stop loading the animation and display success message
-  //  once the image is uploaded
+  // once the image is uploaded
   useEffect(() => {
-    if (createIssueQuery.isSuccess) {
+    if (isSuccess) {
       setOpen(false);
       dispatch(setMessageBarOpen({ message: 'Image uploaded successfully' }));
     }
-  }, [createIssueQuery.isSuccess]);
+  }, [isSuccess]);
 
   // once the issue attachments are retrived from the server
   // store them in the redux store
@@ -81,17 +75,18 @@ function IssueAttachments() {
   }, [getIssueAttachmentsQuery.data]);
 
   return (
-    <TabPanel selectedTab={selectedTab} index={2}>
-      <MuiGrid component="form" spacing={1} container>
-        <MuiGrid item sx={{ display: 'none' }}>
+    <TabPanel index={2} selectedTab={selectedTab}>
+      <MuiGrid
+        component="form"
+        encType="multipart/form-data"
+        spacing={1}
+        container
+      >
+        <MuiGrid sx={{ display: 'none' }} item>
           <MuiInput name="file" type="file" onChange={handleChange} />
         </MuiGrid>
         <MuiGrid item>
           <MuiButton
-            variant="contained"
-            onClick={() => {
-              document.querySelector('input[type="file"]').click();
-            }}
             sx={{
               color: theme.palette.grey[900],
               borderRadius: '6px',
@@ -101,25 +96,32 @@ function IssueAttachments() {
                 backgroundColor: theme.palette.grey[300],
               },
             }}
+            variant="contained"
             disableRipple
+            onClick={() => {
+              document.querySelector('input[type="file"]').click();
+            }}
           >
             Choose a file
           </MuiButton>
         </MuiGrid>
         <MuiGrid item>
-          <UploadButton label="Upload" onClick={handleSubmit} open={open} />
+          <UploadButton label="Upload" open={open} onClick={handleSubmit} />
         </MuiGrid>
       </MuiGrid>
       <ImageList
-        variant="quilted"
-        rowHeight={170}
-        cols={5}
+        cols={8}
+        rowHeight={164}
         sx={{ width: '100%' }}
+        variant="quilted"
       >
-        {attachments.rows.map(({ id, url }) => (
-          <ImageListItem key={id}>
-            <img src={url} srcSet={url} loading="lazy" />
-          </ImageListItem>
+        {attachments.rows.map(({ id: attachmentId, path }) => (
+          <ImageCard
+            key={attachmentId}
+            attachmentId={attachmentId}
+            issueId={id}
+            path={path}
+          />
         ))}
       </ImageList>
     </TabPanel>

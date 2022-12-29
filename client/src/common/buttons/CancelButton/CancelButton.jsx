@@ -6,7 +6,6 @@ import theme from '../../../config/mui.config';
 export default function CancelButton({ label, onClick }) {
   return (
     <MuiButton
-      onClick={onClick}
       sx={{
         color: theme.palette.grey[900],
         height: '100%',
@@ -18,6 +17,7 @@ export default function CancelButton({ label, onClick }) {
         },
       }}
       disableRipple
+      onClick={onClick}
     >
       {label}
     </MuiButton>

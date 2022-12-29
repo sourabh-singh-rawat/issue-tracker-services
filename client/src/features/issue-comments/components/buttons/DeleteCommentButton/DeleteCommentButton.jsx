@@ -1,21 +1,24 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import MuiBox from "@mui/material/Box";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import MuiTypography from "@mui/material/Typography";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
+import MuiBox from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import MuiTypography from '@mui/material/Typography';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 
-import CancelButton from "../../../../../common/buttons/CancelButton";
-import SecondaryButton from "../../../../../common/buttons/SecondaryButton";
+import CancelButton from '../../../../../common/buttons/CancelButton';
+import SecondaryButton from '../../../../../common/buttons/SecondaryButton';
 
-import { setLoadingComments } from "../../../slice/issue-comments.slice";
-import { useDeleteCommentMutation } from "../../../api/issue-comments.api";
+import { setLoadingComments } from '../../../slice/issue-comments.slice';
+import { useDeleteCommentMutation } from '../../../api/issue-comments.api';
 
-const DeleteCommentButton = ({ id, issue_id }) => {
+function DeleteCommentButton({ id, issue_id }) {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
@@ -31,25 +34,25 @@ const DeleteCommentButton = ({ id, issue_id }) => {
   return (
     <MuiBox component="span">
       <MuiTypography
+        sx={{
+          fontSize: '13px',
+          fontWeight: 600,
+          ':hover': { cursor: 'pointer' },
+        }}
         variant="body2"
         onClick={handleOpen}
-        sx={{
-          fontSize: "13px",
-          fontWeight: 600,
-          ":hover": { cursor: "pointer" },
-        }}
       >
-        <a>Delete</a>
+        Delete
       </MuiTypography>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          <MuiTypography variant="body1" component="span">
+          <MuiTypography component="span" variant="body1">
             Do you want to delete?
           </MuiTypography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <MuiTypography variant="body2" component="span">
+            <MuiTypography component="span" variant="body2">
               Once the comments is deleted, it cannot be recovered.
             </MuiTypography>
           </DialogContentText>
@@ -68,6 +71,6 @@ const DeleteCommentButton = ({ id, issue_id }) => {
       </Dialog>
     </MuiBox>
   );
-};
+}
 
 export default DeleteCommentButton;

@@ -1,1 +1,1 @@
-export { default } from "./ProjectStatusSelector";
+export { default } from './ProjectStatusSelector';

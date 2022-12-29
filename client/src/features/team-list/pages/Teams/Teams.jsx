@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
@@ -12,22 +12,22 @@ function Teams() {
   const navigate = useNavigate();
 
   return (
-    <MuiGrid container gap="40px">
+    <MuiGrid gap="40px" container>
       {pathname === '/teams' && (
-        <MuiGrid item xs={12}>
+        <MuiGrid xs={12} item>
           <SectionHeader
-            title="Teams"
-            subtitle="Create teams to organize people involved with your project."
             actionButton={
               <PrimaryButton
                 label="Create Team"
                 onClick={() => navigate('/teams/new')}
               />
             }
+            subtitle="Create teams to organize people involved with your project."
+            title="Teams"
           />
         </MuiGrid>
       )}
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet />
       </MuiGrid>
     </MuiGrid>

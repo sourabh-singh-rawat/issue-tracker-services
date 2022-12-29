@@ -1,8 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Routes, Route } from 'react-router-dom';
 
-import ProtectedRoute from './hoc/ProtectedRoute';
-
+import ProtectedRoute from './common/hoc/ProtectedRoute';
 import Main from './common/headers/Main';
 import Login from './features/auth/pages/Login/Login';
 import SignUp from './features/auth/pages/Signup';
@@ -27,7 +26,7 @@ import Issue from './features/issue/pages/Issue';
 import IssueTasks from './features/issue-tasks/pages/IssueTasks/IssueTasks';
 import IssueOverview from './features/issue/pages/IssueOverview';
 import IssueComments from './features/issue-comments/pages/IssueComments';
-import IssueAttachments from './features/issue/pages/IssueAttachments';
+import IssueAttachments from './features/issue-attachments/pages/IssueAttachments';
 import IssueSettings from './features/issue/pages/IssueSettings';
 import IssueForm from './features/issue/pages/IssueForm';
 import IssueList from './features/issue-list/components/containers/IssueList';

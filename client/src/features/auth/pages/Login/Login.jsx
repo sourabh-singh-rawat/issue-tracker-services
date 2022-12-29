@@ -1,11 +1,11 @@
 /* eslint-disable import/named */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable object-curly-newline */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Button, Container, Grid, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
+import MuiGrid from '@mui/material/Grid';
 import GoogleIcon from '@mui/icons-material/Google';
 
 import continueWithGoogle from '../../../../utils/firebase/continue-with-google.utils';
@@ -32,27 +32,27 @@ function Login() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Grid container spacing={2}>
-        <Grid item xs={12} sx={{ textAlign: 'center', marginTop: 8 }}>
-          <Typography variant="h4" fontWeight="bold">
+      <MuiGrid spacing={2} container>
+        <MuiGrid sx={{ textAlign: 'center', marginTop: 8 }} xs={12} item>
+          <Typography fontWeight="bold" variant="h4">
             Log In
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
+        </MuiGrid>
+        <MuiGrid xs={12} item>
           <Button
-            variant="outlined"
-            onClick={handleContinueWithGoogle}
             startIcon={<GoogleIcon />}
             sx={{
               color: 'text.primary',
               textTransform: 'none',
             }}
+            variant="outlined"
             fullWidth
+            onClick={handleContinueWithGoogle}
           >
             Continue with Google
           </Button>
-        </Grid>
-      </Grid>
+        </MuiGrid>
+      </MuiGrid>
     </Container>
   );
 }

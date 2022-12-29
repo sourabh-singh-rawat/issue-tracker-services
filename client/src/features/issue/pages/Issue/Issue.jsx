@@ -1,7 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -100,8 +99,8 @@ function Issue() {
   );
 
   return (
-    <MuiGrid container spacing={2}>
-      <MuiGrid item xs={12}>
+    <MuiGrid spacing={2} container>
+      <MuiGrid xs={12} item>
         <TitleSection
           breadcrumbItems={[
             { text: 'Projects', onClick: () => navigate('/projects') },
@@ -120,25 +119,8 @@ function Issue() {
           ]}
           isLoading={issue.isLoading}
           page={issue}
-          updateTitle={updateIssue}
-          updateTitleQuery={updateTitleQuery}
-          onClick={() => navigate('/issues')}
-          statusSelector={
-            <IssueStatusSelector
-              value={issue.status}
-              handleChange={async (e) => {
-                const { value } = e.target;
-                dispatch(updateIssue({ status: value }));
-                await updateIssueQuery({ id, body: { status: value } });
-
-                if (isSuccess) dispatch(setMessageBarOpen(true));
-              }}
-              variant="dense"
-            />
-          }
           prioritySelector={
             <IssuePrioritySelector
-              value={issue.priority}
               handleChange={async (e) => {
                 const { value } = e.target;
                 dispatch(updateIssue({ priority: value }));
@@ -146,12 +128,29 @@ function Issue() {
 
                 if (isSuccess) dispatch(setMessageBarOpen(true));
               }}
+              value={issue.priority}
               variant="dense"
             />
           }
+          statusSelector={
+            <IssueStatusSelector
+              handleChange={async (e) => {
+                const { value } = e.target;
+                dispatch(updateIssue({ status: value }));
+                await updateIssueQuery({ id, body: { status: value } });
+
+                if (isSuccess) dispatch(setMessageBarOpen(true));
+              }}
+              value={issue.status}
+              variant="dense"
+            />
+          }
+          updateTitle={updateIssue}
+          updateTitleQuery={updateTitleQuery}
+          onClick={() => navigate('/issues')}
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab label="Overview" value={0} />
           <Tab label="Tasks" value={1} />
@@ -160,7 +159,7 @@ function Issue() {
           <Tab label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
-      <MuiGrid item xs={12}>
+      <MuiGrid xs={12} item>
         <Outlet context={[selectedTab]} />
       </MuiGrid>
     </MuiGrid>
