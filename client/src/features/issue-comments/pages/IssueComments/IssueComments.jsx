@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import MuiGrid from '@mui/material/Grid';
 import MuiLinearProgress from '@mui/material/LinearProgress';
 
-import AddComment from '../../components/containers/AddComment';
-import CommentList from '../../components/containers/CommentList';
+import AddComment from '../../components/AddComment';
+import CommentList from '../../components/CommentList';
 
-import { setComments } from '../../slice/issue-comments.slice';
-import { useGetIssueCommentsQuery } from '../../api/issue-comments.api';
+import { setComments } from '../../issue-comments.slice';
+import { useGetIssueCommentsQuery } from '../../issue-comments.api';
 
 function IssueComments() {
   const { id } = useParams();

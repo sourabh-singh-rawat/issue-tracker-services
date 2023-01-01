@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import db from '../../config/db.config.js';
 
 const insertOne = async ({ typeId, projectId, userId }) =>

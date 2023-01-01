@@ -1,7 +1,7 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { useOutletContext } from 'react-router-dom';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
+import TabPanel from '../../../../common/TabPanel';
 
 function TeamActivity() {
   const [selectedTab] = useOutletContext();

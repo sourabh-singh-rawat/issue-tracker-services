@@ -1,31 +1,31 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-wrap-multilines */
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
 
-import Tab from '../../../../common/tabs/Tab';
-import Tabs from '../../../../common/tabs/Tabs';
-import TitleSection from '../../../../common/headers/TitleSection';
-import IssueStatusSelector from '../../components/containers/IssueStatusSelector';
-import IssuePrioritySelector from '../../components/containers/IssuePrioritySelector';
+import IssuePrioritySelector from '../../components/IssuePrioritySelector';
+import IssueStatusSelector from '../../components/IssueStatusSelector';
+import Tab from '../../../../common/Tab';
+import Tabs from '../../../../common/Tabs';
+import TitleSection from '../../../../common/TitleSection';
 
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
 import {
   resetIssueSlice,
   setIssue,
   setIssuePriority,
   setIssueStatus,
   updateIssue,
-} from '../../slice/issue.slice';
+} from '../../issue.slice';
 import {
   useGetIssueQuery,
   useGetIssuesPriorityQuery,
   useGetIssuesStatusQuery,
   useUpdateIssueMutation,
-} from '../../api/issue.api';
+} from '../../issue.api';
 
 function Issue() {
   const { id } = useParams();

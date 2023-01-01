@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import createToken from './create-token.auth.controller.js';
 import verifyToken from './verify-token.auth.controller.js';
 

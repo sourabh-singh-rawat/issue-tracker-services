@@ -1,47 +1,47 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import ProtectedRoute from './common/hoc/ProtectedRoute';
-import Main from './common/headers/Main';
-import Login from './features/auth/pages/Login/Login';
-import SignUp from './features/auth/pages/Signup';
 import Dashboard from './features/dashboard/pages/Dashboard';
-import Settings from './features/settings/components/pages/Settings';
+import Login from './features/auth/pages/Login/Login';
+import Main from './common/Main';
+import ProtectedRoute from './common/ProtectedRoute';
+import Settings from './features/settings/pages/Settings';
+import SignUp from './features/auth/pages/Signup';
 
+import CollaboratorList from './features/collaborator-list/components/CollaboratorList';
 import Collaborators from './features/collaborator-list/pages/Collaborators/Collaborators';
-import CollaboratorList from './features/collaborator-list/components/containers/CollaboratorList';
 
 import Project from './features/project/pages/Project';
-import ProjectOverview from './features/project/pages/ProjectOverview';
-import ProjectIssues from './features/project/pages/ProjectIssues';
-import ProjectMembers from './features/project/pages/ProjectMembers';
 import ProjectActivity from './features/project/pages/ProjectActivity';
-import ProjectSetting from './features/project/pages/ProjectSettings';
 import ProjectForm from './features/project/pages/ProjectForm';
+import ProjectIssues from './features/project/pages/ProjectIssues';
+import ProjectList from './features/project-list/components/ProjectList';
+import ProjectMembers from './features/project/pages/ProjectMembers';
+import ProjectOverview from './features/project/pages/ProjectOverview';
 import Projects from './features/project-list/pages/Projects';
-import ProjectList from './features/project-list/components/containers/ProjectList';
+import ProjectSetting from './features/project/pages/ProjectSettings';
 
-import Issues from './features/issue-list/pages/Issues';
 import Issue from './features/issue/pages/Issue';
-import IssueTasks from './features/issue-tasks/pages/IssueTasks/IssueTasks';
-import IssueOverview from './features/issue/pages/IssueOverview';
-import IssueComments from './features/issue-comments/pages/IssueComments';
 import IssueAttachments from './features/issue-attachments/pages/IssueAttachments';
-import IssueSettings from './features/issue/pages/IssueSettings';
+import IssueComments from './features/issue-comments/pages/IssueComments';
 import IssueForm from './features/issue/pages/IssueForm';
-import IssueList from './features/issue-list/components/containers/IssueList';
+import IssueList from './features/issue-list/components/IssueList';
+import IssueOverview from './features/issue/pages/IssueOverview';
+import Issues from './features/issue-list/pages/Issues';
+import IssueSettings from './features/issue/pages/IssueSettings';
+import IssueTasks from './features/issue-tasks/pages/IssueTasks/IssueTasks';
 
-import Teams from './features/team-list/pages/Teams';
 import Team from './features/team/pages/Team';
 import TeamActivity from './features/team/pages/TeamActivity';
-import TeamOverview from './features/team/pages/TeamOverview';
-import TeamSettings from './features/team/pages/TeamSettings';
 import TeamForm from './features/team/pages/TeamForm';
-import TeamList from './features/team-list/components/containers/TeamList';
+import TeamList from './features/team-list/components/TeamList';
+import TeamOverview from './features/team/pages/TeamOverview';
+import Teams from './features/team-list/pages/Teams';
+import TeamSettings from './features/team/pages/TeamSettings';
 
 import Profile from './features/profile/pages/Profile';
-import TeamProjects from './features/team/pages/TeamProjects';
 import TeamMembers from './features/team/pages/TeamMembers';
+import TeamProjects from './features/team/pages/TeamProjects';
 
 function NoComponent() {
   return <h1>404</h1>;

@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import IssuePriority from '../../models/issue-priority/issue-priority.model.js';
 
 /**

@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import IssueTask from '../../models/issue-task/issue-task.model.js';
 
 /**

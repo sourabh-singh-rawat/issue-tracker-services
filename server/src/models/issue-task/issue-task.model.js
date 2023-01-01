@@ -1,5 +1,5 @@
 /* eslint-disable import/named */
-/* eslint-disable import/extensions */
+
 import db from '../../config/db.config.js';
 
 import { selectIssueTasks } from './utils/select-issue-tasks-query.utils.js';

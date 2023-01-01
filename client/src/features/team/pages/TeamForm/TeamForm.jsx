@@ -6,12 +6,12 @@ import MuiBox from '@mui/material/Box';
 import MuiGrid from '@mui/material/Grid';
 import MuiButton from '@mui/material/Button';
 
-import TextField from '../../../../common/textfields/TextField';
-import SectionHeader from '../../../../common/headers/SectionHeader';
+import TextField from '../../../../common/TextField';
+import SectionHeader from '../../../../common/SectionHeader';
 
-import { useCreateTeamMutation } from '../../api/team.api';
+import { useCreateTeamMutation } from '../../team.api';
 
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
 
 function TeamForm() {
   const dispatch = useDispatch();

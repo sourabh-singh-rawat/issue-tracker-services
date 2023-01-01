@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import TeamUser from '../../models/team-user/team-user.model.js';
 
 const createMember = async (req, res) => {

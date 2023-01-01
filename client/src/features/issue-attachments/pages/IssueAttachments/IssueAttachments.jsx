@@ -1,27 +1,25 @@
 /* eslint-disable consistent-return */
-/* eslint-disable no-shadow */
-/* eslint-disable import/extensions */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams } from 'react-router-dom';
 
-import MuiGrid from '@mui/material/Grid';
-import MuiInput from '@mui/material/Input';
 import MuiButton from '@mui/material/Button';
-import ImageList from '@mui/material/ImageList';
+import MuiGrid from '@mui/material/Grid';
+import MuiImageList from '@mui/material/ImageList';
+import MuiInput from '@mui/material/Input';
 import theme from '../../../../config/mui.config';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
-import UploadButton from '../../../issue/components/buttons/UploadButton';
+import ImageCard from '../../components/ImageCard/ImageCard';
+import TabPanel from '../../../../common/TabPanel';
+import UploadButton from '../../../issue/components/UploadButton';
 
 import {
-  useGetIssueAttachmentsQuery,
   useCreateIssueAttachmentMutation,
-} from '../../api/issue-attachments.api';
+  useGetIssueAttachmentsQuery,
+} from '../../issue-attachments.api';
 
-import { setIssueAttachments } from '../../../issue/slice/issue.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
-import ImageCard from '../../components/ImageCard/ImageCard';
+import { setIssueAttachments } from '../../../issue/issue.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
 
 function IssueAttachments() {
   const { id } = useParams();
@@ -109,7 +107,7 @@ function IssueAttachments() {
           <UploadButton label="Upload" open={open} onClick={handleSubmit} />
         </MuiGrid>
       </MuiGrid>
-      <ImageList
+      <MuiImageList
         cols={8}
         rowHeight={164}
         sx={{ width: '100%' }}
@@ -123,7 +121,7 @@ function IssueAttachments() {
             path={path}
           />
         ))}
-      </ImageList>
+      </MuiImageList>
     </TabPanel>
   );
 }

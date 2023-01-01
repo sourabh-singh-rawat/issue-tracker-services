@@ -2,11 +2,11 @@ import React from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
-import IssueList from '../../../issue-list/components/containers/IssueList';
-import AddIssueButton from '../../../issue/components/buttons/AddIssueButton/AddIssueButton';
-import TabPanel from '../../../../common/tabs/TabPanel';
-import IssueStatusFilter from '../../../../common/selects/IssueStatusFilter';
-import IssuePriorityFilter from '../../../../common/selects/IssuePriorityFilter';
+import IssueList from '../../../issue-list/components/IssueList';
+import AddIssueButton from '../../../issue/components/AddIssueButton/AddIssueButton';
+import TabPanel from '../../../../common/TabPanel';
+import IssueStatusFilter from '../../../../common/IssueStatusFilter';
+import IssuePriorityFilter from '../../../../common/IssuePriorityFilter';
 import theme from '../../../../config/mui.config';
 
 function ProjectIssues() {

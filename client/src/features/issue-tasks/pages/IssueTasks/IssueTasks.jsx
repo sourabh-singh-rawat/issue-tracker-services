@@ -4,11 +4,11 @@ import { useOutletContext, useParams } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
-import TaskList from '../../components/containers/TaskList';
+import TabPanel from '../../../../common/TabPanel';
+import TaskList from '../../components/TaskList';
 
-import { setTasks } from '../../slice/issue-tasks.slice';
-import { useGetTasksQuery } from '../../api/issue-tasks.api';
+import { setTasks } from '../../issue-tasks.slice';
+import { useGetTasksQuery } from '../../issue-tasks.api';
 
 function IssueTasks() {
   const { id } = useParams();

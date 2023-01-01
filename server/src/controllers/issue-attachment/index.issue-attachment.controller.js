@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import IssueAttachment from '../../models/issue-attachment/issue-attachment.model.js';
 
 /**

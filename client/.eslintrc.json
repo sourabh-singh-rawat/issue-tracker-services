@@ -14,6 +14,16 @@
     "no-console": "error",
     "no-restricted-exports": "off",
     "implicit-arrow-linebreak": "off",
+    // "sort-imports": [
+    //   "off",
+    //   {
+    //     "ignoreCase": true,
+    //     "ignoreDeclarationSort": false,
+    //     "ignoreMemberSort": false,
+    //     "memberSyntaxSortOrder": ["none", "all", "single", "multiple"],
+    //     "allowSeparatedGroups": true
+    //   }
+    // ],
     "react/jsx-sort-props": [
       "error",
       {

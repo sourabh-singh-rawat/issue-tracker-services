@@ -1,5 +1,5 @@
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable import/extensions */
+
 import db from '../../config/db.config.js';
 // eslint-disable-next-line import/no-useless-path-segments
 import ProjectMember from '../../models/project-member/project-member.model.js';

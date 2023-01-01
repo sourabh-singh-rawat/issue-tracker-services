@@ -1,5 +1,5 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable import/extensions */
+
 import db from '../../config/db.config.js';
 import User from '../../models/user/user.model.js';
 import Project from '../../models/project/project.model.js';

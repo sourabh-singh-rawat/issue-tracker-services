@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Team from '../../models/team/team.model.js';
 
 const update = async (req, res) => {

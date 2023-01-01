@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 /* eslint-disable-next-line import/extensions */
 import db from '../../config/db.config.js';
 import User from '../../models/user/user.model.js';

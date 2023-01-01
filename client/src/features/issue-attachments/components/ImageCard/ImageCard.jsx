@@ -2,7 +2,7 @@
 import { ImageListItem, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { useGetIssueAttachmentQuery } from '../../api/issue-attachments.api';
+import { useGetIssueAttachmentQuery } from '../../issue-attachments.api';
 
 export default function ImageCard({ attachmentId, issueId }) {
   const [signedUrl, setSignedUrl] = useState('');

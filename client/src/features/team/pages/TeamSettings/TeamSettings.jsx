@@ -7,11 +7,11 @@ import MuiGrid from '@mui/material/Grid';
 import MuiButton from '@mui/material/Button';
 import MuiTypography from '@mui/material/Typography';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
-import TextField from '../../../../common/textfields/TextField';
+import TabPanel from '../../../../common/TabPanel';
+import TextField from '../../../../common/TextField';
 
-import { updateList } from '../../slice/team.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import { updateList } from '../../team.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
 
 function TeamSettings() {
   const [selectedTab] = useOutletContext();

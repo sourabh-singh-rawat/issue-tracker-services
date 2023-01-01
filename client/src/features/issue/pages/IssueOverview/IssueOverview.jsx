@@ -2,24 +2,25 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable curly */
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useOutletContext, Link } from 'react-router-dom';
 
+import { ImageList } from '@mui/material';
 import MuiGrid from '@mui/material/Grid';
 import MuiTypography from '@mui/material/Typography';
-import { ImageList } from '@mui/material';
 import theme from '../../../../config/mui.config';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
-import Description from '../../../../common/textfields/Description';
-import IssueAssignee from '../../components/containers/IssueAssignee';
+import Description from '../../../../common/Description';
+import IssueAssignee from '../../components/IssueAssignee';
+import TabPanel from '../../../../common/TabPanel';
 
-import { setIssueAttachments, updateIssue } from '../../slice/issue.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
-import { useUpdateIssueMutation } from '../../api/issue.api';
-import { useGetIssueAttachmentsQuery } from '../../../issue-attachments/api/issue-attachments.api';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
+import { setIssueAttachments, updateIssue } from '../../issue.slice';
+
 import ImageCard from '../../../issue-attachments/components/ImageCard/ImageCard';
+import { useGetIssueAttachmentsQuery } from '../../../issue-attachments/issue-attachments.api';
+import { useUpdateIssueMutation } from '../../issue.api';
 
 function IssueOverview() {
   const { id } = useParams();

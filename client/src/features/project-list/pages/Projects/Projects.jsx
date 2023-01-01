@@ -5,9 +5,9 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from '../../../../common/headers/SectionHeader';
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
-import { resetProjectSlice } from '../../../project/slice/project.slice';
+import SectionHeader from '../../../../common/SectionHeader';
+import PrimaryButton from '../../../../common/PrimaryButton';
+import { resetProjectSlice } from '../../../project/project.slice';
 
 function Projects() {
   const navigate = useNavigate();

@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import db from '../../config/db.config.js';
 import { selectIssuesQuery } from './utils/select-issues-query.utils.js';
 

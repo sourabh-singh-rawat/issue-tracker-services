@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Issue from '../../models/issue/issue.model.js';
 
 /**

@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import User from '../../models/user/user.model.js';
 
 const update = async (req, res) => {

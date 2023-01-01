@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/react-in-jsx-scope */
-import { useLocation, Outlet, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
-
-import SectionHeader from '../../../../common/headers/SectionHeader';
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import PrimaryButton from '../../../../common/PrimaryButton';
+import SectionHeader from '../../../../common/SectionHeader';
 
 function Collaborators() {
   const navigate = useNavigate();

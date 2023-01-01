@@ -1,8 +1,7 @@
-/* eslint-disable import/extensions */
 /* eslint-disable import/prefer-default-export */
 // eslint-disable-next-line import/prefer-default-export
 
-import toSnakeCase from '../../../utils/toSnakeCase.util.js';
+import toSnakeCase from '../../../utils/to-snake-case.util.js';
 
 export const selectIssuesQuery = ({
   reporterId,

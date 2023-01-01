@@ -1,5 +1,5 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable import/extensions */
+
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 import db from '../../config/db.config.js';

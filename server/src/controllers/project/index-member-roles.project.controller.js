@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import ProjectMemberRole from '../../models/project-member-roles/project-member-roles.model.js';
 
 /**

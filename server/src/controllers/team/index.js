@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import create from './create.team.controller.js';
 import index from './index.team.controller.js';
 import show from './show.team.controller.js';

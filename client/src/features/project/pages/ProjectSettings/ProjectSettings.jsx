@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { formatISO } from 'date-fns';
 
 import MuiGrid from '@mui/material/Grid';
+import TabPanel from '../../../../common/TabPanel';
+import PrimaryButton from '../../../../common/PrimaryButton';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
-
-import { updateProject } from '../../slice/project.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
-import { useUpdateProjectMutation } from '../../api/project.api';
+import { updateProject } from '../../project.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
+import { useUpdateProjectMutation } from '../../project.api';
 import ProjectDetailSettings from '../../components/ProjectDetailSettings';
 import CoreSettings from '../../components/CoreSettings/CoreSettings';
 import TimelineSettings from '../../components/TimelineSettings';

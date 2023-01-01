@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import create from './create.issue-task.controller.js';
 import index from './index.issue-task.controller.js';
 import show from './show.issue-task.controller.js';

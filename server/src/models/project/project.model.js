@@ -1,7 +1,7 @@
 /* eslint-disable import/named */
-/* eslint-disable import/extensions */
+
 import db from '../../config/db.config.js';
-import toSnakeCase from '../../utils/toSnakeCase.util.js';
+import toSnakeCase from '../../utils/to-snake-case.util.js';
 import { buildProjectsQuery } from './utils/build-projects-query.utils.js';
 
 /**

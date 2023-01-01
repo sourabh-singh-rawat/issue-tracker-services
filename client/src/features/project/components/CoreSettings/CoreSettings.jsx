@@ -5,8 +5,8 @@ import MuiDivider from '@mui/material/Divider';
 import MuiTypography from '@mui/material/Typography';
 import MuiGrid from '@mui/material/Grid';
 import theme from '../../../../config/mui.config';
-import Setting from '../../../../common/utilities/Setting';
-import TextField from '../../../../common/textfields/TextField';
+import Setting from '../../../../common/Setting';
+import TextField from '../../../../common/TextField';
 
 export default function CoreSettings({ id, isLoading, ownerId }) {
   return (

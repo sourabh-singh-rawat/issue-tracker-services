@@ -4,9 +4,9 @@ import MuiGrid from '@mui/material/Grid';
 import MuiTypography from '@mui/material/Typography';
 import MuiBox from '@mui/material/Box';
 import MuiDivider from '@mui/material/Divider';
-import TextField from '../../../../common/textfields/TextField';
-import Setting from '../../../../common/utilities/Setting';
-import ProjectStatusSelector from '../containers/ProjectStatusSelector';
+import TextField from '../../../../common/TextField';
+import Setting from '../../../../common/Setting';
+import ProjectStatusSelector from '../ProjectStatusSelector';
 import theme from '../../../../config/mui.config';
 
 export default function ProjectDetailSetting({

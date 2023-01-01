@@ -1,14 +1,13 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable implicit-arrow-linebreak */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import MuiGrid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import MuiButton from '@mui/material/Button';
 import MuiContainer from '@mui/material/Container';
+import MuiGoogleIcon from '@mui/icons-material/Google';
+import MuiGrid from '@mui/material/Grid';
 import MuiTypography from '@mui/material/Typography';
-import GoogleIcon from '@mui/icons-material/Google';
 import theme from '../../../../config/mui.config';
 
 import continueWithGoogle from '../../../../utils/firebase/continue-with-google.utils';
@@ -44,7 +43,7 @@ function SignUp() {
             </MuiGrid>
             <MuiGrid xs={12} item>
               <MuiButton
-                startIcon={<GoogleIcon />}
+                startIcon={<MuiGoogleIcon />}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 500,

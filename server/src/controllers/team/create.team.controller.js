@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import User from '../../models/user/user.model.js';
 import Team from '../../models/team/team.model.js';
 
