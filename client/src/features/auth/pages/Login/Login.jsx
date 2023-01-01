@@ -4,9 +4,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Button, Container, Typography } from '@mui/material';
+import MuiButton from '@mui/material/Button';
+import MuiContainer from '@mui/material/Container';
+import MuiGoogleIcon from '@mui/icons-material/Google';
 import MuiGrid from '@mui/material/Grid';
-import GoogleIcon from '@mui/icons-material/Google';
+import MuiTypography from '@mui/material/Typography';
 
 import continueWithGoogle from '../../../../utils/firebase/continue-with-google.utils';
 import { onAuthStateChangedListener } from '../../../../config/firebase.config';
@@ -31,16 +33,16 @@ function Login() {
   );
 
   return (
-    <Container component="main" maxWidth="xs">
+    <MuiContainer component="main" maxWidth="xs">
       <MuiGrid spacing={2} container>
         <MuiGrid sx={{ textAlign: 'center', marginTop: 8 }} xs={12} item>
-          <Typography fontWeight="bold" variant="h4">
+          <MuiTypography fontWeight="bold" variant="h4">
             Log In
-          </Typography>
+          </MuiTypography>
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <Button
-            startIcon={<GoogleIcon />}
+          <MuiButton
+            startIcon={<MuiGoogleIcon />}
             sx={{
               color: 'text.primary',
               textTransform: 'none',
@@ -50,10 +52,10 @@ function Login() {
             onClick={handleContinueWithGoogle}
           >
             Continue with Google
-          </Button>
+          </MuiButton>
         </MuiGrid>
       </MuiGrid>
-    </Container>
+    </MuiContainer>
   );
 }
 

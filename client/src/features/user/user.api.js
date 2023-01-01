@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import apiSlice from '../../config/api.config';
 
 const userApiSlice = apiSlice.injectEndpoints({
@@ -10,3 +9,5 @@ const userApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useGetUserQuery } = userApiSlice;
+
+export default { useGetUserQuery };

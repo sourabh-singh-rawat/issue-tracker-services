@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import db from '../../config/db.config.js';
 import ProjectActivity from '../../models/project-activity/project-activity.model.js';
 import User from '../../models/user/user.model.js';

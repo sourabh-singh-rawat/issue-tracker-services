@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import create from './create.issue.controller.js';
 import index from './index.issue.controller.js';
 import show from './show.issue.controller.js';

@@ -1,5 +1,5 @@
 /* eslint-disable arrow-body-style */
-/* eslint-disable import/extensions */
+
 import db from '../../config/db.config.js';
 
 const insertOne = ({

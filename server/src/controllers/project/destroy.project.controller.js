@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Project from '../../models/project/project.model.js';
 
 const destroy = async (req, res) => {

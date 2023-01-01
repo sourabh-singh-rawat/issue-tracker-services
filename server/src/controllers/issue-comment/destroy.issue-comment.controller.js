@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import IssueComment from '../../models/issue-comment/issue-comment.model.js';
 
 /**

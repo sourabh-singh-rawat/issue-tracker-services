@@ -1,5 +1,5 @@
 /* eslint-disable import/named */
-/* eslint-disable import/extensions */
+
 import express from 'express';
 import { auth } from '../middlewares/auth.middleware.js';
 

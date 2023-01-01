@@ -1,8 +1,8 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 
 import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from '../../../../common/headers/SectionHeader';
+import SectionHeader from '../../../../common/SectionHeader';
 
 function Profile() {
   return (

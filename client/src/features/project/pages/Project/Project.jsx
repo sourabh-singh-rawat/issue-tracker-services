@@ -6,24 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import MuiGrid from '@mui/material/Grid';
 
-import Tab from '../../../../common/tabs/Tab';
-import Tabs from '../../../../common/tabs/Tabs';
-import PageTitleSection from '../../../../common/headers/TitleSection';
-import ProjectStatusSelector from '../../components/containers/ProjectStatusSelector';
+import Tab from '../../../../common/Tab';
+import Tabs from '../../../../common/Tabs';
+import PageTitleSection from '../../../../common/TitleSection';
+import ProjectStatusSelector from '../../components/ProjectStatusSelector';
 
 import {
   setProject,
   setStatus,
   updateProject,
   resetProjectSlice,
-} from '../../slice/project.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+} from '../../project.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
 
 import {
   useGetStatusQuery,
   useGetProjectQuery,
   useUpdateProjectMutation,
-} from '../../api/project.api';
+} from '../../project.api';
 
 function Project() {
   const { id } = useParams();

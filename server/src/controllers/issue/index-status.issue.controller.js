@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import IssueStatus from '../../models/issue-status/issue-status.model.js';
 
 /**

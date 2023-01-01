@@ -5,34 +5,35 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import MuiAutocomplete from '@mui/material/Autocomplete';
 import MuiBox from '@mui/material/Box';
 import MuiGrid from '@mui/material/Grid';
-import MuiAutocomplete from '@mui/material/Autocomplete';
 
-import DatePicker from '../../../../common/dates/DatePicker';
-import TextField from '../../../../common/textfields/TextField';
-import SectionHeader from '../../../../common/headers/SectionHeader';
+import DatePicker from '../../../../common/DatePicker';
+import SectionHeader from '../../../../common/SectionHeader';
+import TextField from '../../../../common/TextField';
 
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
-import IssueStatusSelector from '../../components/containers/IssueStatusSelector';
-import IssueAssigneeSelector from '../../../../common/selects/IssueAssigneeSelector';
-import IssuePrioritySelector from '../../components/containers/IssuePrioritySelector';
+import IssueAssigneeSelector from '../../../../common/IssueAssigneeSelector';
+import IssuePrioritySelector from '../../components/IssuePrioritySelector';
+import IssueStatusSelector from '../../components/IssueStatusSelector';
+import PrimaryButton from '../../../../common/PrimaryButton';
 
+import Label from '../../../../common/Label';
+
+import { useGetProjectMembersQuery } from '../../../project/project.api';
+import { useGetProjectsQuery } from '../../../project-list/project-list.api';
 import {
   useCreateIssueMutation,
   useGetIssuesPriorityQuery,
   useGetIssuesStatusQuery,
-} from '../../api/issue.api';
-import { useGetProjectMembersQuery } from '../../../project/api/project.api';
-import { useGetProjectsQuery } from '../../../project-list/api/project-list.api';
+} from '../../issue.api';
 
+import { setMembers } from '../../../project/project.slice';
 import {
   setIssuePriority,
   setIssueStatus,
   updateIssue,
-} from '../../slice/issue.slice';
-import { setMembers } from '../../../project/slice/project.slice';
-import Label from '../../../../common/utilities/Label';
+} from '../../issue.slice';
 
 function IssueForm() {
   const { id } = useParams();

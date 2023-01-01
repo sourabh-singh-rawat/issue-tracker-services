@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import ProjectStatus from '../../models/project-status/project-status.model.js';
 
 /**

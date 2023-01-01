@@ -1,26 +1,24 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable consistent-return */
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import MuiGrid from '@mui/material/Grid';
+
+import DatePicker from '../../../../common/DatePicker';
+import PrimaryButton from '../../../../common/PrimaryButton';
+import ProjectStatusSelector from '../../components/ProjectStatusSelector';
+import SectionHeader from '../../../../common/SectionHeader';
+import TextField from '../../../../common/TextField';
+
 import errors from '../../../../errors';
 
-import DatePicker from '../../../../common/dates/DatePicker';
-import TextField from '../../../../common/textfields/TextField';
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
-import SectionHeader from '../../../../common/headers/SectionHeader';
-import ProjectStatusSelector from '../../components/containers/ProjectStatusSelector';
+import { setStatus } from '../../project.slice';
 
-import { setStatus } from '../../slice/project.slice';
-import {
-  useGetStatusQuery,
-  useCreateProjectMutation,
-} from '../../api/project.api';
+import { useCreateProjectMutation, useGetStatusQuery } from '../../project.api';
 
 function ProjectForm() {
   const dispatch = useDispatch();

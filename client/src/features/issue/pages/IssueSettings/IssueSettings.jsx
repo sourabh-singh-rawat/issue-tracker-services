@@ -1,28 +1,28 @@
 /* eslint-disable object-curly-newline */
-import React, { useEffect } from 'react';
-import { useOutletContext, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { format, formatISO, parseISO } from 'date-fns';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useOutletContext, useParams } from 'react-router-dom';
 
-import MuiGrid from '@mui/material/Grid';
 import MuiDivider from '@mui/material/Divider';
+import MuiGrid from '@mui/material/Grid';
 import MuiSkeleton from '@mui/material/Skeleton';
 import MuiTypography from '@mui/material/Typography';
 
-import TabPanel from '../../../../common/tabs/TabPanel';
-import DatePicker from '../../../../common/dates/DatePicker';
-import TextField from '../../../../common/textfields/TextField';
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
-import IssueStatusSelector from '../../components/containers/IssueStatusSelector';
-import IssueAssigneeSelector from '../../../../common/selects/IssueAssigneeSelector';
-import IssuePrioritySelector from '../../components/containers/IssuePrioritySelector';
+import DatePicker from '../../../../common/DatePicker';
+import IssueAssigneeSelector from '../../../../common/IssueAssigneeSelector';
+import IssuePrioritySelector from '../../components/IssuePrioritySelector';
+import IssueStatusSelector from '../../components/IssueStatusSelector';
+import PrimaryButton from '../../../../common/PrimaryButton';
+import TabPanel from '../../../../common/TabPanel';
+import TextField from '../../../../common/TextField';
 
-import { updateIssue } from '../../slice/issue.slice';
-import { setMembers } from '../../../project/slice/project.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import { setMembers } from '../../../project/project.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
+import { updateIssue } from '../../issue.slice';
 
-import { useUpdateIssueMutation } from '../../api/issue.api';
-import { useGetProjectMembersQuery } from '../../../project/api/project.api';
+import { useGetProjectMembersQuery } from '../../../project/project.api';
+import { useUpdateIssueMutation } from '../../issue.api';
 
 function IssueSettings() {
   const { id } = useParams();

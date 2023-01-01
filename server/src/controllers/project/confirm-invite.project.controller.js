@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import jwt from 'jsonwebtoken';
 // eslint-disable-next-line
 import dotenv from 'dotenv/config';

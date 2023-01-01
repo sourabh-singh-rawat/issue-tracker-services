@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import ProjectMember from '../../models/project-member/project-member.model.js';
 import User from '../../models/user/user.model.js';
 

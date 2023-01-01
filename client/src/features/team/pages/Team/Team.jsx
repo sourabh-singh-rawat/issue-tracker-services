@@ -7,11 +7,11 @@ import MuiGrid from '@mui/material/Grid';
 import MuiToolbar from '@mui/material/Toolbar';
 import MuiTypography from '@mui/material/Typography';
 
-import Tab from '../../../../common/tabs/Tab';
-import Tabs from '../../../../common/tabs/Tabs';
+import Tab from '../../../../common/Tab';
+import Tabs from '../../../../common/Tabs';
 
-import { useGetTeamQuery } from '../../api/team.api';
-import { setTeam } from '../../slice/team.slice';
+import { useGetTeamQuery } from '../../team.api';
+import { setTeam } from '../../team.slice';
 
 function Team() {
   const navigate = useNavigate();

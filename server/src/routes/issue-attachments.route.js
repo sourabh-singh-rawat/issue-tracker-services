@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import express from 'express';
 import multer from 'multer';
 import IssueAttachmentController from '../controllers/issue-attachment/index.js';

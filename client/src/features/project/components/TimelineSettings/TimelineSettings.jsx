@@ -6,9 +6,9 @@ import MuiDivider from '@mui/material/Divider';
 import MuiTypography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
 import theme from '../../../../config/mui.config';
-import TextField from '../../../../common/textfields/TextField';
-import Setting from '../../../../common/utilities/Setting';
-import DatePicker from '../../../../common/dates/DatePicker';
+import TextField from '../../../../common/TextField';
+import Setting from '../../../../common/Setting';
+import DatePicker from '../../../../common/DatePicker';
 
 export default function TimelineSettings({
   createdAt,

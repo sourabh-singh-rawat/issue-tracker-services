@@ -1,16 +1,15 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable react/react-in-jsx-scope */
-import { useEffect } from 'react';
+import { formatDistance, parseISO } from 'date-fns';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams } from 'react-router-dom';
-import { parseISO, formatDistance } from 'date-fns';
 
 import MuiTypography from '@mui/material/Typography';
 
-import StyledTabPanel from '../../../../common/tabs/TabPanel';
+import StyledTabPanel from '../../../../common/TabPanel';
 
-import { useGetProjectActivityQuery } from '../../api/project.api';
-import { setActivity } from '../../slice/project.slice';
+import { setActivity } from '../../project.slice';
+import { useGetProjectActivityQuery } from '../../project.api';
 
 function ProjectActivity() {
   const { id } = useParams();

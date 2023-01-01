@@ -6,18 +6,18 @@ import MuiGrid from '@mui/material/Grid';
 import MuiTypography from '@mui/material/Typography';
 
 import { CircularProgress } from '@mui/material';
-import TabPanel from '../../../../common/tabs/TabPanel';
-import MembersCard from '../../../../common/cards/MembersCard';
-import PageDescription from '../../../../common/textfields/Description';
-import IssueStats from '../../components/containers/IssueStats';
+import TabPanel from '../../../../common/TabPanel';
+import MembersCard from '../../components/MembersCard';
+import PageDescription from '../../../../common/Description';
+import IssueStats from '../../components/IssueStats';
 
-import { setIssueStatusCount, updateProject } from '../../slice/project.slice';
-import { setMessageBarOpen } from '../../../message-bar/slice/message-bar.slice';
+import { setIssueStatusCount, updateProject } from '../../project.slice';
+import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
 
 import {
   useUpdateProjectMutation,
   useGetProjectIssuesStatusCountQuery,
-} from '../../api/project.api';
+} from '../../project.api';
 import theme from '../../../../config/mui.config';
 
 function ProjectOverview() {

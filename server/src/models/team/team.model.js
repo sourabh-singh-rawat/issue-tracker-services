@@ -1,5 +1,5 @@
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable import/extensions */
+
 import db from '../../config/db.config.js';
 
 const insertOne = ({ name, teamLeader }) =>

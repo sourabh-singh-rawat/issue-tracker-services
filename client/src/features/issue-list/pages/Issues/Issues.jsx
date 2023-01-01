@@ -4,8 +4,8 @@ import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 import MuiGrid from '@mui/material/Grid';
 
-import SectionHeader from '../../../../common/headers/SectionHeader';
-import PrimaryButton from '../../../../common/buttons/PrimaryButton';
+import SectionHeader from '../../../../common/SectionHeader';
+import PrimaryButton from '../../../../common/PrimaryButton';
 
 function Issues() {
   const navigate = useNavigate();

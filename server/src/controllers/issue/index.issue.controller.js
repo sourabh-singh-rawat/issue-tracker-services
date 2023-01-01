@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-/* eslint-disable import/extensions */
+
 import User from '../../models/user/user.model.js';
 import Issue from '../../models/issue/issue.model.js';
-import toSnakeCase from '../../utils/toSnakeCase.util.js';
+import toSnakeCase from '../../utils/to-snake-case.util.js';
 
 /**
  * Lists all the issues of project

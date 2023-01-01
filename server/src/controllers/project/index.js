@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import create from './create.project.controller.js';
 import index from './index.project.controller.js';
 import show from './show.project.controller.js';
