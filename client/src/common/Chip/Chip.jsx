@@ -2,14 +2,22 @@
 import React from 'react';
 
 import MuiChip from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
+import theme from '../../config/mui.config';
 
-function Chip({ id }) {
+const StyledChip = styled(MuiChip)(() => ({
+  fontWeight: 600,
+}));
+
+function Chip({ label, color, backgroundColor }) {
   return (
-    <MuiChip
-      label={id}
+    <StyledChip
+      backgroundColor={backgroundColor}
+      label={label}
       size="small"
       sx={{
-        borderRadius: '6px',
+        color,
+        backgroundColor: backgroundColor || theme.palette.grey[1400],
       }}
     />
   );

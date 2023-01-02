@@ -9,12 +9,12 @@ function EditTaskButton({ onClick }) {
   return (
     <MuiIconButton
       sx={{
-        color: theme.palette.grey[400],
+        color: theme.palette.grey[1200],
         border: 'none',
         boxShadow: 'none',
         backgroundColor: 'transparent',
         ':hover': {
-          color: theme.palette.grey[600],
+          color: theme.palette.grey[900],
           boxShadow: 'none',
           backgroundColor: 'transparent',
         },

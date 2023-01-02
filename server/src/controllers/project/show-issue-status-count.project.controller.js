@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/extensions
 import User from '../../models/user/user.model.js';
-// eslint-disable-next-line import/extensions
 import Project from '../../models/project/project.model.js';
 
 const showIssuesStatusCount = async (req, res) => {

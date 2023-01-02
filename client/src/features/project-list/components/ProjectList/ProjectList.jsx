@@ -105,7 +105,7 @@ function ProjectList() {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               fontWeight: 500,
-              ':hover': { color: theme.palette.primary.main },
+              ':hover': { color: theme.palette.primary[800] },
             }}
             variant="body2"
           >

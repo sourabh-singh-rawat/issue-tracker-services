@@ -14,44 +14,46 @@ import Label from '../../../../common/Label/Label';
 import theme from '../../../../config/mui.config';
 
 const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
+  transitionDuration: '350ms',
   '&.MuiOutlinedInput-root': {
     color: theme.palette.text.primary,
     fontSize: '13px',
     fontWeight: 500,
     textTransform: 'capitalize',
-    borderRadius: '6px',
-    transitionDuration: '350ms',
-    backgroundColor: lighten(statuscolor, 0.9),
+    borderRadius: theme.shape.borderRadiusRounded,
+    backgroundColor: lighten(statuscolor, 0.85),
+    '& .MuiSvgIcon-root': { color: statuscolor },
+    transition: '350ms',
     '& fieldset': {
       transitionDuration: '350ms',
-      border: `2px solid ${lighten(statuscolor, 0.8)}`,
+      border: `2px solid ${lighten(statuscolor, 0.85)}`,
     },
     '&:hover fieldset': {
       backgroundColor: 'transparent',
-      border: `2px solid ${lighten(statuscolor, 0.2)}`,
-      transitionDuration: '350ms',
+      border: `2px solid ${lighten(statuscolor, 0.65)}`,
     },
   },
 }));
 
 const StyledMenuItem = styled(MuiMenuItem)(() => ({
+  paddingLeft: '12px',
+  paddingRight: '12px',
+  transition: 'all 350ms',
+  borderRadius: theme.shape.borderRadiusMedium,
   '&.MuiMenuItem-root': {
-    ':hover': {
-      backgroundColor: 'action.hover',
-    },
+    margin: '0 4px',
+    ':hover': { backgroundColor: theme.palette.grey[1300] },
   },
-  '&.Mui-selected': {
-    color: theme.palette.primary.main,
-  },
+  '&.Mui-selected': { color: theme.palette.primary[1000] },
 }));
 
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: 32 * 6.5 + 8,
-      borderRadius: '6px',
       marginTop: '6px',
-      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+      borderRadius: theme.shape.borderRadiusLarge,
+      backgroundColor: theme.palette.common.white,
+      boxShadow: theme.shadows[2],
     },
   },
 };
@@ -91,16 +93,18 @@ function IssueStatusSelector({
                 fontSize: '13px',
                 fontWeight: 600,
                 textTransform: 'capitalize',
-                '&:hover': {
-                  boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
-                },
               }}
               value={value}
               displayEmpty
               onChange={handleChange}
             >
               {issueStatus.map(({ id, name, color }) => (
-                <StyledMenuItem key={id} value={id}>
+                <StyledMenuItem
+                  key={id}
+                  value={id}
+                  disableGutters
+                  disableRipple
+                >
                   <MuiTypography
                     overflow="hidden"
                     sx={{

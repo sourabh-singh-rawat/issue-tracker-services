@@ -10,12 +10,12 @@ function DeleteTaskButton({ onClick }) {
     <MuiIconButton
       size="small"
       sx={{
-        color: theme.palette.grey[400],
-        border: 'none',
+        color: theme.palette.grey[1100],
+        border: theme.shape.borderRadiusNone,
         boxShadow: 'none',
         backgroundColor: 'transparent',
         ':hover': {
-          color: theme.palette.grey[600],
+          color: theme.palette.grey[900],
           boxShadow: 'none',
           backgroundColor: 'transparent',
         },

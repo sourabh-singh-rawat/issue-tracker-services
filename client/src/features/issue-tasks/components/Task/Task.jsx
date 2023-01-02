@@ -74,9 +74,13 @@ function Task({ taskId, dueDate, description, completed }) {
       sx={{
         cursor: 'pointer',
         alignItems: 'center',
-        borderBottom: `1px solid ${theme.palette.grey[200]}`,
+        borderBottom: `1px solid ${theme.palette.grey[1200]}`,
         transitionDuration: '250ms',
-        ':hover': { boxShadow: 4, backgroundColor: 'action.hover' },
+        borderRadius: theme.shape.borderRadiusNone,
+        ':hover': {
+          boxShadow: theme.shadows[1],
+          backgroundColor: theme.palette.grey[1400],
+        },
       }}
       container
       onMouseEnter={() => setShow(true)}
@@ -110,10 +114,10 @@ function Task({ taskId, dueDate, description, completed }) {
                   boxShadow: 'none',
                   marginLeft: '8px',
                   textTransform: 'none',
-                  backgroundColor: 'primary.main',
+                  backgroundColor: theme.palette.primary[900],
                   ':hover': {
                     boxShadow: 'none',
-                    backgroundColor: 'primary.main',
+                    backgroundColor: theme.palette.primary[700],
                   },
                 }}
                 onClick={handleSave}

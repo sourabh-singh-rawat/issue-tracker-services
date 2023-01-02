@@ -8,13 +8,14 @@ export default function CancelButton({ label, onClick }) {
   return (
     <MuiButton
       sx={{
-        color: theme.palette.grey[900],
+        color: theme.palette.grey[200],
         height: '100%',
-        borderRadius: '6px',
+        borderRadius: theme.shape.borderRadiusMedium,
+        backgroundColor: theme.palette.grey[1300],
         textTransform: 'none',
         '&:hover': {
           boxShadow: 4,
-          backgroundColor: theme.palette.grey[300],
+          backgroundColor: theme.palette.grey[1100],
         },
       }}
       disableRipple

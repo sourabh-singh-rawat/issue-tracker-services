@@ -2,7 +2,8 @@ const formErrors = {
   project: {
     NAME_MAX_LENGTH_ERROR: {
       limit: 255,
-      message: '"Name" length must be less than or equal to 60 characters long',
+      message:
+        '"Name" length must be less than or equal to 255 characters long',
     },
     DESCRIPTION_MAX_LENGTH_ERROR: {
       limit: 4000,

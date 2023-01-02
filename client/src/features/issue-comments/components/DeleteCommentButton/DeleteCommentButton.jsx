@@ -17,6 +17,7 @@ import SecondaryButton from '../../../../common/SecondaryButton';
 
 import { setLoadingComments } from '../../issue-comments.slice';
 import { useDeleteCommentMutation } from '../../issue-comments.api';
+import theme from '../../../../config/mui.config';
 
 function DeleteCommentButton({ id, issue_id }) {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ function DeleteCommentButton({ id, issue_id }) {
         sx={{
           fontSize: '13px',
           fontWeight: 600,
-          ':hover': { cursor: 'pointer' },
+          ':hover': { cursor: 'pointer', color: theme.palette.primary[900] },
         }}
         variant="body2"
         onClick={handleOpen}

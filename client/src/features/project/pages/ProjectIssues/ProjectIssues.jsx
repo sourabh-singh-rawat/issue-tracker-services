@@ -19,8 +19,8 @@ function ProjectIssues() {
         <MuiGrid
           sx={{
             display: 'flex',
-            backgroundColor: theme.palette.grey[200],
-            borderRadius: '6px',
+            backgroundColor: theme.palette.grey[1400],
+            borderRadius: theme.shape.borderRadiusMedium,
             paddingBottom: '8px',
           }}
           xs={12}

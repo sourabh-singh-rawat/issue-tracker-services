@@ -15,8 +15,8 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-input': {
     overflow: 'hidden',
     paddingTop: '4px',
-    textOverflow: 'ellipsis',
     paddingBottom: '4px',
+    textOverflow: 'ellipsis',
   },
   '& .MuiOutlinedInput-root ': {
     fontSize: theme.typography.h4.fontSize,
@@ -28,17 +28,17 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
     },
     '&:hover': {
       transitionDuration: '250ms',
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.grey[1200],
       '& fieldset': {
-        border: `2px solid ${theme.palette.grey[200]}`,
+        border: `2px solid ${theme.palette.grey[1200]}`,
         transitionDuration: '250ms',
       },
     },
     '&.Mui-focused': {
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.common.white,
       transitionDuration: '250ms',
       '& fieldset': {
-        border: `2px solid ${theme.palette.primary.main}`,
+        border: `2px solid ${theme.palette.primary[900]}`,
         transitionDuration: '250ms',
       },
     },

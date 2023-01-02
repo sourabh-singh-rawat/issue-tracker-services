@@ -37,11 +37,10 @@ const Drawer = styled(MuiDrawer, {
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
   '& .MuiPaper-root': {
     border: 'none',
     backgroundColor: theme.palette.common.white,
-    borderRight: `1px solid ${theme.palette.grey[300]}`,
+    borderRight: `1px solid ${theme.palette.grey[1200]}`,
   },
   ...(open && {
     ...openedMixin(theme),
@@ -81,9 +80,9 @@ function MenuSidebar() {
               padding: '4px 6px',
               transform: open && 'rotate(180deg)',
               borderRadius: '4px',
-              color: theme.palette.grey[500],
+              color: theme.palette.grey[900],
               '&:hover': {
-                backgroundColor: theme.palette.grey[400],
+                backgroundColor: theme.palette.grey[1400],
               },
             }}
             disableRipple

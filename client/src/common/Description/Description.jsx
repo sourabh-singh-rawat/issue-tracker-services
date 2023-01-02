@@ -37,7 +37,7 @@ function Description({
       <MuiGrid xs={12} item>
         <MuiTypography
           fontWeight={600}
-          sx={{ color: theme.palette.grey[900] }}
+          sx={{ color: theme.palette.grey[200] }}
           variant="body1"
         >
           Description:
@@ -45,7 +45,7 @@ function Description({
         {page.descriptionSelected ? (
           <TextField
             inputProps={{
-              style: { fontSize: '14px', lineHeight: 1.5 },
+              style: { fontSize: theme.typography.fontSize, lineHeight: 1.5 },
             }}
             minRows={4}
             size="small"

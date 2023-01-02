@@ -17,13 +17,13 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
     fontWeight: 600,
     textTransform: 'capitalize',
     borderRadius: '6px',
-    backgroundColor: theme.palette.grey[200],
+    backgroundColor: theme.palette.grey[1200],
     '& fieldset': {
-      border: `2px solid ${theme.palette.grey[200]}`,
+      border: `2px solid ${theme.palette.grey[1200]}`,
     },
     '&:hover fieldset': {
       backgroundColor: 'transparent',
-      border: `2px solid ${theme.palette.grey[400]}`,
+      border: `2px solid ${theme.palette.grey[1000]}`,
       transitionDuration: '250ms',
     },
   },

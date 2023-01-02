@@ -13,9 +13,9 @@ function ProjectEditButton({ id }) {
     <MuiIconButton
       size="small"
       sx={{
-        color: theme.palette.grey[300],
+        color: theme.palette.grey[1100],
         transition: 'ease-in-out 0.2s',
-        '&:hover': { color: theme.palette.primary.main },
+        '&:hover': { color: theme.palette.primary[900] },
       }}
       disableRipple
       onClick={() => navigate(`/projects/${id}/settings`)}

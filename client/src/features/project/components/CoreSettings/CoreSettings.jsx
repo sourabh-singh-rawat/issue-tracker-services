@@ -20,13 +20,13 @@ export default function CoreSettings({ id, isLoading, ownerId }) {
         </MuiTypography>
       </MuiBox>
       <MuiGrid
-        padding={3}
+        padding={2}
         rowSpacing={1}
         sx={{
-          borderRadius: 3,
           width: '100%',
+          border: `1px solid ${theme.palette.grey[1200]}`,
+          borderRadius: 3,
           backgroundColor: theme.palette.common.white,
-          border: `1px solid ${theme.palette.grey[300]}`,
         }}
         container
       >

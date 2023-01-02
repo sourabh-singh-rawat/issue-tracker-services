@@ -19,28 +19,44 @@ const StyledSelect = styled(MuiSelect)(() => ({
     color: theme.palette.grey[700],
     fontSize: '13px',
     fontWeight: 600,
-    borderRadius: '6px',
+    borderRadius: theme.shape.borderRadiusRounded,
     textTransform: 'capitalize',
-    backgroundColor: theme.palette.grey[50],
+    backgroundColor: theme.palette.grey[1300],
     transitionDuration: '350ms',
     '& fieldset': {
       transitionDuration: '350ms',
-      border: `2px solid ${theme.palette.grey[300]}`,
+      border: `2px solid ${theme.palette.grey[1300]}`,
     },
     '&:hover fieldset': {
-      border: `2px solid ${theme.palette.grey[600]}`,
+      border: `2px solid ${theme.palette.grey[1000]}`,
       backgroundColor: 'transparent',
     },
+  },
+}));
+
+const StyledMenuItem = styled(MuiMenuItem)(() => ({
+  paddingLeft: '12px',
+  paddingRight: '12px',
+  transition: 'all 350ms',
+  '&.MuiMenuItem-root': {
+    borderRadius: theme.shape.borderRadiusMedium,
+    margin: '0 4px',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[1200],
+    },
+  },
+  '&.Mui-selected': {
+    color: theme.palette.primary[800],
   },
 }));
 
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: 32 * 6.5 + 8,
-      borderRadius: '6px',
       marginTop: '6px',
-      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+      borderRadius: theme.shape.borderRadiusLarge,
+      backgroundColor: theme.palette.common.white,
+      boxShadow: theme.shadows[2],
     },
   },
 };
@@ -68,19 +84,15 @@ function IssueAssigneeSelector({
             MenuProps={MenuProps}
             name="assigneeId"
             size="small"
-            sx={{
-              '&:hover': {
-                boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
-              },
-            }}
-            value={!value ? 0 : value}
+            value={!value ? 'UNASSIGNED' : value}
             onChange={handleChange}
           >
             {projectMembers.map(({ name, memberId, photoUrl }) => (
-              <MuiMenuItem
+              <StyledMenuItem
                 key={memberId}
-                sx={{ fontSize: '13px', fontWeight: 600 }}
                 value={memberId}
+                disableGutters
+                disableRipple
               >
                 <MuiGrid columnSpacing={1} container>
                   <MuiGrid item>
@@ -89,17 +101,28 @@ function IssueAssigneeSelector({
                       sx={{
                         width: '20px',
                         height: '20px',
-                        backgroundColor: theme.palette.grey[500],
+                        backgroundColor: theme.palette.grey[900],
                       }}
                     />
                   </MuiGrid>
                   <MuiGrid sx={{ color: theme.palette.grey[700] }} item>
-                    {name}
+                    <MuiTypography
+                      overflow="hidden"
+                      sx={{
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        textTransform: 'capitalize',
+                      }}
+                      textOverflow="ellipsis"
+                      variant="body2"
+                    >
+                      {name}
+                    </MuiTypography>
                   </MuiGrid>
                 </MuiGrid>
-              </MuiMenuItem>
+              </StyledMenuItem>
             ))}
-            <MuiMenuItem value={0}>
+            <StyledMenuItem value="UNASSIGNED">
               <MuiGrid
                 columnSpacing={1}
                 sx={{ alignItems: 'center' }}
@@ -110,7 +133,7 @@ function IssueAssigneeSelector({
                     sx={{
                       width: '20px',
                       height: '20px',
-                      backgroundColor: theme.palette.grey[500],
+                      backgroundColor: theme.palette.grey[900],
                     }}
                   />
                 </MuiGrid>
@@ -127,7 +150,7 @@ function IssueAssigneeSelector({
                   </MuiTypography>
                 </MuiGrid>
               </MuiGrid>
-            </MuiMenuItem>
+            </StyledMenuItem>
           </StyledSelect>
         </MuiFormControl>
       )}

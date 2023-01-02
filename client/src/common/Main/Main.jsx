@@ -3,10 +3,10 @@ import React from 'react';
 
 import MuiBox from '@mui/material/Box';
 import MuiToolbar from '@mui/material/Toolbar';
+import theme from '../../config/mui.config';
 
 import MenuSidebar from '../MenuSidebar';
 import MessageBar from '../MessageBar';
-import theme from '../../config/mui.config';
 
 function Main() {
   return (

@@ -20,7 +20,7 @@ function MenuSidebarItem({ open, text, icon, href }) {
   const listItemIconStyles = {
     minWidth: 0,
     mr: open ? 1.5 : 'auto',
-    color: theme.palette.grey[800],
+    color: theme.palette.grey[400],
   };
 
   const listItemButtonStyles = {
@@ -29,7 +29,7 @@ function MenuSidebarItem({ open, text, icon, href }) {
   };
 
   const listLinkStyles = {
-    color: theme.palette.grey[900],
+    color: theme.palette.grey[600],
     textDecoration: 'none',
   };
 

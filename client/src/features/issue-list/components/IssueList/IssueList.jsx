@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -93,7 +92,7 @@ function IssueList({ projectId }) {
               textOverflow: 'ellipsis',
               color: theme.palette.text.primary,
               '&:hover': {
-                color: theme.palette.primary.main,
+                color: theme.palette.primary[800],
                 textDecoration: 'none!important',
               },
             }}
@@ -141,7 +140,7 @@ function IssueList({ projectId }) {
           sx={{
             color: theme.palette.secondary.main,
             ':hover': {
-              color: theme.palette.primary.main,
+              color: theme.palette.primary[800],
               backgroundColor: 'transparent',
             },
           }}
@@ -267,7 +266,7 @@ function IssueList({ projectId }) {
       rows={rows}
       autoHeight
       onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
-      onPageSizeChange={(pageSize) => dispatch(updateIssueList({ pageSize }))}
+      onPageSizeChange={(newSize) => dispatch(updateIssueList({ newSize }))}
     />
   );
 }

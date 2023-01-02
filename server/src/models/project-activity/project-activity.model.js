@@ -44,7 +44,8 @@ const find = async ({ projectId, memberId }) =>
           WHERE  project_id = $1
         )
       ORDER BY
-        pa.created_at DESC;
+        pa.created_at DESC
+      LIMIT 10
     `,
     [projectId, memberId],
   );
