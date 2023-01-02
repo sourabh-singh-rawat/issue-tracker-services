@@ -64,7 +64,7 @@ function ProjectOverview() {
         <MuiGrid md={6} sm={12} xs={12} item>
           <MuiTypography
             fontWeight={600}
-            sx={{ color: theme.palette.grey[900] }}
+            sx={{ color: theme.palette.grey[200] }}
             variant="body1"
           >
             Members:
@@ -79,7 +79,7 @@ function ProjectOverview() {
             <>
               <MuiTypography
                 fontWeight={600}
-                sx={{ color: theme.palette.grey[900] }}
+                sx={{ color: theme.palette.grey[200] }}
                 variant="body1"
               >
                 Issue Stats:

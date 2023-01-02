@@ -9,6 +9,7 @@ import { format, parseISO } from 'date-fns';
 import MuiAvatar from '@mui/material/Avatar';
 import MuiGrid from '@mui/material/Grid';
 import MuiTypography from '@mui/material/Typography';
+import theme from '../../../../config/mui.config';
 
 import List from '../../../../common/List';
 
@@ -35,33 +36,30 @@ function MemberList() {
       headerName: 'Name',
       minWidth: 200,
       renderCell: ({ value, row: { photoUrl } }) => (
-        <MuiGrid
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-          container
-        >
+        <MuiGrid sx={{ display: 'flex', alignItems: 'center' }} container>
           <MuiGrid item>
             <MuiAvatar
               src={photoUrl}
               sx={{
-                width: '24px',
-                height: '24px',
+                width: '30px',
+                height: '30px',
                 marginRight: '8px',
+                backgroundColor: theme.palette.grey[800],
               }}
             >
-              {value.match(/\b(\w)/g)[0]}
+              <MuiTypography variant="body2">
+                {value.match(/\b(\w)/g)[0]}
+              </MuiTypography>
             </MuiAvatar>
           </MuiGrid>
           <MuiGrid item>
             <Link style={{ textDecoration: 'none' }} to={`/profile/${id}`}>
               <MuiTypography
                 sx={{
-                  color: 'text.primary',
-                  fontWeight: 500,
+                  fontWeight: 600,
+                  color: theme.palette.grey[200],
                   '&:hover': {
-                    color: 'primary.main',
+                    color: theme.palette.primary[900],
                     textDecoration: 'none !important',
                   },
                 }}

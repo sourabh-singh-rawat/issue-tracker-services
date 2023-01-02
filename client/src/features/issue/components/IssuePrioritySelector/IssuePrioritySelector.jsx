@@ -20,28 +20,41 @@ const StyledSelect = styled(MuiSelect)(() => ({
     fontSize: '13px',
     fontWeight: 600,
     textTransform: 'capitalize',
-    borderRadius: '6px',
-    transitionDuration: '350ms',
-    backgroundColor: theme.palette.grey[50],
+    borderRadius: theme.shape.borderRadiusRounded,
+    backgroundColor: theme.palette.grey[1300],
     '& fieldset': {
-      transitionDuration: '350ms',
-      border: `2px solid ${theme.palette.grey[300]}`,
+      border: `2px solid ${theme.palette.grey[1300]}`,
     },
     '&:hover fieldset': {
       backgroundColor: 'transparent',
-      border: `2px solid ${theme.palette.grey[600]}`,
-      transitionDuration: '250ms',
+      border: `2px solid ${theme.palette.grey[1000]}`,
     },
+  },
+}));
+
+const StyledMenuItem = styled(MuiMenuItem)(() => ({
+  paddingLeft: '12px',
+  paddingRight: '12px',
+  transition: 'all 350ms',
+  '&.MuiMenuItem-root': {
+    borderRadius: theme.shape.borderRadiusMedium,
+    margin: '0 4px',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[1200],
+    },
+  },
+  '&.Mui-selected': {
+    color: theme.palette.primary[800],
   },
 }));
 
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: 32 * 6.5 + 8,
-      borderRadius: '6px',
       marginTop: '6px',
-      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+      borderRadius: theme.shape.borderRadiusLarge,
+      backgroundColor: theme.palette.common.white,
+      boxShadow: theme.shadows[2],
     },
   },
 };
@@ -79,27 +92,31 @@ function IssuePrioritySelector({
                 height: variant === 'dense' ? '28px' : 'auto',
                 fontSize: '13px',
                 textTransform: 'capitalize',
-                '&:hover': {
-                  boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
-                },
               }}
               value={value}
               displayEmpty
               onChange={handleChange}
             >
               {issuePriority.map(({ id, name }) => (
-                <MuiMenuItem
+                <StyledMenuItem
                   key={id}
-                  sx={{
-                    color: theme.palette.grey[700],
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    textTransform: 'capitalize',
-                  }}
                   value={id}
+                  disableGutters
+                  disableRipple
                 >
-                  {name}
-                </MuiMenuItem>
+                  <MuiTypography
+                    overflow="hidden"
+                    sx={{
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      textTransform: 'capitalize',
+                    }}
+                    textOverflow="ellipsis"
+                    variant="body2"
+                  >
+                    {name}
+                  </MuiTypography>
+                </StyledMenuItem>
               ))}
             </StyledSelect>
           </MuiFormControl>

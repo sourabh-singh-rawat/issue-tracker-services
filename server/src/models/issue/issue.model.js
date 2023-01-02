@@ -12,8 +12,10 @@ const insertOne = ({
   projectId,
 }) =>
   // eslint-disable-next-line implicit-arrow-linebreak
-  db.query(
-    `
+  {
+    if (assigneeId === 'UNASSIGNED') assigneeId = null;
+    return db.query(
+      `
     INSERT INTO
       issues (name, description, status, priority, reporter_id, due_date, project_id, assignee_id)
     VALUES
@@ -21,17 +23,18 @@ const insertOne = ({
     RETURNING 
       *
     `,
-    [
-      name,
-      description,
-      status,
-      priority,
-      reporterId,
-      dueDate,
-      projectId,
-      assigneeId,
-    ],
-  );
+      [
+        name,
+        description,
+        status,
+        priority,
+        reporterId,
+        dueDate,
+        projectId,
+        assigneeId,
+      ],
+    );
+  };
 
 const find = async (options) => {
   const { query, colValues } = selectIssuesQuery(options);

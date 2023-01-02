@@ -11,7 +11,7 @@ export default function Setting({ title, children }) {
     <MuiGrid sx={{ padding: '16px' }} container>
       <MuiGrid xs={2} item>
         <MuiTypography
-          color={theme.palette.grey[900]}
+          color={theme.palette.grey[200]}
           fontWeight={600}
           variant="body2"
         >

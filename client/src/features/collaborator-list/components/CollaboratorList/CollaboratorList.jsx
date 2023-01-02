@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import MuiAvatar from '@mui/material/Avatar';
 import MuiTypography from '@mui/material/Typography';
+import theme from '../../../../config/mui.config';
 
 import List from '../../../../common/List';
 
@@ -31,9 +32,16 @@ function CollaboratorList() {
         <>
           <MuiAvatar
             src={photoUrl}
-            sx={{ width: '24px', height: '24px', marginRight: '10px' }}
+            sx={{
+              width: '30px',
+              height: '30px',
+              marginRight: '10px',
+              backgroundColor: theme.palette.grey[700],
+            }}
           >
-            {value.match(/\b(\w)/g)[0]}
+            <MuiTypography variant="body2">
+              {value.match(/\b(\w)/g)[0]}
+            </MuiTypography>
           </MuiAvatar>
           <Link style={{ textDecoration: 'none' }} to={`/profile/${id}`}>
             <MuiTypography
@@ -41,7 +49,7 @@ function CollaboratorList() {
                 color: 'text.primary',
                 fontWeight: 500,
                 '&:hover': {
-                  color: 'primary.main',
+                  color: theme.palette.primary[900],
                   textDecoration: 'none!important',
                 },
               }}

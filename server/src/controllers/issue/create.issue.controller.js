@@ -39,6 +39,7 @@ const create = async (req, res) => {
     return res.send(createdIssue);
   } catch (error) {
     db.query('ROLLBACK');
+    console.log(error);
     return res.status(500).send();
   }
 };

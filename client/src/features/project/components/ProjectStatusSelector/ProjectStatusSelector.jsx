@@ -3,6 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+// import MuiCircleIcon from '@mui/icons-material/Circle';
 import MuiFormControl from '@mui/material/FormControl';
 import MuiFormHelperText from '@mui/material/FormHelperText';
 import MuiGrid from '@mui/material/Grid';
@@ -11,7 +12,6 @@ import MuiSelect from '@mui/material/Select';
 import MuiSkeleton from '@mui/material/Skeleton';
 import MuiTypography from '@mui/material/Typography';
 import { lighten, styled } from '@mui/material/styles';
-
 import theme from '../../../../config/mui.config';
 
 const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
@@ -19,35 +19,45 @@ const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
     color: theme.palette.text.primary,
     fontSize: '13px',
     fontWeight: 500,
-    borderRadius: '6px',
+    borderRadius: theme.shape.borderRadiusRounded,
     textTransform: 'capitalize',
-    backgroundColor: lighten(statuscolor, 0.95),
+    backgroundColor: lighten(statuscolor, 0.8),
     transitionDuration: '350ms',
+    '& .MuiSvgIcon-root': { color: statuscolor },
     '& fieldset': {
       transitionDuration: '350ms',
       border: `2px solid ${lighten(statuscolor, 0.8)}`,
     },
     '&:hover fieldset': {
       backgroundColor: 'transparent',
-      border: `2px solid ${lighten(statuscolor, 0.2)}`,
+      border: `2px solid ${lighten(statuscolor, 0.6)}`,
     },
   },
 }));
 
 const StyledMenuItem = styled(MuiMenuItem)(() => ({
+  paddingLeft: '12px',
+  paddingRight: '12px',
+  transition: 'all 350ms',
   '&.MuiMenuItem-root': {
-    ':hover': { backgroundColor: 'action.hover' },
+    borderRadius: theme.shape.borderRadiusMedium,
+    margin: '0 4px',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[1200],
+    },
   },
-  '&.Mui-selected': { color: theme.palette.primary.main },
+  '&.Mui-selected': {
+    color: theme.palette.primary[800],
+  },
 }));
 
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: 32 * 6.5 + 8,
-      borderRadius: '6px',
       marginTop: '6px',
-      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+      boxShadow: theme.shadows[2],
+      borderRadius: theme.shape.borderRadiusMedium,
+      backgroundColor: theme.palette.common.white,
     },
   },
 };
@@ -73,21 +83,15 @@ function ProjectStatusSelector({ value, variant, helperText, handleChange }) {
             statuscolor={
               projectStatus.find((status) => status.id === value)?.color
             }
-            sx={{
-              height: variant === 'dense' ? '28px' : 'auto',
-              '&:hover': {
-                boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
-              },
-            }}
+            sx={{ height: variant === 'dense' ? '28px' : 'auto' }}
             value={value}
             onChange={handleChange}
           >
-            {projectStatus.map(({ id, name, color }) => (
-              <StyledMenuItem key={id} value={id}>
+            {projectStatus.map(({ id, name }) => (
+              <StyledMenuItem key={id} value={id} disableGutters disableRipple>
                 <MuiTypography
                   overflow="hidden"
                   sx={{
-                    color,
                     fontSize: '13px',
                     fontWeight: 600,
                     textTransform: 'capitalize',

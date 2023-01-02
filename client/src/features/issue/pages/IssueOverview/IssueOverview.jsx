@@ -60,7 +60,7 @@ function IssueOverview() {
         <MuiGrid md={12} sm={6} xs={12} item>
           <MuiTypography
             fontWeight={600}
-            sx={{ color: theme.palette.grey[900] }}
+            sx={{ color: theme.palette.grey[200] }}
             variant="body1"
           >
             Assignee:
@@ -70,7 +70,7 @@ function IssueOverview() {
         <MuiGrid item>
           <MuiTypography
             fontWeight={600}
-            sx={{ color: theme.palette.grey[900] }}
+            sx={{ color: theme.palette.grey[200] }}
             variant="body1"
           >
             Tasks:
@@ -81,11 +81,11 @@ function IssueOverview() {
               <MuiTypography
                 component="span"
                 sx={{
-                  color: theme.palette.primary.main,
+                  color: theme.palette.primary[900],
                   fontWeight: 600,
                   '&:hover': {
                     transitionDuration: '0.5s',
-                    color: theme.palette.primary.dark,
+                    color: theme.palette.primary[700],
                   },
                 }}
                 variant="body2"
@@ -98,7 +98,7 @@ function IssueOverview() {
         <MuiGrid xs={12} item>
           <MuiTypography
             fontWeight={600}
-            sx={{ color: theme.palette.grey[900] }}
+            sx={{ color: theme.palette.grey[200] }}
             variant="body1"
           >
             Attachments:
@@ -114,7 +114,7 @@ function IssueOverview() {
                   <MuiTypography
                     component="span"
                     sx={{
-                      color: theme.palette.primary.main,
+                      color: theme.palette.primary[800],
                       fontWeight: 600,
                       '&:hover': {
                         transitionDuration: '0.5s',

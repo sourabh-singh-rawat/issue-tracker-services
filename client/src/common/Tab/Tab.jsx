@@ -4,16 +4,7 @@ import React from 'react';
 import MuiTab from '@mui/material/Tab';
 
 function Tab(props) {
-  return (
-    <MuiTab
-      {...props}
-      sx={{
-        color: 'text.main',
-        textTransform: 'none',
-      }}
-      disableRipple
-    />
-  );
+  return <MuiTab {...props} sx={{ textTransform: 'none' }} disableRipple />;
 }
 
 export default Tab;

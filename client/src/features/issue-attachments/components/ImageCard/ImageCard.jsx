@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { ImageListItem, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import theme from '../../../../config/mui.config';
 
 import { useGetIssueAttachmentQuery } from '../../issue-attachments.api';
 
@@ -31,7 +32,7 @@ export default function ImageCard({ attachmentId, issueId }) {
           height="100%"
           loading="lazy"
           src={signedUrl}
-          style={{ borderRadius: '8px' }}
+          style={{ borderRadius: theme.shape.borderRadiusLarge }}
           width="100%"
         />
       )}

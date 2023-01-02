@@ -86,12 +86,14 @@ function IssueAttachments() {
         <MuiGrid item>
           <MuiButton
             sx={{
-              color: theme.palette.grey[900],
-              borderRadius: '6px',
+              color: theme.palette.grey[200],
               textTransform: 'none',
-              backgroundColor: theme.palette.grey[100],
+              borderRadius: theme.shape.borderRadiusMedium,
+              boxShadow: 'none',
+              backgroundColor: theme.palette.grey[1200],
               '&:hover': {
-                backgroundColor: theme.palette.grey[300],
+                backgroundColor: theme.palette.grey[900],
+                boxShadow: theme.shadows[1],
               },
             }}
             variant="contained"
@@ -108,8 +110,8 @@ function IssueAttachments() {
         </MuiGrid>
       </MuiGrid>
       <MuiImageList
-        cols={8}
-        rowHeight={164}
+        cols={6}
+        rowHeight={124}
         sx={{ width: '100%' }}
         variant="quilted"
       >

@@ -17,7 +17,7 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
     <MuiGrid
       sx={{
         padding: '8px 0',
-        borderBottom: `1px solid ${theme.palette.grey[200]}`,
+        borderBottom: `1px solid ${theme.palette.grey[1200]}`,
       }}
       container
     >
@@ -28,7 +28,7 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
             width: '30px',
             height: '30px',
             marginLeft: '5px',
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: theme.palette.grey[700],
           }}
         >
           <MuiTypography variant="body2">
@@ -41,8 +41,20 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
           <MuiGrid item>
             <MuiGrid spacing={1} container>
               <MuiGrid item>
-                <Link style={{ color: '#080F0F' }} to="/profile">
-                  <MuiTypography fontWeight={600} variant="body2">
+                <Link
+                  style={{
+                    color: theme.palette.grey[200],
+                    textDecoration: 'none',
+                  }}
+                  to="/profile"
+                >
+                  <MuiTypography
+                    fontWeight={600}
+                    sx={{
+                      '&:hover': { color: theme.palette.primary[900] },
+                    }}
+                    variant="body2"
+                  >
                     {name}
                   </MuiTypography>
                 </Link>
@@ -70,7 +82,10 @@ function Comment({ id, issueId, name, description, photoUrl, createdAt }) {
                     sx={{
                       fontSize: '13px',
                       fontWeight: 600,
-                      ':hover': { cursor: 'pointer' },
+                      ':hover': {
+                        cursor: 'pointer',
+                        color: theme.palette.primary[900],
+                      },
                     }}
                   >
                     Edit

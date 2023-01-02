@@ -1,12 +1,31 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: white;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background-color: #f7f7f8;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #efeff1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 2em;
+  background: #c8c8d0;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  height: 16px;
+  background: #848494;
+}
 #root {
   display: flex;
 }

@@ -22,61 +22,61 @@ The Issue Tracker is a Web Application that tracks issues in a project. Once ins
 
   Projects are **containers for issues**. You can create a project to **track issues** related to a specific product, feature, or initiative.
 
-  ## ![projects](https://user-images.githubusercontent.com/66995301/209439507-461b19e2-eb83-4516-afb0-ea451d540ae8.png)
+  ## ![projects](https://user-images.githubusercontent.com/66995301/210263373-586b7129-cc57-4e14-ab23-3cb1c075d539.png)
 
 - ### Project Overview
 
   Project Overview page **displays a summary of the project**, including the project name, description, members, and issues.
 
-  ## ![project-overview](https://user-images.githubusercontent.com/66995301/209439560-6b803db4-ff56-4376-9a56-9e856d1bf375.png)
+  ## ![project-overview](https://user-images.githubusercontent.com/66995301/210263448-f1da0996-1f29-4205-a624-4e1a075a3c28.png)
 
 - ### Project Issues
 
   Project Issues page **displays a list of all the issues** in the project.
 
-  ## ![project-issues](https://user-images.githubusercontent.com/66995301/209439582-4b719d8f-f35e-4a46-a0bd-e6e9b7f91f9a.png)
+  ## ![project-issues](https://user-images.githubusercontent.com/66995301/210263540-61148820-7a0b-4e16-ab50-47ddaf407d31.png)
 
 - ### Project Members
 
   Project Members page **displays a list of all the members** in the project.
 
-  ## ![project-members](https://user-images.githubusercontent.com/66995301/209439618-b7d96fd0-8cbc-4410-8786-cff8e861117b.png)
+  ## ![project-members](https://user-images.githubusercontent.com/66995301/210263828-214b65fe-fa26-4861-92fb-a60ef1fc6c9c.png)
 
 - ### Project Settings
 
   Project Settings **helps to edit the project details.**
 
-  ## ![project-settings](https://user-images.githubusercontent.com/66995301/209439349-a4a9311e-b088-4dce-9c05-8e3a14f8e192.png)
+  ## ![project-settings](https://user-images.githubusercontent.com/66995301/210263959-28504096-033b-4962-92a5-83e181d4696f.png)
 
 - ### Issues
 
   Issues page **displays a list of all the issues.**
 
-  ## ![issues](https://user-images.githubusercontent.com/66995301/209439417-a50e08c7-4ec7-420a-b3a2-86833d5c7123.png)
+  ## ![issues](https://user-images.githubusercontent.com/66995301/210264094-3c87d96e-fd07-443f-b688-2323d85e7f6f.png)
 
 - ### Issue Overview
 
   Issue Overview page **displays a summary of the issue**, including the issue name, description, assignee, and tasks.
 
-  ## ![issue-overview](https://user-images.githubusercontent.com/66995301/209439279-cde7bf78-09e0-475d-bdd7-bb0758d16357.png)
+  ## ![issue-overview](https://user-images.githubusercontent.com/66995301/210264686-1977a557-fd40-473e-86f1-7146217b44df.png)
 
 - ### Issue Comments
 
   Comments page **displays a list of all the comments in the issue.**
 
-  ## ![issue-comments](https://user-images.githubusercontent.com/66995301/209439270-7ed1c264-a712-4c8d-b0df-11278588b781.png)
+  ## ![issue-comments](https://user-images.githubusercontent.com/66995301/210266695-558720b4-80d6-4231-8be0-20eac992ad98.png)
 
 - ### Issue Attachments
 
   Attachments page displays a **list of all the attachments in the issue.**
 
-  ## ![issue-attachments](https://user-images.githubusercontent.com/66995301/209439177-15714742-e506-4bb8-8470-d65ecc89703c.png)
+  ## ![issue-attachments](https://user-images.githubusercontent.com/66995301/210265036-e1ef1af8-ae33-42d3-9046-cb1ce97f68dd.png)
 
 - ### Issue Tasks
 
   Tasks page **displays a list of all the tasks in the issue.**
 
-  ## ![issue-tasks](https://user-images.githubusercontent.com/66995301/209439114-5fd2bf1c-a7dc-444f-8460-02fe2b333407.png)
+  ## ![issue-tasks](https://user-images.githubusercontent.com/66995301/210264829-85d731df-ebca-4110-8bf2-cd376570e84e.png)
 
 ## Installation
 

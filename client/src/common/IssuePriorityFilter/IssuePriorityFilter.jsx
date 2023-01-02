@@ -1,5 +1,4 @@
 /* eslint-disable function-paren-newline */
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -16,9 +15,10 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: 32 * 6.5 + 8,
-      borderRadius: '6px',
       marginTop: '6px',
-      boxShadow: `0 1px 7px 0 ${theme.palette.grey[500]}`,
+      boxShadow: theme.shadows[2],
+      borderRadius: theme.shape.borderRadiusLarge,
+      backgroundColor: theme.palette.common.white,
     },
   },
 };
@@ -30,14 +30,13 @@ const StyledSelect = styled(MuiSelect)(() => ({
     fontWeight: 600,
     textTransform: 'capitalize',
     borderRadius: '6px',
-    backgroundColor: theme.palette.grey[50],
+    backgroundColor: theme.palette.grey[1200],
     '& fieldset': {
-      border: `2px solid ${theme.palette.grey[300]}`,
+      border: `2px solid ${theme.palette.grey[1200]}`,
     },
     '&:hover fieldset': {
-      border: `2px solid ${theme.palette.grey[600]}`,
+      border: `2px solid ${theme.palette.grey[1000]}`,
       transitionDuration: '250ms',
-      boxShadow: `0 1px 4px 0 ${theme.palette.grey[400]}`,
     },
   },
 }));

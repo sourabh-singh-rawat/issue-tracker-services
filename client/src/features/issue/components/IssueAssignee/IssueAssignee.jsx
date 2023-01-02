@@ -45,7 +45,7 @@ function IssueAssignee({ fullWidth }) {
         handleChange={handleChange}
         isLoading={project.members.isLoading}
         projectMembers={project.members.rows}
-        value={!issue.info.assigneeId ? 0 : issue.info.assigneeId}
+        value={!issue.info.assigneeId ? '' : issue.info.assigneeId}
       />
     </MuiBox>
   );

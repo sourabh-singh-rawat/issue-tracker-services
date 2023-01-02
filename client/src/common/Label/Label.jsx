@@ -2,19 +2,15 @@
 import React from 'react';
 
 import MuiTypography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import theme from '../../config/mui.config';
 
 function Label({ title, error }) {
-  const theme = useTheme();
-
   return (
     <MuiTypography
       sx={{
-        color: error ? 'error.main' : theme.palette.grey[600],
+        color: error ? theme.palette.red[900] : theme.palette.grey[200],
         fontWeight: 600,
         paddingBottom: 1,
-        // // textTransform: "uppercase",
-        // // fontSize: "12px",
       }}
       variant="body2"
     >

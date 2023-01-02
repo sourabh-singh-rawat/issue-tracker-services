@@ -27,14 +27,13 @@ export default function ProjectDetailSetting({
         </MuiTypography>
       </MuiBox>
       <MuiGrid
-        padding={3}
+        padding={2}
         rowSpacing={1}
         sx={{
           borderRadius: 3,
           width: '100%',
-          // backgroundColor: theme.palette.grey[50],
           backgroundColor: theme.palette.common.white,
-          border: `1px solid ${theme.palette.grey[300]}`,
+          border: `1px solid ${theme.palette.grey[1200]}`,
         }}
         container
       >

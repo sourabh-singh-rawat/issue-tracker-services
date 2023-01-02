@@ -35,7 +35,7 @@ function Navbar() {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <AppBar position="fixed" sx={{ boxShadow: 3 }}>
+    <AppBar position="fixed" sx={{ boxShadow: theme.shadows[2] }}>
       <MuiToolbar
         sx={{
           backgroundColor: theme.palette.background.navbar,
@@ -53,7 +53,7 @@ function Navbar() {
             >
               <MuiTypography
                 sx={{
-                  color: theme.palette.primary.main,
+                  color: theme.palette.primary[800],
                   display: 'flex',
                   alignItems: 'center',
                   fontWeight: 600,
@@ -78,7 +78,7 @@ function Navbar() {
                 sx={{
                   fontWeight: 600,
                   transitionDuration: '0.3s',
-                  '&:hover': { color: theme.palette.primary.main },
+                  '&:hover': { color: theme.palette.primary[800] },
                 }}
                 variant="body2"
               >
@@ -98,7 +98,7 @@ function Navbar() {
                 sx={{
                   transitionDuration: '0.3s',
                   fontWeight: 600,
-                  '&:hover': { color: theme.palette.primary.main },
+                  '&:hover': { color: theme.palette.primary[800] },
                 }}
                 variant="body2"
               >
@@ -118,7 +118,7 @@ function Navbar() {
                 sx={{
                   fontWeight: 600,
                   transitionDuration: '0.3s',
-                  '&:hover': { color: theme.palette.primary.main },
+                  '&:hover': { color: theme.palette.primary[800] },
                 }}
                 variant="body2"
               >

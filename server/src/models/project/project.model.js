@@ -117,10 +117,13 @@ const statusCount = ({ projectId, memberId }) =>
   db.query(
     `
     SELECT
-      issue_status_types.id, issue_status_types.name, issue_status_types.description, COUNT(issues.status)
-    FROM
+      issue_status_types.id, 
+      issue_status_types.name, 
+      issue_status_types.description, 
+      COUNT(issues.status), -- total count
+      -- count for last week
       (
-        SELECT * 
+        SELECT COUNT(*)
         FROM issues 
         WHERE 
           project_id = $1 AND 
@@ -128,7 +131,21 @@ const statusCount = ({ projectId, memberId }) =>
                   SELECT member_id
                   FROM   project_members
                   WHERE  project_id = $1
-                ) 
+                )
+           AND status = issue_status_types.id
+           AND created_at BETWEEN (NOW() - INTERVAL '1 WEEK') AND NOW()
+      ) as "weeklyCount"
+    FROM
+      (
+        SELECT *
+        FROM issues 
+        WHERE 
+          project_id = $1 AND 
+          $2 IN (
+                  SELECT member_id
+                  FROM   project_members
+                  WHERE  project_id = $1
+                )
       ) as issues
     RIGHT OUTER JOIN
       issue_status_types ON issue_status_types.id = issues.status

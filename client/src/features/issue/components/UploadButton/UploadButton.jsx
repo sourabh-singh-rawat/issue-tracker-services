@@ -3,6 +3,7 @@ import React from 'react';
 
 import MuiButton from '@mui/material/Button';
 import MuiCircularProgress from '@mui/material/CircularProgress';
+import theme from '../../../../config/mui.config';
 
 function UploadButton({ label, onClick, open }) {
   return (
@@ -12,8 +13,10 @@ function UploadButton({ label, onClick, open }) {
       }
       sx={{
         fontWeight: 600,
-        borderRadius: '6px',
+        borderRadius: theme.shape.borderRadiusMedium,
         textTransform: 'none',
+        boxShadow: 'none',
+        backgroundColor: theme.palette.primary[900],
       }}
       variant="contained"
       disableRipple

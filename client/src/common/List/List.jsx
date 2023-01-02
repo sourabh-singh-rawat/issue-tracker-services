@@ -3,33 +3,33 @@ import React from 'react';
 
 import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
-
 import MuiLinearProgress from '@mui/material/LinearProgress';
+import theme from '../../config/mui.config';
 
-const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
+const StyledDataGrid = styled(MuiDataGrid)(() => ({
   border: 'none',
   '.MuiDataGrid-row': {
-    color: theme.palette.text.primary,
     transition: 'ease-in-out 0.150s',
     ':hover': {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.grey[1400],
+      boxShadow: theme.shadows[1],
     },
   },
   '.MuiDataGrid-cell': {
-    color: theme.palette.text.primary,
-    borderColor: theme.palette.grey[200],
+    color: theme.palette.grey[200],
+    borderColor: theme.palette.grey[1300],
+    borderRight: `${theme.shape.borderWidthDefault} solid ${theme.palette.grey[1200]}`,
   },
   '.MuiDataGrid-columnHeaders': {},
   '& .MuiDataGrid-columnHeaderTitle': {
-    color: theme.palette.grey[600],
+    color: theme.palette.grey[800],
     fontSize: '14px',
-    fontWeight: 500,
   },
   '.MuiDataGrid-columnSeparator': {
     display: 'none',
   },
   '.MuiDataGrid-footerContainer': {
-    borderTop: `1px solid ${theme.palette.grey[300]}`,
+    borderTop: `${theme.shape.borderWidthDefault} solid ${theme.palette.grey[1200]}`,
   },
 }));
 
