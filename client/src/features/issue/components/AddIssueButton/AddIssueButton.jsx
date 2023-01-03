@@ -10,6 +10,7 @@ import PrimaryButton from '../../../../common/PrimaryButton';
 
 import { setMembers } from '../../../project/project.slice';
 import { useGetProjectMembersQuery } from '../../../project/project.api';
+import theme from '../../../../config/mui.config';
 
 function AddIssueButton() {
   const { id } = useParams();
@@ -46,10 +47,29 @@ function AddIssueButton() {
             minWidth: '60vw',
             top: '50%',
             left: '50%',
-            bgcolor: 'background.paper',
+            backgroundColor: 'background.paper',
             transform: 'translate(-50%, -50%)',
-            borderRadius: '6px',
-            boxShadow: 24,
+            borderRadius: theme.shape.borderRadiusExtraLarge,
+            boxShadow: theme.shadows[2],
+            '::-webkit-scrollbar': {
+              overflow: 'hidden',
+              height: '0.4em',
+              width: '0.4em',
+            },
+            '::-webkit-scrollbar-thumb': {
+              backgroundColor: theme.palette.grey[1000],
+              borderRadius: '0.5em',
+            },
+            '::-webkit-scrollbar-track': {
+              backgroundColor: 'transparent',
+              borderRadius: '0.5em',
+            },
+            '::-webkit-scrollbar-button': {
+              display: 'none',
+            },
+            '::-webkit-scrollbar-corner': {
+              display: 'none',
+            },
           }}
         >
           <IssueForm />

@@ -71,7 +71,6 @@ function ProjectOverview() {
           </MuiTypography>
           <MembersCard />
         </MuiGrid>
-
         <MuiGrid sm={12} item>
           {issuesStatusCount.isLoading ? (
             <CircularProgress />

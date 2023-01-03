@@ -6,7 +6,7 @@ import Login from './features/auth/pages/Login/Login';
 import Main from './common/Main';
 import ProtectedRoute from './common/ProtectedRoute';
 import Settings from './features/settings/pages/Settings';
-import SignUp from './features/auth/pages/Signup';
+import SignUp from './features/auth/pages/SignUp';
 
 import CollaboratorList from './features/collaborator-list/components/CollaboratorList';
 import Collaborators from './features/collaborator-list/pages/Collaborators/Collaborators';

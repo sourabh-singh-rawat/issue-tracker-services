@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import MuiGrid from '@mui/material/Grid';
 import theme from '../../../../config/mui.config';
@@ -8,14 +8,22 @@ import theme from '../../../../config/mui.config';
 import IssueCard from '../IssueCard';
 
 function IssueStats({ issuesStatusCount }) {
-  const total = issuesStatusCount.reduce(
-    (prev, cur) => prev + parseInt(cur.count, 10),
-    0,
+  const memoizedTotal = useMemo(
+    () =>
+      issuesStatusCount.reduce(
+        (prev, cur) => prev + parseInt(cur.count, 10),
+        0,
+      ),
+    [issuesStatusCount],
   );
 
-  const totalWeeklyCount = issuesStatusCount.reduce(
-    (prev, cur) => prev + parseInt(cur.weeklyCount, 10),
-    0,
+  const memoizedWeeklyTotal = useMemo(
+    () =>
+      issuesStatusCount.reduce(
+        (prev, cur) => prev + parseInt(cur.weeklyCount, 10),
+        0,
+      ),
+    [issuesStatusCount],
   );
 
   return (
@@ -27,11 +35,11 @@ function IssueStats({ issuesStatusCount }) {
     >
       <MuiGrid md={2.4} xs={12} item>
         <IssueCard
-          backgroundColor={theme.palette.primary[900]}
           color={theme.palette.common.white}
-          count={total}
+          count={memoizedTotal}
+          surfaceColor={theme.palette.primary[900]}
           title="Total Issues"
-          weeklyCount={totalWeeklyCount}
+          weeklyCount={memoizedWeeklyTotal}
         />
       </MuiGrid>
       {issuesStatusCount.map(({ id, name, count, weeklyCount }) => (

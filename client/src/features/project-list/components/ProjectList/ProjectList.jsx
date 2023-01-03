@@ -127,15 +127,20 @@ function ProjectList() {
       field: 'created_at',
       headerName: 'Created At',
       type: 'date',
-      minWidth: 125,
-      flex: 0.15,
+      minWidth: 150,
       renderCell: ({ value, ...params }) =>
         value ? (
           <MuiTypography
-            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontWeight: 600,
+              fontSize: 13,
+              color: theme.palette.grey[700],
+            }}
             variant="body2"
           >
-            {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
+            {format(parseISO(value), 'dd MMM, yyyy', { locale: enIN })}
           </MuiTypography>
         ) : (
           '-'
@@ -145,15 +150,20 @@ function ProjectList() {
       field: 'start_date',
       headerName: 'Start Date',
       type: 'date',
-      minWidth: 125,
-      flex: 0.15,
+      minWidth: 150,
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography
-            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontWeight: 600,
+              fontSize: 13,
+              color: theme.palette.grey[700],
+            }}
             variant="body2"
           >
-            {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
+            {format(parseISO(value), 'dd MMM, yyyy', { locale: enIN })}
           </MuiTypography>
         ) : (
           '-'
@@ -164,14 +174,19 @@ function ProjectList() {
       headerName: 'End Date',
       type: 'date',
       minWidth: 150,
-      flex: 0.075,
       renderCell: ({ value }) =>
         value ? (
           <MuiTypography
-            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            sx={{
+              overflow: 'hidden',
+              fontSize: 13,
+              fontWeight: 600,
+              textOverflow: 'ellipsis',
+              color: theme.palette.grey[700],
+            }}
             variant="body2"
           >
-            {format(parseISO(value), 'dd MMMM yyyy', { locale: enIN })}
+            {format(parseISO(value), 'dd MMM, yyyy', { locale: enIN })}
           </MuiTypography>
         ) : (
           '-'

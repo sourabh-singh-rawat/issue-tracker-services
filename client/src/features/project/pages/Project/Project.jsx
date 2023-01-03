@@ -31,7 +31,7 @@ function Project() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const projectSettings = useSelector((store) => store.project.settings);
+  const project = useSelector((store) => store.project.settings);
 
   const status = useGetStatusQuery();
   const getProject = useGetProjectQuery(id);
@@ -62,7 +62,7 @@ function Project() {
   };
 
   const updateTitleQuery = () =>
-    updateProjectMutation({ id, body: { name: projectSettings.name } });
+    updateProjectMutation({ id, body: { name: project.name } });
 
   useEffect(() => {
     if (isSuccess) dispatch(setMessageBarOpen(true));
@@ -93,13 +93,12 @@ function Project() {
               onClick: () => navigate('/projects'),
             },
             {
-              text: projectSettings.name,
-              onClick: () =>
-                navigate(`/projects/${projectSettings.id}/overview`),
+              text: project.name,
+              onClick: () => navigate(`/projects/${project.id}/overview`),
             },
           ]}
-          isLoading={projectSettings.isLoading}
-          page={projectSettings}
+          isLoading={project.isLoading}
+          page={project}
           statusSelector={
             <ProjectStatusSelector
               handleChange={(e) => {
@@ -107,7 +106,7 @@ function Project() {
                 updateProjectMutation({ id, body: { status: value } });
                 dispatch(updateProject({ status: value }));
               }}
-              value={projectSettings.status}
+              value={project.status}
               variant="dense"
             />
           }
@@ -117,11 +116,11 @@ function Project() {
       </MuiGrid>
       <MuiGrid xs={12} item>
         <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab label="Overview" value={0} />
-          <Tab label="Issues" value={1} />
-          <Tab label="Members" value={2} />
-          <Tab label="Activity" value={3} />
-          <Tab label="Settings" value={4} />
+          <Tab isLoading={project.isLoading} label="Overview" value={0} />
+          <Tab isLoading={project.isLoading} label="Issues" value={1} />
+          <Tab isLoading={project.isLoading} label="Members" value={2} />
+          <Tab isLoading={project.isLoading} label="Activity" value={3} />
+          <Tab isLoading={project.isLoading} label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
       <MuiGrid xs={12} item>

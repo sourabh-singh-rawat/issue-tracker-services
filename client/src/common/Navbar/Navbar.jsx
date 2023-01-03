@@ -20,6 +20,22 @@ import theme from '../../config/mui.config';
 
 import { logout } from '../../utils/firebase/logout.util';
 
+const StyledMenuItem = styled(MuiMenuItem)(() => ({
+  paddingLeft: '12px',
+  paddingRight: '12px',
+  transition: 'all 350ms',
+  '&.MuiMenuItem-root': {
+    borderRadius: theme.shape.borderRadiusMedium,
+    margin: '0 4px',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[1200],
+    },
+  },
+  '&.Mui-selected': {
+    color: theme.palette.primary[800],
+  },
+}));
+
 const AppBar = styled(MuiAppBar)(() => ({
   width: '100%',
   zIndex: () => theme.zIndex.drawer + 1,
@@ -37,12 +53,10 @@ function Navbar() {
   return (
     <AppBar position="fixed" sx={{ boxShadow: theme.shadows[2] }}>
       <MuiToolbar
-        sx={{
-          backgroundColor: theme.palette.background.navbar,
-        }}
+        sx={{ backgroundColor: theme.palette.background.navbar }}
         variant="dense"
       >
-        <MuiGrid alignItems="center" columnSpacing={3} container>
+        <MuiGrid alignItems="center" columnSpacing={2.5} container>
           <MuiGrid item>
             <Link
               style={{
@@ -62,7 +76,7 @@ function Navbar() {
                 }}
                 variant="body2"
               >
-                <MuiBugReportIcon sx={{ paddingRight: 1 }} />
+                <MuiBugReportIcon />
               </MuiTypography>
             </Link>
           </MuiGrid>
@@ -145,15 +159,25 @@ function Navbar() {
               anchorEl={anchorEl}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               open={Boolean(anchorEl)}
+              PaperProps={{
+                style: {
+                  marginTop: '6px',
+                  boxShadow: theme.shadows[2],
+                  borderRadius: theme.shape.borderRadiusMedium,
+                  backgroundColor: theme.palette.common.white,
+                },
+              }}
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               keepMounted
               onClose={handleClose}
             >
-              <MuiMenuItem onClick={handleClose}>
+              <StyledMenuItem onClick={handleClose}>
                 <MuiAccountBoxOutlinedIcon sx={{ fontSize: '18px' }} />
-                <MuiTypography variant="body2">My Account</MuiTypography>
-              </MuiMenuItem>
-              <MuiMenuItem
+                <MuiTypography sx={{ marginLeft: 1 }} variant="body2">
+                  My Account
+                </MuiTypography>
+              </StyledMenuItem>
+              <StyledMenuItem
                 onClick={async () => {
                   handleClose();
                   await logout();
@@ -161,8 +185,10 @@ function Navbar() {
                 }}
               >
                 <MuiLogoutIcon sx={{ fontSize: '18px' }} />
-                <MuiTypography variant="body2">Sign Out</MuiTypography>
-              </MuiMenuItem>
+                <MuiTypography sx={{ marginLeft: 1 }} variant="body2">
+                  Sign Out
+                </MuiTypography>
+              </StyledMenuItem>
             </MuiMenu>
           </MuiGrid>
         </MuiGrid>

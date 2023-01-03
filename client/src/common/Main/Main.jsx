@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import React from 'react';
 
-import MuiBox from '@mui/material/Box';
+import MuiContainer from '@mui/material/Container';
 import MuiToolbar from '@mui/material/Toolbar';
 import theme from '../../config/mui.config';
 
@@ -12,7 +12,8 @@ function Main() {
   return (
     <>
       <MenuSidebar />
-      <MuiBox
+      <MuiContainer
+        maxWidth={false}
         sx={{
           flexGrow: 1,
           paddingTop: '20px',
@@ -24,7 +25,7 @@ function Main() {
         <MuiToolbar variant="dense" />
         <Outlet />
         <MessageBar />
-      </MuiBox>
+      </MuiContainer>
     </>
   );
 }

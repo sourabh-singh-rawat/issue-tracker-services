@@ -9,15 +9,15 @@ const StyledChip = styled(MuiChip)(() => ({
   fontWeight: 600,
 }));
 
-function Chip({ label, color, backgroundColor }) {
+function Chip({ label, color, surfaceColor }) {
   return (
     <StyledChip
-      backgroundColor={backgroundColor}
+      backgroundColor={surfaceColor}
       label={label}
       size="small"
       sx={{
         color,
-        backgroundColor: backgroundColor || theme.palette.grey[1400],
+        backgroundColor: surfaceColor || theme.palette.grey[1400],
       }}
     />
   );
