@@ -152,11 +152,11 @@ function Issue() {
       </MuiGrid>
       <MuiGrid xs={12} item>
         <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab label="Overview" value={0} />
-          <Tab label="Tasks" value={1} />
-          <Tab label="Attachments" value={2} />
-          <Tab label="Comments" value={3} />
-          <Tab label="Settings" value={4} />
+          <Tab isLoading={issue.isLoading} label="Overview" value={0} />
+          <Tab isLoading={issue.isLoading} label="Tasks" value={1} />
+          <Tab isLoading={issue.isLoading} label="Attachments" value={2} />
+          <Tab isLoading={issue.isLoading} label="Comments" value={3} />
+          <Tab isLoading={issue.isLoading} label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
       <MuiGrid xs={12} item>

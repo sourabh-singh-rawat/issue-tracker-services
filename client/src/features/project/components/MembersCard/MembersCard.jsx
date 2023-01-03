@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Skeleton from '@mui/material/Skeleton';
 import MuiGrid from '@mui/material/Grid';
 
 import AvatarGroup from '../../../../common/AvatarGroup';
@@ -26,7 +27,11 @@ function MembersCard() {
   return (
     <MuiGrid container>
       <MuiGrid sx={{ marginTop: '8px' }} item>
-        <AvatarGroup members={members.rows} total={members.rowCount} />
+        {members.isLoading ? (
+          <Skeleton height="40px" variant="circular" width="40px" />
+        ) : (
+          <AvatarGroup members={members.rows} total={members.rowCount} />
+        )}
       </MuiGrid>
     </MuiGrid>
   );

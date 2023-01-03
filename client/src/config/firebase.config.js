@@ -16,7 +16,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
+// this function always knnows if the user is logged in or not
 export const onAuthStateChangedListener = (callback) => {
-  // eslint-disable-next-line implicit-arrow-linebreak
   onAuthStateChanged(auth, callback);
 };

@@ -1,11 +1,15 @@
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from 'firebase/auth';
 import { auth } from '../../config/firebase.config';
 import verifyToken from './verify-token.utils';
 import storeUserInfoInDatabase from './database.utils';
 
-const continueWithGoogle = async (inviteToken) => {
-  const provider = new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
+const continueWithGoogle = async (inviteToken) => {
   if (inviteToken) {
     try {
       const response = await verifyToken(inviteToken);
@@ -39,8 +43,7 @@ const continueWithGoogle = async (inviteToken) => {
     }
   } else {
     try {
-      const { user } = await signInWithPopup(auth, provider);
-      return await storeUserInfoInDatabase(user);
+      return await signInWithRedirect(auth, provider);
     } catch (error) {
       return error;
     }

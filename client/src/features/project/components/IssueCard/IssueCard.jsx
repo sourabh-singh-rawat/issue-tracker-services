@@ -8,42 +8,42 @@ import MuiSkeleton from '@mui/material/Skeleton';
 import MuiTypography from '@mui/material/Typography';
 import theme from '../../../../config/mui.config';
 
-import Chip from '../../../../common/Chip/Chip';
+import Chip from '../../../../common/Chip';
 
 function IssueCard({
-  title,
-  count,
-  weeklyCount,
   color,
-  backgroundColor,
+  count,
+  title,
+  weeklyCount,
+  surfaceColor,
   isLoading,
 }) {
   return (
-    <MuiBox>
+    <MuiBox component="div">
       {isLoading ? (
         <MuiSkeleton
           height="90px"
-          sx={{ borderRadius: '6px' }}
+          sx={{ borderRadius: theme.shape.borderRadiusMedium }}
           variant="rectangular"
         />
       ) : (
         <MuiGrid
           sx={{
             cursor: 'pointer',
-            border: `2px solid ${backgroundColor || theme.palette.grey[1400]}`,
+            border: `2px solid ${surfaceColor || theme.palette.grey[1400]}`,
             padding: 2,
             minHeight: '60px',
             borderRadius: '10px',
-            backgroundColor: backgroundColor || theme.palette.common.white,
+            bgcolor: surfaceColor || theme.palette.common.white,
             transition: 'all 0.25s ease-in-out',
             '&:hover': {
               boxShadow: theme.shadows[1],
               border: `2px solid ${
-                backgroundColor
+                surfaceColor
                   ? theme.palette.primary[700]
                   : theme.palette.grey[1300]
               }`,
-              backgroundColor: backgroundColor
+              bgcolor: surfaceColor
                 ? theme.palette.primary[700]
                 : theme.palette.grey[1300],
             },
@@ -79,34 +79,36 @@ function IssueCard({
             </MuiTypography>
           </MuiGrid>
           <MuiGrid xs={12} item>
-            <MuiTypography
-              sx={{
-                marginTop: '8px',
-                fontWeight: 500,
-                color: color || theme.palette.grey[800],
-                display: 'flex',
-                alignItems: 'center',
-                alignContent: 'center',
-              }}
-              variant="body2"
+            <MuiGrid
+              sx={{ marginTop: '8px', alignItems: 'center', color }}
+              container
             >
-              {weeklyCount > 0 ? (
-                <Chip
-                  backgroundColor={theme.palette.green[1500]}
-                  color={theme.palette.green[900]}
-                  label={`+${weeklyCount}`}
-                />
-              ) : (
-                <Chip
-                  backgroundColor={theme.palette.grey[1400]}
-                  color={theme.palette.grey[900]}
-                  label={`${weeklyCount}`}
-                />
-              )}
-              <MuiTypography sx={{ paddingLeft: 0.5 }} variant="body2">
+              <MuiGrid item>
+                {weeklyCount > 0 ? (
+                  <Chip
+                    color={theme.palette.red[1000]}
+                    label={`+${weeklyCount}`}
+                    surfaceColor={theme.palette.red[1300]}
+                  />
+                ) : (
+                  <Chip
+                    color={theme.palette.grey[1000]}
+                    label={`${weeklyCount}`}
+                    surfaceColor={theme.palette.grey[1400]}
+                  />
+                )}
+              </MuiGrid>
+              <MuiTypography
+                sx={{
+                  fontWeight: 400,
+                  marginLeft: '6px',
+                  color: color || theme.palette.grey[900],
+                }}
+                variant="body2"
+              >
                 this week
               </MuiTypography>
-            </MuiTypography>
+            </MuiGrid>
           </MuiGrid>
         </MuiGrid>
       )}

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React from 'react';
 
@@ -18,16 +19,14 @@ const StyledAvatarGroup = styled(MuiAvatarGroup)(({ theme }) => ({
 function AvatarGroup({ members, total }) {
   return (
     <StyledAvatarGroup max={5} spacing={-1} total={total}>
-      {members.map((member) => (
-        <Tooltip key={member.id} title={member.name}>
+      {members.map(({ id, name, photoUrl }) => (
+        <Tooltip key={id} title={name}>
           <MuiAvatar
-            alt={member.name}
-            src={member.photoUrl}
-            sx={{
-              '&:hover': { cursor: 'pointer' },
-            }}
+            alt={name}
+            src={photoUrl}
+            sx={{ '&:hover': { cursor: 'pointer' } }}
           >
-            {member.name.match(/\b(\w)/g)[0]}
+            {name.match(/\b(\w)/g)[0]}
           </MuiAvatar>
         </Tooltip>
       ))}
