@@ -55,7 +55,7 @@ function TeamList() {
       flex: 0.4,
     },
     {
-      field: 'created_at',
+      field: 'createdAt',
       headerName: 'Created At',
       width: 200,
       flex: 0.2,

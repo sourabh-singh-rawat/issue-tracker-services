@@ -45,29 +45,6 @@ const projectSlice = createSlice({
   name: 'project',
   initialState,
   reducers: {
-    setProjectQuick: (state, action) => {
-      const {
-        name,
-        nameSelected,
-        description,
-        descriptionSelected,
-        createdAt,
-        status,
-      } = action.payload;
-
-      return {
-        ...state,
-        quick: {
-          name,
-          nameSelected,
-          description,
-          descriptionSelected,
-          createdAt,
-          status,
-          isLoading: false,
-        },
-      };
-    },
     setProject: (state, action) => ({
       ...state,
       settings: {
@@ -128,7 +105,7 @@ const projectSlice = createSlice({
       ...state,
       activity: { ...state.activity, ...action.payload, isLoading: false },
     }),
-    resetProjectSlice: () => initialState,
+    reset: () => initialState,
   },
 });
 
@@ -143,7 +120,7 @@ export const {
   updateProject,
   updateList,
   updateMembers,
-  resetProjectSlice,
+  reset,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

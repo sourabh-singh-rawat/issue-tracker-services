@@ -27,7 +27,7 @@ import {
   useUpdateIssueMutation,
 } from '../../issue.api';
 
-function Issue() {
+export default function Issue() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,15 +54,11 @@ function Issue() {
   };
 
   useEffect(() => {
-    if (issueStatus.isSuccess) {
-      dispatch(setIssueStatus(issueStatus.data));
-    }
+    if (issueStatus.isSuccess) dispatch(setIssueStatus(issueStatus.data));
   }, [issueStatus]);
 
   useEffect(() => {
-    if (issuePriority.isSuccess) {
-      dispatch(setIssuePriority(issuePriority.data));
-    }
+    if (issuePriority.isSuccess) dispatch(setIssuePriority(issuePriority.data));
   }, [issuePriority]);
 
   useEffect(() => {
@@ -91,12 +87,7 @@ function Issue() {
   };
 
   // On component unmount: clear issue info
-  useEffect(
-    () => () => {
-      dispatch(resetIssueSlice());
-    },
-    [],
-  );
+  useEffect(() => () => dispatch(resetIssueSlice()), []);
 
   return (
     <MuiGrid spacing={2} container>
@@ -165,5 +156,3 @@ function Issue() {
     </MuiGrid>
   );
 }
-
-export default Issue;

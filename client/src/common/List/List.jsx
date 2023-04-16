@@ -61,6 +61,7 @@ function List({
       pageSize={pageSize}
       paginationMode="server"
       rowCount={rowCount}
+      // rowHeight={38}
       rows={rows}
       rowsPerPageOptions={[10, 20, 50, 100]}
       autoHeight

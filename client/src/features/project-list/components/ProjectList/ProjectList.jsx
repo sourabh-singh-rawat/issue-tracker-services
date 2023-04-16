@@ -40,7 +40,7 @@ function ProjectList() {
   const getProjectsQuery = useGetProjectsQuery({
     page,
     pageSize,
-    sortBy: 'created_at:desc',
+    sortBy: 'createdAt:desc',
   });
 
   useEffect(() => {
@@ -117,14 +117,14 @@ function ProjectList() {
     {
       field: 'status',
       headerName: 'Status',
-      minWidth: 125,
+      minWidth: 150,
       editable: true,
-      flex: 0.15,
+      flex: 0.1,
       renderCell: (params) => renderSelectEditInputCell(params),
       renderEditCell: renderSelectEditInputCell,
     },
     {
-      field: 'created_at',
+      field: 'createdAt',
       headerName: 'Created At',
       type: 'date',
       minWidth: 150,
@@ -147,7 +147,7 @@ function ProjectList() {
         ),
     },
     {
-      field: 'start_date',
+      field: 'startDate',
       headerName: 'Start Date',
       type: 'date',
       minWidth: 150,
@@ -170,7 +170,7 @@ function ProjectList() {
         ),
     },
     {
-      field: 'end_date',
+      field: 'endDate',
       headerName: 'End Date',
       type: 'date',
       minWidth: 150,

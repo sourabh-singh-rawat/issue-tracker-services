@@ -9,7 +9,7 @@ const issueListApiSlice = apiSlice.injectEndpoints({
         projectId = '',
         page = 0,
         pageSize = 10,
-        sortBy = 'issues.created_at:desc',
+        sortBy = 'issues.createdAt:desc',
         reporterId,
         assigneeId = '',
       }) =>

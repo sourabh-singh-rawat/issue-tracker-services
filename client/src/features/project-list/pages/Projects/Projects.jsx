@@ -7,14 +7,14 @@ import MuiGrid from '@mui/material/Grid';
 
 import SectionHeader from '../../../../common/SectionHeader';
 import PrimaryButton from '../../../../common/PrimaryButton';
-import { resetProjectSlice } from '../../../project/project.slice';
+import { reset } from '../../../project/project.slice';
 
 function Projects() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  useEffect(() => () => dispatch(resetProjectSlice()), []);
+  useEffect(() => () => dispatch(reset()), []);
 
   return (
     <MuiGrid gap="40px" container>

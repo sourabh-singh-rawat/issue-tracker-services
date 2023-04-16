@@ -38,9 +38,9 @@ const projectApiSlice = apiSlice.injectEndpoints({
         page = 0,
         pageSize = 10,
         projectId = '',
-        sortBy = 'created_at:desc',
+        sortBy = 'createdAt:desc',
       }) =>
-        `/issues?project_id=${projectId}&page=${page}&limit=${pageSize}&sort_by=${sortBy}`,
+        `/issues?projectId=${projectId}&page=${page}&limit=${pageSize}&sortBy=${sortBy}`,
     }),
     getProjectMembers: build.query({
       query: (id) => `/projects/${id}/members`,

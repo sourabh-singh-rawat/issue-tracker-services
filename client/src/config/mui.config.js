@@ -146,7 +146,8 @@ const lightThemeConfig = {
   },
   typography: {
     fontSize: 14,
-    fontFamily: 'Inter, sans-serif',
+    fontFamily:
+      '-apple-system,BlinkMacSystemFont, Inter,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
@@ -184,6 +185,18 @@ const lightThemeConfig = {
     h6: {
       fontSize: '1rem',
       fontWeight: 700,
+      lineHeight: 1.2,
+      letterSpacing: '0.0075em',
+    },
+    body1: {
+      fontSize: '1rem',
+      fontWeight: 400,
+      lineHeight: 1.2,
+      letterSpacing: '0.0075em',
+    },
+    body2: {
+      fontSize: '0.875rem',
+      fontWeight: 400,
       lineHeight: 1.2,
       letterSpacing: '0.0075em',
     },

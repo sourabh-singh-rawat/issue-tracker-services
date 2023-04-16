@@ -16,7 +16,7 @@ const initialState = {
     status: '',
     priority: '',
     assigneeId: 0,
-    project_id: null,
+    projectId: null,
     isLoading: true,
   },
   options: {

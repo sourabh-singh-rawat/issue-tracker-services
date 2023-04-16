@@ -42,7 +42,7 @@ function ProjectOverview() {
 
   useEffect(() => {
     if (projectIssueStatusCount.isSuccess) {
-      dispatch(setIssueStatusCount(projectIssueStatusCount.data));
+      dispatch(setIssueStatusCount(projectIssueStatusCount.data.rows));
     }
   }, [projectIssueStatusCount.data]);
 
@@ -83,6 +83,8 @@ function ProjectOverview() {
               >
                 Issue Stats:
               </MuiTypography>
+              {/* eslint-disable-next-line no-console */}
+              {console.log(issuesStatusCount)}
               <IssueStats issuesStatusCount={issuesStatusCount.rows} />
             </>
           )}
