@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -266,7 +267,9 @@ function IssueList({ projectId }) {
       rows={rows}
       autoHeight
       onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
-      onPageSizeChange={(newSize) => dispatch(updateIssueList({ newSize }))}
+      onPageSizeChange={(newSize) =>
+        dispatch(updateIssueList({ pageSize: newSize }))
+      }
     />
   );
 }

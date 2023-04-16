@@ -63,8 +63,6 @@ export default function IssuePriorityFilter() {
 
     searchParams.set('priority', mapped);
     setSearchParams(searchParams);
-
-    // TODO send request to server
   };
 
   const renderValue = (selected) => {

@@ -62,7 +62,12 @@ const MenuProps = {
   },
 };
 
-function ProjectStatusSelector({ value, variant, helperText, handleChange }) {
+export default function ProjectStatusSelector({
+  value,
+  variant,
+  helperText,
+  handleChange,
+}) {
   const projectStatus = useSelector(
     (store) => store.project.options.status.rows,
   );
@@ -83,7 +88,10 @@ function ProjectStatusSelector({ value, variant, helperText, handleChange }) {
             statuscolor={
               projectStatus.find((status) => status.id === value)?.color
             }
-            sx={{ height: variant === 'dense' ? '28px' : 'auto' }}
+            sx={{
+              display: 'flex',
+              height: variant === 'dense' ? '28px' : 'auto',
+            }}
             value={value}
             onChange={handleChange}
           >
@@ -95,6 +103,8 @@ function ProjectStatusSelector({ value, variant, helperText, handleChange }) {
                     fontSize: '13px',
                     fontWeight: 600,
                     textTransform: 'capitalize',
+                    alignItems: 'center',
+                    alignContent: 'center',
                   }}
                   textOverflow="ellipsis"
                   variant="body2"
@@ -120,5 +130,3 @@ function ProjectStatusSelector({ value, variant, helperText, handleChange }) {
     </MuiGrid>
   );
 }
-
-export default ProjectStatusSelector;

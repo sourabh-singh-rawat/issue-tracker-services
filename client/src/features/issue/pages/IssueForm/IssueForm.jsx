@@ -63,10 +63,10 @@ function IssueForm() {
   const getProjectsQuery = useGetProjectsQuery({
     page: 0,
     pageSize: 10,
-    sortBy: 'created_at:desc',
+    sortBy: 'createdAt:desc',
   });
   const getProjectMembersQuery = useGetProjectMembersQuery(
-    formFields.project_id,
+    formFields.projectId,
   );
 
   useEffect(() => {
@@ -178,7 +178,7 @@ function IssueForm() {
                     onChange={(e, selectedProject) => {
                       setFormFields({
                         ...formFields,
-                        project_id: selectedProject.id,
+                        projectId: selectedProject.id,
                       });
                     }}
                   />

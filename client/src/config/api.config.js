@@ -1,7 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const baseUrl = {
+  DOTNET_CORE_API: 'http://localhost:5142/api',
+  NODE_API: 'http://localhost:4000/api',
+};
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:4000/api',
+  baseUrl: baseUrl.DOTNET_CORE_API,
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const store = getState();

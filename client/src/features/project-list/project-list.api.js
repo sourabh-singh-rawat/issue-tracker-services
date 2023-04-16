@@ -6,8 +6,8 @@ import apiSlice from '../../config/api.config';
 const projectListApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getProjects: build.query({
-      query: ({ page = 0, pageSize = 10, sortBy = 'created_at:desc' }) =>
-        `/projects?page=${page}&limit=${pageSize}&sort_by=${sortBy}`,
+      query: ({ page = 0, pageSize = 10, sortBy = 'createdAt:desc' }) =>
+        `/projects?page=${page}&limit=${pageSize}&sortBy=${sortBy}`,
       providesTags: ['Project'],
     }),
   }),

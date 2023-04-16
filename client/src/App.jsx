@@ -6,12 +6,12 @@ import Login from './features/auth/pages/Login/Login';
 import Main from './common/Main';
 import ProtectedRoute from './common/ProtectedRoute';
 import Settings from './features/settings/pages/Settings';
-import SignUp from './features/auth/pages/SignUp';
+import SignUp from './features/auth/pages/Signup';
 
 import CollaboratorList from './features/collaborator-list/components/CollaboratorList';
 import Collaborators from './features/collaborator-list/pages/Collaborators/Collaborators';
 
-import Project from './features/project/pages/Project';
+import Project from './pages/Project';
 import ProjectActivity from './features/project/pages/ProjectActivity';
 import ProjectForm from './features/project/pages/ProjectForm';
 import ProjectIssues from './features/project/pages/ProjectIssues';

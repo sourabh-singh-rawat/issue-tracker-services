@@ -89,6 +89,7 @@ function ProjectForm() {
     });
   };
 
+  // Side Effects
   useEffect(() => {
     if (getProjectStatusQuery.isSuccess) {
       setFormFields({ ...formFields, status: defaultStatus.id });
@@ -97,7 +98,7 @@ function ProjectForm() {
   }, [getProjectStatusQuery.data]);
 
   useEffect(() => {
-    if (isSuccess) navigate(`/projects/${data.id}/overview`);
+    if (isSuccess) navigate(`/projects/${data.data}/overview`);
   }, [isSuccess]);
 
   const handleSubmit = async (e) => {
