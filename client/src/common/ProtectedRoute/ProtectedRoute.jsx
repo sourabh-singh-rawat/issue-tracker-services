@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable indent */
-/* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable object-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
