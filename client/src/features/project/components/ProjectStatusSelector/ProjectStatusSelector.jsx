@@ -17,44 +17,36 @@ import theme from '../../../../config/mui.config';
 const StyledSelect = styled(MuiSelect)(({ statuscolor = '#000' }) => ({
   '&.MuiOutlinedInput-root': {
     color: theme.palette.text.primary,
-    fontSize: '13px',
-    fontWeight: 500,
-    borderRadius: theme.shape.borderRadiusRounded,
-    textTransform: 'capitalize',
-    backgroundColor: lighten(statuscolor, 0.8),
-    transitionDuration: '350ms',
-    '& .MuiSvgIcon-root': { color: statuscolor },
+    borderRadius: theme.shape.borderRadiusMedium,
+    '& .MuiSvgIcon-root': {
+      color: statuscolor,
+      display: 'none',
+    },
     '& fieldset': {
-      transitionDuration: '350ms',
-      border: `2px solid ${lighten(statuscolor, 0.8)}`,
+      border: 'none',
     },
     '&:hover fieldset': {
+      border: 'none',
       backgroundColor: 'transparent',
-      border: `2px solid ${lighten(statuscolor, 0.6)}`,
     },
   },
+  '& div': { padding: '0 !important' },
 }));
 
 const StyledMenuItem = styled(MuiMenuItem)(() => ({
-  paddingLeft: '12px',
-  paddingRight: '12px',
-  transition: 'all 350ms',
+  paddingRight: 0,
   '&.MuiMenuItem-root': {
-    borderRadius: theme.shape.borderRadiusMedium,
-    margin: '0 4px',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[1200],
-    },
+    padding: '0 10px',
+    // '&:hover': { backgroundColor: theme.palette.grey[1200] },
   },
   '&.Mui-selected': {
-    color: theme.palette.primary[800],
+    // color: theme.palette.primary[800],
   },
 }));
 
 const MenuProps = {
   PaperProps: {
     style: {
-      marginTop: '6px',
       boxShadow: theme.shadows[2],
       borderRadius: theme.shape.borderRadiusMedium,
       backgroundColor: theme.palette.common.white,
@@ -95,16 +87,24 @@ export default function ProjectStatusSelector({
             value={value}
             onChange={handleChange}
           >
-            {projectStatus.map(({ id, name }) => (
-              <StyledMenuItem key={id} value={id} disableGutters disableRipple>
+            {projectStatus.map(({ id, name, color }) => (
+              <StyledMenuItem
+                key={id}
+                color={color}
+                value={id}
+                disableGutters
+                disableRipple
+              >
                 <MuiTypography
-                  overflow="hidden"
                   sx={{
-                    fontSize: '13px',
+                    color,
+                    textTransform: 'uppercase',
+                    fontSize: '12px',
                     fontWeight: 600,
-                    textTransform: 'capitalize',
-                    alignItems: 'center',
-                    alignContent: 'center',
+                    margin: '5px',
+                    padding: '2.5px 10px',
+                    borderRadius: theme.shape.borderRadiusMedium,
+                    backgroundColor: lighten(color, 0.8),
                   }}
                   textOverflow="ellipsis"
                   variant="body2"

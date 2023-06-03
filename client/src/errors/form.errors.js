@@ -24,4 +24,14 @@ const formErrors = {
   },
 };
 
-export default formErrors;
+function getFormErrors(formType) {
+  const errors = formErrors[formType];
+
+  if (!errors) {
+    return null;
+  }
+
+  return errors;
+}
+
+export default getFormErrors;

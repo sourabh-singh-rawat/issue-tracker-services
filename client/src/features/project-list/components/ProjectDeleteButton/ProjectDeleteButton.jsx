@@ -39,6 +39,7 @@ function ProjectDeleteButton({ id }) {
         sx={{
           color: theme.palette.grey[1200],
           transition: 'ease-in-out 0.2s',
+          '& svg': { width: '0.875em' },
           '&:hover': { color: theme.palette.primary[900] },
         }}
         disableRipple
@@ -56,7 +57,6 @@ function ProjectDeleteButton({ id }) {
           </MuiDialogContentText>
         </MuiDialogContent>
         <MuiDialogActions>
-          <CancelButton label="Cancel" onClick={handleClose} />
           <SecondaryButton
             label="Delete"
             onClick={() => {
@@ -65,6 +65,7 @@ function ProjectDeleteButton({ id }) {
               deleteProject({ id });
             }}
           />
+          <CancelButton label="Cancel" onClick={handleClose} />
         </MuiDialogActions>
       </MuiDialog>
     </>

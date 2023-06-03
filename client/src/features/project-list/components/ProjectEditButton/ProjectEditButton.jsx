@@ -15,6 +15,7 @@ function ProjectEditButton({ id }) {
       sx={{
         color: theme.palette.grey[1100],
         transition: 'ease-in-out 0.2s',
+        '& svg': { width: '0.875em' },
         '&:hover': { color: theme.palette.primary[900] },
       }}
       disableRipple
