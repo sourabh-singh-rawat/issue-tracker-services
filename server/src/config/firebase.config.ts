@@ -1,10 +1,10 @@
-import { cert, initializeApp } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
-import { getStorage } from 'firebase-admin/storage';
+import { cert, initializeApp } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
+import { getStorage } from "firebase-admin/storage";
 
 // Load environment variables from .env file
-import dotenv from 'dotenv';
-dotenv.config({ path: '../.env' });
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 
 const firebaseConfig = {
   storageBucket: process.env.STORAGE_BUCKET,

@@ -1,0 +1,41 @@
+post:
+  operationId: generateToken
+  tags:
+    - identity
+  summary: Generate tokens
+  description: Validates username and email, then generates access and refresh tokens.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              minLength: 1
+              maxLength: 80
+            password:
+              type: string
+              minLength: 8
+              maxLength: 64
+              pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$
+  responses:
+    200:
+      description: accessToken and refreshTokens are successfully generated.
+      headers:
+        "Set-Cookie":
+          description: The cookie with accessToken and refreshToken
+          schema:
+            type: string
+          example: accessToken=[jwt_token]; refreshToken=[jwt_token_2]
+    400:
+      description: The request contains invalid body paramaters
+    401:
+      description: User credentials are invalid
+    403:
+      description: User may be blocked
+    429:
+      description: User is blocked for sending too many request
+    500:
+      $ref: ../../openapi.yaml#/components/responses/InternalServerError
