@@ -1,0 +1,5 @@
+type: string
+format: email
+minLength: 1
+maxLength: 80
+example: Sourabh.rawatcc@gmail.com

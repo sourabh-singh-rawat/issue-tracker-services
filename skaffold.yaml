@@ -1,0 +1,13 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: issue-tracker
+build:
+  artifacts:
+    - image: sourabhrawatcc/identity
+      context: identity
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - k8s/deployments/dev/identity.depl.yaml

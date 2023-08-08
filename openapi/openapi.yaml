@@ -24,10 +24,10 @@ paths:
     $ref: ./paths/identity/logout.yaml
   /identity/refresh:
     $ref: ./paths/identity/refresh.yaml
-  /identity/password-reset:
-    $ref: ./paths/identity/password-reset.yaml
-  /identity/verify-email:
-    $ref: ./paths/identity/verify-email.yaml
+  # /identity/password-reset:
+  #   $ref: ./paths/identity/password-reset.yaml
+  # /identity/verify-email:
+  #   $ref: ./paths/identity/verify-email.yaml
   # user profile get and post
 
 security: []
@@ -38,5 +38,7 @@ components:
       $ref: ./components/responses/InternalServerError.yaml
 
   schemas:
+    Email:
+      $ref: ./components/schema/Email.yaml
     Error:
       $ref: ./components/schema/Error.yaml
