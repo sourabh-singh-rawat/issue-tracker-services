@@ -11,3 +11,4 @@ build:
 manifests:
   rawYaml:
     - k8s/deployments/dev/identity.depl.yaml
+    - k8s/deployments/dev/identity-postgres.depl.yaml
