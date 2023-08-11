@@ -20,4 +20,10 @@ spec:
               memory: "256Mi"
               cpu: "500m"
           ports:
-            - containerPort: 4000
+            - name: identity-port
+              containerPort: 4000
+          envFrom:
+            - secretRef:
+                name: identity-pg-secret
+            - secretRef:
+                name: github-token-secret
