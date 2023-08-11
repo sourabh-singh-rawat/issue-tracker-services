@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: identity-pg
+  template:
+    metadata:
+      labels:
+        app: identity-pg
+    spec:
+      containers:
+        - name: identity-pg
+          image: postgres:15.3-alpine3.18
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          ports:
+            - name: pg-port
+              containerPort: 5432
+
+          envFrom:
+            - secretRef:
+                name: identity-pg-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-pg-service
+spec:
+  selector:
+    app: identity-pg
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: pg-port
