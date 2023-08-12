@@ -15,9 +15,6 @@ ENV NODE_ENV production
 
 WORKDIR /usr/src/app
 
-# Copy npmrc file for configuring github as registry
-COPY .npmrc .
-
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into

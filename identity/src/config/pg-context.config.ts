@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { PgContext } from "@sourabh-singh-rawat/core-utils";
+import { PgContext } from "@sourabhrawatcc/core-utils";
 
 let pool: Pool | null = null;
 try {
@@ -11,7 +11,7 @@ try {
     user: process.env.POSTGRES_USER,
   });
 
-  console.log("identity-pg connecion pool created");
+  console.log("Identity service is connected with postgres server");
 } catch (error) {
   // convert to custom error
   throw new Error("TODO: Pool creation error");
