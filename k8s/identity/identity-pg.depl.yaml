@@ -25,15 +25,10 @@ spec:
           envFrom:
             - secretRef:
                 name: identity-pg-secret
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: identity-pg-service
-spec:
-  selector:
-    app: identity-pg
-  ports:
-    - protocol: TCP
-      port: 5432
-      targetPort: pg-port
+          volumeMounts:
+            - name: identity-pg-persistent-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: identity-pg-persistent-volume
+          persistentVolumeClaim:
+            claimName: identity-pg-pvc

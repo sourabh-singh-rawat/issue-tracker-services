@@ -25,5 +25,3 @@ spec:
           envFrom:
             - secretRef:
                 name: identity-pg-secret
-            - secretRef:
-                name: github-token-secret

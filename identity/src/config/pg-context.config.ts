@@ -5,7 +5,7 @@ let pool: Pool | null = null;
 try {
   // TODO: env variables exists?
   pool = new Pool({
-    host: "identity-pg-service",
+    host: "identity-pg-srv",
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
     user: process.env.POSTGRES_USER,
