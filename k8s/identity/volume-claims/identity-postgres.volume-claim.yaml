@@ -1,8 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: identity-pg-pvc
+  name: identity-postgres-volume-claim
 spec:
+  storageClassName: local-storage
   resources:
     requests:
       storage: 5Gi

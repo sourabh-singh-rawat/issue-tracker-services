@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: identity
+  name: identity-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: identity
+      app: identity-pod
   template:
     metadata:
       labels:
-        app: identity
+        app: identity-pod
     spec:
       containers:
-        - name: identity
+        - name: identity-container
           image: sourabhrawatcc/identity
           resources:
             limits:
               memory: "256Mi"
               cpu: "500m"
           ports:
-            - name: identity-port
+            - name: identity
               containerPort: 4000
           envFrom:
             - secretRef:
-                name: identity-pg-secret
+                name: identity-postgres-secret

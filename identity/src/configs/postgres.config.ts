@@ -1,11 +1,11 @@
 import { Pool } from "pg";
-import { PgContext } from "@sourabhrawatcc/core-utils";
+import { PostgresContext } from "@sourabhrawatcc/core-utils";
 
 let pool: Pool | null = null;
 try {
   // TODO: env variables exists?
   pool = new Pool({
-    host: "identity-pg-srv",
+    host: "identity-postgres-service",
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
     user: process.env.POSTGRES_USER,
@@ -19,4 +19,4 @@ try {
 
 // TODO: is pool null?
 
-export const pgContext = new PgContext(pool);
+export const postgresContext = new PostgresContext(pool);
