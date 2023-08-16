@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: identity-pg
+  name: identity-postgres-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: identity-pg
+      app: identity-postgres-pod
   template:
     metadata:
       labels:
-        app: identity-pg
+        app: identity-postgres-pod
     spec:
       containers:
-        - name: identity-pg
+        - name: identity-postgres-container
           image: postgres:15.3-alpine3.18
           resources:
             limits:
               memory: "256Mi"
               cpu: "500m"
           ports:
-            - name: pg-port
+            - name: postgres
               containerPort: 5432
           envFrom:
             - secretRef:
-                name: identity-pg-secret
+                name: identity-postgres-secret
           volumeMounts:
-            - name: identity-pg-persistent-volume
+            - name: identity-postgres-volume
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: identity-pg-persistent-volume
+        - name: identity-postgres-volume
           persistentVolumeClaim:
-            claimName: identity-pg-pvc
+            claimName: identity-postgres-volume-claim
