@@ -42,19 +42,18 @@ FROM production AS development
 # Node environment to development
 ENV NODE_ENV development
 
-# Switching to root
-USER root
 
 WORKDIR /usr/src/app
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci
+# Switching to root
+USER root
+
+# Copy package.json from production stage to development stage
+COPY --from=production /usr/src/app/package.json .
+COPY --from=production /usr/src/app/package-lock.json .
+
+RUN --mount=type=cache,target=/root/.npm \
+    npm i
 
 # Expose the port that the application listens on.
 EXPOSE 4000

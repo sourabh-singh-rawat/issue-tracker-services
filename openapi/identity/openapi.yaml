@@ -1,0 +1,50 @@
+openapi: 3.0.0
+info:
+  title: Issue Tracker API
+  version: 1.0.0
+  description: API for describing various endpoints of issue tracker
+  license:
+    name: ISC
+    url: https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE
+
+servers:
+  - url: http://localhost:4000/api
+
+tags:
+  - name: identity
+    description: Authentication and user management service.
+
+paths:
+  /identity/signup:
+    description: Create a user
+    $ref: ./paths/signup.path.yaml
+
+  # /identity/{id}:
+  #   description: Read, update or delete a user
+  #   $ref: ./paths/identity/signup.yaml
+
+  # /identity/login:
+  #   $ref: ./paths/identity/login.yaml
+
+  # /identity/logout:
+  #   $ref: ./paths/identity/logout.yaml
+
+  # /identity/refresh:
+  #   $ref: ./paths/identity/refresh.yaml
+  # # /identity/password-reset:
+  #   $ref: ./paths/identity/password-reset.yaml
+  # /identity/verify-email:
+  #   $ref: ./paths/identity/verify-email.yaml
+  # user profile get and post
+
+security: []
+
+components:
+  responses:
+    InternalServerError:
+      $ref: ../common/components/responses/internal-server-error.yaml
+  schemas:
+    Email:
+      $ref: ../common/components/schemas/email.yaml
+    Error:
+      $ref: ../common/components/schemas/error.yaml
