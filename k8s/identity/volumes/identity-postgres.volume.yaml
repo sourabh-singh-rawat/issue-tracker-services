@@ -11,5 +11,4 @@ spec:
   persistentVolumeReclaimPolicy: Recycle
   storageClassName: local-storage
   hostPath:
-    path: "/data/identity-postgres"
-    type: DirectoryOrCreate
+    path: "/run/desktop/mnt/host/c/data/identity-postgres"

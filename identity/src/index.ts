@@ -1,15 +1,17 @@
 import { app } from "./app";
-// import { PostgresUserRepository } from "./repositories/postgres-user.repository";
 
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
+const HOST = "0.0.0.0";
 
 const main = async () => {
-  app.listen(PORT, () => {
-    console.log(`Identity service is up and running on port ${PORT}`);
-  });
+  try {
+    await app.listen({ port: PORT, host: HOST });
 
-  // const repo = new PostgresUserRepository();
-  // repo.create({ email: "sourabh2@gmail.com", password: "password123" });
+    console.log(`Identity service is up and running on port@${PORT}`);
+  } catch (error) {
+    console.log("Identity service cannot start");
+    process.exit(1);
+  }
 };
 
 main();
