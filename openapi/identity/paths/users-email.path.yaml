@@ -1,0 +1,22 @@
+patch:
+  tags:
+    - identity
+  summary: Update user email
+  operationId: updateUserEmail
+  parameters:
+    - name: id
+      in: path
+      description: Id of the user
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../common/components/schemas/requests/body/users-email-patch.yaml
+  responses:
+    200:
+      description: Email updated successfully.
+    401:
+      description: Unauthorized

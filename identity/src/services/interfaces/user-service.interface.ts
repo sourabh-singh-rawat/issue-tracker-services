@@ -1,14 +1,19 @@
-import { UserEntity } from "../../data/entities";
-import { UserUpdateDto } from "../../dtos/user";
-import { UserBodyDto } from "../../dtos/user/post-user.dto";
+import { CreateUserRequestDTO } from "../../dtos/user/create-user-request.dto";
 import { UserDetailsDto } from "../../dtos/user/user-details.dto";
 import { ServiceResponse } from "../core-user.service";
 
 export interface UserService {
-  createUser(user: UserBodyDto): Promise<ServiceResponse<UserDetailsDto>>;
+  createUser(
+    user: CreateUserRequestDTO,
+  ): Promise<ServiceResponse<UserDetailsDto>>;
   // getUserById(): void;
   // getUserByUsername(): void;
-  updateUser(id: string, user: UserUpdateDto): Promise<UserEntity>;
+  updateEmail(id: string, email: string): Promise<boolean>;
+  updatePassword(
+    id: string,
+    update: { oldPassword: string; newPassword: string },
+  ): Promise<boolean>;
+
   // deleteUser(): void;
   // changePassword(): void;
   // resetPassword(): void;

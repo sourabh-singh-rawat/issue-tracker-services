@@ -10,7 +10,10 @@ export const userRoutes = (
   const userController = container.resolve<UserController>("userController");
 
   fastify.post("/signup", userController.create);
-  fastify.patch("/:id", userController.update);
+  fastify.patch("/users/:id/email", userController.updateEmail);
+  fastify.patch("/users/:id/password", userController.updatePassword);
+  // fastify.get("/users/:id", userController.update);
+  // fastify.delete("/users/:id", userController.update);
 
   next();
 };

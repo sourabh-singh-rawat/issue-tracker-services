@@ -1,9 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export interface UserController {
-  create(request: FastifyRequest, reply: FastifyReply): Promise<Response>;
+  create(req: FastifyRequest, res: FastifyReply): Promise<Response>;
   // get(): void;
-  update(request: FastifyRequest, reply: FastifyReply): Promise<Response>;
+  updateEmail(req: FastifyRequest, res: FastifyReply): Promise<Response>;
+  updatePassword(req: FastifyRequest, res: FastifyReply): Promise<Response>;
   // delete(): void;
   // list(): void;
 }

@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DataSource } from "typeorm";
-import { UserCreateDto, UserUpdateDto } from "../../dtos/user";
+import { UserCredentialsDTO, UserUpdateDto } from "../../dtos/user";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interfaces/user-repository.interface";
-import { UUID } from "typeorm/driver/mongodb/bson.typings";
 
 export class PostgresUserRepository implements UserRepository {
   private readonly _context;
@@ -15,10 +14,10 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Creates a new user.
    *
-   * @param {UserCreateDto} user Object that represents the user to be created
+   * @param {UserCredentialsDTO} user Object that represents the user to be created
    * @returns {Promise<UserEntity>}
    */
-  save = async (user: UserCreateDto): Promise<UserEntity> => {
+  save = async (user: UserCredentialsDTO): Promise<UserEntity> => {
     const { email, password } = user;
 
     const query = this._context
@@ -31,6 +30,50 @@ export class PostgresUserRepository implements UserRepository {
     const result = await query.execute();
 
     return result.raw[0];
+  };
+
+  /**
+   * Checks if user exists, by id
+   *
+   * @param id
+   */
+  existsById = async (id: string): Promise<boolean> => {
+    const result = await this._context.query(
+      "SELECT * FROM user_exists_by_id($1)",
+      [id],
+    );
+
+    return result[0].user_exists_by_id;
+  };
+
+  /**
+   * Checks if user exists, by email
+   *
+   * @param email
+   * @returns
+   */
+  existsByEmail = async (email: string): Promise<boolean> => {
+    const result = await this._context.query(
+      "SELECT * FROM user_exists_by_email($1)",
+      [email],
+    );
+
+    return result[0].user_exists_by_email;
+  };
+
+  /**
+   * Find the user by user's id
+   *
+   * @param id
+   * @returns
+   */
+  findById = async (id: string): Promise<UserEntity | null> => {
+    const result = await this._context.query(
+      "SELECT * FROM find_user_by_id($1)",
+      [id],
+    );
+
+    return result[0];
   };
 
   /**
@@ -56,18 +99,43 @@ export class PostgresUserRepository implements UserRepository {
     return result.raw[0];
   };
 
-  delete(): Promise<void> {
+  /**
+   *
+   */
+  updateEmail = async (id: string, email: string): Promise<boolean> => {
     throw new Error("Method not implemented.");
-  }
+  };
 
-  existsById(id: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-  findById(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
+  /**
+   * Update password
+   */
+  updatePassword = async (id: string, password: string): Promise<boolean> => {
+    const query = this._context
+      .createQueryBuilder()
+      .update(UserEntity)
+      .set({ password })
+      .where("id = :id", { id });
 
-  count(): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
+    const result = await query.execute();
+
+    return result.affected == 1;
+  };
+
+  /**
+   * Soft delete an existing user (kinda like archive)
+   *
+   * @param id
+   * @returns {Promise<void>}
+   */
+  softDelete = async (id: string): Promise<void> => {
+    const query = this._context
+      .createQueryBuilder()
+      .softDelete()
+      .where("id = :id", { id })
+      .returning(["id"]);
+
+    const result = await query.execute();
+
+    return result.raw[0];
+  };
 }
