@@ -1,0 +1,291 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Issue Tracker API",
+    "version": "1.0.0",
+    "description": "API for describing various endpoints of issue tracker",
+    "license": {
+      "name": "ISC",
+      "url": "https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:80/api/v1/identity"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "identity",
+      "description": "Authentication and user management service."
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "description": "Create a user",
+      "post": {
+        "operationId": "register",
+        "tags": [
+          "identity"
+        ],
+        "summary": "Create user",
+        "description": "Creates a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New user + accessToken + refreshToken",
+            "headers": {
+              "Authorization": {
+                "description": "The cookie with accessToken and refreshToken",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest"
+          },
+          "401": {
+            "description": "Unauthorization"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Too many request"
+          }
+        }
+      }
+    },
+    "/users/{id}/email": {
+      "patch": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Update user email",
+        "operationId": "updateUserEmail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email updated successfully."
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "InternalServerError": {
+        "description": "Internal Server Error - An unexpected server error occured",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "internal-server-error": {
+        "description": "Internal Server Error - An unexpected server error occured",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Email": {
+        "type": "string",
+        "format": "email",
+        "minLength": 1,
+        "maxLength": 80,
+        "example": "Sourabh.rawatcc@gmail.com"
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "field": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "user-body-post": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64,
+            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        }
+      },
+      "users-email-patch": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "minLength": 1,
+        "maxLength": 80,
+        "example": "Sourabh.rawatcc@gmail.com"
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "field": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

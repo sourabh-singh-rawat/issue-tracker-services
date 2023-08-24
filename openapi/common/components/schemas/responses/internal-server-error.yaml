@@ -2,4 +2,4 @@ description: Internal Server Error - An unexpected server error occured
 content:
   application/json:
     schema:
-      $ref: ../schemas/error.yaml
+      $ref: ../error.yaml

@@ -1,33 +1,21 @@
-import fastify, { FastifyError, FastifyReply, FastifyRequest } from "fastify";
-import * as awilix from "awilix";
-import "reflect-metadata";
+import fastify from "fastify";
+import swagger from "@fastify/swagger";
+import { createContainer } from "awilix";
 import { userRoutes } from "./routes/user.routes";
-import { CoreUserController } from "./controllers/core-user.controller";
-import { CoreUserService } from "./services/core-user.service";
-import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
-import { dataSource } from "./configs/typeorm.config";
+import { containerValues } from "./configs/awilix.config";
+import { handleError } from "./common/error-handler.util";
+import "reflect-metadata";
 
 export const app = fastify();
-export const container = awilix.createContainer();
+export const container = createContainer();
 
-// Application routes registration
+// Application registration
 app.register(userRoutes, { prefix: "/api/v1/identity" });
+app.register(swagger, {
+  mode: "static",
+  specification: { path: "./openapi.json", baseDir: "/usr/src/app" },
+});
+app.setErrorHandler(handleError);
 
 // Dependency container registration
-container.register({
-  postgresContext: awilix.asValue(dataSource),
-  userController: awilix.asClass(CoreUserController).singleton(),
-  userService: awilix.asClass(CoreUserService).singleton(),
-  userRepository: awilix.asClass(PostgresUserRepository),
-});
-
-// Plugin registration
-app.setErrorHandler(
-  (error: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
-    console.log(error);
-
-    return reply.send(
-      "Fastify's global error handler responds with something went wrong",
-    );
-  },
-);
+container.register(containerValues);

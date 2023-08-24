@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserController } from "./interfaces/user-controller.interface";
 import { UserService } from "../services/interfaces/user-service.interface";
-import { UserBodyDto } from "../dtos/user/post-user.dto";
+import { CreateUserRequestDTO } from "../dtos/user/create-user-request.dto";
+import { StatusCodes } from "http-status-codes";
 
 export class CoreUserController implements UserController {
   private readonly _userService;
@@ -10,33 +11,54 @@ export class CoreUserController implements UserController {
     this._userService = container.userService;
   }
 
+  // Create a new user
   create = async (
-    request: FastifyRequest<{ Body: UserBodyDto }>,
-    reply: FastifyReply,
+    req: FastifyRequest<{ Body: CreateUserRequestDTO }>,
+    res: FastifyReply,
   ): Promise<Response> => {
-    const { displayName, email, password } = request.body;
+    const { email, password, displayName } = req.body;
 
-    const serviceResponse = await this._userService.createUser({
-      displayName,
-      email,
-      password,
-    });
+    const user = new CreateUserRequestDTO({ email, password, displayName });
 
-    return reply.send(serviceResponse);
+    const serviceResponse = await this._userService.createUser(user);
+
+    return res.status(StatusCodes.CREATED).send(serviceResponse);
   };
 
-  update = async (
-    request: FastifyRequest<{ Body: UserBodyDto; Params: { id: string } }>,
-    reply: FastifyReply,
+  // Update user email.
+  updateEmail = async (
+    req: FastifyRequest<{
+      Body: { email: string };
+      Params: { id: string };
+    }>,
+    res: FastifyReply,
   ): Promise<Response> => {
-    const { id } = request.params;
-    const { email, password } = request.body;
+    const { id } = req.params;
+    const { email } = req.body;
 
-    const response = await this._userService.updateUser(id, {
-      email,
-      password,
+    const response = await this._userService.updateEmail(id, email);
+
+    return res.status(StatusCodes.OK).send(response);
+  };
+
+  // contact updatePassword method on the service object
+  // updatePassword service will require some sort of DTO
+  // return response to the user
+  updatePassword = async (
+    req: FastifyRequest<{
+      Body: { oldPassword: string; newPassword: string };
+      Params: { id: string };
+    }>,
+    res: FastifyReply,
+  ) => {
+    const { id } = req.params;
+    const { newPassword, oldPassword } = req.body;
+
+    const response = await this._userService.updatePassword(id, {
+      oldPassword,
+      newPassword,
     });
 
-    return reply.send(response);
+    return res.status(StatusCodes.OK).send(response);
   };
 }
