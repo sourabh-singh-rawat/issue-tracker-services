@@ -1,5 +1,6 @@
 import { ConnectionRefusedError } from "@sourabhrawatcc/core-utils";
 import { DataSource } from "typeorm";
+import { app } from "../app";
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -15,9 +16,8 @@ export const dataSource = new DataSource({
 dataSource
   .initialize()
   .then(() => {
-    console.log("Identity service is connected with postgres server");
+    app.log.info("Server connected with postgres server");
   })
-  .catch((error) => {
-    console.log(error);
+  .catch(() => {
     throw new ConnectionRefusedError("Connection to postgres server refused");
   });
