@@ -1,63 +1,73 @@
 {
-  "name": "issue-tracker",
-  "version": "2.0.0",
-  "private": true,
+  "name": "client",
+  "version": "1.0.0",
+  "description": "React client for issue tracker",
+  "private": "true",
+  "main": "src/index.tsx",
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+  },
+  "keywords": [
+    "issue-tracker",
+    "react",
+    "client"
+  ],
+  "author": "Sourabh Singh Rawat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+  },
+  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-react": "^7.22.5",
+    "@babel/preset-typescript": "^7.22.5",
+    "@rtk-query/codegen-openapi": "^1.0.0",
+    "@types/node": "^20.5.6",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-redux": "^7.1.26",
+    "@types/redux-logger": "^3.0.9",
+    "@types/webpack": "^5.28.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "babel-loader": "^9.1.3",
+    "eslint": "^8.47.0",
+    "eslint-plugin-react": "^7.33.2",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.3",
+    "redux-logger": "^3.0.6",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
   "dependencies": {
-    "@date-io/date-fns": "^2.14.0",
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
+    "@date-io/date-fns": "^2.17.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.6.1",
-    "@mui/material": "^5.6.1",
+    "@mui/material": "^5.14.6",
     "@mui/x-data-grid": "^5.9.0",
     "@mui/x-date-pickers": "^5.0.0-alpha.6",
     "@reduxjs/toolkit": "^1.8.2",
-    "@testing-library/jest-dom": "^5.16.3",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
-    "date-fns": "^2.28.0",
+    "@tanstack/react-form": "^0.0.11",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "css-loader": "^6.8.1",
+    "date-fns": "^2.30.0",
     "firebase": "^9.6.10",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-redux": "^7.2.8",
-    "react-router-dom": "^6.3.0",
-    "react-select": "^5.7.2",
-    "source-map-explorer": "^2.5.3",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "dotenv": "^16.0.1",
-    "eslint": "^8.30.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "react-scripts": "^5.0.1",
-    "redux-logger": "^3.0.6"
-  },
-  "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.4",
+    "react-redux": "^8.1.2",
+    "react-router-dom": "^6.15.0",
+    "react-select": "^5.7.4"
   }
 }

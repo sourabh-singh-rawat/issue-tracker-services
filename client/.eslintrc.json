@@ -1,30 +1,35 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": ["plugin:react/recommended", "airbnb"],
-  "overrides": [],
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
-  "plugins": ["react"],
-  "rules": {
-    "no-console": "error",
-    "no-restricted-exports": "off",
-    "implicit-arrow-linebreak": "off",
-    "react/jsx-sort-props": [
-      "error",
-      {
-        "callbacksLast": true,
-        "shorthandFirst": false,
-        "shorthandLast": true,
-        "ignoreCase": true,
-        "noSortAlphabetically": false,
-        "reservedFirst": true
-      }
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended"
     ],
-    "linebreak-style": "off"
-  }
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "react"
+    ],
+    "rules": {
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "react/no-children-prop": "off"
+    }
 }

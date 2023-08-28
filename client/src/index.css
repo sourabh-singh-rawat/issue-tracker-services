@@ -1,9 +1,3 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #f7f7f8;
-}
-
 /* width */
 ::-webkit-scrollbar {
   width: 8px;
@@ -25,15 +19,4 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   height: 16px;
   background: #848494;
-}
-#root {
-  display: flex;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }
