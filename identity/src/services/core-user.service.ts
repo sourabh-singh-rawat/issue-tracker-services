@@ -1,11 +1,11 @@
+import { Hash } from "@sourabhrawatcc/core-utils";
 import { UserRepository } from "../data/repositories/interfaces/user-repository.interface";
 import { UserCredentialsDTO } from "../dtos/user";
 import { CreateUserRequestDTO } from "../dtos/user/create-user-request.dto";
 import { UserDetailsDto } from "../dtos/user/user-details.dto";
 import { UserPasswordUpdateDto } from "../dtos/user/user-password-update.dto";
+import { UserAlreadyExists } from "../errors/repository/user-already-exists.error";
 import { UserService } from "./interfaces/user-service.interface";
-import argon2 from "argon2";
-import { randomBytes } from "crypto";
 
 interface ServiceResponseInputs<T> {
   data: T | T[] | null;
@@ -39,17 +39,14 @@ export class CoreUserService implements UserService {
   ): Promise<ServiceResponse<UserDetailsDto>> => {
     const { email, password } = user;
 
-    // Checks if the email already exists
     const doesUserExist = await this._userRepository.existsByEmail(email);
 
     if (doesUserExist) {
-      throw new Error("User already exists");
+      throw new UserAlreadyExists();
     }
 
-    // Hashes the password
-    const hashedPassword = await this.hashPassword(password);
+    const hashedPassword = await Hash.create(password);
 
-    // Saves the newly created user
     const userToSave = new UserCredentialsDTO({
       email,
       password: hashedPassword,
@@ -98,14 +95,6 @@ export class CoreUserService implements UserService {
     );
 
     return updatedUser;
-  };
-
-  // Hash password function
-  hashPassword = async (password: string): Promise<string> => {
-    const salt = randomBytes(32);
-    const hashedPassword = await argon2.hash(password, { salt });
-
-    return `${hashedPassword}#${salt.toString("hex")}`;
   };
 
   // Compare password function
