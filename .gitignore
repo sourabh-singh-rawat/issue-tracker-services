@@ -131,3 +131,6 @@ dist
 
 # ignore draw.io's backup files
 *.bkp
+
+# client
+build
