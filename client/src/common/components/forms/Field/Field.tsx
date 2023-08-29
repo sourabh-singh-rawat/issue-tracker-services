@@ -5,26 +5,26 @@ import MuiTextField from "@mui/material/TextField";
 
 const StyledTextField = styled(MuiTextField)(({ theme, error }) => {
   const palette = theme.palette;
-  const grey = palette.grey;
-  const primary = palette.primary;
+  const greyColor = palette.grey;
+  const primaryColor = palette.primary;
   const errorColor = palette.error;
 
   return {
     "& .MuiOutlinedInput-root ": {
       borderRadius: theme.shape.borderRadiusMedium,
       "& fieldset": {
-        color: primary.main,
+        color: primaryColor.main,
         border: error
           ? `2px solid ${errorColor.light}`
-          : `1px solid ${grey[500]}`,
+          : `1px solid ${greyColor[500]}`,
       },
-      "&:hover fieldset": { border: `2px solid ${grey[600]}` },
+      "&:hover fieldset": { border: `2px solid ${greyColor[600]}` },
       "&.Mui-focused": {
-        "& fieldset": { border: `2px solid ${primary.main}` },
+        "& fieldset": { border: `2px solid ${primaryColor.main}` },
       },
       "&.Mui-disabled": {
-        backgroundColor: grey[200],
-        "& fieldset": { border: `1px solid ${grey[300]}` },
+        backgroundColor: greyColor[200],
+        "& fieldset": { border: `1px solid ${greyColor[300]}` },
       },
     },
     "& .MuiFormHelperText-contained": {
@@ -41,10 +41,13 @@ interface FieldProps {
   value: string | number;
   onBlur?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  rows?: number;
+  helperText?: string;
+  endAdornment?: React.JSX.Element;
+  startAdornment?: React.JSX.Element;
   isInvalid: boolean;
   isDisabled?: boolean;
   isMultiline?: boolean;
+  rows?: number;
 }
 
 export default function Field({
@@ -54,10 +57,13 @@ export default function Field({
   value,
   onBlur,
   onChange,
-  rows,
+  helperText,
+  endAdornment,
+  startAdornment,
   isInvalid,
   isDisabled,
   isMultiline,
+  rows,
 }: FieldProps) {
   return (
     <StyledTextField
@@ -69,8 +75,7 @@ export default function Field({
       id={id}
       name={name}
       value={value}
-      // helperText={helperText}
-      rows={rows}
+      helperText={helperText}
       // placeholder={placeholder}
       fullWidth
       onBlur={onBlur}
@@ -78,6 +83,8 @@ export default function Field({
       error={isInvalid}
       multiline={isMultiline}
       disabled={isDisabled}
+      rows={rows}
+      InputProps={{ endAdornment, startAdornment }}
     />
   );
 }
