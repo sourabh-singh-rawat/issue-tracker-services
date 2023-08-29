@@ -1,0 +1,44 @@
+import React, { useState } from "react";
+import TextField from "../TextField";
+import { Control, FieldValues, FormState, Path } from "react-hook-form";
+import MuiIconButton from "@mui/material/IconButton";
+import MuiVisibilityOff from "@mui/icons-material/VisibilityOff";
+import MuiVisibility from "@mui/icons-material/Visibility";
+
+interface PasswordFieldProps<DefaultValues extends FieldValues> {
+  name: Path<DefaultValues>;
+  title: string;
+  control: Control<DefaultValues>;
+  formState: FormState<DefaultValues>;
+}
+
+export default function PasswordField<DefaultValues extends FieldValues>({
+  name,
+  title,
+  control,
+  formState,
+}: PasswordFieldProps<DefaultValues>) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggle = () => setIsVisible(!isVisible);
+
+  return (
+    <TextField
+      name={name}
+      title={title}
+      control={control}
+      formState={formState}
+      type={isVisible ? "text" : "password"}
+      helperText="Minimum 8 characters with uppercase, lowercase, one digit, no whitespace and atleast one special character (@#$%^&+=!)"
+      endAdornment={
+        <MuiIconButton
+          aria-label="toggle password visibility"
+          onClick={toggle}
+          // onMouseDown={handleMouseDownPassword}
+        >
+          {isVisible ? <MuiVisibilityOff /> : <MuiVisibility />}
+        </MuiIconButton>
+      }
+    />
+  );
+}

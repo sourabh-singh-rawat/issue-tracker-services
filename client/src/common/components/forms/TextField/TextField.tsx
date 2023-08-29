@@ -22,10 +22,12 @@ interface TextFieldProps<DefaultValues extends FieldValues> {
   formState: FormState<DefaultValues>;
   type?: React.HTMLInputTypeAttribute;
   rules?: UseControllerProps<DefaultValues>["rules"];
+  helperText?: string;
   rows?: number;
   isLoading?: boolean;
   isDisabled?: boolean;
   isMultiline?: boolean;
+  endAdornment?: React.JSX.Element;
 }
 
 export default function TextField<DefaultValues extends FieldValues>({
@@ -35,11 +37,14 @@ export default function TextField<DefaultValues extends FieldValues>({
   formState,
   rules,
   type = "text",
+  helperText,
   rows = 3,
   isLoading,
   isDisabled,
   isMultiline,
+  endAdornment,
 }: TextFieldProps<DefaultValues>) {
+
   return (
     <MuiGrid container>
       {title && (
@@ -68,10 +73,14 @@ export default function TextField<DefaultValues extends FieldValues>({
                 value={field.value}
                 onBlur={field.onBlur}
                 onChange={field.onChange}
+                helperText={
+                  (formState.errors[name]?.message as string) || helperText
+                }
                 rows={rows}
                 isInvalid={Boolean(formState.errors[name])}
                 isDisabled={isDisabled}
                 isMultiline={isMultiline}
+                endAdornment={endAdornment}
               />
             )}
           />
