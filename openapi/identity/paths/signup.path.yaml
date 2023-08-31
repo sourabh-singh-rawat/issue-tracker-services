@@ -1,5 +1,5 @@
 post:
-  operationId: register
+  operationId: registerUser
   tags:
     - identity
   summary: Create user
@@ -20,9 +20,19 @@ post:
           example: accessToken=[jwt_token]; refreshToken=[jwt_token_2]
     400:
       description: BadRequest
+      content:
+        application/json:
+          schema:
+            $ref: ../../common/components/schemas/error.yaml
     401:
       description: Unauthorization
     403:
       description: Forbidden
+    409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: ../../common/components/schemas/error.yaml
     429:
       description: Too many request

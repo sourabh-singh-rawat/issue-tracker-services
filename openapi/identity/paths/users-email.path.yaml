@@ -1,8 +1,8 @@
 patch:
+  operationId: updateUserEmail
   tags:
     - identity
   summary: Update user email
-  operationId: updateUserEmail
   parameters:
     - name: id
       in: path

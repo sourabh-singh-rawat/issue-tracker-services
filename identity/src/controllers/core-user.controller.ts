@@ -20,9 +20,12 @@ export class CoreUserController implements UserController {
 
     const user = new CreateUserRequestDTO({ email, password, displayName });
 
-    const serviceResponse = await this._userService.createUser(user);
+    const { data, dataCount } = await this._userService.createUser(user);
 
-    return res.status(StatusCodes.CREATED).send(serviceResponse);
+    res.setCookie("accessToken", data.accessToken, { path: "/", httpOnly: true, sameSite: true });
+    res.setCookie("refreshToken", data.refreshToken, { path: "/", httpOnly: true, sameSite: true });
+
+    return res.status(StatusCodes.CREATED).send({ data, dataCount });
   };
 
   // Update user email.

@@ -10,5 +10,5 @@ build:
         dockerfile: Dockerfile
 manifests:
   rawYaml:
-    - k8s/identity/deployments/identity.deployment.yaml
-    - k8s/identity/deployments/identity-postgres.deployment.yaml
+    - k8s/deployments/identity.deployment.yaml
+    - k8s/deployments/identity-postgres.deployment.yaml

@@ -25,3 +25,5 @@ spec:
           envFrom:
             - secretRef:
                 name: identity-postgres-secret
+            - secretRef:
+                name: jwt-secret

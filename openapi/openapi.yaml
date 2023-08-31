@@ -8,18 +8,18 @@ info:
     url: https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE
 
 servers:
-  - url: http://localhost:80/api/v1/identity
+  - url: http://localhost:80/api/v1
 
 tags:
   - name: identity
     description: Authentication and user management service.
 
 paths:
-  /signup:
+  /identity/signup:
     description: Create a user
-    $ref: paths/signup.path.yaml
-  /users/{id}/email:
-    $ref: paths/users-email.path.yaml
+    $ref: ./identity/paths/signup.path.yaml
+  /identity/users/{id}/email:
+    $ref: ./identity/paths/users-email.path.yaml
   # /identity/users/{id}/password:
 
   # /identity/login:
@@ -41,9 +41,9 @@ security: []
 components:
   responses:
     InternalServerError:
-      $ref: ../common/components/schemas/responses/internal-server-error.yaml
+      $ref: common/components/schemas/responses/internal-server-error.yaml
   schemas:
     Email:
-      $ref: ../common/components/schemas/email.yaml
+      $ref: common/components/schemas/email.yaml
     Error:
-      $ref: ../common/components/schemas/error.yaml
+      $ref: common/components/schemas/error.yaml
