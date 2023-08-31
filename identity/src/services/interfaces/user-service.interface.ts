@@ -1,11 +1,13 @@
+import { ServiceResponseDTO } from "@sourabhrawatcc/core-utils";
 import { CreateUserRequestDTO } from "../../dtos/user/create-user-request.dto";
-import { UserDetailsDto } from "../../dtos/user/user-details.dto";
-import { ServiceResponse } from "../core-user.service";
 
 export interface UserService {
-  createUser(
-    user: CreateUserRequestDTO,
-  ): Promise<ServiceResponse<UserDetailsDto>>;
+  createUser(user: CreateUserRequestDTO): Promise<
+    ServiceResponseDTO<{
+      accessToken: string;
+      refreshToken: string;
+    }>
+  >;
   // getUserById(): void;
   // getUserByUsername(): void;
   updateEmail(id: string, email: string): Promise<boolean>;
