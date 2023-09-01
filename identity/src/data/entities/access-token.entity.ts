@@ -9,7 +9,7 @@ import { AuditEntity } from "./audit.entity";
 import { UserEntity } from "./user.entity";
 
 @Entity("access_tokens")
-export class AccessToken extends AuditEntity {
+export class AccessTokenEntity extends AuditEntity {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "access_tokens_pkey",
   })

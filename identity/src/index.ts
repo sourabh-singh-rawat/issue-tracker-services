@@ -7,6 +7,7 @@ const main = async () => {
   try {
     await app.listen({ port: SERVER_PORT, host: SERVER_HOST });
     await dataSource.connect();
+    app.log.info("Server connected to postgres server");
   } catch (error) {
     console.log(error);
     app.log.error("Identity service cannot start");
