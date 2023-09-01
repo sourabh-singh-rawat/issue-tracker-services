@@ -10,6 +10,8 @@ import { CoreUserController } from "./controllers/core-user.controller";
 import { CoreUserService } from "./services/core-user.service";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
 import { PostgresAccessTokenRepository } from "./data/repositories/postgres-access-token.repository";
+import { DataSource } from "typeorm";
+import { PostgresRefreshTokenRepository } from "./data/repositories/postgres-refresh-token.repository";
 
 export const app = fastify({ logger: true });
 export const container = createContainer();
@@ -25,8 +27,7 @@ app.register(swagger, {
 
 app.setErrorHandler(ErrorHandler.handleError);
 
-
-export const dataSource = new PostgresContext({
+const source = new DataSource({
   type: "postgres",
   host: process.env.POSTGRES_HOST,
   username: process.env.POSTGRES_USER,
@@ -36,6 +37,7 @@ export const dataSource = new PostgresContext({
   entities: ["src/data/entities/*.ts"],
   // migrations: [],
 });
+export const dataSource = new PostgresContext(source);
 
 // Dependency container registration
 container.register({
@@ -44,4 +46,5 @@ container.register({
   userService: asClass(CoreUserService),
   userRepository: asClass(PostgresUserRepository),
   accessTokenRepository: asClass(PostgresAccessTokenRepository),
+  refreshTokenRepository: asClass(PostgresRefreshTokenRepository),
 });

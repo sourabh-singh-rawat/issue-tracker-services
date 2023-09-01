@@ -22,4 +22,5 @@ export interface UserService {
   // deactivateAccount(): void;
   // hashPassword(): void;
   // checkPassword(): void;
+  // createAccessToken(user: UserDetailDto, exp: number): string;
 }
