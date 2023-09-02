@@ -3,16 +3,25 @@ import {
   Token,
   ServiceResponseDTO,
   PostgresContext,
+  UnauthorizedError,
 } from "@sourabhrawatcc/core-utils";
-import { UserRepository } from "../data/repositories/interfaces/user-repository.interface";
-import { UserCredentialsDTO } from "../dtos/user";
-import { CreateUserRequestDTO } from "../dtos/user/create-user-request.dto";
-import { UserDetailDto } from "../dtos/user/user-detail.dto";
-import { UserPasswordUpdateDto } from "../dtos/user/user-password-update.dto";
-import { UserAlreadyExists } from "../errors/repository/user-already-exists.error";
+
 import { UserService } from "./interfaces/user-service.interface";
+import { UserRepository } from "../data/repositories/interfaces/user-repository.interface";
 import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository.interface";
+
 import { PostgresRefreshTokenRepository } from "../data/repositories/postgres-refresh-token.repository";
+
+import { UserAlreadyExists } from "../errors/repository/user-already-exists.error";
+import { UserNotFoundError } from "../errors/repository/user-not-found.error";
+
+// import { UserPasswordUpdateDto } from "../dtos/user/user-password-update.dto";
+import { UserDetailDto } from "../dtos/user/user-detail.dto";
+import {
+  CreateUserRequestDTO,
+  CreateUserResponseDTO,
+  UserCredentialsDTO,
+} from "../dtos/user";
 
 export class CoreUserService implements UserService {
   private readonly _context;
@@ -39,12 +48,7 @@ export class CoreUserService implements UserService {
    */
   createUser = async (
     user: CreateUserRequestDTO,
-  ): Promise<
-    ServiceResponseDTO<{
-      accessToken: string;
-      refreshToken: string;
-    }>
-  > => {
+  ): Promise<ServiceResponseDTO<CreateUserResponseDTO>> => {
     const { email, password } = user;
 
     // Check user exists
@@ -55,10 +59,15 @@ export class CoreUserService implements UserService {
     }
 
     // Hash password
-    const hashedPassword = await Hash.create(password);
+    const { hash, salt } = await Hash.create(password);
 
     // Create new user
-    const newUser = new UserCredentialsDTO({ email, password: hashedPassword });
+    const newUser = new UserCredentialsDTO({
+      email,
+      hash,
+      salt,
+      plain: password,
+    });
 
     // Transaction to save user, accessToken, and refreshToken
     const transactionResult = await this._context.transaction(async (t) => {
@@ -72,10 +81,7 @@ export class CoreUserService implements UserService {
         createdAt: savedUser.createdAt,
       });
       const accessTokenExp = Date.now() + 15 * 60 * 1000;
-      const accessToken = this.createAccessToken(
-        userDetail,
-        Math.floor(accessTokenExp / 1000),
-      );
+      const accessToken = this.createAccessToken(userDetail, accessTokenExp);
 
       // save access token
       await this._accessTokenRepository.save(
@@ -89,10 +95,7 @@ export class CoreUserService implements UserService {
 
       // create refresh token
       const refreshTokenExp = Date.now() + 60 * 60 * 1000;
-      const refreshToken = this.createRefreshToken(
-        userDetail,
-        Math.floor(refreshTokenExp / 1000),
-      );
+      const refreshToken = this.createRefreshToken(userDetail, refreshTokenExp);
 
       // save refresh token
       await this._refreshTokenRepository.save(
@@ -115,9 +118,82 @@ export class CoreUserService implements UserService {
   };
 
   /**
+   * Logins the user
+   * @param user
+   */
+  loginUser = async (
+    credentials: UserCredentialsDTO,
+  ): Promise<
+    ServiceResponseDTO<{ accessToken: string; refreshToken: string }>
+  > => {
+    const { email, plain } = credentials;
+
+    const user = await this._userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+
+    // Compare user's hashed password with password+salt
+    const isPasswordValid = await Hash.verify(
+      user.passwordHash,
+      user.passwordSalt,
+      plain,
+    );
+
+    // if matches then create access and refresh token
+    if (!isPasswordValid) {
+      throw new UnauthorizedError();
+    }
+
+    const transactionResult = await this._context.transaction(async (t) => {
+      const userDetail = {
+        id: user.id,
+        email: user.email,
+        isEmailVerified: user.isEmailVerified,
+        createdAt: user.createdAt,
+      };
+
+      const accessTokenExp = Date.now() + 15 * 60 * 1000;
+      const accessToken = this.createAccessToken(userDetail, accessTokenExp);
+      await this._accessTokenRepository.save(
+        {
+          userId: user.id,
+          tokenValue: accessToken,
+          expirationAt: new Date(accessTokenExp),
+        },
+        { t },
+      );
+
+      // create refresh token
+      const refreshTokenExp = Date.now() + 60 * 60 * 1000;
+      const refreshToken = this.createRefreshToken(userDetail, refreshTokenExp);
+
+      // save refresh token
+      await this._refreshTokenRepository.save(
+        {
+          userId: user.id,
+          tokenValue: refreshToken,
+          expirationAt: new Date(refreshTokenExp),
+        },
+        { t },
+      );
+
+      return { accessToken, refreshToken };
+    });
+
+    return new ServiceResponseDTO({
+      data: {
+        accessToken: transactionResult.accessToken,
+        refreshToken: transactionResult.refreshToken,
+      },
+    });
+  };
+
+  /**
    * Creates and saves accessToken in the database
    * @param userDetails
-   * @param exp The expiration time in seconds
+   * @param exp expiration time in ms
    * @returns access token string
    */
   private createAccessToken = (user: UserDetailDto, exp: number): string => {
@@ -133,7 +209,7 @@ export class CoreUserService implements UserService {
       iss: "identity-service",
       aud: "client",
       sub: id,
-      exp,
+      exp: Math.floor(exp / 1000),
     };
     const secret = process.env.JWT_SECRET as string;
 
@@ -143,6 +219,7 @@ export class CoreUserService implements UserService {
   /**
    * Create refreshToken
    * @param userDetails
+   * @param exp expiration time in ms
    * @returns refresh token string
    */
   createRefreshToken = (userDetails: UserDetailDto, exp: number): string => {
@@ -153,7 +230,7 @@ export class CoreUserService implements UserService {
       iss: "identity-service",
       aud: "client",
       sub: id,
-      exp,
+      exp: Math.floor(exp / 1000),
     };
     const secret = process.env.JWT_SECRET as string;
     const refreshToken = Token.create(payload, secret);
@@ -181,17 +258,15 @@ export class CoreUserService implements UserService {
    * @param {UserPasswordUpdateDto} data
    * @returns service response?
    */
-  updatePassword = async (id: string, data: UserPasswordUpdateDto) => {
-    // Check if old password matches with the new password
-    // If matched update the user's passwords
+  // updatePassword = async (id: string, data: UserPasswordUpdateDto) => {
+  //   // Check if old password matches with the new password
+  //   // If matched update the user's passwords
 
-    const updatedUser = await this._userRepository.updatePassword(
-      id,
-      data.newPassword,
-    );
+  //   const updatedUser = await this._userRepository.updatePassword(
+  //     id,
+  //     data.newPassword,
+  //   );
 
-    return updatedUser;
-  };
-
-  // Compare password function
+  //   return updatedUser;
+  // };
 }

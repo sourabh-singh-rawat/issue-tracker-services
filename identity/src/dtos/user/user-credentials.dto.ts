@@ -1,14 +1,20 @@
 interface Inputs {
   email: string;
-  password: string;
+  hash?: string;
+  salt?: string;
+  plain: string;
 }
 
 export class UserCredentialsDTO {
   email: string;
-  password: string;
+  plain: string;
+  hash?: string;
+  salt?: string;
 
-  constructor({ email, password }: Inputs) {
+  constructor({ email, hash, salt, plain }: Inputs) {
     this.email = email;
-    this.password = password;
+    this.plain = plain;
+    this.hash = hash;
+    this.salt = salt;
   }
 }

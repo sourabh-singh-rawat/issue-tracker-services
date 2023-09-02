@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+import { Auth } from "@sourabhrawatcc/core-utils";
 import { container } from "../app";
 import { UserController } from "../controllers/interfaces/user-controller.interface";
 
@@ -8,12 +9,13 @@ export const userRoutes = (
   next: (err?: Error | undefined) => void,
 ) => {
   const userController = container.resolve<UserController>("userController");
+  const auth = { preHandler: Auth.requireAuth };
 
   fastify.post("/signup", userController.create);
-  fastify.patch("/users/:id/email", userController.updateEmail);
-  fastify.patch("/users/:id/password", userController.updatePassword);
-  // fastify.get("/users/:id", userController.update);
-  // fastify.delete("/users/:id", userController.update);
+  fastify.post("/login", userController.login);
+  fastify.get("/users/me", auth, userController.getCurrentUser);
+  fastify.patch("/users/:id/email", auth, userController.updateEmail);
+  // fastify.patch("/users/:id/password", auth, userController.updatePassword);
 
   next();
 };

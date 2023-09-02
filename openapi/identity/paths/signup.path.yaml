@@ -1,5 +1,5 @@
 post:
-  operationId: registerUser
+  operationId: signup
   tags:
     - identity
   summary: Create user
@@ -8,7 +8,18 @@ post:
     content:
       application/json:
         schema:
-          $ref: ../../common/components/schemas/user-body-post.yaml
+          type: object
+          properties:
+            email:
+              $ref: ..\..\components\schemas\email.yaml
+            password:
+              $ref: ..\..\components\schemas\password.yaml
+            displayName:
+              $ref: ..\..\components\schemas\display-name.yaml
+          required:
+            - email
+            - password
+            - displayName
   responses:
     201:
       description: New user + accessToken + refreshToken
@@ -23,7 +34,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../../common/components/schemas/error.yaml
+            $ref: ../../components/schemas/error.yaml
     401:
       description: Unauthorization
     403:
@@ -33,6 +44,6 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../../common/components/schemas/error.yaml
+            $ref: ../../components/schemas/error.yaml
     429:
       description: Too many request

@@ -3,18 +3,12 @@
 ## build-docs
 
 ```powershell
-npx @redocly/cli build-docs ./openapi.yaml --output=./dist/api.html
+npx @redocly/cli build-docs ./openapi.yaml --output=../client/src/api/generated/openapi.docs.html
 ```
 
 ## bundle
 
 ```powershell
-npx @redocly/cli bundle ./openapi.yaml --output ./dist/openapi.yaml --remove-unused-components
-npx @redocly/cli bundle ./openapi.yaml --output ./dist/openapi.json --format json --remove-unused-components
-```
-
-## split
-
-```powershell
-npx @redocly/cli split ./dist/openapi.yaml --outDir ./dist/split
+npx @redocly/cli bundle ./openapi.yaml --output ../client/src/api/generated/openapi.yaml --remove-unused-components --d
+npx @redocly/cli bundle ./openapi.yaml --output ../client/src/api/generated/openapi.json --format json --remove-unused-components --d
 ```
