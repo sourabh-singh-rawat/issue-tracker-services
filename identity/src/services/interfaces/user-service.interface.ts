@@ -1,5 +1,6 @@
 import { ServiceResponseDTO } from "@sourabhrawatcc/core-utils";
 import { CreateUserRequestDTO } from "../../dtos/user/create-user-request.dto";
+import { UserCredentialsDTO } from "../../dtos/user";
 
 export interface UserService {
   createUser(user: CreateUserRequestDTO): Promise<
@@ -8,13 +9,14 @@ export interface UserService {
       refreshToken: string;
     }>
   >;
-  // getUserById(): void;
-  // getUserByUsername(): void;
+  loginUser(
+    credentials: UserCredentialsDTO,
+  ): Promise<ServiceResponseDTO<{ accessToken: string; refreshToken: string }>>;
   updateEmail(id: string, email: string): Promise<boolean>;
-  updatePassword(
-    id: string,
-    update: { oldPassword: string; newPassword: string },
-  ): Promise<boolean>;
+  // updatePassword(
+  //   id: string,
+  //   update: { oldPassword: string; newPassword: string },
+  // ): Promise<boolean>;
 
   // deleteUser(): void;
   // changePassword(): void;

@@ -1,5 +1,5 @@
 post:
-  operationId: generateToken
+  operationId: login
   tags:
     - identity
   summary: Generate tokens
@@ -11,12 +11,9 @@ post:
           type: object
           properties:
             email:
-              $ref: ../../openapi.yaml#/components/schemas/Email
+              $ref: ..\..\components\schemas\email.yaml
             password:
-              type: string
-              minLength: 8
-              maxLength: 64
-              pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$
+              $ref: ..\..\components\schemas\password.yaml
   responses:
     200:
       description: accessToken and refreshTokens are successfully generated.
@@ -35,4 +32,5 @@ post:
     429:
       description: User is blocked for sending too many request
     500:
-      $ref: ../../openapi.yaml#/components/responses/InternalServerError
+      description: Something went wrong
+      $ref: ..\..\components\schemas\responses\internal-server-error.yaml

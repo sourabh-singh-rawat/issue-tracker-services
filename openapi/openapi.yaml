@@ -18,8 +18,11 @@ paths:
   /identity/signup:
     description: Create a user
     $ref: ./identity/paths/signup.path.yaml
-  /identity/users/{id}/email:
-    $ref: ./identity/paths/users-email.path.yaml
+  /identity/login:
+    description: Login a user
+    $ref: ./identity/paths/login.path.yaml
+  # /identity/users/{id}/email:
+  #   $ref: ./identity/paths/users-email.path.yaml
   # /identity/users/{id}/password:
 
   # /identity/login:
@@ -37,13 +40,3 @@ paths:
   # user profile get and post
 
 security: []
-
-components:
-  responses:
-    InternalServerError:
-      $ref: common/components/schemas/responses/internal-server-error.yaml
-  schemas:
-    Email:
-      $ref: common/components/schemas/email.yaml
-    Error:
-      $ref: common/components/schemas/error.yaml

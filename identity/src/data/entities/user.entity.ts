@@ -12,8 +12,11 @@ export class UserEntity extends AuditEntity {
   @Check("users_email_check", "LENGTH(email) BETWEEN 3 AND 80")
   email!: string;
 
-  @Column({ type: "text" })
-  password!: string;
+  @Column({ type: "text", name: "password_hash" })
+  passwordHash!: string;
+
+  @Column({ type: "text", name: "password_salt" })
+  passwordSalt!: string;
 
   @Column({
     name: "is_email_verified",
