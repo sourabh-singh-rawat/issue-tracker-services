@@ -1,6 +1,7 @@
-import { RefreshTokenDTO } from "../../../dtos/tokens/refresh-token.dto";
-import { RepositoryOptions } from "./user-repository.interface";
+import { RefreshTokenEntity } from "../../entities";
+import { QueryBuilderOptions } from "./query-builder-options.interface";
 
 export interface RefreshTokenRepository {
-  save(entity: RefreshTokenDTO, opts?: RepositoryOptions): Promise<void>;
+  save(token: RefreshTokenEntity, options?: QueryBuilderOptions): Promise<void>;
+  softDelete(id: string, options?: QueryBuilderOptions): Promise<void>;
 }

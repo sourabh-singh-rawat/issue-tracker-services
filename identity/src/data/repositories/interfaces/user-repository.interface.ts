@@ -1,20 +1,12 @@
-import { QueryRunner } from "typeorm";
-import { UserCredentialsDTO } from "../../../dtos/user";
 import { UserEntity } from "../../entities/user.entity";
-
-export interface RepositoryOptions {
-  t?: QueryRunner;
-}
+import { QueryBuilderOptions } from "./query-builder-options.interface";
 
 export interface UserRepository {
-  save(
-    entity: UserCredentialsDTO,
-    opts?: RepositoryOptions,
-  ): Promise<UserEntity>;
+  save(user: UserEntity, options?: QueryBuilderOptions): Promise<UserEntity>;
   existsById(id: string): Promise<boolean>;
   findById(id: string): Promise<UserEntity | null>;
   findByEmail(email: string): Promise<UserEntity | null>;
-  softDelete(id: string, { t }: RepositoryOptions): Promise<void>;
+  softDelete(id: string, options?: QueryBuilderOptions): Promise<void>;
   existsByEmail(email: string): Promise<boolean>;
   // isOldPasswordMatch(id: string, password: string): Promise<boolean>;
   // update(id: string, user: UserUpdateDto): Promise<UserEntity>;

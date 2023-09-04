@@ -1,8 +1,7 @@
 import { PostgresContext } from "@sourabhrawatcc/core-utils";
-import { RefreshTokenDTO } from "../../dtos/tokens/refresh-token.dto";
 import { RefreshTokenEntity } from "../entities";
 import { RefreshTokenRepository } from "./interfaces/refresh-token-repository.interface";
-import { RepositoryOptions } from "./interfaces/user-repository.interface";
+import { QueryBuilderOptions } from "./interfaces/query-builder-options.interface";
 
 export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   private readonly _context;
@@ -11,16 +10,35 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   }
 
   save = async (
-    entity: RefreshTokenDTO,
-    { t }: RepositoryOptions,
+    token: RefreshTokenEntity,
+    options?: QueryBuilderOptions,
   ): Promise<void> => {
-    const { expirationAt, tokenValue, userId } = entity;
+    const { expirationAt, tokenValue, userId } = token;
+    const queryRunner = options?.queryRunner;
 
     const query = this._context
-      .queryBuilder(RefreshTokenEntity, "refresh_tokens", t)
+      .queryBuilder(RefreshTokenEntity, "refresh_tokens", queryRunner)
       .insert()
       .into(RefreshTokenEntity)
       .values({ tokenValue, expirationAt, userId });
+
+    await query.execute();
+  };
+
+  /**
+   * Soft deletes the refresh token
+   * @param id
+   */
+  softDelete = async (
+    id: string,
+    options?: QueryBuilderOptions,
+  ): Promise<void> => {
+    const queryRunner = options?.queryRunner;
+
+    const query = this._context
+      .queryBuilder(RefreshTokenEntity, "at", queryRunner)
+      .softDelete()
+      .where("id=:id", { id });
 
     await query.execute();
   };
