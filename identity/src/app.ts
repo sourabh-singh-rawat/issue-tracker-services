@@ -47,11 +47,10 @@ const source = new DataSource({
 export const dataSource = new PostgresContext(source);
 
 // Dependency container registration
-container.register({
-  postgresContext: asValue(dataSource),
-  userController: asClass(CoreUserController),
-  userService: asClass(CoreUserService),
-  userRepository: asClass(PostgresUserRepository),
-  accessTokenRepository: asClass(PostgresAccessTokenRepository),
-  refreshTokenRepository: asClass(PostgresRefreshTokenRepository),
-});
+const { register } = container;
+register("postgresContext", asValue(dataSource));
+register("userController", asClass(CoreUserController));
+register("userService", asClass(CoreUserService));
+register("userRepository", asClass(PostgresUserRepository));
+register("accessTokenRepository", asClass(PostgresAccessTokenRepository));
+register("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));

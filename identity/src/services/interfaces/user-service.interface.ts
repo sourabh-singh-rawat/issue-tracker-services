@@ -1,17 +1,11 @@
-import { ServiceResponseDTO } from "@sourabhrawatcc/core-utils";
-import { CreateUserRequestDTO } from "../../dtos/user/create-user-request.dto";
-import { UserCredentialsDTO } from "../../dtos/user";
+import { ServiceResponse } from "@sourabhrawatcc/core-utils";
+import { Tokens } from "../../dtos/tokens.dto";
+import { AuthCredentials } from "../../dtos";
 
 export interface UserService {
-  createUser(user: CreateUserRequestDTO): Promise<
-    ServiceResponseDTO<{
-      accessToken: string;
-      refreshToken: string;
-    }>
-  >;
-  loginUser(
-    credentials: UserCredentialsDTO,
-  ): Promise<ServiceResponseDTO<{ accessToken: string; refreshToken: string }>>;
+  createUser(credentials: AuthCredentials): Promise<ServiceResponse<Tokens>>;
+  authenticate(credentials: AuthCredentials): Promise<ServiceResponse<Tokens>>;
+  refreshToken(token: Tokens): Promise<ServiceResponse<Tokens>>;
   updateEmail(id: string, email: string): Promise<boolean>;
   // updatePassword(
   //   id: string,

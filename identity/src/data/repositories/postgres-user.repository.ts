@@ -1,10 +1,7 @@
-import { UserCredentialsDTO } from "../../dtos/user";
 import { UserEntity } from "../entities/user.entity";
-import {
-  UserRepository,
-  RepositoryOptions,
-} from "./interfaces/user-repository.interface";
+import { UserRepository } from "./interfaces/user-repository.interface";
 import { PostgresContext } from "@sourabhrawatcc/core-utils";
+import { QueryBuilderOptions } from "./interfaces/query-builder-options.interface";
 
 export class PostgresUserRepository implements UserRepository {
   private readonly _context;
@@ -15,61 +12,58 @@ export class PostgresUserRepository implements UserRepository {
 
   /**
    * Creates a new user.
-   * @param {UserCredentialsDTO} user Object that represents the user to be created
-   * @returns {Promise<UserEntity>}
+   * @param user Object that represents the user to be created
+   * @returns
    */
   save = async (
-    user: UserCredentialsDTO,
-    { t }: RepositoryOptions,
+    user: UserEntity,
+    options?: QueryBuilderOptions,
   ): Promise<UserEntity> => {
-    const { email, hash, salt } = user;
+    const { email, passwordHash, passwordSalt } = user;
+    const queryRunner = options?.queryRunner;
 
     const query = this._context
-      .queryBuilder(UserEntity, "users", t)
+      .queryBuilder(UserEntity, "u", queryRunner)
       .insert()
       .into(UserEntity)
-      .values({ email, passwordHash: hash, passwordSalt: salt })
-      .returning(["id", "email"]);
+      .values({ email, passwordHash, passwordSalt })
+      .returning("*");
 
-    const result = await query.execute();
-
-    return result.raw[0];
+    return (await query.execute()).raw[0];
   };
 
   /**
    * Checks if user exists, by id
-   *
    * @param id
+   * @returns true if user exists, false otherwise
    */
   existsById = async (id: string): Promise<boolean> => {
-    const result = await this._context.query<UserEntity>(
+    const result = await this._context.query<{ user_exists_by_id: boolean }>(
       "SELECT * FROM user_exists_by_id($1)",
       [id],
     );
 
-    return Boolean(result[0]);
+    return result[0].user_exists_by_id;
   };
 
   /**
    * Checks if user exists, by email
    * @param email
-   * @returns
+   * @returns true if user exists, false otherwise
    */
   existsByEmail = async (email: string): Promise<boolean> => {
-    const result = await this._context.query<UserEntity>(
+    const result = await this._context.query<{ user_exists_by_email: boolean }>(
       "SELECT * FROM user_exists_by_email($1)",
       [email],
     );
 
-    console.log("Test:", result);
-
-    return Boolean(result[0]);
+    return result[0].user_exists_by_email;
   };
 
   /**
    * Find the user by user's id
    * @param id
-   * @returns
+   * @returns User if found or null
    */
   findById = async (id: string): Promise<UserEntity | null> => {
     const result = await this._context.query<UserEntity>(
@@ -80,44 +74,19 @@ export class PostgresUserRepository implements UserRepository {
     return result[0];
   };
 
+  /**
+   * Finds a user by their email address
+   * @param email
+   * @returns
+   */
   findByEmail = async (email: string): Promise<UserEntity | null> => {
     const result = await this._context.query<UserEntity>(
       "SELECT * FROM find_user_by_email($1)",
       [email],
     );
 
-    console.log("Result", result);
-
     return result[0];
   };
-
-  /**
-   * Updates an existing user.
-   * @param id - id of the user to be updated
-   * @param user - object that represents the new updated user
-   * @returns {Promise<UserEntity>}
-   */
-  // update = async (
-  //   id: string,
-  //   user: UserUpdateDto,
-  //   { t }: RepositoryOptions,
-  // ): Promise<UserEntity> => {
-  //   const { email, , isEmailVerified } = user;
-
-  //   const query = this._context
-  //     .queryBuilder(UserEntity, "users", t)
-  //     .update(UserEntity);
-
-  //   if (email) query.set({ email });
-  //   if () query.set({ passwordHash, passwordSalt });
-  //   if (isEmailVerified) query.set({ isEmailVerified });
-
-  //   query.where("id = :id", { id }).returning(["id"]);
-
-  //   const result = await query.execute();
-
-  //   return result.raw[0];
-  // };
 
   /**
    *
@@ -133,10 +102,12 @@ export class PostgresUserRepository implements UserRepository {
   updatePassword = async (
     id: string,
     password: string,
-    { t }: RepositoryOptions,
+    options: QueryBuilderOptions,
   ): Promise<boolean> => {
+    const { queryRunner } = options;
+
     const query = this._context
-      .queryBuilder(UserEntity, "users", t)
+      .queryBuilder(UserEntity, "users", queryRunner)
       .update(UserEntity)
       .set({ passwordHash: password })
       .where("id = :id", { id });
@@ -151,15 +122,17 @@ export class PostgresUserRepository implements UserRepository {
    * @param id
    * @returns {Promise<void>}
    */
-  softDelete = async (id: string, { t }: RepositoryOptions): Promise<void> => {
+  softDelete = async (
+    id: string,
+    options?: QueryBuilderOptions,
+  ): Promise<void> => {
+    const queryRunner = options?.queryRunner;
+
     const query = this._context
-      .queryBuilder(UserEntity, "users", t)
+      .queryBuilder(UserEntity, "users", queryRunner)
       .softDelete()
-      .where("id = :id", { id })
-      .returning(["id"]);
+      .where("id = :id", { id });
 
-    const result = await query.execute();
-
-    return result.raw[0];
+    await query.execute();
   };
 }

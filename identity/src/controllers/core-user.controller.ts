@@ -1,10 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserController } from "./interfaces/user-controller.interface";
 import { UserService } from "../services/interfaces/user-service.interface";
-import { CreateUserRequestDTO } from "../dtos/user/create-user-request.dto";
 import { StatusCodes } from "http-status-codes";
-import { UserDetailDto } from "../dtos/user/user-detail.dto";
-import { UserCredentialsDTO } from "../dtos/user";
+import { AuthCredentials } from "../dtos/auth-credentials.dto";
+import { JwtPayload } from "jsonwebtoken";
 
 export class CoreUserController implements UserController {
   private readonly _userService;
@@ -14,12 +13,68 @@ export class CoreUserController implements UserController {
   }
 
   /**
-   * Returns the current authenticated user
+   * Router handler for creating users.
+   * @param req
+   * @param res
+   * @returns
    */
-  getCurrentUser = async (
+  create = async (
+    req: FastifyRequest<{ Body: AuthCredentials }>,
+    res: FastifyReply,
+  ): Promise<void> => {
+    const { email, password, displayName } = req.body;
+
+    const user = new AuthCredentials({ email, password, displayName });
+    const {
+      data: { accessToken, refreshToken },
+    } = await this._userService.createUser(user);
+
+    const cookieOptions = {
+      path: "/",
+      httpOnly: true,
+      sameSite: true,
+      secure: true,
+    };
+    res.setCookie("accessToken", accessToken, cookieOptions);
+    res.setCookie("refreshToken", refreshToken, cookieOptions);
+
+    return res.status(StatusCodes.CREATED).send();
+  };
+
+  /**
+   * Router handler to authenticate user with credentials.
+   * @param req
+   * @param res
+   */
+  login = async (
+    req: FastifyRequest<{ Body: AuthCredentials }>,
+    res: FastifyReply,
+  ): Promise<void> => {
+    const { email, password } = req.body;
+
+    const credentials = new AuthCredentials({ email, password });
+    const { data } = await this._userService.authenticate(credentials);
+    const { accessToken, refreshToken } = data;
+
+    const cookieOptions = {
+      path: "/",
+      httpOnly: true,
+      sameSite: true,
+      secure: true,
+    };
+    res.setCookie("accessToken", accessToken, cookieOptions);
+    res.setCookie("refreshToken", refreshToken, cookieOptions);
+
+    return res.status(StatusCodes.OK).send();
+  };
+
+  /**
+   * Route handler to return the currently authenticated user.
+   */
+  getCurrentUser = (
     req: FastifyRequest,
     res: FastifyReply,
-  ): Promise<UserDetailDto | null> => {
+  ): JwtPayload | null => {
     // current user or null
     // we will take the cookie and return the current user
     const { currentUser } = req;
@@ -28,65 +83,40 @@ export class CoreUserController implements UserController {
     return res.status(StatusCodes.OK).send(currentUser);
   };
 
-  // Create a new user
-  create = async (
-    req: FastifyRequest<{ Body: CreateUserRequestDTO }>,
-    res: FastifyReply,
-  ): Promise<void> => {
-    const { email, password, displayName } = req.body;
-
-    const user = new CreateUserRequestDTO({ email, password, displayName });
-    const { data } = await this._userService.createUser(user);
-
-    res.setCookie("accessToken", data.accessToken, {
-      path: "/",
-      httpOnly: true,
-      sameSite: true,
-      secure: true,
-    });
-    res.setCookie("refreshToken", data.refreshToken, {
-      path: "/",
-      httpOnly: true,
-      sameSite: true,
-      secure: true,
-    });
-
-    return res.status(StatusCodes.CREATED).send();
-  };
-
   /**
-   *
-   * @param req
-   * @param res
+   * Route handler to get new access and refresh tokens, if refresh token is valid
    */
-  login = async (
-    req: FastifyRequest<{
-      Body: { email: string; password: string };
-    }>,
-    res: FastifyReply,
-  ): Promise<void> => {
-    const { email, password } = req.body;
+  refresh = async (req: FastifyRequest, res: FastifyReply) => {
+    const accessToken = req.cookies.accessToken;
+    const refreshToken = req.cookies.refreshToken;
 
-    const credential = new UserCredentialsDTO({ email, plain: password });
-    const { data } = await this._userService.loginUser(credential);
+    if (!accessToken || !refreshToken) {
+      return res.status(StatusCodes.BAD_REQUEST).send();
+    }
 
-    res.setCookie("accessToken", data.accessToken, {
+    const { data } = await this._userService.refreshToken({
+      accessToken,
+      refreshToken,
+    });
+
+    const cookieOptions = {
       path: "/",
       httpOnly: true,
       sameSite: true,
       secure: true,
-    });
-    res.setCookie("refreshToken", data.refreshToken, {
-      path: "/",
-      httpOnly: true,
-      sameSite: true,
-      secure: true,
-    });
+    };
+    res.setCookie("accessToken", data.accessToken, cookieOptions);
+    res.setCookie("refreshToken", data.refreshToken, cookieOptions);
 
     return res.status(StatusCodes.OK).send();
   };
 
-  // Update user email.
+  /**
+   * Route handler to update user email
+   * @param req
+   * @param res
+   * @returns
+   */
   updateEmail = async (
     req: FastifyRequest<{
       Body: { email: string };

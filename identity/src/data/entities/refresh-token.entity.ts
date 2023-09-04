@@ -26,9 +26,6 @@ export class RefreshTokenEntity extends AuditEntity {
   @Column({ name: "token_value", type: "text" })
   tokenValue!: string;
 
-  @Column({ name: "status", type: "text" })
-  status!: string;
-
   @Column({ name: "expiration_at", type: "timestamp with time zone" })
   expirationAt!: Date;
 }

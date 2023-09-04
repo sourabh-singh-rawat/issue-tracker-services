@@ -1,6 +1,7 @@
-import { AccessTokenDTO } from "../../../dtos/tokens/access-token.dto";
-import { RepositoryOptions } from "./user-repository.interface";
+import { AccessTokenEntity } from "../../entities";
+import { QueryBuilderOptions } from "./query-builder-options.interface";
 
 export interface AccessTokenRepository {
-  save(entity: AccessTokenDTO, opts?: RepositoryOptions): Promise<void>;
+  save(token: AccessTokenEntity, options?: QueryBuilderOptions): Promise<void>;
+  softDelete(id: string, options?: QueryBuilderOptions): Promise<void>;
 }

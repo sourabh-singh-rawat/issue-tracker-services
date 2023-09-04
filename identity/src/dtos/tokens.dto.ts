@@ -1,13 +1,13 @@
-interface Inputs {
+interface TokensInput {
   accessToken: string;
   refreshToken: string;
 }
 
-export class CreateUserResponseDTO {
+export class Tokens {
   accessToken: string;
   refreshToken: string;
 
-  constructor({ accessToken, refreshToken }: Inputs) {
+  constructor({ accessToken, refreshToken }: TokensInput) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
   }
