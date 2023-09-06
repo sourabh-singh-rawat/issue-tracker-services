@@ -5,8 +5,9 @@ import { QueryBuilderOptions } from "./interfaces/query-builder-options.interfac
 
 export class PostgresAccessTokenRepository implements AccessTokenRepository {
   private readonly _context;
-  constructor({ postgresContext }: { postgresContext: PostgresContext }) {
-    this._context = postgresContext;
+
+  constructor(container: { postgresContext: PostgresContext }) {
+    this._context = container.postgresContext;
   }
 
   /**
@@ -18,14 +19,14 @@ export class PostgresAccessTokenRepository implements AccessTokenRepository {
     token: AccessTokenEntity,
     options?: QueryBuilderOptions,
   ): Promise<void> => {
-    const { expirationAt, tokenValue, userId } = token;
+    const { id, expirationAt, tokenValue, userId } = token;
     const queryRunner = options?.queryRunner;
 
     const query = this._context
       .queryBuilder(AccessTokenEntity, "at", queryRunner)
       .insert()
       .into(AccessTokenEntity)
-      .values({ tokenValue, expirationAt, userId });
+      .values({ id, tokenValue, expirationAt, userId });
 
     await query.execute();
   };

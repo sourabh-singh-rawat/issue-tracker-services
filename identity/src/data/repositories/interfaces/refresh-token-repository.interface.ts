@@ -1,7 +1,5 @@
 import { RefreshTokenEntity } from "../../entities";
-import { QueryBuilderOptions } from "./query-builder-options.interface";
+import { Repository } from "./repository.interface";
 
-export interface RefreshTokenRepository {
-  save(token: RefreshTokenEntity, options?: QueryBuilderOptions): Promise<void>;
-  softDelete(id: string, options?: QueryBuilderOptions): Promise<void>;
-}
+export interface RefreshTokenRepository
+  extends Repository<RefreshTokenEntity> {}

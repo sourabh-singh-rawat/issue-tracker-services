@@ -1,14 +1,14 @@
-DROP FUNCTION IF EXISTS select_user_profile;
-CREATE OR REPLACE FUNCTION select_user_profile (
+DROP FUNCTION IF EXISTS find_user_profile_by_user_id;
+CREATE OR REPLACE FUNCTION find_user_profile_by_user_id (
     p_user_id UUID
   )
   RETURNS TABLE (
-    user_id UUID, 
-    display_name TEXT, 
+    userId UUID, 
+    "displayName" TEXT, 
     description TEXT, 
-    photo_url TEXT, 
-    default_workspace_id UUID, 
-    created_at TIMESTAMP WITH TIME ZONE,
+    "photoUrl" TEXT, 
+    "defaultWorkspaceId" UUID, 
+    "createdAt" TIMESTAMP WITH TIME ZONE,
     email TEXT
   )
   LANGUAGE PLPGSQL AS $$

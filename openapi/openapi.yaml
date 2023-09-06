@@ -17,10 +17,13 @@ tags:
 paths:
   /identity/signup:
     description: Create a user
-    $ref: ./identity/paths/signup.path.yaml
+    $ref: identity/paths/signup.path.yaml
   /identity/login:
     description: Login a user
-    $ref: ./identity/paths/login.path.yaml
+    $ref: identity/paths/login.path.yaml
+  /identity/users/me:
+    description: Gets the current logged in user
+    $ref: identity/paths/me.path.yaml
   # /identity/users/{id}/email:
   #   $ref: ./identity/paths/users-email.path.yaml
   # /identity/users/{id}/password:

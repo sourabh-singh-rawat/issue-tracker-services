@@ -2,7 +2,7 @@ post:
   operationId: login
   tags:
     - identity
-  summary: Generate tokens
+  summary: Login user
   description: Validates username and email, then generates access and refresh tokens.
   requestBody:
     content:

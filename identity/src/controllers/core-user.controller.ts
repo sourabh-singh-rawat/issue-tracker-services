@@ -1,14 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserController } from "./interfaces/user-controller.interface";
-import { UserService } from "../services/interfaces/user-service.interface";
 import { StatusCodes } from "http-status-codes";
 import { AuthCredentials } from "../dtos/auth-credentials.dto";
 import { JwtPayload } from "jsonwebtoken";
+import { Injectables } from "../app";
 
 export class CoreUserController implements UserController {
   private readonly _userService;
 
-  constructor(container: { userService: UserService }) {
+  constructor(container: Injectables) {
     this._userService = container.userService;
   }
 
