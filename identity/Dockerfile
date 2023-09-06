@@ -44,18 +44,16 @@ FROM production AS development
 # Node environment to development
 ENV NODE_ENV development
 
-
-WORKDIR /usr/src/app
-
-# Switching to root
+# Switching to root for installing the application
 USER root
 
-# Copy package.json from production stage to development stage
 COPY --from=production /usr/src/app/package.json .
 COPY --from=production /usr/src/app/package-lock.json .
-
 RUN --mount=type=cache,target=/root/.npm \
     npm i
+
+# Run the application as a non-root user.
+USER node
 
 # Expose the port that the application listens on.
 EXPOSE 4000

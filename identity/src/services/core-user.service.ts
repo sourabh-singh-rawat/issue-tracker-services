@@ -2,45 +2,40 @@ import {
   Hash,
   Token,
   ServiceResponse,
-  PostgresContext,
   UnauthorizedError,
 } from "@sourabhrawatcc/core-utils";
 
 import { v4 } from "uuid";
 import { UserService } from "./interfaces/user-service.interface";
-import { UserRepository } from "../data/repositories/interfaces/user-repository.interface";
-import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository.interface";
-import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository.interface";
 
 import { UserAlreadyExists } from "../errors/repository/user-already-exists.error";
 import { UserNotFoundError } from "../errors/repository/user-not-found.error";
 
-// import { UserPasswordUpdateDto } from "../dtos/user/user-password-update.dto";
 import { UserDetails } from "../dtos/user-details.dto";
 import { Tokens, AuthCredentials } from "../dtos";
 import {
   AccessTokenEntity,
   RefreshTokenEntity,
   UserEntity,
+  UserProfileEntity,
 } from "../data/entities";
 import { TokenOptions } from "../data/repositories/interfaces/token-options.interface";
+import { UserProfileNotFoundError } from "../errors/repository/user-profile-not-found.error";
+import { Injectables } from "../app";
 
 export class CoreUserService implements UserService {
   private readonly _context;
   private readonly _userRepository;
   private readonly _accessTokenRepository;
   private readonly _refreshTokenRepository;
+  private readonly _userProfileRepository;
 
-  constructor(container: {
-    postgresContext: PostgresContext;
-    userRepository: UserRepository;
-    accessTokenRepository: AccessTokenRepository;
-    refreshTokenRepository: RefreshTokenRepository;
-  }) {
+  constructor(container: Injectables) {
     this._context = container.postgresContext;
     this._userRepository = container.userRepository;
     this._accessTokenRepository = container.accessTokenRepository;
     this._refreshTokenRepository = container.refreshTokenRepository;
+    this._userProfileRepository = container.userProfileRepository;
   }
 
   /**
@@ -61,6 +56,10 @@ export class CoreUserService implements UserService {
     return await this._userRepository.findByEmail(email);
   };
 
+  private getUserById = async (id: string) => {
+    return await this._userRepository.findById(id);
+  };
+
   /**
    * Returns number of seconds past unix epoch + x min.
    * @param min
@@ -74,26 +73,29 @@ export class CoreUserService implements UserService {
     return v4();
   };
 
+  private getUserProfileByUserId = async (id: string) => {
+    return await this._userProfileRepository.findUserProfileByUserId(id);
+  };
+
   /**
    * Creates accessToken
    * @param userDetails
    * @param exp expiration time in ms
    * @returns access token string
    */
-  private createAccessToken = (user: UserDetails, options: TokenOptions) => {
-    const { id, email, isEmailVerified } = user;
+  private createAccessToken = (
+    userDetails: UserDetails,
+    options: TokenOptions,
+  ) => {
     const { exp, jwtid } = options;
 
     const payload = {
-      id,
-      email,
-      isEmailVerified,
-      displayName: "temporay display name",
+      ...userDetails,
       userMetadata: { language: "en" },
       appMetadata: { roles: ["user"] },
       iss: "identity-service",
       aud: "client",
-      sub: id,
+      sub: userDetails.id,
       exp,
       jwtid,
     };
@@ -102,7 +104,7 @@ export class CoreUserService implements UserService {
 
     const newAccessToken = new AccessTokenEntity();
     newAccessToken.id = jwtid;
-    newAccessToken.userId = id;
+    newAccessToken.userId = userDetails.id;
     newAccessToken.tokenValue = Token.create(payload, secret);
     newAccessToken.expirationAt = new Date(exp * 1000);
 
@@ -118,7 +120,7 @@ export class CoreUserService implements UserService {
   private createRefreshToken = (userId: string, options: TokenOptions) => {
     const { exp, jwtid } = options;
     const payload = {
-      id: userId,
+      userId,
       iss: "identity-service",
       aud: "client",
       sub: userId,
@@ -145,10 +147,11 @@ export class CoreUserService implements UserService {
   createUser = async (
     credentials: AuthCredentials,
   ): Promise<ServiceResponse<Tokens>> => {
-    const { email, password } = credentials;
+    const { email, password, displayName } = credentials;
 
     // Check if the user already exists
     const isUserExists = await this.isUserExistsByEmail(email);
+
     if (isUserExists) {
       throw new UserAlreadyExists();
     }
@@ -166,11 +169,27 @@ export class CoreUserService implements UserService {
         queryRunner,
       });
 
+      if (!displayName) {
+        throw new Error("No display name");
+      }
+      const newUserProfile = new UserProfileEntity();
+      newUserProfile.displayName = displayName;
+      newUserProfile.userId = savedUser.id;
+
+      const savedUserProfile = await this._userProfileRepository.save(
+        newUserProfile,
+        { queryRunner },
+      );
+
       const userDetails = new UserDetails({
         id: savedUser.id,
         email: savedUser.email,
+        displayName: savedUserProfile.displayName,
         isEmailVerified: savedUser.isEmailVerified,
         createdAt: savedUser.createdAt,
+        photoUrl: savedUserProfile.photoUrl,
+        description: savedUserProfile.description,
+        defaultWorkspaceId: savedUserProfile.defaultWorkspaceId,
       });
 
       // Create and save access token
@@ -218,6 +237,11 @@ export class CoreUserService implements UserService {
       throw new UserNotFoundError();
     }
 
+    const userProfile = await this.getUserProfileByUserId(user.id);
+    if (!userProfile) {
+      throw new UserProfileNotFoundError();
+    }
+
     const { passwordHash, passwordSalt } = user;
     const isHashValid = await Hash.verify(passwordHash, passwordSalt, password);
 
@@ -226,14 +250,18 @@ export class CoreUserService implements UserService {
     }
 
     const result = await this._context.transaction(async (queryRunner) => {
-      const userDetail = new UserDetails({
+      const userDetails = new UserDetails({
         id: user.id,
         email: user.email,
-        createdAt: user.createdAt,
+        displayName: userProfile.displayName,
         isEmailVerified: user.isEmailVerified,
+        createdAt: user.createdAt,
+        photoUrl: userProfile.photoUrl,
+        description: userProfile.description,
+        defaultWorkspaceId: userProfile.defaultWorkspaceId,
       });
 
-      const newAccessToken = this.createAccessToken(userDetail, {
+      const newAccessToken = this.createAccessToken(userDetails, {
         exp: this.generateTime(1),
         jwtid: this.generateId(),
       });
@@ -267,27 +295,48 @@ export class CoreUserService implements UserService {
 
   // TODO: refresh tokens
   refreshToken = async (token: Tokens): Promise<ServiceResponse<Tokens>> => {
-    const { accessToken, refreshToken } = token;
+    const { refreshToken } = token;
 
-    const accessTokenValue = Token.decodeAccessToken(accessToken);
-    const refreshTokenValue = Token.decodeRefreshToken(refreshToken);
-
+    // Verify refresh token's integrity
     try {
       Token.verify(refreshToken, process.env.JWT_SECRET!);
     } catch (error) {
       throw new UnauthorizedError();
-    } finally {
-      if (refreshToken)
-        await this._accessTokenRepository.softDelete(accessTokenValue.jwtid);
-      if (accessToken)
-        await this._refreshTokenRepository.softDelete(refreshTokenValue.jwtid);
+    }
+
+    // Check if token exits in database
+    const { userId, jwtid } = Token.decodeRefreshToken(refreshToken);
+    console.log(jwtid, userId);
+    const isTokenPresent = await this._refreshTokenRepository.existsById(jwtid);
+
+    console.log(isTokenPresent);
+    if (!isTokenPresent) {
+      throw new UnauthorizedError();
+    }
+
+    // Token is Valid
+    // Check if the user exists
+    const user = await this.getUserById(userId);
+
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+
+    const userProfile = await this.getUserProfileByUserId(userId);
+
+    if (!userProfile) {
+      throw new UserProfileNotFoundError();
     }
 
     const userDetails = new UserDetails({
-      id: accessTokenValue.id,
-      email: accessTokenValue.email,
-      createdAt: accessTokenValue.createdAt,
-      isEmailVerified: accessTokenValue.isEmailVerified,
+      id: user.id,
+      email: user.email,
+      createdAt: user.createdAt,
+      isEmailVerified: user.isEmailVerified,
+      displayName: userProfile.displayName,
+      description: userProfile.description,
+      photoUrl: userProfile.photoUrl,
+      defaultWorkspaceId: userProfile.defaultWorkspaceId,
     });
     const newAccessToken = this.createAccessToken(userDetails, {
       exp: this.generateTime(1),
@@ -298,14 +347,10 @@ export class CoreUserService implements UserService {
       jwtid: this.generateId(),
     });
 
-    try {
-      await this._context.transaction((queryRunner) => {
-        this._accessTokenRepository.save(newAccessToken, { queryRunner });
-        this._refreshTokenRepository.save(newRefreshToken, { queryRunner });
-      });
-    } catch (error) {
-      throw new Error("S");
-    }
+    await this._context.transaction((queryRunner) => {
+      this._accessTokenRepository.save(newAccessToken, { queryRunner });
+      this._refreshTokenRepository.save(newRefreshToken, { queryRunner });
+    });
 
     return new ServiceResponse({
       data: {

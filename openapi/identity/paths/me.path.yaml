@@ -1,0 +1,15 @@
+get:
+  operationId: getCurrentUser
+  tags:
+    - identity
+  summary: Get current user
+  responses:
+    200:
+      description: Returns the current logged in user or null
+      headers:
+        Set-Cookie:
+          description: Contains the accessToken and refreshToken
+          schema:
+            type: string
+    401:
+      description: Unauthorized

@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "jest --watchAll",
-    "start": "nodemon ./src/index.ts",
+    "start": "ts-node src/index.ts --inspect=127.0.0.1:9009",
     "generate": "ts-node ./node_modules/typeorm/cli.js migration:generate migration -d ./src/configs/typeorm.config.ts -p"
   },
   "repository": {
