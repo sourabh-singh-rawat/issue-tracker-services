@@ -6,7 +6,7 @@ const config: ConfigFile = {
   apiImport: "apiSlice",
   outputFiles: {
     "./generated/identity.api.ts": {
-      filterEndpoints: ["register", "updateUserEmail"],
+      filterEndpoints: ["signup", "login", "getCurrentUser"],
     },
   },
   exportName: "issueTrackerApi",

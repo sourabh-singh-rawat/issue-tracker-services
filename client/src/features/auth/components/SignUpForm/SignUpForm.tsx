@@ -1,24 +1,23 @@
 import React, { useEffect, useMemo } from "react";
-import {
-  Error,
-  useRegisterMutation,
-} from "../../../api/generated/identity.api";
-import { useMessageBar } from "../../message-bar/hooks";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ajvResolver } from "@hookform/resolvers/ajv";
-import ajvFormat from "ajv-formats";
+import AjvFormats from "ajv-formats";
+
+import { useMessageBar } from "../../../message-bar/hooks";
+import { useSignupMutation } from "../../../../api/generated/identity.api";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
-import TextField from "../../../common/components/forms/TextField";
-import PasswordField from "../../../common/components/forms/PasswordField";
-import PrimaryButton from "../../../common/components/buttons/PrimaryButton";
 
-import openapi from "../../../api/generated/openapi.json";
+import TextField from "../../../../common/components/forms/TextField";
+import PasswordField from "../../../../common/components/forms/PasswordField";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 
-export function SignUpForm() {
-  const [registerUser, { error, status }] = useRegisterMutation();
+import openapi from "../../../../api/generated/openapi.json";
+
+export default function SignUpForm() {
+  const [signup, { error, status }] = useSignupMutation();
   const messageBar = useMessageBar();
 
   const defaultValues = useMemo(
@@ -28,7 +27,10 @@ export function SignUpForm() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
-    () => openapi.components.schemas["user-body-post"],
+    () =>
+      openapi.paths["/identity/signup"].post.requestBody.content[
+        "application/json"
+      ].schema,
     [],
   );
 
@@ -36,7 +38,7 @@ export function SignUpForm() {
     defaultValues,
     mode: "onBlur",
     resolver: ajvResolver(defaultSchemas, {
-      formats: { email: ajvFormat.get("email") },
+      formats: { email: AjvFormats.get("email") },
     }),
   });
 
@@ -45,14 +47,12 @@ export function SignUpForm() {
     password,
     displayName,
   }) => {
-    registerUser({
-      body: { email, password, displayName },
-    });
+    signup({ body: { email, password, displayName } });
   };
 
   useEffect(() => {
     if (error) {
-      messageBar.showError((error.data as Error).errors[0].message);
+      messageBar.showError("Some error");
     }
   }, [status]);
 

@@ -1,5 +1,5 @@
 import React from "react";
 
-export function Welcome() {
+export default function Welcome() {
   return <div>Welcome message</div>;
 }

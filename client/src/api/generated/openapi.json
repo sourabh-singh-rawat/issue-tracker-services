@@ -25,7 +25,7 @@
     "/identity/signup": {
       "description": "Create a user",
       "post": {
-        "operationId": "registerUser",
+        "operationId": "signup",
         "tags": [
           "identity"
         ],
@@ -35,7 +35,31 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user-body-post"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "displayName"
+                ]
               }
             }
           }
@@ -58,7 +82,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -74,7 +117,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -85,124 +147,118 @@
         }
       }
     },
-    "/identity/users/{id}/email": {
-      "patch": {
-        "operationId": "updateUserEmail",
+    "/identity/login": {
+      "description": "Login a user",
+      "post": {
+        "operationId": "login",
         "tags": [
           "identity"
         ],
-        "summary": "Update user email",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Id of the user",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "Login user",
+        "description": "Validates username and email, then generates access and refresh tokens.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/users-email-patch"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Email updated successfully."
+            "description": "accessToken and refreshTokens are successfully generated.",
+            "headers": {
+              "Set-Cookie": {
+                "description": "The cookie with accessToken and refreshToken",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains invalid body paramaters"
           },
           "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "responses": {
-      "internal-server-error": {
-        "description": "Internal Server Error - An unexpected server error occured",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error"
+            "description": "User credentials are invalid"
+          },
+          "403": {
+            "description": "User may be blocked"
+          },
+          "429": {
+            "description": "User is blocked for sending too many request"
+          },
+          "500": {
+            "description": "Something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
     },
-    "schemas": {
-      "user-body-post": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80,
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 64,
-            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
-          },
-          "displayName": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          }
-        },
-        "required": [
-          "email",
-          "password",
-          "displayName"
-        ]
-      },
-      "error": {
-        "type": "object",
-        "properties": {
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "field": {
+    "/identity/me": {
+      "get": {
+        "operationId": "getCurrentUser",
+        "tags": [
+          "identity"
+        ],
+        "summary": "Get current user",
+        "responses": {
+          "200": {
+            "description": "Returns the current logged in user or null",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Contains the accessToken and refreshToken",
+                "schema": {
                   "type": "string"
                 }
-              },
-              "required": [
-                "message"
-              ]
+              }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
-      },
-      "users-email-patch": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "email": {
-        "type": "string",
-        "format": "email",
-        "minLength": 1,
-        "maxLength": 80,
-        "example": "Sourabh.rawatcc@gmail.com"
       }
     }
   }

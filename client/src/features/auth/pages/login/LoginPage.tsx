@@ -1,14 +1,10 @@
-/* eslint-disable no-console */
-/* eslint-disable consistent-return */
-/* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
-import React from "react";
-// import { useDispatch } from "react-redux";
-// import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+import LoginForm from "../../components/LoginForm";
+import { useAppSelector } from "../../../../common/hooks";
 
 // import continueWithGoogle from "../../../../utils/firebase/continue-with-google.utils";
 // import handleRedirectedAuth from "../../../../utils/firebase/handle-redirect.firebase.util";
@@ -17,7 +13,8 @@ import MuiTypography from "@mui/material/Typography";
 // import GoogleButton from "../../../../common/GoogleButton/GoogleButton";
 
 function Login() {
-  // const navigate = useNavigate();
+  const currentUser = useAppSelector((store) => store.auth.currentUser);
+  const navigate = useNavigate();
   // const [searchParams] = useSearch/Params();
   // const dispatch = useDispatch();
 
@@ -80,20 +77,19 @@ function Login() {
   // return unsubscribe;
   // }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/");
+    }
+  }, [currentUser]);
+
   return (
-    <MuiContainer component="main" maxWidth="xs">
-      <MuiGrid spacing={2} container>
-        <MuiGrid sx={{ textAlign: "center", marginTop: 8 }} xs={12} item>
-          <MuiTypography fontWeight="600" variant="h4">
-            Log In
-          </MuiTypography>
+    <MuiContainer maxWidth="md">
+      <MuiGrid container>
+        <MuiGrid item xs={6}>
+          <LoginForm />
         </MuiGrid>
-        <MuiGrid xs={12} item>
-          {/* <GoogleButton
-            message="Login with Google"
-            onClick={handleContinueWithGoogle}
-          /> */}
-        </MuiGrid>
+        <MuiGrid item xs={6}></MuiGrid>
       </MuiGrid>
     </MuiContainer>
   );

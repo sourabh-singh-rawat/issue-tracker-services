@@ -1,9 +1,9 @@
 import { showMessage } from "../message-bar.slice";
-import { userAppDispatch } from "../../../common/hooks";
+import { useAppDispatch } from "../../../common/hooks";
 import { LogLevels } from "../../../common/enums/log-level.enum";
 
 export const useMessageBar = () => {
-  const dispatch = userAppDispatch();
+  const dispatch = useAppDispatch();
 
   const show = (message: string, level: LogLevels) => {
     dispatch(showMessage({ message, level }));

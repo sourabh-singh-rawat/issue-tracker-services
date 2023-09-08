@@ -6,7 +6,7 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: (build) => ({
-      register: build.mutation<RegisterApiResponse, RegisterApiArg>({
+      signup: build.mutation<SignupApiResponse, SignupApiArg>({
         query: (queryArg) => ({
           url: `/identity/signup`,
           method: "POST",
@@ -14,43 +14,51 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["identity"],
       }),
-      updateUserEmail: build.mutation<
-        UpdateUserEmailApiResponse,
-        UpdateUserEmailApiArg
-      >({
+      login: build.mutation<LoginApiResponse, LoginApiArg>({
         query: (queryArg) => ({
-          url: `/identity/users/${queryArg.id}/email`,
-          method: "PATCH",
+          url: `/identity/login`,
+          method: "POST",
           body: queryArg.body,
         }),
         invalidatesTags: ["identity"],
+      }),
+      getCurrentUser: build.query<
+        GetCurrentUserApiResponse,
+        GetCurrentUserApiArg
+      >({
+        query: () => ({ url: `/identity/users/me` }),
+        providesTags: ["identity"],
       }),
     }),
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
-export type RegisterApiResponse =
+export type SignupApiResponse =
   /** status 201 New user + accessToken + refreshToken */ undefined;
-export type RegisterApiArg = {
+export type SignupApiArg = {
+  body: {
+    email: Email;
+    password: Password;
+    displayName: string;
+  };
+};
+export type LoginApiResponse =
+  /** status 200 accessToken and refreshTokens are successfully generated. */ undefined;
+export type LoginApiArg = {
   body: {
     email?: string;
     password?: string;
-    displayName?: string;
   };
 };
-export type UpdateUserEmailApiResponse = unknown;
-export type UpdateUserEmailApiArg = {
-  /** Id of the user */
-  id: string;
-  body: {
-    email: string;
-  };
-};
-export type Error = {
+export type GetCurrentUserApiResponse = unknown;
+export type GetCurrentUserApiArg = void;
+export type Schema = {
   errors?: {
     message: string;
     field?: string;
   }[];
 };
-export const { useRegisterMutation, useUpdateUserEmailMutation } =
+export type Email = string;
+export type Password = string;
+export const { useSignupMutation, useLoginMutation, useGetCurrentUserQuery } =
   injectedRtkApi;
