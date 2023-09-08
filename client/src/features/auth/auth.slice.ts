@@ -1,26 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState: {
+  currentUser: null | {
+    id: string;
+    displayName: string;
+    photoUrl: string;
+  };
+  isLoading: boolean;
+} = {
+  currentUser: null,
+  isLoading: true,
+};
+
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    accessToken: null,
-    isLoading: true,
-  },
+  initialState,
   reducers: {
-    setCredentials: (state, action) => ({
+    setCurrentUser: (state, action) => ({
       ...state,
-      accessToken: action.payload.accessToken,
-      user: action.payload.user,
+      currentUser: action.payload,
       isLoading: false,
     }),
-    signOut: (state) => ({
+    logout: (state) => ({
       ...state,
-      user: null,
-      accessToken: null,
+      currentUser: null,
     }),
   },
 });
 
-export const { setCredentials, signOut } = authSlice.actions;
+export const { setCurrentUser, logout } = authSlice.actions;
 export default authSlice.reducer;

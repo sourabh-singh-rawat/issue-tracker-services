@@ -7,12 +7,10 @@ import MuiTypography from "@mui/material/Typography";
 
 function SectionHeader({
   title,
-  subtitle,
   actionButton,
   noButton,
 }: {
   title: string;
-  subtitle: string;
   actionButton: React.JSX.Element | null;
   noButton: boolean;
 }) {
@@ -29,11 +27,6 @@ function SectionHeader({
           {title}
         </MuiTypography>
         {actionButton}
-      </MuiGrid>
-      <MuiGrid sx={{ paddingTop: noButton ? "7px" : 0 }} item>
-        <MuiTypography sx={{ color: "text.primary" }} variant="body2">
-          {subtitle}
-        </MuiTypography>
       </MuiGrid>
     </MuiGrid>
   );

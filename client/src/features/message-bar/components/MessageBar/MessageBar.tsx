@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector, userAppDispatch } from "../../../../common/hooks";
+import { useAppSelector, useAppDispatch } from "../../../../common/hooks";
 
 import MuiAlert from "@mui/material/Alert";
 import MuiSlide, { SlideProps } from "@mui/material/Slide";
@@ -15,7 +15,7 @@ function SlideTransition(props: SlideProps) {
 }
 
 export default function MessageBar() {
-  const dispatch = userAppDispatch();
+  const dispatch = useAppDispatch();
   const { message, isOpen } = useAppSelector((store) => store.messageBar);
 
   const handleClose = (e: React.SyntheticEvent | Event, reason?: string) => {

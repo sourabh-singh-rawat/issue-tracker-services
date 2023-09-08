@@ -1,5 +1,5 @@
 import React from "react";
-import { SignUpForm } from "../../components";
+import SignUpForm from "../../components/SignUpForm";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";

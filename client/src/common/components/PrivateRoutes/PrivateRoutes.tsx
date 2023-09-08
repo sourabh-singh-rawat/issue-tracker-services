@@ -1,33 +1,17 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAppSelector } from "../../hooks";
 import AppLoader from "../AppLoader";
+import AppMain from "../AppMain";
 
 export default function ProtectedRoutes() {
   const location = useLocation();
-  const [currentUser, setCurrentUser] = useState<{
-    id: string;
-    email: string;
-  } | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { currentUser, isLoading } = useAppSelector((store) => store.auth);
 
-  const getCurrentUser = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setIsLoading(true);
-        setCurrentUser({ id: "uuid", email: "email@email.com" });
-        resolve("promise resolved");
-      }, 1000);
-    });
-  };
-
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
-
-  if (!isLoading) return <AppLoader />;
+  if (isLoading) return <AppLoader />;
 
   return currentUser ? (
-    <Outlet />
+    <AppMain />
   ) : (
     <Navigate state={{ from: location }} to="/login" replace />
   );

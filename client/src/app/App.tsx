@@ -4,20 +4,20 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "../features/dashboard/pages/Dashboard";
 import AppLayout from "../common/components/AppLayout";
 import PrivateRoutes from "../common/components/PrivateRoutes";
-import LoginPage from "../features/auth/pages/login";
-import SignUpPage from "../features/auth/pages/signup";
+import LoginPage from "../features/auth/pages/Login";
+import SignUpPage from "../features/auth/pages/Signup";
 // import Settings from "./features/settings/pages/Settings";
 // import CollaboratorList from "./features/collaborator-list/components/CollaboratorList";
 // import Collaborators from "./features/collaborator-list/pages/Collaborators/Collaborators";
 
-// import Project from "./pages/Project";
+import Projects from "../features/project-list/pages/Projects";
+// import Project from "../features/project/pages/Project";
 // import ProjectActivity from "./features/project/pages/ProjectActivity";
 // import ProjectForm from "./features/project/pages/ProjectForm";
 // import ProjectIssues from "./features/project/pages/ProjectIssues";
 // import ProjectList from "./features/project-list/components/ProjectList";
 // import ProjectMembers from "./features/project/pages/ProjectMembers";
 // import ProjectOverview from "./features/project/pages/ProjectOverview";
-// import Projects from "./features/project-list/pages/Projects";
 // import ProjectSetting from "./features/project/pages/ProjectSettings";
 
 // import Issue from "./features/issue/pages/Issue";
@@ -63,8 +63,8 @@ function App() {
             <Route element={<CollaboratorList />} index />
           </Route> */}
           {/* project route */}
-          {/* <Route element={<Projects />} path="projects">
-            <Route element={<ProjectList />} index />
+          <Route element={<Projects />} path="projects">
+            {/* <Route element={<ProjectList />} index />
             <Route element={<ProjectForm />} path="new" />
             <Route element={<Project />} path=":id">
               <Route element={<ProjectOverview />} path="overview" />
@@ -72,8 +72,8 @@ function App() {
               <Route element={<ProjectMembers />} path="members" />
               <Route element={<ProjectActivity />} path="activity" />
               <Route element={<ProjectSetting />} path="settings" />
-            </Route>
-          </Route> */}
+            </Route> */}
+          </Route>
           {/* team route */}
           {/* <Route element={<Teams />} path="teams">
             <Route element={<TeamList />} index />
