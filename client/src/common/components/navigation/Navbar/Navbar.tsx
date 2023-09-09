@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
 import MuiGrid from "@mui/material/Grid";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiToolbar from "@mui/material/Toolbar";
@@ -13,7 +14,6 @@ import WorkspaceSwitcher from "../../../../features/workspace/components/Workspa
 import Notifications from "../../../../features/notifications/components/Notification/Notifications";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
-  width: "100%",
   zIndex: theme.zIndex.drawer + 1,
 }));
 

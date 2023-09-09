@@ -1,47 +1,37 @@
 import React, { useState } from "react";
 import MuiList from "@mui/material/List";
 import MuiCollapse from "@mui/material/Collapse";
-import SidebarItem from "../SidebarItem";
-
 import MuiKeyboardArrowRightTwoToneIcon from "@mui/icons-material/KeyboardArrowRightTwoTone";
 
+import SidebarGroupItem from "../SidebarGroupItem";
+
 interface SidebarGroupProps {
-  heading: string;
-  isSidebarOpen: boolean;
+  label?: string;
+  isVisible?: boolean;
   avatarIcon?: JSX.Element;
 }
 
 export default function SidebarGroup({
-  heading,
-  isSidebarOpen,
   avatarIcon,
+  label,
+  isVisible,
 }: SidebarGroupProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleClick = () => setIsOpen(!isOpen);
+  const [isSidebarGroupOpen, setIsSidebarGroupOpen] = useState(false);
+
+  const handleClickMenuItem = () => setIsSidebarGroupOpen(!isSidebarGroupOpen);
 
   return (
     <>
-      <SidebarItem
-        isSidebarOpen={isSidebarOpen}
-        href=""
-        icon={avatarIcon}
-        text={heading}
-        onClick={handleClick}
+      <SidebarGroupItem
+        avatarIcon={avatarIcon}
+        label={label}
+        onClick={handleClickMenuItem}
         indicatorIcon={<MuiKeyboardArrowRightTwoToneIcon />}
+        isVisible={isVisible}
       />
-      <MuiCollapse
-        in={isOpen}
-        timeout="auto"
-        orientation="vertical"
-        unmountOnExit
-      >
+      <MuiCollapse in={isSidebarGroupOpen} timeout="auto" unmountOnExit>
         <MuiList component="div" disablePadding>
-          <SidebarItem
-            isSidebarOpen={isSidebarOpen}
-            href=""
-            text={heading}
-            isChild
-          />
+          <SidebarGroupItem label={label} isVisible={isVisible} isChild />
         </MuiList>
       </MuiCollapse>
     </>

@@ -1,38 +1,39 @@
 import React from "react";
-import MuiMenuItem from "@mui/material/MenuItem";
 import MenuItemContent from "../MenuItemContent";
-import MuiDoneIcon from "@mui/icons-material/Done";
+import { Link } from "react-router-dom";
 
-interface MenuItemProps {
-  item: { label: string; value?: string };
-  selectedOption?: { label: string; value?: string } | undefined | null;
-  onClick: () => void;
+export interface MenuItemProps {
+  label?: string;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   avatarIcon?: JSX.Element;
   indicatorIcon?: JSX.Element;
+  to?: string;
+  isChild?: boolean;
+  isMenuGroupOpen?: boolean;
 }
 
 export default function MenuItem({
   avatarIcon,
-  item,
-  selectedOption,
+  label,
   onClick,
+  indicatorIcon,
+  to,
 }: MenuItemProps) {
-  const isSelected = item.value === selectedOption?.value;
-
-  return (
-    <MuiMenuItem
-      onClick={onClick}
-      sx={{ paddingRight: 1, paddingLeft: 1 }}
-      selected={isSelected}
-      disableRipple
-    >
+  return to ? (
+    <Link to={to} style={{ color: "inherit", textDecoration: "none" }}>
       <MenuItemContent
         avatarIcon={avatarIcon}
-        label={item.label}
-        indicatorIcon={
-          selectedOption && isSelected ? <MuiDoneIcon /> : undefined
-        }
+        label={label}
+        onClick={onClick}
+        indicatorIcon={indicatorIcon}
       />
-    </MuiMenuItem>
+    </Link>
+  ) : (
+    <MenuItemContent
+      avatarIcon={avatarIcon}
+      label={label}
+      onClick={onClick}
+      indicatorIcon={indicatorIcon}
+    />
   );
 }
