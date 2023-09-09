@@ -1,41 +1,15 @@
 import React, { useState } from "react";
-
-import { styled } from "@mui/material/styles";
-import { useTheme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 import MuiList from "@mui/material/List";
-import MuiMenu from "@mui/material/Menu";
 import MuiDivider from "@mui/material/Divider";
-import MuiListButtonItem from "@mui/material/ListItemButton";
 import MuiAddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import MuiSettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MuiUnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
-import MenuItemContent from "../../../../common/components/MenuItemContent";
-import MenuItem from "../../../../common/components/MenuItem";
+
 import Avatar from "../../../../common/components/Avatar";
-import AppLoader from "../../../../common/components/AppLoader";
-
-const StyledList = styled(MuiList)(({ theme }) => ({
-  ".MuiButtonBase-root": {
-    borderRadius: theme.shape.borderRadiusMedium,
-    backgroundColor: theme.palette.text.primary,
-  },
-  ".MuiButtonBase-root:hover": {
-    backgroundColor: theme.palette.grey[700],
-  },
-}));
-
-export const StyledMenu = styled(MuiMenu)(({ theme }) => ({
-  marginTop: 5,
-  ".MuiPaper-root": {
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: theme.shape.borderRadiusMedium,
-    boxShadow: theme.shadows[5],
-  },
-  ".MuiPopover-paper": {
-    transition: "none !important",
-  },
-}));
+import MenuItem from "../../../../common/components/MenuItem";
+import StyledMenu from "../../../../common/components/styled/StyledMenu";
 
 const options = [
   { label: "Workspace 1", value: "workspace1" },
@@ -60,66 +34,52 @@ export default function WorkspaceSwitcher() {
 
   return (
     <>
-      <StyledList disablePadding>
-        <MuiListButtonItem
-          onClick={handleClickListItem}
-          sx={{
-            paddingRight: 1,
-            paddingLeft: 1,
-            borderRadius: theme.shape.borderRadiusMedium,
-            backgroundColor: theme.palette.grey[100],
-          }}
-          disableRipple
-          disableGutters
-        >
-          <MenuItemContent
-            avatarIcon={
-              <Avatar
-                photoUrl={selectedOption?.label}
-                label={selectedOption?.label}
-                variant="rounded"
-              />
-            }
+      <MenuItem
+        onClick={handleClickListItem}
+        avatarIcon={
+          <Avatar
+            variant="rounded"
             label={selectedOption?.label}
-            indicatorIcon={<MuiUnfoldMoreIcon />}
+            photoUrl={selectedOption?.label}
           />
-        </MuiListButtonItem>
-      </StyledList>
+        }
+        label={selectedOption?.label}
+        indicatorIcon={<MuiUnfoldMoreIcon />}
+      />
       <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        {options.map((option) => (
+        <MuiList sx={{ p: theme.spacing(2) }} disablePadding>
+          {options.map((option) => (
+            <MenuItem
+              isMenuGroupOpen={open}
+              key={option.value}
+              avatarIcon={
+                <Avatar
+                  photoUrl={selectedOption?.label}
+                  label={selectedOption?.label}
+                  variant="rounded"
+                />
+              }
+              label={option.label}
+              onClick={() => {
+                setSelectedOption(option);
+                handleClose();
+              }}
+            />
+          ))}
+          <MuiDivider />
           <MenuItem
-            key={option.value}
-            avatarIcon={
-              <Avatar
-                photoUrl={selectedOption?.label}
-                label={selectedOption?.label}
-                variant="rounded"
-              />
-            }
-            item={option}
-            selectedOption={selectedOption}
+            avatarIcon={<MuiAddBoxOutlinedIcon />}
+            label="Add new workspace"
+            onClick={() => handleClose()}
+          />
+          <MenuItem
+            avatarIcon={<MuiSettingsOutlinedIcon />}
+            label="Manage workspaces"
             onClick={() => {
-              setSelectedOption(option);
               handleClose();
             }}
           />
-        ))}
-        <AppLoader />
-        <MuiDivider />
-        <MenuItem
-          avatarIcon={<MuiAddBoxOutlinedIcon />}
-          item={{ label: "Add new workspace" }}
-          selectedOption={selectedOption}
-          onClick={() => handleClose()}
-        />
-        <MenuItem
-          avatarIcon={<MuiSettingsOutlinedIcon />}
-          item={{ label: "Manage workspaces" }}
-          selectedOption={selectedOption}
-          onClick={() => {
-            handleClose();
-          }}
-        />
+        </MuiList>
       </StyledMenu>
     </>
   );

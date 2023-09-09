@@ -13,8 +13,8 @@ import MuiArticleTwoToneIcon from "@mui/icons-material/ArticleTwoTone";
 import MuiAssignmentTurnedInTwoToneIcon from "@mui/icons-material/AssignmentTurnedInTwoTone";
 import MuiStarTwoToneIcon from "@mui/icons-material/StarTwoTone";
 
-import MenuSidebarItem from "../SidebarItem";
 import SidebarGroup from "../SidebarGroup";
+import SidebarGroupItem from "../SidebarGroupItem";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const opendrawerWidth = theme.spacing(28);
@@ -50,10 +50,6 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   };
 });
 
-const StyledList = styled(MuiList)(() => ({
-  "&.MuiList-root": { padding: 0 },
-}));
-
 export default function Sidebar() {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
@@ -74,37 +70,37 @@ export default function Sidebar() {
         if (!isLargeScreen) setOpen(false);
       }}
     >
-      <MuiToolbar variant="dense" />
-      <StyledList>
-        <MenuSidebarItem
-          href="/"
-          icon={<MuiGridViewTwoToneIcon />}
-          isSidebarOpen={open}
-          text="Dashboard"
+      <MuiToolbar variant="dense" disableGutters />
+      <MuiList disablePadding>
+        <SidebarGroupItem
+          avatarIcon={<MuiGridViewTwoToneIcon />}
+          to="/"
+          label="Dashboard"
+          isVisible={open}
         />
-        <MenuSidebarItem
-          href="/projects"
-          icon={<MuiArticleTwoToneIcon />}
-          isSidebarOpen={open}
-          text="Projects"
+        <SidebarGroupItem
+          avatarIcon={<MuiArticleTwoToneIcon />}
+          to="/projects"
+          label="Projects"
+          isVisible={open}
         />
-        <MenuSidebarItem
-          href="/issues"
-          icon={<MuiPestControlTwoToneIcon />}
-          isSidebarOpen={open}
-          text="Issues"
+        <SidebarGroupItem
+          avatarIcon={<MuiPestControlTwoToneIcon />}
+          to="/issues"
+          label="Issues"
+          isVisible={open}
         />
-        <MenuSidebarItem
-          href="/tasks"
-          icon={<MuiAssignmentTurnedInTwoToneIcon />}
-          isSidebarOpen={open}
-          text="Tasks"
+        <SidebarGroupItem
+          avatarIcon={<MuiAssignmentTurnedInTwoToneIcon />}
+          to="/tasks"
+          label="Tasks"
+          isVisible={open}
         />
-      </StyledList>
+      </MuiList>
       <MuiDivider />
       <SidebarGroup
-        heading="Favourites"
-        isSidebarOpen={open}
+        label="Favourites"
+        isVisible={open}
         avatarIcon={<MuiStarTwoToneIcon />}
       />
     </Drawer>
