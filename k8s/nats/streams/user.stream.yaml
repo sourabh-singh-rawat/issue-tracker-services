@@ -1,0 +1,10 @@
+apiVersion: jetstream.nats.io/v1beta2
+kind: Stream
+metadata:
+  name: user-stream
+spec:
+  name: user
+  description: stream to store messages on user.*
+  subjects:
+    - "user.*"
+  storage: file
