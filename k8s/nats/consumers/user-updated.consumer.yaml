@@ -1,0 +1,12 @@
+apiVersion: jetstream.nats.io/v1beta2
+kind: Consumer
+metadata:
+  name: user-updated-consumer
+spec:
+  streamName: user
+  durableName: user-updated-consumer
+  deliverPolicy: all
+  filterSubject: user.updated
+  maxDeliver: 20
+  ackPolicy: explicit
+  replayPolicy: instant
