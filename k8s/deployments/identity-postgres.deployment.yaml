@@ -26,9 +26,9 @@ spec:
             - secretRef:
                 name: identity-postgres-secret
           volumeMounts:
-            - name: identity-postgres-volume
+            - name: identity-postgres-pv
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: identity-postgres-volume
+        - name: identity-postgres-pv
           persistentVolumeClaim:
-            claimName: identity-postgres-volume-claim
+            claimName: identity-postgres-pvc
