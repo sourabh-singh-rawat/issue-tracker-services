@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  title: Issue Tracker API
+  version: 1.0.0
+  description: API for describing various endpoints of issue tracker
+  license:
+    name: ISC
+    url: https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE
+servers:
+  - url: http://localhost:80/api/v1
+security: []
+tags:
+  - name: identity
+    description: Authentication and user management service.
+paths:
+  /identity/signup:
+    description: Create a user
+    post:
+      operationId: signup
+      tags:
+        - identity
+      summary: Create user
+      description: Creates a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                  maxLength: 80
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 64
+                  pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$
+                displayName:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+              required:
+                - email
+                - password
+                - displayName
+      responses:
+        '201':
+          description: New user + accessToken + refreshToken
+          headers:
+            Authorization:
+              description: The cookie with accessToken and refreshToken
+              schema:
+                type: string
+              example: accessToken=[jwt_token]; refreshToken=[jwt_token_2]
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: &ref_0
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                        field:
+                          type: string
+                      required:
+                        - message
+        '401':
+          description: Unauthorization
+        '403':
+          description: Forbidden
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: *ref_0
+        '429':
+          description: Too many request
+  /identity/login:
+    description: Login a user
+    post:
+      operationId: login
+      tags:
+        - identity
+      summary: Login user
+      description: Validates username and email, then generates access and refresh tokens.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                  maxLength: 80
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 64
+                  pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$
+      responses:
+        '200':
+          description: accessToken and refreshTokens are successfully generated.
+          headers:
+            Set-Cookie:
+              description: The cookie with accessToken and refreshToken
+              schema:
+                type: string
+              example: accessToken=[jwt_token]; refreshToken=[jwt_token_2]
+        '400':
+          description: The request contains invalid body paramaters
+        '401':
+          description: User credentials are invalid
+        '403':
+          description: User may be blocked
+        '429':
+          description: User is blocked for sending too many request
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: *ref_0
+  /identity/users/me:
+    description: Gets the current logged in user
+    get:
+      operationId: getCurrentUser
+      tags:
+        - identity
+      summary: Get current user
+      responses:
+        '200':
+          description: Returns the current logged in user or null
+          headers:
+            Set-Cookie:
+              description: Contains the accessToken and refreshToken
+              schema:
+                type: string
+        '401':
+          description: Unauthorized

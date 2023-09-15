@@ -1,27 +1,26 @@
+import { v4 } from "uuid";
 import {
+  AuthCredentials,
   Hash,
-  Token,
   ServiceResponse,
+  Token,
+  Tokens,
   UnauthorizedError,
+  UserAlreadyExists,
+  UserDetails,
+  UserNotFoundError,
+  UserProfileNotFoundError,
 } from "@sourabhrawatcc/core-utils";
 
-import { v4 } from "uuid";
-import { UserService } from "./interfaces/user-service.interface";
-
-import { UserAlreadyExists } from "../errors/repository/user-already-exists.error";
-import { UserNotFoundError } from "../errors/repository/user-not-found.error";
-
-import { UserDetails } from "../dtos/user-details.dto";
-import { Tokens, AuthCredentials } from "../dtos";
+import { Services } from "../app/container.config";
+import { UserService } from "./interfaces/user-service";
+import { TokenOptions } from "../data/repositories/interfaces/token-options";
 import {
   AccessTokenEntity,
   RefreshTokenEntity,
   UserEntity,
   UserProfileEntity,
 } from "../data/entities";
-import { TokenOptions } from "../data/repositories/interfaces/token-options.interface";
-import { UserProfileNotFoundError } from "../errors/repository/user-profile-not-found.error";
-import { Injectables } from "../app";
 
 export class CoreUserService implements UserService {
   private readonly _context;
@@ -30,7 +29,7 @@ export class CoreUserService implements UserService {
   private readonly _refreshTokenRepository;
   private readonly _userProfileRepository;
 
-  constructor(container: Injectables) {
+  constructor(container: Services) {
     this._context = container.postgresContext;
     this._userRepository = container.userRepository;
     this._accessTokenRepository = container.accessTokenRepository;
@@ -194,14 +193,14 @@ export class CoreUserService implements UserService {
 
       // Create and save access token
       const newAccessToken = this.createAccessToken(userDetails, {
-        exp: this.generateTime(1),
+        exp: this.generateTime(15),
         jwtid: this.generateId(),
       });
       await this._accessTokenRepository.save(newAccessToken, { queryRunner });
 
       // Create and save refresh token
       const newRefreshToken = this.createRefreshToken(savedUser.id, {
-        exp: this.generateTime(60),
+        exp: this.generateTime(60 * 24),
         jwtid: this.generateId(),
       });
       await this._refreshTokenRepository.save(newRefreshToken, {
@@ -262,14 +261,14 @@ export class CoreUserService implements UserService {
       });
 
       const newAccessToken = this.createAccessToken(userDetails, {
-        exp: this.generateTime(1),
+        exp: this.generateTime(15),
         jwtid: this.generateId(),
       });
       await this._accessTokenRepository.save(newAccessToken, { queryRunner });
 
       // create refresh token
       const newRefreshToken = this.createRefreshToken(user.id, {
-        exp: this.generateTime(60),
+        exp: this.generateTime(60 * 24),
         jwtid: this.generateId(),
       });
 
@@ -306,10 +305,8 @@ export class CoreUserService implements UserService {
 
     // Check if token exits in database
     const { userId, jwtid } = Token.decodeRefreshToken(refreshToken);
-    console.log(jwtid, userId);
     const isTokenPresent = await this._refreshTokenRepository.existsById(jwtid);
 
-    console.log(isTokenPresent);
     if (!isTokenPresent) {
       throw new UnauthorizedError();
     }
@@ -339,11 +336,11 @@ export class CoreUserService implements UserService {
       defaultWorkspaceId: userProfile.defaultWorkspaceId,
     });
     const newAccessToken = this.createAccessToken(userDetails, {
-      exp: this.generateTime(1),
+      exp: this.generateTime(15),
       jwtid: this.generateId(),
     });
     const newRefreshToken = this.createRefreshToken(userDetails.id, {
-      exp: this.generateTime(60),
+      exp: this.generateTime(60 * 24),
       jwtid: this.generateId(),
     });
 

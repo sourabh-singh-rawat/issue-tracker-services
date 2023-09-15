@@ -1,14 +1,13 @@
 import { FastifyInstance } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { container } from "../app";
-import { UserController } from "../controllers/interfaces/user-controller.interface";
+import { container } from "../app/container.config";
 
 export const userRoutes = (
   fastify: FastifyInstance,
   options: unknown,
   next: (err?: Error | undefined) => void,
 ) => {
-  const userController = container.resolve<UserController>("userController");
+  const userController = container.get("userController");
   const auth = { preHandler: [Auth.requireTokens, Auth.requireAuth] };
 
   fastify.post("/signup", userController.create);

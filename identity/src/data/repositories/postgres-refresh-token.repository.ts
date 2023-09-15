@@ -1,7 +1,7 @@
 import { PostgresContext } from "@sourabhrawatcc/core-utils";
 import { RefreshTokenEntity } from "../entities";
-import { RefreshTokenRepository } from "./interfaces/refresh-token-repository.interface";
-import { QueryBuilderOptions } from "./interfaces/query-builder-options.interface";
+import { RefreshTokenRepository } from "./interfaces/refresh-token-repository";
+import { QueryBuilderOptions } from "./interfaces/query-builder-options";
 
 export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   private readonly _context;
