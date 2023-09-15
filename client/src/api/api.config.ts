@@ -28,20 +28,20 @@ const baseQueryWithReAuth: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   await mutex.waitForUnlock();
-  let result = await baseQuery(args, api, extraOptions);
+  let response = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status == 401) {
+  if (response.error && response.error.status == 401) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        const refreshResult = await baseQuery(
+        const refreshResponse = await baseQuery(
           { url: `${URL}/identity/refresh`, method: "POST" },
           api,
           extraOptions,
         );
 
-        if (!refreshResult.error) {
-          result = await baseQuery(args, api, extraOptions);
+        if (!refreshResponse.error) {
+          response = await baseQuery(args, api, extraOptions);
         }
       } catch (error) {
         console.log(error);
@@ -50,11 +50,11 @@ const baseQueryWithReAuth: BaseQueryFn<
       }
     } else {
       await mutex.waitForUnlock();
-      result = await baseQuery(args, api, extraOptions);
+      response = await baseQuery(args, api, extraOptions);
     }
   }
 
-  return result;
+  return response;
 };
 
 export const apiSlice = createApi({

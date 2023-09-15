@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-pod
+  template:
+    metadata:
+      labels:
+        app: user-pod
+    spec:
+      containers:
+        - name: user-container
+          image: sourabhrawatcc/user
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          ports:
+            - name: user
+              containerPort: 4000
+          # envFrom:
+          #   - secretRef:
+          #       name: user-postgres-secret
+          #   - secretRef:
+          #       name: jwt-secret

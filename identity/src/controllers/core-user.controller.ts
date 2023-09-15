@@ -1,28 +1,28 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { UserController } from "./interfaces/user-controller.interface";
+import { UserController } from "./interfaces/user-controller";
 import { StatusCodes } from "http-status-codes";
-import { AuthCredentials } from "../dtos/auth-credentials.dto";
 import { JwtPayload } from "jsonwebtoken";
-import { Injectables } from "../app";
+import { Services } from "../app/container.config";
+import { AuthCredentials } from "@sourabhrawatcc/core-utils";
 
 export class CoreUserController implements UserController {
   private readonly _userService;
 
-  constructor(container: Injectables) {
+  constructor(container: Services) {
     this._userService = container.userService;
   }
 
   /**
    * Router handler for creating users.
-   * @param req
-   * @param res
+   * @param request
+   * @param response
    * @returns
    */
   create = async (
-    req: FastifyRequest<{ Body: AuthCredentials }>,
-    res: FastifyReply,
+    request: FastifyRequest<{ Body: AuthCredentials }>,
+    response: FastifyReply,
   ): Promise<void> => {
-    const { email, password, displayName } = req.body;
+    const { email, password, displayName } = request.body;
 
     const user = new AuthCredentials({ email, password, displayName });
     const {
@@ -35,22 +35,22 @@ export class CoreUserController implements UserController {
       sameSite: true,
       secure: true,
     };
-    res.setCookie("accessToken", accessToken, cookieOptions);
-    res.setCookie("refreshToken", refreshToken, cookieOptions);
+    response.setCookie("accessToken", accessToken, cookieOptions);
+    response.setCookie("refreshToken", refreshToken, cookieOptions);
 
-    return res.status(StatusCodes.CREATED).send();
+    return response.status(StatusCodes.CREATED).send();
   };
 
   /**
    * Router handler to authenticate user with credentials.
-   * @param req
-   * @param res
+   * @param request
+   * @param response
    */
   login = async (
-    req: FastifyRequest<{ Body: AuthCredentials }>,
-    res: FastifyReply,
+    request: FastifyRequest<{ Body: AuthCredentials }>,
+    response: FastifyReply,
   ): Promise<void> => {
-    const { email, password } = req.body;
+    const { email, password } = request.body;
 
     const credentials = new AuthCredentials({ email, password });
     const { data } = await this._userService.authenticate(credentials);
@@ -62,36 +62,36 @@ export class CoreUserController implements UserController {
       sameSite: true,
       secure: true,
     };
-    res.setCookie("accessToken", accessToken, cookieOptions);
-    res.setCookie("refreshToken", refreshToken, cookieOptions);
+    response.setCookie("accessToken", accessToken, cookieOptions);
+    response.setCookie("refreshToken", refreshToken, cookieOptions);
 
-    return res.status(StatusCodes.OK).send();
+    return response.status(StatusCodes.OK).send();
   };
 
   /**
    * Route handler to return the currently authenticated user.
    */
   getCurrentUser = (
-    req: FastifyRequest,
-    res: FastifyReply,
+    request: FastifyRequest,
+    response: FastifyReply,
   ): JwtPayload | null => {
     // current user or null
     // we will take the cookie and return the current user
-    const { currentUser } = req;
+    const { currentUser } = request;
     if (!currentUser) return null;
 
-    return res.status(StatusCodes.OK).send(currentUser);
+    return response.status(StatusCodes.OK).send(currentUser);
   };
 
   /**
    * Route handler to get new access and refresh tokens, if refresh token is valid
    */
-  refresh = async (req: FastifyRequest, res: FastifyReply) => {
-    const accessToken = req.cookies.accessToken;
-    const refreshToken = req.cookies.refreshToken;
+  refresh = async (request: FastifyRequest, response: FastifyReply) => {
+    const accessToken = request.cookies.accessToken;
+    const refreshToken = request.cookies.refreshToken;
 
     if (!accessToken || !refreshToken) {
-      return res.status(StatusCodes.BAD_REQUEST).send();
+      return response.status(StatusCodes.BAD_REQUEST).send();
     }
 
     const { data } = await this._userService.refreshToken({
@@ -105,51 +105,51 @@ export class CoreUserController implements UserController {
       sameSite: true,
       secure: true,
     };
-    res.setCookie("accessToken", data.accessToken, cookieOptions);
-    res.setCookie("refreshToken", data.refreshToken, cookieOptions);
+    response.setCookie("accessToken", data.accessToken, cookieOptions);
+    response.setCookie("refreshToken", data.refreshToken, cookieOptions);
 
-    return res.status(StatusCodes.OK).send();
+    return response.status(StatusCodes.OK).send();
   };
 
   /**
    * Route handler to update user email
-   * @param req
-   * @param res
+   * @param request
+   * @param response
    * @returns
    */
   updateEmail = async (
-    req: FastifyRequest<{
+    request: FastifyRequest<{
       Body: { email: string };
       Params: { id: string };
     }>,
-    res: FastifyReply,
+    response: FastifyReply,
   ): Promise<Response> => {
-    const { id } = req.params;
-    const { email } = req.body;
+    const { id } = request.params;
+    const { email } = request.body;
 
-    const response = await this._userService.updateEmail(id, email);
+    const serviceResponse = await this._userService.updateEmail(id, email);
 
-    return res.status(StatusCodes.OK).send(response);
+    return response.status(StatusCodes.OK).send(serviceResponse);
   };
 
   // contact updatePassword method on the service object
   // updatePassword service will require some sort of DTO
   // return response to the user
   // updatePassword = async (
-  //   req: FastifyRequest<{
+  //   request: FastifyRequest<{
   //     Body: { oldPassword: string; newPassword: string };
   //     Params: { id: string };
   //   }>,
-  //   res: FastifyReply,
+  //   response: FastifyReply,
   // ) => {
-  //   const { id } = req.params;
-  //   const { newPassword, oldPassword } = req.body;
+  //   const { id } = request.params;
+  //   const { newPassword, oldPassword } = request.body;
 
   //   const response = await this._userService.updatePassword(id, {
   //     oldPassword,
   //     newPassword,
   //   });
 
-  //   return res.status(StatusCodes.OK).send(response);
+  //   return response.status(StatusCodes.OK).send(response);
   // };
 }

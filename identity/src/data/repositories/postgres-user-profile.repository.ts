@@ -1,12 +1,12 @@
-import { Injectables } from "../../app";
+import { Services } from "../../app/container.config";
 import { UserProfileEntity } from "../entities";
-import { QueryBuilderOptions } from "./interfaces/query-builder-options.interface";
-import { UserProfileRepository } from "./interfaces/user-profile.repository.interface";
+import { QueryBuilderOptions } from "./interfaces/query-builder-options";
+import { UserProfileRepository } from "./interfaces/user-profile.repository";
 
 export class PostgresUserProfileRepository implements UserProfileRepository {
   private _context;
 
-  constructor(container: Injectables) {
+  constructor(container: Services) {
     this._context = container.postgresContext;
   }
 
