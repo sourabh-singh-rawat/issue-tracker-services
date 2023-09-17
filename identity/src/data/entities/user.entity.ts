@@ -1,5 +1,5 @@
+import { AuditEntity } from "@sourabhrawatcc/core-utils";
 import { Check, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { AuditEntity } from "./audit.entity";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
@@ -11,12 +11,6 @@ export class UserEntity extends AuditEntity {
   @Column({ type: "text", unique: true })
   @Check("users_email_check", "LENGTH(email) BETWEEN 3 AND 80")
   email!: string;
-
-  @Column({ type: "text", name: "password_hash" })
-  passwordHash!: string;
-
-  @Column({ type: "text", name: "password_salt" })
-  passwordSalt!: string;
 
   @Column({
     name: "is_email_verified",
