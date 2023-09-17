@@ -2,3 +2,4 @@ type: string
 minLength: 1
 maxLength: 80
 format: email
+default: Sourabh.rawatcc@gmail.com

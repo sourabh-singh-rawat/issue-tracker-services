@@ -1,0 +1,43 @@
+post:
+  operationId: registerUser
+  tags:
+    - user
+  summary: Create user
+  description: Creates a new user
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              $ref: ../../components/schemas/email.yaml
+            password:
+              $ref: ../../components/schemas/password.yaml
+            displayName:
+              $ref: ../../components/schemas/display-name.yaml
+          required:
+            - email
+            - password
+            - displayName
+  responses:
+    201:
+      description: User successfully registered
+    400:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
+    401:
+      description: Unauthorization
+    403:
+      description: Forbidden
+    409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
+    429:
+      description: Too many request

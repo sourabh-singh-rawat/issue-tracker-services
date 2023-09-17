@@ -1,9 +1,9 @@
 post:
-  operationId: login
+  operationId: generateTokens
   tags:
     - identity
-  summary: Login user
-  description: Validates username and email, then generates access and refresh tokens.
+  summary: Generate tokens
+  description: Validates credentials, generates tokens
   requestBody:
     content:
       application/json:

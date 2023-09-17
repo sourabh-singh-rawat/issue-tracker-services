@@ -1,0 +1,19 @@
+get:
+  operationId: getCurrentUser
+  tags:
+    - identity
+  summary: Get current user
+  responses:
+    200:
+      description: Returns the current logged in user or null
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                $ref: ../../components/schemas/email.yaml
+              displayName:
+                $ref: ../../components/schemas/display-name.yaml
+    401:
+      description: Unauthorized

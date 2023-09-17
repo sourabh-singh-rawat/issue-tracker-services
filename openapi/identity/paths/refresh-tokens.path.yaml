@@ -1,9 +1,9 @@
 get:
-  operationId: refreshToken
+  operationId: refreshTokens
   tags:
     - identity
-  summary: Refresh Token
-  description: If accessToken expires, but refresh token is valid, generates a new accessToken
+  summary: Refresh Tokens
+  description: If refresh token is valud, generates new tokens
   responses:
     200:
       description: new accessToken token is successfully created
@@ -22,4 +22,4 @@ get:
     429:
       description: Too Many Request
     500:
-      $ref: ../../openapi.yaml#/components/responses/InternalServerError
+      $ref: ../../components/schemas/responses/internal-server-error.yaml
