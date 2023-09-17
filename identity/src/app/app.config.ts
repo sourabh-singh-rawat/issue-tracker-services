@@ -3,7 +3,7 @@ import cors from "@fastify/cors";
 import cookie from "@fastify/cookie";
 import swagger from "@fastify/swagger";
 import { Auth, ErrorHandler } from "@sourabhrawatcc/core-utils";
-import { userRoutes } from "../routes/user.routes";
+import { identityRoutes } from "../routes/identity.routes";
 import { logger } from "./logger.config";
 
 export const app = fastify({ logger });
@@ -20,4 +20,4 @@ app.register(swagger, {
 app.addHook("preHandler", Auth.currentUser);
 app.setErrorHandler(ErrorHandler.handleError);
 
-app.register(userRoutes, { prefix: "/api/v1/identity" });
+app.register(identityRoutes, { prefix: "/api/v1/identity" });

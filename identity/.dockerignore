@@ -33,3 +33,5 @@
 LICENSE
 README.md
 /docs
+.tgz
+.sql

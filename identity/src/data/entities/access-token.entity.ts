@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AuditEntity } from "./audit.entity";
+import { AuditEntity } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "./user.entity";
 
 @Entity("access_tokens")

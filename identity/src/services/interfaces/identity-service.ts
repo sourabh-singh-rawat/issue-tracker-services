@@ -4,11 +4,9 @@ import {
   ServiceResponse,
 } from "@sourabhrawatcc/core-utils";
 
-export interface UserService {
-  createUser(credentials: AuthCredentials): Promise<ServiceResponse<Tokens>>;
+export interface IdentityService {
   authenticate(credentials: AuthCredentials): Promise<ServiceResponse<Tokens>>;
   refreshToken(token: Tokens): Promise<ServiceResponse<Tokens>>;
-  updateEmail(id: string, email: string): Promise<boolean>;
   // updatePassword(
   //   id: string,
   //   update: { oldPassword: string; newPassword: string },

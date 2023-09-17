@@ -19,15 +19,15 @@ export class PostgresUserRepository implements UserRepository {
     user: UserEntity,
     options?: QueryBuilderOptions,
   ): Promise<UserEntity> => {
-    const { email, passwordHash, passwordSalt } = user;
+    const { id, email } = user;
     const queryRunner = options?.queryRunner;
 
     const query = this._context
       .queryBuilder(UserEntity, "u", queryRunner)
       .insert()
       .into(UserEntity)
-      .values({ email, passwordHash, passwordSalt })
-      .returning("*");
+      .values({ id, email })
+      .returning(["id", "email"]);
 
     return (await query.execute()).raw[0];
   };
@@ -84,6 +84,7 @@ export class PostgresUserRepository implements UserRepository {
       "SELECT * FROM find_user_by_email($1)",
       [email],
     );
+    console.log(result);
 
     return result[0];
   };
@@ -94,27 +95,6 @@ export class PostgresUserRepository implements UserRepository {
   updateEmail = async (id: string, email: string): Promise<boolean> => {
     console.log(id, email);
     throw new Error("Method not implemented.");
-  };
-
-  /**
-   * Update password
-   */
-  updatePassword = async (
-    id: string,
-    password: string,
-    options: QueryBuilderOptions,
-  ): Promise<boolean> => {
-    const { queryRunner } = options;
-
-    const query = this._context
-      .queryBuilder(UserEntity, "users", queryRunner)
-      .update(UserEntity)
-      .set({ passwordHash: password })
-      .where("id = :id", { id });
-
-    const result = await query.execute();
-
-    return result.affected == 1;
   };
 
   /**

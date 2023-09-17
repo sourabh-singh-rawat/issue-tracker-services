@@ -12,9 +12,11 @@ const main = async () => {
     await app.listen({ port: SERVER_PORT, host: SERVER_HOST });
     await dataSource.connect();
     await messageServer.connect();
+
+    const userCreatedSubscriber = container.get("userCreatedSubscriber");
+    await userCreatedSubscriber.fetchMessages();
   } catch (error) {
-    console.log(error);
-    app.log.error("Identity service cannot start");
+    app.log.error(error);
     process.exit(1);
   }
 };
