@@ -12,34 +12,25 @@ servers:
 
 tags:
   - name: identity
-    description: Authentication and user management service.
+    description: Authentication and authorization functionalities.
+  - name: user
+    description: User management
 
 paths:
-  /identity/signup:
-    description: Create a user
-    $ref: identity/paths/signup.path.yaml
-  /identity/login:
-    description: Login a user
-    $ref: identity/paths/login.path.yaml
-  /identity/users/me:
+  /users/register:
+    description: Create or register a new user
+    $ref: user/paths/register.path.yaml
+  /users/verify-password:
+    description: Verifies user password
+    $ref: user/paths/verify-password.path.yaml
+  /users/me:
     description: Gets the current logged in user
-    $ref: identity/paths/me.path.yaml
-  # /identity/users/{id}/email:
-  #   $ref: ./identity/paths/users-email.path.yaml
-  # /identity/users/{id}/password:
-
-  # /identity/login:
-  #   $ref: ./paths/identity/login.yaml
-
-  # /identity/logout:
-  #   $ref: ./paths/identity/logout.yaml
-
-  # /identity/refresh:
-  #   $ref: ./paths/identity/refresh.yaml
-  # # /identity/password-reset:
-  #   $ref: ./paths/identity/password-reset.yaml
-  # /identity/verify-email:
-  #   $ref: ./paths/identity/verify-email.yaml
-  # user profile get and post
+    $ref: user/paths/me.path.yaml
+  /identity/generate-tokens:
+    description: Generate access and refresh tokens
+    $ref: identity/paths/generate-tokens.path.yaml
+  /identity/refresh-tokens:
+    description: If refresh token is valid, generate new access and refresh tokens
+    $ref: identity/paths/refresh-tokens.path.yaml
 
 security: []
