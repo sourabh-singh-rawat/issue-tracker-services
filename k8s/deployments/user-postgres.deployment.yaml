@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-postgres-pod
+  template:
+    metadata:
+      labels:
+        app: user-postgres-pod
+    spec:
+      containers:
+        - name: user-postgres-container
+          image: postgres:15.4-alpine3.17
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          ports:
+            - name: postgres
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: user-postgres-secret
+          volumeMounts:
+            - name: user-postgres-pv
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: user-postgres-pv
+          persistentVolumeClaim:
+            claimName: user-postgres-pvc

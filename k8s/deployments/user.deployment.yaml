@@ -22,8 +22,8 @@ spec:
           ports:
             - name: user
               containerPort: 4000
-          # envFrom:
-          #   - secretRef:
-          #       name: user-postgres-secret
-          #   - secretRef:
-          #       name: jwt-secret
+          envFrom:
+            - secretRef:
+                name: user-postgres-secret
+            - secretRef:
+                name: jwt-secret
