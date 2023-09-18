@@ -1,5 +1,22 @@
 # Add objects to cluster
 
+## Dashboard UI (WIP)
+
+```powershell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl proxy
+
+# Create service account in default namespace
+kubectl create serviceaccount dashboard -n default
+# Create a cluster role binding
+kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=default:dashboard
+
+# Optional: Install base64 decoder also will display the base64 decoded access token
+scoop install main/base64
+#  Get the access token
+kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
+```
+
 ## Install Ingress Controller
 
 ```powershell
