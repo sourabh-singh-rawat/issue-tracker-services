@@ -1,7 +1,9 @@
+import {
+  PostgresContext,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { AccessTokenRepository } from "./interfaces/access-token-repository";
 import { AccessTokenEntity } from "../entities";
-import { PostgresContext } from "@sourabhrawatcc/core-utils";
-import { QueryBuilderOptions } from "./interfaces/query-builder-options";
 
 export class PostgresAccessTokenRepository implements AccessTokenRepository {
   private readonly _context;

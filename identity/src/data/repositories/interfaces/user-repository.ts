@@ -1,5 +1,5 @@
+import { Repository } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../../entities/user.entity";
-import { Repository } from "./repository";
 
 export interface UserRepository extends Repository<UserEntity> {
   findById(id: string): Promise<UserEntity | null>;

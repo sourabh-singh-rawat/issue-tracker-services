@@ -4,8 +4,8 @@ import {
   Subscriber,
   UserCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
-import { Services } from "../../app/container.config";
 import { JsMsg } from "nats";
+import { Services } from "../../app/container.config";
 import { UserEntity } from "../../data/entities";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
@@ -22,8 +22,6 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     message: JsMsg,
     payload: UserCreatedPayload,
   ): Promise<void> => {
-    console.log(payload);
-    console.log(Object.keys(payload));
     const newUser = new UserEntity();
     newUser.id = payload.userId;
     newUser.email = payload.email;

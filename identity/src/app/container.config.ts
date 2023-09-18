@@ -6,6 +6,7 @@ import {
 } from "@sourabhrawatcc/core-utils";
 import { logger } from "./logger.config";
 import { dataSource } from "./db.config";
+import { messageServer } from "./message-system.config";
 
 import { CoreIdentityController } from "../controllers/core-identity.controller";
 import { CoreIdentityService } from "../services/core-identity.service";
@@ -18,8 +19,9 @@ import { AccessTokenRepository } from "../data/repositories/interfaces/access-to
 import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
 import { IdentityService } from "../services/interfaces/identity-service";
 import { IdentityController } from "../controllers/interfaces/identity-controller";
-import { messageServer } from "./message-system.config";
+
 import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subscribers";
+import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscribers";
 
 export interface Services {
   postgresContext: PostgresContext;
@@ -30,6 +32,7 @@ export interface Services {
   accessTokenRepository: AccessTokenRepository;
   refreshTokenRepository: RefreshTokenRepository;
   userCreatedSubscriber: UserCreatedSubscriber;
+  userUpdatedSubscriber: UserUpdatedSubscriber;
 }
 
 const awilix = createContainer<Services>();
@@ -45,4 +48,6 @@ add("userRepository", asClass(PostgresUserRepository));
 add("accessTokenRepository", asClass(PostgresAccessTokenRepository));
 add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
 
+// Subscriptions
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
+add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));

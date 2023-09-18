@@ -1,6 +1,6 @@
-import { UserEntity } from "../entities/user.entity";
+import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserRepository } from "./interfaces/user-repository";
-import { QueryBuilderOptions } from "./interfaces/query-builder-options";
+import { UserEntity } from "../entities/user.entity";
 import { Services } from "../../app/container.config";
 
 export class PostgresUserRepository implements UserRepository {
