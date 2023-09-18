@@ -7,4 +7,4 @@ spec:
     app: user-postgres-pod
   ports:
     - port: 5432
-      targetPort: postgres
+      targetPort: user
