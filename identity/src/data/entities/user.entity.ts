@@ -1,5 +1,5 @@
 import { AuditEntity } from "@sourabhrawatcc/core-utils";
-import { Check, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
@@ -9,7 +9,6 @@ export class UserEntity extends AuditEntity {
   id!: string;
 
   @Column({ type: "text", unique: true })
-  @Check("users_email_check", "LENGTH(email) BETWEEN 3 AND 80")
   email!: string;
 
   @Column({

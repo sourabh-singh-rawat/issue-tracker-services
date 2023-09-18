@@ -14,9 +14,9 @@ import {
 
 import { Services } from "../app/container.config";
 import { IdentityService } from "./interfaces/identity-service";
-import { TokenOptions } from "../data/repositories/interfaces/token-options";
 import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
 import { StatusCodes } from "http-status-codes";
+import { TokenOptions } from "./interfaces/token-options";
 
 export class CoreIdentityService implements IdentityService {
   private readonly _context;
@@ -129,6 +129,34 @@ export class CoreIdentityService implements IdentityService {
   };
 
   /**
+   * Generates access and refresh tokens
+   * @returns tokens
+   */
+  private generateTokens = (user: UserDetails) => {
+    const access = this.createAccessToken(user, {
+      exp: this.generateTime(15),
+      jwtid: this.generateId(),
+    });
+    // create refresh token
+    const refresh = this.createRefreshToken(user.id, {
+      exp: this.generateTime(60 * 24),
+      jwtid: this.generateId(),
+    });
+
+    return { access, refresh };
+  };
+
+  private saveTokens = async (
+    accessToken: AccessTokenEntity,
+    refreshToken: RefreshTokenEntity,
+  ) => {
+    await this._context.transaction((queryRunner) => {
+      this._accessTokenRepository.save(accessToken, { queryRunner });
+      this._refreshTokenRepository.save(refreshToken, { queryRunner });
+    });
+  };
+
+  /**
    * Authenticates the current user with provided credentials
    * @param user
    */
@@ -145,41 +173,24 @@ export class CoreIdentityService implements IdentityService {
       "http://user-service:4000/api/v1/users/verify-password",
       { email, password },
     );
+
     if (response.status !== StatusCodes.OK) throw new InvalidCredentialsError();
 
-    const result = await this._context.transaction(async (queryRunner) => {
-      const userDetails = new UserDetails({
-        id: user.id,
-        email: user.email,
-        isEmailVerified: user.isEmailVerified,
-        createdAt: user.createdAt,
-      });
-
-      const newAccessToken = this.createAccessToken(userDetails, {
-        exp: this.generateTime(15),
-        jwtid: this.generateId(),
-      });
-      await this._accessTokenRepository.save(newAccessToken, { queryRunner });
-
-      // create refresh token
-      const newRefreshToken = this.createRefreshToken(user.id, {
-        exp: this.generateTime(60 * 24),
-        jwtid: this.generateId(),
-      });
-
-      // save refresh token
-      await this._refreshTokenRepository.save(newRefreshToken, { queryRunner });
-
-      return {
-        newAccessToken: newAccessToken.tokenValue,
-        newRefreshToken: newRefreshToken.tokenValue,
-      };
+    const userDetails = new UserDetails({
+      id: user.id,
+      email: user.email,
+      isEmailVerified: user.isEmailVerified,
+      createdAt: user.createdAt,
     });
+
+    const { access, refresh } = this.generateTokens(userDetails);
+
+    await this.saveTokens(access, refresh);
 
     return new ServiceResponse({
       data: {
-        accessToken: result!.newAccessToken,
-        refreshToken: result!.newRefreshToken,
+        accessToken: access.tokenValue,
+        refreshToken: refresh.tokenValue,
       },
     });
   };
@@ -194,18 +205,15 @@ export class CoreIdentityService implements IdentityService {
    */
   refreshToken = async (token: Tokens): Promise<ServiceResponse<Tokens>> => {
     const { refreshToken } = token;
+    const secret = process.env.JWT_SECRET;
 
-    Token.verify(refreshToken, process.env.JWT_SECRET!);
-
-    const { userId, jwtid } = Token.decodeRefreshToken(refreshToken);
-    const user = await this.getUserById(userId);
-    if (!user) throw new UserNotFoundError();
+    const { userId, jwtid } = Token.verify(refreshToken, secret!);
 
     const isTokenPresent = await this._refreshTokenRepository.existsById(jwtid);
     if (!isTokenPresent) throw new UnauthorizedError();
 
-    // Token is Valid
-    // Check if the user exists
+    const user = await this.getUserById(userId);
+    if (!user) throw new UserNotFoundError();
 
     const userDetails = new UserDetails({
       id: user.id,
@@ -213,24 +221,15 @@ export class CoreIdentityService implements IdentityService {
       createdAt: user.createdAt,
       isEmailVerified: user.isEmailVerified,
     });
-    const newAccessToken = this.createAccessToken(userDetails, {
-      exp: this.generateTime(15),
-      jwtid: this.generateId(),
-    });
-    const newRefreshToken = this.createRefreshToken(userDetails.id, {
-      exp: this.generateTime(60 * 24),
-      jwtid: this.generateId(),
-    });
 
-    await this._context.transaction((queryRunner) => {
-      this._accessTokenRepository.save(newAccessToken, { queryRunner });
-      this._refreshTokenRepository.save(newRefreshToken, { queryRunner });
-    });
+    const { access, refresh } = this.generateTokens(userDetails);
+
+    await this.saveTokens(access, refresh);
 
     return new ServiceResponse({
       data: {
-        accessToken: newAccessToken.tokenValue,
-        refreshToken: newRefreshToken.tokenValue,
+        accessToken: access.tokenValue,
+        refreshToken: refresh.tokenValue,
       },
     });
   };

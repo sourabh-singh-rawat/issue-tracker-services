@@ -1,5 +1,5 @@
+import { Repository } from "@sourabhrawatcc/core-utils";
 import { RefreshTokenEntity } from "../../entities";
-import { Repository } from "./repository";
 
 export interface RefreshTokenRepository
   extends Repository<RefreshTokenEntity> {}
