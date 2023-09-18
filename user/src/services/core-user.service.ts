@@ -86,6 +86,7 @@ export class CoreUserService implements UserService {
     await userCreatedPublisher.publish({
       userId: savedUser.id,
       email: savedUser.email,
+      defaultWorkspaceId: savedUser.defaultWorkspaceId,
     });
   };
 
@@ -101,8 +102,8 @@ export class CoreUserService implements UserService {
     if (!user) throw new UserNotFoundError();
 
     const { passwordHash, passwordSalt } = user;
-    const isHashValid = await Hash.verify(passwordHash, passwordSalt, password);
 
+    const isHashValid = await Hash.verify(passwordHash, passwordSalt, password);
     if (!isHashValid) throw new UnauthorizedError();
   };
 

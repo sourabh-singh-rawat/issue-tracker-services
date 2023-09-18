@@ -1,5 +1,11 @@
 import { AuditEntity } from "@sourabhrawatcc/core-utils";
-import { Check, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Check,
+  Column,
+  Entity,
+  Generated,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
@@ -9,7 +15,6 @@ export class UserEntity extends AuditEntity {
   id!: string;
 
   @Column({ type: "text", unique: true })
-  @Check("users_email_check", "LENGTH(email) BETWEEN 3 AND 80")
   email!: string;
 
   @Column({ type: "text", name: "password_hash" })
@@ -17,6 +22,10 @@ export class UserEntity extends AuditEntity {
 
   @Column({ type: "text", name: "password_salt" })
   passwordSalt!: string;
+
+  @Column({ name: "default_workspace_id", type: "uuid" })
+  @Generated("uuid")
+  defaultWorkspaceId!: string;
 
   @Column({
     name: "is_email_verified",
