@@ -5,11 +5,11 @@ import {
   UserCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
 
-export class UserCreatedPublisher extends Publisher<{
-  payload: UserCreatedPayload;
+export class UserUpdatedPublisher extends Publisher<{
+  payload: string;
   subject: Subjects;
 }> {
-  subject = Subjects.USER_CREATED;
+  subject = Subjects.USER_UPDATED;
 
   constructor(client: NatsConnection) {
     super(client);

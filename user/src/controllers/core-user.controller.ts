@@ -47,7 +47,7 @@ export class CoreUserController implements UserController {
     const authCredentials = new AuthCredentials({ email, password });
     await this._userService.verifyPassword(authCredentials);
 
-    return reply.status(StatusCodes.OK);
+    return reply.status(StatusCodes.OK).send();
   };
 
   /**
