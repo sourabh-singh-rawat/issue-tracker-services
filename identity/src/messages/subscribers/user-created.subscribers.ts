@@ -10,7 +10,7 @@ import { UserEntity } from "../../data/entities";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = Consumers.UserCreatedConsumer;
+  readonly consumer = Consumers.UserCreatedConsumerIdentity;
   private readonly _userRepository;
 
   constructor(container: Services) {
