@@ -1,4 +1,4 @@
-get:
+post:
   operationId: refreshTokens
   tags:
     - identity
