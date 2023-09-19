@@ -11,15 +11,15 @@ import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 
 import openapi from "../../../../api/generated/openapi.json";
-import { useLoginMutation } from "../../../../api/generated/identity.api";
+import { useGenerateTokensMutation } from "../../../../api/generated/identity.api";
 
 export default function LoginForm() {
-  const [login, { error, status }] = useLoginMutation();
+  const [login] = useGenerateTokensMutation();
   const defaultValues = useMemo(() => ({ email: "", password: "" }), []);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/identity/login"].post.requestBody.content[
+      openapi.paths["/identity/generate-tokens"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

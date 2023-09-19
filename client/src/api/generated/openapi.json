@@ -18,16 +18,20 @@
   "tags": [
     {
       "name": "identity",
-      "description": "Authentication and user management service."
+      "description": "Authentication and authorization functionalities."
+    },
+    {
+      "name": "user",
+      "description": "User management"
     }
   ],
   "paths": {
-    "/identity/signup": {
-      "description": "Create a user",
+    "/users/register": {
+      "description": "Create or register a new user",
       "post": {
-        "operationId": "signup",
+        "operationId": "registerUser",
         "tags": [
-          "identity"
+          "user"
         ],
         "summary": "Create user",
         "description": "Creates a new user",
@@ -41,18 +45,21 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 80,
-                    "format": "email"
+                    "format": "email",
+                    "default": "Sourabh.rawatcc@gmail.com"
                   },
                   "password": {
                     "type": "string",
                     "minLength": 8,
                     "maxLength": 64,
-                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
+                    "default": "Leipzigcool7023#"
                   },
                   "displayName": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255
+                    "maxLength": 255,
+                    "default": "Sourabh Singh Rawat"
                   }
                 },
                 "required": [
@@ -66,16 +73,7 @@
         },
         "responses": {
           "201": {
-            "description": "New user + accessToken + refreshToken",
-            "headers": {
-              "Authorization": {
-                "description": "The cookie with accessToken and refreshToken",
-                "schema": {
-                  "type": "string"
-                },
-                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
-              }
-            }
+            "description": "User successfully registered"
           },
           "400": {
             "description": "BadRequest",
@@ -147,15 +145,15 @@
         }
       }
     },
-    "/identity/login": {
-      "description": "Login a user",
+    "/users/verify-password": {
+      "description": "Verifies user password",
       "post": {
-        "operationId": "login",
+        "operationId": "verifyPassword",
         "tags": [
-          "identity"
+          "user"
         ],
-        "summary": "Login user",
-        "description": "Validates username and email, then generates access and refresh tokens.",
+        "summary": "Verify password",
+        "description": "Verifies user password",
         "requestBody": {
           "content": {
             "application/json": {
@@ -166,13 +164,167 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 80,
-                    "format": "email"
+                    "format": "email",
+                    "default": "Sourabh.rawatcc@gmail.com"
                   },
                   "password": {
                     "type": "string",
                     "minLength": 8,
                     "maxLength": 64,
-                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$"
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
+                    "default": "Leipzigcool7023#"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User password verified"
+          },
+          "400": {
+            "description": "BadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorization"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many request"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "description": "Gets the current logged in user",
+      "get": {
+        "operationId": "getCurrentUser",
+        "tags": [
+          "identity"
+        ],
+        "summary": "Get current user",
+        "responses": {
+          "200": {
+            "description": "Returns the current logged in user or null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80,
+                      "format": "email",
+                      "default": "Sourabh.rawatcc@gmail.com"
+                    },
+                    "displayName": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "default": "Sourabh Singh Rawat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/identity/generate-tokens": {
+      "description": "Generate access and refresh tokens",
+      "post": {
+        "operationId": "generateTokens",
+        "tags": [
+          "identity"
+        ],
+        "summary": "Generate tokens",
+        "description": "Validates credentials, generates tokens",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "format": "email",
+                    "default": "Sourabh.rawatcc@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
+                    "default": "Leipzigcool7023#"
                   }
                 }
               }
@@ -236,27 +388,68 @@
         }
       }
     },
-    "/identity/me": {
-      "get": {
-        "operationId": "getCurrentUser",
+    "/identity/refresh-tokens": {
+      "description": "If refresh token is valid, generate new access and refresh tokens",
+      "post": {
+        "operationId": "refreshTokens",
         "tags": [
           "identity"
         ],
-        "summary": "Get current user",
+        "summary": "Refresh Tokens",
+        "description": "If refresh token is valud, generates new tokens",
         "responses": {
           "200": {
-            "description": "Returns the current logged in user or null",
+            "description": "new accessToken token is successfully created",
             "headers": {
               "Set-Cookie": {
-                "description": "Contains the accessToken and refreshToken",
+                "description": "The cookie with accessToken and refreshToken",
                 "schema": {
                   "type": "string"
-                }
+                },
+                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
               }
             }
           },
+          "400": {
+            "description": "BadRequest, the provided token was not in correct format"
+          },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Too Many Request"
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected server error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

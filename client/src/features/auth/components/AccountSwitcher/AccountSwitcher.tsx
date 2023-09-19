@@ -29,7 +29,7 @@ export default function AccountSwitcher() {
       <MenuItem
         onClick={handleClickIconButton}
         avatarIcon={
-          <Avatar variant="circular" label={auth.currentUser?.displayName[0]} />
+          <Avatar variant="circular" label={auth.currentUser?.displayName} />
         }
       />
       <StyledMenu
