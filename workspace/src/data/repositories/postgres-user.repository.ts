@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interface/user-repository";
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import { QueryBuilderOptions, User } from "@sourabhrawatcc/core-utils";
 import { Services } from "../../app/container.config";
 
 export class PostgresUserRepository implements UserRepository {
@@ -19,17 +19,17 @@ export class PostgresUserRepository implements UserRepository {
     user: UserEntity,
     options?: QueryBuilderOptions,
   ): Promise<UserEntity> => {
-    const { id, email } = user;
+    const { id, email, defaultWorkspaceId } = user;
     const queryRunner = options?.queryRunner;
 
     const query = this._context
       .queryBuilder(UserEntity, "u", queryRunner)
       .insert()
       .into(UserEntity)
-      .values({ id, email })
-      .returning(["id", "email"]);
+      .values({ id, email, defaultWorkspaceId })
+      .returning("*");
 
-    return (await query.execute()).raw[0];
+    return (await query.execute()).generatedMaps[0] as UserEntity;
   };
 
   /**
@@ -84,7 +84,6 @@ export class PostgresUserRepository implements UserRepository {
       "SELECT * FROM find_user_by_email($1)",
       [email],
     );
-    console.log(result);
 
     return result[0];
   };

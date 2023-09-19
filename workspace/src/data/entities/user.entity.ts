@@ -12,7 +12,6 @@ export class UserEntity extends AuditEntity {
   email!: string;
 
   @Column({ name: "default_workspace_id", type: "uuid" })
-  @Generated("uuid")
   defaultWorkspaceId!: string;
 
   @Column({
