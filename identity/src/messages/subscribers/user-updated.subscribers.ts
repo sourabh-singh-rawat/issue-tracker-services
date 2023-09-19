@@ -4,7 +4,7 @@ import { JsMsg } from "nats";
 
 export class UserUpdatedSubscriber extends Subscriber<string> {
   readonly stream = Streams.USER;
-  readonly consumer = Consumers.UserUpdatedConsumer;
+  readonly consumer = Consumers.UserUpdatedConsumerIdentity;
   private readonly _userRepository;
 
   constructor(container: Services) {
