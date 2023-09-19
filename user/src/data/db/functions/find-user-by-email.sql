@@ -1,3 +1,4 @@
+DROP FUNCTION IF EXISTS find_user_by_email;
 CREATE OR REPLACE FUNCTION find_user_by_email (
   p_email TEXT
 )
@@ -6,7 +7,8 @@ RETURNS TABLE (
   email TEXT,
   "passwordHash" TEXT,
   "passwordSalt" TEXT,
-  "isEmailVerified" BOOLEAN
+  "isEmailVerified" BOOLEAN,
+  "defaultWorkspaceId" UUID
 )
 LANGUAGE PLPGSQL AS $$
   BEGIN
@@ -16,7 +18,8 @@ LANGUAGE PLPGSQL AS $$
         u.email,
         u.password_hash,
         u.password_salt,
-        u.is_email_verified
+        u.is_email_verified,
+        u.default_workspace_id
       FROM users AS u 
       WHERE u.email ILIKE p_email;
   END;
