@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-pod
+  template: 
+    metadata:
+      labels: 
+        app: {{ .Release.Name }}-pod 
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-container
+          image: {{ .Values.container.image }}
+          ports:
+            - containerPort: {{ .Values.container.exposedPort }}
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-postgres-secret
+            - secretRef:
+                name: {{ .Values.jwtSecretRef }}
