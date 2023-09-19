@@ -70,7 +70,7 @@ export class PostgresUserRepository implements UserRepository {
       .values({ email, passwordHash, passwordSalt })
       .returning("*");
 
-    return (await query.execute()).raw[0];
+    return (await query.execute()).generatedMaps[0] as UserEntity;
   };
 
   /**
