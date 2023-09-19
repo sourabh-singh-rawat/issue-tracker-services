@@ -4,7 +4,7 @@ import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
 
 import { useMessageBar } from "../../../message-bar/hooks";
-import { useSignupMutation } from "../../../../api/generated/identity.api";
+import { useRegisterUserMutation } from "../../../../api/generated/user.api";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
@@ -17,7 +17,7 @@ import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import openapi from "../../../../api/generated/openapi.json";
 
 export default function SignUpForm() {
-  const [signup, { error, status }] = useSignupMutation();
+  const [signup, { error, status }] = useRegisterUserMutation();
   const messageBar = useMessageBar();
 
   const defaultValues = useMemo(
@@ -28,7 +28,7 @@ export default function SignUpForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/identity/signup"].post.requestBody.content[
+      openapi.paths["/users/register"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

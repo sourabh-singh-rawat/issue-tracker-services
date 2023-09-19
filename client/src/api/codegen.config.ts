@@ -6,7 +6,10 @@ const config: ConfigFile = {
   apiImport: "apiSlice",
   outputFiles: {
     "./generated/identity.api.ts": {
-      filterEndpoints: ["signup", "login", "getCurrentUser"],
+      filterEndpoints: ["generateTokens", "getCurrentUser"],
+    },
+    "./generated/user.api.ts": {
+      filterEndpoints: ["registerUser"],
     },
   },
   exportName: "issueTrackerApi",

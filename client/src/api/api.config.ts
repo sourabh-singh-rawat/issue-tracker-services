@@ -35,7 +35,7 @@ const baseQueryWithReAuth: BaseQueryFn<
       const release = await mutex.acquire();
       try {
         const refreshResponse = await baseQuery(
-          { url: `${URL}/identity/refresh`, method: "POST" },
+          { url: `${URL}/identity/refresh-tokens`, method: "POST" },
           api,
           extraOptions,
         );
