@@ -4,25 +4,32 @@ metadata:
   name: issue-tracker
 build:
   artifacts:
-    - image: sourabhrawatcc/identity
-      context: identity
-      docker:
-        dockerfile: Dockerfile
-    - image: sourabhrawatcc/user
-      context: user
-      docker:
-        dockerfile: Dockerfile
-    - image: sourabhrawatcc/workspace
-      context: workspace
-      docker:
-        dockerfile: Dockerfile
-manifests:
-  rawYaml:
-    - k8s/deployments/identity-postgres.deployment.yaml
-    - k8s/deployments/identity.deployment.yaml
+  - image: sourabhrawatcc/identity
+    context: identity
+    docker:
+      dockerfile: Dockerfile
+  - image: sourabhrawatcc/user
+    context: user
+    docker:
+      dockerfile: Dockerfile
+  - image: sourabhrawatcc/workspace
+    context: workspace
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  helm:
+    releases:
+    - name: identity
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/identity.values.yaml
 
-    - k8s/deployments/user-postgres.deployment.yaml
-    - k8s/deployments/user.deployment.yaml
-
-    - k8s/deployments/workspace.deployment.yaml
-    - k8s/deployments/workspace-postgres.deployment.yaml
+    - name: user
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/user.values.yaml
+      
+    - name: workspace
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/workspace.values.yaml
