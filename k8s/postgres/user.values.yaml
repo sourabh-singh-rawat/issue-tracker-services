@@ -1,0 +1,15 @@
+# Deployment configuration
+postgresVersion: 16.0
+
+# Persistent volume configuration
+pvSize: 10Gi
+pvHostPath: "/run/desktop/mnt/host/c/data/user-postgres"
+
+# Persistent volume claim configuration
+
+# Secret configuration
+POSTGRES_HOST: user-postgres-service
+POSTGRES_PORT: 5432
+POSTGRES_USER: postgres
+POSTGRES_DB: user-pg
+POSTGRES_PASSWORD: sGPYRNxqeqUf4ZVf1Y1%NcdwNZ&j99!3

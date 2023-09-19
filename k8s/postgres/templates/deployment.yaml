@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-pod
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-pod
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-container
+          image: postgres:{{ .Values.postgresVersion }}-alpine3.18
+          ports:
+            - name: postgres
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-secret
+          volumeMounts:
+            - name: {{ .Release.Name }}-pv
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: {{ .Release.Name }}-pv
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
