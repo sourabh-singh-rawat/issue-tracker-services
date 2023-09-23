@@ -21,7 +21,7 @@ export class CoreUserService implements UserService {
   private readonly _userProfileRepository;
 
   constructor(container: Services) {
-    this._context = container.postgresContext;
+    this._context = container.dbContext;
     this._userRepository = container.userRepository;
     this._userProfileRepository = container.userProfileRepository;
   }

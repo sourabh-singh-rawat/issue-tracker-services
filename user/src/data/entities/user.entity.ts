@@ -23,9 +23,12 @@ export class UserEntity extends AuditEntity {
   @Column({ type: "text", name: "password_salt" })
   passwordSalt!: string;
 
-  @Column({ name: "default_workspace_id", type: "uuid" })
   @Generated("uuid")
+  @Column({ name: "default_workspace_id", type: "uuid" })
   defaultWorkspaceId!: string;
+
+  @Column({ name: "default_workspace_name", type: "text", default: "default" })
+  defaultWorkspaceName!: string;
 
   @Column({
     name: "is_email_verified",

@@ -1,5 +1,4 @@
-import { NatsMessageServer } from "@sourabhrawatcc/core-utils";
-import { logger } from "./logger.config";
+import { NatsMessageServer, logger } from "@sourabhrawatcc/core-utils";
 
 export const messageServer = new NatsMessageServer(
   { servers: ["nats"] },

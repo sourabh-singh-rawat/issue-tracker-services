@@ -7,7 +7,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
   private _context;
 
   constructor(container: Services) {
-    this._context = container.postgresContext;
+    this._context = container.dbContext;
   }
 
   save = async (
