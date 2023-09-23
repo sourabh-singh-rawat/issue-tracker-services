@@ -19,6 +19,6 @@ spec:
             - containerPort: {{ .Values.container.exposedPort }}
           envFrom:
             - secretRef:
-                name: {{ .Release.Name }}-postgres-secret
+                name: {{ .Release.Name }}-postgres-pguser-{{ .Release.Name }}-postgres
             - secretRef:
                 name: {{ .Values.jwtSecretRef }}
