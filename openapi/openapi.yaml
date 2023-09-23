@@ -15,6 +15,8 @@ tags:
     description: Authentication and authorization functionalities.
   - name: user
     description: User management
+  - name: workspace
+    description: Create and manage workspaces
 
 paths:
   /users/register:
@@ -32,5 +34,8 @@ paths:
   /identity/refresh-tokens:
     description: If refresh token is valid, generate new access and refresh tokens
     $ref: identity/paths/refresh-tokens.path.yaml
+  /workspaces:
+    description: Create and get workspaces
+    $ref: workspace/paths/create-workspace.path.yaml
 
 security: []
