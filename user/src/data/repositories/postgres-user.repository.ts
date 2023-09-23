@@ -7,7 +7,7 @@ export class PostgresUserRepository implements UserRepository {
   private readonly _context;
 
   constructor(container: Services) {
-    this._context = container.postgresContext;
+    this._context = container.dbContext;
   }
 
   /**

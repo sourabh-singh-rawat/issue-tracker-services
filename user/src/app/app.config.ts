@@ -1,9 +1,8 @@
 import fastify from "fastify";
 import cors from "@fastify/cors";
 import cookie from "@fastify/cookie";
-import { Auth, ErrorHandler } from "@sourabhrawatcc/core-utils";
+import { Auth, ErrorHandler, logger } from "@sourabhrawatcc/core-utils";
 import { userRoutes } from "../routes/user.routes";
-import { logger } from "./logger.config";
 
 export const app = fastify({ logger });
 

@@ -1,15 +1,20 @@
+import { FastifyInstance } from "fastify";
+import { Logger } from "pino";
 import { createContainer, asValue, asClass } from "awilix";
 import {
   PostgresContext,
   AwilixServiceContainer,
+  logger,
+  MessageServer,
 } from "@sourabhrawatcc/core-utils";
-import { logger } from "./logger.config";
+import { app } from "./app.config";
+import { dbContext } from "./db.config";
+import { messageServer } from "./message-system.config";
 
 import { UserController } from "../controllers/interfaces/user.controller";
 import { UserService } from "../services/interface/user.service";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 
-import { dataSource } from "./db.config";
 import { CoreUserController } from "../controllers/core-user.controller";
 import { CoreUserService } from "../services/core-user.service";
 import { PostgresUserRepository } from "../data/repositories/postgres-user.repository";
@@ -17,7 +22,10 @@ import { UserProfileRepository } from "../data/repositories/interfaces/user-prof
 import { PostgresUserProfileRepository } from "../data/repositories/postgres-user-profile.repository";
 
 export interface Services {
-  postgresContext: PostgresContext;
+  app: FastifyInstance;
+  logger: Logger;
+  dbContext: PostgresContext;
+  messageServer: MessageServer;
   userController: UserController;
   userService: UserService;
   userRepository: UserRepository;
@@ -29,7 +37,10 @@ export const container = new AwilixServiceContainer<Services>(awilix, logger);
 
 const { add } = container;
 
-add("postgresContext", asValue(dataSource));
+add("app", asValue(app));
+add("logger", asValue(logger));
+add("dbContext", asValue(dbContext));
+add("messageServer", asValue(messageServer));
 add("userController", asClass(CoreUserController));
 add("userService", asClass(CoreUserService));
 add("userRepository", asClass(PostgresUserRepository));
