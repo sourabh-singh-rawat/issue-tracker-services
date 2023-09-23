@@ -22,11 +22,11 @@ export class WorkspaceEntity extends AuditEntity {
   description?: string;
 
   @ManyToOne(() => UserEntity)
-  @Column("uuid")
   @JoinColumn({
     name: "owner_user_id",
     referencedColumnName: "id",
     foreignKeyConstraintName: "workspaces_fkey",
   })
+  @Column({ name: "owner_user_id", type: "uuid", nullable: false })
   ownerUserId!: string;
 }
