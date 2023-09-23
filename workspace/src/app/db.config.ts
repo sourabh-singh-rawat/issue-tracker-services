@@ -1,15 +1,14 @@
 import { DataSource } from "typeorm";
-import { PostgresContext } from "@sourabhrawatcc/core-utils";
-import { logger } from "./logger.config";
+import { PostgresContext, logger } from "@sourabhrawatcc/core-utils";
 
-const source = new DataSource({
+export const dbSource = new DataSource({
   type: "postgres",
-  host: process.env.POSTGRES_HOST,
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  host: process.env.host,
+  username: process.env.user,
+  password: process.env.password,
+  database: process.env.dbname,
   synchronize: true,
   entities: ["src/data/entities/*.ts"],
 });
 
-export const dataSource = new PostgresContext(source, logger);
+export const dbContext = new PostgresContext(dbSource, logger);

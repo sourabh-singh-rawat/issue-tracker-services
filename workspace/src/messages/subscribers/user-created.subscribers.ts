@@ -18,7 +18,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   constructor(container: Services) {
     super(container.messageServer.natsClient);
 
-    this._context = container.postgresContext;
+    this._context = container.dbContext;
     this._userRepository = container.userRepository;
     this._workspaceRepository = container.workspaceRepository;
   }

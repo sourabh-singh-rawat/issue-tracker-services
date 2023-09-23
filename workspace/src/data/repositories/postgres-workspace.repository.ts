@@ -7,7 +7,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
   private readonly _context;
 
   constructor(container: Services) {
-    this._context = container.postgresContext;
+    this._context = container.dbContext;
   }
 
   /**
@@ -20,13 +20,13 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
     workspace: WorkspaceEntity,
     options?: QueryBuilderOptions,
   ): Promise<WorkspaceEntity> => {
-    const { name, description, ownerUserId } = workspace;
+    const { id, name, description, ownerUserId } = workspace;
     const queryRunner = options?.queryRunner;
     const query = this._context
       .queryBuilder(WorkspaceEntity, "w", queryRunner)
       .insert()
       .into(WorkspaceEntity)
-      .values({ name, description, ownerUserId })
+      .values({ id, name, description, ownerUserId })
       .returning("*");
 
     return (await query.execute()).generatedMaps[0] as WorkspaceEntity;
