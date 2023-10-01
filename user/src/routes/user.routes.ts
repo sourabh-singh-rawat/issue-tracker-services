@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { container } from "../app/container.config";
+import { container } from "../app/service-container";
 
 export const userRoutes = (
   fastify: FastifyInstance,

@@ -1,6 +1,6 @@
-import { NatsMessageServer, logger } from "@sourabhrawatcc/core-utils";
+import { NatsMessageService, logger } from "@sourabhrawatcc/core-utils";
 
-export const messageServer = new NatsMessageServer(
+export const messageService = new NatsMessageService(
   { servers: ["nats"] },
   logger,
 );

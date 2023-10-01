@@ -5,13 +5,13 @@ import {
   UserRegistrationData,
 } from "@sourabhrawatcc/core-utils";
 import { UserController } from "./interfaces/user.controller";
-import { Services } from "../app/container.config";
+import { RegisteredServices } from "../app/service-container";
 
 export class CoreUserController implements UserController {
-  private readonly _userService;
+  private readonly userService;
 
-  constructor(container: Services) {
-    this._userService = container.userService;
+  constructor(serviceContainer: RegisteredServices) {
+    this.userService = serviceContainer.userService;
   }
 
   /**
@@ -29,7 +29,7 @@ export class CoreUserController implements UserController {
       password,
       displayName,
     });
-    await this._userService.createUser(userRegistrationData);
+    await this.userService.createUser(userRegistrationData);
 
     return reply.status(StatusCodes.CREATED).send();
   };
@@ -45,7 +45,7 @@ export class CoreUserController implements UserController {
     const { email, password } = request.body;
 
     const authCredentials = new AuthCredentials({ email, password });
-    await this._userService.verifyPassword(authCredentials);
+    await this.userService.verifyPassword(authCredentials);
 
     return reply.status(StatusCodes.OK).send();
   };
@@ -58,7 +58,7 @@ export class CoreUserController implements UserController {
     const { currentUser } = request;
     const { email } = currentUser;
 
-    const user = await this._userService.getUserInfoByEmail(email);
+    const user = await this.userService.getUserInfoByEmail(email);
 
     return reply.status(StatusCodes.OK).send(user);
   };

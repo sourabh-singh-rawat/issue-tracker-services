@@ -1,13 +1,13 @@
 import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserProfileEntity } from "../entities/user-profile.entity";
 import { UserProfileRepository } from "./interfaces/user-profile.repository";
-import { Services } from "../../app/container.config";
+import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserProfileRepository implements UserProfileRepository {
-  private _context;
+  private databaseService;
 
-  constructor(container: Services) {
-    this._context = container.dbContext;
+  constructor(serviceContainer: RegisteredServices) {
+    this.databaseService = serviceContainer.databaseService;
   }
 
   save = async (
@@ -17,7 +17,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
     const { displayName, userId, defaultWorkspaceId, photoUrl } = userProfile;
     const queryRunner = options?.queryRunner;
 
-    const query = this._context
+    const query = this.databaseService
       .queryBuilder(UserProfileEntity, "up", queryRunner)
       .insert()
       .into(UserProfileEntity)
@@ -33,7 +33,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
   };
 
   findByUserId = async (userId: string) => {
-    const result = await this._context.query<UserProfileEntity>(
+    const result = await this.databaseService.query<UserProfileEntity>(
       "SELECT * FROM find_user_profile_by_user_id($1)",
       [userId],
     );
@@ -46,7 +46,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
     options?: QueryBuilderOptions | undefined,
   ): Promise<void> => {
     const queryRunner = options?.queryRunner;
-    const query = this._context
+    const query = this.databaseService
       .queryBuilder(UserProfileEntity, "up", queryRunner)
       .softDelete()
       .where("id=:id", { id });
