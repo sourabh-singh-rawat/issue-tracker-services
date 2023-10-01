@@ -1,13 +1,13 @@
 import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interfaces/user.repository";
-import { Services } from "../../app/container.config";
+import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserRepository implements UserRepository {
   private readonly _context;
 
-  constructor(container: Services) {
-    this._context = container.dbContext;
+  constructor(serviceContainer: RegisteredServices) {
+    this._context = serviceContainer.databaseService;
   }
 
   /**

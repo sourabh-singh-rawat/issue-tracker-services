@@ -9,21 +9,21 @@ import {
   UserDetails,
 } from "@sourabhrawatcc/core-utils";
 import { UserService } from "./interface/user.service";
-import { Services } from "../app/container.config";
+import { RegisteredServices } from "../app/service-container";
 import { UserEntity } from "../data/entities/user.entity";
 import { UserProfileEntity } from "../data/entities/user-profile.entity";
 import { UserCreatedPublisher } from "../messages/publishers/user-created.publisher";
-import { messageServer } from "../app/message-system.config";
+import { messageService } from "../app/message-system.config";
 
 export class CoreUserService implements UserService {
-  private readonly _context;
-  private readonly _userRepository;
-  private readonly _userProfileRepository;
+  private readonly databaseService;
+  private readonly userRepository;
+  private readonly userProfileRepository;
 
-  constructor(container: Services) {
-    this._context = container.dbContext;
-    this._userRepository = container.userRepository;
-    this._userProfileRepository = container.userProfileRepository;
+  constructor(serviceContainer: RegisteredServices) {
+    this.databaseService = serviceContainer.databaseService;
+    this.userRepository = serviceContainer.userRepository;
+    this.userProfileRepository = serviceContainer.userProfileRepository;
   }
 
   /**
@@ -32,7 +32,7 @@ export class CoreUserService implements UserService {
    * @returns
    */
   private getUserByEmail = async (email: string) => {
-    return await this._userRepository.findByEmail(email);
+    return await this.userRepository.findByEmail(email);
   };
 
   /**
@@ -41,7 +41,7 @@ export class CoreUserService implements UserService {
    * @returns
    */
   private isUserExistsByEmail = async (email: string) => {
-    return await this._userRepository.existsByEmail(email);
+    return await this.userRepository.existsByEmail(email);
   };
 
   /**
@@ -66,22 +66,24 @@ export class CoreUserService implements UserService {
     newUser.passwordSalt = salt;
 
     // Create user and their profile
-    const savedUser = await this._context.transaction(async (queryRunner) => {
-      const savedUser = await this._userRepository.save(newUser, {
-        queryRunner,
-      });
+    const savedUser = await this.databaseService.transaction(
+      async (queryRunner) => {
+        const savedUser = await this.userRepository.save(newUser, {
+          queryRunner,
+        });
 
-      const newUserProfile = new UserProfileEntity();
-      newUserProfile.userId = savedUser.id;
-      newUserProfile.displayName = displayName;
+        const newUserProfile = new UserProfileEntity();
+        newUserProfile.userId = savedUser.id;
+        newUserProfile.displayName = displayName;
 
-      await this._userProfileRepository.save(newUserProfile, { queryRunner });
+        await this.userProfileRepository.save(newUserProfile, { queryRunner });
 
-      return savedUser;
-    });
+        return savedUser;
+      },
+    );
 
     const userCreatedPublisher = new UserCreatedPublisher(
-      messageServer.natsClient,
+      messageService.client,
     );
     await userCreatedPublisher.publish({
       userId: savedUser.id,
@@ -115,7 +117,7 @@ export class CoreUserService implements UserService {
     const user = await this.getUserByEmail(email);
     if (!user) throw new UserNotFoundError();
 
-    const userProfile = await this._userProfileRepository.findByUserId(user.id);
+    const userProfile = await this.userProfileRepository.findByUserId(user.id);
     if (!userProfile) throw new UserProfileNotFoundError();
 
     const userDetails = new UserDetails({

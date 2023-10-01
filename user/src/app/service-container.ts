@@ -1,15 +1,13 @@
-import { FastifyInstance } from "fastify";
 import { Logger } from "pino";
 import { createContainer, asValue, asClass } from "awilix";
 import {
-  PostgresContext,
+  PostgresService,
   AwilixServiceContainer,
   logger,
-  MessageServer,
+  MessageService,
 } from "@sourabhrawatcc/core-utils";
-import { app } from "./app.config";
-import { dbContext } from "./db.config";
-import { messageServer } from "./message-system.config";
+import { databaseService } from "./database-service";
+import { messageService } from "./message-system.config";
 
 import { UserController } from "../controllers/interfaces/user.controller";
 import { UserService } from "../services/interface/user.service";
@@ -21,26 +19,27 @@ import { PostgresUserRepository } from "../data/repositories/postgres-user.repos
 import { UserProfileRepository } from "../data/repositories/interfaces/user-profile.repository";
 import { PostgresUserProfileRepository } from "../data/repositories/postgres-user-profile.repository";
 
-export interface Services {
-  app: FastifyInstance;
+export interface RegisteredServices {
   logger: Logger;
-  dbContext: PostgresContext;
-  messageServer: MessageServer;
+  databaseService: PostgresService;
+  messageService: MessageService;
   userController: UserController;
   userService: UserService;
   userRepository: UserRepository;
   userProfileRepository: UserProfileRepository;
 }
 
-const awilix = createContainer<Services>();
-export const container = new AwilixServiceContainer<Services>(awilix, logger);
+const awilix = createContainer<RegisteredServices>();
+export const container = new AwilixServiceContainer<RegisteredServices>(
+  awilix,
+  logger,
+);
 
 const { add } = container;
 
-add("app", asValue(app));
 add("logger", asValue(logger));
-add("dbContext", asValue(dbContext));
-add("messageServer", asValue(messageServer));
+add("databaseService", asValue(databaseService));
+add("messageService", asValue(messageService));
 add("userController", asClass(CoreUserController));
 add("userService", asClass(CoreUserService));
 add("userRepository", asClass(PostgresUserRepository));
