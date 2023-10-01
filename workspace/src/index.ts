@@ -1,26 +1,31 @@
-import { container } from "./app/container.config";
-
-const SERVER_PORT = 4000;
-const SERVER_HOST = "0.0.0.0";
+import { serviceContainer } from "./app/service-container";
+import { httpServer } from "./app/http-server";
+import { WorkspaceMemberRoles } from "./data/entities/workspace-member-roles";
 
 const startServer = async () => {
   try {
-    await container.connect();
-    await container.get("app").listen({ port: SERVER_PORT, host: SERVER_HOST });
-    await container.get("dbContext").connect();
-    await container.get("casbin").connect();
-    await container.get("messageServer").connect();
+    // Connect to necessary services
+    await serviceContainer.initialize();
+    await serviceContainer.get("databaseService").connect();
+    await serviceContainer.get("messageService").connect();
+    await serviceContainer
+      .get("policyManager")
+      .initialize(serviceContainer.get("dbSource"), {
+        customCasbinRuleEntity: WorkspaceMemberRoles,
+      });
+
+    // Start the server
+    httpServer.listen({ port: 4000, host: "0.0.0.0" });
   } catch (error) {
-    container.get("logger").error(error);
+    serviceContainer.get("logger").error(error);
     process.exit(1);
   }
 };
 
+// Start message subscription
 const startSubscriptions = () => {
-  const userCreatedSubscriber = container.get("userCreatedSubscriber");
-  // const userUpdatedSubscriber = container.get("userUpdatedSubscriber");
+  const userCreatedSubscriber = serviceContainer.get("userCreatedSubscriber");
   userCreatedSubscriber.fetchMessages();
-  // userUpdatedSubscriber.fetchMessages();
 };
 
 const main = async () => {

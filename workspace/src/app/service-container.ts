@@ -2,57 +2,64 @@ import { Logger } from "pino";
 import { DataSource } from "typeorm";
 import { asClass, asValue, createContainer } from "awilix";
 import {
-  AwilixServiceContainer,
-  NatsMessageServer,
-  PostgresContext,
   logger,
+  AwilixServiceContainer,
+  DatabaseService,
+  NatsMessageService,
 } from "@sourabhrawatcc/core-utils";
-import { app } from "./app.config";
-import { dbContext, dbSource } from "./db.config";
-import { Casbin } from "./casbin.config";
-import { messageServer } from "./message-system.config";
+import { databaseService, dbSource } from "./database-service";
+import { messageService } from "./message-service";
+import { WorkspaceCasbinPolicyManager, policyManager } from "./policy-manager";
 
+// Controllers
 import { WorkspaceController } from "../controllers/interfaces/workspace-controller";
 import { CoreWorkspaceController } from "../controllers/core-workspace.controller";
 
+// Services
 import { WorkspaceService } from "../services/interfaces/workspace.service";
 import { CoreWorkspaceService } from "../services/core-workspace.service";
 
+// Repositories
 import { UserRepository } from "../data/repositories/interface/user-repository";
 import { WorkspaceRepository } from "../data/repositories/interface/workspace-repository";
+import { WorkspaceMemberRepository } from "../data/repositories/interface/workspace-member";
 import { PostgresUserRepository } from "../data/repositories/postgres-user.repository";
 import { PostgresWorkspaceRepository } from "../data/repositories/postgres-workspace.repository";
+import { PostgresWorkspaceMemberRepository } from "../data/repositories/postgres-workspace-member.repository";
 
+// Publishers and Subscribers
 import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subscribers";
-import { FastifyInstance } from "fastify";
 
-export interface Services {
-  app: FastifyInstance;
+export interface RegisteredServices {
   logger: Logger;
   dbSource: DataSource;
-  dbContext: PostgresContext;
-  casbin: Casbin;
-  messageServer: NatsMessageServer;
+  databaseService: DatabaseService;
+  policyManager: WorkspaceCasbinPolicyManager;
+  messageService: NatsMessageService;
   workspaceController: WorkspaceController;
   workspaceService: WorkspaceService;
   userRepository: UserRepository;
   workspaceRepository: WorkspaceRepository;
+  workspaceMemberRepository: WorkspaceMemberRepository;
   userCreatedSubscriber: UserCreatedSubscriber;
 }
 
-const awilix = createContainer<Services>();
-export const container = new AwilixServiceContainer<Services>(awilix, logger);
+const awilix = createContainer<RegisteredServices>();
+export const serviceContainer = new AwilixServiceContainer<RegisteredServices>(
+  awilix,
+  logger,
+);
 
-const { add } = container;
+const { add } = serviceContainer;
 
-add("app", asValue(app));
 add("logger", asValue(logger));
 add("dbSource", asValue(dbSource));
-add("dbContext", asValue(dbContext));
-add("casbin", asClass(Casbin));
-add("messageServer", asValue(messageServer));
+add("databaseService", asValue(databaseService));
+add("messageService", asValue(messageService));
+add("policyManager", asValue(policyManager));
 add("workspaceController", asClass(CoreWorkspaceController));
 add("workspaceService", asClass(CoreWorkspaceService));
 add("userRepository", asClass(PostgresUserRepository));
 add("workspaceRepository", asClass(PostgresWorkspaceRepository));
+add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));

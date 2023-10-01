@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION find_workspace_by_user_id (
+CREATE OR REPLACE FUNCTION find_workspaces_by_user_id (
   p_userId UUID
 )
 RETURNS TABLE (

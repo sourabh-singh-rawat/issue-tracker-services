@@ -1,13 +1,13 @@
 import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interface/user-repository";
-import { Services } from "../../app/container.config";
+import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserRepository implements UserRepository {
-  private readonly _context;
+  private readonly databaseService;
 
-  constructor(container: Services) {
-    this._context = container.dbContext;
+  constructor(appServiceContainer: RegisteredServices) {
+    this.databaseService = appServiceContainer.databaseService;
   }
 
   /**
@@ -22,7 +22,7 @@ export class PostgresUserRepository implements UserRepository {
     const { id, email, defaultWorkspaceId } = user;
     const queryRunner = options?.queryRunner;
 
-    const query = this._context
+    const query = this.databaseService
       .queryBuilder(UserEntity, "u", queryRunner)
       .insert()
       .into(UserEntity)
@@ -38,10 +38,9 @@ export class PostgresUserRepository implements UserRepository {
    * @returns true if user exists, false otherwise
    */
   existsById = async (id: string): Promise<boolean> => {
-    const result = await this._context.query<{ user_exists_by_id: boolean }>(
-      "SELECT * FROM user_exists_by_id($1)",
-      [id],
-    );
+    const result = await this.databaseService.query<{
+      user_exists_by_id: boolean;
+    }>("SELECT * FROM user_exists_by_id($1)", [id]);
 
     return result[0].user_exists_by_id;
   };
@@ -52,10 +51,9 @@ export class PostgresUserRepository implements UserRepository {
    * @returns true if user exists, false otherwise
    */
   existsByEmail = async (email: string): Promise<boolean> => {
-    const result = await this._context.query<{ user_exists_by_email: boolean }>(
-      "SELECT * FROM user_exists_by_email($1)",
-      [email],
-    );
+    const result = await this.databaseService.query<{
+      user_exists_by_email: boolean;
+    }>("SELECT * FROM user_exists_by_email($1)", [email]);
 
     return result[0].user_exists_by_email;
   };
@@ -66,7 +64,7 @@ export class PostgresUserRepository implements UserRepository {
    * @returns User if found or null
    */
   findById = async (id: string): Promise<UserEntity | null> => {
-    const result = await this._context.query<UserEntity>(
+    const result = await this.databaseService.query<UserEntity>(
       "SELECT * FROM find_user_by_id($1)",
       [id],
     );
@@ -80,7 +78,7 @@ export class PostgresUserRepository implements UserRepository {
    * @returns
    */
   findByEmail = async (email: string): Promise<UserEntity | null> => {
-    const result = await this._context.query<UserEntity>(
+    const result = await this.databaseService.query<UserEntity>(
       "SELECT * FROM find_user_by_email($1)",
       [email],
     );
@@ -107,7 +105,7 @@ export class PostgresUserRepository implements UserRepository {
   ): Promise<void> => {
     const queryRunner = options?.queryRunner;
 
-    const query = this._context
+    const query = this.databaseService
       .queryBuilder(UserEntity, "users", queryRunner)
       .softDelete()
       .where("id = :id", { id });

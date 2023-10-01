@@ -1,13 +1,13 @@
 import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { WorkspaceEntity } from "../entities";
 import { WorkspaceRepository } from "./interface/workspace-repository";
-import { Services } from "../../app/container.config";
+import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresWorkspaceRepository implements WorkspaceRepository {
-  private readonly _context;
+  private readonly databaseService;
 
-  constructor(container: Services) {
-    this._context = container.dbContext;
+  constructor(serviceContainer: RegisteredServices) {
+    this.databaseService = serviceContainer.databaseService;
   }
 
   /**
@@ -16,13 +16,10 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
    * @param options
    * @returns
    */
-  save = async (
-    workspace: WorkspaceEntity,
-    options?: QueryBuilderOptions,
-  ): Promise<WorkspaceEntity> => {
+  save = async (workspace: WorkspaceEntity, options?: QueryBuilderOptions) => {
     const { id, name, description, ownerUserId } = workspace;
     const queryRunner = options?.queryRunner;
-    const query = this._context
+    const query = this.databaseService
       .queryBuilder(WorkspaceEntity, "w", queryRunner)
       .insert()
       .into(WorkspaceEntity)
@@ -32,9 +29,31 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
     return (await query.execute()).generatedMaps[0] as WorkspaceEntity;
   };
 
-  existsById(id: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
+  /**
+   * Checks if workspace exists
+   * @param id Workspace id
+   * @returns boolean indicating if workspace exists
+   */
+  existsById = async (id: string) => {
+    const result = await this.databaseService.query<{
+      workspace_exists_by_id: boolean;
+    }>("SELECT * FROM workspace_exists_by_id($1)", [id]);
+
+    return result[0].workspace_exists_by_id;
+  };
+
+  /**
+   * Finds a workspace by id
+   * @param id
+   */
+  findById = async (id: string) => {
+    const result = await this.databaseService.query<WorkspaceEntity>(
+      "SELECT * FROM find_workspace_by_id($1)",
+      [id],
+    );
+
+    return result[0];
+  };
 
   softDelete(id: string, options?: QueryBuilderOptions): Promise<void> {
     throw new Error("Method not implemented.");

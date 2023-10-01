@@ -1,13 +1,18 @@
 import { AuditEntity } from "@sourabhrawatcc/core-utils";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { WorkspaceEntity } from "./workspace.entity";
 import { UserEntity } from "./user.entity";
 
-@Entity({ name: "workspace_member_entity" })
+@Entity({ name: "workspace_members" })
 export class WorkspaceMemberEntity extends AuditEntity {
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "id", referencedColumnName: "id" })
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @ManyToOne(() => UserEntity)
