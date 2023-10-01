@@ -3,43 +3,63 @@ import {
   Streams,
   Subscriber,
   UserCreatedPayload,
+  WorkspacePrivileges,
+  WorkspaceRoles,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { Services } from "../../app/container.config";
+import { RegisteredServices } from "../../app/service-container";
 import { UserEntity, WorkspaceEntity } from "../../data/entities";
+import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserCreatedConsumerWorkspace;
-  private readonly _context;
-  private readonly _userRepository;
-  private readonly _workspaceRepository;
+  private readonly databaseService;
+  private readonly policyManager;
+  private readonly userRepository;
+  private readonly workspaceRepository;
+  private readonly workspaceMemberRepository;
 
-  constructor(container: Services) {
-    super(container.messageServer.natsClient);
+  constructor(serviceContainer: RegisteredServices) {
+    super(serviceContainer.messageService.client);
 
-    this._context = container.dbContext;
-    this._userRepository = container.userRepository;
-    this._workspaceRepository = container.workspaceRepository;
+    this.policyManager = serviceContainer.policyManager;
+    this.databaseService = serviceContainer.databaseService;
+    this.userRepository = serviceContainer.userRepository;
+    this.workspaceRepository = serviceContainer.workspaceRepository;
+    this.workspaceMemberRepository = serviceContainer.workspaceMemberRepository;
   }
 
   onMessage = async (
     message: JsMsg,
     payload: UserCreatedPayload,
   ): Promise<void> => {
+    const { userId, email, defaultWorkspaceId } = payload;
+
     const newUser = new UserEntity();
-    newUser.id = payload.userId;
-    newUser.email = payload.email;
-    newUser.defaultWorkspaceId = payload.defaultWorkspaceId;
+    newUser.id = userId;
+    newUser.email = email;
+    newUser.defaultWorkspaceId = defaultWorkspaceId;
 
     const newWorkspace = new WorkspaceEntity();
-    newWorkspace.id = payload.defaultWorkspaceId;
+    newWorkspace.id = defaultWorkspaceId;
     newWorkspace.name = "default";
-    newWorkspace.ownerUserId = payload.userId;
+    newWorkspace.ownerUserId = userId;
 
-    await this._context.transaction(async (queryRunner) => {
-      await this._userRepository.save(newUser, { queryRunner });
-      await this._workspaceRepository.save(newWorkspace, { queryRunner });
+    const newWorkspaceMember = new WorkspaceMemberEntity();
+    newWorkspaceMember.userId = userId;
+    newWorkspaceMember.workspaceId = defaultWorkspaceId;
+
+    await this.databaseService.transaction(async (queryRunner) => {
+      await this.userRepository.save(newUser, { queryRunner });
+      await this.workspaceRepository.save(newWorkspace, { queryRunner });
+      await this.workspaceMemberRepository.save(newWorkspaceMember, {
+        queryRunner,
+      });
+      await this.policyManager.createWorkspacePolicies(
+        userId,
+        defaultWorkspaceId,
+      );
     });
 
     message.ack();

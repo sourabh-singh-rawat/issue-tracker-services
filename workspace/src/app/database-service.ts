@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { PostgresContext, logger } from "@sourabhrawatcc/core-utils";
+import { PostgresService, logger } from "@sourabhrawatcc/core-utils";
 
 export const dbSource = new DataSource({
   type: "postgres",
@@ -7,8 +7,8 @@ export const dbSource = new DataSource({
   username: process.env.user,
   password: process.env.password,
   database: process.env.dbname,
-  synchronize: true,
   entities: ["src/data/entities/*.ts"],
+  synchronize: true,
 });
 
-export const dbContext = new PostgresContext(dbSource, logger);
+export const databaseService = new PostgresService(dbSource, logger);

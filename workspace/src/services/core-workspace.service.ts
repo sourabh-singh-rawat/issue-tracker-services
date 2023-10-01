@@ -1,15 +1,15 @@
 import { ServiceResponse } from "@sourabhrawatcc/core-utils";
-import { Services } from "../app/container.config";
+import { RegisteredServices } from "../app/service-container";
 import { WorkspaceService } from "./interfaces/workspace.service";
 import { WorkspaceEntity } from "../data/entities";
 
 export class CoreWorkspaceService implements WorkspaceService {
-  private readonly _context;
-  private readonly _workspaceRepository;
+  private readonly databaseService;
+  private readonly workspaceRepository;
 
-  constructor(container: Services) {
-    this._context = container.dbContext;
-    this._workspaceRepository = container.workspaceRepository;
+  constructor(serviceContainer: RegisteredServices) {
+    this.databaseService = serviceContainer.databaseService;
+    this.workspaceRepository = serviceContainer.workspaceRepository;
   }
 
   createWorkspace = async (
@@ -24,8 +24,8 @@ export class CoreWorkspaceService implements WorkspaceService {
     newWorkspace.description = inputs.description;
     newWorkspace.ownerUserId = userId;
 
-    const id = await this._context.transaction(async (queryRunner) => {
-      const { id } = await this._workspaceRepository.save(newWorkspace);
+    const id = await this.databaseService.transaction(async (queryRunner) => {
+      const { id } = await this.workspaceRepository.save(newWorkspace);
       return id;
     });
 
@@ -34,5 +34,16 @@ export class CoreWorkspaceService implements WorkspaceService {
 
   getAllWorkspaces = async (userId: string) => {
     return new ServiceResponse({ data: "some data", dataCount: 1 });
+  };
+
+  getWorkspace = async (id: string) => {
+    const doesWorkspaceExists = await this.workspaceRepository.existsById(id);
+    if (!doesWorkspaceExists) {
+      throw Error("Workspace does not exist");
+    }
+
+    const workspace = await this.workspaceRepository.findById(id);
+
+    return new ServiceResponse({ data: workspace });
   };
 }

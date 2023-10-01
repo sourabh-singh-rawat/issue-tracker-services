@@ -1,5 +1,5 @@
 import { Consumers, Streams, Subscriber } from "@sourabhrawatcc/core-utils";
-import { Services } from "../../app/container.config";
+import { RegisteredServices } from "../../app/service-container";
 import { JsMsg } from "nats";
 
 export class UserUpdatedSubscriber extends Subscriber<string> {
@@ -7,8 +7,8 @@ export class UserUpdatedSubscriber extends Subscriber<string> {
   readonly consumer = Consumers.UserUpdatedConsumerWorkspace;
   // private readonly _userRepository;
 
-  constructor(container: Services) {
-    super(container.messageServer.natsClient);
+  constructor(serviceContainer: RegisteredServices) {
+    super(serviceContainer.messageService.client);
     // this._userRepository = container.userRepository;
   }
 
