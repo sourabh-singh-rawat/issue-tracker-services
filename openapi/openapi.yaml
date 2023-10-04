@@ -21,21 +21,27 @@ tags:
 paths:
   /users/register:
     description: Create or register a new user
-    $ref: user/paths/register.path.yaml
+    $ref: user/paths/register.yaml
   /users/verify-password:
     description: Verifies user password
-    $ref: user/paths/verify-password.path.yaml
+    $ref: user/paths/verify-password.yaml
   /users/me:
     description: Gets the current logged in user
-    $ref: user/paths/me.path.yaml
+    $ref: user/paths/me.yaml
   /identity/generate-tokens:
     description: Generate access and refresh tokens
-    $ref: identity/paths/generate-tokens.path.yaml
+    $ref: identity/paths/generate-tokens.yaml
   /identity/refresh-tokens:
     description: If refresh token is valid, generate new access and refresh tokens
-    $ref: identity/paths/refresh-tokens.path.yaml
+    $ref: identity/paths/refresh-tokens.yaml
   /workspaces:
     description: Create and get workspaces
-    $ref: workspace/paths/create-workspace.path.yaml
+    $ref: workspace/paths/workspaces.yaml
+  /workspaces/{id}:
+    description: Create and get workspaces
+    $ref: workspace/paths/workspace.yaml
+  /projects:
+    description: Create and get projects
+    $ref: project/paths/projects.yaml
 
 security: []

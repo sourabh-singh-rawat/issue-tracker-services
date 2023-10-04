@@ -1,0 +1,35 @@
+get:
+  tags: [ "workspace" ]
+  summary: Get workspace
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      required: true
+      description: Numeric id of the workspace to get  
+  description: Get workspaces of the user
+  operationId: getWorkspace
+  responses: 
+    200:
+      description: Returns the workspace
+      content: 
+        application/json:
+          schema: 
+            type: object
+            properties:
+              data:
+                type: object
+                properties: 
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  createdAt:
+                    type: string
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml

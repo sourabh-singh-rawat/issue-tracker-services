@@ -22,8 +22,10 @@ get:
                       type: string
                     createdAt:
                       type: string
+                  required: ["id", "name", "createdAt"]
               dataCount:
                 type: number
+            required: ["data", "dataCount"]
     400:
       description: Bad request
       content:

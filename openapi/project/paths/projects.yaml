@@ -1,0 +1,32 @@
+post:
+  tags: [ "projects" ]
+  summary: Create a new project
+  description: Create a new project
+  operationId: createProject
+  requestBody: 
+    description: Fields used for creating a new project
+    content: 
+      application/json:
+        schema: 
+          type: object
+          properties:
+            name:
+              $ref: ../../components/schemas/name.yaml
+            description:
+              $ref: ../../components/schemas/description.yaml
+            startDate:
+              $ref: ../../components/schemas/start-date.yaml
+            endDate:
+              $ref: ../../components/schemas/end-date.yaml
+            status:
+              $ref: ../../components/schemas/status.yaml
+          required: ["name", "status"]
+  responses: 
+    201:
+      description: Project created successfully
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
