@@ -1,13 +1,13 @@
 import { FastifyInstance } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { container } from "../app/container.config";
+import { serviceContainer } from "../app/service-container";
 
 export const identityRoutes = (
   fastify: FastifyInstance,
   options: unknown,
   done: () => void,
 ) => {
-  const identityController = container.get("identityController");
+  const identityController = serviceContainer.get("identityController");
   const auth = { preHandler: [Auth.requireTokens] };
 
   fastify.post("/generate-tokens", identityController.generateTokens);
