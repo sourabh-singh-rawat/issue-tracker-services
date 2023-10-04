@@ -19,14 +19,13 @@ export class PostgresUserRepository implements UserRepository {
     user: UserEntity,
     options?: QueryBuilderOptions,
   ): Promise<UserEntity> => {
-    const { id, email, defaultWorkspaceId } = user;
     const queryRunner = options?.queryRunner;
 
     const query = this.databaseService
-      .queryBuilder(UserEntity, "u", queryRunner)
+      .createQueryBuilder(UserEntity, "u", queryRunner)
       .insert()
       .into(UserEntity)
-      .values({ id, email, defaultWorkspaceId })
+      .values(user)
       .returning("*");
 
     return (await query.execute()).generatedMaps[0] as UserEntity;
@@ -106,7 +105,7 @@ export class PostgresUserRepository implements UserRepository {
     const queryRunner = options?.queryRunner;
 
     const query = this.databaseService
-      .queryBuilder(UserEntity, "users", queryRunner)
+      .createQueryBuilder(UserEntity, "users", queryRunner)
       .softDelete()
       .where("id = :id", { id });
 

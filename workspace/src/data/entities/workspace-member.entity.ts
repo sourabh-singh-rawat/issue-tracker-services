@@ -24,7 +24,4 @@ export class WorkspaceMemberEntity extends AuditEntity {
   @Column({ name: "workspace_id", type: "uuid", nullable: false })
   @JoinColumn({ name: "workspace_id", referencedColumnName: "id" })
   workspaceId!: string;
-
-  @Column({ name: "role_id", type: "uuid", nullable: true })
-  roleId!: string;
 }

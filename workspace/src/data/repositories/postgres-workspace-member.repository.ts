@@ -21,7 +21,7 @@ export class PostgresWorkspaceMemberRepository
     const { userId, workspaceId } = entity;
 
     const query = this.databaseService
-      .queryBuilder(WorkspaceMemberEntity, "wm", options?.queryRunner)
+      .createQueryBuilder(WorkspaceMemberEntity, "wm", options?.queryRunner)
       .insert()
       .into(WorkspaceMemberEntity)
       .values({ userId, workspaceId })

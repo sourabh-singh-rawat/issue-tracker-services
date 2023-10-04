@@ -1,13 +1,13 @@
 import {
   CasbinPolicyManager,
   UnauthorizedError,
-  WorkspacePrivileges,
+  WorkspacePermissions,
   WorkspaceRoles,
   logger,
 } from "@sourabhrawatcc/core-utils";
 import { FastifyReply, FastifyRequest } from "fastify";
 
-export class WorkspaceCasbinPolicyManager extends CasbinPolicyManager<WorkspacePrivileges> {
+export class WorkspaceCasbinPolicyManager extends CasbinPolicyManager<WorkspacePermissions> {
   createWorkspacePolicies = async (userId: string, workspaceId: string) => {
     const adminRole = `${workspaceId}:${WorkspaceRoles.Admin}`;
     const viewerRole = `${workspaceId}:${WorkspaceRoles.Viewer}`;
@@ -18,9 +18,9 @@ export class WorkspaceCasbinPolicyManager extends CasbinPolicyManager<WorkspaceP
     await this.saveGroupingPolicy(adminRole, viewerRole);
     await this.saveGroupingPolicy(editorRole, viewerRole);
 
-    await this.savePolicy(viewerRole, workspaceId, WorkspacePrivileges.View);
-    await this.savePolicy(editorRole, workspaceId, WorkspacePrivileges.Edit);
-    await this.savePolicy(adminRole, workspaceId, WorkspacePrivileges.Delete);
+    await this.savePolicy(viewerRole, workspaceId, WorkspacePermissions.View);
+    await this.savePolicy(editorRole, workspaceId, WorkspacePermissions.Edit);
+    await this.savePolicy(adminRole, workspaceId, WorkspacePermissions.Delete);
 
     await this.saveRoleForUser(userId, adminRole);
   };
@@ -36,14 +36,12 @@ export class WorkspaceCasbinPolicyManager extends CasbinPolicyManager<WorkspaceP
     }
     const { id } = request.params;
     const { userId } = request.currentUser;
-    const isValid = this.enforce(userId, id, WorkspacePrivileges.View);
+    const isValid = this.enforce(userId, id, WorkspacePermissions.View);
     if (!isValid) {
       throw new UnauthorizedError("Does not have permission to view");
     }
     done();
   };
-
-  requireViewPermission = async () => {};
 }
 
 export const policyManager = new WorkspaceCasbinPolicyManager(logger);

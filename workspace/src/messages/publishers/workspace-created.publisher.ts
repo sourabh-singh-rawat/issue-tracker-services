@@ -1,10 +1,11 @@
-import { Publisher, Subjects } from "@sourabhrawatcc/core-utils";
+import {
+  Publisher,
+  Subjects,
+  WorkspaceCreatedPayload,
+} from "@sourabhrawatcc/core-utils";
 
 export class WorkspaceCreatedPublisher extends Publisher<{
-  payload: {
-    id: string;
-    name: string;
-  };
+  payload: WorkspaceCreatedPayload;
   subject: Subjects;
 }> {
   subject = Subjects.WORKSPACE_CREATED;
