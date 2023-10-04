@@ -1,15 +1,18 @@
-import {
-  PostgresContext,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { AccessTokenRepository } from "./interfaces/access-token-repository";
 import { AccessTokenEntity } from "../entities";
+import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresAccessTokenRepository implements AccessTokenRepository {
-  private readonly _context;
+  private readonly databaseService;
 
-  constructor(container: { postgresContext: PostgresContext }) {
-    this._context = container.postgresContext;
+  constructor(seriveContainer: RegisteredServices) {
+    this.databaseService = seriveContainer.databaseService;
+  }
+
+  existsById(id: string): Promise<boolean> {
+    console.log(id);
+    throw new Error("Method not implemented.");
   }
 
   /**
@@ -17,34 +20,28 @@ export class PostgresAccessTokenRepository implements AccessTokenRepository {
    * @param token access token to be saved
    * @param options options to be passed to query builder
    */
-  save = async (
-    token: AccessTokenEntity,
-    options?: QueryBuilderOptions,
-  ): Promise<void> => {
-    const { id, expirationAt, tokenValue, userId } = token;
+  save = async (token: AccessTokenEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this._context
-      .queryBuilder(AccessTokenEntity, "at", queryRunner)
+    const query = this.databaseService
+      .createQueryBuilder(AccessTokenEntity, "at", queryRunner)
       .insert()
       .into(AccessTokenEntity)
-      .values({ id, tokenValue, expirationAt, userId });
+      .values(token)
+      .returning("*");
 
-    await query.execute();
+    return (await query.execute()).generatedMaps[0] as AccessTokenEntity;
   };
 
   /**
    * Soft deletes the access token
    * @param id
    */
-  softDelete = async (
-    id: string,
-    options: QueryBuilderOptions,
-  ): Promise<void> => {
+  softDelete = async (id: string, options: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this._context
-      .queryBuilder(AccessTokenEntity, "at", queryRunner)
+    const query = this.databaseService
+      .createQueryBuilder(AccessTokenEntity, "at", queryRunner)
       .delete()
       .from(AccessTokenEntity)
       .where("id=:id", { id });

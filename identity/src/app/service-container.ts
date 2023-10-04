@@ -1,31 +1,32 @@
+import { Logger } from "pino";
 import { createContainer, asValue, asClass } from "awilix";
 import {
-  PostgresContext,
+  PostgresService,
   AwilixServiceContainer,
-  NatsMessageServer,
+  logger,
+  NatsMessageService,
 } from "@sourabhrawatcc/core-utils";
-import { logger } from "./logger.config";
-import { dataSource } from "./db.config";
-import { messageServer } from "./message-system.config";
+import { databaseService } from "./database-service";
+import { messageService } from "./message-service";
+
+import { IdentityController } from "../controllers/interfaces/identity-controller";
+import { IdentityService } from "../services/interfaces/identity-service";
+import { UserRepository } from "../data/repositories/interfaces/user-repository";
 
 import { CoreIdentityController } from "../controllers/core-identity.controller";
 import { CoreIdentityService } from "../services/core-identity.service";
 import { PostgresUserRepository } from "../data/repositories/postgres-user.repository";
 import { PostgresAccessTokenRepository } from "../data/repositories/postgres-access-token.repository";
 import { PostgresRefreshTokenRepository } from "../data/repositories/postgres-refresh-token.repository";
-
-import { UserRepository } from "../data/repositories/interfaces/user-repository";
-import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
-import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
-import { IdentityService } from "../services/interfaces/identity-service";
-import { IdentityController } from "../controllers/interfaces/identity-controller";
-
 import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subscribers";
 import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscribers";
+import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
+import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
 
-export interface Services {
-  postgresContext: PostgresContext;
-  messageServer: NatsMessageServer;
+export interface RegisteredServices {
+  logger: Logger;
+  databaseService: PostgresService;
+  messageService: NatsMessageService;
   identityController: IdentityController;
   identityService: IdentityService;
   userRepository: UserRepository;
@@ -35,19 +36,24 @@ export interface Services {
   userUpdatedSubscriber: UserUpdatedSubscriber;
 }
 
-const awilix = createContainer<Services>();
-export const container = new AwilixServiceContainer<Services>(awilix, logger);
+const awilix = createContainer<RegisteredServices>();
+export const serviceContainer = new AwilixServiceContainer<RegisteredServices>(
+  awilix,
+  logger,
+);
 
-const { add } = container;
+const { add } = serviceContainer;
 
-add("postgresContext", asValue(dataSource));
-add("messageServer", asValue(messageServer));
+add("logger", asValue(logger));
+add("databaseService", asValue(databaseService));
+add("messageService", asValue(messageService));
+
 add("identityController", asClass(CoreIdentityController));
 add("identityService", asClass(CoreIdentityService));
+
 add("userRepository", asClass(PostgresUserRepository));
 add("accessTokenRepository", asClass(PostgresAccessTokenRepository));
 add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
 
-// Subscriptions
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
 add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));

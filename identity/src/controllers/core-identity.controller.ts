@@ -2,13 +2,13 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { AuthCredentials } from "@sourabhrawatcc/core-utils";
 import { StatusCodes } from "http-status-codes";
 import { IdentityController } from "./interfaces/identity-controller";
-import { Services } from "../app/container.config";
+import { RegisteredServices } from "../app/service-container";
 
 export class CoreIdentityController implements IdentityController {
-  private readonly _identityService;
+  private readonly identityService;
 
-  constructor(container: Services) {
-    this._identityService = container.identityService;
+  constructor(container: RegisteredServices) {
+    this.identityService = container.identityService;
   }
 
   /**
@@ -19,12 +19,10 @@ export class CoreIdentityController implements IdentityController {
   generateTokens = async (
     request: FastifyRequest<{ Body: AuthCredentials }>,
     reply: FastifyReply,
-  ): Promise<void> => {
-    const { email, password } = request.body;
+  ) => {
+    const credentials = new AuthCredentials(request.body);
 
-    const credentials = new AuthCredentials({ email, password });
-
-    const { data } = await this._identityService.authenticate(credentials);
+    const { data } = await this.identityService.authenticate(credentials);
     const { accessToken, refreshToken } = data;
 
     const cookieOptions = {
@@ -36,7 +34,7 @@ export class CoreIdentityController implements IdentityController {
     reply.setCookie("accessToken", accessToken, cookieOptions);
     reply.setCookie("refreshToken", refreshToken, cookieOptions);
 
-    return reply.status(StatusCodes.OK).send();
+    return reply.send();
   };
 
   /**
@@ -50,7 +48,7 @@ export class CoreIdentityController implements IdentityController {
       return reply.status(StatusCodes.BAD_REQUEST).send();
     }
 
-    const { data } = await this._identityService.refreshToken({
+    const { data } = await this.identityService.refreshToken({
       accessToken,
       refreshToken,
     });
@@ -64,6 +62,6 @@ export class CoreIdentityController implements IdentityController {
     reply.setCookie("accessToken", data.accessToken, cookieOptions);
     reply.setCookie("refreshToken", data.refreshToken, cookieOptions);
 
-    return reply.status(StatusCodes.OK).send();
+    return reply.send();
   };
 }

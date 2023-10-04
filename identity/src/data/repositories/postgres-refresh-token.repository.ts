@@ -1,35 +1,29 @@
-import {
-  PostgresContext,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { RefreshTokenEntity } from "../entities";
 import { RefreshTokenRepository } from "./interfaces/refresh-token-repository";
+import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
-  private readonly _context;
+  private readonly databaseService;
 
-  constructor(container: { postgresContext: PostgresContext }) {
-    this._context = container.postgresContext;
+  constructor(serviceContainer: RegisteredServices) {
+    this.databaseService = serviceContainer.databaseService;
   }
 
-  save = async (
-    token: RefreshTokenEntity,
-    options?: QueryBuilderOptions,
-  ): Promise<RefreshTokenEntity> => {
-    const { userId, expirationAt, tokenValue, id } = token;
+  save = async (token: RefreshTokenEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-
-    const query = this._context
-      .queryBuilder(RefreshTokenEntity, "refresh_tokens", queryRunner)
+    const query = this.databaseService
+      .createQueryBuilder(RefreshTokenEntity, "refresh_tokens", queryRunner)
       .insert()
       .into(RefreshTokenEntity)
-      .values({ id, tokenValue, expirationAt, userId });
+      .values(token)
+      .returning("*");
 
-    return (await query.execute()).raw[0];
+    return (await query.execute()).raw[0] as RefreshTokenEntity;
   };
 
   existsById = async (id: string): Promise<boolean> => {
-    const result = await this._context.query<{
+    const result = await this.databaseService.query<{
       refresh_token_exists_by_id: boolean;
     }>("SELECT * FROM refresh_token_exists_by_id($1)", [id]);
 
@@ -37,7 +31,7 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   };
 
   findTokenById = async (id: string): Promise<RefreshTokenEntity> => {
-    const result = await this._context.query<RefreshTokenEntity>(
+    const result = await this.databaseService.query<RefreshTokenEntity>(
       "SELECT * FROM find_refresh_token_by_id($1)",
       [id],
     );
@@ -49,14 +43,11 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
    * Soft deletes the refresh token
    * @param id
    */
-  softDelete = async (
-    id: string,
-    options?: QueryBuilderOptions,
-  ): Promise<void> => {
+  softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this._context
-      .queryBuilder(RefreshTokenEntity, "at", queryRunner)
+    const query = this.databaseService
+      .createQueryBuilder(RefreshTokenEntity, "at", queryRunner)
       .softDelete()
       .where("id=:id", { id });
 

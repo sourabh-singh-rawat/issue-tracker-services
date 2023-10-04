@@ -4,7 +4,8 @@ CREATE OR REPLACE FUNCTION find_user_by_email (
 RETURNS TABLE (
   id UUID,
   email TEXT,
-  "isEmailVerified" BOOLEAN
+  "isEmailVerified" BOOLEAN,
+  "defaultWorkspaceId" uuid
 )
 LANGUAGE PLPGSQL AS $$
   BEGIN
@@ -12,7 +13,8 @@ LANGUAGE PLPGSQL AS $$
       SELECT 
         u.id, 
         u.email,
-        u.is_email_verified
+        u.is_email_verified,
+        u.default_workspace_id
       FROM users AS u 
       WHERE u.email ILIKE p_email;
   END;
