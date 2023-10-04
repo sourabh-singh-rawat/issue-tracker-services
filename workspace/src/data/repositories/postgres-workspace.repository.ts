@@ -20,7 +20,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
     const { id, name, description, ownerUserId } = workspace;
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .queryBuilder(WorkspaceEntity, "w", queryRunner)
+      .createQueryBuilder(WorkspaceEntity, "w", queryRunner)
       .insert()
       .into(WorkspaceEntity)
       .values({ id, name, description, ownerUserId })
@@ -53,6 +53,15 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
     );
 
     return result[0];
+  };
+
+  find = async (userId: string) => {
+    const result = await this.databaseService.query<WorkspaceEntity>(
+      "SELECT * FROM find_workspaces_by_user_id($1)",
+      [userId],
+    );
+
+    return result;
   };
 
   softDelete(id: string, options?: QueryBuilderOptions): Promise<void> {

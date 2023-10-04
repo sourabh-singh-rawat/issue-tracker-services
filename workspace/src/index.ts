@@ -1,6 +1,6 @@
 import { serviceContainer } from "./app/service-container";
 import { httpServer } from "./app/http-server";
-import { WorkspaceMemberRoles } from "./data/entities/workspace-member-roles";
+import { WorkspaceMemberPermissions } from "./data/entities/workspace-member-permission.entity";
 
 const startServer = async () => {
   try {
@@ -11,7 +11,7 @@ const startServer = async () => {
     await serviceContainer
       .get("policyManager")
       .initialize(serviceContainer.get("dbSource"), {
-        customCasbinRuleEntity: WorkspaceMemberRoles,
+        customCasbinRuleEntity: WorkspaceMemberPermissions,
       });
 
     // Start the server
@@ -24,8 +24,7 @@ const startServer = async () => {
 
 // Start message subscription
 const startSubscriptions = () => {
-  const userCreatedSubscriber = serviceContainer.get("userCreatedSubscriber");
-  userCreatedSubscriber.fetchMessages();
+  serviceContainer.get("userCreatedSubscriber").fetchMessages();
 };
 
 const main = async () => {

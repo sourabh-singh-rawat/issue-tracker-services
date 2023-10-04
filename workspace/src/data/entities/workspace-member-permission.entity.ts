@@ -1,8 +1,8 @@
 import { Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import TypeORMAdapter, { CasbinRule } from "typeorm-adapter";
+import { CasbinRule } from "typeorm-adapter";
 
-@Entity({ name: "workspace_member_roles" })
-export class WorkspaceMemberRoles extends CasbinRule {
+@Entity({ name: "workspace_member_permissions" })
+export class WorkspaceMemberPermissions extends CasbinRule {
   @CreateDateColumn({ name: "created_at", type: "timestamp with time zone" })
   createdDate!: Date;
 

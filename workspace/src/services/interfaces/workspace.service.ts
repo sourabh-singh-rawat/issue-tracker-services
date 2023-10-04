@@ -1,12 +1,16 @@
-import { ServiceResponse } from "@sourabhrawatcc/core-utils";
-import { WorkspaceEntity } from "../../data/entities";
+import {
+  QueryBuilderOptions,
+  ServiceResponse,
+  WorkspaceRegistrationData,
+} from "@sourabhrawatcc/core-utils";
+import { UserEntity, WorkspaceEntity } from "../../data/entities";
 
 export interface WorkspaceService {
   createWorkspace(
     userId: string,
-    inputs: { name: string; description?: string },
+    workspace: WorkspaceRegistrationData,
   ): Promise<ServiceResponse<string>>;
-
-  getAllWorkspaces(userId: string): Promise<ServiceResponse<string>>;
+  createDefaultWorkspace(userId: string, workspaceId: string): Promise<void>;
+  getAllWorkspaces(userId: string): Promise<ServiceResponse<WorkspaceEntity[]>>;
   getWorkspace(id: string): Promise<ServiceResponse<WorkspaceEntity>>;
 }

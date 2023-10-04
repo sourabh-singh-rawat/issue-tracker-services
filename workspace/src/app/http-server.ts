@@ -12,7 +12,7 @@ httpServer.register(cors, {
 });
 httpServer.register(cookie, { secret: process.env.JWT_SECRET });
 httpServer.addHook("preHandler", Auth.requireTokens);
-httpServer.addHook("preHandler", Auth.currentUser);
+httpServer.addHook("preHandler", Auth.setCurrentUser);
 httpServer.addHook("preHandler", Auth.requireAuth);
 httpServer.setErrorHandler(ErrorHandler.handleError);
 
