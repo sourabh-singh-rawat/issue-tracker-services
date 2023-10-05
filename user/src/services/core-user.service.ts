@@ -7,23 +7,25 @@ import {
   UserRegistrationData,
   UserProfileNotFoundError,
   UserDetails,
+  TransactionExecutionError,
 } from "@sourabhrawatcc/core-utils";
 import { UserService } from "./interface/user.service";
 import { RegisteredServices } from "../app/service-container";
 import { UserEntity } from "../data/entities/user.entity";
 import { UserProfileEntity } from "../data/entities/user-profile.entity";
 import { UserCreatedPublisher } from "../messages/publishers/user-created.publisher";
-import { messageService } from "../app/message-system.config";
 
 export class CoreUserService implements UserService {
   private readonly databaseService;
   private readonly userRepository;
   private readonly userProfileRepository;
+  private readonly messageService;
 
   constructor(serviceContainer: RegisteredServices) {
     this.databaseService = serviceContainer.databaseService;
     this.userRepository = serviceContainer.userRepository;
     this.userProfileRepository = serviceContainer.userProfileRepository;
+    this.messageService = serviceContainer.messageService;
   }
 
   /**
@@ -64,9 +66,12 @@ export class CoreUserService implements UserService {
     newUser.email = email;
     newUser.passwordHash = hash;
     newUser.passwordSalt = salt;
+    newUser.defaultWorkspaceName = "Default Workspace";
 
     // Create user and their profile
+    const queryRunner = this.databaseService.createQueryRunner();
     const savedUser = await this.databaseService.transaction(
+      queryRunner,
       async (queryRunner) => {
         const savedUser = await this.userRepository.save(newUser, {
           queryRunner,
@@ -82,14 +87,26 @@ export class CoreUserService implements UserService {
       },
     );
 
+    if (!savedUser) {
+      throw new TransactionExecutionError("User creation failed");
+    }
+
     const userCreatedPublisher = new UserCreatedPublisher(
-      messageService.client,
+      this.messageService.client,
     );
     await userCreatedPublisher.publish({
       userId: savedUser.id,
       email: savedUser.email,
       defaultWorkspaceId: savedUser.defaultWorkspaceId,
     });
+  };
+
+  setDefaultWorkspace = async (userId: string, id: string, name: string) => {
+    const updatedUser = new UserEntity();
+    updatedUser.defaultWorkspaceId = id;
+    updatedUser.defaultWorkspaceName = name;
+
+    await this.userRepository.update(userId, updatedUser);
   };
 
   /**
@@ -121,10 +138,11 @@ export class CoreUserService implements UserService {
     if (!userProfile) throw new UserProfileNotFoundError();
 
     const userDetails = new UserDetails({
-      id: user.id,
+      userId: user.id,
       email: user.email,
       displayName: userProfile.displayName,
       defaultWorkspaceId: user.defaultWorkspaceId,
+      defaultWorkspaceName: user.defaultWorkspaceName,
       createdAt: user.createdAt,
       isEmailVerified: user.isEmailVerified,
     });

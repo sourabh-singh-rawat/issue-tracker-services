@@ -4,10 +4,10 @@ import {
   PostgresService,
   AwilixServiceContainer,
   logger,
-  MessageService,
+  NatsMessageService,
 } from "@sourabhrawatcc/core-utils";
 import { databaseService } from "./database-service";
-import { messageService } from "./message-system.config";
+import { messageService } from "./message-service";
 
 import { UserController } from "../controllers/interfaces/user.controller";
 import { UserService } from "../services/interface/user.service";
@@ -22,7 +22,7 @@ import { PostgresUserProfileRepository } from "../data/repositories/postgres-use
 export interface RegisteredServices {
   logger: Logger;
   databaseService: PostgresService;
-  messageService: MessageService;
+  messageService: NatsMessageService;
   userController: UserController;
   userService: UserService;
   userRepository: UserRepository;
@@ -30,12 +30,12 @@ export interface RegisteredServices {
 }
 
 const awilix = createContainer<RegisteredServices>();
-export const container = new AwilixServiceContainer<RegisteredServices>(
+export const serviceContainer = new AwilixServiceContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = container;
+const { add } = serviceContainer;
 
 add("logger", asValue(logger));
 add("databaseService", asValue(databaseService));

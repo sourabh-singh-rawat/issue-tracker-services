@@ -11,7 +11,7 @@ httpServer.register(cors, {
   credentials: true,
 });
 httpServer.register(cookie, { secret: process.env.JWT_SECRET });
-httpServer.addHook("preHandler", Auth.currentUser);
+httpServer.addHook("preHandler", Auth.setCurrentUser);
 httpServer.setErrorHandler(ErrorHandler.handleError);
 
 httpServer.register(userRoutes, { prefix: "/api/v1/users" });

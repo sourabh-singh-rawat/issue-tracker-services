@@ -11,7 +11,7 @@ export class UserCreatedPublisher extends Publisher<{
 }> {
   subject = Subjects.USER_CREATED;
 
-  constructor(client: NatsConnection) {
+  constructor(client?: NatsConnection) {
     super(client);
   }
 }

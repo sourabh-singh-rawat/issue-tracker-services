@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import {
   AuthCredentials,
   UserRegistrationData,
+  WorkspaceRegistrationData,
 } from "@sourabhrawatcc/core-utils";
 import { UserController } from "./interfaces/user.controller";
 import { RegisteredServices } from "../app/service-container";
@@ -34,6 +35,18 @@ export class CoreUserController implements UserController {
     return reply.status(StatusCodes.CREATED).send();
   };
 
+  // Route handler for changing default workspace
+  setDefaultWorkspace = async (
+    request: FastifyRequest<{ Body: { id: string; name: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const { userId } = request.currentUser;
+    const { id, name } = request.body;
+
+    await this.userService.setDefaultWorkspace(userId, id, name);
+    return reply.send();
+  };
+
   /**
    * Route handler for verifying password of existing users.
    * @returns status code
@@ -47,7 +60,7 @@ export class CoreUserController implements UserController {
     const authCredentials = new AuthCredentials({ email, password });
     await this.userService.verifyPassword(authCredentials);
 
-    return reply.status(StatusCodes.OK).send();
+    return reply.send();
   };
 
   /**
@@ -60,6 +73,6 @@ export class CoreUserController implements UserController {
 
     const user = await this.userService.getUserInfoByEmail(email);
 
-    return reply.status(StatusCodes.OK).send(user);
+    return reply.send(user);
   };
 }
