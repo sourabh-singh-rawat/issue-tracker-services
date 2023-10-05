@@ -28,6 +28,9 @@ paths:
   /users/me:
     description: Gets the current logged in user
     $ref: user/paths/me.yaml
+  /users/default-workspace:
+    description: Gets the current logged in user
+    $ref: user/paths/default-workspace.yaml
   /identity/generate-tokens:
     description: Generate access and refresh tokens
     $ref: identity/paths/generate-tokens.yaml
