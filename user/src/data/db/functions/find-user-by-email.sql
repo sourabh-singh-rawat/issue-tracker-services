@@ -8,7 +8,8 @@ RETURNS TABLE (
   "passwordHash" TEXT,
   "passwordSalt" TEXT,
   "isEmailVerified" BOOLEAN,
-  "defaultWorkspaceId" UUID
+  "defaultWorkspaceId" UUID,
+  "defaultWorkspaceName" TEXT
 )
 LANGUAGE PLPGSQL AS $$
   BEGIN
@@ -19,7 +20,8 @@ LANGUAGE PLPGSQL AS $$
         u.password_hash,
         u.password_salt,
         u.is_email_verified,
-        u.default_workspace_id
+        u.default_workspace_id,
+        u.default_workspace_name
       FROM users AS u 
       WHERE u.email ILIKE p_email;
   END;

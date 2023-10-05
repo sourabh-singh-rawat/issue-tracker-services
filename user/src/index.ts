@@ -1,4 +1,4 @@
-import { container } from "./app/service-container";
+import { serviceContainer } from "./app/service-container";
 import { httpServer } from "./app/http-server";
 
 const SERVER_PORT = 4000;
@@ -6,13 +6,13 @@ const SERVER_HOST = "0.0.0.0";
 
 const startServer = async () => {
   try {
-    await container.connect();
-    await container.get("databaseService").connect();
-    await container.get("messageService").connect();
+    await serviceContainer.initialize();
+    await serviceContainer.get("databaseService").connect();
+    await serviceContainer.get("messageService").connect();
 
     httpServer.listen({ port: SERVER_PORT, host: SERVER_HOST });
   } catch (error) {
-    container.get("logger").error(error);
+    serviceContainer.get("logger").error(error);
     process.exit(1);
   }
 };

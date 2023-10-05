@@ -35,7 +35,7 @@ export class PostgresUserRepository implements UserRepository {
       [email],
     );
 
-    return result[0];
+    return result[0] as UserEntity;
   };
 
   /**
@@ -56,18 +56,13 @@ export class PostgresUserRepository implements UserRepository {
    * Creates a new user.
    * @param user Object that represents the user to be created
    */
-  save = async (
-    user: UserEntity,
-    options?: QueryBuilderOptions,
-  ): Promise<UserEntity> => {
-    const { email, passwordHash, passwordSalt } = user;
+  save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-
     const query = this._context
-      .queryBuilder(UserEntity, "u", queryRunner)
+      .createQueryBuilder(UserEntity, "u", queryRunner)
       .insert()
       .into(UserEntity)
-      .values({ email, passwordHash, passwordSalt })
+      .values(user)
       .returning("*");
 
     return (await query.execute()).generatedMaps[0] as UserEntity;
@@ -88,6 +83,29 @@ export class PostgresUserRepository implements UserRepository {
   };
 
   /**
+   * Updates an existing user by ID.
+   * @param id The ID of the user to be updated.
+   * @param updateUser Partial object containing fields to be updated.
+   * @param options Additional query builder options.
+   * @returns Updated user object.
+   */
+  update = async (
+    id: string,
+    updateUser: UserEntity,
+    options?: QueryBuilderOptions,
+  ) => {
+    const queryRunner = options?.queryRunner;
+    const query = this._context
+      .createQueryBuilder(UserEntity, "u", queryRunner)
+      .update(UserEntity)
+      .set(updateUser)
+      .where("id = :id", { id })
+      .returning("*");
+
+    await query.execute();
+  };
+
+  /**
    * Soft delete an existing user (kinda like archive)
    * @param id
    */
@@ -98,7 +116,7 @@ export class PostgresUserRepository implements UserRepository {
     const queryRunner = options?.queryRunner;
 
     const query = this._context
-      .queryBuilder(UserEntity, "users", queryRunner)
+      .createQueryBuilder(UserEntity, "users", queryRunner)
       .softDelete()
       .where("id = :id", { id });
 
