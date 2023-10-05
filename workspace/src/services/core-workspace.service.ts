@@ -28,16 +28,21 @@ export class CoreWorkspaceService implements WorkspaceService {
     this.workspaceMemberRepository = serviceContainer.workspaceMemberRepository;
   }
 
+  // Optionally can also save user
   private saveWorkspace = async (
     workspace: WorkspaceEntity,
     workspaceMember: WorkspaceMemberEntity,
-    options: QueryBuilderOptions,
+    user?: UserEntity,
   ) => {
-    const { queryRunner } = options;
+    const queryRunner = this.databaseService.createQueryRunner();
 
-    return await this.databaseService.transaction(
+    const savedWorkspace = await this.databaseService.transaction(
       queryRunner,
       async (queryRunner) => {
+        if (user) {
+          await this.userRepository.save(user, { queryRunner });
+        }
+
         const savedWorkspace = await this.workspaceRepository.save(workspace, {
           queryRunner,
         });
@@ -52,6 +57,14 @@ export class CoreWorkspaceService implements WorkspaceService {
         return savedWorkspace;
       },
     );
+
+    if (!savedWorkspace) {
+      throw new TransactionExecutionError(
+        "Failed to save workspace, member, and policies",
+      );
+    }
+
+    return savedWorkspace;
   };
 
   createDefaultWorkspace = async (userId: string, workspaceId: string) => {
@@ -68,12 +81,19 @@ export class CoreWorkspaceService implements WorkspaceService {
     newWorkspaceMember.userId = userId;
     newWorkspaceMember.workspaceId = workspaceId;
 
-    const queryRunner = this.databaseService.createQueryRunner();
-    this.databaseService.transaction(queryRunner, async (queryRunner) => {
-      await this.userRepository.save(newUser, { queryRunner });
-      await this.saveWorkspace(newWorkspace, newWorkspaceMember, {
-        queryRunner,
-      });
+    const savedWorkspace = await this.saveWorkspace(
+      newWorkspace,
+      newWorkspaceMember,
+      newUser,
+    );
+
+    const workspaceCreatedPublisher = new WorkspaceCreatedPublisher(
+      this.messageService.client,
+    );
+    await workspaceCreatedPublisher.publish({
+      id: savedWorkspace.id,
+      name: savedWorkspace.name,
+      ownerId: savedWorkspace.ownerUserId,
     });
   };
 
@@ -94,19 +114,10 @@ export class CoreWorkspaceService implements WorkspaceService {
     newWorkspaceMember.userId = userId;
     newWorkspaceMember.workspaceId = workspaceId;
 
-    const queryRunner = this.databaseService.createQueryRunner();
-    const savedWorkspace = await this.databaseService.transaction(
-      queryRunner,
-      async (queryRunner) => {
-        return await this.saveWorkspace(newWorkspace, newWorkspaceMember, {
-          queryRunner,
-        });
-      },
+    const savedWorkspace = await this.saveWorkspace(
+      newWorkspace,
+      newWorkspaceMember,
     );
-
-    if (!savedWorkspace) {
-      throw new TransactionExecutionError("failed to create workspace");
-    }
 
     const workspaceCreatedPublisher = new WorkspaceCreatedPublisher(
       this.messageService.client,
