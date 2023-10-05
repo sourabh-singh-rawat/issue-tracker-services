@@ -8,6 +8,10 @@ build:
     context: identity
     docker:
       dockerfile: Dockerfile
+  - image: sourabhrawatcc/project
+    context: project
+    docker:
+      dockerfile: Dockerfile
   - image: sourabhrawatcc/user
     context: user
     docker:
@@ -23,6 +27,11 @@ deploy:
       chartPath: ./k8s/microservice
       valuesFiles:
       - ./k8s/microservice/identity.values.yaml
+
+    - name: project
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/project.values.yaml
 
     - name: user
       chartPath: ./k8s/microservice
