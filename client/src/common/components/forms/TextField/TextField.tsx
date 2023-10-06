@@ -5,7 +5,6 @@ import React from "react";
 import MuiGrid from "@mui/material/Grid";
 import MuiSkeleton from "@mui/material/Skeleton";
 import Label from "../Label";
-import Field from "../Field";
 import {
   Control,
   Controller,
@@ -14,6 +13,7 @@ import {
   Path,
   UseControllerProps,
 } from "react-hook-form";
+import StyledTextField from "../../styled/StyledTextField";
 
 interface TextFieldProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -44,7 +44,6 @@ export default function TextField<DefaultValues extends FieldValues>({
   isMultiline,
   endAdornment,
 }: TextFieldProps<DefaultValues>) {
-
   return (
     <MuiGrid container>
       {title && (
@@ -66,7 +65,7 @@ export default function TextField<DefaultValues extends FieldValues>({
             control={control}
             rules={rules}
             render={({ field }) => (
-              <Field
+              <StyledTextField
                 type={type}
                 id={field.name}
                 name={field.name}
@@ -76,11 +75,13 @@ export default function TextField<DefaultValues extends FieldValues>({
                 helperText={
                   (formState.errors[name]?.message as string) || helperText
                 }
+                size="small"
                 rows={rows}
-                isInvalid={Boolean(formState.errors[name])}
-                isDisabled={isDisabled}
-                isMultiline={isMultiline}
-                endAdornment={endAdornment}
+                InputProps={endAdornment}
+                error={Boolean(formState.errors[name])}
+                disabled={isDisabled}
+                multiline={isMultiline}
+                fullWidth
               />
             )}
           />

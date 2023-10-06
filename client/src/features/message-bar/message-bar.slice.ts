@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { LogLevels } from "../../common/enums/log-level.enum";
+import { AlertColor } from "@mui/material";
 
 const initialState = {
   message: "",
   isOpen: false,
-  level: LogLevels.INFO,
+  severity: "info",
 };
 
 const messageBarSlice = createSlice({
@@ -13,12 +13,15 @@ const messageBarSlice = createSlice({
   reducers: {
     showMessage: (
       slice,
-      action: PayloadAction<{ message: string; level?: LogLevels }>,
+      action: PayloadAction<{
+        message: string;
+        severity: AlertColor;
+      }>,
     ) => ({
       ...slice,
       message: action.payload.message,
-      level: action.payload.level ? action.payload.level : slice.level,
       isOpen: true,
+      severity: action.payload.severity,
     }),
     hideMessage: (slice) => ({ ...slice, isOpen: false }),
   },

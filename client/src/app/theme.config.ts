@@ -38,53 +38,65 @@ declare module "@mui/material/styles" {
   }
 }
 
+// const mode = "light";
+const mode: "dark" | "light" = "dark";
+
 export const theme = createTheme({
   spacing: 8,
   palette: {
-    mode: "light",
-    primary: {
-      main: "#6e56cf",
-      dark: "#5136BF",
-    },
-    secondary: {
-      main: "#323239",
-      100: "#f7f7f8",
-      200: "#e6e6ea",
-      300: "#d3d3d9",
-      400: "#dedee3",
-      500: "#adadb8",
-      600: "#53535f",
-      700: "#323239",
-      800: "#1f1f23",
-      900: "#0e0e10",
-    },
-    error: {
-      main: "#bb1411",
-      dark: "#530a09",
-      light: "#eb0400",
-    },
-    success: {
-      main: "#018852",
-      dark: "#074029",
-    },
-    warning: {
-      main: "#7c570e",
-      dark: "#372706",
-      light: "#9e6900",
-    },
-    grey: {
-      100: "#f7f7f8",
-      200: "#e6e6ea",
-      300: "#d3d3d9",
-      400: "#dedee3",
-      500: "#adadb8",
-      600: "#53535f",
-      700: "#323239",
-      800: "#1f1f23",
-      900: "#0e0e10",
-    },
-    text: { primary: "#191919" },
-    divider: "#d3d3d9",
+    mode,
+    ...(mode === "light"
+      ? {
+          primary: { main: "#9147ff" },
+          secondary: {
+            main: "#323239",
+            100: "#f7f7f8",
+            200: "#e6e6ea",
+            300: "#d3d3d9",
+            400: "#dedee3",
+            500: "#adadb8",
+            600: "#53535f",
+            700: "#323239",
+            800: "#1f1f23",
+            900: "#0e0e10",
+          },
+          error: {
+            main: "#bb1411",
+            dark: "#530a09",
+            light: "#eb0400",
+          },
+          success: {
+            main: "#018852",
+            dark: "#074029",
+          },
+          warning: {
+            main: "#7c570e",
+            dark: "#372706",
+            light: "#9e6900",
+          },
+          grey: {
+            100: "#f7f7f8",
+            200: "#e6e6ea",
+            300: "#d3d3d9",
+            400: "#dedee3",
+            500: "#adadb8",
+            600: "#53535f",
+            700: "#323239",
+            800: "#1f1f23",
+            900: "#0e0e10",
+          },
+          text: { primary: "#191919" },
+          divider: "#d3d3d9",
+        }
+      : {
+          primary: { main: "#9147ff" },
+          text: { primary: "#adbac7" },
+          background: {
+            default: "#1c2128",
+            paper: "#22272e",
+          },
+          divider: "#444c56",
+        }),
   },
   shape: {
     borderWidthDefault: "1px",

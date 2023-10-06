@@ -16,7 +16,9 @@ function SlideTransition(props: SlideProps) {
 
 export default function MessageBar() {
   const dispatch = useAppDispatch();
-  const { message, isOpen } = useAppSelector((store) => store.messageBar);
+  const { message, isOpen, severity } = useAppSelector(
+    (store) => store.messageBar,
+  );
 
   const handleClose = (e: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") return;
@@ -39,7 +41,7 @@ export default function MessageBar() {
       TransitionComponent={SlideTransition}
       onClose={handleClose}
     >
-      <MuiAlert severity="error" onClose={handleClose}>
+      <MuiAlert severity={severity} onClose={handleClose}>
         <MuiTypography variant="body1">{message}</MuiTypography>
       </MuiAlert>
     </MuiSnackbar>

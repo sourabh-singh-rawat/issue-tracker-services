@@ -10,7 +10,6 @@ import MuiBugReportIcon from "@mui/icons-material/BugReport";
 
 import NavbarGroup from "../NavbarGroup";
 import AccountSwitcher from "../../../../features/auth/components/AccountSwitcher";
-import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 import Notifications from "../../../../features/notifications/components/Notification/Notifications";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
@@ -23,16 +22,17 @@ function Navbar() {
   return (
     <AppBar position="fixed" sx={{ boxShadow: theme.shadows[1] }}>
       <MuiToolbar
-        sx={{ backgroundColor: theme.palette.text.primary }}
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          boxShadow: theme.shadows[12],
+        }}
         variant="dense"
         disableGutters
       >
         <MuiGrid
           alignItems="center"
-          sx={{
-            display: "flex",
-            px: theme.spacing(2),
-          }}
+          sx={{ display: "flex", px: theme.spacing(2) }}
           columnGap={2}
           container
         >
@@ -52,26 +52,11 @@ function Navbar() {
                 </MuiGrid>
               </MuiGrid>
             </Link>
-            <MuiGrid item>
-              <WorkspaceSwitcher />
-            </MuiGrid>
           </NavbarGroup>
 
           <NavbarGroup>
             <MuiGrid item flexGrow={1}></MuiGrid>
           </NavbarGroup>
-
-          {/* <NavbarGroup>
-            <MuiGrid item flexGrow={1}>
-              <NavbarTextItemGroup
-                items={[
-                  { label: "Projects", to: "/projects" },
-                  { label: "Issues", to: "/issues" },
-                  { label: "Tasks", to: "/tasks" },
-                ]}
-              />
-            </MuiGrid>
-          </NavbarGroup> */}
 
           <NavbarGroup>
             <MuiGrid item>
