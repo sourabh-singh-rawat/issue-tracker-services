@@ -15,6 +15,7 @@ import MuiStarTwoToneIcon from "@mui/icons-material/StarTwoTone";
 
 import SidebarGroup from "../SidebarGroup";
 import SidebarGroupItem from "../SidebarGroupItem";
+import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const opendrawerWidth = theme.spacing(28);
@@ -28,10 +29,11 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
     "& .MuiPaper-root": {
       border: "none",
       backgroundColor: theme.palette.background.paper,
-      borderRight: `1px solid ${theme.palette.grey[400]}`,
+      borderRight: `1px solid ${theme.palette.divider}`,
     },
     "& .MuiDrawer-paper": {
-      padding: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
       transition: theme.transitions.create(["width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -71,6 +73,7 @@ export default function Sidebar() {
       }}
     >
       <MuiToolbar variant="dense" disableGutters />
+      <WorkspaceSwitcher isLargeScreen={isLargeScreen} />
       <MuiList disablePadding>
         <SidebarGroupItem
           avatarIcon={<MuiGridViewTwoToneIcon />}

@@ -2,7 +2,11 @@ import React from "react";
 import MuiBox from "@mui/material/Box";
 import MuiCircularProgress from "@mui/material/CircularProgress";
 
-export default function AppLoader() {
+interface AppLoaderProps {
+  size?: string;
+}
+
+export default function AppLoader({ size }: AppLoaderProps) {
   return (
     <MuiBox
       style={{
@@ -13,7 +17,7 @@ export default function AppLoader() {
         alignItems: "center",
       }}
     >
-      <MuiCircularProgress />
+      <MuiCircularProgress size={size} />
     </MuiBox>
   );
 }

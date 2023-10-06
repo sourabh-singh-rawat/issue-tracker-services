@@ -16,6 +16,17 @@ const injectedRtkApi = api
           invalidatesTags: ["user"],
         },
       ),
+      setDefaultWorkspace: build.mutation<
+        SetDefaultWorkspaceApiResponse,
+        SetDefaultWorkspaceApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/default-workspace`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["user"],
+      }),
     }),
     overrideExisting: false,
   });
@@ -29,10 +40,19 @@ export type RegisterUserApiArg = {
     displayName: string;
   };
 };
+export type SetDefaultWorkspaceApiResponse =
+  /** status 200 Default workspace updated successfully */ undefined;
+export type SetDefaultWorkspaceApiArg = {
+  body: {
+    id: string;
+    name: string;
+  };
+};
 export type Schema = {
   errors?: {
     message: string;
     field?: string;
   }[];
 };
-export const { useRegisterUserMutation } = injectedRtkApi;
+export const { useRegisterUserMutation, useSetDefaultWorkspaceMutation } =
+  injectedRtkApi;

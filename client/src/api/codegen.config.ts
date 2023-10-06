@@ -9,7 +9,13 @@ const config: ConfigFile = {
       filterEndpoints: ["generateTokens", "getCurrentUser"],
     },
     "./generated/user.api.ts": {
-      filterEndpoints: ["registerUser"],
+      filterEndpoints: ["registerUser", "setDefaultWorkspace"],
+    },
+    "./generated/workspace.api.ts": {
+      filterEndpoints: ["getAllWorkspaces", "getWorkspace", "createWorkspace"],
+    },
+    "./generated/project.api.ts": {
+      filterEndpoints: ["createProject"],
     },
   },
   exportName: "issueTrackerApi",

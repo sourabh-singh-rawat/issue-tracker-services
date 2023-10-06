@@ -2,9 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: {
   currentUser: null | {
-    id: string;
+    defaultWorkspaceId: string;
+    defaultWorkspaceName: string;
     displayName: string;
-    photoUrl: string;
+    email: string;
+    isEmailVerified: boolean;
+    userId: string;
   };
   isLoading: boolean;
 } = {

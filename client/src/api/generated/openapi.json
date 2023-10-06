@@ -23,6 +23,10 @@
     {
       "name": "user",
       "description": "User management"
+    },
+    {
+      "name": "workspace",
+      "description": "Create and manage workspaces"
     }
   ],
   "paths": {
@@ -297,6 +301,72 @@
         }
       }
     },
+    "/users/default-workspace": {
+      "description": "Gets the current logged in user",
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Sets default workspace",
+        "description": "Set default workspace for the user",
+        "operationId": "setDefaultWorkspace",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default workspace updated successfully"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/identity/generate-tokens": {
       "description": "Generate access and refresh tokens",
       "post": {
@@ -424,6 +494,338 @@
           },
           "500": {
             "description": "Internal Server Error - An unexpected server error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces": {
+      "description": "Create and get workspaces",
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Get all workspaces",
+        "description": "Get all workspaces of the user",
+        "operationId": "getAllWorkspaces",
+        "responses": {
+          "201": {
+            "description": "all workspaces",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "createdAt"
+                        ]
+                      }
+                    },
+                    "dataCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "dataCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Create a workspace",
+        "description": "Create a new workspace to start adding projects",
+        "operationId": "createWorkspace",
+        "requestBody": {
+          "description": "Fields used to create a workspace",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "default": "Untitled"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Workspace created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{id}": {
+      "description": "Create and get workspaces",
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Get workspace",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Numeric id of the workspace to get"
+          }
+        ],
+        "description": "Get workspaces of the user",
+        "operationId": "getWorkspace",
+        "responses": {
+          "200": {
+            "description": "Returns the workspace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects": {
+      "description": "Create and get projects",
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Create a new project",
+        "description": "Create a new project",
+        "operationId": "createProject",
+        "requestBody": {
+          "description": "Fields used for creating a new project",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "default": "Untitled"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "default": null
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "minLength": 1,
+                    "default": null
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project created successfully"
+          },
+          "400": {
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {

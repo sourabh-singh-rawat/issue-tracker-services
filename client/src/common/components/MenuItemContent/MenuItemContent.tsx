@@ -1,5 +1,4 @@
 import React from "react";
-import { useTheme } from "@mui/material";
 
 import MuiTypography from "@mui/material/Typography";
 import StyledListItemButton from "../styled/StyledListItemButton";
@@ -18,21 +17,11 @@ export default function MenuItemContent({
   indicatorIcon,
   onClick,
 }: MenuItemContentProps) {
-  const theme = useTheme();
-
   return (
     <StyledListItemButton onClick={onClick} disableRipple>
       <StyledListItemIcon>{avatarIcon}</StyledListItemIcon>
       {label && (
-        <MuiTypography
-          sx={{
-            ml: 1,
-            flexGrow: 1,
-            fontWeight: theme.typography.fontWeightMedium,
-          }}
-        >
-          {label}
-        </MuiTypography>
+        <MuiTypography sx={{ ml: 1, flexGrow: 1 }}>{label}</MuiTypography>
       )}
       <StyledListItemIcon>{indicatorIcon}</StyledListItemIcon>
     </StyledListItemButton>

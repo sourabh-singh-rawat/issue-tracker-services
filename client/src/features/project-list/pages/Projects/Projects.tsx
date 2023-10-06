@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import React from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
@@ -6,14 +5,10 @@ import MuiGrid from "@mui/material/Grid";
 
 import SectionHeader from "../../../../common/components/SectionHeader";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-// import { reset } from "../../../project/project.slice";
 
 function Projects() {
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
   const { pathname } = useLocation();
-
-  // useEffect(() => () => dispatch(reset()), []);
 
   return (
     <MuiGrid gap="40px" container>
