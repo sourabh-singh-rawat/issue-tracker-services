@@ -14,6 +14,7 @@ import { RegisteredServices } from "../app/service-container";
 import { UserEntity } from "../data/entities/user.entity";
 import { UserProfileEntity } from "../data/entities/user-profile.entity";
 import { UserCreatedPublisher } from "../messages/publishers/user-created.publisher";
+import { UserUpdatedPublisher } from "../messages/publishers/user-updated.publisher";
 
 export class CoreUserService implements UserService {
   private readonly databaseService;
@@ -22,11 +23,15 @@ export class CoreUserService implements UserService {
   private readonly messageService;
 
   constructor(serviceContainer: RegisteredServices) {
+    this.messageService = serviceContainer.messageService;
     this.databaseService = serviceContainer.databaseService;
     this.userRepository = serviceContainer.userRepository;
     this.userProfileRepository = serviceContainer.userProfileRepository;
-    this.messageService = serviceContainer.messageService;
   }
+
+  private getUserById = async (userId: string) => {
+    return await this.userRepository.findById(userId);
+  };
 
   /**
    * Returns user, if user exists else returns null.
@@ -50,9 +55,7 @@ export class CoreUserService implements UserService {
    * Creates a new user with provided credentials
    * @param credentials
    */
-  createUser = async (
-    userRegistrationData: UserRegistrationData,
-  ): Promise<void> => {
+  createUser = async (userRegistrationData: UserRegistrationData) => {
     const { email, password, displayName } = userRegistrationData;
 
     // Check if the user already exists
@@ -102,11 +105,26 @@ export class CoreUserService implements UserService {
   };
 
   setDefaultWorkspace = async (userId: string, id: string, name: string) => {
+    const user = await this.getUserById(userId);
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+
     const updatedUser = new UserEntity();
     updatedUser.defaultWorkspaceId = id;
     updatedUser.defaultWorkspaceName = name;
 
     await this.userRepository.update(userId, updatedUser);
+
+    // publish user updated
+    const userUpdatedPublisher = new UserUpdatedPublisher(
+      this.messageService.client,
+    );
+    await userUpdatedPublisher.publish({
+      userId,
+      defaultWorkspaceId: id,
+      version: user.version,
+    });
   };
 
   /**

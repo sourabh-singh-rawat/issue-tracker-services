@@ -1,11 +1,5 @@
 import { AuditEntity } from "@sourabhrawatcc/core-utils";
-import {
-  Check,
-  Column,
-  Entity,
-  Generated,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, Generated, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {

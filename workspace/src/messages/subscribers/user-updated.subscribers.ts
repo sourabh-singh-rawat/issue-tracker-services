@@ -1,19 +1,26 @@
-import { Consumers, Streams, Subscriber } from "@sourabhrawatcc/core-utils";
+import {
+  Consumers,
+  Streams,
+  Subscriber,
+  UserUpdatedPayload,
+} from "@sourabhrawatcc/core-utils";
 import { RegisteredServices } from "../../app/service-container";
 import { JsMsg } from "nats";
 
-export class UserUpdatedSubscriber extends Subscriber<string> {
+export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserUpdatedConsumerWorkspace;
-  // private readonly _userRepository;
+  private readonly userService;
 
   constructor(serviceContainer: RegisteredServices) {
     super(serviceContainer.messageService.client);
-    // this._userRepository = container.userRepository;
+
+    this.userService = serviceContainer.userService;
   }
 
-  onMessage = async (message: JsMsg, payload: string): Promise<void> => {
-    console.log(payload);
+  onMessage = async (message: JsMsg, payload: UserUpdatedPayload) => {
+    const { userId, defaultWorkspaceId, version } = payload;
+    await this.userService.updateUser(userId, defaultWorkspaceId, version);
     message.ack();
     console.log("Message processing completed");
   };

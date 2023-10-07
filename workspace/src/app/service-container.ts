@@ -16,7 +16,9 @@ import { WorkspaceController } from "../controllers/interfaces/workspace-control
 import { CoreWorkspaceController } from "../controllers/core-workspace.controller";
 
 // Services
+import { UserService } from "../services/interfaces/user.service";
 import { WorkspaceService } from "../services/interfaces/workspace.service";
+import { CoreUserService } from "../services/core-user.service";
 import { CoreWorkspaceService } from "../services/core-workspace.service";
 
 // Repositories
@@ -29,6 +31,7 @@ import { PostgresWorkspaceMemberRepository } from "../data/repositories/postgres
 
 // Publishers and Subscribers
 import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subscribers";
+import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscribers";
 
 export interface RegisteredServices {
   logger: Logger;
@@ -37,11 +40,13 @@ export interface RegisteredServices {
   policyManager: WorkspaceCasbinPolicyManager;
   messageService: NatsMessageService;
   workspaceController: WorkspaceController;
+  userService: UserService;
   workspaceService: WorkspaceService;
   userRepository: UserRepository;
   workspaceRepository: WorkspaceRepository;
   workspaceMemberRepository: WorkspaceMemberRepository;
   userCreatedSubscriber: UserCreatedSubscriber;
+  userUpdatedSubscriber: UserUpdatedSubscriber;
 }
 
 const awilix = createContainer<RegisteredServices>();
@@ -58,8 +63,10 @@ add("databaseService", asValue(databaseService));
 add("messageService", asValue(messageService));
 add("policyManager", asValue(policyManager));
 add("workspaceController", asClass(CoreWorkspaceController));
+add("userService", asClass(CoreUserService));
 add("workspaceService", asClass(CoreWorkspaceService));
 add("userRepository", asClass(PostgresUserRepository));
 add("workspaceRepository", asClass(PostgresWorkspaceRepository));
 add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
+add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));

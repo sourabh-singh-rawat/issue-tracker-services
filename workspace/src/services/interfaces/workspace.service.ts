@@ -1,5 +1,4 @@
 import {
-  QueryBuilderOptions,
   ServiceResponse,
   WorkspaceRegistrationData,
 } from "@sourabhrawatcc/core-utils";

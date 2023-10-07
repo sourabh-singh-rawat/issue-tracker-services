@@ -6,7 +6,7 @@ export interface UserRepository extends Repository<UserEntity> {
   findByEmail(email: string): Promise<UserEntity | null>;
   update(
     id: string,
-    updateUser: UserEntity,
+    updatedUser: UserEntity,
     options?: QueryBuilderOptions,
   ): Promise<void>;
   existsByEmail(email: string): Promise<boolean>;

@@ -25,6 +25,7 @@ const startServer = async () => {
 // Start message subscription
 const startSubscriptions = () => {
   serviceContainer.get("userCreatedSubscriber").fetchMessages();
+  serviceContainer.get("userUpdatedSubscriber").fetchMessages();
 };
 
 const main = async () => {
