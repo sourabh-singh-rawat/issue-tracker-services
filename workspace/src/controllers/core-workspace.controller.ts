@@ -12,7 +12,7 @@ export class CoreWorkspaceController implements WorkspaceController {
   createWorkspace = async (
     request: FastifyRequest<{ Body: { name: string; description?: string } }>,
     reply: FastifyReply,
-  ): Promise<void> => {
+  ) => {
     const { userId } = request.currentUser;
     const { name, description } = request.body;
 

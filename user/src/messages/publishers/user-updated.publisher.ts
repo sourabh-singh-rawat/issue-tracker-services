@@ -2,16 +2,16 @@ import { NatsConnection } from "nats";
 import {
   Publisher,
   Subjects,
-  UserCreatedPayload,
+  UserUpdatedPayload,
 } from "@sourabhrawatcc/core-utils";
 
 export class UserUpdatedPublisher extends Publisher<{
-  payload: string;
+  payload: UserUpdatedPayload;
   subject: Subjects;
 }> {
   subject = Subjects.USER_UPDATED;
 
-  constructor(client: NatsConnection) {
+  constructor(client?: NatsConnection) {
     super(client);
   }
 }
