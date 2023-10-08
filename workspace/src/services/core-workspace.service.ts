@@ -1,5 +1,6 @@
 import {
-  QueryBuilderOptions,
+  DatabaseService,
+  MessageService,
   ServiceResponse,
   TransactionExecutionError,
   WorkspaceRegistrationData,
@@ -10,23 +11,21 @@ import { WorkspaceService } from "./interfaces/workspace.service";
 import { UserEntity, WorkspaceEntity } from "../data/entities";
 import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
 import { WorkspaceCreatedPublisher } from "../messages/publishers/workspace-created.publisher";
+import { WorkspaceCasbinPolicyManager } from "../app/policy-manager";
+import { UserRepository } from "../data/repositories/interface/user-repository";
+import { WorkspaceRepository } from "../data/repositories/interface/workspace-repository";
+import { WorkspaceMemberRepository } from "../data/repositories/interface/workspace-member";
 
 export class CoreWorkspaceService implements WorkspaceService {
-  private readonly policyManager;
-  private readonly databaseService;
-  private readonly messageService;
-  private readonly userRepository;
-  private readonly workspaceRepository;
-  private readonly workspaceMemberRepository;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.policyManager = serviceContainer.policyManager;
-    this.databaseService = serviceContainer.databaseService;
-    this.messageService = serviceContainer.messageService;
-    this.userRepository = serviceContainer.userRepository;
-    this.workspaceRepository = serviceContainer.workspaceRepository;
-    this.workspaceMemberRepository = serviceContainer.workspaceMemberRepository;
-  }
+  constructor(
+    private policyManager: WorkspaceCasbinPolicyManager,
+    private databaseService: DatabaseService,
+    private messageService: MessageService,
+    private userRepository: UserRepository,
+    private workspaceRepository: WorkspaceRepository,
+    private workspaceMemberRepository: WorkspaceMemberRepository,
+    private workspaceCreatedPublisher: WorkspaceCreatedPublisher,
+  ) {}
 
   // Optionally can also save user
   private saveWorkspace = async (
@@ -35,7 +34,6 @@ export class CoreWorkspaceService implements WorkspaceService {
     user?: UserEntity,
   ) => {
     const queryRunner = this.databaseService.createQueryRunner();
-
     const savedWorkspace = await this.databaseService.transaction(
       queryRunner,
       async (queryRunner) => {
@@ -67,10 +65,15 @@ export class CoreWorkspaceService implements WorkspaceService {
     return savedWorkspace;
   };
 
-  createDefaultWorkspace = async (userId: string, workspaceId: string) => {
+  createDefaultWorkspace = async (
+    userId: string,
+    isEmailVerified: boolean,
+    workspaceId: string,
+  ) => {
     const newUser = new UserEntity();
     newUser.id = userId;
     newUser.defaultWorkspaceId = workspaceId;
+    newUser.isEmailVerified = isEmailVerified;
 
     const newWorkspace = new WorkspaceEntity();
     newWorkspace.id = workspaceId;
@@ -87,10 +90,7 @@ export class CoreWorkspaceService implements WorkspaceService {
       newUser,
     );
 
-    const workspaceCreatedPublisher = new WorkspaceCreatedPublisher(
-      this.messageService.client,
-    );
-    await workspaceCreatedPublisher.publish({
+    await this.workspaceCreatedPublisher.publish({
       id: savedWorkspace.id,
       name: savedWorkspace.name,
       ownerId: savedWorkspace.ownerUserId,
@@ -119,10 +119,7 @@ export class CoreWorkspaceService implements WorkspaceService {
       newWorkspaceMember,
     );
 
-    const workspaceCreatedPublisher = new WorkspaceCreatedPublisher(
-      this.messageService.client,
-    );
-    await workspaceCreatedPublisher.publish({
+    await this.workspaceCreatedPublisher.publish({
       id: savedWorkspace.id,
       name: savedWorkspace.name,
       ownerId: savedWorkspace.ownerUserId,

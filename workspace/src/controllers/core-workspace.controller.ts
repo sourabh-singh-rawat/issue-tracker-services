@@ -1,13 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { WorkspaceController } from "./interfaces/workspace-controller";
-import { RegisteredServices } from "../app/service-container";
+import { WorkspaceService } from "../services/interfaces/workspace.service";
 
 export class CoreWorkspaceController implements WorkspaceController {
-  private readonly workspaceService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.workspaceService = serviceContainer.workspaceService;
-  }
+  constructor(private workspaceService: WorkspaceService) {}
 
   createWorkspace = async (
     request: FastifyRequest<{ Body: { name: string; description?: string } }>,

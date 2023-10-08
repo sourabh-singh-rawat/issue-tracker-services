@@ -1,14 +1,12 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interface/user-repository";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserRepository implements UserRepository {
-  private readonly databaseService;
-
-  constructor(appServiceContainer: RegisteredServices) {
-    this.databaseService = appServiceContainer.databaseService;
-  }
+  constructor(private databaseService: DatabaseService) {}
 
   /**
    * Creates a new user.
@@ -17,7 +15,6 @@ export class PostgresUserRepository implements UserRepository {
    */
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-
     const query = this.databaseService
       .createQueryBuilder(UserEntity, "u", queryRunner)
       .insert()

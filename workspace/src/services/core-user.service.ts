@@ -5,14 +5,10 @@ import {
 } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../data/entities";
 import { UserService } from "./interfaces/user.service";
-import { RegisteredServices } from "../app/service-container";
+import { UserRepository } from "../data/repositories/interface/user-repository";
 
 export class CoreUserService implements UserService {
-  private readonly userRepository;
-
-  constructor(serviceController: RegisteredServices) {
-    this.userRepository = serviceController.userRepository;
-  }
+  constructor(private userRepository: UserRepository) {}
 
   private getUserById = async (userId: string) => {
     return await this.userRepository.findById(userId);

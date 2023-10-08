@@ -10,4 +10,11 @@ export class UserEntity extends AuditEntity {
 
   @Column({ name: "default_workspace_id", type: "uuid" })
   defaultWorkspaceId!: string;
+
+  @Column({
+    name: "is_email_verified",
+    type: "boolean",
+    default: false,
+  })
+  isEmailVerified!: boolean;
 }
