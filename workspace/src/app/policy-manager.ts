@@ -9,20 +9,20 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 export class WorkspaceCasbinPolicyManager extends CasbinPolicyManager<WorkspacePermissions> {
   createWorkspacePolicies = async (userId: string, workspaceId: string) => {
+    const ownerRole = `${workspaceId}:${WorkspaceRoles.Owner}`;
     const adminRole = `${workspaceId}:${WorkspaceRoles.Admin}`;
-    const viewerRole = `${workspaceId}:${WorkspaceRoles.Viewer}`;
-    const editorRole = `${workspaceId}:${WorkspaceRoles.Editor}`;
+    const memberRole = `${workspaceId}:${WorkspaceRoles.Member}`;
 
     // Important grouping
-    await this.saveGroupingPolicy(adminRole, editorRole);
-    await this.saveGroupingPolicy(adminRole, viewerRole);
-    await this.saveGroupingPolicy(editorRole, viewerRole);
+    await this.saveGroupingPolicy(ownerRole, adminRole);
+    await this.saveGroupingPolicy(ownerRole, memberRole);
+    await this.saveGroupingPolicy(adminRole, memberRole);
 
-    await this.savePolicy(viewerRole, workspaceId, WorkspacePermissions.View);
-    await this.savePolicy(editorRole, workspaceId, WorkspacePermissions.Edit);
-    await this.savePolicy(adminRole, workspaceId, WorkspacePermissions.Delete);
+    await this.savePolicy(memberRole, workspaceId, WorkspacePermissions.View);
+    await this.savePolicy(adminRole, workspaceId, WorkspacePermissions.Edit);
+    await this.savePolicy(ownerRole, workspaceId, WorkspacePermissions.Archive);
 
-    await this.saveRoleForUser(userId, adminRole);
+    await this.saveRoleForUser(userId, ownerRole);
   };
 
   // Prehandlers

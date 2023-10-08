@@ -14,4 +14,6 @@ export class WorkspaceCreatedPublisher extends Publisher<{
   constructor(messageService: MessageService) {
     super(messageService.client);
   }
+
+  publish = jest.fn();
 }

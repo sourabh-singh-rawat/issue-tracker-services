@@ -1,11 +1,11 @@
 import { Logger } from "pino";
 import { DataSource } from "typeorm";
-import { asClass, asValue, createContainer } from "awilix";
+import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import {
   logger,
   AwilixServiceContainer,
   DatabaseService,
-  NatsMessageService,
+  MessageService,
 } from "@sourabhrawatcc/core-utils";
 import { databaseService, dbSource } from "./database-service";
 import { messageService } from "./message-service";
@@ -38,7 +38,7 @@ export interface RegisteredServices {
   dbSource: DataSource;
   databaseService: DatabaseService;
   policyManager: WorkspaceCasbinPolicyManager;
-  messageService: NatsMessageService;
+  messageService: MessageService;
   workspaceController: WorkspaceController;
   userService: UserService;
   workspaceService: WorkspaceService;
@@ -49,7 +49,9 @@ export interface RegisteredServices {
   userUpdatedSubscriber: UserUpdatedSubscriber;
 }
 
-const awilix = createContainer<RegisteredServices>();
+const awilix = createContainer<RegisteredServices>({
+  injectionMode: InjectionMode.CLASSIC,
+});
 export const serviceContainer = new AwilixServiceContainer<RegisteredServices>(
   awilix,
   logger,

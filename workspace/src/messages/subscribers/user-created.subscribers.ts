@@ -1,28 +1,30 @@
 import {
   Consumers,
+  MessageService,
   Streams,
   Subscriber,
   UserCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { RegisteredServices } from "../../app/service-container";
+import { WorkspaceService } from "../../services/interfaces/workspace.service";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserCreatedConsumerWorkspace;
-  private readonly workspaceService;
 
-  constructor(serviceContainer: RegisteredServices) {
-    super(serviceContainer.messageService.client);
-
-    this.workspaceService = serviceContainer.workspaceService;
+  constructor(
+    private messageService: MessageService,
+    private workspaceService: WorkspaceService,
+  ) {
+    super(messageService.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {
-    const { userId, defaultWorkspaceId } = payload;
+    const { userId, defaultWorkspaceId, isEmailVerified } = payload;
 
     await this.workspaceService.createDefaultWorkspace(
       userId,
+      isEmailVerified,
       defaultWorkspaceId,
     );
 

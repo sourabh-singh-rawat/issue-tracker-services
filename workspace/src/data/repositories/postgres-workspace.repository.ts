@@ -1,14 +1,12 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { WorkspaceEntity } from "../entities";
 import { WorkspaceRepository } from "./interface/workspace-repository";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresWorkspaceRepository implements WorkspaceRepository {
-  private readonly databaseService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-  }
+  constructor(private databaseService: DatabaseService) {}
 
   /**
    * Creates a new workspace
@@ -17,13 +15,12 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
    * @returns
    */
   save = async (workspace: WorkspaceEntity, options?: QueryBuilderOptions) => {
-    const { id, name, description, ownerUserId } = workspace;
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
       .createQueryBuilder(WorkspaceEntity, "w", queryRunner)
       .insert()
       .into(WorkspaceEntity)
-      .values({ id, name, description, ownerUserId })
+      .values(workspace)
       .returning("*");
 
     return (await query.execute()).generatedMaps[0] as WorkspaceEntity;
