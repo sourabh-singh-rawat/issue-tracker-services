@@ -12,13 +12,26 @@ user.version = 1;
 export class PostgresUserRepository implements UserRepository {
   constructor(private databaseService: DatabaseService) {}
 
-  findById = jest.fn().mockReturnValue(user);
+  findById = jest.fn().mockImplementation((userId: string) =>
+    [
+      { id: userId, version: 1 },
+      { id: userId + " 2", version: 1 },
+    ].find(({ id }) => id === userId),
+  );
   findByEmail = jest.fn().mockReturnValue(user);
   updateEmail = jest.fn().mockReturnValue(false);
-  existsByEmail = jest.fn().mockReturnValue(true);
   updateUser = jest.fn().mockReturnValue(undefined);
   save = jest.fn().mockReturnValue({ id: "mocked-user-id" });
-  existsById = jest.fn().mockReturnValue(true);
+  existsByEmail = jest.fn().mockImplementation((email: string) => {
+    const emails = ["user-id-1", "user-id-2"];
+
+    return { id: "user-id-1", version: 1 };
+  });
+  existsById = jest.fn().mockImplementation((userId: string) => {
+    const userIds = ["user-id-1", "user-id-2"];
+
+    return Boolean(userIds.find((id) => id === userId));
+  });
 
   softDelete(
     id: string,

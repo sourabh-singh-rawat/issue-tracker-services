@@ -6,7 +6,6 @@ import {
   WorkspaceRegistrationData,
 } from "@sourabhrawatcc/core-utils";
 import { v4 } from "uuid";
-import { RegisteredServices } from "../app/service-container";
 import { WorkspaceService } from "./interfaces/workspace.service";
 import { UserEntity, WorkspaceEntity } from "../data/entities";
 import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
@@ -20,14 +19,12 @@ export class CoreWorkspaceService implements WorkspaceService {
   constructor(
     private policyManager: WorkspaceCasbinPolicyManager,
     private databaseService: DatabaseService,
-    private messageService: MessageService,
     private userRepository: UserRepository,
     private workspaceRepository: WorkspaceRepository,
     private workspaceMemberRepository: WorkspaceMemberRepository,
     private workspaceCreatedPublisher: WorkspaceCreatedPublisher,
   ) {}
 
-  // Optionally can also save user
   private saveWorkspace = async (
     workspace: WorkspaceEntity,
     workspaceMember: WorkspaceMemberEntity,
