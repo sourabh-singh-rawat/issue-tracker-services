@@ -24,7 +24,6 @@ const workspaceCreatedPublisher = new WorkspaceCreatedPublisher(messageService);
 const userService = new CoreWorkspaceService(
   policyManager,
   databaseService,
-  messageService,
   userRepository,
   workspaceRepository,
   workspaceMemberRepository,
