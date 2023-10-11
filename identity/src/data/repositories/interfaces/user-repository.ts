@@ -1,4 +1,4 @@
-import { Repository } from "@sourabhrawatcc/core-utils";
+import { QueryBuilderOptions, Repository } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../../entities/user.entity";
 
 export interface UserRepository extends Repository<UserEntity> {
@@ -8,7 +8,11 @@ export interface UserRepository extends Repository<UserEntity> {
   // isOldPasswordMatch(id: string, password: string): Promise<boolean>;
   // update(id: string, user: UserUpdateDto): Promise<UserEntity>;
   updateEmail(id: string, email: string): Promise<boolean>;
-  // updateEmailVerificationStatus(id: string, status: string): Promise<void>;
+  updateUser(
+    id: string,
+    updatedUser: UserEntity,
+    options?: QueryBuilderOptions,
+  ): Promise<void>; // updateEmailVerificationStatus(id: string, status: string): Promise<void>;
   // updatePassword(
   //   id: string,
   //   password: string,
