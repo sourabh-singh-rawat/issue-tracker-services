@@ -8,26 +8,26 @@ import {
   UserProfileNotFoundError,
   UserDetails,
   TransactionExecutionError,
+  DatabaseService,
+  MessageService,
 } from "@sourabhrawatcc/core-utils";
 import { UserService } from "./interface/user.service";
-import { RegisteredServices } from "../app/service-container";
 import { UserEntity } from "../data/entities/user.entity";
 import { UserProfileEntity } from "../data/entities/user-profile.entity";
 import { UserCreatedPublisher } from "../messages/publishers/user-created.publisher";
 import { UserUpdatedPublisher } from "../messages/publishers/user-updated.publisher";
+import { UserRepository } from "../data/repositories/interfaces/user.repository";
+import { UserProfileRepository } from "../data/repositories/interfaces/user-profile.repository";
 
 export class CoreUserService implements UserService {
-  private readonly databaseService;
-  private readonly userRepository;
-  private readonly userProfileRepository;
-  private readonly messageService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.messageService = serviceContainer.messageService;
-    this.databaseService = serviceContainer.databaseService;
-    this.userRepository = serviceContainer.userRepository;
-    this.userProfileRepository = serviceContainer.userProfileRepository;
-  }
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly messageService: MessageService,
+    private readonly userRepository: UserRepository,
+    private readonly userProfileRepository: UserProfileRepository,
+    private readonly userCreatedPublisher: UserCreatedPublisher,
+    private readonly userUpdatedPublisher: UserUpdatedPublisher,
+  ) {}
 
   private getUserById = async (userId: string) => {
     return await this.userRepository.findById(userId);
@@ -94,12 +94,10 @@ export class CoreUserService implements UserService {
       throw new TransactionExecutionError("User creation failed");
     }
 
-    const userCreatedPublisher = new UserCreatedPublisher(
-      this.messageService.client,
-    );
-    await userCreatedPublisher.publish({
+    this.userCreatedPublisher.publish({
       userId: savedUser.id,
       email: savedUser.email,
+      isEmailVerified: savedUser.isEmailVerified,
       defaultWorkspaceId: savedUser.defaultWorkspaceId,
     });
   };
@@ -117,10 +115,7 @@ export class CoreUserService implements UserService {
     await this.userRepository.update(userId, updatedUser);
 
     // publish user updated
-    const userUpdatedPublisher = new UserUpdatedPublisher(
-      this.messageService.client,
-    );
-    await userUpdatedPublisher.publish({
+    this.userUpdatedPublisher.publish({
       userId,
       defaultWorkspaceId: id,
       version: user.version,

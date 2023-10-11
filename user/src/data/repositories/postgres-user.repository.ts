@@ -1,14 +1,12 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interfaces/user.repository";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserRepository implements UserRepository {
-  private readonly databaseService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-  }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   /**
    * Find the user by id
