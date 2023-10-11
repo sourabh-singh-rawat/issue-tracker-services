@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   rows: [],
   rowCount: 0,
+  filteredRowCount: 0,
   page: 0,
   pageSize: 10,
   filters: [],
@@ -13,12 +14,17 @@ const projectListSlice = createSlice({
   name: "projectList",
   initialState,
   reducers: {
-    setProjectList: (state, action) => ({
-      ...state,
-      rows: action.payload.rows,
-      rowCount: action.payload.rowCount,
-      isLoading: false,
-    }),
+    setProjectList: (state, action) => {
+      const { rows, rowCount, filteredRowCount } = action.payload;
+
+      return {
+        ...state,
+        rows,
+        rowCount,
+        filteredRowCount,
+        isLoading: false,
+      };
+    },
     updateProjectList: (state, action) => ({
       ...state,
       ...action.payload,

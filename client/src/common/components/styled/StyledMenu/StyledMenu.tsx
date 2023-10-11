@@ -3,11 +3,10 @@ import MuiMenu from "@mui/material/Menu";
 
 const StyledMenu = styled(MuiMenu)(({ theme }) => ({
   ".MuiPaper-root": {
-    border: `1px solid ${theme.palette.divider}`,
-    boxShadow: theme.shadows[6],
-    borderRadius: theme.shape.borderRadiusMedium,
+    boxShadow: theme.shadows[20],
+    borderRadius: theme.shape.borderRadiusLarge,
+    border: `2px solid ${theme.palette.divider}`,
   },
   ".MuiMenu-list": { padding: 0 },
 }));
-
 export default StyledMenu;

@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import MuiListItemButton from "@mui/material/ListItemButton";
 
-const StyledListItemButton = styled(MuiListItemButton)(({ theme }) => ({
+const StyledMenuItem = styled(MuiListItemButton)(({ theme }) => ({
   backgroundColor: "transparent",
   "&.MuiListItemButton-root": {
     borderRadius: theme.shape.borderRadiusMedium,
@@ -17,4 +17,4 @@ const StyledListItemButton = styled(MuiListItemButton)(({ theme }) => ({
   },
 }));
 
-export default StyledListItemButton;
+export default StyledMenuItem;

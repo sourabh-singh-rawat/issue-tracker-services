@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: {
   currentUser: null | {
-    defaultWorkspaceId: string;
-    defaultWorkspaceName: string;
     displayName: string;
     email: string;
     isEmailVerified: boolean;
     userId: string;
   };
+  currentWorkspace: { id: string; name: string };
   isLoading: boolean;
 } = {
   currentUser: null,
+  currentWorkspace: { id: "", name: "" },
   isLoading: true,
 };
 
@@ -19,11 +19,24 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCurrentUser: (state, action) => ({
-      ...state,
-      currentUser: action.payload,
-      isLoading: false,
-    }),
+    setCurrentUser: (state, action) => {
+      // const {} = action.payload;
+
+      return {
+        ...state,
+        currentUser: action.payload,
+        isLoading: false,
+      };
+    },
+    setCurrentWorkspace: (state, action) => {
+      const { id, name } = action.payload;
+
+      return {
+        ...state,
+        currentWorkspace: { id, name },
+        isLoading: false,
+      };
+    },
     logout: (state) => ({
       ...state,
       currentUser: null,
@@ -31,5 +44,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, logout } = authSlice.actions;
+export const { setCurrentUser, setCurrentWorkspace, logout } =
+  authSlice.actions;
 export default authSlice.reducer;

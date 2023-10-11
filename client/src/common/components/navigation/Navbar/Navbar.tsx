@@ -20,7 +20,7 @@ function Navbar() {
   const theme = useTheme();
 
   return (
-    <AppBar position="fixed" sx={{ boxShadow: theme.shadows[1] }}>
+    <AppBar position="fixed" sx={{ boxShadow: theme.shadows[0] }}>
       <MuiToolbar
         sx={{
           backgroundColor: theme.palette.background.default,

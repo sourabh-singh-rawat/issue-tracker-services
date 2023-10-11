@@ -1,24 +1,24 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable consistent-return */
-import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import Box from '@mui/material/Box';
-import MuiGrid from '@mui/material/Grid';
+import Box from "@mui/material/Box";
+import MuiGrid from "@mui/material/Grid";
 
-import DatePicker from '../../../../common/DatePicker';
-import PrimaryButton from '../../../../common/PrimaryButton';
-import ProjectStatusSelector from '../../components/ProjectStatusSelector';
-import SectionHeader from '../../../../common/SectionHeader';
-import TextField from '../../../../common/TextField';
+import DatePicker from "../../../../common/DatePicker";
+import PrimaryButton from "../../../../common/PrimaryButton";
+import ProjectStatusSelector from "../../components/ProjectStatusSelector";
+import SectionHeader from "../../../../common/SectionHeader";
+import TextField from "../../../../common/TextField";
 
-import errors from '../../../../errors';
+import errors from "../../../../errors";
 
-import { setStatus } from '../../project.slice';
+import { setStatus } from "../../project.slice";
 
-import { useCreateProjectMutation, useGetStatusQuery } from '../../project.api';
+import { useCreateProjectMutation, useGetStatusQuery } from "../../project.api";
 
 function ProjectForm() {
   const dispatch = useDispatch();
@@ -26,16 +26,16 @@ function ProjectForm() {
 
   const [formFields, setFormFields] = useState({
     name: {
-      value: '',
+      value: "",
       error: false,
       errorMessage: errors.form.project.NAME_MAX_LENGTH_ERROR.message,
     },
     description: {
-      value: '',
+      value: "",
       error: false,
       errorMessage: errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.message,
     },
-    status: '',
+    status: "",
     startDate: null,
     endDate: null,
   });

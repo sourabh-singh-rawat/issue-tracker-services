@@ -6,7 +6,7 @@ export interface MenuItemProps {
   label?: string;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   avatarIcon?: JSX.Element;
-  indicatorIcon?: JSX.Element;
+  indicatorIcon?: JSX.Element | null;
   to?: string;
   isChild?: boolean;
   isMenuGroupOpen?: boolean;
@@ -17,6 +17,7 @@ export default function MenuItem({
   label,
   onClick,
   indicatorIcon,
+  value,
   to,
 }: MenuItemProps) {
   return to ? (

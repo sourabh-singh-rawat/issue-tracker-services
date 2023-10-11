@@ -289,6 +289,18 @@
                       "minLength": 1,
                       "maxLength": 255,
                       "default": "Sourabh Singh Rawat"
+                    },
+                    "defaultWorkspaceId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "default": "Untitled"
+                    },
+                    "defaultWorkspaceName": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "default": "Untitled"
                     }
                   }
                 }
@@ -772,9 +784,111 @@
     },
     "/projects": {
       "description": "Create and get projects",
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Get all projects",
+        "description": "Get all the projects created by a user or associated with them",
+        "operationId": "getProjectList",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": null
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": null
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "created_at"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "asc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All the projects created by a user or associated with them",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255,
+                            "default": "Untitled"
+                          },
+                          "description": {
+                            "type": "string",
+                            "maxLength": 3000,
+                            "default": "No description"
+                          },
+                          "status": {
+                            "type": "string",
+                            "default": "Not Started"
+                          },
+                          "ownerUserId": {
+                            "type": "string"
+                          },
+                          "workspaceId": {
+                            "type": "string"
+                          },
+                          "startDate": {
+                            "type": "string",
+                            "default": null
+                          },
+                          "endDate": {
+                            "type": "string",
+                            "default": null
+                          }
+                        }
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
       "post": {
         "tags": [
-          "projects"
+          "project"
         ],
         "summary": "Create a new project",
         "description": "Create a new project",
@@ -799,17 +913,15 @@
                   },
                   "startDate": {
                     "type": "string",
-                    "format": "date",
                     "default": null
                   },
                   "endDate": {
                     "type": "string",
-                    "format": "date",
-                    "minLength": 1,
                     "default": null
                   },
                   "status": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Not Started"
                   }
                 },
                 "required": [
@@ -822,7 +934,89 @@
         },
         "responses": {
           "201": {
-            "description": "Project created successfully"
+            "description": "Project created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "rows"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/status": {
+      "description": "Get a list of project statues",
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Get list of all project statuses available",
+        "description": "Get project statuses",
+        "operationId": "getProjectStatusList",
+        "responses": {
+          "200": {
+            "description": "Get project status list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "row",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad request",

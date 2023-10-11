@@ -2,9 +2,9 @@ import { alpha, styled } from "@mui/material";
 import MuiTextField from "@mui/material/TextField";
 
 const StyledTextField = styled(MuiTextField)(({ theme }) => ({
-  ".MuiOutlinedInput-root": {
-    borderRadius: theme.shape.borderRadiusMedium,
+  "& .MuiInputBase-root": {
     position: "relative",
+    borderRadius: theme.shape.borderRadiusMedium,
     backgroundColor: theme.palette.background.default,
     borderColor: theme.palette.divider,
     width: "100%",

@@ -1,37 +1,31 @@
 import React, { useState } from "react";
 
-import { styled } from "@mui/material/styles";
-import WorkspaceList from "../WorkspaceList";
-import MuiMenu from "@mui/material/Menu";
 import MuiDivider from "@mui/material/Divider";
-import MenuItem from "../../../../common/components/MenuItem";
 
-import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import MenuList from "../../../../common/components/MenuList";
+import MuiMenuList from "@mui/material/MenuList";
 import WorkspaceModal from "../WorkspaceModal";
+import WorkspaceListItem from "../WorkspaceListItem";
 
-const StyledMenu = styled(MuiMenu)(({ theme }) => ({
-  ".MuiPaper-root": {
-    boxShadow: theme.shadows[6],
-    borderRadius: theme.shape.borderRadiusMedium,
-  },
-  ".MuiMenu-list": { padding: 0 },
-}));
+import AddIcon from "@mui/icons-material/Add";
+import AppsIcon from "@mui/icons-material/Apps";
+
+import MenuItem from "../../../../common/components/MenuItem";
+import StyledMenu from "../../../../common/components/styled/StyledMenu";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
-  options: { name: string; id: string; createdAt: string }[];
-  selectedOption: { id: string; name: string; createdAt: string } | undefined;
+  options?: { name: string; id: string; createdAt: string }[];
+  selectedOption: { id: string; name: string };
   setSelectedOption: React.Dispatch<
-    React.SetStateAction<{ name: string; id: string } | undefined>
+    React.SetStateAction<{ name: string; id: string }>
   >;
 }
 
 export default function WorkspaceMenu({
   anchorEl,
   handleClose,
-  options,
+  options = [],
   selectedOption,
   setSelectedOption,
 }: WorkspaceMenuProps) {
@@ -45,29 +39,32 @@ export default function WorkspaceMenu({
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <WorkspaceList
-          options={options}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          isOpen={Boolean(anchorEl)}
-          handleClose={handleClose}
-        />
+        <MuiMenuList dense disablePadding>
+          {options.map((option) => (
+            <WorkspaceListItem
+              key={option.id}
+              isOpen={open}
+              option={option}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              handleClose={handleClose}
+            />
+          ))}
+        </MuiMenuList>
         <MuiDivider />
-        <MenuList>
-          <MenuItem
-            avatarIcon={<AddBoxOutlinedIcon />}
-            label="Add new workspace"
-            onClick={() => {
-              setOpen(true);
-              handleClose();
-            }}
-          />
-          <MenuItem
-            label="Manage workspaces"
-            onClick={handleClose}
-            avatarIcon={<AddBoxOutlinedIcon />}
-          />
-        </MenuList>
+        <MenuItem
+          avatarIcon={<AddIcon />}
+          label="Add new workspace"
+          onClick={() => {
+            setOpen(true);
+            handleClose();
+          }}
+        />
+        <MenuItem
+          label="Manage workspaces"
+          onClick={handleClose}
+          avatarIcon={<AppsIcon />}
+        />
       </StyledMenu>
       <WorkspaceModal open={open} handleClose={handleModalClose} />
     </>
