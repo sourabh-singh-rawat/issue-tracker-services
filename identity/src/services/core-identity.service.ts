@@ -195,8 +195,8 @@ export class CoreIdentityService implements IdentityService {
       userId: user.id,
       email: user.email,
       isEmailVerified: user.isEmailVerified,
-      createdAt: user.createdAt,
       defaultWorkspaceId: user.defaultWorkspaceId,
+      createdAt: user.createdAt,
     });
 
     const { access, refresh } = this.generateTokens(userDetails);

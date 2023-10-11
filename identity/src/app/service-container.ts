@@ -22,6 +22,8 @@ import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subs
 import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscribers";
 import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
 import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
+import { UserService } from "../services/interfaces/user.service";
+import { CoreUserService } from "../services/core-user.service";
 
 export interface RegisteredServices {
   logger: Logger;
@@ -29,6 +31,7 @@ export interface RegisteredServices {
   messageService: NatsMessageService;
   identityController: IdentityController;
   identityService: IdentityService;
+  userService: UserService;
   userRepository: UserRepository;
   accessTokenRepository: AccessTokenRepository;
   refreshTokenRepository: RefreshTokenRepository;
@@ -49,6 +52,8 @@ add("databaseService", asValue(databaseService));
 add("messageService", asValue(messageService));
 
 add("identityController", asClass(CoreIdentityController));
+
+add("userService", asClass(CoreUserService));
 add("identityService", asClass(CoreIdentityService));
 
 add("userRepository", asClass(PostgresUserRepository));

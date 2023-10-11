@@ -17,7 +17,6 @@ export class PostgresUserRepository implements UserRepository {
    */
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-
     const query = this.databaseService
       .createQueryBuilder(UserEntity, "u", queryRunner)
       .insert()
@@ -65,13 +64,15 @@ export class PostgresUserRepository implements UserRepository {
       [id],
     );
 
+    console.log(result);
+
     return result[0];
   };
 
   /**
    * Finds a user by their email address
    * @param email
-   * @returns
+   * @returns User if found or null
    */
   findByEmail = async (email: string): Promise<UserEntity | null> => {
     const result = await this.databaseService.query<UserEntity>(
@@ -82,22 +83,32 @@ export class PostgresUserRepository implements UserRepository {
     return result[0];
   };
 
-  /**
-   *
-   */
   updateEmail = async (id: string, email: string): Promise<boolean> => {
     console.log(id, email);
     throw new Error("Method not implemented.");
   };
 
+  updateUser = async (
+    id: string,
+    updatedUser: UserEntity,
+    options?: QueryBuilderOptions,
+  ) => {
+    const queryRunner = options?.queryRunner;
+    const query = this.databaseService
+      .createQueryBuilder(UserEntity, "u", queryRunner)
+      .update(UserEntity)
+      .set(updatedUser)
+      .where("id = :id", { id })
+      .returning("*");
+
+    await query.execute();
+  };
+
   /**
    * Soft delete an existing user (kinda like archive)
-   * @param id
-   * @returns {Promise<void>}
    */
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-
     const query = this.databaseService
       .createQueryBuilder(UserEntity, "users", queryRunner)
       .softDelete()
