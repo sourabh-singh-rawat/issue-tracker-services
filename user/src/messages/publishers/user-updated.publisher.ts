@@ -1,5 +1,6 @@
 import { NatsConnection } from "nats";
 import {
+  MessageService,
   Publisher,
   Subjects,
   UserUpdatedPayload,
@@ -11,7 +12,7 @@ export class UserUpdatedPublisher extends Publisher<{
 }> {
   subject = Subjects.USER_UPDATED;
 
-  constructor(client?: NatsConnection) {
-    super(client);
+  constructor(messageService: MessageService) {
+    super(messageService.client);
   }
 }

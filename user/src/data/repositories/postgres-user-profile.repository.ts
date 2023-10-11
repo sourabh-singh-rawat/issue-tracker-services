@@ -1,14 +1,9 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import { DatabaseService, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserProfileEntity } from "../entities/user-profile.entity";
 import { UserProfileRepository } from "./interfaces/user-profile.repository";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserProfileRepository implements UserProfileRepository {
-  private databaseService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-  }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   save = async (
     userProfile: UserProfileEntity,

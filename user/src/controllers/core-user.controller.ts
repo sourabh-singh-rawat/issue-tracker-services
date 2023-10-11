@@ -6,14 +6,10 @@ import {
   WorkspaceRegistrationData,
 } from "@sourabhrawatcc/core-utils";
 import { UserController } from "./interfaces/user.controller";
-import { RegisteredServices } from "../app/service-container";
+import { UserService } from "../services/interface/user.service";
 
 export class CoreUserController implements UserController {
-  private readonly userService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.userService = serviceContainer.userService;
-  }
+  constructor(private readonly userService: UserService) {}
 
   /**
    * Route handler for registering new users.
