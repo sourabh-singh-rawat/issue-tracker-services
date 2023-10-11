@@ -46,5 +46,8 @@ paths:
   /projects:
     description: Create and get projects
     $ref: project/paths/projects.yaml
+  /projects/status:
+    description: Get a list of project statues
+    $ref: project/paths/status.yaml
 
 security: []

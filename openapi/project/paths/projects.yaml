@@ -1,5 +1,64 @@
+get:
+  tags: [ "project" ]
+  summary: Get all projects
+  description: Get all the projects created by a user or associated with them
+  operationId: getProjectList
+  parameters: 
+    - name: page
+      in: query
+      schema: 
+        type: string
+        default: 0
+    - name: pageSize
+      in: query
+      schema: 
+        type: string
+        default: 10
+    - name: sortBy
+      in: query
+      schema: 
+        type: string
+        default: "created_at"
+    - name: sortOrder
+      in: query
+      schema: 
+        type: string
+        default: "asc"
+  responses: 
+    200:
+      description: All the projects created by a user or associated with them
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              rows:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: string
+                    name: 
+                      $ref: ../../components/schemas/name.yaml
+                    description:
+                      $ref: ../../components/schemas/description.yaml
+                    status:
+                      $ref: ../../components/schemas/status.yaml
+                    ownerUserId:
+                      type: string
+                    workspaceId:
+                      type: string
+                    startDate:
+                      $ref: ../../components/schemas/start-date.yaml
+                    endDate:
+                      $ref: ../../components/schemas/end-date.yaml
+              rowCount:
+                type: number
+    400:
+      description: Bad request
 post:
-  tags: [ "projects" ]
+  tags: [ "project" ]
   summary: Create a new project
   description: Create a new project
   operationId: createProject
@@ -24,6 +83,14 @@ post:
   responses: 
     201:
       description: Project created successfully
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              rows:
+                type: string
+            required: ["rows"]
     400:
       description: Bad request
       content:

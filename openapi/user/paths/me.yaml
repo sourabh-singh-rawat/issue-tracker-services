@@ -15,5 +15,10 @@ get:
                 $ref: ../../components/schemas/email.yaml
               displayName:
                 $ref: ../../components/schemas/display-name.yaml
+              defaultWorkspaceId:
+                $ref: ../../components/schemas/name.yaml
+              defaultWorkspaceName:
+                $ref: ../../components/schemas/name.yaml
+
     401:
       description: Unauthorized

@@ -1,4 +1,2 @@
 type: string
-format: date
-minLength: 1
 default: null
