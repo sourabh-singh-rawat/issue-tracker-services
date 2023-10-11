@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useTheme } from "@mui/material";
 import { useAppSelector } from "../../../../common/hooks";
 
-import MuiList from "@mui/material/List";
+import MuiMenuList from "@mui/material/MenuList";
 import MuiDivider from "@mui/material/Divider";
 import MuiLockTwoToneIcon from "@mui/icons-material/LockTwoTone";
-import MuiPersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
 
 import Avatar from "../../../../common/components/Avatar";
 import MenuItem from "../../../../common/components/MenuItem";
@@ -13,12 +11,11 @@ import MenuItem from "../../../../common/components/MenuItem";
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
 
 export default function AccountSwitcher() {
-  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const auth = useAppSelector((store) => store.auth);
+  const currentUser = useAppSelector((store) => store.auth.currentUser);
 
-  const handleClickIconButton = (e: React.MouseEvent<HTMLElement>) => {
+  const handleClickAccountIcon = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
 
@@ -27,9 +24,9 @@ export default function AccountSwitcher() {
   return (
     <>
       <MenuItem
-        onClick={handleClickIconButton}
+        onClick={handleClickAccountIcon}
         avatarIcon={
-          <Avatar variant="circular" label={auth.currentUser?.displayName} />
+          <Avatar variant="circular" label={currentUser?.displayName} />
         }
       />
       <StyledMenu
@@ -38,19 +35,18 @@ export default function AccountSwitcher() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <MuiList sx={{ p: theme.spacing(2) }} disablePadding>
+        <MuiMenuList dense disablePadding>
           <MenuItem
-            avatarIcon={<MuiPersonOutlineTwoToneIcon />}
-            label="Profile"
-            onClick={() => handleClose()}
+            avatarIcon={<Avatar label={currentUser?.displayName} />}
+            label={currentUser?.displayName}
           />
           <MuiDivider />
           <MenuItem
             avatarIcon={<MuiLockTwoToneIcon />}
             label="Logout"
-            onClick={() => handleClose()}
+            onClick={handleClose}
           />
-        </MuiList>
+        </MuiMenuList>
       </StyledMenu>
     </>
   );

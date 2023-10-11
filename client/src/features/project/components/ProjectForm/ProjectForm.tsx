@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useMemo } from "react";
 import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
+import dayjs from "dayjs";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
@@ -9,13 +10,20 @@ import MuiTypography from "@mui/material/Typography";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { useCreateProjectMutation } from "../../../../api/generated/project.api";
+import {
+  useCreateProjectMutation,
+  useGetProjectStatusListQuery,
+} from "../../../../api/generated/project.api";
 import TextField from "../../../../common/components/forms/TextField";
 import DatePicker from "../../../../common/components/DatePicker";
 import openapi from "../../../../api/generated/openapi.json";
+import ProjectStatusSelector from "../ProjectStatusSelector";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 
 function ProjectForm() {
-  const [createProject, { data, isSuccess }] = useCreateProjectMutation();
+  const { data: statusOptions, isLoading } = useGetProjectStatusListQuery();
+  const [createProject, { data: createdProject, isSuccess }] =
+    useCreateProjectMutation();
   const navigate = useNavigate();
 
   const defaultValues = useMemo(
@@ -24,7 +32,7 @@ function ProjectForm() {
       description: "",
       startDate: "",
       endDate: "",
-      status: "",
+      status: "Not Started",
     }),
     [],
   );
@@ -50,24 +58,41 @@ function ProjectForm() {
     endDate,
     status,
   }) => {
-    createProject({ body: { name, description, startDate, endDate, status } });
+    createProject({
+      body: {
+        name,
+        description,
+        startDate: dayjs(startDate).isValid()
+          ? dayjs(startDate).format()
+          : undefined,
+        endDate: dayjs(endDate).isValid() ? dayjs(endDate).format() : undefined,
+        status,
+      },
+    });
   };
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(`projects/${data}/overview`);
+      navigate(`projects/${createdProject?.rows}/overview`);
     }
   }, [isSuccess]);
 
   return (
-    <MuiContainer component="form" onSubmit={handleSubmit(onSubmit)}>
+    <MuiContainer
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      disableGutters
+    >
       <MuiGrid container rowSpacing={2} columnSpacing={2}>
         <MuiGrid item xs={12}>
-          <MuiTypography variant="h4">New Project</MuiTypography>
-          <MuiTypography variant="subtitle1">
+          <MuiTypography variant="h4" fontWeight={600}>
+            New Project
+          </MuiTypography>
+          <MuiTypography variant="body1">
             Projects are container for storing issues.
           </MuiTypography>
         </MuiGrid>
+
         <MuiGrid item xs={12}>
           <TextField
             name="name"
@@ -102,96 +127,23 @@ function ProjectForm() {
             formState={formState}
           />
         </MuiGrid>
+
+        <MuiGrid item xs={6}>
+          <ProjectStatusSelector
+            name="status"
+            options={statusOptions?.rows}
+            title="Project Status"
+            control={control}
+            formState={formState}
+          />
+        </MuiGrid>
+
+        <MuiGrid item xs={12}>
+          {!isLoading && <PrimaryButton type="submit" label="Create" />}
+        </MuiGrid>
       </MuiGrid>
     </MuiContainer>
   );
-
-  // <MuiGrid rowSpacing={2} container>
-  //   <MuiGrid xs={12} item>
-  //     <SectionHeader
-  //       subtitle="Projects are container for storing issues."
-  //       title="New Project"
-  //     />
-  //   </MuiGrid>
-  //   <MuiGrid xs={12} item>
-  //     <Box component="form" onSubmit={handleSubmit}>
-  //       <MuiGrid columnSpacing={4} rowSpacing={3} container>
-  //         <MuiGrid xs={12} item>
-  //           <TextField
-  //             error={formFields.name.error}
-  //             helperText={
-  //               formFields.name.error
-  //                 ? formFields.name.errorMessage
-  //                 : `A name for your project. Do not exceed ${errors.form.project.NAME_MAX_LENGTH_ERROR.limit} characters`
-  //             }
-  //             name="name"
-  //             title="Name"
-  //             type="text"
-  //             value={formFields.name.value}
-  //             onChange={handleNameChange}
-  //           />
-  //         </MuiGrid>
-  //         <MuiGrid md={12} sm={12} xs={12} item>
-  //           <TextField
-  //             error={formFields.description.error}
-  //             helperText={
-  //               formFields.description.error
-  //                 ? formFields.description.errorMessage
-  //                 : `A text description of your project. Do not exceed ${errors.form.project.DESCRIPTION_MAX_LENGTH_ERROR.limit} characters`
-  //             }
-  //             minRows={4}
-  //             name="Description"
-  //             placeholder={formFields.description.placeHolder}
-  //             title="Description"
-  //             type="text"
-  //             value={formFields.description.value}
-  //             multiline
-  //             onChange={handleDescriptionChange}
-  //           />
-  //         </MuiGrid>
-  //         <MuiGrid md={6} sm={12} xs={12} item>
-  //           <DatePicker
-  //             handleChange={handleChange}
-  //             helperText="Set a start date for your project"
-  //             maxDate={formFields.endDate}
-  //             name="startDate"
-  //             title="Start Date"
-  //             value={formFields.startDate}
-  //             onChange={(selectedDate) =>
-  //               setFormFields({ ...formFields, startDate: selectedDate })
-  //             }
-  //           />
-  //         </MuiGrid>
-  //         <MuiGrid md={6} sm={12} xs={12} item>
-  //           <DatePicker
-  //             handleChange={handleChange}
-  //             helperText="Set an end date for your project"
-  //             minDate={formFields.startDate}
-  //             name="endDate"
-  //             title="End Date"
-  //             value={formFields.endDate}
-  //             onChange={(selectedDate) =>
-  //               setFormFields({ ...formFields, endDate: selectedDate })
-  //             }
-  //           />
-  //         </MuiGrid>
-  //         <MuiGrid md={6} sm={12} xs={12} item>
-  //           <ProjectStatusSelector
-  //             handleChange={handleChange}
-  //             helperText="Current status of your project."
-  //             name="status"
-  //             title="Status"
-  //             value={formFields.status}
-  //           />
-  //         </MuiGrid>
-  //         <MuiGrid xs={12} item />
-  //         <MuiGrid item>
-  //           <PrimaryButton label="Create Project" type="submit" />
-  //         </MuiGrid>
-  //       </MuiGrid>
-  //     </Box>
-  //   </MuiGrid>
-  // </MuiGrid>
 }
 
 export default ProjectForm;

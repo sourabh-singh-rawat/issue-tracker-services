@@ -15,7 +15,11 @@ const config: ConfigFile = {
       filterEndpoints: ["getAllWorkspaces", "getWorkspace", "createWorkspace"],
     },
     "./generated/project.api.ts": {
-      filterEndpoints: ["createProject"],
+      filterEndpoints: [
+        "createProject",
+        "getProjectStatusList",
+        "getProjectList",
+      ],
     },
   },
   exportName: "issueTrackerApi",

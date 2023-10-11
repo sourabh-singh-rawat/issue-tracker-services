@@ -35,7 +35,9 @@ export default function ModalHeader({
         disableGutters
         disablePadding
       >
-        <MuiTypography variant="h3">{title}</MuiTypography>
+        <MuiTypography variant="h4" fontWeight="bold">
+          {title}
+        </MuiTypography>
       </MuiListItem>
       <MuiTypography variant="body1">{subtitle}</MuiTypography>
     </MuiBox>

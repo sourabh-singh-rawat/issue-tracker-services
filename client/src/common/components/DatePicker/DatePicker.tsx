@@ -3,11 +3,10 @@ import enIn from "date-fns/locale/en-IN";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import MuiCircularProgress from "@mui/material/CircularProgress";
-import { DesktopDatePicker as MuiDesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import MuiFormHelperText from "@mui/material/FormHelperText";
-import MuiTypography from "@mui/material/Typography";
 import MuiGrid from "@mui/material/Grid";
+import MuiCircularProgress from "@mui/material/CircularProgress";
+import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 import {
   Control,
@@ -37,7 +36,6 @@ function DatePicker<DefaultValues extends FieldValues>({
   formState,
   rules,
   isLoading,
-  helperText,
 }: DatePickerProps<DefaultValues>) {
   return (
     <MuiGrid container>
@@ -56,30 +54,30 @@ function DatePicker<DefaultValues extends FieldValues>({
             rules={rules}
             render={({ field }) => {
               return (
-                <MuiDesktopDatePicker
+                <MuiDatePicker
                   value={field.value}
-                  onChange={field.onChange}
-                  renderInput={(params) => (
-                    <StyledTextField
-                      size="small"
-                      type="date"
-                      fullWidth
-                      {...params}
-                    />
-                  )}
+                  onChange={(e) => field.onChange(String(e))}
+                  renderInput={(params) => {
+                    console.log(params);
+                    return (
+                      <StyledTextField
+                        size="small"
+                        type="date"
+                        error={Boolean(formState.errors[name])}
+                        helperText={formState.errors[name]?.message as string}
+                        inputRef={params.inputRef}
+                        InputProps={params.InputProps}
+                        inputProps={params.inputProps}
+                        fullWidth
+                      />
+                    );
+                  }}
                 />
               );
             }}
           />
         )}
       </LocalizationProvider>
-      {helperText && (
-        <MuiFormHelperText>
-          <MuiTypography component="span" sx={{ fontSize: "13px" }}>
-            {(formState.errors[name]?.message as string) || helperText}
-          </MuiTypography>
-        </MuiFormHelperText>
-      )}
     </MuiGrid>
   );
 }

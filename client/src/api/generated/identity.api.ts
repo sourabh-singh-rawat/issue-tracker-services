@@ -32,6 +32,8 @@ export type GetCurrentUserApiResponse =
   /** status 200 Returns the current logged in user or null */ {
     email?: Email;
     displayName?: DisplayName;
+    defaultWorkspaceId?: Name;
+    defaultWorkspaceName?: Name;
   };
 export type GetCurrentUserApiArg = void;
 export type GenerateTokensApiResponse =
@@ -44,6 +46,7 @@ export type GenerateTokensApiArg = {
 };
 export type Email = string;
 export type DisplayName = string;
+export type Name = string;
 export type Schema = {
   errors?: {
     message: string;

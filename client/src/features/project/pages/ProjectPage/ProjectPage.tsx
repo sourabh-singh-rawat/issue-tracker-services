@@ -6,7 +6,7 @@ import ProjectForm from "../../components/ProjectForm";
 
 export default function ProjectPage() {
   return (
-    <MuiContainer>
+    <MuiContainer disableGutters>
       <MuiGrid container>
         <MuiGrid item xs={12}>
           <ProjectForm />

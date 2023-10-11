@@ -11,11 +11,12 @@ import SignUpPage from "../features/auth/pages/Signup";
 // import Collaborators from "./features/collaborator-list/pages/Collaborators/Collaborators";
 
 import Projects from "../features/project-list/pages/Projects";
+import ProjectPage from "../features/project/pages/ProjectPage";
 // import Project from "../features/project/pages/Project";
 // import ProjectActivity from "./features/project/pages/ProjectActivity";
 // import ProjectForm from "./features/project/pages/ProjectForm";
 // import ProjectIssues from "./features/project/pages/ProjectIssues";
-// import ProjectList from "./features/project-list/components/ProjectList";
+import ProjectList from "../features/project-list/components/ProjectList";
 // import ProjectMembers from "./features/project/pages/ProjectMembers";
 // import ProjectOverview from "./features/project/pages/ProjectOverview";
 // import ProjectSetting from "./features/project/pages/ProjectSettings";
@@ -64,14 +65,16 @@ function App() {
           </Route> */}
           {/* project route */}
           <Route element={<Projects />} path="projects">
-            {/* <Route element={<ProjectList />} index />
-            <Route element={<ProjectForm />} path="new" />
+            <Route element={<ProjectList />} index />
+            <Route element={<ProjectPage />} path="new" />
+            {/* 
+            
             <Route element={<Project />} path=":id">
-              <Route element={<ProjectOverview />} path="overview" />
-              <Route element={<ProjectIssues />} path="issues" />
-              <Route element={<ProjectMembers />} path="members" />
-              <Route element={<ProjectActivity />} path="activity" />
-              <Route element={<ProjectSetting />} path="settings" />
+            <Route element={<ProjectOverview />} path="overview" />
+            <Route element={<ProjectMembers />} path="members" />
+            <Route element={<ProjectActivity />} path="activity" />
+            <Route element={<ProjectSetting />} path="settings" />
+            <Route element={<ProjectIssues />} path="issues" />
             </Route> */}
           </Route>
           {/* team route */}
