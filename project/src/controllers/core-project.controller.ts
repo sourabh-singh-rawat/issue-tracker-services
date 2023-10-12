@@ -1,27 +1,49 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ProjectController } from "./interfaces/project.controller";
-import { RegisteredServices } from "../app/service-container";
-import { ProjectRegistrationData } from "@sourabhrawatcc/core-utils";
+import { Filters, ProjectFormData } from "@sourabhrawatcc/core-utils";
+import { ProjectService } from "../services/interfaces/project.service";
 
 export class CoreProjectController implements ProjectController {
-  private readonly projectService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.projectService = serviceContainer.projectService;
-  }
+  constructor(private projectService: ProjectService) {}
 
   createProject = async (
-    request: FastifyRequest<{ Body: ProjectRegistrationData }>,
+    request: FastifyRequest<{ Body: ProjectFormData }>,
     reply: FastifyReply,
   ) => {
-    const { userId, workspaceId } = request.currentUser;
+    const { userId } = request.currentUser;
     const project = request.body;
 
-    await this.projectService.createProject(userId, workspaceId, project);
+    const response = await this.projectService.createProject(userId, project);
+
+    return reply.send(response);
   };
 
-  getProjectStatuses = async (
+  getProjectStatusList = async (
     request: FastifyRequest,
     reply: FastifyReply,
-  ) => {};
+  ) => {
+    return reply.send(this.projectService.getProjectStatusList());
+  };
+
+  getProjectList = async (
+    request: FastifyRequest<{ Querystring: Filters }>,
+    reply: FastifyReply,
+  ) => {
+    const { userId } = request.currentUser;
+    const filters = request.query;
+
+    const response = await this.projectService.getProjectList(userId, filters);
+
+    return reply.send(response);
+  };
+
+  updateProject = async (
+    request: FastifyRequest<{ Params: { id: string }; Body: ProjectFormData }>,
+    reply: FastifyReply,
+  ) => {
+    const { id } = request.params;
+    const updatables = request.body;
+
+    await this.projectService.updateProject(id, updatables);
+  };
 }

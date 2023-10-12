@@ -1,5 +1,4 @@
-import axios from "axios";
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyRequest } from "fastify";
 import { serviceContainer } from "../app/service-container";
 
 export const projectRoutes = (
@@ -9,6 +8,9 @@ export const projectRoutes = (
 ) => {
   const projectController = serviceContainer.get("projectController");
   fastify.post("/", projectController.createProject);
+  fastify.get("/", projectController.getProjectList);
+  fastify.get("/status", projectController.getProjectStatusList);
+  fastify.patch("/:id", projectController.updateProject);
 
   done();
 };

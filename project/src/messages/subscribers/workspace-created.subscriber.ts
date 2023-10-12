@@ -1,21 +1,23 @@
 import {
   Consumers,
+  MessageService,
   Streams,
   Subscriber,
   WorkspaceCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { RegisteredServices } from "../../app/service-container";
 import { WorkspaceEntity } from "../../data/entities";
+import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
 
 export class WorkspaceCreatedSubscriber extends Subscriber<WorkspaceCreatedPayload> {
   readonly stream = Streams.WORKSPACE;
   readonly consumer = Consumers.WorkspaceCreatedConsumerProject;
-  private readonly workspaceRepository;
 
-  constructor(serviceContainer: RegisteredServices) {
-    super(serviceContainer.messageService.client);
-    this.workspaceRepository = serviceContainer.workspaceRepository;
+  constructor(
+    private messageService: MessageService,
+    private workspaceRepository: WorkspaceRepository,
+  ) {
+    super(messageService.client);
   }
 
   onMessage = async (message: JsMsg, payload: WorkspaceCreatedPayload) => {

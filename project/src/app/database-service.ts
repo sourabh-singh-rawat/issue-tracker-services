@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { PostgresService, logger } from "@sourabhrawatcc/core-utils";
 
-const dataSource = new DataSource({
+export const dataSource = new DataSource({
   type: "postgres",
   host: process.env.host,
   username: process.env.user,

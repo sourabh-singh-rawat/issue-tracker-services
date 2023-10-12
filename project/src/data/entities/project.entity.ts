@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { UserEntity } from "./user.entity";
@@ -22,7 +22,7 @@ export class ProjectEntity extends AuditEntity {
   @Column({ type: "text" })
   status!: string;
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({
     name: "owner_user_id",
     referencedColumnName: "id",
