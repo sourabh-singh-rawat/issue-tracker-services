@@ -1,14 +1,12 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { WorkspaceEntity } from "../entities";
 import { WorkspaceRepository } from "./interfaces/workspace.repository";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresWorkspaceRepository implements WorkspaceRepository {
-  private readonly databaseService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-  }
+  constructor(private databaseService: DatabaseService) {}
 
   save = async (workspace: WorkspaceEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;

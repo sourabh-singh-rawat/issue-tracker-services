@@ -1,30 +1,32 @@
 import {
   Consumers,
+  MessageService,
   Streams,
   Subscriber,
   UserCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { RegisteredServices } from "../../app/service-container";
 import { UserEntity } from "../../data/entities";
+import { UserRepository } from "../../data/repositories/interfaces/user.repository";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserCreatedConsumerProject;
-  private readonly userRepository;
 
-  constructor(serviceContainer: RegisteredServices) {
-    super(serviceContainer.messageService.client);
-    this.userRepository = serviceContainer.userRepository;
+  constructor(
+    private messageService: MessageService,
+    private userRepository: UserRepository,
+  ) {
+    super(messageService.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {
-    const { userId, email, defaultWorkspaceId } = payload;
+    const { userId, isEmailVerified, defaultWorkspaceId } = payload;
 
     const newUser = new UserEntity();
     newUser.id = userId;
-    newUser.email = email;
     newUser.defaultWorkspaceId = defaultWorkspaceId;
+    newUser.isEmailVerified = isEmailVerified;
 
     await this.userRepository.save(newUser);
     message.ack();

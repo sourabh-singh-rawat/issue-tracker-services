@@ -1,18 +1,16 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  Filters,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { ProjectEntity } from "../entities/project.entity";
 import { ProjectRepository } from "./interfaces/project.repository";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresProjectRepository implements ProjectRepository {
-  private readonly databaseService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-  }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   save = async (project: ProjectEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-
     const query = this.databaseService
       .createQueryBuilder(ProjectEntity, "p", queryRunner)
       .insert()
@@ -26,9 +24,43 @@ export class PostgresProjectRepository implements ProjectRepository {
   existsById = async (id: string) => {
     const result = await this.databaseService.query<{
       project_exists_by_id: boolean;
-    }>("SELECT * FROM project_exists_by_id($1)", [id]); // TODO
+    }>("SELECT * FROM project_exists_by_id($1)", [id]);
 
     return result[0].project_exists_by_id;
+  };
+
+  find = async (userId: string, workspaceId: string, filters: Filters) => {
+    const { page, pageSize, sortBy, sortOrder } = filters;
+    const result = await this.databaseService.query<ProjectEntity>(
+      "SELECT * FROM find_projects_by_user_id_and_workspace_id($1, $2, $3, $4, $5, $6)",
+      [userId, workspaceId, sortBy, sortOrder, pageSize, page * pageSize],
+    );
+
+    return result;
+  };
+
+  findCount = async (userId: string, workspaceId: string) => {
+    const result = await this.databaseService.query<{ count: number }>(
+      "SELECT * FROM find_projects_by_user_id_and_workspace_id_count($1, $2)",
+      [userId, workspaceId],
+    );
+
+    return result[0].count as number;
+  };
+
+  update = async (
+    id: string,
+    updatedProject: ProjectEntity,
+    options?: QueryBuilderOptions,
+  ) => {
+    const queryRunner = options?.queryRunner;
+    const query = this.databaseService
+      .createQueryBuilder(ProjectEntity, "p", queryRunner)
+      .update(ProjectEntity)
+      .set(updatedProject)
+      .where("id = :id", { id });
+
+    await query.execute();
   };
 
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
