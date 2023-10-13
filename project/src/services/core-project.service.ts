@@ -139,6 +139,12 @@ export class CoreProjectService implements ProjectService {
     });
   };
 
+  getProject = async (id: string) => {
+    const project = await this.projectRepository.findOne(id);
+
+    return new ServiceResponse({ rows: project });
+  };
+
   updateProject = async (id: string, updatables: ProjectFormData) => {
     const { name, description, status, startDate, endDate } = updatables;
     const updatedProject = new ProjectEntity();

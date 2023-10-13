@@ -11,6 +11,7 @@ export interface ProjectRepository extends Repository<ProjectEntity> {
     workspaceId: string,
     filters: Filters,
   ): Promise<ProjectEntity[]>;
+  findOne(id: string): Promise<ProjectEntity>;
   findCount(userId: string, workspaceId: string): Promise<number>;
   update(
     id: string,

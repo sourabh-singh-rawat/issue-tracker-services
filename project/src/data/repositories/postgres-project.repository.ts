@@ -48,6 +48,15 @@ export class PostgresProjectRepository implements ProjectRepository {
     return result[0].count as number;
   };
 
+  findOne = async (id: string) => {
+    const result = await this.databaseService.query<ProjectEntity>(
+      "SELECT * FROM find_project_by_id($1)",
+      [id],
+    );
+
+    return result[0] as ProjectEntity;
+  };
+
   update = async (
     id: string,
     updatedProject: ProjectEntity,
