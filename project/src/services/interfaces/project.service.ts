@@ -5,6 +5,7 @@ import {
   ProjectStatus,
   ServiceResponse,
 } from "@sourabhrawatcc/core-utils";
+import { ProjectEntity, ProjectMemberEntity } from "../../data/entities";
 
 export interface ProjectService {
   createProject(
@@ -15,6 +16,7 @@ export interface ProjectService {
   getProjectList(
     userId: string,
     filters: Filters,
-  ): Promise<ServiceResponse<ProjectDetails[]>>;
+  ): Promise<ServiceResponse<ProjectDetails<ProjectMemberEntity>[]>>;
+  getProject: (id: string) => Promise<ServiceResponse<ProjectEntity>>;
   updateProject(id: string, updatables: ProjectFormData): Promise<void>;
 }

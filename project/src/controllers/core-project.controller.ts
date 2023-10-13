@@ -37,6 +37,16 @@ export class CoreProjectController implements ProjectController {
     return reply.send(response);
   };
 
+  getProject = async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const { id } = request.params;
+    const response = await this.projectService.getProject(id);
+
+    return reply.send(response);
+  };
+
   updateProject = async (
     request: FastifyRequest<{ Params: { id: string }; Body: ProjectFormData }>,
     reply: FastifyReply,

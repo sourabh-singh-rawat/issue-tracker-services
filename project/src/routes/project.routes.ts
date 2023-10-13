@@ -10,6 +10,7 @@ export const projectRoutes = (
   fastify.post("/", projectController.createProject);
   fastify.get("/", projectController.getProjectList);
   fastify.get("/status", projectController.getProjectStatusList);
+  fastify.get("/:id", projectController.getProject);
   fastify.patch("/:id", projectController.updateProject);
 
   done();
