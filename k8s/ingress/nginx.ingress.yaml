@@ -20,6 +20,13 @@ spec:
                 port:
                   number: 4000
           - pathType: ImplementationSpecific
+            path: /api/v1/issues/?(.*)
+            backend:
+              service:
+                name: issue-service
+                port:
+                  number: 4000
+          - pathType: ImplementationSpecific
             path: /api/v1/projects/?(.*)
             backend:
               service:
