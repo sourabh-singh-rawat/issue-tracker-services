@@ -8,5 +8,6 @@ spec:
   deliverPolicy: all
   filterSubject: {{ .Values.streamName }}.updated
   maxDeliver: 20
+  ackWait: "30s"
   ackPolicy: explicit
   replayPolicy: instant
