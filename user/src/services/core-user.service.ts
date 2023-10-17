@@ -73,7 +73,7 @@ export class CoreUserService implements UserService {
 
     // Create user and their profile
     const queryRunner = this.databaseService.createQueryRunner();
-    const savedUser = await this.databaseService.transaction(
+    const result = await this.databaseService.transaction(
       queryRunner,
       async (queryRunner) => {
         const savedUser = await this.userRepository.save(newUser, {
@@ -84,21 +84,31 @@ export class CoreUserService implements UserService {
         newUserProfile.userId = savedUser.id;
         newUserProfile.displayName = displayName;
 
-        await this.userProfileRepository.save(newUserProfile, { queryRunner });
+        const savedUserProfile = await this.userProfileRepository.save(
+          newUserProfile,
+          { queryRunner },
+        );
 
-        return savedUser;
+        return {
+          savedUser,
+          savedUserProfile,
+        };
       },
     );
 
-    if (!savedUser) {
+    if (!result) {
       throw new TransactionExecutionError("User creation failed");
     }
 
-    this.userCreatedPublisher.publish({
+    const { savedUser, savedUserProfile } = result;
+
+    await this.userCreatedPublisher.publish({
       userId: savedUser.id,
       email: savedUser.email,
       isEmailVerified: savedUser.isEmailVerified,
       defaultWorkspaceId: savedUser.defaultWorkspaceId,
+      displayName: savedUserProfile.displayName,
+      photoUrl: savedUserProfile.photoUrl,
     });
   };
 

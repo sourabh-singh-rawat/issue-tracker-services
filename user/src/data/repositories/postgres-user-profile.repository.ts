@@ -1,4 +1,7 @@
-import { DatabaseService, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { UserProfileEntity } from "../entities/user-profile.entity";
 import { UserProfileRepository } from "./interfaces/user-profile.repository";
 
@@ -7,19 +10,17 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
 
   save = async (
     userProfile: UserProfileEntity,
-    options?: QueryBuilderOptions | undefined,
-  ): Promise<UserProfileEntity> => {
-    const { displayName, userId, defaultWorkspaceId, photoUrl } = userProfile;
+    options?: QueryBuilderOptions,
+  ) => {
     const queryRunner = options?.queryRunner;
-
     const query = this.databaseService
       .createQueryBuilder(UserProfileEntity, "up", queryRunner)
       .insert()
       .into(UserProfileEntity)
-      .values({ displayName, userId, defaultWorkspaceId, photoUrl })
-      .returning(["displayName", "userId", "defaultWorkspaceId", "photoUrl"]);
+      .values(userProfile)
+      .returning("*");
 
-    return (await query.execute()).raw[0];
+    return (await query.execute()).generatedMaps[0] as UserProfileEntity;
   };
 
   existsById = async (id: string): Promise<boolean> => {
