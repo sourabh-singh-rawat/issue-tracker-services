@@ -25,7 +25,6 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Finds a user by their email address
    * @param email
-   * @returns User if found or null
    */
   findByEmail = async (email: string): Promise<UserEntity | null> => {
     const result = await this.databaseService.query<UserEntity>(
@@ -68,7 +67,6 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Checks if user exists, by id
    * @param id
-   * @returns true if user exists, false otherwise
    */
   existsById = async (id: string): Promise<boolean> => {
     const result = await this.databaseService.query<{
@@ -83,7 +81,6 @@ export class PostgresUserRepository implements UserRepository {
    * @param id The ID of the user to be updated.
    * @param updateUser Partial object containing fields to be updated.
    * @param options Additional query builder options.
-   * @returns Updated user object.
    */
   update = async (
     id: string,
