@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { ProjectController } from "./interfaces/project.controller";
 import { Filters, ProjectFormData } from "@sourabhrawatcc/core-utils";
 import { ProjectService } from "../services/interfaces/project.service";
+import { StatusCodes } from "http-status-codes";
 
 export class CoreProjectController implements ProjectController {
   constructor(private projectService: ProjectService) {}
@@ -15,7 +16,7 @@ export class CoreProjectController implements ProjectController {
 
     const response = await this.projectService.createProject(userId, project);
 
-    return reply.send(response);
+    return reply.status(StatusCodes.CREATED).send(response);
   };
 
   getProjectStatusList = async (
@@ -43,6 +44,16 @@ export class CoreProjectController implements ProjectController {
   ) => {
     const { id } = request.params;
     const response = await this.projectService.getProject(id);
+
+    return reply.send(response);
+  };
+
+  getProjectMembers = async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const { id } = request.params;
+    const response = await this.projectService.getProjectMembers(id);
 
     return reply.send(response);
   };

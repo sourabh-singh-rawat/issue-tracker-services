@@ -31,10 +31,14 @@ export class PostgresProjectMemberRepository
   find = async () => {};
 
   findByProjectId = async (projectId: string) => {
-    const result = await this.databaseService.query<ProjectMemberEntity>(
-      "SELECT * FROM find_members_by_project_id($1)",
-      [projectId],
-    );
+    const result = await this.databaseService.query<{
+      id: string;
+      name: string;
+      email: string;
+      memberUserId: string;
+      createdAt: string;
+      updatedAt: string;
+    }>("SELECT * FROM find_members_by_project_id($1)", [projectId]);
 
     return result;
   };

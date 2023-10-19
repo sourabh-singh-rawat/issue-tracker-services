@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION find_project_by_id (
 )
 RETURNS TABLE (
   id UUID,
+  description TEXT,
   "workspaceId" UUID,
   "name" TEXT,
   status TEXT,
@@ -16,7 +17,8 @@ LANGUAGE PLPGSQL AS $$
   BEGIN      
     RETURN QUERY 
       SELECT 
-        p.id, 
+        p.id,
+        p.description,
         p.workspace_id,
         p.name,
         p.status,
