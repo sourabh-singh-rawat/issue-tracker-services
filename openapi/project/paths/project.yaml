@@ -1,0 +1,57 @@
+
+get:
+  tags: ["project"]
+  summary: Gets a project
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the project to update
+  operationId: getProject
+  responses:
+    200:
+      description: Projects updated successfully
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
+patch:
+  tags: ["project"]
+  summary: Updates the project with new properties
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      required: true
+      description: Numeric id of the project to update  
+  description: Updates the project with new properties
+  operationId: updateProject
+  requestBody: 
+    content:
+      application/json:
+        schema: 
+          type: object
+          properties:
+            name: 
+              $ref: ../../components/schemas/name.yaml
+            description:
+              $ref: ../../components/schemas/description.yaml
+            status:
+              $ref: ../../components/schemas/status.yaml
+            startDate:
+              $ref: ../../components/schemas/date.yaml
+            endDate:
+              $ref: ../../components/schemas/date.yaml
+  responses:
+    200:
+      description: Projects updated successfully
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml

@@ -50,9 +50,9 @@ get:
                     workspaceId:
                       type: string
                     startDate:
-                      $ref: ../../components/schemas/start-date.yaml
+                      $ref: ../../components/schemas/date.yaml
                     endDate:
-                      $ref: ../../components/schemas/end-date.yaml
+                      $ref: ../../components/schemas/date.yaml
               rowCount:
                 type: number
     400:
@@ -74,9 +74,9 @@ post:
             description:
               $ref: ../../components/schemas/description.yaml
             startDate:
-              $ref: ../../components/schemas/start-date.yaml
+              $ref: ../../components/schemas/date.yaml
             endDate:
-              $ref: ../../components/schemas/end-date.yaml
+              $ref: ../../components/schemas/date.yaml
             status:
               $ref: ../../components/schemas/status.yaml
           required: ["name", "status"]

@@ -1,0 +1,20 @@
+
+get:
+  tags: ["issue"]
+  summary: Gets a Issue
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the issue to get
+  operationId: getIssue
+  responses:
+    200:
+      description: Returns the issue if it exists
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
