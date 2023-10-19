@@ -1,0 +1,48 @@
+post: 
+  tags: ["issue"]
+  summary: Create a new issue comment
+  description: Create a new issue comment
+  operationId: createIssueComment
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the issue in which the comment will be created
+  requestBody: 
+    content:
+      application/json:
+        schema:
+          type: object
+          properties: 
+            description:
+              $ref: ../../components/schemas/description.yaml
+  responses: 
+    201:
+      description: The comment has been created successfully
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
+get: 
+  tags: ["issue"]
+  summary: Gets list of all issue comments
+  description: Gets list of all issues comments
+  operationId: getIssueCommentList
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the issue who's comments will be returned
+  responses: 
+    200:
+      description: List of all the issue comments
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml

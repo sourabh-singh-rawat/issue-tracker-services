@@ -1,11 +1,17 @@
 get:
   tags: [ "project" ]
-  summary: Get list of all project statuses available
-  description: Get project statuses
-  operationId: getProjectStatusList
+  summary: Get all project members
+  description: Get all project members
+  operationId: getProjectMembers
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the project to update
   responses: 
     200:
-      description: Get project status list
+      description: Get all project members
       content: 
         application/json:
           schema:

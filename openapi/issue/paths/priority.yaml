@@ -1,11 +1,11 @@
 get:
-  tags: [ "project" ]
-  summary: Get list of all project statuses available
-  description: Get project statuses
-  operationId: getProjectStatusList
+  tags: [ "issue" ]
+  summary: Get a list of all issue priority
+  description: Get issue priorities
+  operationId: getIssuePriorityList
   responses: 
     200:
-      description: Get project status list
+      description: Get issue priority list
       content: 
         application/json:
           schema:
