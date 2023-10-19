@@ -4,7 +4,9 @@ CREATE OR REPLACE FUNCTION find_members_by_project_id (
 )
 RETURNS TABLE (
   id UUID,
-  member_user_id UUID,
+  "name" TEXT,
+  email TEXT,
+  "memberUserId" UUID,
   "createdAt" TIMESTAMP WITH TIME ZONE,
   "updatedAt" TIMESTAMP WITH TIME ZONE
 )
@@ -14,6 +16,8 @@ BEGIN
   RETURN QUERY
   SELECT
     pm.id,
+    u.display_name,
+    u.email,
     pm.member_user_id,
     pm.created_at,
     pm.updated_at

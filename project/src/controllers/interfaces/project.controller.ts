@@ -8,6 +8,10 @@ export interface ProjectController {
   ): Promise<void>;
   getProjectList(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   getProject(request: FastifyRequest, reply: FastifyReply): Promise<void>;
+  getProjectMembers(
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ): Promise<void>;
   updateProject(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   // deleteProject(request: FastifyRequest, reply: FastifyReply): Promise<void>;
 }

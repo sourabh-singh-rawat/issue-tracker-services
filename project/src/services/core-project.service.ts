@@ -3,6 +3,7 @@ import {
   Filters,
   ProjectDetails,
   ProjectFormData,
+  ProjectMember,
   ProjectStatus,
   ServiceResponse,
   TransactionExecutionError,
@@ -30,6 +31,10 @@ export class CoreProjectService implements ProjectService {
     return await this.userRepository.findById(userId);
   };
 
+  private getRoleForUser = async (userId: string, projectId: string) => {
+    return await this.projectPolicyManager.getRoleForUser(userId, projectId);
+  };
+
   private getProjectActions = async (userId: string, projectId: string) => {
     return await this.projectPolicyManager.getPermissionsForUser(
       userId,
@@ -39,8 +44,31 @@ export class CoreProjectService implements ProjectService {
 
   private getStatuses = () => Object.values(ProjectStatus);
 
-  private getProjectMembers = async (projectId: string) => {
-    return await this.projectMemberRepository.findByProjectId(projectId);
+  getProjectMembers = async (projectId: string) => {
+    const members =
+      await this.projectMemberRepository.findByProjectId(projectId);
+
+    const rows = await Promise.all(
+      members.map(async (member) => {
+        const { id, email, name, memberUserId, createdAt, updatedAt } = member;
+        const role = await this.getRoleForUser(member.memberUserId, projectId);
+
+        return new ProjectMember(
+          id,
+          name,
+          email,
+          memberUserId,
+          createdAt,
+          updatedAt,
+          role.split(":")[1],
+        );
+      }),
+    );
+
+    return new ServiceResponse({
+      rows,
+      filteredRowCount: members.length,
+    });
   };
 
   /**
@@ -125,7 +153,7 @@ export class CoreProjectService implements ProjectService {
     const rows = await Promise.all(
       projects.map(async (p) => {
         const actions = await this.getProjectActions(userId, p.id);
-        const members = await this.getProjectMembers(p.id);
+        const members = (await this.getProjectMembers(p.id)).rows;
         const statuses = this.getStatuses();
 
         return new ProjectDetails(p, actions, statuses, members);

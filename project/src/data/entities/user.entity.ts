@@ -8,8 +8,8 @@ export class UserEntity extends AuditEntity {
   })
   id!: string;
 
-  @Column({ name: "default_workspace_id", type: "uuid" })
-  defaultWorkspaceId!: string;
+  @Column({ type: "text", unique: true })
+  email!: string;
 
   @Column({
     name: "is_email_verified",
@@ -17,4 +17,13 @@ export class UserEntity extends AuditEntity {
     default: false,
   })
   isEmailVerified!: boolean;
+
+  @Column({ name: "default_workspace_id", type: "uuid" })
+  defaultWorkspaceId!: string;
+
+  @Column({ name: "display_name", type: "text" })
+  displayName!: string;
+
+  @Column({ name: "photo_url", type: "text", nullable: true })
+  photoUrl?: string;
 }

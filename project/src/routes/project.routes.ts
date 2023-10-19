@@ -11,6 +11,7 @@ export const projectRoutes = (
   fastify.get("/", projectController.getProjectList);
   fastify.get("/status", projectController.getProjectStatusList);
   fastify.get("/:id", projectController.getProject);
+  fastify.get("/:id/members", projectController.getProjectMembers);
   fastify.patch("/:id", projectController.updateProject);
 
   done();

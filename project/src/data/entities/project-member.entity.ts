@@ -6,9 +6,9 @@ export class ProjectMemberEntity extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ name: "project_id", type: "uuid", nullable: false })
+  @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
 
-  @Column({ name: "member_user_id", type: "uuid", nullable: false })
+  @Column({ name: "member_user_id", type: "uuid" })
   memberUserId!: string;
 }
