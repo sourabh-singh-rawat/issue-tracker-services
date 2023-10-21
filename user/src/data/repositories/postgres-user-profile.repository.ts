@@ -14,7 +14,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserProfileEntity, "up", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(UserProfileEntity)
       .values(userProfile)
@@ -43,7 +43,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
   ): Promise<void> => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserProfileEntity, "up", queryRunner)
+      .createQueryBuilder(queryRunner)
       .softDelete()
       .where("id=:id", { id });
 

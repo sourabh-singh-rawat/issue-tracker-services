@@ -16,9 +16,13 @@ export class CoreUserController implements UserController {
    * @returns status code
    */
   registerUser = async (
-    request: FastifyRequest<{ Body: UserRegistrationData }>,
+    request: FastifyRequest<{
+      Body: UserRegistrationData;
+      Querystring: { inviteToken: string };
+    }>,
     reply: FastifyReply,
   ) => {
+    const { inviteToken } = request.query;
     const { email, password, displayName } = request.body;
 
     const userRegistrationData = new UserRegistrationData({
@@ -26,7 +30,7 @@ export class CoreUserController implements UserController {
       password,
       displayName,
     });
-    await this.userService.createUser(userRegistrationData);
+    await this.userService.createUser(userRegistrationData, inviteToken);
 
     return reply.status(StatusCodes.CREATED).send();
   };

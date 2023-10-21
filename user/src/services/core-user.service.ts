@@ -55,7 +55,11 @@ export class CoreUserService implements UserService {
    * Creates a new user with provided credentials
    * @param credentials
    */
-  createUser = async (userRegistrationData: UserRegistrationData) => {
+  createUser = async (
+    userRegistrationData: UserRegistrationData,
+    inviteToken?: string,
+  ) => {
+    console.log(inviteToken);
     const { email, password, displayName } = userRegistrationData;
 
     // Check if the user already exists
@@ -109,6 +113,7 @@ export class CoreUserService implements UserService {
       defaultWorkspaceId: savedUser.defaultWorkspaceId,
       displayName: savedUserProfile.displayName,
       photoUrl: savedUserProfile.photoUrl,
+      inviteToken,
     });
   };
 

@@ -1,19 +1,23 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
 import { serviceContainer } from "../app/service-container";
 
 export const userRoutes = (
   fastify: FastifyInstance,
-  options: unknown,
+  fastifyOptions: {},
   done: () => void,
 ) => {
-  const userController = serviceContainer.get("userController");
-  const auth = { preHandler: [Auth.requireTokens, Auth.requireAuth] };
+  const controller = serviceContainer.get("userController");
+  const { requireTokens, setCurrentUser, requireAuth, requireNoAuth } = Auth;
+  const noAuth: RouteShorthandOptions = { preHandler: [requireNoAuth] };
+  const auth: RouteShorthandOptions = {
+    preHandler: [requireTokens, setCurrentUser, requireAuth],
+  };
 
-  fastify.post("/register", userController.registerUser);
-  fastify.post("/verify-password", userController.verifyPassword);
-  fastify.post("/default-workspace", auth, userController.setDefaultWorkspace);
-  fastify.get("/me", auth, userController.getCurrentUser);
+  fastify.post("/register", noAuth, controller.registerUser);
+  fastify.post("/verify-password", controller.verifyPassword);
+  fastify.post("/default-workspace", auth, controller.setDefaultWorkspace);
+  fastify.get("/me", auth, controller.getCurrentUser);
 
   done();
 };
