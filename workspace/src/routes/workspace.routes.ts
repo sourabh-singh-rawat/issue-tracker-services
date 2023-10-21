@@ -1,21 +1,24 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { serviceContainer } from "../app/service-container";
+import { Auth } from "@sourabhrawatcc/core-utils";
 
 export const workspaceRoutes = (
   fastify: FastifyInstance,
-  options: unknown,
+  fastifyOptions: {},
   done: () => void,
 ) => {
-  const workspaceController = serviceContainer.get("workspaceController");
-  const p = serviceContainer.get("policyManager");
+  const controller = serviceContainer.get("workspaceController");
+  const { requireTokens, setCurrentUser, requireAuth } = Auth;
+  const auth: RouteShorthandOptions = {
+    preHandler: [requireTokens, setCurrentUser, requireAuth],
+  };
 
-  fastify.get("/", workspaceController.getAllWorkspaces);
-  fastify.get(
-    "/:id",
-    { preHandler: p.hasViewPermission },
-    workspaceController.getWorkspace,
-  );
-  fastify.post("/", workspaceController.createWorkspace);
+  fastify.post("/", auth, controller.createWorkspace);
+  fastify.post("/invite", auth, controller.createWorkspaceInvite);
+  fastify.get("/", auth, controller.getAllWorkspaces);
+  fastify.get("/role", auth, controller.getWorkspaceRoleList);
+  fastify.get("/:id", auth, controller.getWorkspace);
+  fastify.get("/:id/invite/confirm", controller.confirmWorkspaceInvite);
 
   done();
 };

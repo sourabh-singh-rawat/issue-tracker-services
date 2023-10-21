@@ -1,7 +1,7 @@
 import {
   QueryBuilderOptions,
   UserNotFoundError,
-  VersionMismatch,
+  VersionMismatchError,
 } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../data/entities";
 import { UserService } from "./interfaces/user.service";
@@ -23,7 +23,7 @@ export class CoreUserService implements UserService {
     const user = await this.getUserById(userId);
     if (!user) throw new UserNotFoundError();
 
-    if (user.version !== version) throw new VersionMismatch();
+    if (user.version !== version) throw new VersionMismatchError();
 
     const updatedUser = new UserEntity();
     updatedUser.defaultWorkspaceId = defaultWorkspaceId;

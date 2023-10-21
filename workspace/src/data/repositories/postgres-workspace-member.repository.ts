@@ -11,23 +11,33 @@ export class PostgresWorkspaceMemberRepository
   constructor(private databaseService: DatabaseService) {}
 
   save = async (
-    entity: WorkspaceMemberEntity,
-    options?: QueryBuilderOptions | undefined,
-  ): Promise<WorkspaceMemberEntity> => {
-    const { userId, workspaceId } = entity;
-
+    workspace: WorkspaceMemberEntity,
+    options?: QueryBuilderOptions,
+  ) => {
     const query = this.databaseService
-      .createQueryBuilder(WorkspaceMemberEntity, "wm", options?.queryRunner)
+      .createQueryBuilder(options?.queryRunner)
       .insert()
       .into(WorkspaceMemberEntity)
-      .values({ userId, workspaceId })
-      .returning(["userId", "workspaceId"]);
+      .values(workspace)
+      .returning("*");
 
     return (await query.execute()).generatedMaps[0] as WorkspaceMemberEntity;
   };
 
   existsById = async (id: string): Promise<boolean> => {
-    throw new Error("Method not implemented.");
+    const result = await this.databaseService.query<{
+      member_exists_by_email: boolean;
+    }>("SELECT * FROM member_exists_by_email($1)", [id]);
+
+    return result[0].member_exists_by_email;
+  };
+
+  existsByUserId = async (userId: string, workspaceId: string) => {
+    const result = await this.databaseService.query<{
+      member_exists_by_user_id: boolean;
+    }>("SELECT * FROM member_exists_by_user_id($1, $2)", [userId, workspaceId]);
+
+    return result[0].member_exists_by_user_id;
   };
 
   softDelete = async (

@@ -9,18 +9,22 @@ import {
 import { WorkspaceEntity } from "./workspace.entity";
 import { UserEntity } from "./user.entity";
 
-@Entity({ name: "workspace_members" })
-export class WorkspaceMemberEntity extends AuditEntity {
+@Entity({ name: "workspace_member_invites" })
+export class WorkspaceMemberInviteEntity extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @ManyToOne(() => UserEntity)
-  @Column({ name: "user_id", type: "uuid" })
-  @JoinColumn({ name: "user_id" })
-  userId!: string;
+  @JoinColumn({ name: "sender_id" })
+  senderId!: string;
+
+  @Column({ name: "receiver_email", type: "text" })
+  receiverEmail!: string;
 
   @ManyToOne(() => WorkspaceEntity)
-  @Column({ name: "workspace_id", type: "uuid" })
   @JoinColumn({ name: "workspace_id" })
   workspaceId!: string;
+
+  @Column({ type: "text", default: WorkspaceMemberStatus.PENDING })
+  status!: WorkspaceMemberStatus;
 }

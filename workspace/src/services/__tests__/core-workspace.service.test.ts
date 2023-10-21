@@ -6,6 +6,7 @@ import { PostgresUserRepository } from "../../data/repositories/postgres-user.re
 import { PostgresWorkspaceRepository } from "../../data/repositories/postgres-workspace.repository";
 import { PostgresWorkspaceMemberRepository } from "../../data/repositories/postgres-workspace-member.repository";
 import { WorkspaceCreatedPublisher } from "../../messages/publishers/workspace-created.publisher";
+import { UserEntity } from "../../data/entities";
 
 jest.mock("../../app/policy-manager");
 jest.mock("../../app/database-service");
@@ -40,11 +41,8 @@ describe("save default workspace", () => {
       id: workspaceId,
     });
 
-    await userService.createDefaultWorkspace(
-      userId,
-      isEmailVerified,
-      workspaceId,
-    );
+    const user = new UserEntity();
+    await userService.createDefaultWorkspace(user);
 
     expect(databaseService.transaction).toHaveBeenCalled();
     expect(databaseService.transaction).toBeDefined();
@@ -55,11 +53,8 @@ describe("save default workspace", () => {
       id: workspaceId,
     });
 
-    await userService.createDefaultWorkspace(
-      userId,
-      isEmailVerified,
-      workspaceId,
-    );
+    const user = new UserEntity();
+    await userService.createDefaultWorkspace(user);
 
     expect(workspaceCreatedPublisher.publish).toHaveBeenCalled();
   });

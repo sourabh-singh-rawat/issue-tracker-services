@@ -17,7 +17,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
   save = async (workspace: WorkspaceEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(WorkspaceEntity, "w", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(WorkspaceEntity)
       .values(workspace)
