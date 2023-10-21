@@ -11,7 +11,7 @@ export class PostgresUserRepository implements UserRepository {
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserEntity, "u", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(UserEntity)
       .values(user)
@@ -27,7 +27,7 @@ export class PostgresUserRepository implements UserRepository {
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserEntity, "u", queryRunner)
+      .createQueryBuilder(queryRunner)
       .update(UserEntity)
       .set(updatedUser)
       .where("id = :id", { id });

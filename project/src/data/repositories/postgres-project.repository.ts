@@ -12,7 +12,7 @@ export class PostgresProjectRepository implements ProjectRepository {
   save = async (project: ProjectEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(ProjectEntity, "p", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(ProjectEntity)
       .values(project)
@@ -64,7 +64,7 @@ export class PostgresProjectRepository implements ProjectRepository {
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(ProjectEntity, "p", queryRunner)
+      .createQueryBuilder(queryRunner)
       .update(ProjectEntity)
       .set(updatedProject)
       .where("id = :id", { id });
@@ -76,7 +76,7 @@ export class PostgresProjectRepository implements ProjectRepository {
     const queryRunner = options?.queryRunner;
 
     const query = this.databaseService
-      .createQueryBuilder(ProjectEntity, "p", queryRunner)
+      .createQueryBuilder(queryRunner)
       .softDelete()
       .where("id = :id", { id });
 
