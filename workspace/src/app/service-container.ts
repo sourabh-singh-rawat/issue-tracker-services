@@ -33,6 +33,9 @@ import { PostgresWorkspaceMemberRepository } from "../data/repositories/postgres
 import { WorkspaceCreatedPublisher } from "../messages/publishers/workspace-created.publisher";
 import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subscribers";
 import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscribers";
+import { WorkspaceInviteCreatedPublisher } from "../messages/publishers/workspace-invite-created.publisher";
+import { WorkspaceMemberInviteRepository } from "../data/repositories/interface/workspace-member-invite.repository";
+import { PostgresWorkspaceMemberInviteRepository } from "../data/repositories/postgres-workspace-member-invite.repository";
 
 export interface RegisteredServices {
   logger: Logger;
@@ -46,9 +49,11 @@ export interface RegisteredServices {
   userRepository: UserRepository;
   workspaceRepository: WorkspaceRepository;
   workspaceMemberRepository: WorkspaceMemberRepository;
+  workspaceMemberInviteRepository: WorkspaceMemberInviteRepository;
   userCreatedSubscriber: UserCreatedSubscriber;
   userUpdatedSubscriber: UserUpdatedSubscriber;
   workspaceCreatedPublisher: WorkspaceCreatedPublisher;
+  workspaceInviteCreatedPublisher: WorkspaceInviteCreatedPublisher;
 }
 
 const awilix = createContainer<RegisteredServices>({
@@ -75,3 +80,11 @@ add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
 add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
 add("workspaceCreatedPublisher", asClass(WorkspaceCreatedPublisher));
+add(
+  "workspaceInviteCreatedPublisher",
+  asClass(WorkspaceInviteCreatedPublisher),
+);
+add(
+  "workspaceMemberInviteRepository",
+  asClass(PostgresWorkspaceMemberInviteRepository),
+);

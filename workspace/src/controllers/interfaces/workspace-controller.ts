@@ -1,6 +1,9 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 export interface WorkspaceController {
-  createWorkspace(request: FastifyRequest, reply: FastifyReply): Promise<void>;
-  getAllWorkspaces(request: FastifyRequest, reply: FastifyReply): Promise<void>;
-  getWorkspace(request: FastifyRequest, reply: FastifyReply): Promise<void>;
+  createWorkspace(req: FastifyRequest, res: FastifyReply): Promise<void>;
+  createWorkspaceInvite(req: FastifyRequest, res: FastifyReply): Promise<void>;
+  getAllWorkspaces(req: FastifyRequest, res: FastifyReply): Promise<void>;
+  getWorkspace(req: FastifyRequest, res: FastifyReply): Promise<void>;
+  getWorkspaceRoleList(req: FastifyRequest, res: FastifyReply): Promise<void>;
+  confirmWorkspaceInvite(req: FastifyRequest, res: FastifyReply): Promise<void>;
 }

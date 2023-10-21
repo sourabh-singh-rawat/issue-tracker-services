@@ -25,6 +25,16 @@ export class WorkspaceCasbinPolicyManager extends CasbinPolicyManager<WorkspaceP
     await this.saveRoleForUser(userId, ownerRole);
   };
 
+  createWorkspaceAdmin = async (userId: string, workspaceId: string) => {
+    const adminRole = `${workspaceId}:${WorkspaceRoles.Admin}`;
+    await this.saveRoleForUser(userId, adminRole);
+  };
+
+  createWorkspaceMember = async (userId: string, workspaceId: string) => {
+    const memberRole = `${workspaceId}:${WorkspaceRoles.Member}`;
+    await this.saveRoleForUser(userId, memberRole);
+  };
+
   // Prehandlers
   hasViewPermission = (
     request: FastifyRequest<{ Params: { id: string } }>,

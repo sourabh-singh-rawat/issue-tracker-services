@@ -4,6 +4,9 @@ CREATE OR REPLACE FUNCTION find_user_by_id (
   )
   RETURNS TABLE (
     id UUID,
+    email TEXT,
+    "displayName" TEXT,
+    "defaultWorkspaceId" UUID,
     "createdAt" TIMESTAMP WITH TIME ZONE,
     VERSION INTEGER
   )
@@ -11,7 +14,10 @@ CREATE OR REPLACE FUNCTION find_user_by_id (
     BEGIN      
       RETURN QUERY 
         SELECT 
-          u.id, 
+          u.id,
+          u.email,
+          u.display_name,
+          u.default_workspace_id,
           u.created_at,
           u.version
         FROM users AS u

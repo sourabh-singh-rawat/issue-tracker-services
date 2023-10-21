@@ -1,9 +1,14 @@
 import {
   DatabaseService,
-  MessageService,
+  JwtToken,
   ServiceResponse,
   TransactionExecutionError,
+  UserAlreadyExists,
+  UserNotFoundError,
+  WorkspaceInvitePayload,
+  WorkspaceMemberStatus,
   WorkspaceRegistrationData,
+  WorkspaceRoles,
 } from "@sourabhrawatcc/core-utils";
 import { v4 } from "uuid";
 import { WorkspaceService } from "./interfaces/workspace.service";
@@ -14,6 +19,9 @@ import { WorkspaceCasbinPolicyManager } from "../app/policy-manager";
 import { UserRepository } from "../data/repositories/interface/user-repository";
 import { WorkspaceRepository } from "../data/repositories/interface/workspace-repository";
 import { WorkspaceMemberRepository } from "../data/repositories/interface/workspace-member";
+import { WorkspaceInviteCreatedPublisher } from "../messages/publishers/workspace-invite-created.publisher";
+import { WorkspaceMemberInviteRepository } from "../data/repositories/interface/workspace-member-invite.repository";
+import { WorkspaceMemberInviteEntity } from "../data/entities/workspace-member-invite.entity";
 
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(
@@ -23,6 +31,8 @@ export class CoreWorkspaceService implements WorkspaceService {
     private workspaceRepository: WorkspaceRepository,
     private workspaceMemberRepository: WorkspaceMemberRepository,
     private workspaceCreatedPublisher: WorkspaceCreatedPublisher,
+    private workspaceMemberInviteRepository: WorkspaceMemberInviteRepository,
+    private workspaceInviteCreatedPublisher: WorkspaceInviteCreatedPublisher,
   ) {}
 
   private saveWorkspace = async (
@@ -62,29 +72,22 @@ export class CoreWorkspaceService implements WorkspaceService {
     return savedWorkspace;
   };
 
-  createDefaultWorkspace = async (
-    userId: string,
-    isEmailVerified: boolean,
-    workspaceId: string,
-  ) => {
-    const newUser = new UserEntity();
-    newUser.id = userId;
-    newUser.defaultWorkspaceId = workspaceId;
-    newUser.isEmailVerified = isEmailVerified;
+  createDefaultWorkspace = async (user: UserEntity) => {
+    const { defaultWorkspaceId, id } = user;
 
     const newWorkspace = new WorkspaceEntity();
-    newWorkspace.id = workspaceId;
+    newWorkspace.id = defaultWorkspaceId;
     newWorkspace.name = "Default Workspace";
-    newWorkspace.ownerUserId = userId;
+    newWorkspace.ownerUserId = id;
 
     const newWorkspaceMember = new WorkspaceMemberEntity();
-    newWorkspaceMember.userId = userId;
-    newWorkspaceMember.workspaceId = workspaceId;
+    newWorkspaceMember.userId = id;
+    newWorkspaceMember.workspaceId = defaultWorkspaceId;
 
     const savedWorkspace = await this.saveWorkspace(
       newWorkspace,
       newWorkspaceMember,
-      newUser,
+      user,
     );
 
     await this.workspaceCreatedPublisher.publish({
@@ -122,15 +125,112 @@ export class CoreWorkspaceService implements WorkspaceService {
       ownerId: savedWorkspace.ownerUserId,
     });
 
-    return new ServiceResponse({ data: savedWorkspace.id });
+    return new ServiceResponse({ rows: savedWorkspace.id });
+  };
+
+  /**
+   * Should create a workspace member if they do not exists
+   * @param userId
+   * @param workspaceId
+   * @param role
+   * @returns
+   */
+  createWorkspaceMember = async (
+    userId: string,
+    workspaceId: string,
+    role: WorkspaceRoles,
+  ) => {
+    const isMember = await this.workspaceMemberRepository.existsByUserId(
+      userId,
+      workspaceId,
+    );
+
+    if (isMember) throw new UserAlreadyExists();
+
+    const newWorkspaceMember = new WorkspaceMemberEntity();
+    newWorkspaceMember.userId = userId;
+    newWorkspaceMember.workspaceId = workspaceId;
+
+    await this.workspaceMemberRepository.save(newWorkspaceMember);
+
+    if (role === WorkspaceRoles.Member) {
+      await this.policyManager.createWorkspaceMember(userId, workspaceId);
+    }
+
+    if (role === WorkspaceRoles.Admin) {
+      await this.policyManager.createWorkspaceAdmin(userId, workspaceId);
+    }
+  };
+
+  createWorkspaceInvite = async (
+    userId: string,
+    email: string,
+    role: WorkspaceRoles,
+  ) => {
+    const sender = await this.userRepository.findById(userId);
+    if (!sender) throw new UserNotFoundError();
+
+    const isReceiverMember =
+      await this.workspaceMemberRepository.existsById(email);
+    if (isReceiverMember) throw new UserAlreadyExists();
+
+    const { defaultWorkspaceId } = sender;
+    const newWorkspaceMemberInvite = new WorkspaceMemberInviteEntity();
+    newWorkspaceMemberInvite.senderId = userId;
+    newWorkspaceMemberInvite.receiverEmail = email;
+    newWorkspaceMemberInvite.workspaceId = defaultWorkspaceId;
+    newWorkspaceMemberInvite.status = WorkspaceMemberStatus.PENDING;
+
+    const { id, status } = await this.workspaceMemberInviteRepository.save(
+      newWorkspaceMemberInvite,
+    );
+
+    await this.workspaceInviteCreatedPublisher.publish({
+      senderId: userId,
+      senderEmail: sender.email,
+      senderName: sender.displayName,
+      receiverEmail: email,
+      receiverStatus: status,
+      receiverRole: role,
+      workspaceId: defaultWorkspaceId,
+    });
+  };
+
+  /**
+   * Should confirm workspace invites,
+   * if confirmed and user is already logged in then add the user as member
+   *
+   * redirect the user to signup page with token
+   */
+  confirmWorkspaceInvite = async (token: string) => {
+    let verifedToken: WorkspaceInvitePayload;
+    try {
+      verifedToken = JwtToken.verify(token, process.env.JWT_SECRET!);
+    } catch (error) {
+      throw new Error("Token verification failed");
+    }
+
+    // Token verified, check if the user is a account holder
+    const { receiverEmail } = verifedToken;
+    const userExists = await this.userRepository.findByEmail(receiverEmail);
+
+    if (!userExists) {
+      return new ServiceResponse({
+        rows: `https://localhost:3000/signup?inviteToken=${token}`,
+      });
+    }
+
+    return new ServiceResponse({
+      rows: `http://localhost:3000/login?inviteToken=${token}`,
+    });
   };
 
   getAllWorkspaces = async (userId: string) => {
     const workspaces = await this.workspaceRepository.find(userId);
 
     return new ServiceResponse({
-      data: workspaces,
-      dataCount: workspaces.length,
+      rows: workspaces,
+      filteredRowCount: workspaces.length,
     });
   };
 
@@ -142,6 +242,10 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     const workspace = await this.workspaceRepository.findById(id);
 
-    return new ServiceResponse({ data: workspace });
+    return new ServiceResponse({ rows: workspace });
+  };
+
+  getWorkspaceRoleList = async () => {
+    return new ServiceResponse({ rows: Object.values(WorkspaceRoles) });
   };
 }
