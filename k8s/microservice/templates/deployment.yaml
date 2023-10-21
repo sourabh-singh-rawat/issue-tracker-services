@@ -22,3 +22,7 @@ spec:
                 name: {{ .Release.Name }}-postgres-pguser-{{ .Release.Name }}-postgres
             - secretRef:
                 name: {{ .Values.jwtSecretRef }}
+            {{- if .Values.smtpSecretRef }}
+            - secretRef:
+                name: {{ .Values.smtpSecretRef }}
+            {{- end }}
