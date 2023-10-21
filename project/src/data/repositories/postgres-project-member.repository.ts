@@ -15,7 +15,7 @@ export class PostgresProjectMemberRepository
     options?: QueryBuilderOptions,
   ) => {
     const query = this.databaseService
-      .createQueryBuilder(ProjectMemberEntity, "wm", options?.queryRunner)
+      .createQueryBuilder(options?.queryRunner)
       .insert()
       .into(ProjectMemberEntity)
       .values(project)
