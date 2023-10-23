@@ -6,13 +6,6 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: (build) => ({
-      getCurrentUser: build.query<
-        GetCurrentUserApiResponse,
-        GetCurrentUserApiArg
-      >({
-        query: () => ({ url: `/users/me` }),
-        providesTags: ["identity"],
-      }),
       generateTokens: build.mutation<
         GenerateTokensApiResponse,
         GenerateTokensApiArg
@@ -24,18 +17,17 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["identity"],
       }),
+      getCurrentUser: build.query<
+        GetCurrentUserApiResponse,
+        GetCurrentUserApiArg
+      >({
+        query: () => ({ url: `/users/me` }),
+        providesTags: ["identity"],
+      }),
     }),
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
-export type GetCurrentUserApiResponse =
-  /** status 200 Returns the current logged in user or null */ {
-    email?: Email;
-    displayName?: DisplayName;
-    defaultWorkspaceId?: Name;
-    defaultWorkspaceName?: Name;
-  };
-export type GetCurrentUserApiArg = void;
 export type GenerateTokensApiResponse =
   /** status 200 accessToken and refreshTokens are successfully generated. */ undefined;
 export type GenerateTokensApiArg = {
@@ -44,15 +36,23 @@ export type GenerateTokensApiArg = {
     password?: Password;
   };
 };
-export type Email = string;
-export type DisplayName = string;
-export type Name = string;
+export type GetCurrentUserApiResponse =
+  /** status 200 Returns the current logged in user or null */ {
+    email?: Email;
+    displayName?: DisplayName;
+    defaultWorkspaceId?: Name;
+    defaultWorkspaceName?: Name;
+  };
+export type GetCurrentUserApiArg = void;
 export type Schema = {
   errors?: {
     message: string;
     field?: string;
   }[];
 };
+export type Email = string;
 export type Password = string;
-export const { useGetCurrentUserQuery, useGenerateTokensMutation } =
+export type DisplayName = string;
+export type Name = string;
+export const { useGenerateTokensMutation, useGetCurrentUserQuery } =
   injectedRtkApi;

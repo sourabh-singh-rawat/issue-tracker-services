@@ -1,72 +1,79 @@
-/* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
-
-import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
+import React, { useEffect, useState } from "react";
+import {
+  GridCallbackDetails,
+  GridColDef,
+  GridPaginationModel,
+  GridValidRowModel,
+  DataGrid as MuiDataGrid,
+} from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
-import MuiLinearProgress from "@mui/material/LinearProgress";
 
 const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
   border: "none",
   ".MuiDataGrid-row": {
     transition: "ease-in-out 0.150s",
-    ":hover": {
-      backgroundColor: theme.palette.grey[100],
-    },
+    ":hover": { backgroundColor: theme.palette.action.hover },
   },
   ".MuiDataGrid-cell": {
     color: theme.palette.text.primary,
-    borderColor: theme.palette.grey[200],
-    borderRight: `${theme.shape.borderWidthDefault} solid ${theme.palette.grey[1200]}`,
+    borderColor: theme.palette.divider,
   },
+  ".MuiDataGrid-columnHeader": {},
   ".MuiDataGrid-columnHeaders": {
-    borderBottom: `${theme.shape.borderWidthDefault} solid ${theme.palette.grey[200]}`,
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
   ".MuiDataGrid-columnSeparator": {
     display: "none",
   },
   ".MuiDataGrid-footerContainer": {
-    borderTop: `${theme.shape.borderWidthDefault} solid ${theme.palette.grey[200]}`,
+    borderTop: `1px solid ${theme.palette.divider}`,
   },
 }));
 
-function List({
-  rows,
-  rowCount,
-  columns,
+interface ListProps {
+  rows: GridValidRowModel[];
+  rowCount: number;
+  columns: GridColDef<GridValidRowModel>[];
+  paginationModel: GridPaginationModel;
+  onPaginationModelChange: (
+    model: GridPaginationModel,
+    details: GridCallbackDetails,
+  ) => void;
+  isLoading?: boolean;
+}
+
+export default function List({
+  rows = [],
+  rowCount = 0,
+  columns = [],
   isLoading,
-  page,
-  pageSize,
-  initialState,
-  onPageChange,
-  onPageSizeChange,
-  getRowId,
-  checkboxSelection,
-}) {
+  paginationModel,
+  onPaginationModelChange,
+}: ListProps) {
+  const [rowCountState, setRowCountState] = useState(rowCount);
+
+  useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      rowCount !== undefined ? rowCount : prevRowCountState,
+    );
+  }, [rowCount, setRowCountState]);
+
   return (
     <StyledDataGrid
-      checkboxSelection={checkboxSelection}
       columns={columns}
-      components={{
-        LoadingOverlay: MuiLinearProgress,
-      }}
-      getRowId={getRowId}
-      initialState={initialState}
+      slotProps={{ loadingOverlay: {} }}
+      getRowId={({ id }) => id}
       loading={isLoading}
-      page={page}
-      pageSize={pageSize}
-      paginationMode="server"
       rows={rows}
-      rowCount={rowCount}
+      rowCount={rowCountState}
       rowHeight={40}
-      rowsPerPageOptions={[10, 20, 50, 100]}
-      onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
-      autoHeight
+      pageSizeOptions={[2, 10, 20, 50, 100]}
+      paginationMode="server"
+      paginationModel={paginationModel}
+      onPaginationModelChange={onPaginationModelChange}
       disableColumnMenu
-      disableSelectionOnClick
-      pagination
+      disableRowSelectionOnClick
+      autoHeight
     />
   );
 }
-
-export default List;

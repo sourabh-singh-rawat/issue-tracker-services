@@ -8,17 +8,39 @@ const config: ConfigFile = {
     "./generated/identity.api.ts": {
       filterEndpoints: ["generateTokens", "getCurrentUser"],
     },
-    "./generated/user.api.ts": {
-      filterEndpoints: ["registerUser", "setDefaultWorkspace"],
-    },
-    "./generated/workspace.api.ts": {
-      filterEndpoints: ["getAllWorkspaces", "getWorkspace", "createWorkspace"],
+    "./generated/issue.api.ts": {
+      filterEndpoints: [
+        "createIssue",
+        "createIssueComment",
+        "createIssueTask",
+        "getIssue",
+        "getIssueList",
+        "getIssueStatusList",
+        "getIssuePriorityList",
+        "getIssueCommentList",
+        "getIssueTaskList",
+      ],
     },
     "./generated/project.api.ts": {
       filterEndpoints: [
         "createProject",
         "getProjectStatusList",
         "getProjectList",
+        "getProject",
+        "updateProject",
+        "getProjectMembers",
+      ],
+    },
+    "./generated/user.api.ts": {
+      filterEndpoints: ["registerUser", "setDefaultWorkspace"],
+    },
+    "./generated/workspace.api.ts": {
+      filterEndpoints: [
+        "createWorkspace",
+        "getAllWorkspaces",
+        "getWorkspace",
+        "getWorkspaceRoleList",
+        "createWorkspaceInvite",
       ],
     },
   },

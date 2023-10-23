@@ -39,7 +39,7 @@ export default function SidebarGroupItemContent({
           fontWeight: theme.typography.fontWeightMedium,
           backgroundColor: "transparent",
         }}
-        variant={isChild ? "body2" : "body1"}
+        variant={isChild ? "body2" : "body2"}
       >
         {label}
       </MuiTypography>

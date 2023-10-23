@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
 import React from "react";
 import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
@@ -11,7 +10,6 @@ import { theme } from "./app/theme.config";
 import App from "./app/App";
 import MessageBar from "./features/message-bar/components/MessageBar";
 
-import "./index.css";
 import { CssBaseline } from "@mui/material";
 
 const element = document.getElementById("root");

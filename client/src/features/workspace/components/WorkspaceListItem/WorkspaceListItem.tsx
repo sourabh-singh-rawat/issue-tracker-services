@@ -5,6 +5,8 @@ import AppLoader from "../../../../common/components/AppLoader";
 import { useMessageBar } from "../../../message-bar/hooks";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
+import { useTheme } from "@mui/material";
+
 interface WorkspaceListItemProps {
   option: { name: string; id: string };
   selectedOption: { name: string; id: string } | undefined;
@@ -24,6 +26,7 @@ export default function WorkspaceListItem({
   setSelectedOption,
   handleClose,
 }: WorkspaceListItemProps) {
+  const theme = useTheme();
   const { id, name } = option;
   const { showSuccess, showError } = useMessageBar();
   const [setDefaultWorkspace, { isLoading, isSuccess, isError }] =
@@ -61,7 +64,10 @@ export default function WorkspaceListItem({
         isLoading ? (
           <AppLoader size="1rem" />
         ) : id === selectedOption?.id ? (
-          <CheckCircleOutlineIcon fontSize="small" color="success" />
+          <CheckCircleOutlineIcon
+            fontSize="small"
+            sx={{ color: theme.palette.primary.main }}
+          />
         ) : null
       }
     />

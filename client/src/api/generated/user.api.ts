@@ -12,6 +12,7 @@ const injectedRtkApi = api
             url: `/users/register`,
             method: "POST",
             body: queryArg.body,
+            params: { inviteToken: queryArg.inviteToken },
           }),
           invalidatesTags: ["user"],
         },
@@ -34,6 +35,7 @@ export { injectedRtkApi as issueTrackerApi };
 export type RegisterUserApiResponse =
   /** status 201 User successfully registered */ undefined;
 export type RegisterUserApiArg = {
+  inviteToken?: string;
   body: {
     email: string;
     password: string;

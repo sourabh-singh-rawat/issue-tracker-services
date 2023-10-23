@@ -1,36 +1,52 @@
 import React from "react";
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
-import { useTheme } from "@mui/material";
+import { alpha, useTheme, styled, SxProps, Theme } from "@mui/material";
+
+const StyledButton = styled(MuiButton)(({ theme }) => {
+  return {
+    "&:focus": {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+      borderColor: theme.palette.primary.main,
+    },
+  };
+});
 
 interface ButtonProps {
-  label: string;
-  hoverBgColor: string;
-  type: MuiButtonProps["type"];
-  onClick?: (e: unknown) => void;
+  type?: MuiButtonProps["type"];
+  sx?: SxProps<Theme> | undefined;
+  color?: string;
+  label?: string;
+  startIcon?: React.ReactNode;
+  variant?: "text" | "outlined" | "contained";
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function Button({
+  type = "button",
+  sx,
   label,
+  startIcon,
+  variant = "contained",
   onClick,
-  type,
-  hoverBgColor,
 }: ButtonProps) {
   const theme = useTheme();
 
   return (
-    <MuiButton
-      sx={{
-        color: "white",
-        borderRadius: theme.shape.borderRadiusMedium,
-        textTransform: "none",
-        backgroundColor: theme.palette.primary.main,
-        "&:hover": { backgroundColor: hoverBgColor },
-      }}
-      onClick={onClick}
-      disableRipple
+    <StyledButton
       type={type}
+      size="small"
+      variant={variant}
+      startIcon={startIcon}
+      onClick={onClick}
+      sx={{
+        textTransform: "none",
+        borderRadius: theme.shape.borderRadiusMedium,
+        boxShadow: "none",
+        ...sx,
+      }}
+      disableRipple
     >
       {label}
-    </MuiButton>
+    </StyledButton>
   );
 }

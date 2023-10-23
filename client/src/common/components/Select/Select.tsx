@@ -1,84 +1,69 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
 import React from "react";
-import { styled } from "@mui/material/styles";
+import { alpha, styled, useTheme } from "@mui/material";
 
-import MuiFormControl from "@mui/material/FormControl";
-import MuiFormHelperText from "@mui/material/FormHelperText";
-import MuiSelect from "@mui/material/Select";
 import MuiTypography from "@mui/material/Typography";
-import SelectItem from "../MenuItem";
+import MuiSelect, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
-  "&.MuiOutlinedInput-root": {
-    color: theme.palette.text.primary,
-    fontSize: "14px",
-    fontWeight: 600,
-    textTransform: "capitalize",
-    borderRadius: "6px",
-    backgroundColor: theme.palette.grey[100],
-    "& fieldset": {
-      border: `1px solid ${theme.palette.grey[200]}`,
-    },
-    "&:hover fieldset": {
-      border: `1px solid ${theme.palette.primary.main}`,
-      backgroundColor: "transparent",
-      transitionDuration: "250ms",
-    },
+  width: "100%",
+  borderRadius: theme.shape.borderRadiusMedium,
+  fontWeight: "100px",
+  "& fieldset": {
+    border: `1px solid ${theme.palette.divider}`,
+    transition: theme.transitions.create(["border-color"]),
+  },
+  "&.Mui-focused": {
+    boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+    borderColor: theme.palette.primary.main,
+  },
+  "&.Mui-error": {
+    boxShadow: `${alpha(theme.palette.error.main, 0.25)} 0 0 0 0.2rem`,
   },
 }));
 
-interface SelectProps {
-  label: string;
-  options: { label: string; value: string }[];
-  selectedOption: { label: string; value: string } | undefined | null;
-  helperText: string;
-  onClick: () => void;
-  handleChange: () => void;
+export interface SelectProps {
+  name: string;
+  value: string;
+  onChange: (e: SelectChangeEvent<unknown>) => void;
+  options?: string[];
 }
 
 export default function Select({
-  label,
-  options,
-  helperText,
-  selectedOption,
-  onClick,
-  handleChange,
+  value,
+  name,
+  options = [],
+  onChange,
 }: SelectProps) {
+  const theme = useTheme();
+
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        boxShadow: theme.shadows[20],
+        border: `2px solid ${theme.palette.divider}`,
+        borderRadius: theme.shape.borderRadiusMedium,
+        backgroundColor: theme.palette.background.default,
+      },
+    },
+  };
+
   return (
-    <>
-      {label && (
-        <MuiTypography
-          fontWeight={600}
-          sx={{ paddingBottom: 1 }}
-          variant="body2"
-        >
-          {label}
-        </MuiTypography>
-      )}
-      <MuiFormControl fullWidth>
-        <StyledSelect
-          size="small"
-          value={selectedOption}
-          sx={{ color: "text.primary", fontSize: "14px", fontWeight: 600 }}
-          onChange={handleChange}
-        >
-          {options.map((option) => (
-            <SelectItem
-              key={option.value}
-              option={option}
-              onClick={onClick}
-              selectedOption={selectedOption}
-            />
-          ))}
-        </StyledSelect>
-      </MuiFormControl>
-      <MuiFormHelperText>
-        <MuiTypography component="span" variant="body2">
-          {helperText}
-        </MuiTypography>
-      </MuiFormHelperText>
-    </>
+    <StyledSelect
+      id={name}
+      name={name}
+      size="small"
+      value={value}
+      onChange={onChange}
+      MenuProps={MenuProps}
+      IconComponent={KeyboardArrowDownIcon}
+    >
+      {options.map((name) => (
+        <MenuItem key={name} value={name} disableRipple>
+          <MuiTypography variant="body2">{name}</MuiTypography>
+        </MenuItem>
+      ))}
+    </StyledSelect>
   );
 }

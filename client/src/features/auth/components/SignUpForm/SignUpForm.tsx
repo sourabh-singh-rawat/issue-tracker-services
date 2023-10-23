@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
@@ -17,6 +18,9 @@ import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import openapi from "../../../../api/generated/openapi.json";
 
 export default function SignUpForm() {
+  const [searchParams] = useSearchParams();
+  const inviteToken = searchParams.get("inviteToken");
+  console.log(inviteToken);
   const [signup, { error, status }] = useRegisterUserMutation();
   const messageBar = useMessageBar();
 
@@ -47,6 +51,9 @@ export default function SignUpForm() {
     password,
     displayName,
   }) => {
+    if (inviteToken) {
+      return signup({ body: { email, password, displayName }, inviteToken });
+    }
     signup({ body: { email, password, displayName } });
   };
 

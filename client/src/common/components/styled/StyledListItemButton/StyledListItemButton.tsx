@@ -1,20 +1,17 @@
 import { styled } from "@mui/material/styles";
 import MuiListItemButton from "@mui/material/ListItemButton";
 
-const StyledMenuItem = styled(MuiListItemButton)(({ theme }) => ({
-  backgroundColor: "transparent",
+const StyledListItemButton = styled(MuiListItemButton)(({ theme }) => ({
   "&.MuiListItemButton-root": {
     borderRadius: theme.shape.borderRadiusMedium,
-    padding: theme.spacing(1),
   },
   "&.MuiListItemButton-root:hover": {
-    color: theme.palette.primary.main,
-    backgroundColor: "transparent",
+    backgroundColor: theme.palette.action.hover,
     transition: theme.transitions.create(["color"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.shortest,
     }),
   },
 }));
 
-export default StyledMenuItem;
+export default StyledListItemButton;

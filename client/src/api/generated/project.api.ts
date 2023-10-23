@@ -39,6 +39,28 @@ const injectedRtkApi = api
         query: () => ({ url: `/projects/status` }),
         providesTags: ["project"],
       }),
+      getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
+        query: (queryArg) => ({ url: `/projects/${queryArg.id}` }),
+        providesTags: ["project"],
+      }),
+      updateProject: build.mutation<
+        UpdateProjectApiResponse,
+        UpdateProjectApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/projects/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["project"],
+      }),
+      getProjectMembers: build.query<
+        GetProjectMembersApiResponse,
+        GetProjectMembersApiArg
+      >({
+        query: (queryArg) => ({ url: `/projects/${queryArg.id}/members` }),
+        providesTags: ["project"],
+      }),
     }),
     overrideExisting: false,
   });
@@ -52,8 +74,8 @@ export type GetProjectListApiResponse =
       status?: Status;
       ownerUserId?: string;
       workspaceId?: string;
-      startDate?: StartDate;
-      endDate?: EndDate;
+      startDate?: DueDate;
+      endDate?: DueDate;
     }[];
     rowCount?: number;
   };
@@ -70,24 +92,51 @@ export type CreateProjectApiResponse =
 export type CreateProjectApiArg = {
   /** Fields used for creating a new project */
   body: {
-    name: string;
-    description?: string;
-    startDate?: string;
-    endDate?: string;
+    name: Name;
+    description?: Description;
+    startDate?: DueDate;
+    endDate?: DueDate;
     status: string;
   };
 };
 export type GetProjectStatusListApiResponse =
   /** status 200 Get project status list */ {
-    rows?: string[];
+    rows: string[];
     rowCount: number;
   };
 export type GetProjectStatusListApiArg = void;
+export type GetProjectApiResponse =
+  /** status 200 Projects updated successfully */ undefined;
+export type GetProjectApiArg = {
+  /** Numeric id of the project to update */
+  id?: string;
+};
+export type UpdateProjectApiResponse =
+  /** status 200 Projects updated successfully */ undefined;
+export type UpdateProjectApiArg = {
+  /** Numeric id of the project to update */
+  id: string;
+  body: {
+    name?: Name;
+    description?: Description;
+    status?: Status;
+    startDate?: DueDate;
+    endDate?: DueDate;
+  };
+};
+export type GetProjectMembersApiResponse =
+  /** status 200 Get all project members */ {
+    rows: string[];
+    rowCount: number;
+  };
+export type GetProjectMembersApiArg = {
+  /** Numeric id of the project to update */
+  id?: string;
+};
 export type Name = string;
 export type Description = string;
 export type Status = string;
-export type StartDate = string;
-export type EndDate = string;
+export type DueDate = string | string;
 export type Schema = {
   errors?: {
     message: string;
@@ -98,4 +147,7 @@ export const {
   useGetProjectListQuery,
   useCreateProjectMutation,
   useGetProjectStatusListQuery,
+  useGetProjectQuery,
+  useUpdateProjectMutation,
+  useGetProjectMembersQuery,
 } = injectedRtkApi;

@@ -28,6 +28,24 @@ const injectedRtkApi = api
         query: (queryArg) => ({ url: `/workspaces/${queryArg.id}` }),
         providesTags: ["workspace"],
       }),
+      createWorkspaceInvite: build.mutation<
+        CreateWorkspaceInviteApiResponse,
+        CreateWorkspaceInviteApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/workspaces/invite`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["workspace"],
+      }),
+      getWorkspaceRoleList: build.query<
+        GetWorkspaceRoleListApiResponse,
+        GetWorkspaceRoleListApiArg
+      >({
+        query: () => ({ url: `/workspaces/role` }),
+        providesTags: ["workspace"],
+      }),
     }),
     overrideExisting: false,
   });
@@ -62,6 +80,21 @@ export type GetWorkspaceApiArg = {
   /** Numeric id of the workspace to get */
   id: string;
 };
+export type CreateWorkspaceInviteApiResponse =
+  /** status 201 Workspace member created */ undefined;
+export type CreateWorkspaceInviteApiArg = {
+  /** Fields used to create a new workspace member invite */
+  body: {
+    email: Email;
+    workspaceRole: Name;
+  };
+};
+export type GetWorkspaceRoleListApiResponse =
+  /** status 200 Get workspace roles list */ {
+    rows: string[];
+    rowCount: number;
+  };
+export type GetWorkspaceRoleListApiArg = void;
 export type Schema = {
   errors?: {
     message: string;
@@ -70,8 +103,11 @@ export type Schema = {
 };
 export type Name = string;
 export type Description = string;
+export type Email = string;
 export const {
   useGetAllWorkspacesQuery,
   useCreateWorkspaceMutation,
   useGetWorkspaceQuery,
+  useCreateWorkspaceInviteMutation,
+  useGetWorkspaceRoleListQuery,
 } = injectedRtkApi;
