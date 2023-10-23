@@ -17,7 +17,6 @@ export default function MenuItem({
   label,
   onClick,
   indicatorIcon,
-  value,
   to,
 }: MenuItemProps) {
   return to ? (

@@ -4,10 +4,8 @@ import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 import MuiBox from "@mui/material/Box";
 import MuiDivider from "@mui/material/Divider";
-import TextField from "../../../../common/forms/TextField";
-import Setting from "../../../../common/Setting";
-import ProjectStatusSelector from "../ProjectStatusSelector";
-import theme from "../../../../app/theme.config";
+import TextField from "../../../../common/components/forms/TextField";
+import { useTheme } from "@mui/material";
 
 export default function ProjectDetailSetting({
   name,
@@ -16,6 +14,8 @@ export default function ProjectDetailSetting({
   handleChange,
   isLoading,
 }) {
+  const theme = useTheme();
+
   return (
     <>
       <MuiBox sx={{ paddingBottom: 3 }}>
@@ -38,7 +38,7 @@ export default function ProjectDetailSetting({
         container
       >
         <MuiGrid xs={12} item>
-          <Setting title="Name">
+          {/* <Settings title="Name">
             <TextField
               helperText="The name of your project. Max character count is 50"
               isLoading={isLoading}
@@ -47,21 +47,21 @@ export default function ProjectDetailSetting({
               required
               onChange={handleChange}
             />
-          </Setting>
+          </Setting> */}
           <MuiDivider />
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <Setting title="Status">
+          {/* <Setting title="Status">
             <ProjectStatusSelector
               handleChange={handleChange}
               helperText="The current status of your project."
               value={status}
             />
-          </Setting>
+          </Setting> */}
           <MuiDivider />
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <Setting title="Description">
+          {/* <Setting title="Description">
             <TextField
               helperText="A free text description of the project. Max character count is 150"
               isLoading={isLoading}
@@ -71,7 +71,7 @@ export default function ProjectDetailSetting({
               multiline
               onChange={handleChange}
             />
-          </Setting>
+          </Setting> */}
         </MuiGrid>
       </MuiGrid>
     </>

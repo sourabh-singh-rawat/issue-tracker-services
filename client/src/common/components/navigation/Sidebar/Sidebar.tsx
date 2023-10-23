@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useTheme, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useLargeScreen } from "../../../hooks/useLargeScreen";
 
 import MuiList from "@mui/material/List";
 import MuiDrawer from "@mui/material/Drawer";
@@ -18,11 +18,11 @@ import SidebarGroupItem from "../SidebarGroupItem";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
-  const opendrawerWidth = theme.spacing(28);
+  const openDrawerWidth = theme.spacing(28);
   const closedDrawerWidth = theme.spacing(9);
 
   return {
-    width: open ? opendrawerWidth : closedDrawerWidth,
+    width: open ? openDrawerWidth : closedDrawerWidth,
     [theme.breakpoints.down("sm")]: {
       width: closedDrawerWidth,
     },
@@ -39,7 +39,7 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
         duration: theme.transitions.duration.enteringScreen,
       }),
       ...(open && {
-        width: opendrawerWidth,
+        width: openDrawerWidth,
         [theme.breakpoints.down("sm")]: {
           boxShadow: theme.shadows[5],
         },
@@ -53,8 +53,7 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
 });
 
 export default function Sidebar() {
-  const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
+  const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

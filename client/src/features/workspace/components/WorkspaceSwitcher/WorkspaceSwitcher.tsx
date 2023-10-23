@@ -2,10 +2,10 @@ import React, { useState } from "react";
 
 import { useGetAllWorkspacesQuery } from "../../../../api/generated/workspace.api";
 import { useAppSelector } from "../../../../common/hooks";
+import UnfoldMoreTwoToneIcon from "@mui/icons-material/UnfoldMoreTwoTone";
 
 import WorkspaceMenu from "../WorkspaceMenu";
 import MenuItem from "../../../../common/components/MenuItem";
-import UnfoldMoreTwoToneIcon from "@mui/icons-material/UnfoldMoreTwoTone";
 import Avatar from "../../../../common/components/Avatar";
 
 interface WorkspaceSwitcherProps {
@@ -38,7 +38,7 @@ export default function WorkspaceSwitcher({
       />
       <WorkspaceMenu
         anchorEl={anchorEl}
-        options={data?.data}
+        options={data?.rows}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
         handleClose={handleClose}

@@ -50,7 +50,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <MuiGrid container rowSpacing={2}>
+      <MuiGrid rowSpacing={2} container>
         <MuiGrid item xs={12}>
           <TextField
             name="name"

@@ -9,16 +9,27 @@ import MuiContainer from "@mui/material/Container";
 
 import Navbar from "../navigation/Navbar";
 import MenuSidebar from "../navigation/Sidebar";
+import { useLargeScreen } from "../../hooks/useLargeScreen";
 
 export default function AppMain() {
   const theme = useTheme();
+  const isLargeScreen = useLargeScreen();
 
   return (
-    <MuiBox display="flex">
+    <MuiBox display="flex" height="100vh">
       <Navbar />
       <MenuSidebar />
-      <MuiContainer sx={{ padding: theme.spacing(2) }} disableGutters>
-        <MuiToolbar variant="dense" />
+      <MuiContainer
+        sx={{
+          padding: theme.spacing(2),
+          width: `calc(100% - ${
+            isLargeScreen ? theme.spacing(28) : theme.spacing(9)
+          })`,
+          overflowX: "auto",
+        }}
+        disableGutters
+      >
+        <MuiToolbar variant="dense" disableGutters />
         <MuiGrid container>
           <Outlet />
         </MuiGrid>

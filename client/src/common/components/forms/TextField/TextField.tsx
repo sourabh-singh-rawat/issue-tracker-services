@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import MuiGrid from "@mui/material/Grid";
@@ -26,7 +24,6 @@ interface TextFieldProps<DefaultValues extends FieldValues> {
   rows?: number;
   isLoading?: boolean;
   isDisabled?: boolean;
-  isMultiline?: boolean;
   endAdornment?: React.JSX.Element;
 }
 
@@ -38,12 +35,13 @@ export default function TextField<DefaultValues extends FieldValues>({
   rules,
   type = "text",
   helperText,
-  rows = 3,
+  rows = 0,
   isLoading,
   isDisabled,
-  isMultiline,
   endAdornment,
 }: TextFieldProps<DefaultValues>) {
+  const isMultiline = rows > 0;
+
   return (
     <MuiGrid container>
       {title && (

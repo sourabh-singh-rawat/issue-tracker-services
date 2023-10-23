@@ -7,10 +7,12 @@ import WorkspaceModal from "../WorkspaceModal";
 import WorkspaceListItem from "../WorkspaceListItem";
 
 import AddIcon from "@mui/icons-material/Add";
-import AppsIcon from "@mui/icons-material/Apps";
 
 import MenuItem from "../../../../common/components/MenuItem";
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
+import SettingsTwoToneIcon from "@mui/icons-material/SettingsTwoTone";
+import MemberModal from "../MemberModal";
+import PersonAddAlt1TwoToneIcon from "@mui/icons-material/PersonAddAlt1TwoTone";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
@@ -30,7 +32,7 @@ export default function WorkspaceMenu({
   setSelectedOption,
 }: WorkspaceMenuProps) {
   const [open, setOpen] = useState(false);
-  const handleModalClose = () => setOpen(false);
+  const [openMember, setOpenMember] = useState(false);
 
   return (
     <>
@@ -39,19 +41,6 @@ export default function WorkspaceMenu({
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MuiMenuList dense disablePadding>
-          {options.map((option) => (
-            <WorkspaceListItem
-              key={option.id}
-              isOpen={open}
-              option={option}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              handleClose={handleClose}
-            />
-          ))}
-        </MuiMenuList>
-        <MuiDivider />
         <MenuItem
           avatarIcon={<AddIcon />}
           label="Add new workspace"
@@ -61,12 +50,36 @@ export default function WorkspaceMenu({
           }}
         />
         <MenuItem
-          label="Manage workspaces"
-          onClick={handleClose}
-          avatarIcon={<AppsIcon />}
+          label="Invite Members"
+          onClick={() => {
+            setOpenMember(true);
+            handleClose();
+          }}
+          avatarIcon={<PersonAddAlt1TwoToneIcon />}
         />
+        <MenuItem
+          label="Settings"
+          onClick={handleClose}
+          avatarIcon={<SettingsTwoToneIcon />}
+        />
+        <MuiDivider />
+        {options.length > 0 && (
+          <MuiMenuList dense disablePadding>
+            {options.map((option) => (
+              <WorkspaceListItem
+                key={option.id}
+                isOpen={open}
+                option={option}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+                handleClose={handleClose}
+              />
+            ))}
+          </MuiMenuList>
+        )}
       </StyledMenu>
-      <WorkspaceModal open={open} handleClose={handleModalClose} />
+      <MemberModal open={openMember} handleClose={() => setOpenMember(false)} />
+      <WorkspaceModal open={open} handleClose={() => setOpen(false)} />
     </>
   );
 }

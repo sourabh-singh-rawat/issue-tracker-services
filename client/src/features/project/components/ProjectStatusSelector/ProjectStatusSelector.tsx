@@ -1,8 +1,4 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable react/prop-types */
 import React from "react";
-
-import { useTheme } from "@mui/material";
 
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
@@ -18,7 +14,7 @@ import {
   Path,
   UseControllerProps,
 } from "react-hook-form";
-import BaseSelector from "../BaseSelector";
+import Select from "../../../../common/components/Select";
 
 interface ProjectStatusSelectorProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -35,14 +31,11 @@ export default function ProjectStatusSelector<
 >({
   name,
   control,
-  formState,
   rules,
   title,
   options,
   helperText,
 }: ProjectStatusSelectorProps<DefaultValues>) {
-  const theme = useTheme();
-
   const isLoading = false;
 
   return (
@@ -62,7 +55,7 @@ export default function ProjectStatusSelector<
             rules={rules}
             render={({ field }) => {
               return (
-                <BaseSelector
+                <Select
                   name={field.name}
                   value={field.value}
                   options={options}

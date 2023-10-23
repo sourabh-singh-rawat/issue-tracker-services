@@ -18,7 +18,15 @@
   "tags": [
     {
       "name": "identity",
-      "description": "Authentication and authorization functionalities."
+      "description": "Authentication functionalities."
+    },
+    {
+      "name": "issue",
+      "description": "Create and manage issues"
+    },
+    {
+      "name": "project",
+      "description": "Create and manage projects"
     },
     {
       "name": "user",
@@ -30,6 +38,1381 @@
     }
   ],
   "paths": {
+    "/identity/generate-tokens": {
+      "description": "Generate access and refresh tokens",
+      "post": {
+        "operationId": "generateTokens",
+        "tags": [
+          "identity"
+        ],
+        "summary": "Generate tokens",
+        "description": "Validates credentials, generates tokens",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "format": "email",
+                    "default": "Sourabh.rawatcc@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
+                    "default": "Leipzigcool7023#"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "accessToken and refreshTokens are successfully generated.",
+            "headers": {
+              "Set-Cookie": {
+                "description": "The cookie with accessToken and refreshToken",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains invalid body paramaters"
+          },
+          "401": {
+            "description": "User credentials are invalid"
+          },
+          "403": {
+            "description": "User may be blocked"
+          },
+          "429": {
+            "description": "User is blocked for sending too many request"
+          },
+          "500": {
+            "description": "Something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/identity/refresh-tokens": {
+      "description": "If refresh token is valid, generate new access and refresh tokens",
+      "post": {
+        "operationId": "refreshTokens",
+        "tags": [
+          "identity"
+        ],
+        "summary": "Refresh Tokens",
+        "description": "If refresh token is valud, generates new tokens",
+        "responses": {
+          "200": {
+            "description": "new accessToken token is successfully created",
+            "headers": {
+              "Set-Cookie": {
+                "description": "The cookie with accessToken and refreshToken",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
+              }
+            }
+          },
+          "400": {
+            "description": "BadRequest, the provided token was not in correct format"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Too Many Request"
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected server error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues": {
+      "description": "Create and get issues",
+      "get": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Gets a list of issues",
+        "description": "Gets a list of issues",
+        "operationId": "getIssueList",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "created_at"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "asc"
+            }
+          },
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": null
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of issues"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Create a new issue",
+        "description": "Create a new issue",
+        "operationId": "createIssue",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "default": "Untitled"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "resolution": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "projectId": {
+                    "type": "string"
+                  },
+                  "assignees": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    }
+                  },
+                  "reporterId": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "dueDate": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 0
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "assignees"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Issue created successfully"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues/status": {
+      "description": "Get a list of issue statuses",
+      "get": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Get a list of all issue statuses",
+        "description": "Get issue statuses",
+        "operationId": "getIssueStatusList",
+        "responses": {
+          "200": {
+            "description": "Get issue status list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues/priority": {
+      "description": "Get a list of issue priorities",
+      "get": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Get a list of all issue priority",
+        "description": "Get issue priorities",
+        "operationId": "getIssuePriorityList",
+        "responses": {
+          "200": {
+            "description": "Get issue priority list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues/{id}": {
+      "description": "Get or update a issue",
+      "get": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Gets a Issue",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the issue to get"
+          }
+        ],
+        "operationId": "getIssue",
+        "responses": {
+          "200": {
+            "description": "Returns the issue if it exists"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues/{id}/comments": {
+      "description": "Get comments or create a new comment",
+      "post": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Create a new issue comment",
+        "description": "Create a new issue comment",
+        "operationId": "createIssueComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the issue in which the comment will be created"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The comment has been created successfully"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Gets list of all issue comments",
+        "description": "Gets list of all issues comments",
+        "operationId": "getIssueCommentList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the issue who's comments will be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all the issue comments"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues/{id}/tasks": {
+      "description": "Create and gets issue tasks",
+      "get": {
+        "tags": [
+          "issue"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Gets all tasks in an issue",
+        "description": "Gets all tasks in an issue",
+        "operationId": "getIssueTaskList",
+        "responses": {
+          "200": {
+            "description": "Issue task created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array"
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "issue"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Create a new issue task",
+        "description": "Create a new issue task",
+        "operationId": "createIssueTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  },
+                  "completed": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "dueDate": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 0
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "description"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Issue task created successfully"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects": {
+      "description": "Create and get projects",
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Get all projects",
+        "description": "Get all the projects created by a user or associated with them",
+        "operationId": "getProjectList",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "created_at"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "asc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All the projects created by a user or associated with them",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255,
+                            "default": "Untitled"
+                          },
+                          "description": {
+                            "type": "string",
+                            "maxLength": 3000,
+                            "default": "No description"
+                          },
+                          "status": {
+                            "type": "string",
+                            "default": "Not Started"
+                          },
+                          "ownerUserId": {
+                            "type": "string"
+                          },
+                          "workspaceId": {
+                            "type": "string"
+                          },
+                          "startDate": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "format": "date"
+                              },
+                              {
+                                "type": "string",
+                                "maxLength": 0
+                              }
+                            ]
+                          },
+                          "endDate": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "format": "date"
+                              },
+                              {
+                                "type": "string",
+                                "maxLength": 0
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Create a new project",
+        "description": "Create a new project",
+        "operationId": "createProject",
+        "requestBody": {
+          "description": "Fields used for creating a new project",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "default": "Untitled"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  },
+                  "startDate": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 0
+                      }
+                    ]
+                  },
+                  "endDate": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 0
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "default": "Not Started"
+                  }
+                },
+                "required": [
+                  "name",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "rows"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/status": {
+      "description": "Get a list of project statuses",
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Get list of all project statuses available",
+        "description": "Get project statuses",
+        "operationId": "getProjectStatusList",
+        "responses": {
+          "200": {
+            "description": "Get project status list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{id}": {
+      "description": "Update the project status",
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Gets a project",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the project to update"
+          }
+        ],
+        "operationId": "getProject",
+        "responses": {
+          "200": {
+            "description": "Projects updated successfully"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Updates the project with new properties",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Numeric id of the project to update"
+          }
+        ],
+        "description": "Updates the project with new properties",
+        "operationId": "updateProject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "default": "Untitled"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 3000,
+                    "default": "No description"
+                  },
+                  "status": {
+                    "type": "string",
+                    "default": "Not Started"
+                  },
+                  "startDate": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 0
+                      }
+                    ]
+                  },
+                  "endDate": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Projects updated successfully"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{id}/members": {
+      "description": "Get project members",
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "summary": "Get all project members",
+        "description": "Get all project members",
+        "operationId": "getProjectMembers",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the project to update"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all project members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/register": {
       "description": "Create or register a new user",
       "post": {
@@ -39,6 +1422,16 @@
         ],
         "summary": "Create user",
         "description": "Creates a new user",
+        "parameters": [
+          {
+            "name": "inviteToken",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -379,163 +1772,6 @@
         }
       }
     },
-    "/identity/generate-tokens": {
-      "description": "Generate access and refresh tokens",
-      "post": {
-        "operationId": "generateTokens",
-        "tags": [
-          "identity"
-        ],
-        "summary": "Generate tokens",
-        "description": "Validates credentials, generates tokens",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 80,
-                    "format": "email",
-                    "default": "Sourabh.rawatcc@gmail.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "minLength": 8,
-                    "maxLength": 64,
-                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
-                    "default": "Leipzigcool7023#"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "accessToken and refreshTokens are successfully generated.",
-            "headers": {
-              "Set-Cookie": {
-                "description": "The cookie with accessToken and refreshToken",
-                "schema": {
-                  "type": "string"
-                },
-                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
-              }
-            }
-          },
-          "400": {
-            "description": "The request contains invalid body paramaters"
-          },
-          "401": {
-            "description": "User credentials are invalid"
-          },
-          "403": {
-            "description": "User may be blocked"
-          },
-          "429": {
-            "description": "User is blocked for sending too many request"
-          },
-          "500": {
-            "description": "Something went wrong",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          },
-                          "field": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "message"
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/identity/refresh-tokens": {
-      "description": "If refresh token is valid, generate new access and refresh tokens",
-      "post": {
-        "operationId": "refreshTokens",
-        "tags": [
-          "identity"
-        ],
-        "summary": "Refresh Tokens",
-        "description": "If refresh token is valud, generates new tokens",
-        "responses": {
-          "200": {
-            "description": "new accessToken token is successfully created",
-            "headers": {
-              "Set-Cookie": {
-                "description": "The cookie with accessToken and refreshToken",
-                "schema": {
-                  "type": "string"
-                },
-                "example": "accessToken=[jwt_token]; refreshToken=[jwt_token_2]"
-              }
-            }
-          },
-          "400": {
-            "description": "BadRequest, the provided token was not in correct format"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "429": {
-            "description": "Too Many Request"
-          },
-          "500": {
-            "description": "Internal Server Error - An unexpected server error occured",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          },
-                          "field": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "message"
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/workspaces": {
       "description": "Create and get workspaces",
       "get": {
@@ -704,7 +1940,7 @@
       }
     },
     "/workspaces/{id}": {
-      "description": "Create and get workspaces",
+      "description": "Get workspace",
       "get": {
         "tags": [
           "workspace"
@@ -782,151 +2018,40 @@
         }
       }
     },
-    "/projects": {
-      "description": "Create and get projects",
-      "get": {
-        "tags": [
-          "project"
-        ],
-        "summary": "Get all projects",
-        "description": "Get all the projects created by a user or associated with them",
-        "operationId": "getProjectList",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": null
-            }
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": null
-            }
-          },
-          {
-            "name": "sortBy",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": "created_at"
-            }
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": "asc"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "All the projects created by a user or associated with them",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "rows": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 255,
-                            "default": "Untitled"
-                          },
-                          "description": {
-                            "type": "string",
-                            "maxLength": 3000,
-                            "default": "No description"
-                          },
-                          "status": {
-                            "type": "string",
-                            "default": "Not Started"
-                          },
-                          "ownerUserId": {
-                            "type": "string"
-                          },
-                          "workspaceId": {
-                            "type": "string"
-                          },
-                          "startDate": {
-                            "type": "string",
-                            "default": null
-                          },
-                          "endDate": {
-                            "type": "string",
-                            "default": null
-                          }
-                        }
-                      }
-                    },
-                    "rowCount": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          }
-        }
-      },
+    "/workspaces/invite": {
+      "description": "Creates a workspace member",
       "post": {
         "tags": [
-          "project"
+          "workspace"
         ],
-        "summary": "Create a new project",
-        "description": "Create a new project",
-        "operationId": "createProject",
+        "summary": "Create a workspace member invite",
+        "description": "Create a new workspace member invite",
+        "operationId": "createWorkspaceInvite",
         "requestBody": {
-          "description": "Fields used for creating a new project",
+          "description": "Fields used to create a new workspace member invite",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80,
+                    "format": "email",
+                    "default": "Sourabh.rawatcc@gmail.com"
+                  },
+                  "workspaceRole": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
                     "default": "Untitled"
-                  },
-                  "description": {
-                    "type": "string",
-                    "maxLength": 3000,
-                    "default": "No description"
-                  },
-                  "startDate": {
-                    "type": "string",
-                    "default": null
-                  },
-                  "endDate": {
-                    "type": "string",
-                    "default": null
-                  },
-                  "status": {
-                    "type": "string",
-                    "default": "Not Started"
                   }
                 },
                 "required": [
-                  "name",
-                  "status"
+                  "email",
+                  "workspaceRole"
                 ]
               }
             }
@@ -934,22 +2059,7 @@
         },
         "responses": {
           "201": {
-            "description": "Project created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "rows": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "rows"
-                  ]
-                }
-              }
-            }
+            "description": "Workspace member created"
           },
           "400": {
             "description": "Bad request",
@@ -983,18 +2093,18 @@
         }
       }
     },
-    "/projects/status": {
-      "description": "Get a list of project statues",
+    "/workspaces/role": {
+      "description": "Get a list of workspace roles",
       "get": {
         "tags": [
-          "project"
+          "workspace"
         ],
-        "summary": "Get list of all project statuses available",
-        "description": "Get project statuses",
-        "operationId": "getProjectStatusList",
+        "summary": "Get list of all workspace roles",
+        "description": "Get workspace roles",
+        "operationId": "getWorkspaceRoleList",
         "responses": {
           "200": {
-            "description": "Get project status list",
+            "description": "Get workspace roles list",
             "content": {
               "application/json": {
                 "schema": {
@@ -1011,7 +2121,7 @@
                     }
                   },
                   "required": [
-                    "row",
+                    "rows",
                     "rowCount"
                   ]
                 }

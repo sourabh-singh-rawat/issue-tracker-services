@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import apiSlice from "../api/api.config";
 import authSlice from "../features/auth/auth.slice";
-import collaboratorListSlice from "../features/collaborator-list/collaborator-list.slice";
 import issueCommentsSlice from "../features/issue-comments/issue-comments.slice";
 import issueListSlice from "../features/issue-list/issue-list.slice";
 import issueSlice from "../features/issue/issue.slice";
@@ -13,14 +12,11 @@ import profileSlice from "../features/profile/profile.slice";
 import projectListSlice from "../features/project-list/project-list.slice";
 import projectSlice from "../features/project/project.slice";
 import taskListSlice from "../features/task-list/task-list.slice";
-import teamListSlice from "../features/team-list/team-list.slice";
-import teamSlice from "../features/team/team.slice";
 
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authSlice,
-    collaboratorList: collaboratorListSlice,
     issue: issueSlice,
     issueComments: issueCommentsSlice,
     issueList: issueListSlice,
@@ -30,8 +26,6 @@ const store = configureStore({
     projectList: projectListSlice,
     messageBar: messageBarSlice,
     taskList: taskListSlice,
-    team: teamSlice,
-    teamList: teamListSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(logger).concat(apiSlice.middleware),

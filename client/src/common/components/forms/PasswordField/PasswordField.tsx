@@ -31,11 +31,7 @@ export default function PasswordField<DefaultValues extends FieldValues>({
       type={isVisible ? "text" : "password"}
       helperText="Minimum 8 characters with uppercase, lowercase, one digit, no whitespace and atleast one special character (@#$%^&+=!)"
       endAdornment={
-        <MuiIconButton
-          aria-label="toggle password visibility"
-          onClick={toggle}
-          // onMouseDown={handleMouseDownPassword}
-        >
+        <MuiIconButton onClick={toggle}>
           {isVisible ? <MuiVisibilityOff /> : <MuiVisibility />}
         </MuiIconButton>
       }

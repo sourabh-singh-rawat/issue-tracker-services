@@ -1,27 +1,25 @@
 /* eslint-disable react/jsx-curly-newline */
-import React, { useEffect } from "react";
+import React from "react";
 import { useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { formatISO } from "date-fns";
 
 import MuiGrid from "@mui/material/Grid";
-import TabPanel from "../../../../common/TabPanel";
-import PrimaryButton from "../../../../common/buttons/PrimaryButton";
 
 import { updateProject } from "../../project.slice";
-import { setMessageBarOpen } from "../../../message-bar/message-bar.slice";
-import { useUpdateProjectMutation } from "../../project.api";
 import ProjectDetailSettings from "../../components/ProjectDetailSettings";
-import CoreSettings from "../../components/CoreSettings/CoreSettings";
-import TimelineSettings from "../../components/TimelineSettings";
+import TabPanel from "../../../../common/components/TabPanel";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
+import { useAppSelector } from "../../../../common/hooks";
+import { useTheme } from "@mui/material";
 
 function ProjectSettings() {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const [selectedTab] = useOutletContext();
 
-  const project = useSelector((store) => store.project.settings);
+  const project = useAppSelector((store) => store.project.settings);
 
-  const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
+  // const [updateProjectMutation, { isSuccess }] = useUpdateProjectMutation();
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(updateProject({ [name]: value }));
@@ -33,16 +31,16 @@ function ProjectSettings() {
     // eslint-disable-next-line object-curly-newline
     const { name, description, status, endDate, startDate } = project;
 
-    await updateProjectMutation({
-      id: project.id,
-      // eslint-disable-next-line object-curly-newline
-      body: { name, description, status, endDate, startDate },
-    });
+    // await updateProjectMutation({
+    //   id: project.id,
+    //   // eslint-disable-next-line object-curly-newline
+    //   body: { name, description, status, endDate, startDate },
+    // });
   };
 
-  useEffect(() => {
-    if (isSuccess) dispatch(setMessageBarOpen(true));
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) dispatch(setMessageBarOpen(true));
+  // }, [isSuccess]);
 
   return (
     <TabPanel index={4} selectedTab={selectedTab}>
@@ -62,7 +60,7 @@ function ProjectSettings() {
           />
         </MuiGrid>
         <MuiGrid xl={7} xs={12} item>
-          <TimelineSettings
+          {/* <TimelineSettings
             createdAt={project.createdAt}
             endDate={project.endDate}
             handleEndDateChange={(date) =>
@@ -72,14 +70,14 @@ function ProjectSettings() {
               dispatch(updateProject({ startDate: formatISO(date) }))
             }
             startDate={project.startDate}
-          />
+          /> */}
         </MuiGrid>
         <MuiGrid xl={7} xs={12} item>
-          <CoreSettings
+          {/* <CoreSettings
             id={project.id}
             isLoading={project.isLoading}
             ownerId={project.ownerId}
-          />
+          /> */}
         </MuiGrid>
 
         <MuiGrid sx={{ marginBottom: 8 }} xs={12} item>

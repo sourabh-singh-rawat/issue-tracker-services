@@ -39,7 +39,7 @@ declare module "@mui/material/styles" {
 }
 
 // const mode = "light";
-const mode: "dark" | "light" = "light";
+const mode: "dark" | "light" = "dark";
 
 export const theme = createTheme({
   spacing: 8,
@@ -47,7 +47,7 @@ export const theme = createTheme({
     mode,
     ...(mode === "light"
       ? {
-          primary: { main: "#4259F0" },
+          primary: { main: "#9146ff" },
           secondary: {
             main: "#323239",
             100: "#f7f7f8",
@@ -93,12 +93,9 @@ export const theme = createTheme({
           },
         }
       : {
-          primary: { main: "#4259F0" },
-          text: { primary: "#adbac7" },
-          background: {
-            default: "#18181b",
-            paper: "#1f1f23",
-          },
+          primary: { main: "#9146ff" },
+          text: { primary: "#adbac7", secondary: "#9898a2" },
+          background: { default: "#18181b", paper: "#1f1f23" },
           divider: "#444c56",
         }),
   },

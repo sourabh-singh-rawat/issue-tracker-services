@@ -1,6 +1,6 @@
 import React from "react";
 
-import MuiTypography from "@mui/material/Typography";
+import { ListItemText, useTheme } from "@mui/material";
 import StyledListItemIcon from "../styled/StyledListItemIcon";
 import StyledListItemButton from "../styled/StyledListItemButton";
 
@@ -17,24 +17,24 @@ export default function MenuItemContent({
   indicatorIcon,
   onClick,
 }: MenuItemContentProps) {
+  const theme = useTheme();
+
   return (
     <StyledListItemButton onClick={onClick} disableRipple>
-      <StyledListItemIcon>{avatarIcon}</StyledListItemIcon>
-      {label && (
-        <MuiTypography
-          sx={{
-            ml: 1,
-            flexGrow: 1,
-            opacity: 1,
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {label}
-        </MuiTypography>
+      {avatarIcon && (
+        <StyledListItemIcon sx={{ marginRight: theme.spacing(1) }}>
+          {avatarIcon}
+        </StyledListItemIcon>
       )}
-      <StyledListItemIcon>{indicatorIcon}</StyledListItemIcon>
+      {label && (
+        <ListItemText
+          primary={label}
+          primaryTypographyProps={{ variant: "body2", noWrap: true }}
+        />
+      )}
+      {indicatorIcon && (
+        <StyledListItemIcon>{indicatorIcon}</StyledListItemIcon>
+      )}
     </StyledListItemButton>
   );
 }

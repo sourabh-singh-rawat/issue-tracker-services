@@ -4,32 +4,39 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "../features/dashboard/pages/Dashboard";
 import AppLayout from "../common/components/AppLayout";
 import PrivateRoutes from "../common/components/PrivateRoutes";
-import LoginPage from "../features/auth/pages/Login";
-import SignUpPage from "../features/auth/pages/Signup";
+import Login from "../features/auth/pages/Login";
+import SignUp from "../features/auth/pages/Signup";
 // import Settings from "./features/settings/pages/Settings";
 // import CollaboratorList from "./features/collaborator-list/components/CollaboratorList";
 // import Collaborators from "./features/collaborator-list/pages/Collaborators/Collaborators";
 
-import Projects from "../features/project-list/pages/Projects";
-import ProjectPage from "../features/project/pages/ProjectPage";
+import Projects from "../features/project/pages/Projects";
 // import Project from "../features/project/pages/Project";
 // import ProjectActivity from "./features/project/pages/ProjectActivity";
 // import ProjectForm from "./features/project/pages/ProjectForm";
-// import ProjectIssues from "./features/project/pages/ProjectIssues";
-import ProjectList from "../features/project-list/components/ProjectList";
 // import ProjectMembers from "./features/project/pages/ProjectMembers";
-// import ProjectOverview from "./features/project/pages/ProjectOverview";
+import ProjectOverview from "../features/project/pages/ProjectOverview";
+import ProjectForm from "../features/project/components/ProjectForm";
+import ProjectList from "../features/project-list/pages/ProjectListPage";
+import Project from "../features/project/pages/Project";
+import ProjectMembers from "../features/project/pages/ProjectMembers";
+import ProjectActivity from "../features/project/pages/ProjectActivity";
+import ProjectSettings from "../features/project/pages/ProjectSettings";
+import ProjectIssues from "../features/project/pages/ProjectIssues";
 // import ProjectSetting from "./features/project/pages/ProjectSettings";
 
-// import Issue from "./features/issue/pages/Issue";
+import Issue from "../features/issue/pages/Issue";
+import Issues from "../features/issue-list/pages/Issues";
+import IssueForm from "../features/issue/pages/IssueForm";
+import IssueList from "../features/issue-list/components/IssueList";
+import IssueOverview from "../features/issue/pages/IssueOverview";
+import IssueComments from "../features/issue-comments/pages/IssueComments";
 // import IssueAttachments from "./features/issue-attachments/pages/IssueAttachments";
-// import IssueComments from "./features/issue-comments/pages/IssueComments";
 // import IssueForm from "./features/issue/pages/IssueForm";
 // import IssueList from "./features/issue-list/components/IssueList";
-// import IssueOverview from "./features/issue/pages/IssueOverview";
 // import Issues from "./features/issue-list/pages/Issues";
 // import IssueSettings from "./features/issue/pages/IssueSettings";
-// import IssueTasks from "./features/issue-tasks/pages/IssueTasks/IssueTasks";
+import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 
 // import Team from "./features/team/pages/Team";
 // import TeamActivity from "./features/team/pages/TeamActivity";
@@ -47,65 +54,42 @@ function NoComponent() {
   return <h1>404</h1>;
 }
 
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route element={<LoginPage />} path="/login" />
-        <Route element={<SignUpPage />} path="/signup" />
+        <Route element={<Login />} path="login" />
+        <Route element={<SignUp />} path="signup" />
         <Route element={<PrivateRoutes />}>
           <Route element={<Dashboard />} index />
-          {/* <Route element={<Settings />} path="settings" /> */}
-          <Route path="profile">
-            {/* <Route element={<Profile />} path=":id" /> */}
-          </Route>
-          {/* collaborator route */}
-          {/* <Route element={<Collaborators />} path="collaborators">
-            <Route element={<CollaboratorList />} index />
-          </Route> */}
-          {/* project route */}
+
           <Route element={<Projects />} path="projects">
             <Route element={<ProjectList />} index />
-            <Route element={<ProjectPage />} path="new" />
-            {/* 
-            
+            <Route element={<ProjectForm />} path="new" />
             <Route element={<Project />} path=":id">
-            <Route element={<ProjectOverview />} path="overview" />
-            <Route element={<ProjectMembers />} path="members" />
-            <Route element={<ProjectActivity />} path="activity" />
-            <Route element={<ProjectSetting />} path="settings" />
-            <Route element={<ProjectIssues />} path="issues" />
-            </Route> */}
-          </Route>
-          {/* team route */}
-          {/* <Route element={<Teams />} path="teams">
-            <Route element={<TeamList />} index />
-            <Route element={<TeamForm />} path="new" />
-            <Route element={<Team />} path=":id">
-              <Route element={<TeamOverview />} path="overview" />
-              <Route element={<TeamMembers />} path="people" />
-              <Route element={<TeamProjects />} path="projects" />
-              <Route element={<TeamActivity />} path="activity" />
-              <Route element={<TeamSettings />} path="settings" />
+              <Route element={<ProjectOverview />} path="overview" />
+              <Route element={<ProjectIssues />} path="issues" />
+              <Route element={<ProjectMembers />} path="members" />
+              <Route element={<ProjectActivity />} path="activity" />
+              <Route element={<ProjectSettings />} path="settings" />
             </Route>
-          </Route> */}
-          {/* issue route */}
-          {/* <Route element={<Issues />} path="issues">
+          </Route>
+
+          <Route element={<Issues />} path="issues">
             <Route element={<IssueList />} index />
             <Route element={<IssueForm />} path="new" />
             <Route element={<Issue />} path=":id">
               <Route element={<IssueOverview />} path="overview" />
-              <Route element={<IssueTasks />} path="tasks" />
-              <Route element={<IssueAttachments />} path="attachments" />
               <Route element={<IssueComments />} path="comments" />
-              <Route element={<IssueSettings />} path="settings" />
+              <Route element={<IssueTasks />} path="tasks" />
             </Route>
-          </Route> */}
+          </Route>
+          {/* 
+              <Route element={<IssueAttachments />} path="attachments" />
+              <Route element={<IssueSettings />} path="settings" /> */}
         </Route>
       </Route>
       <Route element={<NoComponent />} path="*" />
     </Routes>
   );
 }
-
-export default App;
