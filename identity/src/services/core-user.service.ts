@@ -1,4 +1,7 @@
-import { UserNotFoundError, VersionMismatch } from "@sourabhrawatcc/core-utils";
+import {
+  UserNotFoundError,
+  VersionMismatchError,
+} from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../data/entities";
 import { UserService } from "./interfaces/user.service";
 import { RegisteredServices } from "../app/service-container";
@@ -23,7 +26,7 @@ export class CoreUserService implements UserService {
     if (!user) throw new UserNotFoundError();
 
     console.log(user.version, version);
-    if (user.version !== version) throw new VersionMismatch();
+    if (user.version !== version) throw new VersionMismatchError();
 
     const updatedUser = new UserEntity();
     updatedUser.defaultWorkspaceId = defaultWorkspaceId;

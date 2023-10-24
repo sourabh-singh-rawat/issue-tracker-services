@@ -13,12 +13,11 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Creates a new user.
    * @param user Object that represents the user to be created
-   * @returns
    */
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserEntity, "u", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(UserEntity)
       .values(user)
@@ -30,7 +29,6 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Checks if user exists, by id
    * @param id
-   * @returns true if user exists, false otherwise
    */
   existsById = async (id: string) => {
     const result = await this.databaseService.query<{
@@ -43,7 +41,6 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Checks if user exists, by email
    * @param email
-   * @returns true if user exists, false otherwise
    */
   existsByEmail = async (email: string) => {
     const result = await this.databaseService.query<{
@@ -56,7 +53,6 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Find the user by user's id
    * @param id
-   * @returns User if found or null
    */
   findById = async (id: string): Promise<UserEntity | null> => {
     const result = await this.databaseService.query<UserEntity>(
@@ -64,15 +60,12 @@ export class PostgresUserRepository implements UserRepository {
       [id],
     );
 
-    console.log(result);
-
     return result[0];
   };
 
   /**
    * Finds a user by their email address
    * @param email
-   * @returns User if found or null
    */
   findByEmail = async (email: string): Promise<UserEntity | null> => {
     const result = await this.databaseService.query<UserEntity>(
@@ -95,7 +88,7 @@ export class PostgresUserRepository implements UserRepository {
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserEntity, "u", queryRunner)
+      .createQueryBuilder(queryRunner)
       .update(UserEntity)
       .set(updatedUser)
       .where("id = :id", { id })
@@ -108,9 +101,8 @@ export class PostgresUserRepository implements UserRepository {
    * Soft delete an existing user (kinda like archive)
    */
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
-    const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(UserEntity, "users", queryRunner)
+      .createDeleteQueryBuilder(UserEntity, "u", options?.queryRunner)
       .softDelete()
       .where("id = :id", { id });
 

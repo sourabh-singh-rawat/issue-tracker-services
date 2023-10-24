@@ -24,7 +24,7 @@ export class PostgresAccessTokenRepository implements AccessTokenRepository {
     const queryRunner = options?.queryRunner;
 
     const query = this.databaseService
-      .createQueryBuilder(AccessTokenEntity, "at", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(AccessTokenEntity)
       .values(token)
@@ -41,7 +41,7 @@ export class PostgresAccessTokenRepository implements AccessTokenRepository {
     const queryRunner = options?.queryRunner;
 
     const query = this.databaseService
-      .createQueryBuilder(AccessTokenEntity, "at", queryRunner)
+      .createQueryBuilder(queryRunner)
       .delete()
       .from(AccessTokenEntity)
       .where("id=:id", { id });

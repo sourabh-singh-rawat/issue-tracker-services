@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   AccessToken,
   AuthCredentials,
+  BaseToken,
   EmailNotVerifiedError,
   InvalidCredentialsError,
   JwtToken,
@@ -204,7 +205,7 @@ export class CoreIdentityService implements IdentityService {
     await this.saveTokens(access, refresh);
 
     return new ServiceResponse({
-      data: {
+      rows: {
         accessToken: access.tokenValue,
         refreshToken: refresh.tokenValue,
       },
@@ -223,7 +224,7 @@ export class CoreIdentityService implements IdentityService {
     const { refreshToken } = token;
     const secret = process.env.JWT_SECRET;
 
-    const { userId, jwtid } = JwtToken.verify(refreshToken, secret!);
+    const { userId, jwtid } = JwtToken.verify<BaseToken>(refreshToken, secret!);
 
     const isTokenPresent = await this.refreshTokenRepository.existsById(jwtid);
     if (!isTokenPresent) throw new UnauthorizedError();
@@ -244,7 +245,7 @@ export class CoreIdentityService implements IdentityService {
     await this.saveTokens(access, refresh);
 
     return new ServiceResponse({
-      data: {
+      rows: {
         accessToken: access.tokenValue,
         refreshToken: refresh.tokenValue,
       },
