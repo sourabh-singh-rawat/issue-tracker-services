@@ -20,4 +20,10 @@ export class UserEntity extends AuditEntity {
 
   @Column({ name: "default_workspace_id", type: "uuid" })
   defaultWorkspaceId!: string;
+
+  @Column({ name: "display_name", type: "text" })
+  displayName!: string;
+
+  @Column({ name: "photo_url", type: "text", nullable: true })
+  photoUrl?: string;
 }

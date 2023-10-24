@@ -13,7 +13,7 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   save = async (token: RefreshTokenEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
-      .createQueryBuilder(RefreshTokenEntity, "refresh_tokens", queryRunner)
+      .createQueryBuilder(queryRunner)
       .insert()
       .into(RefreshTokenEntity)
       .values(token)
@@ -47,7 +47,7 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
     const queryRunner = options?.queryRunner;
 
     const query = this.databaseService
-      .createQueryBuilder(RefreshTokenEntity, "at", queryRunner)
+      .createQueryBuilder(queryRunner)
       .softDelete()
       .where("id=:id", { id });
 

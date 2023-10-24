@@ -22,8 +22,8 @@ export class CoreIdentityController implements IdentityController {
   ) => {
     const credentials = new AuthCredentials(request.body);
 
-    const { data } = await this.identityService.authenticate(credentials);
-    const { accessToken, refreshToken } = data;
+    const { rows } = await this.identityService.authenticate(credentials);
+    const { accessToken, refreshToken } = rows;
 
     const cookieOptions = {
       path: "/",
@@ -48,7 +48,7 @@ export class CoreIdentityController implements IdentityController {
       return reply.status(StatusCodes.BAD_REQUEST).send();
     }
 
-    const { data } = await this.identityService.refreshToken({
+    const { rows } = await this.identityService.refreshToken({
       accessToken,
       refreshToken,
     });
@@ -59,8 +59,19 @@ export class CoreIdentityController implements IdentityController {
       sameSite: true,
       secure: true,
     };
-    reply.setCookie("accessToken", data.accessToken, cookieOptions);
-    reply.setCookie("refreshToken", data.refreshToken, cookieOptions);
+    reply.setCookie("accessToken", rows.accessToken, cookieOptions);
+    reply.setCookie("refreshToken", rows.refreshToken, cookieOptions);
+
+    return reply.send();
+  };
+
+  /**
+   * Route handler to revoke the access and refresh tokens
+   * TODO: remove the token from the database
+   */
+  revokeTokens = async (request: FastifyRequest, reply: FastifyReply) => {
+    reply.clearCookie("accessToken", { path: "/" });
+    reply.clearCookie("refreshToken", { path: "/" });
 
     return reply.send();
   };
