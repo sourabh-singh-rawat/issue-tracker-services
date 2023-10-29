@@ -41,7 +41,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     user?: UserEntity,
   ) => {
     const queryRunner = this.databaseService.createQueryRunner();
-    const savedWorkspace = await this.databaseService.transaction(
+    const result = await this.databaseService.transaction(
       queryRunner,
       async (queryRunner) => {
         if (user) {
@@ -51,23 +51,35 @@ export class CoreWorkspaceService implements WorkspaceService {
         const savedWorkspace = await this.workspaceRepository.save(workspace, {
           queryRunner,
         });
-        await this.workspaceMemberRepository.save(workspaceMember, {
-          queryRunner,
-        });
+        const savedWorkspaceMember = await this.workspaceMemberRepository.save(
+          workspaceMember,
+          { queryRunner },
+        );
         await this.policyManager.createWorkspacePolicies(
           workspace.ownerUserId,
           workspace.id,
         );
 
-        return savedWorkspace;
+        return { savedWorkspace, savedWorkspaceMember };
       },
     );
 
-    if (!savedWorkspace) {
+    if (!result) {
       throw new TransactionExecutionError(
         "Failed to save workspace, member, and policies",
       );
     }
+
+    const { savedWorkspace, savedWorkspaceMember } = result;
+    await this.workspaceCreatedPublisher.publish({
+      id: savedWorkspace.id,
+      name: savedWorkspace.name,
+      ownerId: savedWorkspace.ownerUserId,
+      member: {
+        userId: savedWorkspaceMember.userId,
+        workspaceId: savedWorkspaceMember.workspaceId,
+      },
+    });
 
     return savedWorkspace;
   };
@@ -89,12 +101,6 @@ export class CoreWorkspaceService implements WorkspaceService {
       newWorkspaceMember,
       user,
     );
-
-    await this.workspaceCreatedPublisher.publish({
-      id: savedWorkspace.id,
-      name: savedWorkspace.name,
-      ownerId: savedWorkspace.ownerUserId,
-    });
   };
 
   createWorkspace = async (
@@ -118,12 +124,6 @@ export class CoreWorkspaceService implements WorkspaceService {
       newWorkspace,
       newWorkspaceMember,
     );
-
-    await this.workspaceCreatedPublisher.publish({
-      id: savedWorkspace.id,
-      name: savedWorkspace.name,
-      ownerId: savedWorkspace.ownerUserId,
-    });
 
     return new ServiceResponse({ rows: savedWorkspace.id });
   };
@@ -247,5 +247,11 @@ export class CoreWorkspaceService implements WorkspaceService {
 
   getWorkspaceRoleList = async () => {
     return new ServiceResponse({ rows: Object.values(WorkspaceRoles) });
+  };
+
+  getWorkspaceMemberList = async (workspaceId: string) => {
+    const rows = await this.workspaceMemberRepository.find(workspaceId);
+
+    return new ServiceResponse({ rows, filteredRowCount: rows.length });
   };
 }

@@ -77,4 +77,14 @@ export class CoreWorkspaceController implements WorkspaceController {
 
     return reply.send(response);
   };
+
+  getWorkspaceMemberList = async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const { id } = request.params;
+    const response = await this.workspaceService.getWorkspaceMemberList(id);
+
+    return reply.send(response);
+  };
 }

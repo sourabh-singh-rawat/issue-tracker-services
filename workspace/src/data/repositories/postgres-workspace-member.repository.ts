@@ -4,6 +4,7 @@ import {
 } from "@sourabhrawatcc/core-utils";
 import { WorkspaceMemberEntity } from "../entities/workspace-member.entity";
 import { WorkspaceMemberRepository } from "./interface/workspace-member";
+import { UserEntity } from "../entities";
 
 export class PostgresWorkspaceMemberRepository
   implements WorkspaceMemberRepository
@@ -40,10 +41,16 @@ export class PostgresWorkspaceMemberRepository
     return result[0].member_exists_by_user_id;
   };
 
-  softDelete = async (
-    id: string,
-    options?: QueryBuilderOptions | undefined,
-  ): Promise<void> => {
+  find = async (id: string) => {
+    const result = await this.databaseService.query<UserEntity>(
+      "SELECT * FROM find_members_by_workspace_id($1)",
+      [id],
+    );
+
+    return result as UserEntity[];
+  };
+
+  softDelete = async (id: string, options?: QueryBuilderOptions) => {
     throw new Error("Method not implemented.");
   };
 }
