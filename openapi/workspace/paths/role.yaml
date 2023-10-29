@@ -1,0 +1,26 @@
+get:
+  tags: [ "workspace" ]
+  summary: Get list of all workspace roles
+  description: Get workspace roles
+  operationId: getWorkspaceRoleList
+  responses: 
+    200:
+      description: Get workspace roles list
+      content: 
+        application/json:
+          schema:
+            type: object
+            properties:
+              rows:
+                type: array
+                items:
+                  type: string
+              rowCount: 
+                type: number
+            required: ["rows", "rowCount"]
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml

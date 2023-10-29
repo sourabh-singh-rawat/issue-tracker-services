@@ -11,6 +11,8 @@ servers:
   - url: http://localhost:80/api/v1
 
 tags:
+  - name: activity
+    description: Activity service
   - name: identity
     description: Authentication functionalities.
   - name: issue
@@ -23,27 +25,42 @@ tags:
     description: Create and manage workspaces
 
 paths:
+  /activities/projects/{id}:
+    description: Get project activity list
+    $ref: activity/paths/projects.yaml
   /identity/generate-tokens:
     description: Generate access and refresh tokens
     $ref: identity/paths/generate-tokens.yaml
   /identity/refresh-tokens:
     description: If refresh token is valid, generate new access and refresh tokens
     $ref: identity/paths/refresh-tokens.yaml
+  /identity/revoke-tokens:
+    description: Revokes the token from cookie and database
+    $ref: identity/paths/revoke-tokens.yaml
   /issues:
     description: Create and get issues
     $ref: issue/paths/issues.yaml
-  /issues/{id}:
-    description: Get or update a issue
-    $ref: issue/paths/issue.yaml  
-  /issues/{id}/comments:
-    description: Get comments or create a new comment
-    $ref: issue/paths/comments.yaml
   /issues/status:
     description: Get a list of issue statuses
     $ref: issue/paths/status.yaml
   /issues/priority:
     description: Get a list of issue priorities
     $ref: issue/paths/priority.yaml
+  /issues/{id}:
+    description: Get or update a issue
+    $ref: issue/paths/issue.yaml
+  /issues/{id}/comments:
+    description: Get comments or create a new comment
+    $ref: issue/paths/comments.yaml
+  /issues/{id}/comments/{commentId}:
+    description: Delete a comment
+    $ref: issue/paths/comment.yaml
+  /issues/{id}/tasks:
+    description: Create and gets issue tasks
+    $ref: issue/paths/tasks.yaml
+  /issues/{id}/tasks/{taskId}:
+    description: Get or update a issue task
+    $ref: issue/paths/task.yaml
   /projects:
     description: Create and get projects
     $ref: project/paths/projects.yaml
@@ -72,6 +89,15 @@ paths:
     description: Create and get workspaces
     $ref: workspace/paths/workspaces.yaml
   /workspaces/{id}:
-    description: Create and get workspaces
+    description: Get workspace
     $ref: workspace/paths/workspace.yaml
+  /workspaces/{id}/members:
+    description: Get workspace members
+    $ref: workspace/paths/member.yaml
+  /workspaces/invite:
+    description: Creates a workspace member
+    $ref: workspace/paths/invite.yaml
+  /workspaces/role:
+    description: Get a list of workspace roles
+    $ref: workspace/paths/role.yaml
 security: []

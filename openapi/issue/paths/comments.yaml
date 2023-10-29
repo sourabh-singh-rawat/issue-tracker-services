@@ -1,5 +1,5 @@
 post: 
-  tags: ["issue"]
+  tags: ["issue", "comment"]
   summary: Create a new issue comment
   description: Create a new issue comment
   operationId: createIssueComment
