@@ -31,7 +31,17 @@ get:
         default: null
   responses: 
     200:
-      description: A list of issues    
+      description: A list of issues
+      content: 
+        application/json:
+          schema:
+            type: object
+            properties:
+              rows:
+                type: array
+              filteredRowCount:
+                type: number
+            required: [ "rows", "filteredRowCount" ]
     400:
       description: Bad request
       content: 

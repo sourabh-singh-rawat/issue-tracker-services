@@ -1,4 +1,3 @@
-
 get:
   tags: ["issue"]
   summary: Gets a Issue
@@ -18,3 +17,53 @@ get:
         application/json:
           schema:
             $ref: ../../components/schemas/error.yaml
+patch:
+  tags: ["issue"]
+  summary: Updates the issue  
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the issue to get
+  operationId: updateIssue
+  requestBody: 
+    content: 
+      application/json:
+        schema:
+          type: object
+          properties:
+            name: 
+              $ref: ../../components/schemas/name.yaml
+            description:
+              $ref: ../../components/schemas/description.yaml
+            status:
+              $ref: ../../components/schemas/status.yaml
+            priority:
+              $ref: ../../components/schemas/priority.yaml
+            resolution:
+              type: boolean
+            projectId:
+              type: string
+            assignees:
+              $ref: ../../components/schemas/assignee.yaml
+            reportedId:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+              required: [ "id", "name" ]   
+            dueDate:
+                $ref: ../../components/schemas/date.yaml
+  responses:
+    200:
+      description: Updates the issue
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml      
+  

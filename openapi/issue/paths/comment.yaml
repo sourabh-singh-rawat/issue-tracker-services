@@ -1,0 +1,25 @@
+delete: 
+  tags: ["issue", "comment"]
+  summary: Delete a comment
+  description: Delete a comment
+  operationId: deleteIssueComment
+  parameters:
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the issue in which the comment will be created
+    - name: commentId
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the comment
+  responses: 
+    201:
+      description: The comment has been created successfully
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml

@@ -4,6 +4,12 @@ post:
     - user
   summary: Create user
   description: Creates a new user
+  parameters: 
+    - name: inviteToken
+      in: query
+      required: false 
+      schema: 
+        type: string
   requestBody:
     content:
       application/json:
