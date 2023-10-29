@@ -13,7 +13,7 @@ spec:
         app: {{ .Release.Name }}-pod 
     spec:
       containers:
-        - name: {{ .Release.Name }}-container
+        - name: {{ .Release.Name }}
           image: {{ .Values.container.image }}
           ports:
             - containerPort: {{ .Values.container.exposedPort }}
