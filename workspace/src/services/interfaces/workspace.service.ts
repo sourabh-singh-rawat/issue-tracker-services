@@ -25,4 +25,7 @@ export interface WorkspaceService {
   getAllWorkspaces(userId: string): Promise<ServiceResponse<WorkspaceEntity[]>>;
   getWorkspace(id: string): Promise<ServiceResponse<WorkspaceEntity>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceRoles[]>>;
+  getWorkspaceMemberList(
+    workspaceId: string,
+  ): Promise<ServiceResponse<UserEntity[]>>;
 }
