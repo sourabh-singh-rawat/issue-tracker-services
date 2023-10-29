@@ -11,7 +11,6 @@ export class PostgresUserRepository implements UserRepository {
   /**
    * Find the user by id
    * @param id
-   * @returns User if found or null
    */
   findById = async (id: string): Promise<UserEntity | null> => {
     const result = await this.databaseService.query<UserEntity>(

@@ -59,7 +59,6 @@ export class CoreUserService implements UserService {
     userRegistrationData: UserRegistrationData,
     inviteToken?: string,
   ) => {
-    console.log(inviteToken);
     const { email, password, displayName } = userRegistrationData;
 
     // Check if the user already exists
