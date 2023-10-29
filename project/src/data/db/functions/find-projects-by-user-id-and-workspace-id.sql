@@ -12,12 +12,12 @@ RETURNS TABLE (
   NAME TEXT,
   description TEXT,
   STATUS TEXT,
-  "ownerUserId" UUID,
-  "workspaceId" UUID,
-  "startDate" TIMESTAMP WITH TIME ZONE,
-  "endDate" TIMESTAMP WITH TIME ZONE,
-  "createdAt" TIMESTAMP WITH TIME ZONE,
-  "updatedAt" TIMESTAMP WITH TIME ZONE
+  owner_user_id UUID,
+  workspace_id UUID,
+  start_date TIMESTAMP WITH TIME ZONE,
+  end_date TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE,
+  updated_at TIMESTAMP WITH TIME ZONE
 )
 LANGUAGE PLPGSQL
 AS $$
@@ -34,8 +34,8 @@ BEGIN
     p.end_date,
     p.created_at,
     p.updated_at
-  FROM projects as p
-  WHERE p.id in (
+  FROM projects AS p
+  WHERE p.id IN (
     SELECT pm.project_id FROM project_members AS pm
     WHERE pm.member_user_id = p_user_id
   ) AND

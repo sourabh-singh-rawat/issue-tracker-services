@@ -16,6 +16,8 @@ import { ProjectCasbinPolicyManager } from "../app/project-policy-manager";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { ProjectMemberRepository } from "../data/repositories/interfaces/project-member";
 import { UserService } from "./interfaces/user.service";
+import { ProjectCreatedPublisher } from "../messages/publishers/project-created.publisher";
+import { ProjectUpdatedPublisher } from "../messages/publishers/project-updated.publisher";
 
 export class CoreProjectService implements ProjectService {
   constructor(
@@ -25,6 +27,8 @@ export class CoreProjectService implements ProjectService {
     private readonly userRepository: UserRepository,
     private readonly projectRepository: ProjectRepository,
     private readonly projectMemberRepository: ProjectMemberRepository,
+    private readonly projectCreatedPublisher: ProjectCreatedPublisher,
+    private readonly projectUpdatedPublisher: ProjectUpdatedPublisher,
   ) {}
 
   private getUserById = async (userId: string) => {
@@ -53,15 +57,15 @@ export class CoreProjectService implements ProjectService {
         const { id, email, name, memberUserId, createdAt, updatedAt } = member;
         const role = await this.getRoleForUser(member.memberUserId, projectId);
 
-        return new ProjectMember(
+        return new ProjectMember({
           id,
           name,
           email,
-          memberUserId,
+          userId: memberUserId,
           createdAt,
           updatedAt,
-          role.split(":")[1],
-        );
+          role: role.split(":")[1],
+        });
       }),
     );
 
@@ -92,31 +96,36 @@ export class CoreProjectService implements ProjectService {
     newProject.workspaceId = user.defaultWorkspaceId;
 
     const queryRunner = this.databaseService.createQueryRunner();
-    const projectId = await this.databaseService.transaction(
+    const savedProject = await this.databaseService.transaction(
       queryRunner,
       async (queryRunner) => {
-        const { id } = await this.projectRepository.save(newProject, {
+        const savedProject = await this.projectRepository.save(newProject, {
           queryRunner,
         });
         const newProjectMember = new ProjectMemberEntity();
-        newProjectMember.projectId = id;
+        newProjectMember.projectId = savedProject.id;
         newProjectMember.memberUserId = userId;
 
         await this.projectMemberRepository.save(newProjectMember, {
           queryRunner,
         });
 
-        await this.projectPolicyManager.createProjectPolicies(userId, id);
+        await this.projectPolicyManager.createProjectPolicies(
+          userId,
+          savedProject.id,
+        );
 
-        return id;
+        return savedProject;
       },
     );
 
-    if (!projectId) {
+    if (!savedProject) {
       throw new TransactionExecutionError("Cannot create project");
     }
 
-    return new ServiceResponse({ rows: projectId });
+    await this.projectCreatedPublisher.publish(savedProject);
+
+    return new ServiceResponse({ rows: savedProject.id });
   };
 
   /**
@@ -183,5 +192,8 @@ export class CoreProjectService implements ProjectService {
     updatedProject.endDate = endDate;
 
     await this.projectRepository.update(id, updatedProject);
+    const project = await this.projectRepository.findOne(id);
+
+    await this.projectUpdatedPublisher.publish(project);
   };
 }
