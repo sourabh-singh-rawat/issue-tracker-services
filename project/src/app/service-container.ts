@@ -9,6 +9,10 @@ import {
 import { DataSource } from "typeorm";
 import { dataSource, databaseService } from "./database-service";
 import { messageService } from "./message-system.config";
+import {
+  ProjectCasbinPolicyManager,
+  projectPolicyManager,
+} from "./project-policy-manager";
 
 import { ProjectController } from "../controllers/interfaces/project.controller";
 
@@ -18,6 +22,7 @@ import { ProjectService } from "../services/interfaces/project.service";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { ProjectRepository } from "../data/repositories/interfaces/project.repository";
 import { WorkspaceRepository } from "../data/repositories/interfaces/workspace.repository";
+import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
 
 import { CoreProjectController } from "../controllers/core-project.controller";
 
@@ -28,15 +33,15 @@ import { PostgresUserRepository } from "../data/repositories/postgres-user.repos
 import { PostgresProjectRepository } from "../data/repositories/postgres-project.repository";
 import { PostgresProjectMemberRepository } from "../data/repositories/postgres-project-member.repository";
 import { PostgresWorkspaceRepository } from "../data/repositories/postgres-workspace.repository";
+import { PostgresWorkspaceMemberRepository } from "../data/repositories/postgres-workspace-member.repository";
 
 import { UserCreatedSubscriber } from "../messages/subscribers/user-created.subscriber";
-import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscribers";
+import { UserUpdatedSubscriber } from "../messages/subscribers/user-updated.subscriber";
+import { ProjectCreatedPublisher } from "../messages/publishers/project-created.publisher";
+import { ProjectUpdatedPublisher } from "../messages/publishers/project-updated.publisher";
+
 import { WorkspaceCreatedSubscriber } from "../messages/subscribers/workspace-created.subscriber";
 import { ProjectMemberRepository } from "../data/repositories/interfaces/project-member";
-import {
-  ProjectCasbinPolicyManager,
-  projectPolicyManager,
-} from "./project-policy-manager";
 
 export interface RegisteredServices {
   logger: Logger;
@@ -51,6 +56,9 @@ export interface RegisteredServices {
   workspaceRepository: WorkspaceRepository;
   projectRepository: ProjectRepository;
   projectMemberRepository: ProjectMemberRepository;
+  workspaceMemberRepository: WorkspaceMemberRepository;
+  projectCreatedPublisher: ProjectCreatedPublisher;
+  projectUpdatedPublisher: ProjectUpdatedPublisher;
   userCreatedSubscriber: UserCreatedSubscriber;
   userUpdatedSubscriber: UserUpdatedSubscriber;
   workspaceCreatedSubscriber: WorkspaceCreatedSubscriber;
@@ -78,6 +86,9 @@ add("userRepository", asClass(PostgresUserRepository));
 add("workspaceRepository", asClass(PostgresWorkspaceRepository));
 add("projectRepository", asClass(PostgresProjectRepository));
 add("projectMemberRepository", asClass(PostgresProjectMemberRepository));
+add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
+add("projectCreatedPublisher", asClass(ProjectCreatedPublisher));
+add("projectUpdatedPublisher", asClass(ProjectUpdatedPublisher));
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
 add("workspaceCreatedSubscriber", asClass(WorkspaceCreatedSubscriber));
 add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
