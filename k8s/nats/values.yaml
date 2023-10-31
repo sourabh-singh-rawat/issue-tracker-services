@@ -4,4 +4,4 @@ config:
     fileStore:
       pvc:
         name: nats-pvc
-        size: 10Gi
+        size: 2Gi
