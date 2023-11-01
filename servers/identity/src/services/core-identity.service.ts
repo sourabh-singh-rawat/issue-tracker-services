@@ -4,6 +4,7 @@ import {
   AccessToken,
   AuthCredentials,
   BaseToken,
+  DatabaseService,
   EmailNotVerifiedError,
   InvalidCredentialsError,
   JwtToken,
@@ -19,20 +20,17 @@ import { IdentityService } from "./interfaces/identity-service";
 import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
 import { StatusCodes } from "http-status-codes";
 import { TokenOptions } from "./interfaces/token-options";
-import { RegisteredServices } from "../app/service-container";
+import { UserRepository } from "../data/repositories/interfaces/user-repository";
+import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
+import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
 
 export class CoreIdentityService implements IdentityService {
-  private readonly databaseService;
-  private readonly userRepository;
-  private readonly accessTokenRepository;
-  private readonly refreshTokenRepository;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-    this.userRepository = serviceContainer.userRepository;
-    this.accessTokenRepository = serviceContainer.accessTokenRepository;
-    this.refreshTokenRepository = serviceContainer.refreshTokenRepository;
-  }
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly userRepository: UserRepository,
+    private readonly accessTokenRepository: AccessTokenRepository,
+    private readonly refreshTokenRepository: RefreshTokenRepository,
+  ) {}
 
   /**
    * Return Boolean indicating whether the user exists.

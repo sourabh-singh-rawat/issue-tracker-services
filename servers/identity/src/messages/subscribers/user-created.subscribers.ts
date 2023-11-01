@@ -1,21 +1,23 @@
 import {
   Consumers,
+  MessageService,
   Streams,
   Subscriber,
   UserCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
 import { UserEntity } from "../../data/entities";
-import { RegisteredServices } from "../../app/service-container";
+import { UserRepository } from "../../data/repositories/interfaces/user-repository";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserCreatedConsumerIdentity;
-  private readonly userRepository;
 
-  constructor(serviceContainer: RegisteredServices) {
-    super(serviceContainer.messageService.client);
-    this.userRepository = serviceContainer.userRepository;
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly userRepository: UserRepository,
+  ) {
+    super(messageService.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {

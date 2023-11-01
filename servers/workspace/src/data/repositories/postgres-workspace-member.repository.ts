@@ -27,18 +27,18 @@ export class PostgresWorkspaceMemberRepository
 
   existsById = async (id: string): Promise<boolean> => {
     const result = await this.databaseService.query<{
-      member_exists_by_email: boolean;
+      memberExistsByEmail: boolean;
     }>("SELECT * FROM member_exists_by_email($1)", [id]);
 
-    return result[0].member_exists_by_email;
+    return result[0].memberExistsByEmail;
   };
 
   existsByUserId = async (userId: string, workspaceId: string) => {
     const result = await this.databaseService.query<{
-      member_exists_by_user_id: boolean;
+      memberExistsByUserId: boolean;
     }>("SELECT * FROM member_exists_by_user_id($1, $2)", [userId, workspaceId]);
 
-    return result[0].member_exists_by_user_id;
+    return result[0].memberExistsByUserId;
   };
 
   find = async (id: string) => {

@@ -51,10 +51,10 @@ export class PostgresUserRepository implements UserRepository {
    */
   existsById = async (id: string): Promise<boolean> => {
     const result = await this.databaseService.query<{
-      user_exists_by_id: boolean;
+      userExistsById: boolean;
     }>("SELECT * FROM user_exists_by_id($1)", [id]);
 
-    return result[0].user_exists_by_id;
+    return result[0].userExistsById;
   };
 
   softDelete = async (id: string, options?: QueryBuilderOptions) => {

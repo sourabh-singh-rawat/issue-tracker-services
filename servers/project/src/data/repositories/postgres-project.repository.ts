@@ -23,10 +23,10 @@ export class PostgresProjectRepository implements ProjectRepository {
 
   existsById = async (id: string) => {
     const result = await this.databaseService.query<{
-      project_exists_by_id: boolean;
+      projectExistsById: boolean;
     }>("SELECT * FROM project_exists_by_id($1)", [id]);
 
-    return result[0].project_exists_by_id;
+    return result[0].projectExistsById;
   };
 
   find = async (userId: string, workspaceId: string, filters: Filters) => {

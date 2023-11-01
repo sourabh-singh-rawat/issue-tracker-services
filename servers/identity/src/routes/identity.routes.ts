@@ -8,10 +8,11 @@ export const identityRoutes = (
   done: () => void,
 ) => {
   const controller = serviceContainer.get("identityController");
-  const { requireTokens } = Auth;
+  const { requireTokens, requireNoAuth } = Auth;
+  const noAuth: RouteShorthandOptions = { preHandler: [requireNoAuth] };
   const auth: RouteShorthandOptions = { preHandler: [requireTokens] };
 
-  fastify.post("/generate-tokens", controller.generateTokens);
+  fastify.post("/generate-tokens", noAuth, controller.generateTokens);
   fastify.post("/refresh-tokens", auth, controller.refreshTokens);
   fastify.post("/revoke-tokens", auth, controller.revokeTokens);
 

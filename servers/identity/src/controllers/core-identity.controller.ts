@@ -2,14 +2,10 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { AuthCredentials } from "@sourabhrawatcc/core-utils";
 import { StatusCodes } from "http-status-codes";
 import { IdentityController } from "./interfaces/identity-controller";
-import { RegisteredServices } from "../app/service-container";
+import { IdentityService } from "../services/interfaces/identity-service";
 
 export class CoreIdentityController implements IdentityController {
-  private readonly identityService;
-
-  constructor(container: RegisteredServices) {
-    this.identityService = container.identityService;
-  }
+  constructor(private readonly identityService: IdentityService) {}
 
   /**
    * Router handler to authenticate user with credentials.

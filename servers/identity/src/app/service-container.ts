@@ -1,5 +1,5 @@
 import { Logger } from "pino";
-import { createContainer, asValue, asClass } from "awilix";
+import { createContainer, asValue, asClass, InjectionMode } from "awilix";
 import {
   PostgresService,
   AwilixServiceContainer,
@@ -39,7 +39,9 @@ export interface RegisteredServices {
   userUpdatedSubscriber: UserUpdatedSubscriber;
 }
 
-const awilix = createContainer<RegisteredServices>();
+const awilix = createContainer<RegisteredServices>({
+  injectionMode: InjectionMode.CLASSIC,
+});
 export const serviceContainer = new AwilixServiceContainer<RegisteredServices>(
   awilix,
   logger,
@@ -50,15 +52,11 @@ const { add } = serviceContainer;
 add("logger", asValue(logger));
 add("databaseService", asValue(databaseService));
 add("messageService", asValue(messageService));
-
 add("identityController", asClass(CoreIdentityController));
-
 add("userService", asClass(CoreUserService));
 add("identityService", asClass(CoreIdentityService));
-
 add("userRepository", asClass(PostgresUserRepository));
 add("accessTokenRepository", asClass(PostgresAccessTokenRepository));
 add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
-
 add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
 add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
