@@ -37,10 +37,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
     return result[0];
   };
 
-  softDelete = async (
-    id: string,
-    options?: QueryBuilderOptions | undefined,
-  ): Promise<void> => {
+  softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.databaseService
       .createQueryBuilder(queryRunner)

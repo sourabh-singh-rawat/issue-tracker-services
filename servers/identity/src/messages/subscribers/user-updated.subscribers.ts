@@ -1,20 +1,22 @@
 import {
   Consumers,
+  MessageService,
   Streams,
   Subscriber,
   UserUpdatedPayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { RegisteredServices } from "../../app/service-container";
+import { UserService } from "../../services/interfaces/user.service";
 
 export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserUpdatedConsumerIdentity;
-  private readonly userService;
 
-  constructor(serviceContainer: RegisteredServices) {
-    super(serviceContainer.messageService.client);
-    this.userService = serviceContainer.userService;
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly userService: UserService,
+  ) {
+    super(messageService.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserUpdatedPayload) => {

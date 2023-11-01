@@ -26,10 +26,10 @@ export class PostgresProjectMemberRepository
 
   existsById = async (id: string): Promise<boolean> => {
     const result = await this.databaseService.query<{
-      member_exists_by_id: boolean;
+      memberExistsById: boolean;
     }>("SELECT * FROM member_exists_by_id($1)", [id]);
 
-    return result[0].member_exists_by_id;
+    return result[0].memberExistsById;
   };
 
   find = async () => {};

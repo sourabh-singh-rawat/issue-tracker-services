@@ -41,10 +41,10 @@ export class PostgresUserRepository implements UserRepository {
    */
   existsByEmail = async (email: string): Promise<boolean> => {
     const result = await this.databaseService.query<{
-      user_exists_by_email: boolean;
+      userExistsByEmail: boolean;
     }>("SELECT * FROM user_exists_by_email($1)", [email]);
 
-    return result[0].user_exists_by_email;
+    return result[0].userExistsByEmail;
   };
 
   /**
@@ -69,10 +69,10 @@ export class PostgresUserRepository implements UserRepository {
    */
   existsById = async (id: string): Promise<boolean> => {
     const result = await this.databaseService.query<{
-      user_exists_by_id: boolean;
+      userExistsById: boolean;
     }>("SELECT * FROM user_exists_by_id($1)", [id]);
 
-    return result[0].user_exists_by_id;
+    return result[0].userExistsById;
   };
 
   /**

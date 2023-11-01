@@ -1,14 +1,12 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { UserRepository } from "./interfaces/user-repository";
 import { UserEntity } from "../entities/user.entity";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresUserRepository implements UserRepository {
-  private readonly databaseService;
-
-  constructor(serviceContainer: RegisteredServices) {
-    this.databaseService = serviceContainer.databaseService;
-  }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   /**
    * Creates a new user.
@@ -32,10 +30,10 @@ export class PostgresUserRepository implements UserRepository {
    */
   existsById = async (id: string) => {
     const result = await this.databaseService.query<{
-      user_exists_by_id: boolean;
+      userExistsById: boolean;
     }>("SELECT * FROM user_exists_by_id($1)", [id]);
 
-    return result[0].user_exists_by_id;
+    return result[0].userExistsById;
   };
 
   /**
@@ -44,10 +42,10 @@ export class PostgresUserRepository implements UserRepository {
    */
   existsByEmail = async (email: string) => {
     const result = await this.databaseService.query<{
-      user_exists_by_email: boolean;
+      userExistsByEmail: boolean;
     }>("SELECT * FROM user_exists_by_email($1)", [email]);
 
-    return result[0].user_exists_by_email;
+    return result[0].userExistsByEmail;
   };
 
   /**

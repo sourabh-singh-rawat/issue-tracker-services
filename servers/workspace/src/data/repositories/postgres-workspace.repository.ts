@@ -33,10 +33,10 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
    */
   existsById = async (id: string) => {
     const result = await this.databaseService.query<{
-      workspace_exists_by_id: boolean;
+      workspaceExistsById: boolean;
     }>("SELECT * FROM workspace_exists_by_id($1)", [id]);
 
-    return result[0].workspace_exists_by_id;
+    return result[0].workspaceExistsById;
   };
 
   /**

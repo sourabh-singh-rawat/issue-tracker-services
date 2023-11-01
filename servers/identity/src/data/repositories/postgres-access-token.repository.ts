@@ -1,14 +1,12 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
+import {
+  DatabaseService,
+  QueryBuilderOptions,
+} from "@sourabhrawatcc/core-utils";
 import { AccessTokenRepository } from "./interfaces/access-token-repository";
 import { AccessTokenEntity } from "../entities";
-import { RegisteredServices } from "../../app/service-container";
 
 export class PostgresAccessTokenRepository implements AccessTokenRepository {
-  private readonly databaseService;
-
-  constructor(seriveContainer: RegisteredServices) {
-    this.databaseService = seriveContainer.databaseService;
-  }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   existsById(id: string): Promise<boolean> {
     console.log(id);
