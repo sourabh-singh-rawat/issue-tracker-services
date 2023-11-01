@@ -20,8 +20,12 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ .Release.Name }}-postgres-pguser-{{ .Release.Name }}-postgres
+            
+            {{- if .Values.jwtSecretRef }}
             - secretRef:
                 name: {{ .Values.jwtSecretRef }}
+            {{- end }}
+
             {{- if .Values.smtpSecretRef }}
             - secretRef:
                 name: {{ .Values.smtpSecretRef }}
