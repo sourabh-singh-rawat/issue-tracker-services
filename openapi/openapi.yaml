@@ -70,9 +70,15 @@ paths:
   /projects/{id}:
     description: Update the project status
     $ref: project/paths/project.yaml
+  /projects/{id}/role:
+    description: Get project roles
+    $ref: project/paths/role.yaml
   /projects/{id}/members:
     description: Get project members
     $ref: project/paths/members.yaml
+  /projects/{id}/workspace-members:
+    description: Get workspace members
+    $ref: project/paths/workspace-member.yaml
   /users/register:
     description: Create or register a new user
     $ref: user/paths/register.yaml
@@ -91,9 +97,6 @@ paths:
   /workspaces/{id}:
     description: Get workspace
     $ref: workspace/paths/workspace.yaml
-  /workspaces/{id}/members:
-    description: Get workspace members
-    $ref: workspace/paths/member.yaml
   /workspaces/invite:
     description: Creates a workspace member
     $ref: workspace/paths/invite.yaml

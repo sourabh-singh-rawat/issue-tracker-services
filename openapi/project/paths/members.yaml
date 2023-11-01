@@ -8,7 +8,7 @@ get:
       in: path
       schema: 
         type: string
-      description: Numeric id of the project to update
+      description: Numeric id of the project
   responses: 
     200:
       description: Get all project members
@@ -24,6 +24,38 @@ get:
               rowCount: 
                 type: number
             required: ["rows", "rowCount"]
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
+post: 
+  tags: ["project"]
+  summary: Create a new project member
+  description: Create a new project member
+  operationId: createProjectMember
+  parameters: 
+    - name: id 
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the project
+  requestBody: 
+    description: Fields used for creating a new project member
+    content:
+      application/json:
+        schema: 
+          type: object
+          properties:
+            userId:
+              type: string
+            role:
+              type: string
+          required: [ "userId", "role" ]
+  responses: 
+    201:
+      description: Member created successfully
     400:
       description: Bad request
       content:
