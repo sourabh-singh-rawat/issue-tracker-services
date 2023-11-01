@@ -4,29 +4,47 @@ metadata:
   name: issue-tracker
 build:
   artifacts:
+  - image: sourabhrawatcc/activity
+    context: servers/activity
+    docker:
+      dockerfile: Dockerfile
+  - image: sourabhrawatcc/email
+    context: servers/email
+    docker:
+      dockerfile: Dockerfile
   - image: sourabhrawatcc/identity
-    context: identity
+    context: servers/identity
     docker:
       dockerfile: Dockerfile
   - image: sourabhrawatcc/issue
-    context: issue
+    context: servers/issue
     docker:
       dockerfile: Dockerfile
   - image: sourabhrawatcc/project
-    context: project
+    context: servers/project
     docker:
       dockerfile: Dockerfile
   - image: sourabhrawatcc/user
-    context: user
+    context: servers/user
     docker:
       dockerfile: Dockerfile
   - image: sourabhrawatcc/workspace
-    context: workspace
+    context: servers/workspace
     docker:
       dockerfile: Dockerfile
 deploy:
   helm:
     releases:
+    - name: activity
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/activity.values.yaml
+
+    - name: email
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/email.values.yaml
+
     - name: identity
       chartPath: ./k8s/microservice
       valuesFiles:
