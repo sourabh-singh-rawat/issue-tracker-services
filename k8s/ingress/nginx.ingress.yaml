@@ -9,8 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: localhost
-      http:
+    - http:
         paths:
           - pathType: ImplementationSpecific
             path: /api/v1/activities/?(.*)
