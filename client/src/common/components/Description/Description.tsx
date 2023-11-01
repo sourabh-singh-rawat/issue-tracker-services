@@ -1,33 +1,40 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 
-import { TextField, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import MuiGrid from "@mui/material/Grid";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import CancelButton from "../CancelButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
-interface DescriptionProps {
+interface DescriptionProps<T extends { name: string; description: string }> {
+  page: T;
+  setPage: React.Dispatch<React.SetStateAction<T>>;
   isLoading: boolean;
+  updateQuery: () => Promise<void>;
 }
 
-function Description({
-  page,
-  updateDescription,
-  updateDescriptionQuery,
-  isLoading,
-}: DescriptionProps) {
+export default function Description<
+  T extends { name: string; description: string },
+>({ page, setPage, isLoading, updateQuery }: DescriptionProps<T>) {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const [isFocused, setIsFocused] = useState(false);
+  const [previousDescription, setPreviousDescription] = useState("");
 
-  const handleChange = (e) => {
-    dispatch(updateDescription({ description: e.target.value }));
+  const handleSubmit = async () => {
+    if (page?.description !== previousDescription) await updateQuery();
+    setIsFocused(false);
   };
 
-  const handleSave = async () => {
-    if (page.description !== page.previousDescription) updateDescriptionQuery();
+  const handleClick = () => {
+    setIsFocused(true);
+    setPreviousDescription(page.name);
+  };
 
-    dispatch(updateDescription({ descriptionSelected: false }));
+  const handleCancel = () => {
+    setIsFocused(false);
+    setPage({ ...page, description: previousDescription });
   };
 
   return (
@@ -35,16 +42,19 @@ function Description({
       <MuiGrid xs={12} item>
         <MuiTypography
           variant="body1"
-          sx={{ color: theme.palette.text.secondary, fontWeight: "bold" }}
+          sx={{
+            color: theme.palette.text.primary,
+            fontWeight: theme.typography.fontWeightBold,
+          }}
         >
-          Description
+          Description:
         </MuiTypography>
-        {page.descriptionSelected ? (
+        {isFocused ? (
           <TextField
-            rows={4}
             size="small"
-            value={page.description}
-            onChange={handleChange}
+            value={page?.description}
+            onChange={(e) => setPage({ ...page, description: e.target.value })}
+            rows={4}
             autoFocus
             fullWidth
             multiline
@@ -62,47 +72,28 @@ function Description({
               <MuiTypography
                 sx={{
                   lineHeight: 1.5,
-                  padding: "8px 14px",
-                  marginLeft: "-14px",
-                  borderRadius: "6px",
-                  color: "text.primary",
-                  transition: "250ms",
+                  padding: theme.spacing(1),
+                  marginLeft: theme.spacing(-1),
+                  borderRadius: theme.shape.borderRadiusMedium,
                   ":hover": { backgroundColor: "action.hover" },
                 }}
                 variant="body2"
-                onClick={() => {
-                  dispatch(
-                    updateDescription({
-                      descriptionSelected: true,
-                      previousDescription: page.description,
-                    }),
-                  );
-                }}
+                onClick={handleClick}
               >
-                {page.description ? page.description : "Add a description..."}
+                {page?.description ? page?.description : "Add a description..."}
               </MuiTypography>
             )}
           </>
         )}
       </MuiGrid>
-      {page.descriptionSelected && (
+      {isFocused && (
         <MuiGrid sm={12} item>
           <MuiGrid spacing={1} container>
             <MuiGrid item>
-              <CancelButton label="Save" onClick={handleSave} />
+              <PrimaryButton label="Save" onClick={handleSubmit} />
             </MuiGrid>
             <MuiGrid item>
-              <CancelButton
-                label="Cancel"
-                onClick={() =>
-                  dispatch(
-                    updateDescription({
-                      descriptionSelected: false,
-                      description: page.previousDescription,
-                    }),
-                  )
-                }
-              />
+              <CancelButton label="Cancel" onClick={handleCancel} />
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>
@@ -110,5 +101,3 @@ function Description({
     </MuiGrid>
   );
 }
-
-export default Description;

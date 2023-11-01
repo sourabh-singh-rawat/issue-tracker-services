@@ -6,8 +6,8 @@ export default function Checkbox({ checked, handleCheckBoxClick }) {
   return (
     <MuiCheckbox
       checked={checked}
-      disableRipple
       onClick={handleCheckBoxClick}
+      disableRipple
     />
   );
 }

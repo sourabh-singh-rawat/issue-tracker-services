@@ -9,7 +9,7 @@ import AddTaskButton from "../AddTaskButton";
 
 import { resetTasks } from "../../issue-tasks.slice";
 
-export default function TaskList({ rows, isLoading }) {
+export default function TaskList({ rows = [], isLoading }) {
   const dispatch = useDispatch();
   useEffect(() => () => dispatch(resetTasks()), []);
 

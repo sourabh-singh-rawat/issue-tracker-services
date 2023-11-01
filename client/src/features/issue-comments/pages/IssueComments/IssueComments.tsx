@@ -1,44 +1,41 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
 
+import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiLinearProgress from "@mui/material/LinearProgress";
 
 import AddComment from "../../components/AddComment";
 import CommentList from "../../components/CommentList";
 
-import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
-import { useGetIssueCommentListQuery } from "../../../../api/generated/issue.api";
 import { setComments } from "../../issue-comments.slice";
-// import { setComments } from "../../issue-comments.slice";
+import { useAppDispatch } from "../../../../common/hooks";
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
+import { useGetIssueCommentListQuery } from "../../../../api/generated/issue.api";
 
-function IssueComments() {
-  const { id } = useParams();
+export default function IssueComments() {
+  const theme = useTheme();
+  const { id } = useSelectedTab();
   const dispatch = useAppDispatch();
-
-  const comments = useAppSelector((store) => store.issueComments);
 
   const {
     data: issueCommentList,
     isSuccess,
     isLoading,
-  } = useGetIssueCommentListQuery({
-    id,
-  });
+  } = useGetIssueCommentListQuery({ id });
 
   useEffect(() => {
     if (isSuccess) {
       dispatch(
         setComments({
           rows: issueCommentList?.rows,
-          rowCount: issueCommentList?.rowCount,
+          rowCount: issueCommentList?.filteredRowCount,
         }),
       );
     }
   }, [issueCommentList]);
 
   return (
-    <MuiGrid rowSpacing={1} container>
+    <MuiGrid container spacing={1} sx={{ py: theme.spacing(2) }}>
       <MuiGrid xs={12} item>
         <AddComment />
       </MuiGrid>
@@ -48,11 +45,9 @@ function IssueComments() {
         </MuiGrid>
       ) : (
         <MuiGrid xs={12} item>
-          <CommentList rows={comments.rows} />
+          <CommentList rows={issueCommentList?.rows} />
         </MuiGrid>
       )}
     </MuiGrid>
   );
 }
-
-export default IssueComments;

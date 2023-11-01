@@ -12,6 +12,7 @@ import MuiContainer from "@mui/material/Container";
 
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import WorkspaceRoleSelector from "../WorkspaceMemberSelector/WorkspaceRoleSelector";
+import EmailIcon from "@mui/icons-material/Email";
 
 export default function WorkspaceMemberForm() {
   const { id } = useParams();
@@ -60,7 +61,11 @@ export default function WorkspaceMemberForm() {
         </MuiGrid>
 
         <MuiGrid xs={12} item>
-          <PrimaryButton label="Send Invite" type="submit" />
+          <PrimaryButton
+            label="Send Invite"
+            type="submit"
+            startIcon={<EmailIcon />}
+          />
         </MuiGrid>
       </MuiGrid>
     </MuiContainer>

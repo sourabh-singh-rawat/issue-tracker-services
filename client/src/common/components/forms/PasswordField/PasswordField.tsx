@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import TextField from "../TextField";
 import { Control, FieldValues, FormState, Path } from "react-hook-form";
 import MuiIconButton from "@mui/material/IconButton";
 import MuiVisibilityOff from "@mui/icons-material/VisibilityOff";
 import MuiVisibility from "@mui/icons-material/Visibility";
+import TextField from "../TextField";
 
 interface PasswordFieldProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -19,7 +19,6 @@ export default function PasswordField<DefaultValues extends FieldValues>({
   formState,
 }: PasswordFieldProps<DefaultValues>) {
   const [isVisible, setIsVisible] = useState(false);
-
   const toggle = () => setIsVisible(!isVisible);
 
   return (

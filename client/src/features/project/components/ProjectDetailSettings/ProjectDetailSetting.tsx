@@ -1,11 +1,14 @@
-/* eslint-disable react/prop-types */
 import React from "react";
+
+import { useTheme } from "@mui/material";
+
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 import MuiBox from "@mui/material/Box";
 import MuiDivider from "@mui/material/Divider";
+import MuiTextField from "@mui/material/TextField";
+import Settings from "../../../settings/pages/Settings";
 import TextField from "../../../../common/components/forms/TextField";
-import { useTheme } from "@mui/material";
 
 export default function ProjectDetailSetting({
   name,
@@ -30,24 +33,25 @@ export default function ProjectDetailSetting({
         padding={2}
         rowSpacing={1}
         sx={{
-          borderRadius: 3,
           width: "100%",
-          backgroundColor: theme.palette.common.white,
-          border: `1px solid ${theme.palette.grey[1200]}`,
+          backgroundColor: theme.palette.background.paper,
+          border: `1px solid ${theme.palette.background.paper}`,
         }}
         container
       >
         <MuiGrid xs={12} item>
-          {/* <Settings title="Name">
+          <Settings title="Name">
             <TextField
               helperText="The name of your project. Max character count is 50"
               isLoading={isLoading}
               name="name"
               value={name}
-              required
               onChange={handleChange}
+              size="small"
+              fullWidth
+              required
             />
-          </Setting> */}
+          </Settings>
           <MuiDivider />
         </MuiGrid>
         <MuiGrid xs={12} item>

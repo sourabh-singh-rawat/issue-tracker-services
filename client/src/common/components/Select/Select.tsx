@@ -23,31 +23,41 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
   },
 }));
 
-export interface SelectProps {
+export interface SelectProps<Value = unknown> {
   name: string;
-  value: string;
-  onChange: (e: SelectChangeEvent<unknown>) => void;
+  value: Value;
+  onChange: (e: SelectChangeEvent<Value>) => void;
+  variant?: "small" | "medium";
   options?: string[];
+  isDisabled?: boolean;
 }
 
-export default function Select({
-  value,
+export default function Select<Value = unknown>({
+  value = "",
   name,
   options = [],
+  variant,
   onChange,
-}: SelectProps) {
+  isDisabled,
+}: SelectProps<Value>) {
   const theme = useTheme();
 
   const MenuProps = {
     PaperProps: {
       style: {
         boxShadow: theme.shadows[20],
-        border: `2px solid ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadiusMedium,
         backgroundColor: theme.palette.background.default,
       },
     },
   };
+
+  // const getBgColor = (value: string) => {
+  //   if (value === "not started") return theme.palette.error.main;
+  //   if (value === "in progress") return theme.palette.primary.main;
+
+  //   return theme.palette.primary.main;
+  // };
 
   return (
     <StyledSelect
@@ -58,6 +68,14 @@ export default function Select({
       onChange={onChange}
       MenuProps={MenuProps}
       IconComponent={KeyboardArrowDownIcon}
+      sx={{
+        height: variant === "small" ? theme.spacing(4) : "auto",
+        "& fieldset": {
+          // backgroundColor: getBgColor(value.toLowerCase()),
+          // opacity: 0.15,
+        },
+      }}
+      disabled={isDisabled}
     >
       {options.map((name) => (
         <MenuItem key={name} value={name} disableRipple>

@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import { ImageListItem, Skeleton } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import theme from '../../../../config/mui.config';
+import { ImageListItem, Skeleton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import theme from "../../../../config/mui.config";
 
-import { useGetIssueAttachmentQuery } from '../../issue-attachments.api';
+import { useGetIssueAttachmentQuery } from "../../issue-attachments.api";
 
 export default function ImageCard({ attachmentId, issueId }) {
-  const [signedUrl, setSignedUrl] = useState('');
+  const [signedUrl, setSignedUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const { data, isSuccess } = useGetIssueAttachmentQuery({

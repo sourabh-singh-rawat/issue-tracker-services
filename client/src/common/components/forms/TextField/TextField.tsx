@@ -15,9 +15,9 @@ import StyledTextField from "../../styled/StyledTextField";
 
 interface TextFieldProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
-  title: string;
   control: Control<DefaultValues>;
   formState: FormState<DefaultValues>;
+  title?: string;
   type?: React.HTMLInputTypeAttribute;
   rules?: UseControllerProps<DefaultValues>["rules"];
   helperText?: string;
@@ -75,10 +75,10 @@ export default function TextField<DefaultValues extends FieldValues>({
                 }
                 size="small"
                 rows={rows}
-                InputProps={endAdornment}
                 error={Boolean(formState.errors[name])}
                 disabled={isDisabled}
                 multiline={isMultiline}
+                InputProps={{ endAdornment }}
                 fullWidth
               />
             )}

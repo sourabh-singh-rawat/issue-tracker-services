@@ -1,5 +1,5 @@
 import { apiSlice as api } from "../api.config";
-export const addTagTypes = ["user"] as const;
+export const addTagTypes = ["user", "project", "issue"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -26,7 +26,7 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.body,
         }),
-        invalidatesTags: ["user"],
+        invalidatesTags: ["user", "project", "issue"],
       }),
     }),
     overrideExisting: false,

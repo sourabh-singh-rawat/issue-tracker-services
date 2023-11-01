@@ -11,7 +11,6 @@ import { styled } from "@mui/material/styles";
 const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
   border: "none",
   ".MuiDataGrid-row": {
-    transition: "ease-in-out 0.150s",
     ":hover": { backgroundColor: theme.palette.action.hover },
   },
   ".MuiDataGrid-cell": {
@@ -32,10 +31,10 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
 
 interface ListProps {
   rows: GridValidRowModel[];
-  rowCount: number;
   columns: GridColDef<GridValidRowModel>[];
-  paginationModel: GridPaginationModel;
-  onPaginationModelChange: (
+  rowCount?: number;
+  paginationModel?: GridPaginationModel;
+  onPaginationModelChange?: (
     model: GridPaginationModel,
     details: GridCallbackDetails,
   ) => void;
@@ -62,7 +61,7 @@ export default function List({
     <StyledDataGrid
       columns={columns}
       slotProps={{ loadingOverlay: {} }}
-      getRowId={({ id }) => id}
+      getRowId={({ id }) => id as string}
       loading={isLoading}
       rows={rows}
       rowCount={rowCountState}

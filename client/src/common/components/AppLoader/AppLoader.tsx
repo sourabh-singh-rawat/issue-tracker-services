@@ -1,12 +1,26 @@
 import React from "react";
+import { useTheme } from "@mui/material";
 import MuiBox from "@mui/material/Box";
 import MuiCircularProgress from "@mui/material/CircularProgress";
 
 interface AppLoaderProps {
-  size?: string;
+  size?: number;
+  color?:
+    | "inherit"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
 }
 
-export default function AppLoader({ size }: AppLoaderProps) {
+export default function AppLoader({
+  size = 4,
+  color = "primary",
+}: AppLoaderProps) {
+  const theme = useTheme();
+
   return (
     <MuiBox
       style={{
@@ -17,7 +31,7 @@ export default function AppLoader({ size }: AppLoaderProps) {
         alignItems: "center",
       }}
     >
-      <MuiCircularProgress size={size} />
+      <MuiCircularProgress size={theme.spacing(size)} color={color} />
     </MuiBox>
   );
 }

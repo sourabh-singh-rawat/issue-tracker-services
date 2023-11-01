@@ -1,5 +1,5 @@
 import { apiSlice as api } from "../api.config";
-export const addTagTypes = ["issue"] as const;
+export const addTagTypes = ["issue", "comment"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -45,6 +45,14 @@ const injectedRtkApi = api
         query: (queryArg) => ({ url: `/issues/${queryArg.id}` }),
         providesTags: ["issue"],
       }),
+      updateIssue: build.mutation<UpdateIssueApiResponse, UpdateIssueApiArg>({
+        query: (queryArg) => ({
+          url: `/issues/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["issue"],
+      }),
       createIssueComment: build.mutation<
         CreateIssueCommentApiResponse,
         CreateIssueCommentApiArg
@@ -54,7 +62,7 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.body,
         }),
-        invalidatesTags: ["issue"],
+        invalidatesTags: ["issue", "comment"],
       }),
       getIssueCommentList: build.query<
         GetIssueCommentListApiResponse,
@@ -62,6 +70,16 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({ url: `/issues/${queryArg.id}/comments` }),
         providesTags: ["issue"],
+      }),
+      deleteIssueComment: build.mutation<
+        DeleteIssueCommentApiResponse,
+        DeleteIssueCommentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/issues/${queryArg.id}/comments/${queryArg.commentId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["issue", "comment"],
       }),
       getIssueTaskList: build.query<
         GetIssueTaskListApiResponse,
@@ -81,12 +99,25 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["issue"],
       }),
+      updateIssueTask: build.mutation<
+        UpdateIssueTaskApiResponse,
+        UpdateIssueTaskApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/issues/${queryArg.id}/tasks/${queryArg.taskId}`,
+          method: "PATCH",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["issue"],
+      }),
     }),
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
-export type GetIssueListApiResponse =
-  /** status 200 A list of issues */ undefined;
+export type GetIssueListApiResponse = /** status 200 A list of issues */ {
+  rows: any;
+  filteredRowCount: number;
+};
 export type GetIssueListApiArg = {
   page?: string;
   pageSize?: string;
@@ -133,6 +164,26 @@ export type GetIssueApiArg = {
   /** Numeric id of the issue to get */
   id?: string;
 };
+export type UpdateIssueApiResponse =
+  /** status 200 Updates the issue */ undefined;
+export type UpdateIssueApiArg = {
+  /** Numeric id of the issue to get */
+  id?: string;
+  body: {
+    name?: Name;
+    description?: Description;
+    status?: Status;
+    priority?: string;
+    resolution?: boolean;
+    projectId?: string;
+    assignees?: Assignees;
+    reportedId?: {
+      id: string;
+      name: string;
+    };
+    dueDate?: DueDate;
+  };
+};
 export type CreateIssueCommentApiResponse =
   /** status 201 The comment has been created successfully */ undefined;
 export type CreateIssueCommentApiArg = {
@@ -147,6 +198,14 @@ export type GetIssueCommentListApiResponse =
 export type GetIssueCommentListApiArg = {
   /** Numeric id of the issue who's comments will be returned */
   id?: string;
+};
+export type DeleteIssueCommentApiResponse =
+  /** status 201 The comment has been created successfully */ undefined;
+export type DeleteIssueCommentApiArg = {
+  /** Numeric id of the issue in which the comment will be created */
+  id?: string;
+  /** Numeric id of the comment */
+  commentId?: string;
 };
 export type GetIssueTaskListApiResponse =
   /** status 200 Issue task created successfully */ {
@@ -166,13 +225,32 @@ export type CreateIssueTaskApiArg = {
     dueDate?: DueDate;
   };
 };
+export type UpdateIssueTaskApiResponse =
+  /** status 201 Issue task created successfully */ undefined;
+export type UpdateIssueTaskApiArg = {
+  /** Numeric id of the issue */
+  id?: string;
+  /** Numeric id of the task */
+  taskId?: string;
+  body: {
+    description: Description;
+    completed?: boolean;
+    dueDate?: DueDate;
+  };
+};
 export type Schema = {
   errors?: {
     message: string;
     field?: string;
   }[];
 };
+export type Name = string;
 export type Description = string;
+export type Status = string;
+export type Assignees = {
+  id: string;
+  name: string;
+}[];
 export type DueDate = string | string;
 export const {
   useGetIssueListQuery,
@@ -180,8 +258,11 @@ export const {
   useGetIssueStatusListQuery,
   useGetIssuePriorityListQuery,
   useGetIssueQuery,
+  useUpdateIssueMutation,
   useCreateIssueCommentMutation,
   useGetIssueCommentListQuery,
+  useDeleteIssueCommentMutation,
   useGetIssueTaskListQuery,
   useCreateIssueTaskMutation,
+  useUpdateIssueTaskMutation,
 } = injectedRtkApi;

@@ -1,35 +1,22 @@
-/* eslint-disable implicit-arrow-linebreak */
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
 
-import { setMembers } from "../../project.slice";
 import List from "../../../../common/components/List";
-import { useAppSelector } from "../../../../common/hooks";
-import { useGetProjectMembersQuery } from "../../../../api/generated/project.api";
 import dayjs from "dayjs";
 import Avatar from "../../../../common/components/Avatar";
 import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
 
-function MemberList() {
-  const theme = useTheme();
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  const { rows, rowCount, pageSize } = useAppSelector(
-    (store) => store.project.members,
-  );
-  const {
-    data: projectMembers,
-    isSuccess,
-    isLoading,
-  } = useGetProjectMembersQuery({ id });
+export interface MemberListProps {
+  members: [];
+  projectId: string;
+}
 
-  useEffect(() => {
-    if (isSuccess) dispatch(setMembers(projectMembers));
-  }, [projectMembers]);
+function MemberList({ members, projectId }: MemberListProps) {
+  const theme = useTheme();
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -44,7 +31,7 @@ function MemberList() {
             display: "flex",
             alignItems: "center",
           }}
-          to={`/profile/${id}`}
+          to={`/profile/${projectId}`}
         >
           <Avatar label={value} photoUrl={photoUrl} />
           <MuiTypography
@@ -89,9 +76,9 @@ function MemberList() {
   return (
     <List
       columns={columns}
-      rows={rows}
-      rowCount={rowCount}
-      isLoading={isLoading}
+      rows={members}
+      rowCount={members?.length}
+      // isLoading={isLoading}
     />
   );
 }

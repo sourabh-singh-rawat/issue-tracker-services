@@ -4,7 +4,7 @@ import React from "react";
 import MuiTabs from "@mui/material/Tabs";
 import { useTheme } from "@mui/material";
 
-function Tabs(props) {
+export default function Tabs(props) {
   const theme = useTheme();
 
   return (
@@ -17,14 +17,11 @@ function Tabs(props) {
           opacity: 1,
           minWidth: "auto",
           marginRight: theme.spacing(4),
-          fontWeight: 600,
+          fontSize: theme.typography.body2,
+          fontWeight: theme.typography.fontWeightMedium,
         },
-        "& .Mui-selected": {
-          color: theme.palette.primary.main,
-        },
+        "& .Mui-selected": { color: theme.palette.primary.main },
       }}
     />
   );
 }
-
-export default Tabs;

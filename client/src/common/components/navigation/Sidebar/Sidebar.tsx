@@ -19,7 +19,7 @@ import WorkspaceSwitcher from "../../../../features/workspace/components/Workspa
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
-  const closedDrawerWidth = theme.spacing(9);
+  const closedDrawerWidth = theme.spacing(5);
 
   return {
     width: open ? openDrawerWidth : closedDrawerWidth,
@@ -29,11 +29,8 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
     "& .MuiPaper-root": {
       border: "none",
       backgroundColor: theme.palette.background.paper,
-      borderRight: `1px solid ${theme.palette.divider}`,
     },
     "& .MuiDrawer-paper": {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
       transition: theme.transitions.create(["width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,

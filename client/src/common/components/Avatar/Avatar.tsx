@@ -4,12 +4,20 @@ import MuiTypography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
 
 interface AvatarProps {
+  width?: string;
+  height?: string;
   variant?: "circular" | "rounded" | "square";
   label?: string;
   photoUrl?: string;
 }
 
-export default function Avatar({ variant, label, photoUrl }: AvatarProps) {
+export default function Avatar({
+  variant,
+  label,
+  photoUrl,
+  width = 22,
+  height = 22,
+}: AvatarProps) {
   const theme = useTheme();
 
   return (
@@ -17,8 +25,8 @@ export default function Avatar({ variant, label, photoUrl }: AvatarProps) {
       src={photoUrl}
       variant={variant}
       sx={{
-        width: 22,
-        height: 22,
+        width,
+        height,
         textAlign: "center",
         fontSize: theme.typography.body1,
         fontWeight: theme.typography.fontWeightBold,

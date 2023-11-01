@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-import { useSetDefaultWorkspaceMutation } from "../../../../api/generated/user.api";
+import DoneIcon from "@mui/icons-material/Done";
+
 import AppLoader from "../../../../common/components/AppLoader";
 import { useMessageBar } from "../../../message-bar/hooks";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import { useTheme } from "@mui/material";
 
@@ -19,6 +19,7 @@ interface WorkspaceListItemProps {
 
 import MenuItem from "../../../../common/components/MenuItem";
 import Avatar from "../../../../common/components/Avatar";
+import { useSetDefaultWorkspaceMutation } from "../../../../api/generated/user.api";
 
 export default function WorkspaceListItem({
   option,
@@ -64,9 +65,9 @@ export default function WorkspaceListItem({
         isLoading ? (
           <AppLoader size="1rem" />
         ) : id === selectedOption?.id ? (
-          <CheckCircleOutlineIcon
+          <DoneIcon
             fontSize="small"
-            sx={{ color: theme.palette.primary.main }}
+            sx={{ color: theme.palette.success.main }}
           />
         ) : null
       }

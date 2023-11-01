@@ -1,80 +1,64 @@
 import React, { useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
 
-import { CircularProgress, Divider, useTheme } from "@mui/material";
-
-import TabPanel from "../../../../common/components/TabPanel";
-import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
-import { useUpdateProjectMutation } from "../../../../api/generated/project.api";
 import Description from "../../../../common/components/Description";
-import { setProject } from "../../project.slice";
+import TabPanel from "../../../../common/components/TabPanel";
+import { useUpdateProjectMutation } from "../../../../api/generated/project.api";
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
+import { useMessageBar } from "../../../message-bar/hooks";
+import AvatarGroup from "../../../../common/components/AvatarGroup";
+import MuiTypography from "@mui/material/Typography";
+import { useTheme } from "@mui/material";
 
-function ProjectOverview() {
+export default function ProjectOverview() {
   const theme = useTheme();
-  // const { id } = useParams();
-  const dispatch = useAppDispatch();
-  const [selectedTab] = useOutletContext();
+  const { showSuccess, showError } = useMessageBar();
+  const { id, selectedTab, page, setPage, isLoading } = useSelectedTab();
+  const [updateProject, { isSuccess, isError }] = useUpdateProjectMutation();
 
-  const projectSettings = useAppSelector((s) => s.project.settings);
-  // const issuesStatusCount = useAppSelector((s) => s.project.issuesStatusCount);
-
-  const [updateProject, { isSuccess }] = useUpdateProjectMutation();
-
-  const updateDescriptionQuery = () => {
-    updateProject({
-      id,
-      body: { description: projectSettings.description },
-    });
+  const updateDescriptionQuery = async () => {
+    updateProject({ id, body: { description: page.description } });
   };
 
-  // useEffect(() => {
-  //   if (projectIssueStatusCount.isSuccess) {
-  //     dispatch(setIssueStatusCount(projectIssueStatusCount.data.rows));
-  //   }
-  // }, [projectIssueStatusCount.data]);
-
   useEffect(() => {
-    // if (isSuccess) dispatch(setMessageBarOpen(true));
-  }, [isSuccess]);
+    if (isSuccess) return showSuccess("Description updated successfully");
+
+    if (isError) return showError("Error updating description");
+  }, [isSuccess, isError]);
 
   return (
     <TabPanel index={0} selectedTab={selectedTab}>
-      <MuiGrid container spacing={2}>
+      <MuiGrid container>
         <MuiGrid md={8} item></MuiGrid>
         <MuiGrid md={4} item>
           <MuiGrid container rowSpacing={1} marginTop={2}>
             <MuiGrid xs={12} item>
               <Description
-                isLoading={projectSettings.isLoading}
-                page={projectSettings}
-                updateDescription={setProject}
-                updateDescriptionQuery={updateDescriptionQuery}
+                page={page}
+                setPage={setPage}
+                updateQuery={updateDescriptionQuery}
+                isLoading={isLoading}
+              />
+            </MuiGrid>
+            <MuiGrid xs={12} item>
+              <MuiTypography
+                variant="body1"
+                sx={{
+                  color: theme.palette.text.primary,
+                  fontWeight: theme.typography.fontWeightBold,
+                }}
+              >
+                Members:
+              </MuiTypography>
+              <AvatarGroup
+                members={page?.members}
+                total={page?.members?.length}
               />
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>
-        {/* <MuiGrid sm={12} item>
-          {issuesStatusCount.isLoading ? (
-            <CircularProgress />
-          ) : (
-            <>
-              <MuiTypography
-                fontWeight={600}
-                sx={{ color: theme.palette.grey[200] }}
-                variant="body1"
-              >
-                Issue Stats:
-              </MuiTypography>
-              <IssueStats issuesStatusCount={issuesStatusCount.rows} />
-            </>
-          )}
-        </MuiGrid> */}
       </MuiGrid>
     </TabPanel>
   );
 }
-
-export default ProjectOverview;

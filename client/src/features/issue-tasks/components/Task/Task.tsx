@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
@@ -13,11 +12,11 @@ import Checkbox from "../../../../common/components/Checkbox";
 import TextField from "../../../../common/components/styled/StyledTextField";
 
 import { useTheme } from "@mui/material";
+import { useUpdateIssueTaskMutation } from "../../../../api/generated/issue.api";
 
 function Task({ taskId, dueDate, description, completed }) {
   const theme = useTheme();
   const { id } = useParams();
-  const dispatch = useDispatch();
 
   const [editMode, setEditMode] = useState(false);
   const [show, setShow] = useState(false);
@@ -29,7 +28,7 @@ function Task({ taskId, dueDate, description, completed }) {
   });
 
   // const [deleteTask] = useDeleteTaskMutation();
-  // const [updateTask, { isSuccess }] = useUpdateTaskMutation();
+  const [updateTask, { isSuccess, isLoading }] = useUpdateIssueTaskMutation();
 
   const handleCancel = () => setEditMode(false);
   const handleChange = (e) => {

@@ -18,8 +18,8 @@ export default function ProjectListPage() {
           Project
         </MuiTypography>
         <MuiTypography variant="body2">
-          This section contains all the projects that you have created. You can
-          go to individual project to edit them.
+          This section contains all the projects that you have created or are
+          member of. You can go to individual project to edit them.
         </MuiTypography>
       </MuiGrid>
 

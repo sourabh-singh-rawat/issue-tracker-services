@@ -17,7 +17,7 @@ const issueListSlice = createSlice({
     setIssueList: (state, action) => ({
       ...state,
       rows: action.payload.rows,
-      rowCount: action.payload.rowCount,
+      rowCount: action.payload.filteredRowCount,
       isLoading: false,
     }),
     updateIssueList: (state, action) => ({ ...state, ...action.payload }),

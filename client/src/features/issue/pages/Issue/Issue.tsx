@@ -1,21 +1,30 @@
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import Tabs from "../../../../common/components/Tabs";
 import Tab from "../../../../common/components/Tab";
-import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
+import Tabs from "../../../../common/components/Tabs";
 import {
   useGetIssuePriorityListQuery,
   useGetIssueQuery,
   useGetIssueStatusListQuery,
+  useUpdateIssueMutation,
 } from "../../../../api/generated/issue.api";
-import { setIssue, setIssuePriority, setIssueStatus } from "../../issue.slice";
-import TitleSection from "../../../../common/components/TitleSection";
+import { useAppDispatch } from "../../../../common/hooks";
+import { setIssuePriority, setIssueStatus } from "../../issue.slice";
 import TextButton from "../../../../common/components/buttons/TextButton";
+import { useMessageBar } from "../../../message-bar/hooks";
+import Title from "../../../../common/components/Title";
+
+import MuiSkeleton from "@mui/material/Skeleton";
+import MuiTypography from "@mui/material/Typography";
+import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
 export default function Issue() {
   const theme = useTheme();
@@ -23,12 +32,15 @@ export default function Issue() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const { showSuccess, showError } = useMessageBar();
+  const [issue, setIssue] = useState({ name: "", updatedAt: "" });
 
   const { data, ...issueRequest } = useGetIssueQuery({ id });
   const { data: statusList, ...statusListRequest } =
     useGetIssueStatusListQuery();
   const { data: priorityList, ...priorityListRequest } =
     useGetIssuePriorityListQuery();
+  const [updateIssue, updateIssueOptions] = useUpdateIssueMutation();
 
   const tabName = location.pathname.split("/")[3] || "overview";
   const mapTabToIndex: { [k: string]: number } = {
@@ -40,11 +52,15 @@ export default function Issue() {
   };
   const [selectedTab, setSelectedTab] = useState(mapTabToIndex[tabName]);
 
-  const updateTitleQuery = async () => {
-    // updateIssue({ id, body: { name: issue.name } });
-  };
+  useEffect(() => {
+    if (updateIssueOptions.isSuccess) {
+      showSuccess("Issue title updated successfully");
+    }
 
-  const issue = useAppSelector((store) => store.issue.info);
+    if (updateIssueOptions.isError) {
+      showError("Failed to update issue title");
+    }
+  }, [updateIssueOptions.isSuccess]);
 
   useEffect(() => {
     if (statusListRequest.isSuccess) dispatch(setIssueStatus(statusList));
@@ -59,12 +75,8 @@ export default function Issue() {
   }, [id, tabName]);
 
   useEffect(() => {
-    if (issueRequest.isSuccess) dispatch(setIssue(data?.rows));
+    if (issueRequest.isSuccess) setIssue(data?.rows);
   }, [data]);
-
-  // useEffect(() => {
-  //   if (isSuccess) dispatch(setMessageBarOpen(true));
-  // }, [isSuccess]);
 
   const handleChange = (e, newValue) => {
     const mapIndexToTab: { [k: number]: string } = {
@@ -79,27 +91,48 @@ export default function Issue() {
     setSelectedTab(newValue);
   };
 
-  // On component unmount: clear issue info
-  // useEffect(() => () => dispatch(resetIssueSlice()), []);
-
   return (
-    <MuiGrid spacing={2} container>
+    <MuiGrid container>
       <MuiGrid xs={12} item>
-        <MuiGrid xs={12} item sx={{ marginLeft: theme.spacing(-0.5) }}>
+        <MuiGrid xs={12} item sx={{ marginLeft: theme.spacing(-1) }}>
           <TextButton
             label="Back to all issues"
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate("/issues")}
           />
         </MuiGrid>
-
         <MuiGrid xs={12} item>
-          <TitleSection
+          <Title
             page={issue}
-            isLoading={issueRequest.isLoading}
-            updateTitle={setIssue}
-            updateTitleQuery={updateTitleQuery}
+            setPage={setIssue}
+            updateQuery={async () => {
+              if (!id) return;
+              await updateIssue({ id, body: { name: issue.name } });
+            }}
           />
+        </MuiGrid>
+        <MuiGrid xs={12}>
+          <MuiGrid sx={{ color: theme.palette.text.primary }} xs={12} item>
+            <MuiBreadcrumbs separator="•">
+              {/* {isLoading ? <MuiSkeleton width="80px" /> : statusSelector} */}
+              {/* {isLoading ? <MuiSkeleton width="80px" /> : prioritySelector} */}
+              {issueRequest.isLoading ? (
+                <MuiSkeleton width="80px" />
+              ) : (
+                <MuiTypography component="span" variant="body2">
+                  Issue
+                  {/* {type.slice(1, -1)} */}
+                </MuiTypography>
+              )}
+              {issueRequest.isLoading ? (
+                <MuiSkeleton width="80px" />
+              ) : (
+                <MuiTypography component="span" variant="body2">
+                  {issue?.updatedAt && dayjs(issue?.updatedAt).fromNow()}
+                </MuiTypography>
+              )}
+            </MuiBreadcrumbs>
+          </MuiGrid>
         </MuiGrid>
       </MuiGrid>
 
@@ -117,7 +150,14 @@ export default function Issue() {
         </Tabs>
       </MuiGrid>
       <MuiGrid xs={12} item>
-        <Outlet context={[selectedTab]} />
+        <Outlet
+          context={{
+            id,
+            selectedTab,
+            page: issue,
+            setPage: setIssue,
+          }}
+        />
       </MuiGrid>
     </MuiGrid>
   );

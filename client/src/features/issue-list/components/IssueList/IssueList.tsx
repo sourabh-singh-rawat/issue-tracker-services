@@ -1,62 +1,49 @@
-import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import daysjs from "dayjs";
 
 import MuiTypography from "@mui/material/Typography";
 
 import StatusAndPrioritySelectorEditCell from "../StatusAndPrioritySelectorEditCell";
 
-import { resetIssueList, updateIssueList } from "../../issue-list.slice";
-
 import { useTheme } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 import List from "../../../../common/components/List";
-import { useGetIssueListQuery } from "../../../../api/generated/issue.api";
-import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
+import {
+  useGetIssueListQuery,
+  useGetIssuePriorityListQuery,
+  useGetIssueStatusListQuery,
+} from "../../../../api/generated/issue.api";
+import {
+  GridColDef,
+  GridValidRowModel,
+  GridPaginationModel,
+} from "@mui/x-data-grid";
 import Avatar from "../../../../common/components/Avatar";
 import AvatarGroup from "../../../../common/components/AvatarGroup";
+import IssueStatusSelector from "../IssueStatusSelector";
+import IssuePrioritySelector from "../IssuePrioritySelector";
 
-function IssueList() {
-  const { id } = useParams();
+interface IssueListProps {
+  projectId?: string;
+}
+
+function IssueList({ projectId }: IssueListProps) {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const reporterId = useAppSelector((s) => s.auth.currentUser?.userId);
-  const { data: issueList } = useGetIssueListQuery({ projectId: id });
-  const { rows, rowCount, page, pageSize } = useAppSelector((s) => s.issueList);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const onPaginationModelChange = (model: GridPaginationModel) => {
+    setPaginationModel(model);
+  };
 
-  // const getIssuesQuery = useGetIssuesQuery({
-  //   projectId,
-  //   page,
-  //   pageSize,
-  //   sortBy: "issues.createdAt:desc",
-  //   reporterId,
-  // });
-  // const issueStatus = useGetIssuesStatusQuery();
-  // const issuePriority = useGetIssuesPriorityQuery();
-
-  // useEffect(() => {
-  //   if (getIssuesQuery.data) dispatch(setIssueList(getIssuesQuery.data));
-  // }, [pageSize, page, getIssuesQuery.data]);
-
-  // useEffect(() => {
-  //   if (issueStatus.isSuccess) {
-  //     dispatch(setIssueStatus(issueStatus.data));
-  //   }
-  // }, [issueStatus]);
-
-  // useEffect(() => {
-  //   if (issuePriority.isSuccess) {
-  //     dispatch(setIssuePriority(issuePriority.data));
-  //   }
-  // }, [issuePriority]);
-
-  // on component unmount reset the issue list slice
-  useEffect(
-    () => () => {
-      dispatch(resetIssueList());
-    },
-    [],
-  );
+  const { data: issueList, isLoading } = useGetIssueListQuery({
+    projectId,
+    page: paginationModel.page,
+    pageSize: paginationModel.pageSize,
+    sortBy: "updatedAt",
+    sortOrder: "desc",
+  });
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -94,20 +81,16 @@ function IssueList() {
       field: "status",
       headerName: "Status",
       width: 150,
-
-      renderCell: (params) => <StatusAndPrioritySelectorEditCell {...params} />,
-      renderEditCell: (params) => (
-        <StatusAndPrioritySelectorEditCell {...params} />
+      renderCell: ({ id, row, value }) => (
+        <IssueStatusSelector id={id as string} row={row} value={value} />
       ),
     },
     {
       field: "priority",
       headerName: "Priority",
       width: 150,
-
-      renderCell: (params) => <StatusAndPrioritySelectorEditCell {...params} />,
-      renderEditCell: (params) => (
-        <StatusAndPrioritySelectorEditCell {...params} />
+      renderCell: ({ id, value, row }) => (
+        <IssuePrioritySelector id={id as string} value={value} row={row} />
       ),
     },
     {
@@ -121,7 +104,7 @@ function IssueList() {
       field: "reporter",
       headerName: "Reporter",
       width: 200,
-      renderCell: ({ value, row }) => (
+      renderCell: ({ value }) => (
         <Link
           style={{
             textDecoration: "none",
@@ -196,21 +179,12 @@ function IssueList() {
 
   return (
     <List
-      columns={columns}
-      getRowId={(row) => row.id}
-      initialState={{
-        sorting: { sortModel: [{ field: "status", sort: "desc" }] },
-      }}
-      // isLoading={getIssuesQuery.isLoading}
-      page={page}
-      pageSize={pageSize}
-      rowCount={rowCount}
       rows={issueList?.rows}
-      autoHeight
-      onPageChange={(newPage) => dispatch(updateIssueList({ page: newPage }))}
-      onPageSizeChange={(newSize) =>
-        dispatch(updateIssueList({ pageSize: newSize }))
-      }
+      columns={columns}
+      paginationModel={paginationModel}
+      onPaginationModelChange={onPaginationModelChange}
+      rowCount={issueList?.filteredRowCount}
+      isLoading={isLoading}
     />
   );
 }
