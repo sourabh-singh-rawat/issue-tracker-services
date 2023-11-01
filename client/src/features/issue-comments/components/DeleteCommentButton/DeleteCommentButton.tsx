@@ -12,20 +12,24 @@ import { setLoadingComments } from "../../issue-comments.slice";
 import { useTheme } from "@mui/material";
 import { useAppDispatch } from "../../../../common/hooks";
 import CancelButton from "../../../../common/components/CancelButton";
-import SecondaryButton from "../../../../common/components/SecondaryButton";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
+import { useDeleteIssueCommentMutation } from "../../../../api/generated/issue.api";
 
-function DeleteCommentButton({ id, issue_id }) {
-  const dispatch = useAppDispatch();
+interface DeleteCommentButtonProps {
+  id: string;
+  commentId: string;
+}
+
+function DeleteCommentButton({ id, commentId }: DeleteCommentButtonProps) {
   const theme = useTheme();
-
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
-
-  // const [deleteCommentMutation, { isSuccess }] = useDeleteCommentMutation();
+  const [deleteCommentMutation] = useDeleteIssueCommentMutation();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDelete = async () => {
-    // await deleteCommentMutation({ issue_id, commentId: id });
+    await deleteCommentMutation({ id, commentId });
   };
 
   return (
@@ -56,7 +60,7 @@ function DeleteCommentButton({ id, issue_id }) {
         </MuiDialogContent>
         <MuiDialogActions>
           <CancelButton label="Cancel" onClick={handleClose} />
-          <SecondaryButton
+          <PrimaryButton
             label="Delete"
             onClick={() => {
               handleClose();

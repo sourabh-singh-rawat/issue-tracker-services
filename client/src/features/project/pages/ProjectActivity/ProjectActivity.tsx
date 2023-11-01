@@ -1,42 +1,72 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-import { formatDistance, parseISO } from "date-fns";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useOutletContext, useParams } from "react-router-dom";
+import React from "react";
+import dayjs from "dayjs";
 
+import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-import { setActivity } from "../../project.slice";
 import TabPanel from "../../../../common/components/TabPanel";
+import { useGetProjectActivityListQuery } from "../../../../api/generated/workspace.api";
+import { useSelectedTab } from "../../../../common/hooks";
+import { useTheme } from "@mui/material";
+import Avatar from "../../../../common/components/Avatar";
+import Tooltip from "../../../../common/components/Tooltip";
 
-function ProjectActivity() {
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const [selectedTab] = useOutletContext();
-  const { data } = useGetProjectActivityQuery(id);
-
-  const projectActivities = useSelector((store) => store.project.activity);
-
-  useEffect(() => {
-    dispatch(setActivity({ ...data }));
-  }, [data]);
+export default function ProjectActivity() {
+  const theme = useTheme();
+  const { selectedTab, id } = useSelectedTab();
+  const { data: activityList } = useGetProjectActivityListQuery({ id });
 
   return (
-    <TabPanel index={3} selectedTab={selectedTab}>
-      {projectActivities.rows.map((activity) => (
-        <MuiTypography key={activity.id} variant="body2">
-          <b>{activity.userName}</b> {activity.activityDescription}{" "}
-          <b>
-            {formatDistance(parseISO(activity.createdAt), new Date(), {
-              includeSeconds: true,
-              addSuffix: true,
-            })}
-          </b>
-          .
-        </MuiTypography>
+    <TabPanel index={3} selectedTab={selectedTab} sx={{ py: theme.spacing(1) }}>
+      {activityList?.rows.map((activity, index) => (
+        <MuiGrid
+          key={index}
+          columnSpacing={0.5}
+          sx={{
+            py: theme.spacing(1),
+            alignItems: "center",
+            textAlign: "center",
+          }}
+          container
+        >
+          <MuiGrid item>
+            <Avatar label={activity?.displayName} />
+          </MuiGrid>
+          <MuiGrid item>
+            <MuiTypography
+              sx={{
+                color: theme.palette.text.primary,
+                fontWeight: theme.typography.fontWeightMedium,
+              }}
+              variant="body2"
+            >
+              {activity?.displayName}
+            </MuiTypography>
+          </MuiGrid>
+          <MuiGrid item>
+            <MuiTypography
+              variant="body2"
+              sx={{ color: theme.palette.text.secondary }}
+            >
+              {activity?.type}
+            </MuiTypography>
+          </MuiGrid>
+          <MuiGrid item>
+            <MuiTypography
+              variant="body2"
+              sx={{ color: theme.palette.text.primary }}
+            >
+              <Tooltip
+                title={dayjs(activity?.timestamp).format(
+                  "dddd, MMMM D, YYYY h:mm A",
+                )}
+              >
+                {dayjs(activity?.timestamp).fromNow()}
+              </Tooltip>
+            </MuiTypography>
+          </MuiGrid>
+        </MuiGrid>
       ))}
     </TabPanel>
   );
 }
-
-export default ProjectActivity;

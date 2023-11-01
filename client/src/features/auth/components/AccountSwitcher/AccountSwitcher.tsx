@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../../../common/hooks";
 
 import MuiMenuList from "@mui/material/MenuList";
@@ -9,9 +9,13 @@ import Avatar from "../../../../common/components/Avatar";
 import MenuItem from "../../../../common/components/MenuItem";
 
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
+import { useRevokeTokensMutation } from "../../../../api/generated/identity.api";
+import { useMessageBar } from "../../../message-bar/hooks";
 
 export default function AccountSwitcher() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const { showSuccess } = useMessageBar();
+  const [revokeTokens, { isSuccess }] = useRevokeTokensMutation();
 
   const currentUser = useAppSelector((store) => store.auth.currentUser);
 
@@ -21,14 +25,15 @@ export default function AccountSwitcher() {
 
   const handleClose = () => setAnchorEl(null);
 
+  useEffect(() => {
+    if (isSuccess) {
+      showSuccess("Logged out");
+    }
+  }, [isSuccess]);
+
   return (
     <>
-      <MenuItem
-        onClick={handleClickAccountIcon}
-        avatarIcon={
-          <Avatar variant="circular" label={currentUser?.displayName} />
-        }
-      />
+      <Avatar variant="circular" label={currentUser?.displayName} />
       <StyledMenu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -44,7 +49,10 @@ export default function AccountSwitcher() {
           <MenuItem
             avatarIcon={<MuiLockTwoToneIcon />}
             label="Logout"
-            onClick={handleClose}
+            onClick={async () => {
+              await revokeTokens();
+              handleClose();
+            }}
           />
         </MuiMenuList>
       </StyledMenu>

@@ -6,7 +6,7 @@ const config: ConfigFile = {
   apiImport: "apiSlice",
   outputFiles: {
     "./generated/identity.api.ts": {
-      filterEndpoints: ["generateTokens", "getCurrentUser"],
+      filterEndpoints: ["generateTokens", "getCurrentUser", "revokeTokens"],
     },
     "./generated/issue.api.ts": {
       filterEndpoints: [
@@ -19,16 +19,21 @@ const config: ConfigFile = {
         "getIssuePriorityList",
         "getIssueCommentList",
         "getIssueTaskList",
+        "updateIssue",
+        "updateIssueTask",
+        "deleteIssueComment",
       ],
     },
     "./generated/project.api.ts": {
       filterEndpoints: [
         "createProject",
+        "createProjectMember",
         "getProjectStatusList",
+        "getProjectRoleList",
         "getProjectList",
         "getProject",
-        "updateProject",
         "getProjectMembers",
+        "updateProject",
       ],
     },
     "./generated/user.api.ts": {
@@ -41,6 +46,8 @@ const config: ConfigFile = {
         "getWorkspace",
         "getWorkspaceRoleList",
         "createWorkspaceInvite",
+        "getProjectActivityList",
+        "getWorkspaceMemberList",
       ],
     },
   },

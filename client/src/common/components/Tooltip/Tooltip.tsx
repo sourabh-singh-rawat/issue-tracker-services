@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 
 import { styled } from "@mui/material/styles";
@@ -21,7 +19,7 @@ const StyledTooltip = styled(({ ...props }) => <MuiTooltip {...props} arrow />)(
 function Tooltip({ title, placement, children }) {
   return (
     <StyledTooltip placement={placement} title={title}>
-      {children}
+      <div style={{ cursor: "pointer" }}>{children}</div>
     </StyledTooltip>
   );
 }

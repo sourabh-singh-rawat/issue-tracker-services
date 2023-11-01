@@ -1,38 +1,26 @@
-import { useParams } from "react-router-dom";
 import React, { useState } from "react";
-
-// import IssueForm from "../../pages/IssueForm";
-
-// import { setMembers } from "../../../project/project.slice";
-import { useTheme } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
+import PestControlIcon from "@mui/icons-material/PestControl";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import IssueForm from "../../pages/IssueForm";
 import Modal from "../../../../common/components/Modal";
 import ModalHeader from "../../../../common/components/ModalHeader";
 
-function AddIssueButton({ projectId }) {
-  const theme = useTheme();
-  const { id } = useParams();
-  const dispatch = useAppDispatch();
+interface AddIssueButtonProps {
+  projectId: string;
+}
 
+function AddIssueButton({ projectId }: AddIssueButtonProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const project = useAppSelector(({ project }) => project.settings);
-
-  // const getProjectMembersQuery = useGetProjectMembersQuery(id);
-
-  // useEffect(() => {
-  //   if (getProjectMembersQuery.isSuccess) {
-  //     dispatch(setMembers(getProjectMembersQuery.data));
-  //   }
-  // }, [getProjectMembersQuery.data]);
-
   return (
     <>
-      <PrimaryButton label="Add Issue" onClick={handleOpen} />
+      <PrimaryButton
+        label="Add Issue"
+        onClick={handleOpen}
+        startIcon={<PestControlIcon />}
+      />
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader
           title="New Issue"

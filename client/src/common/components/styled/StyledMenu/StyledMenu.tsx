@@ -3,8 +3,7 @@ import MuiMenu from "@mui/material/Menu";
 
 const StyledMenu = styled(MuiMenu)(({ theme }) => ({
   ".MuiPaper-root": {
-    padding: theme.spacing(1),
-    borderRadius: theme.shape.borderRadiusLarge,
+    borderRadius: theme.shape.borderRadiusMedium,
     backgroundColor: theme.palette.background.default,
   },
 }));

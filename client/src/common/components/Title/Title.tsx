@@ -1,21 +1,20 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 
 import MuiGrid from "@mui/material/Grid";
 import { alpha, styled, useTheme } from "@mui/material/styles";
 
-import CancelButton from "../CancelButton";
 import PrimaryButton from "../buttons/PrimaryButton";
 import MuiTextField from "@mui/material/TextField";
-import { useAppDispatch } from "../../hooks";
+import TextButton from "../buttons/TextButton";
 
 const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
     overflow: "hidden",
-    paddingTop: "2px",
-    paddingBottom: "2px",
+    paddingTop: theme.spacing(0.25),
+    paddingBottom: theme.spacing(0.25),
     textOverflow: "ellipsis",
     borderRadius: theme.shape.borderRadiusMedium,
+    paddingLeft: theme.spacing(1),
   },
   "& .MuiOutlinedInput-root ": {
     fontSize: theme.typography.h4.fontSize,
@@ -27,14 +26,10 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
     },
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
-      "& fieldset": {
-        border: `2px solid ${theme.palette.grey[200]}`,
-      },
+      "& fieldset": { border: `2px solid ${theme.palette.grey[200]}` },
     },
     "&.Mui-focused": {
-      "& fieldset": {
-        borderColor: theme.palette.primary.main,
-      },
+      "& fieldset": { borderColor: theme.palette.primary.main },
       borderColor: theme.palette.primary.main,
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
     },
@@ -47,69 +42,53 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   },
 }));
 
-interface TitleProps<T extends { nameSelected: boolean }> {
+interface TitleProps<T extends { name: string }> {
   page: T;
-  updateTitle: () => void;
-  updateTitleQuery: () => void;
+  setPage: React.Dispatch<React.SetStateAction<T>>;
+  updateQuery: () => Promise<void>;
 }
 
-export default function Title<T>({
+export default function Title<T extends { name: string }>({
   page,
-  updateTitle,
-  updateTitleQuery,
+  setPage,
+  updateQuery,
 }: TitleProps<T>) {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const { nameSelected } = page;
+  const [isFocused, setIsFocused] = useState(false);
+  const [previousName, setPreviousName] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    dispatch(updateTitle({ [name]: value }));
+  const handleSubmit = async () => {
+    if (page?.name !== previousName) await updateQuery();
+    setIsFocused(false);
   };
 
-  const handleSave = () => {
-    if (page.name !== page.previousName) updateTitleQuery();
-    dispatch(updateTitle({ nameSelected: false }));
+  const handleClick = () => {
+    setIsFocused(true);
+    setPreviousName(page.name);
   };
 
-  console.log(page);
+  const handleCancel = () => {
+    setIsFocused(false);
+    setPage({ ...page, name: previousName });
+  };
 
   return (
-    <MuiGrid
-      columnSpacing={1}
-      sx={{ marginLeft: theme.spacing(-2.5) }}
-      container
-    >
+    <MuiGrid columnSpacing={1} sx={{ marginLeft: theme.spacing(-2) }} container>
       <MuiGrid flexGrow={1} item>
         <TitleTextField
           name="name"
-          value={page.name}
+          value={page?.name}
           fullWidth
-          onChange={handleChange}
-          onClick={() => {
-            dispatch(
-              updateTitle({ previousName: page.name, nameSelected: true }),
-            );
-          }}
+          onClick={handleClick}
+          onChange={(e) => setPage({ ...page, name: e.target.value })}
         />
       </MuiGrid>
-      {nameSelected && (
-        <MuiGrid item>
-          <PrimaryButton label="Save" onClick={handleSave} />
-        </MuiGrid>
-      )}
-      {nameSelected && (
-        <MuiGrid item>
-          <CancelButton
-            label="Cancel"
-            onClick={() => {
-              dispatch(
-                updateTitle({ name: page.previousName, nameSelected: false }),
-              );
-            }}
-          />
-        </MuiGrid>
-      )}
+      <MuiGrid item sx={{ display: isFocused ? "flex" : "none" }}>
+        <PrimaryButton label="Save" onClick={handleSubmit} />
+      </MuiGrid>
+      <MuiGrid item sx={{ display: isFocused ? "flex" : "none" }}>
+        <TextButton label="Cancel" onClick={handleCancel} />
+      </MuiGrid>
     </MuiGrid>
   );
 }

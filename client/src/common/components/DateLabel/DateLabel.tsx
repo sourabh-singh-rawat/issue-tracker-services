@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { enIN } from "date-fns/locale";
 import React from "react";
 import { formatRelative, parseISO } from "date-fns";

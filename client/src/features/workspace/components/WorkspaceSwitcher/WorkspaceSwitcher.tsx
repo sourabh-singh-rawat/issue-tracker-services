@@ -4,9 +4,10 @@ import { useGetAllWorkspacesQuery } from "../../../../api/generated/workspace.ap
 import { useAppSelector } from "../../../../common/hooks";
 import UnfoldMoreTwoToneIcon from "@mui/icons-material/UnfoldMoreTwoTone";
 
+import { useTheme } from "@mui/material";
 import WorkspaceMenu from "../WorkspaceMenu";
-import MenuItem from "../../../../common/components/MenuItem";
 import Avatar from "../../../../common/components/Avatar";
+import SidebarGroupItem from "../../../../common/components/navigation/SidebarGroupItem";
 
 interface WorkspaceSwitcherProps {
   isLargeScreen: boolean;
@@ -15,6 +16,7 @@ interface WorkspaceSwitcherProps {
 export default function WorkspaceSwitcher({
   isLargeScreen,
 }: WorkspaceSwitcherProps) {
+  const theme = useTheme();
   const { data } = useGetAllWorkspacesQuery();
   const { id, name } = useAppSelector((store) => store.auth.currentWorkspace);
 
@@ -28,13 +30,13 @@ export default function WorkspaceSwitcher({
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <div style={{ marginTop: "8px" }}>
-      <MenuItem
+    <div style={{ marginTop: theme.spacing(1) }}>
+      <SidebarGroupItem
         avatarIcon={<Avatar label={selectedOption?.name} />}
         label={selectedOption?.name}
         onClick={handleClickWorkspaceMenu}
         indicatorIcon={<UnfoldMoreTwoToneIcon />}
-        isMenuGroupOpen={isLargeScreen}
+        isVisible={isLargeScreen}
       />
       <WorkspaceMenu
         anchorEl={anchorEl}

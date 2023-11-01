@@ -54,12 +54,30 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["project"],
       }),
+      getProjectRoleList: build.query<
+        GetProjectRoleListApiResponse,
+        GetProjectRoleListApiArg
+      >({
+        query: (queryArg) => ({ url: `/projects/${queryArg.id}/role` }),
+        providesTags: ["project"],
+      }),
       getProjectMembers: build.query<
         GetProjectMembersApiResponse,
         GetProjectMembersApiArg
       >({
         query: (queryArg) => ({ url: `/projects/${queryArg.id}/members` }),
         providesTags: ["project"],
+      }),
+      createProjectMember: build.mutation<
+        CreateProjectMemberApiResponse,
+        CreateProjectMemberApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/projects/${queryArg.id}/members`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["project"],
       }),
     }),
     overrideExisting: false,
@@ -124,14 +142,33 @@ export type UpdateProjectApiArg = {
     endDate?: DueDate;
   };
 };
+export type GetProjectRoleListApiResponse =
+  /** status 200 Get project roles list */ {
+    rows: string[];
+    rowCount: number;
+  };
+export type GetProjectRoleListApiArg = {
+  id?: string;
+};
 export type GetProjectMembersApiResponse =
   /** status 200 Get all project members */ {
     rows: string[];
     rowCount: number;
   };
 export type GetProjectMembersApiArg = {
-  /** Numeric id of the project to update */
+  /** Numeric id of the project */
   id?: string;
+};
+export type CreateProjectMemberApiResponse =
+  /** status 201 Member created successfully */ undefined;
+export type CreateProjectMemberApiArg = {
+  /** Numeric id of the project */
+  id?: string;
+  /** Fields used for creating a new project member */
+  body: {
+    userId: string;
+    role: string;
+  };
 };
 export type Name = string;
 export type Description = string;
@@ -149,5 +186,7 @@ export const {
   useGetProjectStatusListQuery,
   useGetProjectQuery,
   useUpdateProjectMutation,
+  useGetProjectRoleListQuery,
   useGetProjectMembersQuery,
+  useCreateProjectMemberMutation,
 } = injectedRtkApi;

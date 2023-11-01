@@ -39,7 +39,7 @@ declare module "@mui/material/styles" {
 }
 
 // const mode = "light";
-const mode: "dark" | "light" = "dark";
+const mode: "dark" | "light" = "light";
 
 export const theme = createTheme({
   spacing: 8,
@@ -47,28 +47,18 @@ export const theme = createTheme({
     mode,
     ...(mode === "light"
       ? {
-          primary: { main: "#9146ff" },
+          primary: {
+            main: "#274beb",
+          },
           secondary: {
-            main: "#323239",
-            100: "#f7f7f8",
-            200: "#e6e6ea",
-            300: "#d3d3d9",
-            400: "#dedee3",
-            500: "#adadb8",
-            600: "#53535f",
-            700: "#323239",
-            800: "#1f1f23",
-            900: "#0e0e10",
+            main: "#f7f7f8",
           },
           error: {
             main: "#bb1411",
             dark: "#530a09",
             light: "#eb0400",
           },
-          success: {
-            main: "#018852",
-            dark: "#074029",
-          },
+          success: { main: "#4df498" },
           warning: {
             main: "#7c570e",
             dark: "#372706",
@@ -87,16 +77,14 @@ export const theme = createTheme({
           },
           text: { primary: "#191919" },
           divider: "#d3d3d9",
-          background: {
-            default: "#ffffff",
-            paper: "#efeff1",
-          },
+          background: { default: "#ffffff", paper: "#efeff1" },
         }
       : {
-          primary: { main: "#9146ff" },
+          primary: { main: "#274beb" },
           text: { primary: "#adbac7", secondary: "#9898a2" },
           background: { default: "#18181b", paper: "#1f1f23" },
           divider: "#444c56",
+          success: { main: "#4df498" },
         }),
   },
   shape: {
@@ -116,7 +104,7 @@ export const theme = createTheme({
   },
   shadows: [
     "none",
-    "0 1px 2px rgba(0,0,0,.13), 0 0px 2px rgba(0,0,0,.08)",
+    "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
     "0 4px 8px rgba(0,0,0,.16), 0 0px 4px rgba(0,0,0,.05)",
     "0 4px 8px rgba(0,0,0,.16), 0 0px 4px rgba(0,0,0,.05)",
     "0 6px 16px rgba(0,0,0,.16), 0 0px 4px rgba(0,0,0,.05)",
@@ -144,10 +132,7 @@ export const theme = createTheme({
   typography: {
     fontFamily: "inter",
     fontSize: 14,
-    h1: {
-      fontWeight: 600,
-      fontSize: "2rem",
-    },
+    h1: { fontWeight: 600, fontSize: "2rem" },
     h2: { fontSize: "2rem" },
     h3: { fontSize: "1.75rem" },
     h4: { fontSize: "1.5rem" },

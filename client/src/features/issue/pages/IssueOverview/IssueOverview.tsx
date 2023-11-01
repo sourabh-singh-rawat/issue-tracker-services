@@ -1,65 +1,45 @@
-/* eslint-disable no-shadow */
-import { Link, useOutletContext, useParams } from "react-router-dom";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { ImageList, useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-import { setIssueAttachments, updateIssue } from "../../issue.slice";
 import { useAppSelector } from "../../../../common/hooks";
 import TabPanel from "../../../../common/components/TabPanel";
 import Description from "../../../../common/components/Description";
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
+import { useUpdateIssueMutation } from "../../../../api/generated/issue.api";
+import { useMessageBar } from "../../../message-bar/hooks";
 
-// import ImageCard from "../../../issue-attachments/components/ImageCard/ImageCard";
-// import { useGetIssueAttachmentsQuery } from "../../../issue-attachments/issue-attachments.api";
-// import { useUpdateIssueMutation } from "../../issue.api";
-
-function IssueOverview() {
+export default function IssueOverview() {
   const theme = useTheme();
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const [selectedTab] = useOutletContext();
+  const { id, selectedTab, page, setPage, isLoading } = useSelectedTab();
+  const { showSuccess, showError } = useMessageBar();
 
-  const issue = useAppSelector((store) => store.issue.info);
   const attachments = useAppSelector((store) => store.issue.attachments);
 
-  // const getIssueAttachments = useGetIssueAttachmentsQuery({ issueId: id });
-  // const [updateIssueMutation, { isSuccess }] = useUpdateIssueMutation();
+  const [updateIssueMutation, { isSuccess, isError }] =
+    useUpdateIssueMutation();
   const updatePageQuery = async () => {
-    // updateIssueMutation({ id, body: { description: issue.description } });
+    updateIssueMutation({ id, body: { description: page?.description } });
   };
 
-  // useEffect(() => {
-  //   if (getIssueAttachments.isSuccess) {
-  //     dispatch(setIssueAttachments(getIssueAttachments.data));
-  //   }
-  // }, [getIssueAttachments.data]);
+  useEffect(() => {
+    if (isSuccess) showSuccess("Issue description updated successfully");
 
-  // useEffect(() => {
-  //   if (isSuccess) dispatch(setMessageBarOpen(true));
-  // }, [isSuccess]);
+    if (isError) showError("Issue description not updated successfully");
+  }, [isSuccess]);
 
   return (
     <TabPanel index={0} selectedTab={selectedTab}>
-      <MuiGrid spacing={2} container>
+      <MuiGrid spacing={2} container sx={{ py: theme.spacing(2) }}>
         <MuiGrid md={8} item>
           <MuiGrid spacing={2} container>
-            <MuiGrid md={12} sm={6} xs={12} item>
-              <MuiTypography
-                fontWeight={600}
-                sx={{ color: theme.palette.grey[200] }}
-                variant="body1"
-              >
-                Assignee:
-              </MuiTypography>
-              {/* <IssueAssignee /> */}
-            </MuiGrid>
             <MuiGrid item>
               <MuiTypography
                 fontWeight={600}
-                sx={{ color: theme.palette.grey[200] }}
+                sx={{ color: theme.palette.text.primary }}
                 variant="body1"
               >
                 Tasks:
@@ -86,7 +66,7 @@ function IssueOverview() {
             <MuiGrid xs={12} item>
               <MuiTypography
                 fontWeight={600}
-                sx={{ color: theme.palette.grey[200] }}
+                sx={{ color: theme.palette.text.primary }}
                 variant="body1"
               >
                 Attachments:
@@ -102,7 +82,7 @@ function IssueOverview() {
                       <MuiTypography
                         component="span"
                         sx={{
-                          color: theme.palette.primary[800],
+                          color: theme.palette.primary.main,
                           fontWeight: 600,
                           "&:hover": {
                             transitionDuration: "0.5s",
@@ -136,12 +116,12 @@ function IssueOverview() {
           </MuiGrid>
         </MuiGrid>
         <MuiGrid md={4} item>
-          <MuiGrid md={6} sm={12} xs={12} item>
+          <MuiGrid xs={12} item>
             <Description
-              isLoading={issue.isLoading}
-              page={issue}
-              updateDescription={updateIssue}
-              updateDescriptionQuery={updatePageQuery}
+              isLoading={isLoading}
+              page={page}
+              setPage={setPage}
+              updateQuery={updatePageQuery}
             />
           </MuiGrid>
         </MuiGrid>
@@ -149,5 +129,3 @@ function IssueOverview() {
     </TabPanel>
   );
 }
-
-export default IssueOverview;

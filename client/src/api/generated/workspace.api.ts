@@ -1,11 +1,27 @@
 import { apiSlice as api } from "../api.config";
-export const addTagTypes = ["workspace"] as const;
+export const addTagTypes = ["issue", "workspace"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
   })
   .injectEndpoints({
     endpoints: (build) => ({
+      getProjectActivityList: build.query<
+        GetProjectActivityListApiResponse,
+        GetProjectActivityListApiArg
+      >({
+        query: (queryArg) => ({ url: `/activities/projects/${queryArg.id}` }),
+        providesTags: ["issue"],
+      }),
+      getWorkspaceMemberList: build.query<
+        GetWorkspaceMemberListApiResponse,
+        GetWorkspaceMemberListApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/projects/${queryArg.id}/workspace-members`,
+        }),
+        providesTags: ["workspace"],
+      }),
       getAllWorkspaces: build.query<
         GetAllWorkspacesApiResponse,
         GetAllWorkspacesApiArg
@@ -50,6 +66,26 @@ const injectedRtkApi = api
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
+export type GetProjectActivityListApiResponse =
+  /** status 200 Get project activities for a given project */ {
+    rows: string[];
+    rowCount: number;
+  };
+export type GetProjectActivityListApiArg = {
+  id?: string;
+};
+export type GetWorkspaceMemberListApiResponse =
+  /** status 200 Returns the workspace members */ {
+    rows?: {
+      id?: string;
+      displayName?: string;
+      createdAt?: string;
+    };
+  };
+export type GetWorkspaceMemberListApiArg = {
+  /** Numeric id of the workspace */
+  id: string;
+};
 export type GetAllWorkspacesApiResponse = /** status 201 all workspaces */ {
   data: {
     id: string;
@@ -105,6 +141,8 @@ export type Name = string;
 export type Description = string;
 export type Email = string;
 export const {
+  useGetProjectActivityListQuery,
+  useGetWorkspaceMemberListQuery,
   useGetAllWorkspacesQuery,
   useCreateWorkspaceMutation,
   useGetWorkspaceQuery,

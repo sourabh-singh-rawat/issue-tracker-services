@@ -1,25 +1,25 @@
 /* eslint-disable consistent-return */
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useOutletContext, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useOutletContext, useParams } from "react-router-dom";
 
-import MuiButton from '@mui/material/Button';
-import MuiGrid from '@mui/material/Grid';
-import MuiImageList from '@mui/material/ImageList';
-import MuiInput from '@mui/material/Input';
-import theme from '../../../../config/mui.config';
+import MuiButton from "@mui/material/Button";
+import MuiGrid from "@mui/material/Grid";
+import MuiImageList from "@mui/material/ImageList";
+import MuiInput from "@mui/material/Input";
+import theme from "../../../../config/mui.config";
 
-import ImageCard from '../../components/ImageCard/ImageCard';
-import TabPanel from '../../../../common/TabPanel';
-import UploadButton from '../../../issue/components/UploadButton';
+import ImageCard from "../../components/ImageCard/ImageCard";
+import TabPanel from "../../../../common/TabPanel";
+import UploadButton from "../../../issue/components/UploadButton";
 
 import {
   useCreateIssueAttachmentMutation,
   useGetIssueAttachmentsQuery,
-} from '../../issue-attachments.api';
+} from "../../issue-attachments.api";
 
-import { setIssueAttachments } from '../../../issue/issue.slice';
-import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
+import { setIssueAttachments } from "../../../issue/issue.slice";
+import { setMessageBarOpen } from "../../../message-bar/message-bar.slice";
 
 function IssueAttachments() {
   const { id } = useParams();
@@ -49,7 +49,7 @@ function IssueAttachments() {
 
     // store file in FormData Object
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     // send the image to server
     return createIssue({ issueId: id, body: formData });
@@ -60,7 +60,7 @@ function IssueAttachments() {
   useEffect(() => {
     if (isSuccess) {
       setOpen(false);
-      dispatch(setMessageBarOpen({ message: 'Image uploaded successfully' }));
+      dispatch(setMessageBarOpen({ message: "Image uploaded successfully" }));
     }
   }, [isSuccess]);
 
@@ -80,18 +80,18 @@ function IssueAttachments() {
         spacing={1}
         container
       >
-        <MuiGrid sx={{ display: 'none' }} item>
+        <MuiGrid sx={{ display: "none" }} item>
           <MuiInput name="file" type="file" onChange={handleChange} />
         </MuiGrid>
         <MuiGrid item>
           <MuiButton
             sx={{
               color: theme.palette.grey[200],
-              textTransform: 'none',
+              textTransform: "none",
               borderRadius: theme.shape.borderRadiusMedium,
-              boxShadow: 'none',
+              boxShadow: "none",
               backgroundColor: theme.palette.grey[1200],
-              '&:hover': {
+              "&:hover": {
                 backgroundColor: theme.palette.grey[900],
                 boxShadow: theme.shadows[1],
               },
@@ -112,7 +112,7 @@ function IssueAttachments() {
       <MuiImageList
         cols={6}
         rowHeight={124}
-        sx={{ width: '100%' }}
+        sx={{ width: "100%" }}
         variant="quilted"
       >
         {attachments.rows.map(({ id: attachmentId, path }) => (

@@ -20,7 +20,7 @@ export default function MenuItemContent({
   const theme = useTheme();
 
   return (
-    <StyledListItemButton onClick={onClick} disableRipple>
+    <StyledListItemButton onClick={onClick} disableRipple disableGutters>
       {avatarIcon && (
         <StyledListItemIcon sx={{ marginRight: theme.spacing(1) }}>
           {avatarIcon}

@@ -13,7 +13,7 @@ import AppLoader from "../AppLoader";
 
 export default function AppLayout() {
   const dispatch = useAppDispatch();
-  const { data, isLoading, isSuccess } = useGetCurrentUserQuery();
+  const { data, isLoading, isSuccess, isError } = useGetCurrentUserQuery();
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -25,7 +25,11 @@ export default function AppLayout() {
       dispatch(setCurrentUser({ ...data }));
       dispatch(setCurrentWorkspace(workspace));
     }
-  }, [isLoading]);
+
+    if (isError) {
+      dispatch(setCurrentUser(null));
+    }
+  }, [isLoading, isSuccess, isError]);
 
   return (
     <MuiBox width="100vw" height="100vh">

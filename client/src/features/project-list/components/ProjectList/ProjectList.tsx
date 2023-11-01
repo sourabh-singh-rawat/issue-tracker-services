@@ -9,18 +9,16 @@ import {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 
-import { SelectChangeEvent, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
+import MuiBox from "@mui/material/Box";
 
-import {
-  useGetProjectListQuery,
-  useUpdateProjectMutation,
-} from "../../../../api/generated/project.api";
+import { useGetProjectListQuery } from "../../../../api/generated/project.api";
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 import { setProjectList } from "../../project-list.slice";
 import List from "../../../../common/components/List";
 import ProjectActionsButton from "../ProjectActionsButton";
-import BaseSelector from "../../../../common/components/Select";
+import ProjectStatusSelector from "../ProjectStatusSelector";
 
 export default function ProjectList() {
   const theme = useTheme();
@@ -46,30 +44,6 @@ export default function ProjectList() {
       dispatch(setProjectList(data));
     }
   }, [data]);
-
-  function SelectEditInputCell({ id, value, field, row }) {
-    const [updateProject, { isSuccess }] = useUpdateProjectMutation();
-
-    const handleChange = async (e: SelectChangeEvent<unknown>) => {
-      await updateProject({
-        id,
-        body: { status: e.target.value },
-      });
-    };
-
-    return (
-      <BaseSelector
-        name="status"
-        onChange={handleChange}
-        value={value}
-        options={row.statuses}
-      />
-    );
-  }
-
-  const renderSelectEditInputCell = (params) => (
-    <SelectEditInputCell {...params} />
-  );
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -102,7 +76,9 @@ export default function ProjectList() {
       headerName: "Status",
       minWidth: 150,
       flex: 0.1,
-      renderCell: (params) => renderSelectEditInputCell(params),
+      renderCell: ({ id, row, value }) => (
+        <ProjectStatusSelector id={id as string} row={row} value={value} />
+      ),
     },
     {
       field: "members",

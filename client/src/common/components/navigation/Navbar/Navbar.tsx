@@ -23,16 +23,15 @@ function Navbar() {
     <AppBar position="fixed" sx={{ boxShadow: theme.shadows[0] }}>
       <MuiToolbar
         sx={{
+          boxShadow: theme.shadows[1],
           backgroundColor: theme.palette.background.default,
-          borderBottom: `1px solid ${theme.palette.divider}`,
-          boxShadow: theme.shadows[12],
         }}
         variant="dense"
         disableGutters
       >
         <MuiGrid
           alignItems="center"
-          sx={{ display: "flex", px: theme.spacing(2) }}
+          sx={{ display: "flex", px: theme.spacing(0) }}
           columnGap={2}
           container
         >

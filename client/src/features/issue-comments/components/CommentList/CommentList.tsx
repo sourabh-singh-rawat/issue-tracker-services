@@ -1,20 +1,15 @@
 import React from "react";
 
-import MuiGrid from "@mui/material/Grid";
+import MuiList from "@mui/material/List";
 
 import Comment from "../Comment";
 
-function CommentList({ rows }) {
+export default function CommentList({ rows }) {
   return (
-    <MuiGrid rowSpacing={1} container>
-      {rows &&
-        rows.map(({ id, ...otherProps }) => (
-          <MuiGrid key={id} xs={12} item>
-            <Comment id={id} {...otherProps} />
-          </MuiGrid>
-        ))}
-    </MuiGrid>
+    <MuiList>
+      {rows?.map(({ id, ...otherProps }) => (
+        <Comment id={id} {...otherProps} />
+      ))}
+    </MuiList>
   );
 }
-
-export default CommentList;

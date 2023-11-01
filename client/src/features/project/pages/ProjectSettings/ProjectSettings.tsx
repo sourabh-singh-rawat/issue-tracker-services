@@ -1,21 +1,20 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from "react";
-import { useOutletContext } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
+import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 
 import { updateProject } from "../../project.slice";
 import ProjectDetailSettings from "../../components/ProjectDetailSettings";
 import TabPanel from "../../../../common/components/TabPanel";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { useAppSelector } from "../../../../common/hooks";
-import { useTheme } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 
 function ProjectSettings() {
-  const dispatch = useDispatch();
   const theme = useTheme();
-  const [selectedTab] = useOutletContext();
+  const dispatch = useAppDispatch();
+  const { selectedTab } = useSelectedTab();
 
   const project = useAppSelector((store) => store.project.settings);
 
@@ -47,8 +46,9 @@ function ProjectSettings() {
       <MuiGrid
         component="form"
         rowSpacing={5}
-        container
         onSubmit={handleSubmit}
+        sx={{ py: theme.spacing(2) }}
+        container
       >
         <MuiGrid xl={7} xs={12} item>
           <ProjectDetailSettings

@@ -1,6 +1,6 @@
 import React from "react";
-import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import { alpha, useTheme, styled, SxProps, Theme } from "@mui/material";
+import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 
 const StyledButton = styled(MuiButton)(({ theme }) => {
   return {

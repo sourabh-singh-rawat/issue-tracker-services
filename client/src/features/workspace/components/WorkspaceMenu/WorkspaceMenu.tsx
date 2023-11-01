@@ -6,7 +6,7 @@ import MuiMenuList from "@mui/material/MenuList";
 import WorkspaceModal from "../WorkspaceModal";
 import WorkspaceListItem from "../WorkspaceListItem";
 
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import MenuItem from "../../../../common/components/MenuItem";
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
@@ -42,8 +42,8 @@ export default function WorkspaceMenu({
         onClose={handleClose}
       >
         <MenuItem
-          avatarIcon={<AddIcon />}
-          label="Add new workspace"
+          avatarIcon={<AddCircleIcon />}
+          label="Create workspace"
           onClick={() => {
             setOpen(true);
             handleClose();

@@ -17,6 +17,12 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["identity"],
       }),
+      revokeTokens: build.mutation<RevokeTokensApiResponse, RevokeTokensApiArg>(
+        {
+          query: () => ({ url: `/identity/revoke-tokens`, method: "POST" }),
+          invalidatesTags: ["identity"],
+        },
+      ),
       getCurrentUser: build.query<
         GetCurrentUserApiResponse,
         GetCurrentUserApiArg
@@ -36,6 +42,9 @@ export type GenerateTokensApiArg = {
     password?: Password;
   };
 };
+export type RevokeTokensApiResponse =
+  /** status 200 Tokens were successfully removed */ undefined;
+export type RevokeTokensApiArg = void;
 export type GetCurrentUserApiResponse =
   /** status 200 Returns the current logged in user or null */ {
     email?: Email;
@@ -54,5 +63,8 @@ export type Email = string;
 export type Password = string;
 export type DisplayName = string;
 export type Name = string;
-export const { useGenerateTokensMutation, useGetCurrentUserQuery } =
-  injectedRtkApi;
+export const {
+  useGenerateTokensMutation,
+  useRevokeTokensMutation,
+  useGetCurrentUserQuery,
+} = injectedRtkApi;

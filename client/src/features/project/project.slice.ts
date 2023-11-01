@@ -50,6 +50,7 @@ const projectSlice = createSlice({
       settings: {
         ...state.settings,
         ...action.payload,
+        previousName: "",
         isLoading: false,
       },
     }),
