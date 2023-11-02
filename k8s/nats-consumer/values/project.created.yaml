@@ -1,0 +1,3 @@
+name: project-created-consumer
+stream: project
+subject: project.created
