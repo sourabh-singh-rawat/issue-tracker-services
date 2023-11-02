@@ -1,0 +1,3 @@
+name: workspace-created-consumer
+stream: workspace
+subject: workspace.created
