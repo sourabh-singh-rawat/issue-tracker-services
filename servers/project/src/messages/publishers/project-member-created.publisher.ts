@@ -2,14 +2,14 @@ import {
   NatsMessenger,
   Publisher,
   Subjects,
-  ProjectPayload,
+  ProjectMemberPayload,
 } from "@sourabhrawatcc/core-utils";
 
-export class ProjectUpdatedPublisher extends Publisher<{
-  payload: ProjectPayload;
+export class ProjectMemberCreatedPublisher extends Publisher<{
+  payload: ProjectMemberPayload;
   subject: Subjects;
 }> {
-  subject = Subjects.PROJECT_UPDATED;
+  subject = Subjects.PROJECT_MEMBERS_CREATED;
 
   constructor(messenger: NatsMessenger) {
     super(messenger.client);

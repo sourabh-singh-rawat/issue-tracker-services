@@ -1,31 +1,36 @@
 import {
-  DatabaseService,
+  TypeormStore,
   Filters,
   ProjectDetails,
   ProjectFormData,
-  ProjectMember,
   ProjectRoles,
   ProjectStatus,
   ServiceResponse,
   TransactionExecutionError,
   UserAlreadyExists,
   UserNotFoundError,
+  ProjectInviteStatus,
+  ProjectPermissions,
+  ProjectMemberPayload,
+  JwtToken,
+  InternalServerError,
 } from "@sourabhrawatcc/core-utils";
+import { CasbinProjectGuardian } from "../app/guardians/casbin/casbin-project.guardian";
 import { ProjectService } from "./interfaces/project.service";
 import { ProjectEntity, ProjectMemberEntity } from "../data/entities";
 import { ProjectRepository } from "../data/repositories/interfaces/project.repository";
-import { ProjectCasbinPolicyManager } from "../app/project-policy-manager";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { ProjectMemberRepository } from "../data/repositories/interfaces/project-member";
 import { UserService } from "./interfaces/user.service";
 import { ProjectCreatedPublisher } from "../messages/publishers/project-created.publisher";
 import { ProjectUpdatedPublisher } from "../messages/publishers/project-updated.publisher";
 import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
+import { ProjectMemberCreatedPublisher } from "../messages/publishers/project-member-created.publisher";
 
 export class CoreProjectService implements ProjectService {
   constructor(
-    private readonly databaseService: DatabaseService,
-    private readonly policyManager: ProjectCasbinPolicyManager,
+    private readonly casbinProjectGuardian: CasbinProjectGuardian,
+    private readonly postgresTypeormStore: TypeormStore,
     private readonly userService: UserService,
     private readonly userRepository: UserRepository,
     private readonly projectRepository: ProjectRepository,
@@ -33,6 +38,7 @@ export class CoreProjectService implements ProjectService {
     private readonly projectMemberRepository: ProjectMemberRepository,
     private readonly projectCreatedPublisher: ProjectCreatedPublisher,
     private readonly projectUpdatedPublisher: ProjectUpdatedPublisher,
+    private readonly projectMemberCreatedPublisher: ProjectMemberCreatedPublisher,
   ) {}
 
   private getUserById = async (userId: string) => {
@@ -40,11 +46,16 @@ export class CoreProjectService implements ProjectService {
   };
 
   private getRoleForUser = async (userId: string, projectId: string) => {
-    return await this.policyManager.getRoleForUser(userId, projectId);
+    return await this.casbinProjectGuardian.getRoleForUser(userId, projectId);
   };
 
   private getProjectActions = async (userId: string, projectId: string) => {
-    return await this.policyManager.getPermissionsForUser(userId, projectId);
+    const permissions = await this.casbinProjectGuardian.getPermissionsForUser(
+      userId,
+      projectId,
+    );
+
+    return permissions;
   };
 
   private getStatuses = () => Object.values(ProjectStatus);
@@ -52,29 +63,11 @@ export class CoreProjectService implements ProjectService {
   private getRoles = () => Object.values(ProjectRoles);
 
   getProjectMembers = async (projectId: string) => {
-    const members =
-      await this.projectMemberRepository.findByProjectId(projectId);
-
-    const rows = await Promise.all(
-      members.map(async (member) => {
-        const { id, email, name, memberUserId, createdAt, updatedAt } = member;
-        const role = await this.getRoleForUser(member.memberUserId, projectId);
-
-        return new ProjectMember({
-          id,
-          name,
-          email,
-          userId: memberUserId,
-          createdAt,
-          updatedAt,
-          role: role.split(":")[1],
-        });
-      }),
-    );
+    const rows = await this.projectMemberRepository.findByProjectId(projectId);
 
     return new ServiceResponse({
       rows,
-      filteredRowCount: members.length,
+      filteredRowCount: rows.length,
     });
   };
 
@@ -98,8 +91,8 @@ export class CoreProjectService implements ProjectService {
     newProject.ownerUserId = userId;
     newProject.workspaceId = user.defaultWorkspaceId;
 
-    const queryRunner = this.databaseService.createQueryRunner();
-    const savedProject = await this.databaseService.transaction(
+    const queryRunner = this.postgresTypeormStore.createQueryRunner();
+    const savedProject = await this.postgresTypeormStore.transaction(
       queryRunner,
       async (queryRunner) => {
         const savedProject = await this.projectRepository.save(newProject, {
@@ -107,14 +100,15 @@ export class CoreProjectService implements ProjectService {
         });
         const newProjectMember = new ProjectMemberEntity();
         newProjectMember.projectId = savedProject.id;
-        newProjectMember.memberUserId = userId;
+        newProjectMember.userId = userId;
         newProjectMember.role = ProjectRoles.Owner;
+        newProjectMember.creatorId = userId;
 
         await this.projectMemberRepository.save(newProjectMember, {
           queryRunner,
         });
 
-        await this.policyManager.createProjectPolicies(userId, savedProject.id);
+        await this.casbinProjectGuardian.createOwner(userId, savedProject.id);
 
         return savedProject;
       },
@@ -129,10 +123,64 @@ export class CoreProjectService implements ProjectService {
     return new ServiceResponse({ rows: savedProject.id });
   };
 
+  /**
+   * Check for invite permission
+   * @param userId - Member's user ID
+   * @param projectId - Project ID
+   * @param role - Role assigend to the member
+   * @param invitedBy - The user that invited the member (current user)
+   */
+  createProjectInvite = async (
+    userId: string,
+    projectId: string,
+    role: ProjectRoles,
+    invitedBy: string,
+  ) => {
+    await this.casbinProjectGuardian.validatePermission(
+      invitedBy,
+      projectId,
+      ProjectPermissions.Invite,
+    );
+
+    // await this.casbinProjectGuardian.createAdmin(userId, projectId);
+    await this.createProjectMember(userId, projectId, role, invitedBy);
+  };
+
+  confirmProjectInvite = async (token: string) => {
+    let verifiedToken: ProjectMemberPayload;
+    try {
+      verifiedToken = JwtToken.verify(token, process.env.JWT_SECRET!);
+    } catch (error) {
+      throw new InternalServerError("Token verification failed");
+    }
+
+    const { projectId, userId, role } = verifiedToken;
+    const updatedProjectMember = new ProjectMemberEntity();
+    updatedProjectMember.inviteStatus = ProjectInviteStatus.ACCEPTED;
+
+    await this.projectMemberRepository.updateByUserId(
+      userId,
+      updatedProjectMember,
+    );
+
+    if (role === ProjectRoles.Member) {
+      await this.casbinProjectGuardian.createMember(userId, projectId);
+    }
+
+    if (role === ProjectRoles.Admin) {
+      await this.casbinProjectGuardian.createAdmin(userId, projectId);
+    }
+
+    return new ServiceResponse({
+      rows: "Memeber added successfully(confirmed)",
+    });
+  };
+
   createProjectMember = async (
     userId: string,
     projectId: string,
     role: ProjectRoles,
+    createdBy: string,
   ) => {
     const alreadyMember = await this.projectMemberRepository.existsById(userId);
     if (alreadyMember) throw new UserAlreadyExists();
@@ -140,19 +188,19 @@ export class CoreProjectService implements ProjectService {
     // TODO: check if the user is member of project's workspace
 
     const newProjectMember = new ProjectMemberEntity();
-    newProjectMember.memberUserId = userId;
+    newProjectMember.userId = userId;
     newProjectMember.projectId = projectId;
     newProjectMember.role = role;
+    newProjectMember.creatorId = createdBy;
 
     await this.projectMemberRepository.save(newProjectMember);
 
-    if (role === ProjectRoles.Member) {
-      await this.policyManager.createProjectMember(userId, projectId);
-    }
-
-    if (role === ProjectRoles.Admin) {
-      await this.policyManager.createProjectAdmin(userId, projectId);
-    }
+    await this.projectMemberCreatedPublisher.publish({
+      userId,
+      projectId,
+      role,
+      createdBy,
+    });
   };
 
   /**

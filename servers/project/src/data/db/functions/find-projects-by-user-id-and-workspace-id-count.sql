@@ -15,7 +15,7 @@ BEGIN
   FROM projects AS p
   WHERE p.id in (
     SELECT pm.project_id FROM project_members AS pm
-    WHERE pm.member_user_id = p_user_id
+    WHERE pm.user_id = p_user_id
   ) AND
   p.workspace_id = p_workspace_id;
 END;

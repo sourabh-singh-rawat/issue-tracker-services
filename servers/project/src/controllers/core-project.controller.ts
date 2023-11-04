@@ -23,7 +23,7 @@ export class CoreProjectController implements ProjectController {
     return reply.status(StatusCodes.CREATED).send(response);
   };
 
-  createProjectMember = async (
+  createProjectInvite = async (
     request: FastifyRequest<{
       Params: { id: string };
       Body: { userId: string; role: ProjectRoles };
@@ -32,10 +32,23 @@ export class CoreProjectController implements ProjectController {
   ) => {
     const { id } = request.params;
     const { userId, role } = request.body;
+    const { userId: invitedBy } = request.currentUser;
 
-    await this.projectService.createProjectMember(userId, id, role);
+    await this.projectService.createProjectInvite(userId, id, role, invitedBy);
 
     return reply.send();
+  };
+
+  confirmProjectInvite = async (
+    request: FastifyRequest<{ Querystring: { inviteToken: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const { inviteToken } = request.query;
+
+    const response =
+      await this.projectService.confirmProjectInvite(inviteToken);
+
+    return reply.send(response);
   };
 
   getProjectStatusList = async (

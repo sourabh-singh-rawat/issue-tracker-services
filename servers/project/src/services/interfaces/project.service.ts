@@ -14,11 +14,19 @@ export interface ProjectService {
     userId: string,
     formData: ProjectFormData,
   ): Promise<ServiceResponse<string>>;
+  createProjectInvite(
+    userId: string,
+    projectId: string,
+    role: ProjectRoles,
+    invitedBy: string,
+  ): Promise<void>;
   createProjectMember(
     userId: string,
     projectId: string,
     role: ProjectRoles,
+    invitedBy: string,
   ): Promise<void>;
+  confirmProjectInvite(token: string): Promise<ServiceResponse<string>>;
   getProjectStatusList(): ServiceResponse<ProjectStatus[]>;
   getProjectRoleList(): ServiceResponse<ProjectRoles[]>;
   getProjectList(

@@ -1,8 +1,8 @@
 import {
   Consumers,
-  DatabaseService,
+  TypeormStore,
   JwtToken,
-  MessageService,
+  Messenger,
   Streams,
   Subscriber,
   UserCreatedPayload,
@@ -19,12 +19,12 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly consumer = Consumers.UserCreatedConsumerProject;
 
   constructor(
-    private readonly messageService: MessageService,
+    private readonly messenger: Messenger,
     private readonly userRepository: UserRepository,
-    private readonly databaseService: DatabaseService,
+    private readonly postgresTypeormStore: TypeormStore,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {
@@ -58,8 +58,8 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       newWorkspaceMember.userId = userId;
       newWorkspaceMember.workspaceId = token.workspaceId;
 
-      const queryRunner = this.databaseService.createQueryRunner();
-      await this.databaseService.transaction(
+      const queryRunner = this.postgresTypeormStore.createQueryRunner();
+      await this.postgresTypeormStore.transaction(
         queryRunner,
         async (queryRunner) => {
           await this.userRepository.save(newUser, { queryRunner });

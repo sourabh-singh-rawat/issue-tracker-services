@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION member_exists_by_id (
       RETURN
         EXISTS (
           SELECT * FROM project_members AS pm
-          WHERE pm.member_user_id = p_id
+          WHERE pm.user_id = p_id
           LIMIT 1
         );
     END;
