@@ -51,8 +51,8 @@ export default function ProjectStatusSelector<
         ) : (
           <Controller
             name={name}
-            control={control}
             rules={rules}
+            control={control}
             render={({ field }) => {
               return (
                 <Select

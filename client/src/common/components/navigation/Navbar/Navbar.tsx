@@ -8,7 +8,6 @@ import MuiAppBar from "@mui/material/AppBar";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiBugReportIcon from "@mui/icons-material/BugReport";
 
-import NavbarGroup from "../NavbarGroup";
 import AccountSwitcher from "../../../../features/auth/components/AccountSwitcher";
 import Notifications from "../../../../features/notifications/components/Notification/Notifications";
 
@@ -25,49 +24,32 @@ function Navbar() {
         sx={{
           boxShadow: theme.shadows[1],
           backgroundColor: theme.palette.background.default,
+          px: theme.spacing(1),
         }}
         variant="dense"
         disableGutters
       >
         <MuiGrid
           alignItems="center"
-          sx={{ display: "flex", px: theme.spacing(0) }}
-          columnGap={2}
+          sx={{ display: "flex" }}
+          spacing={1}
           container
         >
-          <NavbarGroup>
+          <MuiGrid item>
             <Link to="/">
-              <MuiGrid item>
-                <MuiGrid
-                  container
-                  sx={{
-                    paddingLeft: theme.spacing(1),
-                    paddingRight: theme.spacing(1),
-                  }}
-                >
-                  <MuiBugReportIcon
-                    sx={{ color: theme.palette.primary.main }}
-                  />
-                </MuiGrid>
-              </MuiGrid>
+              <MuiBugReportIcon sx={{ color: theme.palette.primary.main }} />
             </Link>
-          </NavbarGroup>
+          </MuiGrid>
 
-          <NavbarGroup>
-            <MuiGrid item flexGrow={1}></MuiGrid>
-          </NavbarGroup>
+          <MuiGrid item flexGrow={1}></MuiGrid>
 
-          <NavbarGroup>
-            <MuiGrid item>
-              <Notifications />
-            </MuiGrid>
-          </NavbarGroup>
+          <MuiGrid item>
+            <Notifications />
+          </MuiGrid>
 
-          <NavbarGroup>
-            <MuiGrid item>
-              <AccountSwitcher />
-            </MuiGrid>
-          </NavbarGroup>
+          <MuiGrid item>
+            <AccountSwitcher />
+          </MuiGrid>
         </MuiGrid>
       </MuiToolbar>
     </AppBar>

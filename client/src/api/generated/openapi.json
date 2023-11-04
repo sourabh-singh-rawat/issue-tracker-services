@@ -1930,14 +1930,17 @@
             }
           }
         }
-      },
+      }
+    },
+    "/projects/{id}/members/invite": {
+      "description": "Invite project member",
       "post": {
         "tags": [
           "project"
         ],
-        "summary": "Create a new project member",
-        "description": "Create a new project member",
-        "operationId": "createProjectMember",
+        "summary": "Invite new member",
+        "description": "Invite new member",
+        "operationId": "createProjectInvite",
         "parameters": [
           {
             "name": "id",
@@ -1972,7 +1975,7 @@
         },
         "responses": {
           "201": {
-            "description": "Member created successfully"
+            "description": "Invite created successfully"
           },
           "400": {
             "description": "Bad request",

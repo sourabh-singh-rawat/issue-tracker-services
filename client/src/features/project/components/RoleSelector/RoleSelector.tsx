@@ -5,7 +5,7 @@ import MuiGrid from "@mui/material/Grid";
 import Select from "../../../../common/components/Select";
 import {
   useGetProjectRoleListQuery,
-  useCreateProjectMemberMutation,
+  useCreateProjectInviteMutation,
 } from "../../../../api/generated/project.api";
 import { useSelectedTab } from "../../../../common/hooks";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
@@ -28,8 +28,8 @@ export default function RoleSelector({
   const { showError, showSuccess } = useMessageBar();
   const [role, setRole] = useState(defaultRole ? defaultRole : "member");
   const { data: projectRoleList } = useGetProjectRoleListQuery({ id });
-  const [createProjectMember, { isSuccess, isLoading, isError }] =
-    useCreateProjectMemberMutation();
+  const [createProjectInvite, { isSuccess, isLoading, isError, error }] =
+    useCreateProjectInviteMutation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -37,27 +37,20 @@ export default function RoleSelector({
     }
 
     if (isError) {
-      showError("Cannot add project member");
+      showError(error?.data?.errors[0]?.message);
     }
   }, [isSuccess, isError]);
 
   return (
     <>
-      {isMember ? (
-        <Select
-          value={role ? role : "member"}
-          options={projectRoleList?.rows}
-          onChange={(e) => setRole(e.target.value)}
-          isDisabled={role === "owner"}
-        />
-      ) : (
+      {!isMember && (
         <MuiGrid container spacing={1}>
           <MuiGrid item>
             <Select
+              name="member"
               value={role ? role : "member"}
               options={projectRoleList?.rows}
               onChange={(e) => setRole(e.target.value)}
-              isDisabled={role === "owner"}
             />
           </MuiGrid>
           <MuiGrid item display="flex">
@@ -71,9 +64,9 @@ export default function RoleSelector({
                 )
               }
               onClick={async () => {
-                await createProjectMember({
+                await createProjectInvite({
                   id,
-                  body: { role, userId: userId },
+                  body: { role, userId },
                 });
               }}
             />

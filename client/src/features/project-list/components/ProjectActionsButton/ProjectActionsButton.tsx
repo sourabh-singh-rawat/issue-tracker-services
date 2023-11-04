@@ -3,14 +3,14 @@ import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
 import MenuItem from "../../../../common/components/MenuItem";
-import TextButton from "../../../../common/components/buttons/TextButton";
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
 
 interface ProjectActionsButtonProps {
-  id: string;
+  options: [];
 }
 
 export default function ProjectActionsButton({
-  id,
+  options = [],
 }: ProjectActionsButtonProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -21,10 +21,13 @@ export default function ProjectActionsButton({
 
   return (
     <>
-      <TextButton onClick={handleClick} startIcon={<MoreHorizIcon />} />
+      <StyledIconButton onClick={handleClick} disableRipple>
+        <MoreHorizIcon />
+      </StyledIconButton>
       <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem onClick={handleClose} label="Edit" />
-        <MenuItem onClick={handleClose} label="Archive" />
+        {options.map((option) => (
+          <MenuItem key={option[2]} onClick={handleClose} label={option[2]} />
+        ))}
       </StyledMenu>
     </>
   );
