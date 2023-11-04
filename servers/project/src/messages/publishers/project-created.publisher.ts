@@ -1,5 +1,5 @@
 import {
-  MessageService,
+  NatsMessenger,
   Publisher,
   Subjects,
   ProjectPayload,
@@ -11,7 +11,7 @@ export class ProjectCreatedPublisher extends Publisher<{
 }> {
   subject = Subjects.PROJECT_CREATED;
 
-  constructor(messageService: MessageService) {
-    super(messageService.client);
+  constructor(messenger: NatsMessenger) {
+    super(messenger.client);
   }
 }

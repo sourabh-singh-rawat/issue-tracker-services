@@ -13,8 +13,11 @@ export class ProjectMemberEntity extends AuditEntity {
   @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
 
-  @Column({ name: "member_user_id", type: "uuid" })
-  memberUserId!: string;
+  @Column({ name: "user_id", type: "uuid" })
+  userId!: string;
+
+  @Column({ name: "creator_id", type: "uuid" })
+  creatorId!: string;
 
   @Column({ type: "text" })
   role!: ProjectRoles;

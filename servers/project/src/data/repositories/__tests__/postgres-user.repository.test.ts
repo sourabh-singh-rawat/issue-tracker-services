@@ -1,4 +1,4 @@
-import { databaseService } from "../../../app/database-service";
+import { postgresStore } from "../../../app/stores/postgres-typeorm.store";
 import { UserEntity } from "../../entities";
 import { UserRepository } from "../interfaces/user.repository";
 import { PostgresUserRepository } from "../postgres-user.repository";
@@ -13,7 +13,7 @@ const mockUser = {
 };
 
 beforeEach(() => {
-  userRepository = new PostgresUserRepository(databaseService);
+  userRepository = new PostgresUserRepository(postgresStore);
 });
 
 describe("save user", () => {
@@ -21,7 +21,7 @@ describe("save user", () => {
 
   it("should create a query builder", async () => {
     await userRepository.save(user);
-    expect(databaseService.createQueryBuilder).toHaveBeenCalledWith(
+    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
       UserEntity,
       "u",
       undefined,
@@ -29,17 +29,17 @@ describe("save user", () => {
   });
 
   it("should pass query runner to query builder if provided", async () => {
-    const queryRunner = databaseService.createQueryRunner();
+    const queryRunner = postgresStore.createQueryRunner();
     await userRepository.save(user, { queryRunner });
 
-    expect(databaseService.createQueryBuilder).toHaveBeenCalledWith(
+    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
       UserEntity,
       "u",
       queryRunner,
     );
   });
 
-  const mockQueryBuilder = databaseService.createQueryBuilder(UserEntity, "u");
+  const mockQueryBuilder = postgresStore.createQueryBuilder();
   it("should call insert function with no arguments", async () => {
     await userRepository.save(user);
     expect(mockQueryBuilder.insert).toHaveBeenCalledWith();
@@ -70,10 +70,10 @@ describe("find user or users", () => {
 
   it("should call query function (find_user_by_id)", async () => {
     const postgresFunctionName = "find_user_by_id";
-    (databaseService.query as jest.Mock).mockReturnValue([mockUser]);
+    (postgresStore.query as jest.Mock).mockReturnValue([mockUser]);
 
     await userRepository.findById(userId);
-    expect(databaseService.query).toBeCalledWith(
+    expect(postgresStore.query).toBeCalledWith(
       `SELECT * FROM ${postgresFunctionName}($1)`,
       [userId],
     );
@@ -86,7 +86,7 @@ describe("update user", () => {
 
   it("should create a query builder", async () => {
     await userRepository.updateUser(userId, updatedUser);
-    expect(databaseService.createQueryBuilder).toHaveBeenCalledWith(
+    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
       UserEntity,
       "u",
       undefined,
@@ -94,17 +94,17 @@ describe("update user", () => {
   });
 
   it("should pass query runner to query builder if provided", async () => {
-    const queryRunner = databaseService.createQueryRunner();
+    const queryRunner = postgresStore.createQueryRunner();
     await userRepository.updateUser(userId, updatedUser, { queryRunner });
 
-    expect(databaseService.createQueryBuilder).toHaveBeenCalledWith(
+    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
       UserEntity,
       "u",
       queryRunner,
     );
   });
 
-  const mockQueryBuilder = databaseService.createQueryBuilder(UserEntity, "u");
+  const mockQueryBuilder = postgresStore.createQueryBuilder();
   it("should call update function with UserEntity", async () => {
     await userRepository.updateUser(userId, updatedUser);
     expect(mockQueryBuilder.update).toHaveBeenCalledWith(UserEntity);

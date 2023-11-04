@@ -1,6 +1,6 @@
 import { ProjectStatus } from "@sourabhrawatcc/core-utils";
-import { databaseService } from "../../app/database-service";
-import { projectPolicyManager } from "../../app/project-policy-manager";
+import { databaseService } from "../../app/stores/postgres-typeorm.store";
+import { projectPolicyManager } from "../../app/guardians/project-casbin.guardian";
 import { PostgresProjectMemberRepository } from "../../data/repositories/postgres-project-member.repository";
 import { PostgresProjectRepository } from "../../data/repositories/postgres-project.repository";
 import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";

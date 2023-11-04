@@ -1,5 +1,5 @@
 import { Filters } from "@sourabhrawatcc/core-utils";
-import { databaseService } from "../../../app/database-service";
+import { postgresStore } from "../../../app/stores/postgres-typeorm.store";
 import { ProjectEntity } from "../../entities";
 import { ProjectRepository } from "../interfaces/project.repository";
 import { PostgresProjectRepository } from "../postgres-project.repository";
@@ -13,7 +13,7 @@ const mockProject = {
 };
 
 beforeEach(() => {
-  projectRepository = new PostgresProjectRepository(databaseService);
+  projectRepository = new PostgresProjectRepository(postgresStore);
   jest.clearAllMocks();
 });
 
@@ -22,7 +22,7 @@ describe("save project", () => {
 
   it("should create a query builder", async () => {
     await projectRepository.save(project);
-    expect(databaseService.createQueryBuilder).toHaveBeenCalledWith(
+    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
       ProjectEntity,
       "p",
       undefined,
@@ -30,20 +30,17 @@ describe("save project", () => {
   });
 
   it("should pass query runner to query builder if provided", async () => {
-    const queryRunner = databaseService.createQueryRunner();
+    const queryRunner = postgresStore.createQueryRunner();
     await projectRepository.save(project, { queryRunner });
 
-    expect(databaseService.createQueryBuilder).toHaveBeenCalledWith(
+    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
       ProjectEntity,
       "p",
       queryRunner,
     );
   });
 
-  const mockQueryBuilder = databaseService.createQueryBuilder(
-    ProjectEntity,
-    "p",
-  );
+  const mockQueryBuilder = postgresStore.createQueryBuilder();
   it("should call insert function with no arguments", async () => {
     await projectRepository.save(project);
     expect(mockQueryBuilder.insert).toHaveBeenCalledWith();
@@ -74,12 +71,12 @@ describe("project exists", () => {
 
   it("should call query function (project_exists_by_id)", async () => {
     const postgresFunctionName = "project_exists_by_id";
-    (databaseService.query as jest.Mock).mockReturnValue([
+    (postgresStore.query as jest.Mock).mockReturnValue([
       { [postgresFunctionName]: true },
     ]);
 
     await projectRepository.existsById(projectId);
-    expect(databaseService.query).toBeCalledWith(
+    expect(postgresStore.query).toBeCalledWith(
       `SELECT * FROM ${postgresFunctionName}($1)`,
       [projectId],
     );
@@ -92,7 +89,7 @@ describe("get all projects", () => {
 
   it("should call query function (find_projects_by_user_id_and_workspace_id)", async () => {
     const postgresFunctionName = "find_projects_by_user_id_and_workspace_id";
-    (databaseService.query as jest.Mock).mockReturnValue([
+    (postgresStore.query as jest.Mock).mockReturnValue([
       { [postgresFunctionName]: true },
     ]);
 
@@ -100,13 +97,13 @@ describe("get all projects", () => {
       page: 1,
       pageSize: 10,
       sortBy: "",
-      sortOrder: "",
+      sortOrder: "asc",
     };
     const { page, pageSize, sortBy, sortOrder } = filters;
 
     await projectRepository.find(userId, workspaceId, filters);
 
-    expect(databaseService.query).toHaveBeenCalledWith(
+    expect(postgresStore.query).toHaveBeenCalledWith(
       `SELECT * FROM ${postgresFunctionName}($1, $2, $3, $4, $5, $6)`,
       [userId, workspaceId, sortBy, sortOrder, pageSize, page * pageSize],
     );

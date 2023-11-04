@@ -1,7 +1,7 @@
 import {
   Consumers,
-  DatabaseService,
-  MessageService,
+  TypeormStore,
+  NatsMessenger,
   Streams,
   Subscriber,
   WorkspaceCreatedPayload,
@@ -17,12 +17,12 @@ export class WorkspaceCreatedSubscriber extends Subscriber<WorkspaceCreatedPaylo
   readonly consumer = Consumers.WorkspaceCreatedConsumerProject;
 
   constructor(
-    private messageService: MessageService,
+    private messenger: NatsMessenger,
     private workspaceRepository: WorkspaceRepository,
-    private databaseService: DatabaseService,
+    private postgresTypeormStore: TypeormStore,
     private workspaceMemberRepository: WorkspaceMemberRepository,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: WorkspaceCreatedPayload) => {
@@ -42,13 +42,16 @@ export class WorkspaceCreatedSubscriber extends Subscriber<WorkspaceCreatedPaylo
     newWorkspaceMember.userId = userId;
     newWorkspaceMember.workspaceId = workspaceId;
 
-    const queryRunner = this.databaseService.createQueryRunner();
-    await this.databaseService.transaction(queryRunner, async (queryRunner) => {
-      await this.workspaceRepository.save(newWorkspace, { queryRunner });
-      await this.workspaceMemberRepository.save(newWorkspaceMember, {
-        queryRunner,
-      });
-    });
+    const queryRunner = this.postgresTypeormStore.createQueryRunner();
+    await this.postgresTypeormStore.transaction(
+      queryRunner,
+      async (queryRunner) => {
+        await this.workspaceRepository.save(newWorkspace, { queryRunner });
+        await this.workspaceMemberRepository.save(newWorkspaceMember, {
+          queryRunner,
+        });
+      },
+    );
 
     message.ack();
     console.log("Message processing completed");

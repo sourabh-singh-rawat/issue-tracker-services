@@ -1,5 +1,5 @@
 import {
-  DatabaseService,
+  TypeormStore,
   Filters,
   QueryBuilderOptions,
 } from "@sourabhrawatcc/core-utils";
@@ -7,11 +7,11 @@ import { ProjectEntity } from "../entities/project.entity";
 import { ProjectRepository } from "./interfaces/project.repository";
 
 export class PostgresProjectRepository implements ProjectRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly postgresTypeormStore: TypeormStore) {}
 
   save = async (project: ProjectEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .insert()
       .into(ProjectEntity)
@@ -22,7 +22,7 @@ export class PostgresProjectRepository implements ProjectRepository {
   };
 
   existsById = async (id: string) => {
-    const result = await this.databaseService.query<{
+    const result = await this.postgresTypeormStore.query<{
       projectExistsById: boolean;
     }>("SELECT * FROM project_exists_by_id($1)", [id]);
 
@@ -31,7 +31,7 @@ export class PostgresProjectRepository implements ProjectRepository {
 
   find = async (userId: string, workspaceId: string, filters: Filters) => {
     const { page, pageSize, sortBy, sortOrder } = filters;
-    const result = await this.databaseService.query<ProjectEntity>(
+    const result = await this.postgresTypeormStore.query<ProjectEntity>(
       "SELECT * FROM find_projects_by_user_id_and_workspace_id($1, $2, $3, $4, $5, $6)",
       [userId, workspaceId, sortBy, sortOrder, pageSize, page * pageSize],
     );
@@ -40,7 +40,7 @@ export class PostgresProjectRepository implements ProjectRepository {
   };
 
   findCount = async (userId: string, workspaceId: string) => {
-    const result = await this.databaseService.query<{ count: number }>(
+    const result = await this.postgresTypeormStore.query<{ count: number }>(
       "SELECT * FROM find_projects_by_user_id_and_workspace_id_count($1, $2)",
       [userId, workspaceId],
     );
@@ -49,7 +49,7 @@ export class PostgresProjectRepository implements ProjectRepository {
   };
 
   findOne = async (id: string) => {
-    const result = await this.databaseService.query<ProjectEntity>(
+    const result = await this.postgresTypeormStore.query<ProjectEntity>(
       "SELECT * FROM find_project_by_id($1)",
       [id],
     );
@@ -63,7 +63,7 @@ export class PostgresProjectRepository implements ProjectRepository {
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .update(ProjectEntity)
       .set(updatedProject)
@@ -75,7 +75,7 @@ export class PostgresProjectRepository implements ProjectRepository {
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .softDelete()
       .where("id = :id", { id });
