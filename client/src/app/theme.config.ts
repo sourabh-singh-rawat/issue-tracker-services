@@ -39,7 +39,7 @@ declare module "@mui/material/styles" {
 }
 
 // const mode = "light";
-const mode: "dark" | "light" = "light";
+const mode: "dark" | "light" = "dark";
 
 export const theme = createTheme({
   spacing: 8,

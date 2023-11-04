@@ -11,6 +11,7 @@ import MenuItem from "../../../../common/components/MenuItem";
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
 import { useRevokeTokensMutation } from "../../../../api/generated/identity.api";
 import { useMessageBar } from "../../../message-bar/hooks";
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
 
 export default function AccountSwitcher() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -33,7 +34,9 @@ export default function AccountSwitcher() {
 
   return (
     <>
-      <Avatar variant="circular" label={currentUser?.displayName} />
+      <StyledIconButton onClick={handleClickAccountIcon} disableRipple>
+        <Avatar variant="circular" label={currentUser?.displayName} />
+      </StyledIconButton>
       <StyledMenu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

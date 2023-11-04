@@ -111,9 +111,9 @@ export default function ProjectList() {
     },
 
     {
-      field: "action",
+      field: "actions",
       headerName: "Actions",
-      renderCell: ({ id }) => <ProjectActionsButton id={id} />,
+      renderCell: ({ value }) => <ProjectActionsButton options={value} />,
     },
   ];
 

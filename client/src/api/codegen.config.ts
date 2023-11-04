@@ -27,7 +27,7 @@ const config: ConfigFile = {
     "./generated/project.api.ts": {
       filterEndpoints: [
         "createProject",
-        "createProjectMember",
+        "createProjectInvite",
         "getProjectStatusList",
         "getProjectRoleList",
         "getProjectList",

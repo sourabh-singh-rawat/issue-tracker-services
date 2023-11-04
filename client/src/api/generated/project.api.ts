@@ -68,12 +68,12 @@ const injectedRtkApi = api
         query: (queryArg) => ({ url: `/projects/${queryArg.id}/members` }),
         providesTags: ["project"],
       }),
-      createProjectMember: build.mutation<
-        CreateProjectMemberApiResponse,
-        CreateProjectMemberApiArg
+      createProjectInvite: build.mutation<
+        CreateProjectInviteApiResponse,
+        CreateProjectInviteApiArg
       >({
         query: (queryArg) => ({
-          url: `/projects/${queryArg.id}/members`,
+          url: `/projects/${queryArg.id}/members/invite`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -159,9 +159,9 @@ export type GetProjectMembersApiArg = {
   /** Numeric id of the project */
   id?: string;
 };
-export type CreateProjectMemberApiResponse =
-  /** status 201 Member created successfully */ undefined;
-export type CreateProjectMemberApiArg = {
+export type CreateProjectInviteApiResponse =
+  /** status 201 Invite created successfully */ undefined;
+export type CreateProjectInviteApiArg = {
   /** Numeric id of the project */
   id?: string;
   /** Fields used for creating a new project member */
@@ -188,5 +188,5 @@ export const {
   useUpdateProjectMutation,
   useGetProjectRoleListQuery,
   useGetProjectMembersQuery,
-  useCreateProjectMemberMutation,
+  useCreateProjectInviteMutation,
 } = injectedRtkApi;

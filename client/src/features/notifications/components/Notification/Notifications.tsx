@@ -1,19 +1,14 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
-import MuiIconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/material";
 import MuiNotifications from "@mui/icons-material/Notifications";
-
-const StyledIconButton = styled(MuiIconButton)(({ theme }) => ({
-  borderRadius: theme.shape.borderRadiusMedium,
-  ":hover": {
-    backgroundColor: theme.palette.grey[700],
-  },
-}));
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
 
 export default function Notifications() {
+  const theme = useTheme();
+
   return (
     <StyledIconButton color="inherit" disableRipple>
-      <MuiNotifications />
+      <MuiNotifications sx={{ color: theme.palette.text.secondary }} />
     </StyledIconButton>
   );
 }
