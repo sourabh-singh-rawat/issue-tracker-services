@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 
-import MuiGrid from "@mui/material/Grid";
-
-import Description from "../../../../common/components/Description";
-import TabPanel from "../../../../common/components/TabPanel";
-import { useUpdateProjectMutation } from "../../../../api/generated/project.api";
-import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
-import { useMessageBar } from "../../../message-bar/hooks";
-import AvatarGroup from "../../../../common/components/AvatarGroup";
-import MuiTypography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
+import MuiGrid from "@mui/material/Grid";
+import MuiTypography from "@mui/material/Typography";
+
+import TabPanel from "../../../../common/components/TabPanel";
+import Description from "../../../../common/components/Description";
+import AvatarGroup from "../../../../common/components/AvatarGroup";
+import { useMessageBar } from "../../../message-bar/hooks";
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
+import { useUpdateProjectMutation } from "../../../../api/generated/project.api";
 
 export default function ProjectOverview() {
   const theme = useTheme();
@@ -32,8 +32,16 @@ export default function ProjectOverview() {
       <MuiGrid container>
         <MuiGrid md={8} item></MuiGrid>
         <MuiGrid md={4} item>
-          <MuiGrid container rowSpacing={1} marginTop={2}>
+          <MuiGrid marginTop={2} container>
             <MuiGrid xs={12} item>
+              <MuiTypography
+                sx={{
+                  color: theme.palette.text.primary,
+                  fontWeight: theme.typography.fontWeightBold,
+                }}
+              >
+                Description:
+              </MuiTypography>
               <Description
                 page={page}
                 setPage={setPage}
@@ -42,19 +50,25 @@ export default function ProjectOverview() {
               />
             </MuiGrid>
             <MuiGrid xs={12} item>
-              <MuiTypography
-                variant="body1"
-                sx={{
-                  color: theme.palette.text.primary,
-                  fontWeight: theme.typography.fontWeightBold,
-                }}
-              >
-                Members:
-              </MuiTypography>
-              <AvatarGroup
-                members={page?.members}
-                total={page?.members?.length}
-              />
+              <MuiGrid rowSpacing={1} container>
+                <MuiGrid item xs={12}>
+                  <MuiTypography
+                    variant="body1"
+                    sx={{
+                      color: theme.palette.text.primary,
+                      fontWeight: theme.typography.fontWeightBold,
+                    }}
+                  >
+                    Members:
+                  </MuiTypography>
+                </MuiGrid>
+                <MuiGrid item>
+                  <AvatarGroup
+                    members={page?.members}
+                    total={page?.members?.length}
+                  />
+                </MuiGrid>
+              </MuiGrid>
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>

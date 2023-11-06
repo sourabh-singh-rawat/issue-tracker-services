@@ -3,11 +3,11 @@ import MuiTextField from "@mui/material/TextField";
 
 const StyledTextField = styled(MuiTextField)(({ theme }) => ({
   "& .MuiInputBase-root": {
+    width: "100%",
     position: "relative",
+    borderColor: theme.palette.divider,
     borderRadius: theme.shape.borderRadiusMedium,
     backgroundColor: theme.palette.background.default,
-    borderColor: theme.palette.divider,
-    width: "100%",
     transition: theme.transitions.create([
       "border-color",
       "background-color",

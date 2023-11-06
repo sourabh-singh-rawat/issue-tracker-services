@@ -17,26 +17,27 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import Label from "../forms/Label";
-import { alpha, useTheme } from "@mui/material";
+import { SxProps, alpha, useTheme } from "@mui/material";
 import dayjs from "dayjs";
 
 interface DatePickerProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
-  title: string;
   control: Control<DefaultValues>;
-  rules?: UseControllerProps<DefaultValues>["rules"];
   formState: FormState<DefaultValues>;
+  sx?: SxProps;
+  title?: string;
+  rules?: UseControllerProps<DefaultValues>["rules"];
   helperText?: string;
   isLoading?: boolean;
 }
 
 function DatePicker<DefaultValues extends FieldValues>({
+  sx,
   name,
   title,
   control,
   rules,
   isLoading,
-  formState,
 }: DatePickerProps<DefaultValues>) {
   const theme = useTheme();
 
@@ -80,7 +81,7 @@ function DatePicker<DefaultValues extends FieldValues>({
                           "& input": {
                             fontSize: theme.typography.body2,
                           },
-                          "& .Mui-focused": {
+                          "&.Mui-focused": {
                             boxShadow: `${alpha(
                               theme.palette.primary.main,
                               0.25,
@@ -98,6 +99,7 @@ function DatePicker<DefaultValues extends FieldValues>({
                           fontSize: theme.typography.body1,
                           marginLeft: 0,
                         },
+                        ...sx,
                       },
                     },
                   }}

@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 
-import { useGetAllWorkspacesQuery } from "../../../../api/generated/workspace.api";
 import { useAppSelector } from "../../../../common/hooks";
-import UnfoldMoreTwoToneIcon from "@mui/icons-material/UnfoldMoreTwoTone";
+import { useGetAllWorkspacesQuery } from "../../../../api/generated/workspace.api";
 
-import { useTheme } from "@mui/material";
 import WorkspaceMenu from "../WorkspaceMenu";
 import Avatar from "../../../../common/components/Avatar";
 import SidebarGroupItem from "../../../../common/components/navigation/SidebarGroupItem";
+import UnfoldMoreTwoToneIcon from "@mui/icons-material/UnfoldMoreTwoTone";
 
 interface WorkspaceSwitcherProps {
   isLargeScreen: boolean;
@@ -16,7 +15,6 @@ interface WorkspaceSwitcherProps {
 export default function WorkspaceSwitcher({
   isLargeScreen,
 }: WorkspaceSwitcherProps) {
-  const theme = useTheme();
   const { data } = useGetAllWorkspacesQuery();
   const { id, name } = useAppSelector((store) => store.auth.currentWorkspace);
 
@@ -30,7 +28,7 @@ export default function WorkspaceSwitcher({
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <div style={{ marginTop: theme.spacing(1) }}>
+    <>
       <SidebarGroupItem
         avatarIcon={<Avatar label={selectedOption?.name} />}
         label={selectedOption?.name}
@@ -45,6 +43,6 @@ export default function WorkspaceSwitcher({
         setSelectedOption={setSelectedOption}
         handleClose={handleClose}
       />
-    </div>
+    </>
   );
 }

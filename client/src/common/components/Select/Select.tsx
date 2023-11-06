@@ -45,9 +45,11 @@ export default function Select<Value = unknown>({
   const MenuProps = {
     PaperProps: {
       style: {
-        boxShadow: theme.shadows[20],
+        marginTop: theme.spacing(1),
+        boxShadow: theme.shadows[1],
         borderRadius: theme.shape.borderRadiusMedium,
         backgroundColor: theme.palette.background.default,
+        border: `1px solid ${theme.palette.divider}`,
       },
     },
   };

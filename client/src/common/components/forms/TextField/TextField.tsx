@@ -12,6 +12,7 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import StyledTextField from "../../styled/StyledTextField";
+import { SxProps } from "@mui/material";
 
 interface TextFieldProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -20,11 +21,15 @@ interface TextFieldProps<DefaultValues extends FieldValues> {
   title?: string;
   type?: React.HTMLInputTypeAttribute;
   rules?: UseControllerProps<DefaultValues>["rules"];
+  placeholder?: string;
   helperText?: string;
   rows?: number;
   isLoading?: boolean;
   isDisabled?: boolean;
+  startAdornment?: React.JSX.Element;
   endAdornment?: React.JSX.Element;
+  onClick?: () => void;
+  sx?: SxProps;
 }
 
 export default function TextField<DefaultValues extends FieldValues>({
@@ -32,13 +37,17 @@ export default function TextField<DefaultValues extends FieldValues>({
   name,
   title,
   formState,
+  placeholder,
   rules,
   type = "text",
   helperText,
   rows = 0,
   isLoading,
   isDisabled,
+  startAdornment,
   endAdornment,
+  onClick,
+  sx,
 }: TextFieldProps<DefaultValues>) {
   const isMultiline = rows > 0;
 
@@ -70,15 +79,18 @@ export default function TextField<DefaultValues extends FieldValues>({
                 value={field.value}
                 onBlur={field.onBlur}
                 onChange={field.onChange}
+                placeholder={placeholder}
                 helperText={
                   (formState.errors[name]?.message as string) || helperText
                 }
+                sx={sx}
                 size="small"
                 rows={rows}
                 error={Boolean(formState.errors[name])}
+                onClick={onClick}
                 disabled={isDisabled}
                 multiline={isMultiline}
-                InputProps={{ endAdornment }}
+                InputProps={{ startAdornment, endAdornment }}
                 fullWidth
               />
             )}

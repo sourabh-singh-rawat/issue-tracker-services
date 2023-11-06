@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@mui/material";
 import MuiDeleteIcon from "@mui/icons-material/Delete";
-import MuiIconButton from "@mui/material/IconButton";
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 
 interface DeleteButtonProps {
   onClick: () => void;
@@ -11,22 +11,16 @@ export default function DeleteTaskButton({ onClick }: DeleteButtonProps) {
   const theme = useTheme();
 
   return (
-    <MuiIconButton
-      size="small"
-      sx={{
-        color: theme.palette.text.primary,
-        border: theme.shape.borderRadiusNone,
-        boxShadow: "none",
-        backgroundColor: "transparent",
-        ":hover": {
-          color: theme.palette.text.secondary,
-          boxShadow: "none",
-          backgroundColor: "transparent",
-        },
-      }}
+    <StyledIconButton
       onClick={onClick}
+      sx={{
+        color: theme.palette.text.secondary,
+        width: theme.spacing(4),
+        height: theme.spacing(4),
+      }}
+      disableRipple
     >
       <MuiDeleteIcon />
-    </MuiIconButton>
+    </StyledIconButton>
   );
 }

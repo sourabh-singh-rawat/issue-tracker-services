@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { useLargeScreen } from "../../../hooks/useLargeScreen";
 
-import MuiList from "@mui/material/List";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiDivider from "@mui/material/Divider";
@@ -16,10 +15,11 @@ import MuiStarTwoToneIcon from "@mui/icons-material/StarTwoTone";
 import SidebarGroup from "../SidebarGroup";
 import SidebarGroupItem from "../SidebarGroupItem";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
+import StyledList from "../../styled/StyledList";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
-  const closedDrawerWidth = theme.spacing(5);
+  const closedDrawerWidth = theme.spacing(8);
 
   return {
     width: open ? openDrawerWidth : closedDrawerWidth,
@@ -69,8 +69,11 @@ export default function Sidebar() {
       }}
     >
       <MuiToolbar variant="dense" disableGutters />
-      <WorkspaceSwitcher isLargeScreen={isLargeScreen} />
-      <MuiList disablePadding>
+      <StyledList disablePadding>
+        <WorkspaceSwitcher isLargeScreen={isLargeScreen} />
+      </StyledList>
+      <MuiDivider />
+      <StyledList disablePadding>
         <SidebarGroupItem
           avatarIcon={<MuiGridViewTwoToneIcon />}
           to="/"
@@ -95,7 +98,7 @@ export default function Sidebar() {
           label="Tasks"
           isVisible={open}
         />
-      </MuiList>
+      </StyledList>
       <MuiDivider />
       <SidebarGroup
         label="Favourites"

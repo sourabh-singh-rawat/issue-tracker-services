@@ -4,6 +4,7 @@ import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 
 const StyledButton = styled(MuiButton)(({ theme }) => {
   return {
+    borderRadius: theme.shape.borderRadiusMedium,
     "&:focus": {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,
@@ -17,8 +18,10 @@ interface ButtonProps {
   color?: string;
   label?: string;
   startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
   variant?: "text" | "outlined" | "contained";
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  isDisabled?: boolean;
 }
 
 export default function Button({
@@ -26,8 +29,10 @@ export default function Button({
   sx,
   label,
   startIcon,
+  endIcon,
   variant = "contained",
   onClick,
+  isDisabled,
 }: ButtonProps) {
   const theme = useTheme();
 
@@ -37,6 +42,7 @@ export default function Button({
       size="small"
       variant={variant}
       startIcon={startIcon}
+      endIcon={endIcon}
       onClick={onClick}
       sx={{
         textTransform: "none",
@@ -44,6 +50,7 @@ export default function Button({
         boxShadow: "none",
         ...sx,
       }}
+      disabled={isDisabled}
       disableRipple
     >
       {label}

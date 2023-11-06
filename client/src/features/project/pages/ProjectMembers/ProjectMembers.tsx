@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
 import MuiGrid from "@mui/material/Grid";
-import TabPanel from "../../../../common/components/TabPanel";
 import MemberList from "../../components/MemberList";
-import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
+import TabPanel from "../../../../common/components/TabPanel";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import AddProjectMemberModal from "../../components/AddProjectMemberModal";
+
 import { useTheme } from "@mui/material";
+import { useSelectedTab } from "../../../../common/hooks";
 
 export default function ProjectMembers() {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export default function ProjectMembers() {
 
   return (
     <TabPanel index={2} selectedTab={selectedTab}>
-      <MuiGrid spacing={1} container sx={{ py: theme.spacing(2) }}>
+      <MuiGrid sx={{ py: theme.spacing(2) }} container>
         <MuiGrid item flexGrow={1}></MuiGrid>
         <MuiGrid item>
           <PrimaryButton

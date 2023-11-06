@@ -1,21 +1,23 @@
 import { useParams } from "react-router-dom";
-import React, { useMemo, useState } from "react";
-
-import MuiGrid from "@mui/material/Grid";
-import MuiContainer from "@mui/material/Container";
-
-import { setLoadingComments } from "../../issue-comments.slice";
-import { useAppDispatch } from "../../../../common/hooks";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import CancelButton from "../../../../common/components/CancelButton";
-import { useCreateIssueCommentMutation } from "../../../../api/generated/issue.api";
+import React, { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+
+import { useTheme } from "@mui/material";
+import { useAppSelector } from "../../../../common/hooks";
+import { useCreateIssueCommentMutation } from "../../../../api/generated/issue.api";
+
+import MuiContainer from "@mui/material/Container";
+import Avatar from "../../../../common/components/Avatar";
 import TextField from "../../../../common/components/forms/TextField";
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
+import SendIcon from "@mui/icons-material/Send";
+
+import MuiInputAdornment from "@mui/material/InputAdornment";
 
 export default function AddComment() {
+  const theme = useTheme();
   const { id } = useParams();
-  const dispatch = useAppDispatch();
-  const [isFocused, setIsFocused] = useState(false);
+  const currentUser = useAppSelector(({ auth }) => auth.currentUser);
   const defaultValues = useMemo(() => ({ description: "" }), []);
   const { control, formState, handleSubmit, reset } = useForm({
     defaultValues,
@@ -28,14 +30,8 @@ export default function AddComment() {
   }) => {
     if (description.length > 0) {
       await createComment({ id, body: { description } });
-      dispatch(setLoadingComments());
       reset();
     }
-    setIsFocused(false);
-  };
-
-  const handleCancel = () => {
-    setIsFocused(false);
   };
 
   return (
@@ -44,25 +40,37 @@ export default function AddComment() {
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <MuiGrid columnSpacing={1} container>
-        <MuiGrid flexGrow={1} onClick={() => setIsFocused(true)} item>
-          <TextField
-            name="description"
-            control={control}
-            formState={formState}
-          />
-        </MuiGrid>
-        {isFocused && (
-          <>
-            <MuiGrid item display="flex">
-              <PrimaryButton label="Post" type="submit" />
-            </MuiGrid>
-            <MuiGrid item>
-              <CancelButton label="Cancel" onClick={handleCancel} />
-            </MuiGrid>
-          </>
-        )}
-      </MuiGrid>
+      <TextField
+        name="description"
+        placeholder="Add a comment..."
+        control={control}
+        formState={formState}
+        startAdornment={
+          <MuiInputAdornment position="start">
+            <Avatar
+              label={currentUser?.displayName}
+              width={theme.spacing(3)}
+              height={theme.spacing(3)}
+            />
+          </MuiInputAdornment>
+        }
+        endAdornment={
+          <MuiInputAdornment position="end">
+            <StyledIconButton
+              disabled={!formState.isDirty}
+              sx={{
+                width: theme.spacing(4),
+                height: theme.spacing(4),
+                color: theme.palette.primary.main,
+              }}
+              type="submit"
+              disableRipple
+            >
+              <SendIcon />
+            </StyledIconButton>
+          </MuiInputAdornment>
+        }
+      />
     </MuiContainer>
   );
 }

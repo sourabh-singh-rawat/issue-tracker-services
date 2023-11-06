@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 import MuiGrid from "@mui/material/Grid";
+import MuiTextField from "@mui/material/TextField";
 import { alpha, styled, useTheme } from "@mui/material/styles";
 
-import PrimaryButton from "../buttons/PrimaryButton";
-import MuiTextField from "@mui/material/TextField";
 import TextButton from "../buttons/TextButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -16,7 +16,7 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
     borderRadius: theme.shape.borderRadiusMedium,
     paddingLeft: theme.spacing(1),
   },
-  "& .MuiOutlinedInput-root ": {
+  "& .MuiOutlinedInput-root": {
     fontSize: theme.typography.h4.fontSize,
     fontWeight: "bold",
     backgroundColor: "transparent",

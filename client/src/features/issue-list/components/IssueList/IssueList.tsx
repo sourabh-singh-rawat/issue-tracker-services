@@ -4,15 +4,9 @@ import daysjs from "dayjs";
 
 import MuiTypography from "@mui/material/Typography";
 
-import StatusAndPrioritySelectorEditCell from "../StatusAndPrioritySelectorEditCell";
-
 import { useTheme } from "@mui/material";
 import List from "../../../../common/components/List";
-import {
-  useGetIssueListQuery,
-  useGetIssuePriorityListQuery,
-  useGetIssueStatusListQuery,
-} from "../../../../api/generated/issue.api";
+import { useGetIssueListQuery } from "../../../../api/generated/issue.api";
 import {
   GridColDef,
   GridValidRowModel,
@@ -97,7 +91,7 @@ function IssueList({ projectId }: IssueListProps) {
       field: "assignees",
       headerName: "Assignee",
       renderCell: ({ value }) => {
-        return <AvatarGroup members={value} total={value.length} />;
+        return <AvatarGroup max={1} members={value} total={value.length} />;
       },
     },
     {

@@ -1,8 +1,8 @@
 import React from "react";
 
-import MuiEditIcon from "@mui/icons-material/Edit";
-import MuiIconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material";
+import MuiEditIcon from "@mui/icons-material/Edit";
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 
 interface EditTaskButtonProps {
   onClick: () => void;
@@ -12,23 +12,17 @@ function EditTaskButton({ onClick }: EditTaskButtonProps) {
   const theme = useTheme();
 
   return (
-    <MuiIconButton
+    <StyledIconButton
+      onClick={onClick}
       sx={{
-        color: theme.palette.text.primary,
-        border: "none",
-        boxShadow: "none",
-        backgroundColor: "transparent",
-        ":hover": {
-          color: theme.palette.text.secondary,
-          boxShadow: "none",
-          backgroundColor: "transparent",
-        },
+        color: theme.palette.text.secondary,
+        width: theme.spacing(4),
+        height: theme.spacing(4),
       }}
       disableRipple
-      onClick={onClick}
     >
       <MuiEditIcon />
-    </MuiIconButton>
+    </StyledIconButton>
   );
 }
 

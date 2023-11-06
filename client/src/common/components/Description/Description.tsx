@@ -40,15 +40,6 @@ export default function Description<
   return (
     <MuiGrid rowSpacing={2} container>
       <MuiGrid xs={12} item>
-        <MuiTypography
-          variant="body1"
-          sx={{
-            color: theme.palette.text.primary,
-            fontWeight: theme.typography.fontWeightBold,
-          }}
-        >
-          Description:
-        </MuiTypography>
         {isFocused ? (
           <TextField
             size="small"

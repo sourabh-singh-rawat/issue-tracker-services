@@ -1,38 +1,28 @@
 import React, { useMemo } from "react";
-import { formatISO } from "date-fns";
-import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import AjvFormats from "ajv-formats";
 import { ajvResolver } from "@hookform/resolvers/ajv";
 
-import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
 import MuiContainer from "@mui/material/Container";
-import CancelButton from "../../../../common/components/CancelButton";
+import MuiInputAdornment from "@mui/material/InputAdornment";
 
-import { resetTasks } from "../../issue-tasks.slice";
-import { useCreateIssueTaskMutation } from "../../../../api/generated/issue.api";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useCreateIssueTaskMutation } from "../../../../api/generated/issue.api";
 import openapi from "../../../../api/generated/openapi.json";
 import TextField from "../../../../common/components/forms/TextField";
 import DatePicker from "../../../../common/components/DatePicker";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
+import CancelButton from "../../../../common/components/CancelButton";
 
-function TaskForm({ setOpen }) {
-  const theme = useTheme();
+export default function TaskForm() {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const [createTask] = useCreateIssueTaskMutation();
 
-  const defaultDueDate = formatISO(new Date());
-
   const defaultValues = useMemo(
-    () => ({
-      description: "",
-      dueDate: "",
-      completed: false,
-    }),
+    () => ({ description: "", dueDate: "", completed: false }),
     [],
   );
 
@@ -45,21 +35,13 @@ function TaskForm({ setOpen }) {
     [],
   );
 
-  const { control, formState, handleSubmit } = useForm({
+  const { control, formState, handleSubmit, reset } = useForm({
     defaultValues,
     mode: "all",
     resolver: ajvResolver(defaultSchemas, {
       formats: { date: AjvFormats.get("date") },
     }),
   });
-
-  const handleDateChange = (selectedDate) => {
-    setTask({ ...task, dueDate: selectedDate });
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({
     description,
@@ -71,8 +53,11 @@ function TaskForm({ setOpen }) {
       id,
       body: { description, completed: false, dueDate },
     });
-    dispatch(resetTasks());
-    setOpen(false);
+    reset();
+  };
+
+  const handleCancel = () => {
+    reset();
   };
 
   return (
@@ -81,35 +66,42 @@ function TaskForm({ setOpen }) {
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <MuiGrid spacing={2} container>
-        <MuiGrid item xs={12}>
-          <MuiTypography variant="h6">Create Task</MuiTypography>
-        </MuiGrid>
-        <MuiGrid xs={12} item>
+      <MuiGrid spacing={1} container>
+        <MuiGrid flexGrow={1} item>
           <TextField
             name="description"
-            title="Description"
+            placeholder="Add a task..."
             control={control}
             formState={formState}
+            startAdornment={
+              <MuiInputAdornment position="start">
+                <AddCircleIcon />
+              </MuiInputAdornment>
+            }
+            endAdornment={
+              <MuiInputAdornment position="end"></MuiInputAdornment>
+            }
           />
         </MuiGrid>
-        <MuiGrid xs={12} item>
-          <DatePicker
-            name="dueDate"
-            title="Due Date"
-            control={control}
-            formState={formState}
-          />
-        </MuiGrid>
-        <MuiGrid item>
-          <PrimaryButton label="Create" type="submit" />
-        </MuiGrid>
-        <MuiGrid item>
-          <CancelButton label="Cancel" onClick={handleCancel} />
-        </MuiGrid>
+        {formState.isDirty && (
+          <>
+            <MuiGrid item>
+              <DatePicker
+                sx={{ border: 0 }}
+                name="dueDate"
+                control={control}
+                formState={formState}
+              />
+            </MuiGrid>
+            <MuiGrid item display="flex">
+              <PrimaryButton label="Save" type="submit" />
+            </MuiGrid>
+            <MuiGrid item>
+              <CancelButton label="Cancel" onClick={handleCancel} />
+            </MuiGrid>
+          </>
+        )}
       </MuiGrid>
     </MuiContainer>
   );
 }
-
-export default TaskForm;
