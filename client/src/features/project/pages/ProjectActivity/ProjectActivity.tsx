@@ -1,15 +1,15 @@
 import React from "react";
 import dayjs from "dayjs";
 
+import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
+import Avatar from "../../../../common/components/Avatar";
+import Tooltip from "../../../../common/components/Tooltip";
 import TabPanel from "../../../../common/components/TabPanel";
 import { useGetProjectActivityListQuery } from "../../../../api/generated/workspace.api";
 import { useSelectedTab } from "../../../../common/hooks";
-import { useTheme } from "@mui/material";
-import Avatar from "../../../../common/components/Avatar";
-import Tooltip from "../../../../common/components/Tooltip";
 
 export default function ProjectActivity() {
   const theme = useTheme();

@@ -39,15 +39,13 @@ export default function IssueComments() {
       <MuiGrid xs={12} item>
         <AddComment />
       </MuiGrid>
-      {isLoading ? (
-        <MuiGrid xs={12} item>
+      <MuiGrid xs={12} item>
+        {isLoading ? (
           <MuiLinearProgress />
-        </MuiGrid>
-      ) : (
-        <MuiGrid xs={12} item>
+        ) : (
           <CommentList rows={issueCommentList?.rows} />
-        </MuiGrid>
-      )}
+        )}
+      </MuiGrid>
     </MuiGrid>
   );
 }

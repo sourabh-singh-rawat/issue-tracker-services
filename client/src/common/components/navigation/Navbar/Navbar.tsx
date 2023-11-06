@@ -24,7 +24,7 @@ function Navbar() {
         sx={{
           boxShadow: theme.shadows[1],
           backgroundColor: theme.palette.background.default,
-          px: theme.spacing(1),
+          px: theme.spacing(2.5),
         }}
         variant="dense"
         disableGutters

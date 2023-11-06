@@ -5,12 +5,12 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import MuiGrid from "@mui/material/Grid";
 import MuiListItem from "@mui/material/ListItem";
 import MuiTypography from "@mui/material/Typography";
 import MuiListItemText from "@mui/material/ListItemText";
 import MuiListItemAvatar from "@mui/material/ListItemAvatar";
+import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
 import DeleteCommentButton from "../DeleteCommentButton";
 import Avatar from "../../../../common/components/Avatar";
@@ -34,55 +34,51 @@ export default function Comment({
 
   return (
     <MuiListItem disableGutters disablePadding>
-      <MuiListItemAvatar>
+      <MuiListItemAvatar
+        sx={{
+          minWidth: 0,
+          paddingLeft: theme.spacing(2),
+          paddingRight: theme.spacing(1),
+        }}
+      >
         <Avatar
           label={displayName}
-          width={theme.spacing(4)}
-          height={theme.spacing(4)}
+          width={theme.spacing(3)}
+          height={theme.spacing(3)}
         />
       </MuiListItemAvatar>
       <MuiListItemText
         primary={
-          <Link
-            style={{
-              textDecoration: "none",
-              color: theme.palette.text.primary,
-            }}
-            to="/profile"
-          >
-            <MuiTypography
-              variant="body2"
-              fontWeight={600}
-              sx={{ "&:hover": { color: theme.palette.primary.main } }}
+          <MuiBreadcrumbs separator="•">
+            <Link
+              to="/profile"
+              style={{
+                textDecoration: "none",
+                color: theme.palette.text.primary,
+              }}
             >
-              {displayName}
+              <MuiTypography
+                variant="body2"
+                fontWeight={600}
+                sx={{ "&:hover": { color: theme.palette.primary.main } }}
+              >
+                {displayName}
+              </MuiTypography>
+            </Link>
+            <MuiTypography variant="body2">
+              {dayjs(updatedAt).fromNow()}
             </MuiTypography>
-          </Link>
+          </MuiBreadcrumbs>
         }
         secondary={
-          <MuiGrid container>
+          <MuiGrid rowSpacing={0.5} container>
             <MuiGrid item xs={12}>
               <MuiTypography variant="body2">{description}</MuiTypography>
             </MuiGrid>
             <MuiGrid item xs={12}>
-              <Breadcrumbs separator="•">
-                <MuiTypography variant="body2">
-                  {dayjs(updatedAt).fromNow()}
-                </MuiTypography>
-                {/* <MuiTypography
-                  sx={{
-                    ":hover": {
-                      cursor: "pointer",
-                      color: theme.palette.primary.main,
-                    },
-                  }}
-                  variant="body2"
-                  fontWeight={600}
-                >
-                  Edit
-                </MuiTypography> */}
+              <MuiBreadcrumbs separator="•">
                 <DeleteCommentButton id={issueId} commentId={id} />
-              </Breadcrumbs>
+              </MuiBreadcrumbs>
             </MuiGrid>
           </MuiGrid>
         }

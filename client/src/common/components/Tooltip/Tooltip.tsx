@@ -16,12 +16,10 @@ const StyledTooltip = styled(({ ...props }) => <MuiTooltip {...props} arrow />)(
   }),
 );
 
-function Tooltip({ title, placement, children }) {
+export default function Tooltip({ title, placement, children }) {
   return (
     <StyledTooltip placement={placement} title={title}>
       <div style={{ cursor: "pointer" }}>{children}</div>
     </StyledTooltip>
   );
 }
-
-export default Tooltip;

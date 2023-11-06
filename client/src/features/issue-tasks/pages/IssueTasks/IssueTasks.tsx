@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import MuiGrid from "@mui/material/Grid";
-
 import TabPanel from "../../../../common/components/TabPanel";
 import TaskList from "../../components/TaskList";
 
@@ -29,19 +27,12 @@ export default function IssueTasks() {
   }, [taskList]);
 
   return (
-    <TabPanel index={1} selectedTab={selectedTab}>
-      <MuiGrid rowSpacing={3} container sx={{ py: theme.spacing(2) }}>
-        <MuiGrid xs={12} item>
-          <TaskList
-            isLoading={isLoading}
-            rows={taskList?.rows}
-            rowCount={taskList?.rowCount}
-            title="To do:"
-          />
-        </MuiGrid>
-        {/* Completed Issue Tasks */}
-        <MuiGrid xs={12} item />
-      </MuiGrid>
+    <TabPanel index={1} selectedTab={selectedTab} sx={{ py: theme.spacing(2) }}>
+      <TaskList
+        rows={taskList?.rows}
+        rowCount={taskList?.rowCount}
+        isLoading={isLoading}
+      />
     </TabPanel>
   );
 }

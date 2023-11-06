@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../../../common/hooks";
 
-import MuiMenuList from "@mui/material/MenuList";
 import MuiDivider from "@mui/material/Divider";
 import MuiLockTwoToneIcon from "@mui/icons-material/LockTwoTone";
 
@@ -12,6 +11,7 @@ import StyledMenu from "../../../../common/components/styled/StyledMenu";
 import { useRevokeTokensMutation } from "../../../../api/generated/identity.api";
 import { useMessageBar } from "../../../message-bar/hooks";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
+import StyledList from "../../../../common/components/styled/StyledList";
 
 export default function AccountSwitcher() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -43,12 +43,14 @@ export default function AccountSwitcher() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <MuiMenuList dense disablePadding>
+        <StyledList disablePadding>
           <MenuItem
             avatarIcon={<Avatar label={currentUser?.displayName} />}
             label={currentUser?.displayName}
           />
-          <MuiDivider />
+        </StyledList>
+        <MuiDivider />
+        <StyledList disablePadding>
           <MenuItem
             avatarIcon={<MuiLockTwoToneIcon />}
             label="Logout"
@@ -57,7 +59,7 @@ export default function AccountSwitcher() {
               handleClose();
             }}
           />
-        </MuiMenuList>
+        </StyledList>
       </StyledMenu>
     </>
   );

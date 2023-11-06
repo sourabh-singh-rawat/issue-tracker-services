@@ -3,8 +3,11 @@ import MuiListItemButton from "@mui/material/ListItemButton";
 
 const StyledListItemButton = styled(MuiListItemButton)(({ theme }) => ({
   "&.MuiListItemButton-root": {
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+    borderRadius: theme.shape.borderRadiusMedium,
     height: theme.spacing(5),
   },
   "&.MuiListItemButton-root:hover": {
