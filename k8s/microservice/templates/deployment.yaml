@@ -30,3 +30,8 @@ spec:
             - secretRef:
                 name: {{ .Values.smtpSecretRef }}
             {{- end }}
+
+            {{- if .Values.firebaseSecretRef }}
+            - secretRef:
+                name: {{ .Values.firebaseSecretRef }}
+            {{- end }}
