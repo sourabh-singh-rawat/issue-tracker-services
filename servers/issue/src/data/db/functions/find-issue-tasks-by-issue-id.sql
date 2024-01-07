@@ -9,6 +9,7 @@ LANGUAGE PLPGSQL AS $$
       SELECT 
         *
       FROM issue_tasks AS it
-      WHERE it.issue_id = p_issue_id;
+      WHERE it.issue_id = p_issue_id
+      ORDER BY it.created_at;
   END;
 $$

@@ -10,4 +10,5 @@ export interface IssueAssigneeRepository
       userId: string;
     }[]
   >;
+  findAssigneeByUserId(id: string): Promise<IssueAssigneeEntity | null>;
 }

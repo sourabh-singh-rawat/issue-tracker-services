@@ -1,5 +1,5 @@
 import {
-  DatabaseService,
+  TypeormStore,
   IssueListFilters,
   IssueFormData,
   QueryBuilderOptions,
@@ -8,11 +8,11 @@ import { IssueEntity } from "../entities";
 import { IssueRepository } from "./interfaces/issue.repository";
 
 export class PostgresIssueRepository implements IssueRepository {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private postgresTypeormStore: TypeormStore) {}
 
   save = async (issue: IssueEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .insert()
       .into(IssueEntity)
@@ -34,7 +34,7 @@ export class PostgresIssueRepository implements IssueRepository {
       sortOrder = "ASC",
       projectId,
     } = filters;
-    const result = await this.databaseService.query<IssueFormData>(
+    const result = await this.postgresTypeormStore.query<IssueFormData>(
       "SELECT * FROM find_issues_by_user_id_and_project_id($1, $2, $3, $4, $5, $6)",
       [userId, projectId, sortBy, sortOrder, pageSize, page * pageSize],
     );
@@ -43,14 +43,12 @@ export class PostgresIssueRepository implements IssueRepository {
   };
 
   findOne = async (id: string) => {
-    const result = await this.databaseService
-      .createQueryBuilder()
-      .select("i")
-      .from(IssueEntity, "i")
-      .where("i.id = :id", { id })
-      .getOne();
+    const result = await this.postgresTypeormStore.query<IssueFormData>(
+      "SELECT * FROM find_issue_by_id($1)",
+      [id],
+    );
 
-    return result;
+    return result[0];
   };
 
   update = async (
@@ -59,16 +57,23 @@ export class PostgresIssueRepository implements IssueRepository {
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .update(IssueEntity)
       .set(updatedIssue)
-      .where("id = :id", { id });
+      .where("id = :id AND deletedAt IS NULL", { id });
 
     await query.execute();
   };
 
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
-    throw new Error("Method not implemented.");
+    const queryRunner = options?.queryRunner;
+    const query = this.postgresTypeormStore
+      .createQueryBuilder(queryRunner)
+      .softDelete()
+      .from(IssueEntity)
+      .where("id = :id", { id });
+
+    await query.execute();
   };
 }

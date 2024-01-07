@@ -1,8 +1,22 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  FastifyBaseLogger,
+  FastifyReply,
+  FastifyRequest,
+  FastifySchema,
+  FastifyTypeProviderDefault,
+  RawServerDefault,
+  RouteGenericInterface,
+} from "fastify";
 import { IssueController } from "./interfaces/issue-controller";
 import { IssueService } from "../services/interfaces/issue.service";
-import { IssueListFilters, IssueFormData } from "@sourabhrawatcc/core-utils";
+import {
+  IssueListFilters,
+  IssueFormData,
+  IssueStatus,
+} from "@sourabhrawatcc/core-utils";
 import { StatusCodes } from "http-status-codes";
+import { ResolveFastifyRequestType } from "fastify/types/type-provider";
+import { IncomingMessage, ServerResponse } from "node:http";
 
 export class CoreIssueController implements IssueController {
   constructor(private issueService: IssueService) {}
@@ -61,11 +75,43 @@ export class CoreIssueController implements IssueController {
     request: FastifyRequest<{ Params: { id: string }; Body: IssueFormData }>,
     reply: FastifyReply,
   ) => {
+    const { userId } = request.currentUser;
     const { id } = request.params;
     const issueFormData = request.body;
 
-    await this.issueService.updateIssue(id, issueFormData);
+    await this.issueService.updateIssue(userId, id, issueFormData);
 
+    return reply.send();
+  };
+
+  updateIssueStatus = async (
+    request: FastifyRequest<{
+      Params: { id: string };
+      Body: { status: IssueStatus };
+    }>,
+    reply: FastifyReply,
+  ) => {
+    const { userId } = request.currentUser;
+    const { id } = request.params;
+    const { status } = request.body;
+
+    await this.issueService.updateIssueStatus(userId, id, status);
+
+    return reply.send();
+  };
+
+  updateIssueResolution = async (
+    request: FastifyRequest<{
+      Params: { id: string };
+      Body: { resolution: boolean };
+    }>,
+    reply: FastifyReply,
+  ) => {
+    const { userId } = request.currentUser;
+    const { id } = request.params;
+    const { resolution } = request.body;
+
+    await this.issueService.updateIssueResolution(userId, id, resolution);
     return reply.send();
   };
 }

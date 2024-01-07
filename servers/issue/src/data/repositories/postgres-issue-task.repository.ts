@@ -1,16 +1,13 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { IssueTaskEntity } from "../entities";
 import { IssueTaskRepository } from "./interfaces/issue-task.repository";
 
 export class PostgresIssueTaskRepository implements IssueTaskRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly postgresTypeormStore: TypeormStore) {}
 
   save = async (task: IssueTaskEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .insert()
       .into(IssueTaskEntity)
@@ -25,7 +22,7 @@ export class PostgresIssueTaskRepository implements IssueTaskRepository {
   };
 
   find = async (issueId: string) => {
-    const result = await this.databaseService.query(
+    const result = await this.postgresTypeormStore.query(
       "SELECT * FROM find_issue_tasks_by_issue_id($1)",
       [issueId],
     );
@@ -41,7 +38,7 @@ export class PostgresIssueTaskRepository implements IssueTaskRepository {
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .update(IssueTaskEntity)
       .set(updatedTask)
