@@ -1,16 +1,13 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { IssueCommentEntity } from "../entities";
 import { IssueCommentRepository } from "./interfaces/issue-comment.repository";
 
 export class PostgresIssueCommentRepository implements IssueCommentRepository {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private postgresTypeormStore: TypeormStore) {}
 
   save = async (comment: IssueCommentEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .insert()
       .into(IssueCommentEntity)
@@ -25,7 +22,7 @@ export class PostgresIssueCommentRepository implements IssueCommentRepository {
   };
 
   findByIssueId = async (issueId: string) => {
-    const result = await this.databaseService.query<IssueCommentEntity>(
+    const result = await this.postgresTypeormStore.query<IssueCommentEntity>(
       "SELECT * FROM find_comments_by_issue_id($1)",
       [issueId],
     );
@@ -38,7 +35,7 @@ export class PostgresIssueCommentRepository implements IssueCommentRepository {
   };
 
   delete = async (id: string) => {
-    await this.databaseService
+    await this.postgresTypeormStore
       .createQueryBuilder()
       .delete()
       .from(IssueCommentEntity)

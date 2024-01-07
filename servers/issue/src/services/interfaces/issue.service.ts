@@ -14,12 +14,26 @@ export interface IssueService {
     userId: string,
     issue: IssueFormData,
   ): Promise<ServiceResponse<string>>;
-  getIssue(issueId: string): Promise<ServiceResponse<IssueEntity>>;
+  getIssue(issueId: string): Promise<ServiceResponse<IssueFormData>>;
   getIssueList(
     userId: string,
     filters: IssueListFilters,
   ): Promise<ServiceResponse<ObjectLiteral[]>>;
   getIssueStatusList(): Promise<ServiceResponse<IssueStatus[]>>;
   getIssuePriorityList(): Promise<ServiceResponse<IssuePriority[]>>;
-  updateIssue(id: string, issueFormData: IssueFormData): Promise<void>;
+  updateIssue(
+    userId: string,
+    id: string,
+    issueFormData: IssueFormData,
+  ): Promise<void>;
+  updateIssueStatus(
+    userId: string,
+    id: string,
+    status: IssueStatus,
+  ): Promise<void>;
+  updateIssueResolution(
+    userId: string,
+    id: string,
+    resolution: boolean,
+  ): Promise<void>;
 }

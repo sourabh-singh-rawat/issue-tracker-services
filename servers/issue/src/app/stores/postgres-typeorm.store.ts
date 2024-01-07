@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { PostgresService, logger } from "@sourabhrawatcc/core-utils";
+import { PostgresTypeormStore, logger } from "@sourabhrawatcc/core-utils";
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -11,4 +11,7 @@ export const dataSource = new DataSource({
   synchronize: true,
 });
 
-export const databaseService = new PostgresService(dataSource, logger);
+export const postgresTypeormStore = new PostgresTypeormStore(
+  dataSource,
+  logger,
+);

@@ -1,6 +1,6 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { serviceContainer } from "../app/service-container";
+import { serviceContainer } from "../app/containers/awilix.container";
 
 export const issueTaskRoutes = (
   fastify: FastifyInstance,

@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { serviceContainer } from "../app/service-container";
+import { serviceContainer } from "../app/containers/awilix.container";
 import { Auth } from "@sourabhrawatcc/core-utils";
 
 export const issueCommentRoutes = (

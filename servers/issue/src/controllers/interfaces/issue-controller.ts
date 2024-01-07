@@ -12,4 +12,12 @@ export interface IssueController {
     reply: FastifyReply,
   ): Promise<void>;
   updateIssue(request: FastifyRequest, reply: FastifyReply): Promise<void>;
+  updateIssueStatus(
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ): Promise<void>;
+  updateIssueResolution(
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ): Promise<void>;
 }

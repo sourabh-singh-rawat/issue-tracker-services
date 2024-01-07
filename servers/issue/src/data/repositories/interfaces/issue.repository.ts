@@ -9,7 +9,7 @@ import { ObjectLiteral } from "typeorm";
 
 export interface IssueRepository extends Repository<IssueEntity> {
   find(userId: string, filters: IssueListFilters): Promise<IssueFormData[]>;
-  findOne(issueId: string): Promise<IssueEntity | null>;
+  findOne(id: string): Promise<IssueFormData | null>;
   update(
     id: string,
     updatedProject: IssueEntity,

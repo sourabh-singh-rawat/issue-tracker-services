@@ -1,6 +1,6 @@
 import {
   Consumers,
-  MessageService,
+  Messenger,
   Streams,
   Subscriber,
   UserCreatedPayload,
@@ -14,10 +14,10 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly consumer = Consumers.UserCreatedConsumerIssue;
 
   constructor(
-    private messageService: MessageService,
+    private messenger: Messenger,
     private userRepository: UserRepository,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {

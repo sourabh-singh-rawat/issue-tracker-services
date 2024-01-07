@@ -19,6 +19,7 @@ RETURNS TABLE (
   reporter JSONB,
   assignees JSONB, 
   project_id UUID,
+  project_name TEXT,
   due_date TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE,
   updated_at TIMESTAMP WITH TIME ZONE
@@ -59,16 +60,19 @@ BEGIN
       WHERE ia.issue_id = i.id
     ) AS assignees,
     i.project_id AS "projectId",
+    p.name AS "projectName",
     i.due_date AS "dueDate",
     i.created_at AS "createdAt",
     i.updated_at AS "updatedAt"
-  FROM issues as i
-  INNER JOIN users as u ON u.id = i.reporter_id
-  WHERE i.id IN (
-    SELECT ia.issue_id FROM issue_assignees AS ia
-    WHERE ia.user_id = p_user_id
-  )
-  AND i.project_id = p_project_id OR p_project_id IS NULL
+  FROM issues AS i
+  INNER JOIN users AS u ON u.id = i.reporter_id
+  INNER JOIN projects AS p ON p.id = i.project_id
+  WHERE
+  -- 1. Where the user is owner or an assignee of the issue
+  (i.owner_id = p_user_id OR i.id IN (SELECT ia.issue_id FROM issue_assignees AS ia WHERE ia.user_id = p_user_id))
+  AND
+  -- 2. Also always check is project id is provided (if not provided then assume all issues are required)
+  (p_project_id IS NULL OR i.project_id = p_project_id)
   ORDER BY 
     CASE WHEN p_sort_order = 'asc' THEN
       CASE
