@@ -56,6 +56,7 @@ import {
   CasbinProjectGuardian,
   projectGuardian,
 } from "../guardians/casbin/casbin-project.guardian";
+import { IssueCreatedPublisher } from "../../messages/publishers/issue-created.publisher";
 
 export interface RegisteredServices {
   logger: Logger;
@@ -78,6 +79,7 @@ export interface RegisteredServices {
   userCreatedSubscriber: UserCreatedSubscriber;
   userUpdatedSubscriber: UserUpdatedSubscriber;
   projectCreatedSubscriber: ProjectCreatedSubscriber;
+  issueCreatedPublisher: IssueCreatedPublisher;
   issueGuardian: CasbinIssueGuardian;
   projectGuardian: CasbinProjectGuardian;
 }
@@ -85,12 +87,13 @@ export interface RegisteredServices {
 const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
-export const serviceContainer = new AwilixContainer<RegisteredServices>(
+
+export const container = new AwilixContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = serviceContainer;
+const { add } = container;
 
 add("logger", asValue(logger));
 add("dataSource", asValue(dataSource));
@@ -114,3 +117,4 @@ add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
 add("projectCreatedSubscriber", asClass(ProjectCreatedSubscriber));
 add("issueGuardian", asValue(issueGuardian));
 add("projectGuardian", asValue(projectGuardian));
+add("issueCreatedPublisher", asClass(IssueCreatedPublisher));

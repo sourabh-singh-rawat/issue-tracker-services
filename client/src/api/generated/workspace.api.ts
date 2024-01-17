@@ -86,13 +86,13 @@ export type GetWorkspaceMemberListApiArg = {
   /** Numeric id of the workspace */
   id: string;
 };
-export type GetAllWorkspacesApiResponse = /** status 201 all workspaces */ {
-  data: {
+export type GetAllWorkspacesApiResponse = /** status 200 all workspaces */ {
+  rows: {
     id: string;
     name: string;
     createdAt: string;
   }[];
-  dataCount: number;
+  rowCount: number;
 };
 export type GetAllWorkspacesApiArg = void;
 export type CreateWorkspaceApiResponse = /** status 201 Workspace created */ {

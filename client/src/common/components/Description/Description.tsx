@@ -8,16 +8,17 @@ import MuiTypography from "@mui/material/Typography";
 import CancelButton from "../CancelButton";
 import PrimaryButton from "../buttons/PrimaryButton";
 
-interface DescriptionProps<T extends { name: string; description: string }> {
+interface Props<T extends { name: string; description: string }> {
   page: T;
   setPage: React.Dispatch<React.SetStateAction<T>>;
   isLoading: boolean;
   updateQuery: () => Promise<void>;
+  isDisabled?: boolean;
 }
 
 export default function Description<
   T extends { name: string; description: string },
->({ page, setPage, isLoading, updateQuery }: DescriptionProps<T>) {
+>({ page, setPage, isLoading, updateQuery, isDisabled }: Props<T>) {
   const theme = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const [previousDescription, setPreviousDescription] = useState("");
@@ -29,7 +30,7 @@ export default function Description<
 
   const handleClick = () => {
     setIsFocused(true);
-    setPreviousDescription(page.name);
+    setPreviousDescription(page.description);
   };
 
   const handleCancel = () => {
@@ -38,14 +39,32 @@ export default function Description<
   };
 
   return (
-    <MuiGrid rowSpacing={2} container>
+    <MuiGrid rowSpacing={1} container>
       <MuiGrid xs={12} item>
-        {isFocused ? (
+        <MuiTypography
+          variant="body1"
+          sx={{
+            color: theme.palette.text.primary,
+            fontWeight: theme.typography.fontWeightBold,
+          }}
+        >
+          Description
+        </MuiTypography>
+        {isFocused && !isDisabled ? (
           <TextField
             size="small"
             value={page?.description}
             onChange={(e) => setPage({ ...page, description: e.target.value })}
-            rows={4}
+            inputProps={{
+              style: { fontSize: theme.typography.body2.fontSize },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: theme.shape.borderRadiusMedium,
+              },
+              borderRadius: theme.shape.borderRadiusLarge,
+            }}
+            disabled={isDisabled}
             autoFocus
             fullWidth
             multiline
@@ -62,11 +81,10 @@ export default function Description<
             ) : (
               <MuiTypography
                 sx={{
-                  lineHeight: 1.5,
                   padding: theme.spacing(1),
                   marginLeft: theme.spacing(-1),
                   borderRadius: theme.shape.borderRadiusMedium,
-                  ":hover": { backgroundColor: "action.hover" },
+                  "&:hover": { backgroundColor: "action.hover" },
                 }}
                 variant="body2"
                 onClick={handleClick}
@@ -77,7 +95,7 @@ export default function Description<
           </>
         )}
       </MuiGrid>
-      {isFocused && (
+      {isFocused && !isDisabled && (
         <MuiGrid sm={12} item>
           <MuiGrid spacing={1} container>
             <MuiGrid item>

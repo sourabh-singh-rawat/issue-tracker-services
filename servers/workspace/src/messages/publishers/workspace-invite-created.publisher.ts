@@ -1,7 +1,7 @@
 import {
   Publisher,
   Subjects,
-  MessageService,
+  Messenger,
   WorkspaceInvitePayload,
 } from "@sourabhrawatcc/core-utils";
 
@@ -11,7 +11,7 @@ export class WorkspaceInviteCreatedPublisher extends Publisher<{
 }> {
   subject = Subjects.WORKSPACE_INVITE_CREATED;
 
-  constructor(messageService: MessageService) {
-    super(messageService.client);
+  constructor(messenger: Messenger) {
+    super(messenger.client);
   }
 }

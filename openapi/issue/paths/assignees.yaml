@@ -1,0 +1,10 @@
+post:
+  tags: ["issue"]
+  summary: Add a new assignee
+  parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+      description: Numeric id of the issue
+  operationId: addIssue

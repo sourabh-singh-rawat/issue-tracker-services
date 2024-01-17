@@ -118,6 +118,127 @@
         }
       }
     },
+    "/attachments/issues/{id}": {
+      "description": "Create and manage issue attachments",
+      "post": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The numeric Id of the issue",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "attachment"
+        ],
+        "operationId": "createIssueAttachment",
+        "summary": "Create a new issue attachment",
+        "description": "Create a new issue attachment",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created a new issue attachment"
+          },
+          "400": {
+            "description": "The request contains invalid body paramaters"
+          },
+          "401": {
+            "description": "User credentials are invalid"
+          },
+          "403": {
+            "description": "User may be blocked"
+          },
+          "429": {
+            "description": "User is blocked for sending too many request"
+          },
+          "500": {
+            "description": "Something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The numeric Id of the issue",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "attachment"
+        ],
+        "operationId": "getIssueAttachmentList",
+        "summary": "Get issue attachment list",
+        "description": "Get issue attachment list",
+        "responses": {
+          "200": {
+            "description": "List of issue attachments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array"
+                    },
+                    "filteredRowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains invalid body paramaters"
+          }
+        }
+      }
+    },
     "/identity/generate-tokens": {
       "description": "Generate access and refresh tokens",
       "post": {
@@ -877,6 +998,143 @@
         }
       }
     },
+    "/issues/{id}/status": {
+      "description": "Get or update an issue status",
+      "patch": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Updates the issue status",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the issue to get"
+          }
+        ],
+        "operationId": "updateIssueStatus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "default": "Not Started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update issue status successfully"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issues/{id}/resolution": {
+      "description": "Get or update an issue resolution",
+      "patch": {
+        "tags": [
+          "issue"
+        ],
+        "summary": "Updates the issue resolution",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the issue to get"
+          }
+        ],
+        "operationId": "updateIssueResolution",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "resolution": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update issue resolution successfully"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/issues/{id}/comments": {
       "description": "Get comments or create a new comment",
       "post": {
@@ -967,7 +1225,26 @@
         ],
         "responses": {
           "200": {
-            "description": "List of all the issue comments"
+            "description": "List of all the issue comments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array"
+                    },
+                    "filteredRowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "filteredRowCount"
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -1963,11 +2240,15 @@
                   },
                   "role": {
                     "type": "string"
+                  },
+                  "workspaceId": {
+                    "type": "string"
                   }
                 },
                 "required": [
                   "userId",
-                  "role"
+                  "role",
+                  "workspaceId"
                 ]
               }
             }
@@ -2459,14 +2740,14 @@
         "description": "Get all workspaces of the user",
         "operationId": "getAllWorkspaces",
         "responses": {
-          "201": {
+          "200": {
             "description": "all workspaces",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": {
+                    "rows": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -2488,13 +2769,13 @@
                         ]
                       }
                     },
-                    "dataCount": {
+                    "rowCount": {
                       "type": "number"
                     }
                   },
                   "required": [
-                    "data",
-                    "dataCount"
+                    "rows",
+                    "rowCount"
                   ]
                 }
               }

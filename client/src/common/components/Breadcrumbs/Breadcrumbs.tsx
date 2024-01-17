@@ -1,21 +1,18 @@
-/* eslint-disable react/prop-types */
 import React from "react";
-
 import { useTheme } from "@mui/material";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
-import MuiKeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import MuiLink from "@mui/material/Link";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
+import MuiKeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 export default function Breadcrumbs({ items, isLoading }) {
   const theme = useTheme();
 
   return (
     <MuiBreadcrumbs
-      separator={
-        <MuiKeyboardArrowRightIcon sx={{ color: theme.palette.grey[400] }} />
-      }
+      separator={<MuiKeyboardArrowRightIcon />}
+      sx={{ "& .MuiTypography-root": { color: theme.palette.text.secondary } }}
     >
       {items.map(({ text, onClick }) => (
         <span key={onClick}>

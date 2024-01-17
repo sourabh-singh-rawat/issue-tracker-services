@@ -20,8 +20,12 @@ const config: ConfigFile = {
         "getIssueCommentList",
         "getIssueTaskList",
         "updateIssue",
+        "updateIssueStatus",
+        "updateIssueResolution",
         "updateIssueTask",
         "deleteIssueComment",
+        "createIssueAttachment",
+        "getIssueAttachmentList",
       ],
     },
     "./generated/project.api.ts": {

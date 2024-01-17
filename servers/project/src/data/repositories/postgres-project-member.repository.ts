@@ -25,12 +25,19 @@ export class PostgresProjectMemberRepository
     return (await query.execute()).generatedMaps[0] as ProjectMemberEntity;
   };
 
-  existsById = async (id: string): Promise<boolean> => {
-    const result = await this.postgresTypeormStore.query<{
-      memberExistsById: boolean;
-    }>("SELECT * FROM member_exists_by_id($1)", [id]);
+  existsById(id: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
 
-    return result[0].memberExistsById;
+  existsByProjectId = async (
+    id: string,
+    projectId: string,
+  ): Promise<boolean> => {
+    const result = await this.postgresTypeormStore.query<{
+      existsByProjectId: boolean;
+    }>("SELECT * FROM member_exists_by_project_id($1, $2)", [id, projectId]);
+
+    return result[0].existsByProjectId;
   };
 
   findByProjectId = async (projectId: string) => {

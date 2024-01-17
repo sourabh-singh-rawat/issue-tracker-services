@@ -1,12 +1,11 @@
 import {
+  logger,
   Guardian,
   ProjectPermissions,
   ProjectRoles,
   UnauthorizedError,
-  logger,
 } from "@sourabhrawatcc/core-utils";
 import { ProjectGuardian } from "./interfaces/project-guardian";
-import { dataSource } from "../../stores/postgres-typeorm.store";
 
 export class CasbinProjectGuardian
   extends Guardian<ProjectPermissions>

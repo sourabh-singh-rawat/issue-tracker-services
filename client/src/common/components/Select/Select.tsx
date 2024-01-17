@@ -9,7 +9,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
   width: "100%",
   borderRadius: theme.shape.borderRadiusMedium,
-  fontWeight: "100px",
+  fontWeight: theme.typography.fontWeightBold,
   "& fieldset": {
     border: `1px solid ${theme.palette.divider}`,
     transition: theme.transitions.create(["border-color"]),
@@ -25,7 +25,7 @@ const StyledSelect = styled(MuiSelect)(({ theme }) => ({
 
 export interface SelectProps<Value = unknown> {
   name: string;
-  value: Value;
+  value: string;
   onChange: (e: SelectChangeEvent<Value>) => void;
   variant?: "small" | "medium";
   options?: string[];
@@ -49,7 +49,7 @@ export default function Select<Value = unknown>({
         boxShadow: theme.shadows[1],
         borderRadius: theme.shape.borderRadiusMedium,
         backgroundColor: theme.palette.background.default,
-        border: `1px solid ${theme.palette.divider}`,
+        // border: `1px solid ${theme.palette.divider}`,
       },
     },
   };
@@ -72,10 +72,7 @@ export default function Select<Value = unknown>({
       IconComponent={KeyboardArrowDownIcon}
       sx={{
         height: variant === "small" ? theme.spacing(4) : "auto",
-        "& fieldset": {
-          // backgroundColor: getBgColor(value.toLowerCase()),
-          // opacity: 0.15,
-        },
+        "& fieldset": {},
       }}
       disabled={isDisabled}
     >

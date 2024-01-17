@@ -1,18 +1,18 @@
-import { serviceContainer } from "./app/service-container";
-import { httpServer } from "./app/http-server";
+import { container } from "./app/containers/awilix.container";
+import { server } from "./app/servers/fastify.server";
 
 const SERVER_PORT = 4000;
 const SERVER_HOST = "0.0.0.0";
 
 const startServer = async () => {
   try {
-    await serviceContainer.initialize();
-    await serviceContainer.get("databaseService").connect();
-    await serviceContainer.get("messageService").connect();
+    await container.initialize();
+    await container.get("store").connect();
+    await container.get("messenger").connect();
 
-    httpServer.listen({ port: SERVER_PORT, host: SERVER_HOST });
+    server.listen({ port: SERVER_PORT, host: SERVER_HOST });
   } catch (error) {
-    serviceContainer.get("logger").error(error);
+    container.get("logger").error(error);
     process.exit(1);
   }
 };

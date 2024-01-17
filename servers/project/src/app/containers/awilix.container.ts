@@ -85,9 +85,7 @@ export const awilixContainer = new AwilixContainer<RegisteredServices>(
 const { add } = awilixContainer;
 const options: BuildResolverOptions<
   CasbinProjectGuardian | CasbinWorkspaceGuardian
-> = {
-  lifetime: "SINGLETON",
-};
+> = { lifetime: "SINGLETON" };
 
 add("logger", asValue(logger));
 add("messenger", asValue(natsMessenger));

@@ -1,21 +1,21 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
 import AjvFormats from "ajv-formats";
 import { ajvResolver } from "@hookform/resolvers/ajv";
+import { useCreateIssueTaskMutation } from "../../../../api/generated/issue.api";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useCreateIssueTaskMutation } from "../../../../api/generated/issue.api";
 import openapi from "../../../../api/generated/openapi.json";
 import TextField from "../../../../common/components/forms/TextField";
 import DatePicker from "../../../../common/components/DatePicker";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import CancelButton from "../../../../common/components/CancelButton";
+
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function TaskForm() {
   const { id } = useParams();
@@ -51,14 +51,16 @@ export default function TaskForm() {
 
     createTask({
       id,
-      body: { description, completed: false, dueDate },
+      body: {
+        description,
+        completed: false,
+        dueDate: dueDate ? dueDate : null,
+      },
     });
     reset();
   };
 
-  const handleCancel = () => {
-    reset();
-  };
+  const handleCancel = () => reset();
 
   return (
     <MuiContainer

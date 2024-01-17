@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
-import MuiAccordian from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
-import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import MuiInputAdornment from "@mui/material/InputAdornment";
 
-import EditTaskButton from "../EditTaskButton";
-import DateLabel from "../../../../common/components/DateLabel";
 import Checkbox from "../../../../common/components/Checkbox";
 import TextField from "../../../../common/components/styled/StyledTextField";
 
 import { useTheme } from "@mui/material";
 import { useUpdateIssueTaskMutation } from "../../../../api/generated/issue.api";
 import { useMessageBar } from "../../../message-bar/hooks";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import CancelButton from "../../../../common/components/CancelButton";
+
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
+
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DateLabel from "../../../../common/components/DateLabel";
 
 interface TaskProps {
   taskId: string;
@@ -35,16 +34,20 @@ export default function Task({
   const { id } = useParams();
   const { showSuccess } = useMessageBar();
 
-  const [expanded, setExpanded] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [task, setTask] = useState({ taskId, dueDate, description, completed });
+  const [previousDescription, setPreviousDescription] = useState("");
 
   // const [deleteTask] = useDeleteTaskMutation();
   const [updateTask, { isSuccess }] = useUpdateIssueTaskMutation();
 
   const handleCancel = () => {
-    setExpanded(!expanded);
+    setTask({ ...task, description: previousDescription });
+    setIsEditMode(!isEditMode);
   };
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setTask({ ...task, [name]: value });
   };
@@ -65,6 +68,7 @@ export default function Task({
         taskId,
         body: { description: task.description },
       });
+      setIsEditMode(!isEditMode);
     }
   };
 
@@ -73,72 +77,87 @@ export default function Task({
   }, [isSuccess]);
 
   return (
-    <MuiAccordian
-      expanded={expanded}
+    <MuiGrid
       sx={{
-        boxShadow: 0,
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        "&:hover": { backgroundColor: theme.palette.action.hover },
+        alignItems: "center",
+        px: theme.spacing(0.5),
+        pr: theme.spacing(2),
       }}
-      disableGutters
+      container
     >
-      <MuiAccordionSummary
-        expandIcon={<EditTaskButton onClick={() => setExpanded(!expanded)} />}
-        sx={{
-          overflow: "hidden",
-          backgroundColor: theme.palette.background.default,
-        }}
-      >
-        <MuiGrid columnSpacing={1} sx={{ alignItems: "center" }} container>
-          <Checkbox
-            checked={task.completed}
-            handleCheckBoxClick={handleCheckBoxClick}
-          />
-          <MuiGrid item xs={10}>
-            <MuiTypography
-              variant="body2"
-              sx={{ textDecoration: task.completed && "line-through" }}
-              noWrap
-            >
-              {task.description}
-            </MuiTypography>
-          </MuiGrid>
-          <MuiGrid item>
-            <MuiTypography
-              sx={{
-                color: task.completed && theme.palette.grey[500],
-                textDecoration: task.completed && "line-through",
-              }}
-              variant="body2"
-            >
-              <DateLabel dueDate={dueDate} />
-            </MuiTypography>
-          </MuiGrid>
-          {/* <MuiGrid sx={{ display: show ? "block" : "none" }} item>
-            <DeleteTaskButton onClick={() => deleteTask({ id, taskId })} />
-          </MuiGrid> */}
-        </MuiGrid>
-      </MuiAccordionSummary>
-      <MuiAccordionDetails>
-        <MuiGrid spacing={1} container>
-          <MuiGrid flexGrow={1} item>
-            <TextField
-              name="description"
-              size="small"
-              value={task.description}
-              autoFocus
-              fullWidth
-              onChange={handleChange}
-            />
-          </MuiGrid>
-          <MuiGrid item>
-            <PrimaryButton label="Save" onClick={handleSave} />
-          </MuiGrid>
-          <MuiGrid item>
-            <CancelButton label="Cancel" onClick={handleCancel} />
-          </MuiGrid>
-        </MuiGrid>
-      </MuiAccordionDetails>
-    </MuiAccordian>
+      <MuiGrid item>
+        <Checkbox
+          checked={task.completed}
+          handleCheckBoxClick={handleCheckBoxClick}
+        />
+      </MuiGrid>
+      <MuiGrid item flexGrow={1}>
+        <TextField
+          name="description"
+          value={task.description}
+          InputProps={{
+            endAdornment: (
+              <MuiInputAdornment position="end" sx={{ mr: theme.spacing(1) }}>
+                <DateLabel dueDate={dueDate} />
+                {isEditMode && task.description !== previousDescription && (
+                  <>
+                    <StyledIconButton
+                      onClick={handleSave}
+                      sx={{
+                        color: theme.palette.grey[600],
+                        padding: theme.spacing(0.25),
+                        "&:hover": { color: theme.palette.success.main },
+                      }}
+                      disableRipple
+                    >
+                      <CheckCircleIcon />
+                    </StyledIconButton>
+                    <StyledIconButton
+                      onClick={handleCancel}
+                      sx={{
+                        color: theme.palette.grey[600],
+                        padding: theme.spacing(0.25),
+                        "&:hover": { color: theme.palette.success.main },
+                      }}
+                      disableRipple
+                    >
+                      <CancelIcon />
+                    </StyledIconButton>
+                  </>
+                )}
+              </MuiInputAdornment>
+            ),
+          }}
+          sx={{
+            borderRadius: theme.shape.borderRadiusMedium,
+            textDecoration: task.completed ? "line-through" : "none",
+            "& .MuiInputBase-root": {
+              padding: 0,
+              border: "none",
+              backgroundColor: "transparent",
+              fieldset: { border: 0 },
+            },
+            "&:hover": {
+              backgroundColor: !completed
+                ? theme.palette.action.hover
+                : "transparent",
+              "& fieldset": {
+                border: !completed
+                  ? `2px solid ${theme.palette.grey[200]}`
+                  : "none",
+              },
+            },
+          }}
+          onChange={handleChange}
+          onFocus={() => {
+            setPreviousDescription(description);
+            setIsEditMode(true);
+          }}
+          size="small"
+          disabled={completed}
+          fullWidth
+        />
+      </MuiGrid>
+    </MuiGrid>
   );
 }

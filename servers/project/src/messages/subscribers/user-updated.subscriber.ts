@@ -1,6 +1,6 @@
 import {
   Consumers,
-  NatsMessenger,
+  Messenger,
   Streams,
   Subscriber,
   UserUpdatedPayload,
@@ -13,15 +13,14 @@ export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   readonly consumer = Consumers.UserUpdatedConsumerProject;
 
   constructor(
-    private messenger: NatsMessenger,
+    private messenger: Messenger,
     private userService: UserService,
   ) {
     super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserUpdatedPayload) => {
-    const { userId, defaultWorkspaceId, version } = payload;
-    await this.userService.updateUser(userId, defaultWorkspaceId, version);
+    await this.userService.updateUser(payload);
     message.ack();
     console.log("Message processing completed");
   };

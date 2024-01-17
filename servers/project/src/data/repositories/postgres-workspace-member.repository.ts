@@ -27,10 +27,10 @@ export class PostgresWorkspaceMemberRepository
     throw new Error("Method not implemented.");
   }
 
-  find = async (id: string) => {
+  find = async (projectId: string, workspaceId: string) => {
     const result = await this.postgresTypeormStore.query<UserEntity>(
-      "SELECT * FROM find_workspace_members_by_workspace_id ($1)",
-      [id],
+      "SELECT * FROM find_workspace_members_by_workspace_id ($1, $2)",
+      [projectId, workspaceId],
     );
 
     return result as UserEntity[];

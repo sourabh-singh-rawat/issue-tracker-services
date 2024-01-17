@@ -8,6 +8,10 @@ build:
     context: servers/activity
     docker:
       dockerfile: Dockerfile
+  - image: sourabhrawatcc/attachment
+    context: servers/attachment
+    docker:
+      dockerfile: Dockerfile
   - image: sourabhrawatcc/email
     context: servers/email
     docker:
@@ -39,6 +43,11 @@ deploy:
       chartPath: ./k8s/microservice
       valuesFiles:
       - ./k8s/microservice/activity.values.yaml
+  
+    - name: attachment
+      chartPath: ./k8s/microservice
+      valuesFiles:
+      - ./k8s/microservice/attachment.values.yaml
 
     - name: email
       chartPath: ./k8s/microservice

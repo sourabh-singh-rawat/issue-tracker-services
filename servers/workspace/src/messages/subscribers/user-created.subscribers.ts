@@ -1,7 +1,7 @@
 import {
   Consumers,
   JwtToken,
-  MessageService,
+  Messenger,
   Streams,
   Subscriber,
   UserCreatedPayload,
@@ -16,10 +16,10 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly consumer = Consumers.UserCreatedConsumerWorkspace;
 
   constructor(
-    private messageService: MessageService,
+    private messenger: Messenger,
     private workspaceService: WorkspaceService,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {

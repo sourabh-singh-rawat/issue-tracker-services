@@ -1,24 +1,25 @@
-import { serviceContainer } from "./app/service-container";
-import { httpServer } from "./app/http-server";
+import { container } from "./app/containers";
+import { fastifyServer } from "./app/servers/fastify.server";
 
 const startServer = async () => {
   try {
-    await serviceContainer.initialize();
-    await serviceContainer.get("databaseService").connect();
-    await serviceContainer.get("messageService").connect();
+    await container.initialize();
+    await container.get("postgresTypeormStore").connect();
+    await container.get("messenger").connect();
 
-    httpServer.listen({ port: 4000, host: "0.0.0.0" });
+    fastifyServer.listen({ port: 4000, host: "0.0.0.0" });
   } catch (error) {
-    serviceContainer.get("logger").error(error);
+    container.get("logger").error(error);
     process.exit(1);
   }
 };
 
 const startSubscriptions = () => {
-  serviceContainer.get("userCreatedSubscriber").fetchMessages();
-  serviceContainer.get("userUpdatedSubscriber").fetchMessages();
-  serviceContainer.get("projectCreatedSubscriber").fetchMessages();
-  serviceContainer.get("projectUpdatedSubscriber").fetchMessages();
+  container.get("userCreatedSubscriber").fetchMessages();
+  container.get("userUpdatedSubscriber").fetchMessages();
+  container.get("projectCreatedSubscriber").fetchMessages();
+  container.get("projectUpdatedSubscriber").fetchMessages();
+  container.get("issueCreatedSubscriber").fetchMessages();
 };
 
 const main = async () => {

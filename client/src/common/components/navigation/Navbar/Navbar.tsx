@@ -15,16 +15,16 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
 }));
 
-function Navbar() {
+export default function Navbar() {
   const theme = useTheme();
 
   return (
     <AppBar position="fixed" sx={{ boxShadow: theme.shadows[0] }}>
       <MuiToolbar
         sx={{
-          boxShadow: theme.shadows[1],
-          backgroundColor: theme.palette.background.default,
           px: theme.spacing(2.5),
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          backgroundColor: theme.palette.background.default,
         }}
         variant="dense"
         disableGutters
@@ -55,5 +55,3 @@ function Navbar() {
     </AppBar>
   );
 }
-
-export default Navbar;

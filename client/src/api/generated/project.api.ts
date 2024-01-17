@@ -168,6 +168,7 @@ export type CreateProjectInviteApiArg = {
   body: {
     userId: string;
     role: string;
+    workspaceId: string;
   };
 };
 export type Name = string;

@@ -1,16 +1,13 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { RefreshTokenEntity } from "../entities";
 import { RefreshTokenRepository } from "./interfaces/refresh-token-repository";
 
 export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly store: TypeormStore) {}
 
   save = async (token: RefreshTokenEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .insert()
       .into(RefreshTokenEntity)
@@ -21,7 +18,7 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   };
 
   existsById = async (id: string): Promise<boolean> => {
-    const result = await this.databaseService.query<{
+    const result = await this.store.query<{
       refreshTokenExistsById: boolean;
     }>("SELECT * FROM refresh_token_exists_by_id($1)", [id]);
 
@@ -29,7 +26,7 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   };
 
   findTokenById = async (id: string): Promise<RefreshTokenEntity> => {
-    const result = await this.databaseService.query<RefreshTokenEntity>(
+    const result = await this.store.query<RefreshTokenEntity>(
       "SELECT * FROM find_refresh_token_by_id($1)",
       [id],
     );
@@ -44,7 +41,7 @@ export class PostgresRefreshTokenRepository implements RefreshTokenRepository {
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .softDelete()
       .where("id=:id", { id });

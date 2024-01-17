@@ -3,29 +3,29 @@ import { Link } from "react-router-dom";
 
 import SidebarGroupItemContent from "../SidebarGroupItemContent";
 
-interface SidebarGroupItemProps {
-  avatarIcon?: JSX.Element;
+interface Props {
+  icon?: JSX.Element;
   label?: string;
   indicatorIcon?: JSX.Element;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   to?: string;
   isChild?: boolean;
   isVisible?: boolean;
 }
 
 export default function SidebarGroupItem({
-  avatarIcon,
+  icon,
   label,
   indicatorIcon,
   onClick,
   isChild,
   to,
   isVisible,
-}: SidebarGroupItemProps) {
+}: Props) {
   return to ? (
     <Link to={to} style={{ color: "inherit", textDecoration: "none" }}>
       <SidebarGroupItemContent
-        avatarIcon={avatarIcon}
+        icon={icon}
         label={label}
         indicatorIcon={indicatorIcon}
         onClick={onClick}
@@ -36,7 +36,7 @@ export default function SidebarGroupItem({
   ) : (
     <div>
       <SidebarGroupItemContent
-        avatarIcon={avatarIcon}
+        icon={icon}
         label={label}
         indicatorIcon={indicatorIcon}
         onClick={onClick}

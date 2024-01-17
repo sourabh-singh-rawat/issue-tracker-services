@@ -1,0 +1,28 @@
+patch:
+  tags: ["issue"]
+  summary: Updates the issue status  
+  parameters: 
+    - name: id
+      in: path
+      schema: 
+        type: string
+      description: Numeric id of the issue to get
+  operationId: updateIssueStatus
+  requestBody: 
+    content: 
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              $ref: ../../components/schemas/status.yaml
+  responses:
+    200:
+      description: Update issue status successfully
+    400:
+      description: Bad Request
+      content: 
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml      
+  

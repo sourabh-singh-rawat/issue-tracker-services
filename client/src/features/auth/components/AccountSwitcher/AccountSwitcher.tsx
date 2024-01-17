@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../../../common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 
 import MuiDivider from "@mui/material/Divider";
 import MuiLockTwoToneIcon from "@mui/icons-material/LockTwoTone";
@@ -12,29 +12,31 @@ import { useRevokeTokensMutation } from "../../../../api/generated/identity.api"
 import { useMessageBar } from "../../../message-bar/hooks";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
 import StyledList from "../../../../common/components/styled/StyledList";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../auth.slice";
+import apiSlice from "../../../../api/api.config";
 
 export default function AccountSwitcher() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { showSuccess } = useMessageBar();
   const [revokeTokens, { isSuccess }] = useRevokeTokensMutation();
+  const dispatch = useAppDispatch();
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const handleClose = () => setAnchorEl(null);
 
   const currentUser = useAppSelector((store) => store.auth.currentUser);
 
-  const handleClickAccountIcon = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = () => setAnchorEl(null);
-
   useEffect(() => {
-    if (isSuccess) {
-      showSuccess("Logged out");
-    }
+    if (isSuccess) showSuccess("Logged out");
   }, [isSuccess]);
 
   return (
     <>
-      <StyledIconButton onClick={handleClickAccountIcon} disableRipple>
+      <StyledIconButton onClick={handleClick} disableRipple>
         <Avatar variant="circular" label={currentUser?.displayName} />
       </StyledIconButton>
       <StyledMenu
@@ -47,6 +49,10 @@ export default function AccountSwitcher() {
           <MenuItem
             avatarIcon={<Avatar label={currentUser?.displayName} />}
             label={currentUser?.displayName}
+            onClick={() => {
+              navigate("/me");
+              handleClose();
+            }}
           />
         </StyledList>
         <MuiDivider />
@@ -56,6 +62,8 @@ export default function AccountSwitcher() {
             label="Logout"
             onClick={async () => {
               await revokeTokens();
+              dispatch(apiSlice.util.resetApiState());
+              dispatch(logout());
               handleClose();
             }}
           />

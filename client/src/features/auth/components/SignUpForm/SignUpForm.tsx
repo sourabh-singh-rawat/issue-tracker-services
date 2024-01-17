@@ -7,8 +7,8 @@ import AjvFormats from "ajv-formats";
 import { useMessageBar } from "../../../message-bar/hooks";
 import { useRegisterUserMutation } from "../../../../api/generated/user.api";
 
-import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
+import MuiContainer from "@mui/material/Container";
 import MuiTypography from "@mui/material/Typography";
 
 import TextField from "../../../../common/components/forms/TextField";
@@ -20,7 +20,6 @@ import openapi from "../../../../api/generated/openapi.json";
 export default function SignUpForm() {
   const [searchParams] = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
-  console.log(inviteToken);
   const [signup, { error, status }] = useRegisterUserMutation();
   const messageBar = useMessageBar();
 

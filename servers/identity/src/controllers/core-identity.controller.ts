@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { AuthCredentials } from "@sourabhrawatcc/core-utils";
 import { StatusCodes } from "http-status-codes";
 import { IdentityController } from "./interfaces/identity-controller";
-import { IdentityService } from "../services/interfaces/identity-service";
+import { IdentityService } from "../services/interfaces/identity.service";
 
 export class CoreIdentityController implements IdentityController {
   constructor(private readonly identityService: IdentityService) {}

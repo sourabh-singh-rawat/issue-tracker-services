@@ -1,12 +1,9 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { AccessTokenRepository } from "./interfaces/access-token-repository";
 import { AccessTokenEntity } from "../entities";
 
 export class PostgresAccessTokenRepository implements AccessTokenRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly store: TypeormStore) {}
 
   existsById(id: string): Promise<boolean> {
     console.log(id);
@@ -21,7 +18,7 @@ export class PostgresAccessTokenRepository implements AccessTokenRepository {
   save = async (token: AccessTokenEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .insert()
       .into(AccessTokenEntity)
@@ -38,7 +35,7 @@ export class PostgresAccessTokenRepository implements AccessTokenRepository {
   softDelete = async (id: string, options: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
 
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .delete()
       .from(AccessTokenEntity)

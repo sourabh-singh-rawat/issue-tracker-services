@@ -1,6 +1,5 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
@@ -27,9 +26,9 @@ function MemberList({ members, projectId }: MemberListProps) {
       renderCell: ({ value, row: { photoUrl } }) => (
         <Link
           style={{
-            textDecoration: "none",
             display: "flex",
             alignItems: "center",
+            textDecoration: "none",
           }}
           to={`/profile/${projectId}`}
         >
@@ -75,9 +74,9 @@ function MemberList({ members, projectId }: MemberListProps) {
 
   return (
     <List
-      columns={columns}
       rows={members}
       rowCount={members?.length}
+      columns={columns}
       // isLoading={isLoading}
     />
   );

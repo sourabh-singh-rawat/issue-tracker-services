@@ -23,6 +23,12 @@ export class ProjectMemberEntity extends AuditEntity {
   role!: ProjectRoles;
 
   @Column({
+    name: "workspace_id",
+    type: "uuid",
+  })
+  workspaceId!: string;
+
+  @Column({
     name: "invite_status",
     type: "text",
     default: ProjectInviteStatus.PENDING,

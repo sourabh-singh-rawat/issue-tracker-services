@@ -4,7 +4,7 @@ import {
   AccessToken,
   AuthCredentials,
   BaseToken,
-  DatabaseService,
+  TypeormStore,
   EmailNotVerifiedError,
   InvalidCredentialsError,
   JwtToken,
@@ -16,7 +16,7 @@ import {
   UserNotFoundError,
 } from "@sourabhrawatcc/core-utils";
 
-import { IdentityService } from "./interfaces/identity-service";
+import { IdentityService } from "./interfaces/identity.service";
 import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
 import { StatusCodes } from "http-status-codes";
 import { TokenOptions } from "./interfaces/token-options";
@@ -26,7 +26,7 @@ import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-
 
 export class CoreIdentityService implements IdentityService {
   constructor(
-    private readonly databaseService: DatabaseService,
+    private readonly store: TypeormStore,
     private readonly userRepository: UserRepository,
     private readonly accessTokenRepository: AccessTokenRepository,
     private readonly refreshTokenRepository: RefreshTokenRepository,
@@ -165,8 +165,8 @@ export class CoreIdentityService implements IdentityService {
     accessToken: AccessTokenEntity,
     refreshToken: RefreshTokenEntity,
   ) => {
-    const queryRunner = this.databaseService.createQueryRunner();
-    await this.databaseService.transaction(queryRunner, async (queryRunner) => {
+    const queryRunner = this.store.createQueryRunner();
+    await this.store.transaction(queryRunner, async (queryRunner) => {
       await this.accessTokenRepository.save(accessToken, { queryRunner });
       await this.refreshTokenRepository.save(refreshToken, { queryRunner });
     });

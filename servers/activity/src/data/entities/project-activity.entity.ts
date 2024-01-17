@@ -8,15 +8,21 @@ export class ProjectActivityEntity extends AuditEntity {
   })
   id!: string;
 
-  @Column({ type: "text" })
-  type!: ProjectActivity;
+  @Column({ name: "user_id", type: "uuid" })
+  userId!: string;
 
   @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
 
-  @Column({ name: "user_id", type: "uuid" })
-  userId!: string;
+  @Column({ type: "text" })
+  action!: ProjectActivity;
 
   @Column({ name: "timestamp", type: "timestamp with time zone" })
   timestamp!: Date;
+
+  @Column({ name: "old_value", type: "text", nullable: true })
+  oldValue?: string;
+
+  @Column({ name: "new_value", type: "text", nullable: true })
+  newValue?: string;
 }

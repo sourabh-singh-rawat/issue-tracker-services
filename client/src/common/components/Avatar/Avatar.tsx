@@ -10,6 +10,7 @@ interface AvatarProps {
   label?: string;
   photoUrl?: string;
   color?: string;
+  fontSize?: string;
 }
 
 export default function Avatar({
@@ -18,6 +19,7 @@ export default function Avatar({
   photoUrl,
   width = 22,
   height = 22,
+  fontSize,
 }: AvatarProps) {
   const theme = useTheme();
 
@@ -33,7 +35,7 @@ export default function Avatar({
         backgroundColor: theme.palette.primary.main,
       }}
     >
-      <MuiTypography fontWeight="600" textAlign="center">
+      <MuiTypography fontWeight="600" textAlign="center" fontSize={fontSize}>
         {label && label[0]}
       </MuiTypography>
     </MuiAvatar>

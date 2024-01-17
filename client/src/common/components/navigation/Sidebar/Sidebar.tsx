@@ -31,6 +31,7 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
       backgroundColor: theme.palette.background.paper,
     },
     "& .MuiDrawer-paper": {
+      borderRight: `1px solid ${theme.palette.divider}`,
       transition: theme.transitions.create(["width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -75,36 +76,38 @@ export default function Sidebar() {
       <MuiDivider />
       <StyledList disablePadding>
         <SidebarGroupItem
-          avatarIcon={<MuiGridViewTwoToneIcon />}
+          icon={<MuiGridViewTwoToneIcon />}
           to="/"
           label="Dashboard"
           isVisible={open}
         />
         <SidebarGroupItem
-          avatarIcon={<MuiArticleTwoToneIcon />}
+          icon={<MuiArticleTwoToneIcon />}
           to="/projects"
           label="Projects"
           isVisible={open}
         />
         <SidebarGroupItem
-          avatarIcon={<MuiPestControlTwoToneIcon />}
+          icon={<MuiPestControlTwoToneIcon />}
           to="/issues"
           label="Issues"
           isVisible={open}
         />
         <SidebarGroupItem
-          avatarIcon={<MuiAssignmentTurnedInTwoToneIcon />}
+          icon={<MuiAssignmentTurnedInTwoToneIcon />}
           to="/tasks"
           label="Tasks"
           isVisible={open}
         />
       </StyledList>
       <MuiDivider />
-      <SidebarGroup
-        label="Favourites"
-        isVisible={open}
-        avatarIcon={<MuiStarTwoToneIcon />}
-      />
+      <StyledList disablePadding>
+        <SidebarGroup
+          label="Favourites"
+          isVisible={open}
+          icon={<MuiStarTwoToneIcon />}
+        />
+      </StyledList>
     </Drawer>
   );
 }

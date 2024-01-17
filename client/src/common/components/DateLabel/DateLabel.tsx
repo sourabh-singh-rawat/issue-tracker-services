@@ -1,43 +1,24 @@
-import { enIN } from "date-fns/locale";
 import React from "react";
-import { formatRelative, parseISO } from "date-fns";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 import MuiChip from "@mui/material/Chip";
 import { useTheme } from "@mui/material/styles";
 
-const formatRelativeLocale = {
-  lastWeek: "'Last' eeee",
-  yesterday: "'Yesterday'",
-  today: "'Today'",
-  tomorrow: "'Tomorrow'",
-  nextWeek: "'Next' eeee",
-  other: "dd.MM.yyyy",
-};
+interface DateLabelProps {
+  dueDate: string;
+}
 
-const locale = {
-  ...enIN,
-  formatRelative: (token) => formatRelativeLocale[token],
-};
-
-function DueDateTag({ title, dueDate }) {
+export default function DateLabel({ dueDate }: DateLabelProps) {
   const theme = useTheme();
 
   return (
-    dueDate && (
-      <MuiChip
-        component="span"
-        label={formatRelative(parseISO(dueDate), new Date(), {
-          locale,
-        })}
-        size="small"
-        sx={{
-          borderRadius: "4px",
-          fontWeight: 500,
-          color: theme.palette.grey[600],
-        }}
-      />
-    )
+    <MuiChip
+      component="span"
+      label={dueDate ? dayjs(dueDate).fromNow() : "-"}
+      size="small"
+      sx={{ borderRadius: theme.shape.borderRadiusMedium }}
+    />
   );
 }
-
-export default DueDateTag;

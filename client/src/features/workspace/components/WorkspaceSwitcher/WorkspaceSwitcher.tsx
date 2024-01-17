@@ -8,21 +8,19 @@ import Avatar from "../../../../common/components/Avatar";
 import SidebarGroupItem from "../../../../common/components/navigation/SidebarGroupItem";
 import UnfoldMoreTwoToneIcon from "@mui/icons-material/UnfoldMoreTwoTone";
 
-interface WorkspaceSwitcherProps {
+interface Props {
   isLargeScreen: boolean;
 }
 
-export default function WorkspaceSwitcher({
-  isLargeScreen,
-}: WorkspaceSwitcherProps) {
-  const { data } = useGetAllWorkspacesQuery();
+export default function WorkspaceSwitcher({ isLargeScreen }: Props) {
+  const { data: workspaces } = useGetAllWorkspacesQuery();
   const { id, name } = useAppSelector((store) => store.auth.currentWorkspace);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedOption, setSelectedOption] = useState({ id, name });
 
-  const handleClickWorkspaceMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
   };
 
   const handleClose = () => setAnchorEl(null);
@@ -30,15 +28,15 @@ export default function WorkspaceSwitcher({
   return (
     <>
       <SidebarGroupItem
-        avatarIcon={<Avatar label={selectedOption?.name} />}
+        icon={<Avatar label={selectedOption?.name} />}
         label={selectedOption?.name}
-        onClick={handleClickWorkspaceMenu}
+        onClick={handleClick}
         indicatorIcon={<UnfoldMoreTwoToneIcon />}
         isVisible={isLargeScreen}
       />
       <WorkspaceMenu
         anchorEl={anchorEl}
-        options={data?.rows}
+        options={workspaces?.rows}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
         handleClose={handleClose}

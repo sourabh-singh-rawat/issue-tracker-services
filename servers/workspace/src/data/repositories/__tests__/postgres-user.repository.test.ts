@@ -1,4 +1,4 @@
-import { databaseService } from "../../../app/database-service";
+import { databaseService } from "../../../app/stores/postgres-typeorm.store";
 import { UserEntity } from "../../entities";
 import { UserRepository } from "../interface/user-repository";
 import { PostgresUserRepository } from "../postgres-user.repository";

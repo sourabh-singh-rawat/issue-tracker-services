@@ -1,4 +1,4 @@
-import { databaseService } from "../../../app/database-service";
+import { databaseService } from "../../../app/stores/postgres-typeorm.store";
 import { WorkspaceMemberEntity } from "../../entities/workspace-member.entity";
 import { WorkspaceMemberRepository } from "../interface/workspace-member";
 import { PostgresWorkspaceMemberRepository } from "../postgres-workspace-member.repository";

@@ -1,40 +1,45 @@
-/* eslint-disable react/prop-types */
-import { ImageListItem, Skeleton } from "@mui/material";
+import { ref, getDownloadURL } from "firebase/storage";
 import React, { useEffect, useState } from "react";
-import theme from "../../../../config/mui.config";
+import { ImageListItem, Skeleton, useTheme } from "@mui/material";
+import { storage } from "../../../../api/firebase.config";
 
-import { useGetIssueAttachmentQuery } from "../../issue-attachments.api";
+interface ImageCardProps {
+  path: string;
+}
 
-export default function ImageCard({ attachmentId, issueId }) {
-  const [signedUrl, setSignedUrl] = useState("");
+export default function ImageCard({ path }: ImageCardProps) {
+  const theme = useTheme();
+  const [src, setSrc] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data, isSuccess } = useGetIssueAttachmentQuery({
-    issueId,
-    attachmentId,
-  });
+  // const { data, isSuccess } = useGetIssueAttachmentQuery({
+  //   issueId,
+  //   attachmentId,
+  // });
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    if (isSuccess) {
+    (async () => {
+      const url = await getDownloadURL(ref(storage, path));
+      setSrc(url);
+
       setIsLoading(false);
-      setSignedUrl(data.signedUrl);
-    }
-  }, [data]);
+    })();
+  }, []);
 
   return (
-    <ImageListItem>
+    <ImageListItem
+      sx={{
+        overflow: "hidden",
+        borderRadius: theme.shape.borderRadiusLarge,
+
+        height: "100%",
+        width: "100%",
+      }}
+    >
       {isLoading ? (
-        <Skeleton height="100%" width="100%" />
+        <Skeleton />
       ) : (
-        <img
-          alt="imageTag"
-          height="100%"
-          loading="lazy"
-          src={signedUrl}
-          style={{ borderRadius: theme.shape.borderRadiusLarge }}
-          width="100%"
-        />
+        <img alt="imageTag" loading="lazy" src={src} />
       )}
     </ImageListItem>
   );

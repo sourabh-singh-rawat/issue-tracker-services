@@ -1,7 +1,6 @@
 import {
   Consumers,
-  MessageService,
-  ProjectActivity,
+  NatsMessenger,
   ProjectPayload,
   Streams,
   Subscriber,
@@ -14,17 +13,21 @@ export class ProjectUpdatedSubscriber extends Subscriber<ProjectPayload> {
   readonly consumer = Consumers.ProjectUpdatedConsumerActivity;
 
   constructor(
-    private messageService: MessageService,
+    private messenger: NatsMessenger,
     private projectActivityService: ProjectActivityService,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: ProjectPayload) => {
-    const { name } = payload;
+    const { name, description, status, startDate, endDate } = payload;
 
     if (name) {
       await this.projectActivityService.logProjectNameUpdated(payload);
+    }
+
+    if (description) {
+      await this.projectActivityService.logProjectDescriptionUpdated(payload);
     }
     message.ack();
     console.log("Message processing completed");

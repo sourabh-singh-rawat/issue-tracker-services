@@ -1,20 +1,17 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { WorkspaceMemberInviteEntity } from "../entities/workspace-member-invite.entity";
 import { WorkspaceMemberInviteRepository } from "./interface/workspace-member-invite.repository";
 
 export class PostgresWorkspaceMemberInviteRepository
   implements WorkspaceMemberInviteRepository
 {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly store: TypeormStore) {}
 
   save = async (
     invite: WorkspaceMemberInviteEntity,
     options?: QueryBuilderOptions,
   ) => {
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(options?.queryRunner)
       .insert()
       .into(WorkspaceMemberInviteEntity)

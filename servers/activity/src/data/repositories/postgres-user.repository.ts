@@ -1,16 +1,13 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "./interfaces/user.repository";
 
 export class PostgresUserRepository implements UserRepository {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private readonly postgresTypeormStore: TypeormStore) {}
 
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .insert()
       .into(UserEntity)
@@ -26,7 +23,7 @@ export class PostgresUserRepository implements UserRepository {
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .update(UserEntity)
       .set(updatedUser)
@@ -36,7 +33,7 @@ export class PostgresUserRepository implements UserRepository {
   };
 
   findById = async (id: string) => {
-    const result = await this.databaseService.query<UserEntity>(
+    const result = await this.postgresTypeormStore.query<UserEntity>(
       "SELECT * FROM find_user_by_id($1)",
       [id],
     );
@@ -50,7 +47,7 @@ export class PostgresUserRepository implements UserRepository {
    * @returns true if user exists, false otherwise
    */
   existsById = async (id: string): Promise<boolean> => {
-    const result = await this.databaseService.query<{
+    const result = await this.postgresTypeormStore.query<{
       userExistsById: boolean;
     }>("SELECT * FROM user_exists_by_id($1)", [id]);
 

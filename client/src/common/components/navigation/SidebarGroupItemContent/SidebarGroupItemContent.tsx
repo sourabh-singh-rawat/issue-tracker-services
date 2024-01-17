@@ -5,10 +5,10 @@ import MuiTypography from "@mui/material/Typography";
 import StyledListItemIcon from "../../styled/StyledListItemIcon";
 import StyledListItemButton from "../../styled/StyledListItemButton";
 
-export interface SidebarGroupItemContentProps {
+export interface Props {
   label?: string;
-  avatarIcon?: JSX.Element;
-  onClick?: () => void;
+  icon?: JSX.Element;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   indicatorIcon?: JSX.Element;
   isChild?: boolean;
   isVisible?: boolean;
@@ -16,17 +16,17 @@ export interface SidebarGroupItemContentProps {
 
 export default function SidebarGroupItemContent({
   label,
-  avatarIcon,
+  icon,
   onClick,
   indicatorIcon,
   isChild,
   isVisible,
-}: SidebarGroupItemContentProps) {
+}: Props) {
   const theme = useTheme();
 
   return (
     <StyledListItemButton onClick={onClick} disableRipple>
-      <StyledListItemIcon>{avatarIcon}</StyledListItemIcon>
+      <StyledListItemIcon>{icon}</StyledListItemIcon>
       <MuiTypography
         sx={{
           ml: 1,
@@ -40,6 +40,7 @@ export default function SidebarGroupItemContent({
           backgroundColor: "transparent",
         }}
         variant={isChild ? "body2" : "body2"}
+        noWrap
       >
         {label}
       </MuiTypography>

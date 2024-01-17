@@ -20,8 +20,8 @@ export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   }
 
   onMessage = async (message: JsMsg, payload: UserUpdatedPayload) => {
-    const { userId, defaultWorkspaceId, version } = payload;
-    await this.userService.updateUser(userId, defaultWorkspaceId, version);
+    const { id, defaultWorkspaceId, version } = payload;
+    await this.userService.updateUser(id, defaultWorkspaceId, version);
     message.ack();
     console.log("Message processing completed");
   };

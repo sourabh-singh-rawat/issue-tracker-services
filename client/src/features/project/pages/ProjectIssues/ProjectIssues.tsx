@@ -8,12 +8,12 @@ import AddIssueButton from "../../../issue/components/AddIssueButton";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 
 export default function ProjectIssues() {
-  const { selectedTab, id } = useSelectedTab();
   const theme = useTheme();
+  const { selectedTab, id } = useSelectedTab();
 
   return (
     <TabPanel index={1} selectedTab={selectedTab}>
-      <MuiGrid container sx={{ py: theme.spacing(2) }}>
+      <MuiGrid container sx={{ py: theme.spacing(2) }} rowSpacing={2}>
         <MuiGrid xs={12} item>
           <MuiGrid container>
             <MuiGrid item>{/* <IssuePriorityFilter /> */}</MuiGrid>

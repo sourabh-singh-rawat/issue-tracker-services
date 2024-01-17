@@ -1,7 +1,12 @@
-import { WorkspaceInvitePayload } from "@sourabhrawatcc/core-utils";
+import {
+  ProjectMemberPayload,
+  UserCreatedPayload,
+  WorkspaceInvitePayload,
+} from "@sourabhrawatcc/core-utils";
 
 export interface EmailService {
-  createSentEmail(receiverEmail: string): Promise<void>;
   createInviteToken(payload: WorkspaceInvitePayload): string;
+  sendVerificationEmail(payload: UserCreatedPayload): Promise<void>;
   sendWorkspaceInvitation(payload: WorkspaceInvitePayload): Promise<void>;
+  sendProjectInvitation(payload: ProjectMemberPayload): Promise<void>;
 }

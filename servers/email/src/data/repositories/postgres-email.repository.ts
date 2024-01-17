@@ -1,16 +1,13 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { EmailEntity } from "../entities/email.entity";
 import { EmailRepository } from "./interfaces/email.repository";
 
 export class PostgresEmailRepository implements EmailRepository {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private readonly store: TypeormStore) {}
 
   save = async (sentEmail: EmailEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .insert()
       .into(EmailEntity)
@@ -22,6 +19,15 @@ export class PostgresEmailRepository implements EmailRepository {
 
   existsById = async (id: string) => {
     throw new Error("Method not implemented.");
+  };
+
+  findByEmail = async (id: string) => {
+    const result = await this.store.query<EmailEntity>(
+      "SELECT * FROM find_by_email($1)",
+      [id],
+    );
+
+    return result[0] as EmailEntity | null;
   };
 
   softDelete = async (id: string, options?: QueryBuilderOptions) => {

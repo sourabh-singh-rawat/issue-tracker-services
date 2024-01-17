@@ -1,13 +1,13 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { serviceContainer } from "../app/service-container";
+import { container } from "../app/containers";
 
 export const projectActivityRoutes = (
   fastify: FastifyInstance,
   fastifyOptions: {},
   done: () => void,
 ) => {
-  const controller = serviceContainer.get("projectActivityController");
+  const controller = container.get("projectActivityController");
   const { requireTokens, setCurrentUser, requireAuth, requireNoAuth } = Auth;
   const auth: RouteShorthandOptions = {
     preHandler: [requireTokens, setCurrentUser, requireAuth],

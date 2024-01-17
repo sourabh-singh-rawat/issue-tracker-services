@@ -16,7 +16,7 @@ function Label({ id, title, isLoading }: LabelInputs) {
       {isLoading ? (
         <MuiSkeleton width="20%" />
       ) : (
-        <MuiTypography variant="body1" fontWeight="500">
+        <MuiTypography variant="body2" fontWeight="500">
           {title}
         </MuiTypography>
       )}

@@ -1,11 +1,29 @@
 import { apiSlice as api } from "../api.config";
-export const addTagTypes = ["issue", "comment"] as const;
+export const addTagTypes = ["attachment", "issue", "comment"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
   })
   .injectEndpoints({
     endpoints: (build) => ({
+      createIssueAttachment: build.mutation<
+        CreateIssueAttachmentApiResponse,
+        CreateIssueAttachmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/attachments/issues/${queryArg.id}`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["attachment"],
+      }),
+      getIssueAttachmentList: build.query<
+        GetIssueAttachmentListApiResponse,
+        GetIssueAttachmentListApiArg
+      >({
+        query: (queryArg) => ({ url: `/attachments/issues/${queryArg.id}` }),
+        providesTags: ["attachment"],
+      }),
       getIssueList: build.query<GetIssueListApiResponse, GetIssueListApiArg>({
         query: (queryArg) => ({
           url: `/issues`,
@@ -48,6 +66,28 @@ const injectedRtkApi = api
       updateIssue: build.mutation<UpdateIssueApiResponse, UpdateIssueApiArg>({
         query: (queryArg) => ({
           url: `/issues/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["issue"],
+      }),
+      updateIssueStatus: build.mutation<
+        UpdateIssueStatusApiResponse,
+        UpdateIssueStatusApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/issues/${queryArg.id}/status`,
+          method: "PATCH",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["issue"],
+      }),
+      updateIssueResolution: build.mutation<
+        UpdateIssueResolutionApiResponse,
+        UpdateIssueResolutionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/issues/${queryArg.id}/resolution`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -114,6 +154,22 @@ const injectedRtkApi = api
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
+export type CreateIssueAttachmentApiResponse =
+  /** status 201 Created a new issue attachment */ undefined;
+export type CreateIssueAttachmentApiArg = {
+  /** The numeric Id of the issue */
+  id?: string;
+  body: string;
+};
+export type GetIssueAttachmentListApiResponse =
+  /** status 200 List of issue attachments */ {
+    rows: any;
+    filteredRowCount?: number;
+  };
+export type GetIssueAttachmentListApiArg = {
+  /** The numeric Id of the issue */
+  id?: string;
+};
 export type GetIssueListApiResponse = /** status 200 A list of issues */ {
   rows: any;
   filteredRowCount: number;
@@ -184,6 +240,24 @@ export type UpdateIssueApiArg = {
     dueDate?: DueDate;
   };
 };
+export type UpdateIssueStatusApiResponse =
+  /** status 200 Update issue status successfully */ undefined;
+export type UpdateIssueStatusApiArg = {
+  /** Numeric id of the issue to get */
+  id?: string;
+  body: {
+    status?: Status;
+  };
+};
+export type UpdateIssueResolutionApiResponse =
+  /** status 200 Update issue resolution successfully */ undefined;
+export type UpdateIssueResolutionApiArg = {
+  /** Numeric id of the issue to get */
+  id?: string;
+  body: {
+    resolution?: boolean;
+  };
+};
 export type CreateIssueCommentApiResponse =
   /** status 201 The comment has been created successfully */ undefined;
 export type CreateIssueCommentApiArg = {
@@ -194,7 +268,10 @@ export type CreateIssueCommentApiArg = {
   };
 };
 export type GetIssueCommentListApiResponse =
-  /** status 200 List of all the issue comments */ undefined;
+  /** status 200 List of all the issue comments */ {
+    rows: any;
+    filteredRowCount: number;
+  };
 export type GetIssueCommentListApiArg = {
   /** Numeric id of the issue who's comments will be returned */
   id?: string;
@@ -253,12 +330,16 @@ export type Assignees = {
 }[];
 export type DueDate = string | string;
 export const {
+  useCreateIssueAttachmentMutation,
+  useGetIssueAttachmentListQuery,
   useGetIssueListQuery,
   useCreateIssueMutation,
   useGetIssueStatusListQuery,
   useGetIssuePriorityListQuery,
   useGetIssueQuery,
   useUpdateIssueMutation,
+  useUpdateIssueStatusMutation,
+  useUpdateIssueResolutionMutation,
   useCreateIssueCommentMutation,
   useGetIssueCommentListQuery,
   useDeleteIssueCommentMutation,

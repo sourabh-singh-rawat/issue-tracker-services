@@ -19,12 +19,14 @@ export interface ProjectService {
     projectId: string,
     role: ProjectRoles,
     invitedBy: string,
+    workspaceId: string,
   ): Promise<void>;
   createProjectMember(
     userId: string,
     projectId: string,
     role: ProjectRoles,
     invitedBy: string,
+    workspaceId: string,
   ): Promise<void>;
   confirmProjectInvite(token: string): Promise<ServiceResponse<string>>;
   getProjectStatusList(): ServiceResponse<ProjectStatus[]>;
@@ -38,7 +40,8 @@ export interface ProjectService {
     projectId: string,
   ): Promise<ServiceResponse<ProjectMember[]>>;
   getWorkspaceMemberList(
-    workspaceId: string,
+    userId: string,
+    projectId: string,
   ): Promise<ServiceResponse<UserEntity[]>>;
   updateProject(id: string, updatables: ProjectFormData): Promise<void>;
 }

@@ -8,7 +8,7 @@ const StyledListItemButton = styled(MuiListItemButton)(({ theme }) => ({
     paddingLeft: theme.spacing(1.5),
     paddingRight: theme.spacing(1.5),
     borderRadius: theme.shape.borderRadiusMedium,
-    height: theme.spacing(5),
+    height: theme.spacing(4),
   },
   "&.MuiListItemButton-root:hover": {
     backgroundColor: theme.palette.action.hover,

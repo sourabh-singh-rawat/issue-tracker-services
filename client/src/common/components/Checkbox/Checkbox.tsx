@@ -15,7 +15,6 @@ export default function Checkbox({
     <MuiCheckbox
       checked={checked}
       onClick={handleCheckBoxClick}
-      sx={{ padding: 0 }}
       disableRipple
     />
   );

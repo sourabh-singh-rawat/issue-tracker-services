@@ -1,13 +1,13 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { serviceContainer } from "../app/service-container";
+import { container } from "../app/containers/awilix.container";
 
 export const userRoutes = (
   fastify: FastifyInstance,
   fastifyOptions: {},
   done: () => void,
 ) => {
-  const controller = serviceContainer.get("userController");
+  const controller = container.get("userController");
   const { requireTokens, setCurrentUser, requireAuth, requireNoAuth } = Auth;
   const noAuth: RouteShorthandOptions = { preHandler: [requireNoAuth] };
   const auth: RouteShorthandOptions = {
@@ -18,6 +18,7 @@ export const userRoutes = (
   fastify.post("/verify-password", controller.verifyPassword);
   fastify.post("/default-workspace", auth, controller.setDefaultWorkspace);
   fastify.get("/me", auth, controller.getCurrentUser);
+  fastify.get("/:id/confirm", controller.verifyEmail);
 
   done();
 };

@@ -20,7 +20,6 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
     () => ({ name: "Workspace Name", description: "" }),
     [],
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
       openapi.paths["/workspaces"].post.requestBody.content["application/json"]

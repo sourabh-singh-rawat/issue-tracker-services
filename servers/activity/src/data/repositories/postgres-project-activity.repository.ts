@@ -1,21 +1,18 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { ProjectActivityEntity } from "../entities";
 import { ProjectActivityRepository } from "./interfaces/project-activity.repository";
 
 export class PostgresProjectActivityRepository
   implements ProjectActivityRepository
 {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly postgresTypeormStore: TypeormStore) {}
 
   save = async (
     activity: ProjectActivityEntity,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .insert()
       .into(ProjectActivityEntity)
@@ -30,7 +27,7 @@ export class PostgresProjectActivityRepository
   }
 
   findActivityByProjectId = async (id: string) => {
-    const result = await this.databaseService.query<ProjectActivityEntity>(
+    const result = await this.postgresTypeormStore.query<ProjectActivityEntity>(
       "SELECT * FROM find_project_activity_by_project_id($1)",
       [id],
     );

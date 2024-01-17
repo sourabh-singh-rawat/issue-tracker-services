@@ -1,12 +1,9 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { WorkspaceEntity } from "../entities";
 import { WorkspaceRepository } from "./interface/workspace-repository";
 
 export class PostgresWorkspaceRepository implements WorkspaceRepository {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private store: TypeormStore) {}
 
   /**
    * Creates a new workspace
@@ -16,7 +13,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
    */
   save = async (workspace: WorkspaceEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .insert()
       .into(WorkspaceEntity)
@@ -32,7 +29,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
    * @returns boolean indicating if workspace exists
    */
   existsById = async (id: string) => {
-    const result = await this.databaseService.query<{
+    const result = await this.store.query<{
       workspaceExistsById: boolean;
     }>("SELECT * FROM workspace_exists_by_id($1)", [id]);
 
@@ -44,7 +41,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
    * @param id
    */
   findById = async (id: string) => {
-    const result = await this.databaseService.query<WorkspaceEntity>(
+    const result = await this.store.query<WorkspaceEntity>(
       "SELECT * FROM find_workspace_by_id($1)",
       [id],
     );
@@ -53,7 +50,7 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
   };
 
   find = async (userId: string) => {
-    const result = await this.databaseService.query<WorkspaceEntity>(
+    const result = await this.store.query<WorkspaceEntity>(
       "SELECT * FROM find_workspaces_by_user_id($1)",
       [userId],
     );

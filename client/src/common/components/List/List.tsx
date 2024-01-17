@@ -11,7 +11,7 @@ import { styled } from "@mui/material/styles";
 const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
   border: "none",
   ".MuiDataGrid-row": {
-    ":hover": { backgroundColor: theme.palette.action.hover },
+    ":hover": { backgroundColor: theme.palette.background.default },
   },
   ".MuiDataGrid-cell": {
     color: theme.palette.text.primary,
@@ -19,7 +19,9 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
   },
   ".MuiDataGrid-columnHeader": {},
   ".MuiDataGrid-columnHeaders": {
-    borderBottom: `1px solid ${theme.palette.divider}`,
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadiusLarge,
+    backgroundColor: theme.palette.background.paper,
   },
   ".MuiDataGrid-columnSeparator": {
     display: "none",
@@ -66,6 +68,7 @@ export default function List({
       rows={rows}
       rowCount={rowCountState}
       rowHeight={40}
+      columnHeaderHeight={44}
       pageSizeOptions={[2, 10, 20, 50, 100]}
       paginationMode="server"
       paginationModel={paginationModel}

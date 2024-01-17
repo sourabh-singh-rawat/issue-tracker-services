@@ -8,8 +8,12 @@ import {
   UserProfileNotFoundError,
   UserDetails,
   TransactionExecutionError,
-  DatabaseService,
-  MessageService,
+  TypeormStore,
+  Messenger,
+  UserCreatedPayload,
+  JwtToken,
+  InternalServerError,
+  NotFoundError,
 } from "@sourabhrawatcc/core-utils";
 import { UserService } from "./interface/user.service";
 import { UserEntity } from "../data/entities/user.entity";
@@ -21,8 +25,8 @@ import { UserProfileRepository } from "../data/repositories/interfaces/user-prof
 
 export class CoreUserService implements UserService {
   constructor(
-    private readonly databaseService: DatabaseService,
-    private readonly messageService: MessageService,
+    private readonly store: TypeormStore,
+    private readonly messenger: Messenger,
     private readonly userRepository: UserRepository,
     private readonly userProfileRepository: UserProfileRepository,
     private readonly userCreatedPublisher: UserCreatedPublisher,
@@ -75,8 +79,8 @@ export class CoreUserService implements UserService {
     newUser.defaultWorkspaceName = "Default Workspace";
 
     // Create user and their profile
-    const queryRunner = this.databaseService.createQueryRunner();
-    const result = await this.databaseService.transaction(
+    const queryRunner = this.store.createQueryRunner();
+    const result = await this.store.transaction(
       queryRunner,
       async (queryRunner) => {
         const savedUser = await this.userRepository.save(newUser, {
@@ -99,9 +103,7 @@ export class CoreUserService implements UserService {
       },
     );
 
-    if (!result) {
-      throw new TransactionExecutionError("User creation failed");
-    }
+    if (!result) throw new TransactionExecutionError("User creation failed");
 
     const { savedUser, savedUserProfile } = result;
 
@@ -130,9 +132,10 @@ export class CoreUserService implements UserService {
 
     // publish user updated
     this.userUpdatedPublisher.publish({
-      userId,
+      id: userId,
       defaultWorkspaceId: id,
       version: user.version,
+      isEmailVerified: user.isEmailVerified,
     });
   };
 
@@ -151,6 +154,30 @@ export class CoreUserService implements UserService {
 
     const isHashValid = await Hash.verify(passwordHash, passwordSalt, password);
     if (!isHashValid) throw new UnauthorizedError();
+  };
+
+  /**
+   * Verifies user email token, updates the status in the table
+   * @param token
+   */
+  verifyEmail = async (token: string) => {
+    let verifiedToken: UserCreatedPayload;
+
+    try {
+      verifiedToken = JwtToken.verify(token, process.env.JWT_SECRET!);
+    } catch (error) {
+      throw new InternalServerError("Token verification failed");
+    }
+
+    const { userId } = verifiedToken;
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError("User not found");
+
+    const updatedUser = new UserEntity();
+    updatedUser.isEmailVerified = true;
+
+    await this.userRepository.update(userId, updatedUser);
+    await this.userUpdatedPublisher.publish(user);
   };
 
   /**

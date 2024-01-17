@@ -4,7 +4,7 @@ import React from "react";
 import MuiButton from "@mui/material/Button";
 import MuiGoogleIcon from "@mui/icons-material/Google";
 import { styled } from "@mui/material/styles";
-import theme from "../../../app/theme.config";
+import theme from "../../../app/themes/mui.theme";
 
 const StyledButton = styled(MuiButton)(() => ({
   fontWeight: 600,

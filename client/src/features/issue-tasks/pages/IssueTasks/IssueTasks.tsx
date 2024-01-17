@@ -1,38 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 
-import TabPanel from "../../../../common/components/TabPanel";
-import TaskList from "../../components/TaskList";
-
-import { setTasks } from "../../issue-tasks.slice";
-import { useGetIssueTaskListQuery } from "../../../../api/generated/issue.api";
-import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import { useTheme } from "@mui/material";
+import TaskList from "../../components/TaskList";
+import TabPanel from "../../../../common/components/TabPanel";
+
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
+import { useGetIssueTaskListQuery } from "../../../../api/generated/issue.api";
 
 export default function IssueTasks() {
   const theme = useTheme();
-  const dispatch = useDispatch();
   const { id, selectedTab } = useSelectedTab();
 
-  const {
-    data: taskList,
-    isSuccess,
-    isLoading,
-  } = useGetIssueTaskListQuery({ id });
-
-  useEffect(() => {
-    if (isSuccess && taskList) {
-      dispatch(setTasks(taskList.rows));
-    }
-  }, [taskList]);
+  const { data: taskList, isLoading } = useGetIssueTaskListQuery({ id });
 
   return (
     <TabPanel index={1} selectedTab={selectedTab} sx={{ py: theme.spacing(2) }}>
-      <TaskList
-        rows={taskList?.rows}
-        rowCount={taskList?.rowCount}
-        isLoading={isLoading}
-      />
+      <TaskList rows={taskList?.rows} isLoading={isLoading} />
     </TabPanel>
   );
 }

@@ -1,5 +1,5 @@
 import {
-  MessageService,
+  Messenger,
   Publisher,
   Subjects,
   UserCreatedPayload,
@@ -11,7 +11,7 @@ export class UserCreatedPublisher extends Publisher<{
 }> {
   subject = Subjects.USER_CREATED;
 
-  constructor(messageService: MessageService) {
-    super(messageService.client);
+  constructor(messenger: Messenger) {
+    super(messenger.client);
   }
 }
