@@ -1,0 +1,58 @@
+post:
+  parameters:
+    - name: id
+      in: path
+      description: The numeric Id of the issue
+      schema: 
+        type: string
+  tags:
+    - attachment
+  operationId: createIssueAttachment
+  summary: Create a new issue attachment
+  description: Create a new issue attachment
+  requestBody: 
+    content:
+      multipart/form-data:
+        schema: 
+          type: string
+  responses:
+    201:
+      description: Created a new issue attachment
+    400:
+      description: The request contains invalid body paramaters
+    401:
+      description: User credentials are invalid
+    403:
+      description: User may be blocked
+    429:
+      description: User is blocked for sending too many request
+    500:
+      description: Something went wrong
+      $ref: ..\..\components\schemas\responses\internal-server-error.yaml
+get: 
+  parameters:
+    - name: id
+      in: path
+      description: The numeric Id of the issue
+      schema: 
+        type: string
+  tags:
+    - attachment
+  operationId: getIssueAttachmentList
+  summary: Get issue attachment list
+  description: Get issue attachment list
+  responses: 
+    200:
+      description: List of issue attachments
+      content: 
+        application/json:
+          schema: 
+            type: object
+            properties:
+              rows:
+                type: array
+              filteredRowCount:
+                type: number
+            required: [ "rows", "rowCount" ]
+    400:
+      description: The request contains invalid body paramaters

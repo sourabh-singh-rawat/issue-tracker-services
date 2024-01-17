@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Modal from "../../../../common/components/Modal";
 import ModalHeader from "../../../../common/components/ModalHeader";
 import ModalBody from "../../../../common/components/ModalBody";
@@ -13,7 +13,7 @@ import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
 import Avatar from "../../../../common/components/Avatar";
 
-import { useAppSelector } from "../../../../common/hooks";
+import { useSelectedTab } from "../../../../common/hooks";
 import { useGetWorkspaceMemberListQuery } from "../../../../api/generated/workspace.api";
 import RoleSelector from "../RoleSelector";
 
@@ -26,10 +26,10 @@ export default function AddProjectMemberModal({
   open,
   handleClose,
 }: AddProjectMemberModalProps) {
-  const workspaceId = useAppSelector((store) => store.auth.currentWorkspace.id);
+  const { id } = useSelectedTab();
 
   const { data: workspaceMemberList } = useGetWorkspaceMemberListQuery({
-    id: workspaceId,
+    id,
   });
 
   return (
@@ -42,15 +42,24 @@ export default function AddProjectMemberModal({
       <ModalBody>
         <MuiList dense>
           {workspaceMemberList?.rows?.map(
-            ({ id, displayName, email, createdAt, isMember, role }) => (
+            ({
+              id,
+              displayName,
+              email,
+              createdAt,
+              role,
+              workspaceId,
+              inviteStatus,
+            }) => (
               <MuiListItem
                 xs={12}
                 key={id}
                 secondaryAction={
                   <RoleSelector
                     defaultRole={role}
-                    isMember={isMember}
+                    inviteStatus={inviteStatus}
                     userId={id}
+                    workspaceId={workspaceId}
                   />
                 }
                 item

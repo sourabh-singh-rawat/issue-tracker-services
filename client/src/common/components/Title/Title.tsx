@@ -20,9 +20,9 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
     fontSize: theme.typography.h4.fontSize,
     fontWeight: "bold",
     backgroundColor: "transparent",
+    borderRadius: theme.shape.borderRadiusMedium,
     "& fieldset": {
       border: "2px solid transparent",
-      borderRadius: theme.shape.borderRadiusMedium,
     },
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
@@ -33,7 +33,6 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
       borderColor: theme.palette.primary.main,
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
     },
-    borderRadius: theme.shape.borderRadiusMedium,
     transition: theme.transitions.create([
       "border-color",
       "background-color",

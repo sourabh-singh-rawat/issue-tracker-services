@@ -1,25 +1,20 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
 import LoginForm from "../../components/LoginForm";
+
+import { useTheme } from "@mui/material";
 import { useAppSelector } from "../../../../common/hooks";
 
-// import continueWithGoogle from "../../../../utils/firebase/continue-with-google.utils";
-// import handleRedirectedAuth from "../../../../utils/firebase/handle-redirect.firebase.util";
-// import { setCredentials } from "../../auth.slice";
-// import { onAuthStateChangedListener } from "../../../../config/firebase.config";
-// import GoogleButton from "../../../../common/GoogleButton/GoogleButton";
-
-function Login() {
+export default function Login() {
+  const theme = useTheme();
   const navigate = useNavigate();
-  const currentUser = useAppSelector((store) => store.auth.currentUser);
+  const currentUser = useAppSelector(({ auth }) => auth.currentUser);
 
   useEffect(() => {
-    if (currentUser) {
-      navigate("/");
-    }
+    if (currentUser) navigate("/");
   }, [currentUser]);
 
   return (
@@ -29,9 +24,14 @@ function Login() {
           <LoginForm />
         </MuiGrid>
         <MuiGrid item xs={6}></MuiGrid>
+        <MuiGrid
+          item
+          xs={6}
+          sx={{ px: theme.spacing(3), pt: theme.spacing(1) }}
+        >
+          Don't have an account? <Link to="/signup">Sign up</Link>
+        </MuiGrid>
       </MuiGrid>
     </MuiContainer>
   );
 }
-
-export default Login;

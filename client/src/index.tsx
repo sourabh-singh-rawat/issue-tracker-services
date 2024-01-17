@@ -5,17 +5,14 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 
-import store from "./app/store.config";
-import { theme } from "./app/theme.config";
+import { theme } from "./app/themes/mui.theme";
+import { store } from "./app/stores/redux.store";
 
 import App from "./app/App";
 import MessageBar from "./features/message-bar/components/MessageBar";
 
 const element = document.getElementById("root");
-
-if (!element) {
-  throw new Error("Cannot find root element in DOM");
-}
+if (!element) throw new Error("Cannot find root element in DOM");
 
 const root = createRoot(element);
 

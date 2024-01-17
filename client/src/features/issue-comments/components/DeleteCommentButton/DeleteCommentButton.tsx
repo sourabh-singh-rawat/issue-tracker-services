@@ -8,9 +8,7 @@ import MuiDialogContentText from "@mui/material/DialogContentText";
 import MuiDialogTitle from "@mui/material/DialogTitle";
 import MuiTypography from "@mui/material/Typography";
 
-import { setLoadingComments } from "../../issue-comments.slice";
 import { useTheme } from "@mui/material";
-import { useAppDispatch } from "../../../../common/hooks";
 import CancelButton from "../../../../common/components/CancelButton";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import { useDeleteIssueCommentMutation } from "../../../../api/generated/issue.api";
@@ -22,7 +20,6 @@ interface DeleteCommentButtonProps {
 
 function DeleteCommentButton({ id, commentId }: DeleteCommentButtonProps) {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [deleteCommentMutation] = useDeleteIssueCommentMutation();
 
@@ -64,7 +61,6 @@ function DeleteCommentButton({ id, commentId }: DeleteCommentButtonProps) {
             label="Delete"
             onClick={() => {
               handleClose();
-              dispatch(setLoadingComments());
               handleDelete();
             }}
           />

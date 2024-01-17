@@ -1,7 +1,7 @@
 import {
   Consumers,
   TypeormStore,
-  NatsMessenger,
+  Messenger,
   Streams,
   Subscriber,
   WorkspaceCreatedPayload,
@@ -17,7 +17,7 @@ export class WorkspaceCreatedSubscriber extends Subscriber<WorkspaceCreatedPaylo
   readonly consumer = Consumers.WorkspaceCreatedConsumerProject;
 
   constructor(
-    private messenger: NatsMessenger,
+    private messenger: Messenger,
     private workspaceRepository: WorkspaceRepository,
     private postgresTypeormStore: TypeormStore,
     private workspaceMemberRepository: WorkspaceMemberRepository,

@@ -10,6 +10,7 @@ import {
   UserAlreadyExists,
   IssuePermissions,
   ProjectPermissions,
+  ConflictError,
 } from "@sourabhrawatcc/core-utils";
 import { IssueService } from "./interfaces/issue.service";
 import { IssueRepository } from "../data/repositories/interfaces/issue.repository";
@@ -19,6 +20,7 @@ import { IssueCommentRepository } from "../data/repositories/interfaces/issue-co
 import { CasbinIssueGuardian } from "../app/guardians/casbin/casbin-issue.guardian";
 import { QueryRunner } from "typeorm";
 import { CasbinProjectGuardian } from "../app/guardians/casbin/casbin-project.guardian";
+import { IssueCreatedPublisher } from "../messages/publishers/issue-created.publisher";
 
 export class CoreIssueService implements IssueService {
   constructor(
@@ -28,11 +30,30 @@ export class CoreIssueService implements IssueService {
     private issueAssigneeRepository: IssueAssigneeRepository,
     private issueGuardian: CasbinIssueGuardian,
     private projectGuardian: CasbinProjectGuardian,
+    private issueCreatedPublisher: IssueCreatedPublisher,
   ) {}
 
   private getStatuses = () => Object.values(IssueStatus);
 
   private getPriorities = () => Object.values(IssuePriority);
+
+  private createAssignee = async (
+    userId: string,
+    id: string,
+    queryRunner: QueryRunner,
+  ) => {
+    const newAssignee = new IssueAssigneeEntity();
+    newAssignee.issueId = id;
+    newAssignee.userId = userId;
+
+    await this.issueAssigneeRepository.save(newAssignee, { queryRunner });
+    await this.issueGuardian.createAssignee(userId, id);
+  };
+
+  private isArchived = async (id: string) => {
+    const isArchived = await this.issueRepository.isIssueArchived(id);
+    if (isArchived) throw new ConflictError("Issue is archived");
+  };
 
   createIssue = async (userId: string, issueFormData: IssueFormData) => {
     const {
@@ -88,22 +109,10 @@ export class CoreIssueService implements IssueService {
       throw new TransactionExecutionError("Failed to save issue");
     }
 
-    this.issueGuardian.createReporter(userId, result.id);
+    await this.issueGuardian.createReporter(userId, result.id);
+    await this.issueCreatedPublisher.publish(result);
 
     return new ServiceResponse({ rows: result.id });
-  };
-
-  private createAssignee = async (
-    userId: string,
-    id: string,
-    queryRunner: QueryRunner,
-  ) => {
-    const newAssignee = new IssueAssigneeEntity();
-    newAssignee.issueId = id;
-    newAssignee.userId = userId;
-
-    await this.issueAssigneeRepository.save(newAssignee, { queryRunner });
-    await this.issueGuardian.createAssignee(userId, id);
   };
 
   getIssueList = async (userId: string, filters: IssueListFilters) => {
@@ -150,6 +159,7 @@ export class CoreIssueService implements IssueService {
     id: string,
     issueFormData: IssueFormData,
   ) => {
+    await this.isArchived(id);
     await this.issueGuardian.validatePermission(
       userId,
       id,
@@ -172,6 +182,7 @@ export class CoreIssueService implements IssueService {
     id: string,
     status: IssueStatus,
   ) => {
+    await this.isArchived(id);
     await this.issueGuardian.validatePermission(
       userId,
       id,
@@ -197,14 +208,16 @@ export class CoreIssueService implements IssueService {
     const updatedIssue = new IssueEntity();
     updatedIssue.resolution = resolution;
 
-    await this.issueRepository.update(id, updatedIssue);
-    await this.issueRepository.softDelete(id);
+    await this.issueRepository.updateResolution(id, updatedIssue);
+    if (resolution) {
+      return await this.issueRepository.softDelete(id);
+    }
 
-    // if "yes" then soft delete
-    // if "no" then restore soft delete
+    await this.issueRepository.restoreDelete(id);
   };
 
   updateIssueAssignee = async (id: string, userId: string) => {
+    await this.isArchived(id);
     const issue = await this.issueRepository.findOne(id);
     if (!issue) throw new NotFoundError(`Issue ${id} does not exist`);
 

@@ -29,6 +29,8 @@ export class CoreUserController implements UserController {
       displayName,
     });
     await this.userService.createUser(userRegistrationData, inviteToken);
+    reply.clearCookie("accessToken", { path: "/" });
+    reply.clearCookie("refreshToken", { path: "/" });
 
     return reply.status(StatusCodes.CREATED).send();
   };
@@ -60,6 +62,17 @@ export class CoreUserController implements UserController {
     await this.userService.verifyPassword(authCredentials);
 
     return reply.send();
+  };
+
+  verifyEmail = async (
+    request: FastifyRequest<{ Querystring: { inviteToken: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const { inviteToken } = request.query;
+    // confirm this invite token
+    await this.userService.verifyEmail(inviteToken);
+
+    return reply.send({ confirmation: true });
   };
 
   /**

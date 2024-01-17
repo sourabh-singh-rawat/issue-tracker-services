@@ -40,6 +40,16 @@ get:
   responses: 
     200:
       description: List of all the issue comments
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              rows:
+                type: array
+              filteredRowCount:
+                type: number
+            required: [ "rows", "filteredRowCount" ]
     400:
       description: Bad Request
       content: 

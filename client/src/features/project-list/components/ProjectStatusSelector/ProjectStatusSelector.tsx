@@ -3,37 +3,30 @@ import { useUpdateProjectMutation } from "../../../../api/generated/project.api"
 import { SelectChangeEvent } from "@mui/material";
 import { useMessageBar } from "../../../message-bar/hooks";
 import Select from "../../../../common/components/Select";
-import { GridValidRowModel } from "@mui/x-data-grid";
 
-interface ProjectStatusSelectorProps {
-  id: string;
+interface Props {
+  id?: string;
   value: string;
-  row: GridValidRowModel;
+  options?: string[];
 }
 
 export default function ProjectStatusSelector({
   id,
   value,
-  row,
-}: ProjectStatusSelectorProps) {
+  options = [],
+}: Props) {
   const { showSuccess, showError } = useMessageBar();
   const [updateProject, { isSuccess, isError }] = useUpdateProjectMutation();
 
   const handleChange = async (e: SelectChangeEvent<string>) => {
-    await updateProject({
-      id,
-      body: { status: e.target.value },
-    });
+    if (!id) return;
+
+    await updateProject({ id, body: { status: e.target.value } });
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      showSuccess("Status updated successfully");
-    }
-
-    if (isError) {
-      showError("Failed to update project status");
-    }
+    if (isError) showError("Failed to update project status");
+    if (isSuccess) showSuccess("Status updated successfully");
   }, [isSuccess, isError]);
 
   return (
@@ -41,7 +34,7 @@ export default function ProjectStatusSelector({
       name="status"
       value={value}
       onChange={handleChange}
-      options={row.statuses}
+      options={options}
       variant="small"
     />
   );

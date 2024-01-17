@@ -4,16 +4,16 @@ get:
   description: Get all workspaces of the user
   operationId: getAllWorkspaces
   responses: 
-    201:
+    200:
       description: all workspaces
       content: 
         application/json:
           schema: 
             type: object
             properties:
-              data:
+              rows:
                 type: array
-                items: 
+                items:
                   type: object
                   properties: 
                     id:
@@ -23,9 +23,9 @@ get:
                     createdAt:
                       type: string
                   required: ["id", "name", "createdAt"]
-              dataCount:
+              rowCount:
                 type: number
-            required: ["data", "dataCount"]
+            required: ["rows", "rowCount"]
     400:
       description: Bad request
       content:

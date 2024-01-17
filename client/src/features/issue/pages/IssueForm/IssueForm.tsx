@@ -1,28 +1,8 @@
-/* eslint-disable react/jsx-curly-newline */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
 
-// import DatePicker from "../../../../common/DatePicker";
-// import SectionHeader from "../../../../common/SectionHeader";
-// import TextField from "../../../../common/TextField";
-
-// import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
-// import IssuePrioritySelector from "../../components/IssuePrioritySelector";
-// import IssueStatusSelector from "../../components/IssueStatusSelector";
-// import PrimaryButton from "../../../../common/PrimaryButton";
-
-// import Label from "../../../../common/Label";
-
-// import { setMembers } from "../../../project/project.slice";
-// import {
-//   setIssuePriority,
-//   setIssueStatus,
-//   updateIssue,
-// } from "../../issue.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
@@ -51,8 +31,8 @@ function IssueForm({ projectId }: IssueFormProps) {
   const theme = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: members, isSuccess } = useGetProjectMembersQuery({ id });
   const [createIssue] = useCreateIssueMutation();
+  const { data: members } = useGetProjectMembersQuery({ id });
   const { data: statusList } = useGetIssueStatusListQuery();
   const { data: priorityList } = useGetIssuePriorityListQuery();
 
@@ -62,10 +42,10 @@ function IssueForm({ projectId }: IssueFormProps) {
       name: "",
       description: "",
       dueDate: "",
-      status: "Not Started",
+      status: "To Do",
       assignees: [],
       reporter: undefined,
-      priority: "",
+      priority: "Low",
       resolution: false,
     }),
     [],
@@ -100,7 +80,7 @@ function IssueForm({ projectId }: IssueFormProps) {
       body: {
         name,
         description,
-        dueDate,
+        dueDate: dueDate ? dueDate : null,
         priority,
         projectId,
         reporter,
@@ -110,6 +90,12 @@ function IssueForm({ projectId }: IssueFormProps) {
       },
     });
   };
+
+  // useEffect(() => {
+  //   if (isSuccess && handleClose) {
+  //     handleClose();
+  //   }
+  // }, [isSuccess]);
 
   return (
     <MuiContainer
@@ -198,31 +184,6 @@ function IssueForm({ projectId }: IssueFormProps) {
           />
         </MuiGrid>
 
-        {/* <MuiGrid sm={12} xs={12} item>
-              <IssueAssigneeSelector
-                handleChange={(e) => {
-                  const { value } = e.target;
-
-                  setFormFields({
-                    ...formFields,
-                    assigneeId: value,
-                  });
-                  dispatch(updateIssue({ assigneeId: value }));
-                }}
-                isLoading={members.isLoading}
-                projectMembers={members.rows}
-                title="Assignee"
-                value={formFields.assigneeId}
-              />
-            </MuiGrid> */}
-
-        {/* <MuiGrid sm={12} xs={12} item>
-          <IssuePrioritySelector
-            handleChange={handleChange}
-            title="Priority"
-            value={formFields.priority}
-          />
-        </MuiGrid> */}
         <MuiGrid sm={6} xs={12} item>
           <DatePicker
             name="dueDate"
@@ -231,13 +192,7 @@ function IssueForm({ projectId }: IssueFormProps) {
             formState={formState}
           />
         </MuiGrid>
-        <MuiGrid sm={6} xs={12} item>
-          {/* <IssueStatusSelector
-                handleChange={handleChange}
-                title="Status"
-                value={formFields.status}
-              /> */}
-        </MuiGrid>
+        <MuiGrid sm={6} xs={12} item></MuiGrid>
         <MuiGrid xs={12} item>
           <PrimaryButton label="Create Issue" type="submit" />
         </MuiGrid>

@@ -1,7 +1,5 @@
+import { UserUpdatedPayload } from "@sourabhrawatcc/core-utils";
+
 export interface UserService {
-  updateUser(
-    userId: string,
-    defaultWorkspaceId: string,
-    version: number,
-  ): Promise<void>;
+  updateUser(payload: UserUpdatedPayload): Promise<void>;
 }

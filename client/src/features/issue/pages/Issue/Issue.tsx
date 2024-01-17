@@ -6,40 +6,30 @@ dayjs.extend(relativeTime);
 
 import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
 import {
-  useGetIssuePriorityListQuery,
   useGetIssueQuery,
-  useGetIssueStatusListQuery,
   useUpdateIssueMutation,
 } from "../../../../api/generated/issue.api";
-import { useAppDispatch } from "../../../../common/hooks";
-import { setIssuePriority, setIssueStatus } from "../../issue.slice";
-import TextButton from "../../../../common/components/buttons/TextButton";
 import { useMessageBar } from "../../../message-bar/hooks";
 import Title from "../../../../common/components/Title";
 
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
+import IssuePath from "../../components/IssuePath";
 
 export default function Issue() {
   const theme = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const location = useLocation();
   const { showSuccess, showError } = useMessageBar();
   const [issue, setIssue] = useState({ name: "", updatedAt: "" });
 
   const { data, ...issueRequest } = useGetIssueQuery({ id });
-  const { data: statusList, ...statusListRequest } =
-    useGetIssueStatusListQuery();
-  const { data: priorityList, ...priorityListRequest } =
-    useGetIssuePriorityListQuery();
   const [updateIssue, updateIssueOptions] = useUpdateIssueMutation();
 
   const tabName = location.pathname.split("/")[3] || "overview";
@@ -61,14 +51,6 @@ export default function Issue() {
       showError("Failed to update issue title");
     }
   }, [updateIssueOptions.isSuccess]);
-
-  useEffect(() => {
-    if (statusListRequest.isSuccess) dispatch(setIssueStatus(statusList));
-  }, [statusList]);
-
-  useEffect(() => {
-    if (priorityListRequest.isSuccess) dispatch(setIssuePriority(priorityList));
-  }, [priorityList]);
 
   useEffect(() => {
     setSelectedTab(mapTabToIndex[tabName]);
@@ -94,11 +76,16 @@ export default function Issue() {
   return (
     <MuiGrid container>
       <MuiGrid xs={12} item>
-        <MuiGrid xs={12} item sx={{ marginLeft: theme.spacing(-1) }}>
-          <TextButton
+        <MuiGrid xs={12} item>
+          {/* <TextButton
             label="Back to all issues"
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate("/issues")}
+          /> */}
+          <IssuePath
+            projectName={issue.projectName}
+            projectId={issue.projectId}
+            tabName={tabName}
           />
         </MuiGrid>
         <MuiGrid xs={12} item>
@@ -136,7 +123,7 @@ export default function Issue() {
         </MuiGrid>
       </MuiGrid>
 
-      <MuiGrid xs={12} item>
+      <MuiGrid xs={12} item sx={{ pt: theme.spacing(1) }}>
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab isLoading={issueRequest.isLoading} label="Overview" value={0} />
           <Tab isLoading={issueRequest.isLoading} label="Tasks" value={1} />
@@ -146,7 +133,6 @@ export default function Issue() {
             value={2}
           />
           <Tab isLoading={issueRequest.isLoading} label="Comments" value={3} />
-          <Tab isLoading={issueRequest.isLoading} label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
       <MuiGrid xs={12} item>

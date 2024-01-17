@@ -1,6 +1,6 @@
 import {
-  QueryBuilderOptions,
   UserNotFoundError,
+  UserUpdatedPayload,
   VersionMismatchError,
 } from "@sourabhrawatcc/core-utils";
 import { UserEntity } from "../data/entities";
@@ -14,20 +14,18 @@ export class CoreUserService implements UserService {
     return await this.userRepository.findById(userId);
   };
 
-  updateUser = async (
-    userId: string,
-    defaultWorkspaceId: string,
-    version: number,
-    options?: QueryBuilderOptions,
-  ) => {
-    const user = await this.getUserById(userId);
+  updateUser = async (payload: UserUpdatedPayload) => {
+    const { id, defaultWorkspaceId, version, isEmailVerified } = payload;
+
+    const user = await this.getUserById(id);
     if (!user) throw new UserNotFoundError();
 
     if (user.version !== version) throw new VersionMismatchError();
 
     const updatedUser = new UserEntity();
     updatedUser.defaultWorkspaceId = defaultWorkspaceId;
+    updatedUser.isEmailVerified = isEmailVerified;
 
-    await this.userRepository.updateUser(userId, updatedUser);
+    await this.userRepository.updateUser(id, updatedUser);
   };
 }

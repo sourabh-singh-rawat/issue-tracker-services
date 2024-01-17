@@ -9,7 +9,7 @@ export const issueAttachmentRoutes = (
   done: () => void,
 ) => {
   fastify.register(multipart, {
-    limits: { fileSize: 50000000, files: 1 },
+    limits: { fileSize: 10000000, files: 1 },
   });
 
   const controller = container.get("issueAttachmentController");

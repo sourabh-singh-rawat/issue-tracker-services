@@ -4,5 +4,5 @@ import { UserEntity } from "../../entities";
 
 export interface WorkspaceMemberRepository
   extends Repository<WorkspaceMemberEntity> {
-  find(id: string): Promise<UserEntity[]>;
+  find(projectId: string, workspaceId: string): Promise<UserEntity[]>;
 }

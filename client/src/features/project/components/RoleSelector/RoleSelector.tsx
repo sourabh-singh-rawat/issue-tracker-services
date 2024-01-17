@@ -15,14 +15,16 @@ import AppLoader from "../../../../common/components/AppLoader";
 
 interface RoleSelectorProps {
   defaultRole: string;
-  isMember: boolean;
+  inviteStatus: "Accepted" | "Pending";
   userId: string;
+  workspaceId: string;
 }
 
 export default function RoleSelector({
   defaultRole,
-  isMember,
+  inviteStatus,
   userId,
+  workspaceId,
 }: RoleSelectorProps) {
   const { id } = useSelectedTab();
   const { showError, showSuccess } = useMessageBar();
@@ -32,18 +34,13 @@ export default function RoleSelector({
     useCreateProjectInviteMutation();
 
   useEffect(() => {
-    if (isSuccess) {
-      showSuccess("Successfully added project member");
-    }
-
-    if (isError) {
-      showError(error?.data?.errors[0]?.message);
-    }
+    if (isSuccess) showSuccess("Successfully added project member");
+    if (isError) showError(error?.data?.errors[0]?.message);
   }, [isSuccess, isError]);
 
   return (
     <>
-      {!isMember && (
+      {!(inviteStatus == "Accepted" || inviteStatus == "Pending") && (
         <MuiGrid container spacing={1}>
           <MuiGrid item>
             <Select
@@ -66,7 +63,7 @@ export default function RoleSelector({
               onClick={async () => {
                 await createProjectInvite({
                   id,
-                  body: { role, userId },
+                  body: { role, userId, workspaceId },
                 });
               }}
             />

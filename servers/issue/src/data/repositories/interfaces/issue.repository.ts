@@ -10,9 +10,16 @@ import { ObjectLiteral } from "typeorm";
 export interface IssueRepository extends Repository<IssueEntity> {
   find(userId: string, filters: IssueListFilters): Promise<IssueFormData[]>;
   findOne(id: string): Promise<IssueFormData | null>;
+  isIssueArchived(id: string): Promise<boolean>;
   update(
     id: string,
-    updatedProject: IssueEntity,
+    updatedIssue: IssueEntity,
     options?: QueryBuilderOptions,
   ): Promise<void>;
+  updateResolution(
+    id: string,
+    updatedIssue: IssueEntity,
+    options?: QueryBuilderOptions,
+  ): Promise<void>;
+  restoreDelete(id: string, options?: QueryBuilderOptions): Promise<void>;
 }

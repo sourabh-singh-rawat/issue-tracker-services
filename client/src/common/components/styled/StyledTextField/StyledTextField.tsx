@@ -22,7 +22,7 @@ const StyledTextField = styled(MuiTextField)(({ theme }) => ({
     },
   },
   ".MuiFormHelperText-root": {
-    fontSize: theme.typography.body1,
+    fontSize: theme.typography.body2.fontSize,
     marginLeft: 0,
   },
 }));

@@ -59,7 +59,7 @@ function DatePicker<DefaultValues extends FieldValues>({
             render={({ field }) => {
               return (
                 <MuiDatePicker
-                  value={field.value ? field.value : null}
+                  value={field.value ? dayjs(field.value) : null}
                   onChange={(newValue) =>
                     field.onChange(dayjs(newValue).format("YYYY-MM-DD"))
                   }

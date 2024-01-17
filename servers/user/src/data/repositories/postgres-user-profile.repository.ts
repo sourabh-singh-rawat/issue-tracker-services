@@ -1,19 +1,16 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { QueryBuilderOptions, TypeormStore } from "@sourabhrawatcc/core-utils";
 import { UserProfileEntity } from "../entities/user-profile.entity";
 import { UserProfileRepository } from "./interfaces/user-profile.repository";
 
 export class PostgresUserProfileRepository implements UserProfileRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly store: TypeormStore) {}
 
   save = async (
     userProfile: UserProfileEntity,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .insert()
       .into(UserProfileEntity)
@@ -29,7 +26,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
   };
 
   findByUserId = async (userId: string) => {
-    const result = await this.databaseService.query<UserProfileEntity>(
+    const result = await this.store.query<UserProfileEntity>(
       "SELECT * FROM find_user_profile_by_user_id($1)",
       [userId],
     );
@@ -39,7 +36,7 @@ export class PostgresUserProfileRepository implements UserProfileRepository {
 
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .softDelete()
       .where("id=:id", { id });

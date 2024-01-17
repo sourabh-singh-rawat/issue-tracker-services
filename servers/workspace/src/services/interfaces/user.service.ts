@@ -1,11 +1,5 @@
-import { QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
-import { UserEntity } from "../../data/entities";
+import { UserUpdatedPayload } from "@sourabhrawatcc/core-utils";
 
 export interface UserService {
-  updateUser(
-    userId: string,
-    defaultWorkspaceId: string,
-    version: number,
-    options?: QueryBuilderOptions,
-  ): Promise<void>;
+  updateUser(payload: UserUpdatedPayload): Promise<void>;
 }

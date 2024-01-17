@@ -1,4 +1,4 @@
-import { databaseService } from "../../app/stores/postgres-typeorm.store";
+import { postgresTypeormStore } from "../../app/stores/postgres-typeorm.store";
 import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
 import { CoreUserService } from "../core-user.service";
 import { UserService } from "../interfaces/user.service";
@@ -7,10 +7,10 @@ import {
   VersionMismatchError,
 } from "@sourabhrawatcc/core-utils";
 
-jest.mock("../../app/database-service");
+jest.mock("../../../app/stores/postgres-typeorm.store");
 jest.mock("../../data/repositories/postgres-user.repository");
 
-const userRepository = new PostgresUserRepository(databaseService);
+const userRepository = new PostgresUserRepository(postgresTypeormStore);
 
 let userService: UserService;
 

@@ -5,9 +5,9 @@ CREATE OR REPLACE FUNCTION find_user_by_id (
 RETURNS TABLE (
   id UUID,
   email TEXT,
-  "createdAt" TIMESTAMP WITH TIME ZONE,
-  "isEmailVerified" BOOLEAN,
-  "defaultWorkspaceId" uuid,
+  created_at TIMESTAMP WITH TIME ZONE,
+  is_email_verified BOOLEAN,
+  default_workspace_id uuid,
   "version" INTEGER
 )
 LANGUAGE PLPGSQL AS $$

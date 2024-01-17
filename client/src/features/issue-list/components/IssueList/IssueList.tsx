@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import daysjs from "dayjs";
-
-import MuiTypography from "@mui/material/Typography";
-
 import { useTheme } from "@mui/material";
+import daysjs from "dayjs";
+import MuiTypography from "@mui/material/Typography";
 import List from "../../../../common/components/List";
 import { useGetIssueListQuery } from "../../../../api/generated/issue.api";
 import {
@@ -21,7 +19,7 @@ interface IssueListProps {
   projectId?: string;
 }
 
-function IssueList({ projectId }: IssueListProps) {
+export default function IssueList({ projectId }: IssueListProps) {
   const theme = useTheme();
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -76,7 +74,11 @@ function IssueList({ projectId }: IssueListProps) {
       headerName: "Status",
       width: 150,
       renderCell: ({ id, row, value }) => (
-        <IssueStatusSelector id={id as string} row={row} value={value} />
+        <IssueStatusSelector
+          id={id as string}
+          value={value}
+          options={row?.statusList}
+        />
       ),
     },
     {
@@ -84,7 +86,11 @@ function IssueList({ projectId }: IssueListProps) {
       headerName: "Priority",
       width: 150,
       renderCell: ({ id, value, row }) => (
-        <IssuePrioritySelector id={id as string} value={value} row={row} />
+        <IssuePrioritySelector
+          id={id as string}
+          value={value}
+          options={row?.priorityList}
+        />
       ),
     },
     {
@@ -101,9 +107,9 @@ function IssueList({ projectId }: IssueListProps) {
       renderCell: ({ value }) => (
         <Link
           style={{
-            textDecoration: "none",
             display: "flex",
             alignItems: "center",
+            textDecoration: "none",
           }}
           to={`/profile/${value.userId}`}
         >
@@ -137,16 +143,6 @@ function IssueList({ projectId }: IssueListProps) {
         ),
     },
     {
-      field: "projectId",
-      headerName: "Project Id",
-      width: 125,
-      renderCell: ({ value }) => (
-        <MuiTypography variant="body2" noWrap>
-          {value}
-        </MuiTypography>
-      ),
-    },
-    {
       field: "createdAt",
       headerName: "Created At",
       width: 125,
@@ -158,6 +154,16 @@ function IssueList({ projectId }: IssueListProps) {
         ) : (
           "-"
         ),
+    },
+    {
+      field: "projectId",
+      headerName: "Project Id",
+      width: 125,
+      renderCell: ({ value }) => (
+        <MuiTypography variant="body2" noWrap>
+          {value}
+        </MuiTypography>
+      ),
     },
     {
       field: "id",
@@ -182,5 +188,3 @@ function IssueList({ projectId }: IssueListProps) {
     />
   );
 }
-
-export default IssueList;

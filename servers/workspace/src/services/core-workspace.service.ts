@@ -1,5 +1,5 @@
 import {
-  DatabaseService,
+  TypeormStore,
   JwtToken,
   ServiceResponse,
   TransactionExecutionError,
@@ -7,6 +7,7 @@ import {
   UserNotFoundError,
   WorkspaceInvitePayload,
   WorkspaceMemberStatus,
+  WorkspacePermissions,
   WorkspaceRegistrationData,
   WorkspaceRoles,
 } from "@sourabhrawatcc/core-utils";
@@ -15,7 +16,7 @@ import { WorkspaceService } from "./interfaces/workspace.service";
 import { UserEntity, WorkspaceEntity } from "../data/entities";
 import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
 import { WorkspaceCreatedPublisher } from "../messages/publishers/workspace-created.publisher";
-import { WorkspaceCasbinPolicyManager } from "../app/policy-manager";
+import { WorkspaceGuardian } from "../app/guardians/casbin/workspace.guardian";
 import { UserRepository } from "../data/repositories/interface/user-repository";
 import { WorkspaceRepository } from "../data/repositories/interface/workspace-repository";
 import { WorkspaceMemberRepository } from "../data/repositories/interface/workspace-member";
@@ -25,8 +26,8 @@ import { WorkspaceMemberInviteEntity } from "../data/entities/workspace-member-i
 
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(
-    private policyManager: WorkspaceCasbinPolicyManager,
-    private databaseService: DatabaseService,
+    private store: TypeormStore,
+    private workspaceGuardian: WorkspaceGuardian,
     private userRepository: UserRepository,
     private workspaceRepository: WorkspaceRepository,
     private workspaceMemberRepository: WorkspaceMemberRepository,
@@ -40,8 +41,8 @@ export class CoreWorkspaceService implements WorkspaceService {
     workspaceMember: WorkspaceMemberEntity,
     user?: UserEntity,
   ) => {
-    const queryRunner = this.databaseService.createQueryRunner();
-    const result = await this.databaseService.transaction(
+    const queryRunner = this.store.createQueryRunner();
+    const result = await this.store.transaction(
       queryRunner,
       async (queryRunner) => {
         if (user) {
@@ -55,7 +56,7 @@ export class CoreWorkspaceService implements WorkspaceService {
           workspaceMember,
           { queryRunner },
         );
-        await this.policyManager.createWorkspacePolicies(
+        await this.workspaceGuardian.createWorkspacePolicies(
           workspace.ownerUserId,
           workspace.id,
         );
@@ -154,11 +155,11 @@ export class CoreWorkspaceService implements WorkspaceService {
     await this.workspaceMemberRepository.save(newWorkspaceMember);
 
     if (role === WorkspaceRoles.Member) {
-      await this.policyManager.createWorkspaceMember(userId, workspaceId);
+      await this.workspaceGuardian.createWorkspaceMember(userId, workspaceId);
     }
 
     if (role === WorkspaceRoles.Admin) {
-      await this.policyManager.createWorkspaceAdmin(userId, workspaceId);
+      await this.workspaceGuardian.createWorkspaceAdmin(userId, workspaceId);
     }
   };
 
@@ -169,12 +170,18 @@ export class CoreWorkspaceService implements WorkspaceService {
   ) => {
     const sender = await this.userRepository.findById(userId);
     if (!sender) throw new UserNotFoundError();
+    const { defaultWorkspaceId } = sender;
+
+    this.workspaceGuardian.validatePermission(
+      userId,
+      defaultWorkspaceId,
+      WorkspacePermissions.Invite,
+    );
 
     const isReceiverMember =
       await this.workspaceMemberRepository.existsById(email);
     if (isReceiverMember) throw new UserAlreadyExists();
 
-    const { defaultWorkspaceId } = sender;
     const newWorkspaceMemberInvite = new WorkspaceMemberInviteEntity();
     newWorkspaceMemberInvite.senderId = userId;
     newWorkspaceMemberInvite.receiverEmail = email;

@@ -8,8 +8,8 @@ import MuiTypography from "@mui/material/Typography";
 import Avatar from "../../../../common/components/Avatar";
 import Tooltip from "../../../../common/components/Tooltip";
 import TabPanel from "../../../../common/components/TabPanel";
-import { useGetProjectActivityListQuery } from "../../../../api/generated/workspace.api";
 import { useSelectedTab } from "../../../../common/hooks";
+import { useGetProjectActivityListQuery } from "../../../../api/generated/workspace.api";
 
 export default function ProjectActivity() {
   const theme = useTheme();
@@ -21,7 +21,7 @@ export default function ProjectActivity() {
       {activityList?.rows.map((activity, index) => (
         <MuiGrid
           key={index}
-          columnSpacing={0.5}
+          columnSpacing={1}
           sx={{
             py: theme.spacing(1),
             alignItems: "center",
@@ -48,7 +48,7 @@ export default function ProjectActivity() {
               variant="body2"
               sx={{ color: theme.palette.text.secondary }}
             >
-              {activity?.type}
+              {activity?.action}
             </MuiTypography>
           </MuiGrid>
           <MuiGrid item>

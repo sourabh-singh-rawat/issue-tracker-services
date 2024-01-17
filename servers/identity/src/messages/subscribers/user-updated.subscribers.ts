@@ -1,6 +1,6 @@
 import {
   Consumers,
-  MessageService,
+  Messenger,
   Streams,
   Subscriber,
   UserUpdatedPayload,
@@ -13,15 +13,14 @@ export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   readonly consumer = Consumers.UserUpdatedConsumerIdentity;
 
   constructor(
-    private readonly messageService: MessageService,
+    private readonly messenger: Messenger,
     private readonly userService: UserService,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserUpdatedPayload) => {
-    const { userId, defaultWorkspaceId, version } = payload;
-    await this.userService.updateUser(userId, defaultWorkspaceId, version);
+    await this.userService.updateUser(payload);
     message.ack();
     console.log("Message processing completed");
   };

@@ -9,18 +9,20 @@ import AddProjectMemberModal from "../../components/AddProjectMemberModal";
 
 import { useTheme } from "@mui/material";
 import { useSelectedTab } from "../../../../common/hooks";
+import { useGetProjectMembersQuery } from "../../../../api/generated/project.api";
 
 export default function ProjectMembers() {
   const theme = useTheme();
-  const { selectedTab, id, page } = useSelectedTab();
+  const { selectedTab, id } = useSelectedTab();
   const [open, setOpen] = useState(false);
+  const { data: members } = useGetProjectMembersQuery({ id });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <TabPanel index={2} selectedTab={selectedTab}>
-      <MuiGrid sx={{ py: theme.spacing(2) }} container>
+      <MuiGrid sx={{ py: theme.spacing(2) }} rowSpacing={2} container>
         <MuiGrid item flexGrow={1}></MuiGrid>
         <MuiGrid item>
           <PrimaryButton
@@ -30,7 +32,7 @@ export default function ProjectMembers() {
           />
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <MemberList members={page?.members} projectId={id} />
+          <MemberList members={members?.rows} projectId={id} />
         </MuiGrid>
       </MuiGrid>
       <AddProjectMemberModal open={open} handleClose={handleClose} />

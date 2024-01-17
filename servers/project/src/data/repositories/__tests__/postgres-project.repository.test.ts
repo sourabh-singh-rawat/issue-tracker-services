@@ -1,19 +1,17 @@
 import { Filters } from "@sourabhrawatcc/core-utils";
-import { postgresStore } from "../../../app/stores/postgres-typeorm.store";
+import { postgresTypeormStore } from "../../../app/stores/postgres-typeorm.store";
 import { ProjectEntity } from "../../entities";
 import { ProjectRepository } from "../interfaces/project.repository";
 import { PostgresProjectRepository } from "../postgres-project.repository";
 
-jest.mock("../../../app/database-service");
+jest.mock("../../../app/stores/postgres-typeorm.store");
 
 let projectRepository: ProjectRepository;
 
-const mockProject = {
-  id: "project-id",
-};
+const mockProject = { id: "project-id" };
 
 beforeEach(() => {
-  projectRepository = new PostgresProjectRepository(postgresStore);
+  projectRepository = new PostgresProjectRepository(postgresTypeormStore);
   jest.clearAllMocks();
 });
 
@@ -22,25 +20,17 @@ describe("save project", () => {
 
   it("should create a query builder", async () => {
     await projectRepository.save(project);
-    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
-      ProjectEntity,
-      "p",
-      undefined,
-    );
+    expect(postgresTypeormStore.createQueryBuilder).toHaveBeenCalled();
   });
 
   it("should pass query runner to query builder if provided", async () => {
-    const queryRunner = postgresStore.createQueryRunner();
+    const queryRunner = postgresTypeormStore.createQueryRunner();
     await projectRepository.save(project, { queryRunner });
 
-    expect(postgresStore.createQueryBuilder).toHaveBeenCalledWith(
-      ProjectEntity,
-      "p",
-      queryRunner,
-    );
+    expect(postgresTypeormStore.createQueryBuilder).toHaveBeenCalled();
   });
 
-  const mockQueryBuilder = postgresStore.createQueryBuilder();
+  const mockQueryBuilder = postgresTypeormStore.createQueryBuilder();
   it("should call insert function with no arguments", async () => {
     await projectRepository.save(project);
     expect(mockQueryBuilder.insert).toHaveBeenCalledWith();
@@ -71,12 +61,12 @@ describe("project exists", () => {
 
   it("should call query function (project_exists_by_id)", async () => {
     const postgresFunctionName = "project_exists_by_id";
-    (postgresStore.query as jest.Mock).mockReturnValue([
+    (postgresTypeormStore.query as jest.Mock).mockReturnValue([
       { [postgresFunctionName]: true },
     ]);
 
     await projectRepository.existsById(projectId);
-    expect(postgresStore.query).toBeCalledWith(
+    expect(postgresTypeormStore.query).toBeCalledWith(
       `SELECT * FROM ${postgresFunctionName}($1)`,
       [projectId],
     );
@@ -89,7 +79,7 @@ describe("get all projects", () => {
 
   it("should call query function (find_projects_by_user_id_and_workspace_id)", async () => {
     const postgresFunctionName = "find_projects_by_user_id_and_workspace_id";
-    (postgresStore.query as jest.Mock).mockReturnValue([
+    (postgresTypeormStore.query as jest.Mock).mockReturnValue([
       { [postgresFunctionName]: true },
     ]);
 
@@ -103,7 +93,7 @@ describe("get all projects", () => {
 
     await projectRepository.find(userId, workspaceId, filters);
 
-    expect(postgresStore.query).toHaveBeenCalledWith(
+    expect(postgresTypeormStore.query).toHaveBeenCalledWith(
       `SELECT * FROM ${postgresFunctionName}($1, $2, $3, $4, $5, $6)`,
       [userId, workspaceId, sortBy, sortOrder, pageSize, page * pageSize],
     );

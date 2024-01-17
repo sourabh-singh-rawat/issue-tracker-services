@@ -35,9 +35,8 @@ const config: Configuration = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
-        use: "css-loader",
-        exclude: /node_modules/,
+        test: /\.css$/i,
+        use: ["css-loader"],
       },
     ],
   },

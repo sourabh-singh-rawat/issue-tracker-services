@@ -2,19 +2,20 @@ import React, { useEffect } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { useMessageBar } from "../../../message-bar/hooks";
 import Select from "../../../../common/components/Select";
-import { GridValidRowModel } from "@mui/x-data-grid";
 import { useUpdateIssueMutation } from "../../../../api/generated/issue.api";
 
 interface IssueStatusSelectorProps {
   id: string;
   value: string;
-  row: GridValidRowModel;
+  options?: string[];
+  isDisabled?: boolean;
 }
 
 export default function IssuePrioritySelector({
   id,
   value,
-  row,
+  options = [],
+  isDisabled,
 }: IssueStatusSelectorProps) {
   const { showSuccess, showError } = useMessageBar();
   const [updateIssue, { isSuccess, isError }] = useUpdateIssueMutation();
@@ -41,8 +42,9 @@ export default function IssuePrioritySelector({
       name="status"
       value={value}
       onChange={handleChange}
-      options={row.priorityList}
+      options={options}
       variant="small"
+      isDisabled={isDisabled}
     />
   );
 }

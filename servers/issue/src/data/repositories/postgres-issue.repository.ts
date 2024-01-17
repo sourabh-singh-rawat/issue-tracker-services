@@ -51,6 +51,14 @@ export class PostgresIssueRepository implements IssueRepository {
     return result[0];
   };
 
+  isIssueArchived = async (id: string) => {
+    const result = await this.postgresTypeormStore.query<{
+      isArchived: boolean;
+    }>("SELECT * FROM is_archived($1)", [id]);
+
+    return result[0].isArchived;
+  };
+
   update = async (
     id: string,
     updatedIssue: IssueEntity,
@@ -66,11 +74,37 @@ export class PostgresIssueRepository implements IssueRepository {
     await query.execute();
   };
 
+  updateResolution = async (
+    id: string,
+    updatedIssue: IssueEntity,
+    options?: QueryBuilderOptions,
+  ) => {
+    const queryRunner = options?.queryRunner;
+    const query = this.postgresTypeormStore
+      .createQueryBuilder(queryRunner)
+      .update(IssueEntity)
+      .set(updatedIssue)
+      .where("id = :id", { id });
+
+    await query.execute();
+  };
+
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.postgresTypeormStore
       .createQueryBuilder(queryRunner)
       .softDelete()
+      .from(IssueEntity)
+      .where("id = :id", { id });
+
+    await query.execute();
+  };
+
+  restoreDelete = async (id: string, options?: QueryBuilderOptions) => {
+    const queryRunner = options?.queryRunner;
+    const query = this.postgresTypeormStore
+      .createQueryBuilder(queryRunner)
+      .restore()
       .from(IssueEntity)
       .where("id = :id", { id });
 

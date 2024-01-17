@@ -11,7 +11,6 @@ import {
 
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
-import MuiBox from "@mui/material/Box";
 
 import { useGetProjectListQuery } from "../../../../api/generated/project.api";
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
@@ -77,7 +76,11 @@ export default function ProjectList() {
       minWidth: 150,
       flex: 0.1,
       renderCell: ({ id, row, value }) => (
-        <ProjectStatusSelector id={id as string} row={row} value={value} />
+        <ProjectStatusSelector
+          id={id as string}
+          options={row?.statuses}
+          value={value}
+        />
       ),
     },
     {
@@ -86,7 +89,7 @@ export default function ProjectList() {
       minWidth: 50,
       renderCell: ({ value }) => {
         return (
-          <MuiTypography variant="body2" width="100%" textAlign="right">
+          <MuiTypography variant="body2" width="100%">
             {value?.length}
           </MuiTypography>
         );

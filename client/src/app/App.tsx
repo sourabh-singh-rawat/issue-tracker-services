@@ -17,7 +17,6 @@ import Projects from "../features/project/pages/Projects";
 // import ProjectMembers from "./features/project/pages/ProjectMembers";
 import ProjectOverview from "../features/project/pages/ProjectOverview";
 import ProjectForm from "../features/project/components/ProjectForm";
-import ProjectList from "../features/project-list/pages/ProjectListPage";
 import Project from "../features/project/pages/Project";
 import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
@@ -28,15 +27,11 @@ import ProjectIssues from "../features/project/pages/ProjectIssues";
 import Issue from "../features/issue/pages/Issue";
 import Issues from "../features/issue-list/pages/Issues";
 import IssueForm from "../features/issue/pages/IssueForm";
-import IssueList from "../features/issue-list/components/IssueList";
 import IssueOverview from "../features/issue/pages/IssueOverview";
 import IssueComments from "../features/issue-comments/pages/IssueComments";
-// import IssueAttachments from "./features/issue-attachments/pages/IssueAttachments";
-// import IssueForm from "./features/issue/pages/IssueForm";
-// import IssueList from "./features/issue-list/components/IssueList";
-// import Issues from "./features/issue-list/pages/Issues";
-// import IssueSettings from "./features/issue/pages/IssueSettings";
+import IssueAttachments from "../features/issue-attachments/pages/IssueAttachments";
 import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
+import Profile from "../features/user/pages/Profile";
 
 // import Team from "./features/team/pages/Team";
 // import TeamActivity from "./features/team/pages/TeamActivity";
@@ -63,8 +58,9 @@ export default function App() {
         <Route element={<PrivateRoutes />}>
           <Route element={<Dashboard />} index />
 
+          <Route element={<Profile />} path="me" />
+
           <Route element={<Projects />} path="projects">
-            <Route element={<ProjectList />} index />
             <Route element={<ProjectForm />} path="new" />
             <Route element={<Project />} path=":id">
               <Route element={<ProjectOverview />} path="overview" />
@@ -76,16 +72,15 @@ export default function App() {
           </Route>
 
           <Route element={<Issues />} path="issues">
-            <Route element={<IssueList />} index />
             <Route element={<IssueForm />} path="new" />
             <Route element={<Issue />} path=":id">
               <Route element={<IssueOverview />} path="overview" />
               <Route element={<IssueComments />} path="comments" />
               <Route element={<IssueTasks />} path="tasks" />
+              <Route element={<IssueAttachments />} path="attachments" />
             </Route>
           </Route>
           {/* 
-              <Route element={<IssueAttachments />} path="attachments" />
               <Route element={<IssueSettings />} path="settings" /> */}
         </Route>
       </Route>

@@ -1,6 +1,6 @@
 import {
   Consumers,
-  MessageService,
+  Messenger,
   Streams,
   Subscriber,
   WorkspaceInvitePayload,
@@ -13,10 +13,10 @@ export class WorkspaceInviteCreatedSubscriber extends Subscriber<WorkspaceInvite
   readonly consumer = Consumers.WorkspaceInviteCreatedConsumerEmail;
 
   constructor(
-    private messageService: MessageService,
+    private messenger: Messenger,
     private emailService: EmailService,
   ) {
-    super(messageService.client);
+    super(messenger.client);
   }
 
   onMessage = async (message: JsMsg, payload: WorkspaceInvitePayload) => {

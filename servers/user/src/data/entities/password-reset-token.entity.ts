@@ -23,16 +23,10 @@ export class PasswordResetToken extends AuditEntity {
   })
   userId!: string;
 
-  @Column({
-    name: "token_value",
-    type: "text",
-  })
+  @Column({ name: "token_value", type: "text" })
   tokenValue!: string;
 
-  @Column({
-    name: "status",
-    type: "text", // todo enum
-  })
+  @Column({ name: "status", type: "text" })
   status!: string;
 
   @Column({ name: "expiration_at", type: "timestamp with time zone" })

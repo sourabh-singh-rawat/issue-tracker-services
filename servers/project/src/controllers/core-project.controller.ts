@@ -26,15 +26,21 @@ export class CoreProjectController implements ProjectController {
   createProjectInvite = async (
     request: FastifyRequest<{
       Params: { id: string };
-      Body: { userId: string; role: ProjectRoles };
+      Body: { userId: string; role: ProjectRoles; workspaceId: string };
     }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    const { userId, role } = request.body;
+    const { userId, role, workspaceId } = request.body;
     const { userId: invitedBy } = request.currentUser;
 
-    await this.projectService.createProjectInvite(userId, id, role, invitedBy);
+    await this.projectService.createProjectInvite(
+      userId,
+      id,
+      role,
+      invitedBy,
+      workspaceId,
+    );
 
     return reply.send();
   };
@@ -98,9 +104,13 @@ export class CoreProjectController implements ProjectController {
     request: FastifyRequest<{ Params: { id: string } }>,
     reply: FastifyReply,
   ) => {
+    const { userId } = request.currentUser;
     const { id } = request.params;
 
-    const response = await this.projectService.getWorkspaceMemberList(id);
+    const response = await this.projectService.getWorkspaceMemberList(
+      userId,
+      id,
+    );
 
     return reply.send(response);
   };

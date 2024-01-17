@@ -28,6 +28,9 @@ paths:
   /activities/projects/{id}:
     description: Get project activity list
     $ref: activity/paths/projects.yaml
+  /attachments/issues/{id}:
+    description: Create and manage issue attachments
+    $ref: attachment/paths/attachments.yaml
   /identity/generate-tokens:
     description: Generate access and refresh tokens
     $ref: identity/paths/generate-tokens.yaml
@@ -49,6 +52,12 @@ paths:
   /issues/{id}:
     description: Get or update a issue
     $ref: issue/paths/issue.yaml
+  /issues/{id}/status:
+    description: Get or update an issue status
+    $ref: issue/paths/issue-status.yaml
+  /issues/{id}/resolution:
+    description: Get or update an issue resolution
+    $ref: issue/paths/issue-resolution.yaml
   /issues/{id}/comments:
     description: Get comments or create a new comment
     $ref: issue/paths/comments.yaml
@@ -61,6 +70,8 @@ paths:
   /issues/{id}/tasks/{taskId}:
     description: Get or update a issue task
     $ref: issue/paths/task.yaml
+  # /issues/{id}/assignees:
+    # description: Add new assignees or remove existing assignees
   /projects:
     description: Create and get projects
     $ref: project/paths/projects.yaml
@@ -76,6 +87,9 @@ paths:
   /projects/{id}/members:
     description: Get project members
     $ref: project/paths/members.yaml
+  /projects/{id}/members/invite:
+    description: Invite project member
+    $ref: project/paths/invite.yaml
   /projects/{id}/workspace-members:
     description: Get workspace members
     $ref: project/paths/workspace-member.yaml

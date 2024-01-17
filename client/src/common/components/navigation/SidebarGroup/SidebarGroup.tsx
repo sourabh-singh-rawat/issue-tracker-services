@@ -8,11 +8,11 @@ import SidebarGroupItem from "../SidebarGroupItem";
 interface SidebarGroupProps {
   label?: string;
   isVisible?: boolean;
-  avatarIcon?: JSX.Element;
+  icon?: JSX.Element;
 }
 
 export default function SidebarGroup({
-  avatarIcon,
+  icon,
   label,
   isVisible,
 }: SidebarGroupProps) {
@@ -23,7 +23,7 @@ export default function SidebarGroup({
   return (
     <>
       <SidebarGroupItem
-        avatarIcon={avatarIcon}
+        icon={icon}
         label={label}
         onClick={handleClickMenuItem}
         indicatorIcon={<MuiKeyboardArrowRightTwoToneIcon />}

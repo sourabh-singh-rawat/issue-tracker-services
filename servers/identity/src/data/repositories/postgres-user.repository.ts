@@ -1,12 +1,9 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { UserRepository } from "./interfaces/user-repository";
 import { UserEntity } from "../entities/user.entity";
 
 export class PostgresUserRepository implements UserRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly store: TypeormStore) {}
 
   /**
    * Creates a new user.
@@ -14,7 +11,7 @@ export class PostgresUserRepository implements UserRepository {
    */
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .insert()
       .into(UserEntity)
@@ -29,7 +26,7 @@ export class PostgresUserRepository implements UserRepository {
    * @param id
    */
   existsById = async (id: string) => {
-    const result = await this.databaseService.query<{
+    const result = await this.store.query<{
       userExistsById: boolean;
     }>("SELECT * FROM user_exists_by_id($1)", [id]);
 
@@ -41,7 +38,7 @@ export class PostgresUserRepository implements UserRepository {
    * @param email
    */
   existsByEmail = async (email: string) => {
-    const result = await this.databaseService.query<{
+    const result = await this.store.query<{
       userExistsByEmail: boolean;
     }>("SELECT * FROM user_exists_by_email($1)", [email]);
 
@@ -53,7 +50,7 @@ export class PostgresUserRepository implements UserRepository {
    * @param id
    */
   findById = async (id: string): Promise<UserEntity | null> => {
-    const result = await this.databaseService.query<UserEntity>(
+    const result = await this.store.query<UserEntity>(
       "SELECT * FROM find_user_by_id($1)",
       [id],
     );
@@ -66,7 +63,7 @@ export class PostgresUserRepository implements UserRepository {
    * @param email
    */
   findByEmail = async (email: string): Promise<UserEntity | null> => {
-    const result = await this.databaseService.query<UserEntity>(
+    const result = await this.store.query<UserEntity>(
       "SELECT * FROM find_user_by_email($1)",
       [email],
     );
@@ -85,7 +82,7 @@ export class PostgresUserRepository implements UserRepository {
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(queryRunner)
       .update(UserEntity)
       .set(updatedUser)
@@ -99,7 +96,7 @@ export class PostgresUserRepository implements UserRepository {
    * Soft delete an existing user (kinda like archive)
    */
   softDelete = async (id: string, options?: QueryBuilderOptions) => {
-    const query = this.databaseService
+    const query = this.store
       .createDeleteQueryBuilder(UserEntity, "u", options?.queryRunner)
       .softDelete()
       .where("id = :id", { id });

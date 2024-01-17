@@ -1,7 +1,4 @@
-import {
-  DatabaseService,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { WorkspaceMemberEntity } from "../entities/workspace-member.entity";
 import { WorkspaceMemberRepository } from "./interface/workspace-member";
 import { UserEntity } from "../entities";
@@ -9,13 +6,13 @@ import { UserEntity } from "../entities";
 export class PostgresWorkspaceMemberRepository
   implements WorkspaceMemberRepository
 {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private store: TypeormStore) {}
 
   save = async (
     workspace: WorkspaceMemberEntity,
     options?: QueryBuilderOptions,
   ) => {
-    const query = this.databaseService
+    const query = this.store
       .createQueryBuilder(options?.queryRunner)
       .insert()
       .into(WorkspaceMemberEntity)
@@ -26,7 +23,7 @@ export class PostgresWorkspaceMemberRepository
   };
 
   existsById = async (id: string): Promise<boolean> => {
-    const result = await this.databaseService.query<{
+    const result = await this.store.query<{
       memberExistsByEmail: boolean;
     }>("SELECT * FROM member_exists_by_email($1)", [id]);
 
@@ -34,7 +31,7 @@ export class PostgresWorkspaceMemberRepository
   };
 
   existsByUserId = async (userId: string, workspaceId: string) => {
-    const result = await this.databaseService.query<{
+    const result = await this.store.query<{
       memberExistsByUserId: boolean;
     }>("SELECT * FROM member_exists_by_user_id($1, $2)", [userId, workspaceId]);
 
@@ -42,7 +39,7 @@ export class PostgresWorkspaceMemberRepository
   };
 
   find = async (id: string) => {
-    const result = await this.databaseService.query<UserEntity>(
+    const result = await this.store.query<UserEntity>(
       "SELECT * FROM find_members_by_workspace_id($1)",
       [id],
     );

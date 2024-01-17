@@ -1,9 +1,9 @@
 # Install k8s resources
 
-## Install Ingress Controller
+## Install Ingress Controller on GKE
 
 ```powershell
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin  --user $(gcloud config get-value account)
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin  --user $(gcloud config get-value account) # Optional for GKE
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 kubectl apply -f ./k8s/ingress
 ```
@@ -22,6 +22,7 @@ helm install pgo ./k8s/pgo
 
 ```powershell
 helm install activity-postgres ./k8s/postgres --values ./k8s/postgres/activity.values.yaml
+helm install attachment-postgres ./k8s/postgres --values ./k8s/postgres/attachment.values.yaml
 helm install email-postgres ./k8s/postgres --values ./k8s/postgres/email.values.yaml
 helm install identity-postgres ./k8s/postgres --values ./k8s/postgres/identity.values.yaml
 helm install issue-postgres ./k8s/postgres --values ./k8s/postgres/issue.values.yaml
@@ -43,40 +44,55 @@ helm install nack nats/nack --set jetstream.nats.url=nats://nats:4222
 
 ```powershell
 # Streams
+helm install email-stream ./k8s/nats-stream --set streamName=email
 helm install project-stream ./k8s/nats-stream --set streamName=project
+helm install issue-stream ./k8s/nats-stream --set streamName=issue
 helm install user-stream ./k8s/nats-stream --set streamName=user
 helm install workspace-stream ./k8s/nats-stream --set streamName=workspace
 
 # Consumers
-helm install user-consumer-identity ./k8s/nats-consumer --set serviceName=identity,streamName=user
-helm install user-consumer-issue ./k8s/nats-consumer --set serviceName=issue,streamName=user
-helm install user-consumer-project ./k8s/nats-consumer --set serviceName=project,streamName=user
-helm install user-consumer-workspace ./k8s/nats-consumer --set serviceName=workspace,streamName=user
+# User
+helm install user-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/user.created.yaml
+helm install user-updated-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/user.updated.yaml
+# Project
+helm install project-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/project.created.yaml
+helm install project-updated-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/project.updated.yaml
+helm install project-member-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/project.member-created.yaml
 
-helm install user-consumer-activity ./k8s/nats-consumer --set serviceName=activity,streamName=user
-helm install project-consumer-activity ./k8s/nats-consumer --set serviceName=activity,streamName=project
+# Issue
+helm install issue-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/issue.created.yaml
 
-helm install workspace-consumer-project ./k8s/nats-consumer --set serviceName=project,streamName=workspace
-helm install workspace-invite-created-consumer-email ./k8s/nats-consumer --set serviceName=email,streamName=workspace
+# Email
+helm install email-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/email.created.yaml
+
+# Workspace
+helm install workspace-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/workspace.created.yaml
+helm install workspace-updated-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/workspace.updated.yaml
+helm install workspace-invite-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/workspace.invite.yaml
+```
+
+## Use google DNS
+
+```powershell
+kubectl edit configmap coredns -n kube-system
+
+# Replace forward block with
+forward . 8.8.8.8 8.8.4.4 {
+    max_concurrent 1000
+}
+
+kubectl rollout restart deployment coredns -n kube-system
 ```
 
 <!-- Docker desktop -->
+
 ```powershell
-kubectl port-forward activity-postgres-db-xbt5-0 5430:5432
-kubectl port-forward email-postgres-db-z2h8-0 5431:5432
-kubectl port-forward identity-postgres-db-8vj7-0 5432:5432
-kubectl port-forward issue-postgres-db-4j86-0 5433:5432
-kubectl port-forward project-postgres-db-k62h-0 5434:5432
-kubectl port-forward user-postgres-db-9nfv-0 5435:5432
-kubectl port-forward workspace-postgres-db-76hh-0 5436:5432
-
-
-# GKE
-kubectl port-forward activity-postgres-db-bhms-0 5430:5432
-kubectl port-forward email-postgres-db-qjp9-0 5431:5432
-kubectl port-forward identity-postgres-db-b8ng-0 5432:5432
-kubectl port-forward issue-postgres-db-rpgq-0 5433:5432
-kubectl port-forward project-postgres-db-lg64-0 5434:5432
-kubectl port-forward user-postgres-db-h69j-0 5435:5432
-kubectl port-forward workspace-postgres-db-n69c-0 5436:5432
+kubectl port-forward activity-postgres-db-qp2x-0 5429:5432
+kubectl port-forward attachment-postgres-db-rhfm-0 5430:5432
+kubectl port-forward email-postgres-db-j8ks-0 5431:5432
+kubectl port-forward identity-postgres-db-tfsc-0 5432:5432
+kubectl port-forward issue-postgres-db-cx2f-0 5433:5432
+kubectl port-forward project-postgres-db-bclm-0 5434:5432
+kubectl port-forward user-postgres-db-zbkw-0 5435:5432
+kubectl port-forward workspace-postgres-db-4mhh-0 5436:5432
 ```

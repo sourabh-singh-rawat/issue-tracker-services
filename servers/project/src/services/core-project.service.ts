@@ -103,6 +103,8 @@ export class CoreProjectService implements ProjectService {
         newProjectMember.userId = userId;
         newProjectMember.role = ProjectRoles.Owner;
         newProjectMember.creatorId = userId;
+        newProjectMember.workspaceId = user.defaultWorkspaceId;
+        newProjectMember.inviteStatus = ProjectInviteStatus.ACCEPTED;
 
         await this.projectMemberRepository.save(newProjectMember, {
           queryRunner,
@@ -135,6 +137,7 @@ export class CoreProjectService implements ProjectService {
     projectId: string,
     role: ProjectRoles,
     invitedBy: string,
+    workspaceId: string,
   ) => {
     await this.casbinProjectGuardian.validatePermission(
       invitedBy,
@@ -143,7 +146,13 @@ export class CoreProjectService implements ProjectService {
     );
 
     // await this.casbinProjectGuardian.createAdmin(userId, projectId);
-    await this.createProjectMember(userId, projectId, role, invitedBy);
+    await this.createProjectMember(
+      userId,
+      projectId,
+      role,
+      invitedBy,
+      workspaceId,
+    );
   };
 
   confirmProjectInvite = async (token: string) => {
@@ -181,8 +190,12 @@ export class CoreProjectService implements ProjectService {
     projectId: string,
     role: ProjectRoles,
     createdBy: string,
+    workspaceId: string,
   ) => {
-    const alreadyMember = await this.projectMemberRepository.existsById(userId);
+    const alreadyMember = await this.projectMemberRepository.existsByProjectId(
+      userId,
+      projectId,
+    );
     if (alreadyMember) throw new UserAlreadyExists();
 
     // TODO: check if the user is member of project's workspace
@@ -192,6 +205,7 @@ export class CoreProjectService implements ProjectService {
     newProjectMember.projectId = projectId;
     newProjectMember.role = role;
     newProjectMember.creatorId = createdBy;
+    newProjectMember.workspaceId = workspaceId;
 
     await this.projectMemberRepository.save(newProjectMember);
 
@@ -263,8 +277,14 @@ export class CoreProjectService implements ProjectService {
     return new ServiceResponse({ rows: project });
   };
 
-  getWorkspaceMemberList = async (workspaceId: string) => {
-    const rows = await this.workspaceMemberRepository.find(workspaceId);
+  getWorkspaceMemberList = async (userId: string, projectId: string) => {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new UserNotFoundError();
+
+    const rows = await this.workspaceMemberRepository.find(
+      projectId,
+      user.defaultWorkspaceId,
+    );
 
     return new ServiceResponse({ rows, filteredRowCount: rows.length });
   };

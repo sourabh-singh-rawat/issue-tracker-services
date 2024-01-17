@@ -1,7 +1,7 @@
-import { databaseService } from "../../app/database-service";
+import { databaseService } from "../../app/stores/postgres-typeorm.store";
 import { CoreWorkspaceService } from "../core-workspace.service";
-import { policyManager } from "../../app/policy-manager";
-import { messageService } from "../../app/message-service";
+import { policyManager } from "../../app/guardians/casbin/workspace.guardian";
+import { messageService } from "../../app/messengers/nats.messenger";
 import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
 import { PostgresWorkspaceRepository } from "../../data/repositories/postgres-workspace.repository";
 import { PostgresWorkspaceMemberRepository } from "../../data/repositories/postgres-workspace-member.repository";
