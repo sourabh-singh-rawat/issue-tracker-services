@@ -6,7 +6,7 @@ import StyledListItemIcon from "../../styled/StyledListItemIcon";
 import StyledListItemButton from "../../styled/StyledListItemButton";
 
 export interface Props {
-  label?: string;
+  title?: string;
   icon?: JSX.Element;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   indicatorIcon?: JSX.Element;
@@ -15,7 +15,7 @@ export interface Props {
 }
 
 export default function SidebarGroupItemContent({
-  label,
+  title,
   icon,
   onClick,
   indicatorIcon,
@@ -42,7 +42,7 @@ export default function SidebarGroupItemContent({
         variant={isChild ? "body2" : "body2"}
         noWrap
       >
-        {label}
+        {title}
       </MuiTypography>
       <StyledListItemIcon>{indicatorIcon}</StyledListItemIcon>
     </StyledListItemButton>

@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { useLargeScreen } from "../../../hooks/useLargeScreen";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiDivider from "@mui/material/Divider";
 
-import MuiGridViewTwoToneIcon from "@mui/icons-material/GridViewTwoTone";
-import MuiPestControlTwoToneIcon from "@mui/icons-material/PestControlTwoTone";
-import MuiArticleTwoToneIcon from "@mui/icons-material/ArticleTwoTone";
-import MuiAssignmentTurnedInTwoToneIcon from "@mui/icons-material/AssignmentTurnedInTwoTone";
-import MuiStarTwoToneIcon from "@mui/icons-material/StarTwoTone";
+import MuiGridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import MuiPestControlOutlinedIcon from "@mui/icons-material/PestControlOutlined";
+import MuiArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import MuiAssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
+import MuiStarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
 import SidebarGroup from "../SidebarGroup";
 import SidebarGroupItem from "../SidebarGroupItem";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 import StyledList from "../../styled/StyledList";
+import SidebarGroupLabel from "../SidebarGroupLabel";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
@@ -53,6 +54,7 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
 export default function Sidebar() {
   const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     setOpen(isLargeScreen);
@@ -75,37 +77,47 @@ export default function Sidebar() {
       </StyledList>
       <MuiDivider />
       <StyledList disablePadding>
-        <SidebarGroupItem
-          icon={<MuiGridViewTwoToneIcon />}
-          to="/"
-          label="Dashboard"
-          isVisible={open}
-        />
-        <SidebarGroupItem
-          icon={<MuiArticleTwoToneIcon />}
-          to="/projects"
-          label="Projects"
-          isVisible={open}
-        />
-        <SidebarGroupItem
-          icon={<MuiPestControlTwoToneIcon />}
-          to="/issues"
-          label="Issues"
-          isVisible={open}
-        />
-        <SidebarGroupItem
-          icon={<MuiAssignmentTurnedInTwoToneIcon />}
-          to="/tasks"
-          label="Tasks"
-          isVisible={open}
-        />
+        <SidebarGroupLabel title="Manage" />
+        {[
+          {
+            icon: <MuiGridViewOutlinedIcon />,
+            to: "/",
+            title: "Dashboard",
+            isVisible: open,
+          },
+          {
+            icon: <MuiArticleOutlinedIcon />,
+            to: "/projects",
+            title: "Projects",
+            isVisible: open,
+          },
+          {
+            icon: <MuiPestControlOutlinedIcon />,
+            to: "/issues",
+            title: "Issues",
+            isVisible: open,
+          },
+          {
+            icon: <MuiAssignmentTurnedInOutlinedIcon />,
+            to: "/tasks",
+            title: "Tasks",
+            isVisible: open,
+          },
+        ].map(({ icon, to, title, isVisible }) => (
+          <SidebarGroupItem
+            icon={icon}
+            to={to}
+            title={title}
+            isVisible={open}
+          />
+        ))}
       </StyledList>
       <MuiDivider />
       <StyledList disablePadding>
         <SidebarGroup
-          label="Favourites"
+          title="Favourites"
           isVisible={open}
-          icon={<MuiStarTwoToneIcon />}
+          icon={<MuiStarOutlinedIcon />}
         />
       </StyledList>
     </Drawer>

@@ -5,7 +5,7 @@ import Dashboard from "../features/dashboard/pages/Dashboard";
 import AppLayout from "../common/components/AppLayout";
 import PrivateRoutes from "../common/components/PrivateRoutes";
 import Login from "../features/auth/pages/Login";
-import SignUp from "../features/auth/pages/Signup";
+import SignUp from "../features/auth/pages/SignUp";
 // import Settings from "./features/settings/pages/Settings";
 // import CollaboratorList from "./features/collaborator-list/components/CollaboratorList";
 // import Collaborators from "./features/collaborator-list/pages/Collaborators/Collaborators";
@@ -32,6 +32,7 @@ import IssueComments from "../features/issue-comments/pages/IssueComments";
 import IssueAttachments from "../features/issue-attachments/pages/IssueAttachments";
 import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 import Profile from "../features/user/pages/Profile";
+import Workspaces from "../features/workspace/pages/Workspaces";
 
 // import Team from "./features/team/pages/Team";
 // import TeamActivity from "./features/team/pages/TeamActivity";

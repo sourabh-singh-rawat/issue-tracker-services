@@ -4,7 +4,7 @@ import SignUpForm from "../../components/SignUpForm";
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
 
-export default function SignUpPage() {
+export default function SignUp() {
   return (
     <MuiContainer maxWidth="md">
       <MuiGrid container>
