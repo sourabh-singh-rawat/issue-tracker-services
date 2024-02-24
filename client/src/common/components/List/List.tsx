@@ -8,30 +8,32 @@ import {
 } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 
-const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
-  border: "none",
-  ".MuiDataGrid-row": {
-    ":hover": { backgroundColor: theme.palette.background.default },
-  },
-  ".MuiDataGrid-cell": {
-    color: theme.palette.text.primary,
-    borderColor: theme.palette.divider,
-  },
-  ".MuiDataGrid-columnHeader": {},
-  ".MuiDataGrid-columnHeaders": {
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: theme.shape.borderRadiusLarge,
-    backgroundColor: theme.palette.background.paper,
-  },
-  ".MuiDataGrid-columnSeparator": {
-    display: "none",
-  },
-  ".MuiDataGrid-footerContainer": {
-    borderTop: `1px solid ${theme.palette.divider}`,
-  },
-}));
+const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => {
+  const palette = theme.palette;
+  const bgPalette = palette.background;
+  const borderColor = theme.palette.divider;
+  const border = `1px solid ${borderColor}`;
+  const borderRadiusMedium = theme.shape.borderRadiusMedium;
 
-interface ListProps {
+  return {
+    border: "none",
+    "&.MuiDataGrid-root": { border, borderRadius: borderRadiusMedium },
+    ".MuiDataGrid-row": {},
+    ".MuiDataGrid-cell": { color: palette.text.primary, borderColor },
+    ".MuiDataGrid-columnHeader": {},
+    ".MuiDataGrid-columnHeaders": {
+      borderBottom: border,
+      borderRadius: `${borderRadiusMedium} ${borderRadiusMedium} 0 0 `,
+      backgroundColor: bgPalette.paper,
+    },
+    ".MuiDataGrid-columnSeparator": { display: "none" },
+    ".MuiDataGrid-footerContainer": {
+      borderTop: border,
+    },
+  };
+});
+
+interface Props {
   rows: GridValidRowModel[];
   columns: GridColDef<GridValidRowModel>[];
   rowCount?: number;
@@ -41,6 +43,7 @@ interface ListProps {
     details: GridCallbackDetails,
   ) => void;
   isLoading?: boolean;
+  hideFooter?: boolean;
 }
 
 export default function List({
@@ -48,9 +51,10 @@ export default function List({
   rowCount = 0,
   columns = [],
   isLoading,
+  hideFooter = false,
   paginationModel,
   onPaginationModelChange,
-}: ListProps) {
+}: Props) {
   const [rowCountState, setRowCountState] = useState(rowCount);
 
   useEffect(() => {
@@ -76,6 +80,7 @@ export default function List({
       disableColumnMenu
       disableRowSelectionOnClick
       autoHeight
+      hideFooter={hideFooter}
     />
   );
 }

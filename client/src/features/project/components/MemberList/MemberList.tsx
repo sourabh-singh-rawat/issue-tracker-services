@@ -37,9 +37,7 @@ function MemberList({ members, projectId }: MemberListProps) {
             sx={{
               pl: theme.spacing(1),
               color: theme.palette.text.primary,
-              "&:hover": {
-                color: theme.palette.primary.main,
-              },
+              "&:hover": { color: theme.palette.primary.main },
             }}
             variant="body2"
           >
@@ -78,6 +76,7 @@ function MemberList({ members, projectId }: MemberListProps) {
       rowCount={members?.length}
       columns={columns}
       // isLoading={isLoading}
+      hideFooter={true}
     />
   );
 }

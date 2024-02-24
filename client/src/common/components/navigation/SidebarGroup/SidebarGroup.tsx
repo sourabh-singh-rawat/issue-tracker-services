@@ -6,14 +6,14 @@ import MuiKeyboardArrowRightTwoToneIcon from "@mui/icons-material/KeyboardArrowR
 import SidebarGroupItem from "../SidebarGroupItem";
 
 interface SidebarGroupProps {
-  label?: string;
+  title?: string;
   isVisible?: boolean;
   icon?: JSX.Element;
 }
 
 export default function SidebarGroup({
   icon,
-  label,
+  title,
   isVisible,
 }: SidebarGroupProps) {
   const [isSidebarGroupOpen, setIsSidebarGroupOpen] = useState(false);
@@ -24,14 +24,14 @@ export default function SidebarGroup({
     <>
       <SidebarGroupItem
         icon={icon}
-        label={label}
+        title={title}
         onClick={handleClickMenuItem}
         indicatorIcon={<MuiKeyboardArrowRightTwoToneIcon />}
         isVisible={isVisible}
       />
       <MuiCollapse in={isSidebarGroupOpen} timeout="auto" unmountOnExit>
         <MuiList component="div" disablePadding>
-          <SidebarGroupItem label={label} isVisible={isVisible} isChild />
+          <SidebarGroupItem title={title} isVisible={isVisible} isChild />
         </MuiList>
       </MuiCollapse>
     </>

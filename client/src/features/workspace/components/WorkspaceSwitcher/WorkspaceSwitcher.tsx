@@ -14,7 +14,7 @@ interface Props {
 
 export default function WorkspaceSwitcher({ isLargeScreen }: Props) {
   const { data: workspaces } = useGetAllWorkspacesQuery();
-  const { id, name } = useAppSelector((store) => store.auth.currentWorkspace);
+  const { id, name } = useAppSelector(({ auth }) => auth.currentWorkspace);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedOption, setSelectedOption] = useState({ id, name });
@@ -29,7 +29,7 @@ export default function WorkspaceSwitcher({ isLargeScreen }: Props) {
     <>
       <SidebarGroupItem
         icon={<Avatar label={selectedOption?.name} />}
-        label={selectedOption?.name}
+        title={selectedOption?.name}
         onClick={handleClick}
         indicatorIcon={<UnfoldMoreTwoToneIcon />}
         isVisible={isLargeScreen}

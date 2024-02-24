@@ -22,6 +22,7 @@ import DateTag from "../../../../common/components/DateTag";
 import TextButton from "../../../../common/components/buttons/TextButton";
 
 import { useMessageBar } from "../../../message-bar/hooks";
+import Chip from "../../../../common/components/Chip";
 
 export default function Project() {
   const theme = useTheme();
@@ -103,7 +104,7 @@ export default function Project() {
               <MuiSkeleton width="80px" />
             ) : (
               <MuiTypography component="span" variant="body2">
-                Project
+                <Chip label="Project" />
               </MuiTypography>
             )}
             {isLoading ? (

@@ -34,6 +34,16 @@ export default function WorkspaceMenu({
   const [open, setOpen] = useState(false);
   const [openMember, setOpenMember] = useState(false);
 
+  const onClickOpenWorkspace = () => {
+    setOpen(true);
+    handleClose();
+  };
+
+  const onClickOpenWorkspaceMembers = () => {
+    setOpenMember(true);
+    handleClose();
+  };
+
   return (
     <>
       <StyledMenu
@@ -44,22 +54,21 @@ export default function WorkspaceMenu({
         <StyledList disablePadding>
           <MenuItem
             avatarIcon={<AddCircleIcon />}
-            label="Create workspace"
-            onClick={() => {
-              setOpen(true);
-              handleClose();
-            }}
+            label="Create new Workspace"
+            onClick={onClickOpenWorkspace}
           />
           <MenuItem
             label="Invite Members"
-            onClick={() => {
-              setOpenMember(true);
-              handleClose();
-            }}
+            onClick={onClickOpenWorkspaceMembers}
             avatarIcon={<PersonAddAlt1TwoToneIcon />}
           />
           <MenuItem
             label="Settings"
+            onClick={handleClose}
+            avatarIcon={<SettingsTwoToneIcon />}
+          />
+          <MenuItem
+            label="Manage Workspaces"
             onClick={handleClose}
             avatarIcon={<SettingsTwoToneIcon />}
           />

@@ -5,7 +5,7 @@ import SidebarGroupItemContent from "../SidebarGroupItemContent";
 
 interface Props {
   icon?: JSX.Element;
-  label?: string;
+  title?: string;
   indicatorIcon?: JSX.Element;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   to?: string;
@@ -15,7 +15,7 @@ interface Props {
 
 export default function SidebarGroupItem({
   icon,
-  label,
+  title,
   indicatorIcon,
   onClick,
   isChild,
@@ -26,7 +26,7 @@ export default function SidebarGroupItem({
     <Link to={to} style={{ color: "inherit", textDecoration: "none" }}>
       <SidebarGroupItemContent
         icon={icon}
-        label={label}
+        title={title}
         indicatorIcon={indicatorIcon}
         onClick={onClick}
         isChild={isChild}
@@ -37,7 +37,7 @@ export default function SidebarGroupItem({
     <div>
       <SidebarGroupItemContent
         icon={icon}
-        label={label}
+        title={title}
         indicatorIcon={indicatorIcon}
         onClick={onClick}
         isChild={isChild}
