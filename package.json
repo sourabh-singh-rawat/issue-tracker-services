@@ -1,10 +1,16 @@
 {
   "name": "issue-tracker",
   "version": "1.0.0",
-  "description": "Web application to track issues in your projects.",
+  "description": "A mono repo for web application that track issues in your projects",
   "scripts": {
+    "client:start": "pnpm -F client run start",
+    "server:start": "skaffold dev"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "pnpm": ">=8.15.4",
+    "node": ">=21.6.1"
+  }
 }
