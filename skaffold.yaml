@@ -5,37 +5,45 @@ metadata:
 build:
   artifacts:
   - image: sourabhrawatcc/activity
-    context: servers/activity
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: activity
   - image: sourabhrawatcc/attachment
-    context: servers/attachment
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: attachment
   - image: sourabhrawatcc/email
-    context: servers/email
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: email
   - image: sourabhrawatcc/identity
-    context: servers/identity
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: identity
   - image: sourabhrawatcc/issue
-    context: servers/issue
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: issue
   - image: sourabhrawatcc/project
-    context: servers/project
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: user
   - image: sourabhrawatcc/user
-    context: servers/user
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: user
   - image: sourabhrawatcc/workspace
-    context: servers/workspace
+    context: .
     docker:
       dockerfile: Dockerfile
+      target: workspace
 deploy:
   helm:
     releases:

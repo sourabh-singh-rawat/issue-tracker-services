@@ -1,0 +1,10 @@
+{
+  "name": "issue-tracker",
+  "version": "1.0.0",
+  "description": "Web application to track issues in your projects.",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
