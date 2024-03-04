@@ -1,144 +1,96 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 ARG NODE_VERSION=21.6.1
 ARG PNPM_VERSION=8.15.4
 
+# Stage 1: Setup base
+# Base image with contains node and npm.
 FROM node:${NODE_VERSION}-alpine AS base
 
 # Install pnpm.
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
 
-# Copy only necessary files for installing dependencies.
+# The working directory for base stage
+WORKDIR /usr/src/app
+
+# Copy the source files in the base stage.
+COPY . .
+
+
+# Stage 2: Install node_modules and build the typescript code to javascript.
 FROM base AS build
-WORKDIR /usr/src/app
-COPY . /usr/src/app
 
-# Install dependencies
-RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+# Download dependencies as a separate step to take advantage of Docker's caching.
+# Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
+# Leverage a bind mounts to package.json and pnpm-lock.yaml to avoid having to copy them into
+# into this layer.
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+    --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
-RUN pnpm run -r build
-RUN pnpm -F activity deploy /build/activity
-RUN pnpm -F attachment deploy /build/attachment
-RUN pnpm -F email deploy /build/email
-RUN pnpm -F identity deploy /build/identity
-RUN pnpm -F issue deploy /build/issue
-RUN pnpm -F project deploy /build/project
-RUN pnpm -F user deploy /build/user
-RUN pnpm -F workspace deploy /build/workspace
+RUN pnpm --filter=!client run -r build
 
 
+# Stage 3: Activity
 FROM base AS activity
-COPY --from=build /build/activity /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
-
-# Run the application.
-CMD pnpm start
+CMD pnpm -F activity run start
 
 
+# Stage 3: Attachment
 FROM base AS attachment
-COPY --from=build /build/attachment /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
+CMD pnpm -F attachment run start
 
-# Run the application.
-CMD pnpm start
 
+# Stage 3: Email
 FROM base AS email
-COPY --from=build /build/email /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
-
-# Run the application.
-CMD pnpm start
+CMD pnpm -F email run start
 
 
+# Stage 3: Identity
 FROM base AS identity
-COPY --from=build /build/identity /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
+CMD pnpm -F identity run start
 
-# Run the application.
-CMD pnpm start
 
+# Stage 3: Issue
 FROM base AS issue
-COPY --from=build /build/issue /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
-
-# Run the application.
-CMD pnpm start
+CMD pnpm -F issue run start
 
 
+# Stage 3: Project
 FROM base AS project
-COPY --from=build /build/project /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
+CMD pnpm -F project run start
 
-# Run the application.
-CMD pnpm start
 
+# Stage 3: User
 FROM base AS user
-COPY --from=build /build/user /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
+CMD pnpm -F user run start
 
-# Run the application.
-CMD pnpm start
 
+# Stage 3: Workspace
 FROM base AS workspace
-COPY --from=build /build/workspace /usr/src/app
-WORKDIR /usr/src/app
-
-# Run the application as a non-root user.
+COPY --from=build /usr/src/app /usr/src/app
 USER node
-
-# Expose the port that the application listens on.
 EXPOSE 4000
-
-# Run the application.
-CMD pnpm start
-
-
-
+CMD pnpm -F workspace run start
