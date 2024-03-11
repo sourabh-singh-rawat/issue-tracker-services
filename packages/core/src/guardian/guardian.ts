@@ -3,7 +3,7 @@ import { DataSource } from "typeorm";
 import TypeORMAdapter from "typeorm-adapter";
 import { Enforcer, newEnforcer } from "casbin";
 import { TypeORMAdapterConfig } from "typeorm-adapter/lib/adapter";
-import { MissingEnforcerError } from "../error/missing-enforcer.error";
+import { MissingEnforcerError } from "../errors/missing-enforcer.error";
 
 export abstract class Guardian<A extends string> {
   protected casbinEnforcer?: Enforcer;

@@ -1,4 +1,4 @@
-import { ProjectStatus } from "../enums";
+import { ProjectStatus } from "@issue-tracker/common";
 
 export class ProjectFormData {
   constructor(

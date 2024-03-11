@@ -1,5 +1,5 @@
-import { server } from "./app/servers/fastify.server";
-import { container } from "./app/containers/awilix.container";
+import { server } from "./app/servers";
+import { container } from "./app/containers";
 
 const SERVER_PORT = 4000;
 const SERVER_HOST = "0.0.0.0";

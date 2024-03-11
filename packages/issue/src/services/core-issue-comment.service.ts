@@ -1,7 +1,7 @@
 import { ServiceResponse } from "@sourabhrawatcc/core-utils";
-import { IssueCommentEntity } from "../data/entities";
+import { IssueCommentEntity } from "../app/entities";
 import { IssueCommentService } from "./interfaces/issue-comment.service";
-import { IssueCommentRepository } from "../data/repositories/interfaces/issue-comment.repository";
+import { IssueCommentRepository } from "../repositories/interfaces/issue-comment.repository";
 
 export class CoreIssueCommentService implements IssueCommentService {
   constructor(private issueCommentRepository: IssueCommentRepository) {}

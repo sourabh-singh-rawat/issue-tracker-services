@@ -1,5 +1,5 @@
 import { Errors } from "../../common/enums";
-import { StandardError } from "../../error";
+import { StandardError } from "../../errors";
 
 export class ConnectionRefusedError extends StandardError {
   errorCode: string;

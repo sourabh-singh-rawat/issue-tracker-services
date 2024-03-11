@@ -9,7 +9,7 @@ import {
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
 import { WorkspaceService } from "../../services/interfaces/workspace.service";
-import { UserEntity } from "../../data/entities";
+import { UserEntity } from "../../app/entities";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;

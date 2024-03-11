@@ -4,6 +4,6 @@ import {
 } from "@sourabhrawatcc/core-utils";
 
 export interface UserService {
-  getDefaultWorkspaceId(userId: string): Promise<ServiceResponse<string>>;
+  getDefaultWorkspaceId(userId: string): Promise<string>;
   updateUser(payload: UserUpdatedPayload): Promise<void>;
 }

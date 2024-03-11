@@ -3,17 +3,13 @@ import {
   UserNotFoundError,
   VersionMismatchError,
 } from "@sourabhrawatcc/core-utils";
-import { UserEntity } from "../data/entities";
 import { UserService } from "./interfaces/user.service";
-import { UserRepository } from "../data/repositories/interfaces/user.repository";
+import { UserRepository } from "../repositories/interfaces/user.repository";
+import { UserEntity } from "../app/entities";
 
 export class CoreUserService implements UserService {
   constructor(private userRepository: UserRepository) {}
 
-  /**
-   * Gets current user
-   * @param userId
-   */
   private getUserById = async (userId: string) => {
     const user = await this.userRepository.findById(userId);
     if (!user) throw new UserNotFoundError();
@@ -21,22 +17,12 @@ export class CoreUserService implements UserService {
     return user;
   };
 
-  /**
-   * Gets the default workspace of the user
-   * @param userId
-   */
   getDefaultWorkspaceId = async (userId: string) => {
     const user = await this.getUserById(userId);
 
     return new ServiceResponse({ rows: user.defaultWorkspaceId });
   };
 
-  /**
-   * Updates the user
-   * @param userId
-   * @param defaultWorkspaceId
-   * @param version
-   */
   updateUser = async (
     userId: string,
     defaultWorkspaceId: string,

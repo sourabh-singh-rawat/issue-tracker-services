@@ -1,5 +1,5 @@
 import { MultipartFile } from "@fastify/multipart";
-import { IssueAttachmentEntity } from "../../data/entities";
+import { IssueAttachmentEntity } from "../../app/entities";
 import { ServiceResponse } from "@sourabhrawatcc/core-utils";
 
 export interface IssueAttachmentService {

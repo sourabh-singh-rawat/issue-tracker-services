@@ -6,24 +6,22 @@ import {
   logger,
   Messenger,
 } from "@sourabhrawatcc/core-utils";
-import { store } from "../stores/postgres-typeorm.store";
-import { messenger } from "../messengers/nats.messenger";
+import { store } from "../stores";
+import { messenger } from "../messengers";
 
 import { UserController } from "../../controllers/interfaces/user.controller";
 import { UserService } from "../../services/interface/user.service";
-import { UserRepository } from "../../data/repositories/interfaces/user.repository";
 
 import { CoreUserController } from "../../controllers/core-user.controller";
 
 import { CoreUserService } from "../../services/core-user.service";
 
-import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
-import { UserProfileRepository } from "../../data/repositories/interfaces/user-profile.repository";
-import { PostgresUserProfileRepository } from "../../data/repositories/postgres-user-profile.repository";
-
-// publishers and subscribers
 import { UserCreatedPublisher } from "../../messages/publishers/user-created.publisher";
 import { UserUpdatedPublisher } from "../../messages/publishers/user-updated.publisher";
+import { UserRepository } from "../../repositories/interfaces/user.repository";
+import { UserProfileRepository } from "../../repositories/interfaces/user-profile.repository";
+import { PostgresUserRepository } from "../../repositories/postgres-user.repository";
+import { PostgresUserProfileRepository } from "../../repositories/postgres-user-profile.repository";
 
 interface RegisteredServices {
   logger: Logger;
@@ -41,12 +39,12 @@ const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
 
-export const container = new AwilixContainer<RegisteredServices>(
+export const awilixContainer = new AwilixContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = container;
+const { add } = awilixContainer;
 
 add("logger", asValue(logger));
 add("store", asValue(store));

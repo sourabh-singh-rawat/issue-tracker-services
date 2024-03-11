@@ -87,12 +87,12 @@ kubectl rollout restart deployment coredns -n kube-system
 <!-- Docker desktop -->
 
 ```powershell
-kubectl port-forward activity-postgres-db-qp2x-0 5429:5432
-kubectl port-forward attachment-postgres-db-rhfm-0 5430:5432
-kubectl port-forward email-postgres-db-j8ks-0 5431:5432
-kubectl port-forward identity-postgres-db-tfsc-0 5432:5432
-kubectl port-forward issue-postgres-db-cx2f-0 5433:5432
-kubectl port-forward project-postgres-db-bclm-0 5434:5432
-kubectl port-forward user-postgres-db-zbkw-0 5435:5432
-kubectl port-forward workspace-postgres-db-4mhh-0 5436:5432
+kubectl port-forward activity-postgres-db-m7fv-0 5429:5432
+kubectl port-forward attachment-postgres-db-h4zj-0 5430:5432
+kubectl port-forward email-postgres-db-787b-0 5431:5432
+kubectl port-forward identity-postgres-db-2tw4-0 5432:5432
+kubectl port-forward issue-postgres-db-wngz-0 5433:5432
+kubectl port-forward project-postgres-db-s2cw-0 5434:5432
+kubectl port-forward user-postgres-db-8ljx-0 5435:5432
+kubectl port-forward workspace-postgres-db-hrzc-0 5436:5432
 ```

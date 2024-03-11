@@ -20,7 +20,7 @@ export class IssueCreatedSubscriber extends Subscriber<IssueCreatedPayload> {
   }
 
   onMessage = async (message: JsMsg, payload: IssueCreatedPayload) => {
-    await this.issueActivityService.logIssueCreated(payload);
+    await this.issueActivityService.logCreatedIssue(payload);
     message.ack();
     console.log("Message processing completed");
   };

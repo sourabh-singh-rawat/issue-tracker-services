@@ -9,7 +9,7 @@ export * from "./mailer";
 export * from "./crypto";
 export * from "./guardian";
 export * from "./store";
-export * from "./error";
+export * from "./errors";
 export * from "./app-logger";
 export * from "./messenger";
 export * from "./container";

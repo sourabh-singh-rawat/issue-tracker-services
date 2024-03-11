@@ -17,12 +17,12 @@ import {
 } from "@sourabhrawatcc/core-utils";
 
 import { IdentityService } from "./interfaces/identity.service";
-import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
+import { AccessTokenEntity, RefreshTokenEntity } from "../app/entities";
 import { StatusCodes } from "http-status-codes";
 import { TokenOptions } from "./interfaces/token-options";
-import { UserRepository } from "../data/repositories/interfaces/user-repository";
-import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
-import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
+import { UserRepository } from "../repositories/interfaces/user-repository";
+import { AccessTokenRepository } from "../repositories/interfaces/access-token-repository";
+import { RefreshTokenRepository } from "../repositories/interfaces/refresh-token-repository";
 
 export class CoreIdentityService implements IdentityService {
   constructor(
@@ -32,20 +32,10 @@ export class CoreIdentityService implements IdentityService {
     private readonly refreshTokenRepository: RefreshTokenRepository,
   ) {}
 
-  /**
-   * Return Boolean indicating whether the user exists.
-   * @param email
-   * @returns
-   */
   private isUserExistsByEmail = async (email: string) => {
     return await this.userRepository.existsByEmail(email);
   };
 
-  /**
-   * Returns user, if user exists else returns null.
-   * @param email
-   * @returns
-   */
   private getUserByEmail = async (email: string) => {
     return await this.userRepository.findByEmail(email);
   };
@@ -54,11 +44,6 @@ export class CoreIdentityService implements IdentityService {
     return await this.userRepository.findById(id);
   };
 
-  /**
-   * Returns number of seconds past unix epoch + x min.
-   * @param min
-   * @returns
-   */
   private generateTime = (min: number) => {
     return Math.floor(Date.now() / 1000) + min * 60;
   };
@@ -67,12 +52,6 @@ export class CoreIdentityService implements IdentityService {
     return v4();
   };
 
-  /**
-   * Creates accessToken
-   * @param userDetails
-   * @param exp expiration time in ms
-   * @returns access token string
-   */
   private createAccessToken = (
     userDetails: UserDetails,
     options: TokenOptions,
@@ -115,12 +94,6 @@ export class CoreIdentityService implements IdentityService {
     return newAccessToken;
   };
 
-  /**
-   * Create refreshToken
-   * @param userDetails
-   * @param exp expiration time in ms
-   * @returns refresh token string
-   */
   private createRefreshToken = (userId: string, options: TokenOptions) => {
     const { exp, jwtid } = options;
     const payload: RefreshToken = {
@@ -143,10 +116,6 @@ export class CoreIdentityService implements IdentityService {
     return newRefreshToken;
   };
 
-  /**
-   * Generates access and refresh tokens
-   * @returns tokens
-   */
   private generateTokens = (user: UserDetails) => {
     const access = this.createAccessToken(user, {
       exp: this.generateTime(15),
@@ -172,10 +141,6 @@ export class CoreIdentityService implements IdentityService {
     });
   };
 
-  /**
-   * Authenticates the current user with provided credentials
-   * @param user
-   */
   authenticate = async (credentials: AuthCredentials) => {
     const { email, password } = credentials;
 
@@ -210,14 +175,6 @@ export class CoreIdentityService implements IdentityService {
     });
   };
 
-  // TODO: revokeToken methods
-  // removes both access and refresh tokens from the database
-
-  /**
-   * Generate new access tokens and refresh tokens
-   * @param token
-   * @returns
-   */
   refreshToken = async (token: Tokens) => {
     const { refreshToken } = token;
     const secret = process.env.JWT_SECRET;

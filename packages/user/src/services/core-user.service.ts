@@ -16,12 +16,11 @@ import {
   NotFoundError,
 } from "@sourabhrawatcc/core-utils";
 import { UserService } from "./interface/user.service";
-import { UserEntity } from "../data/entities/user.entity";
-import { UserProfileEntity } from "../data/entities/user-profile.entity";
 import { UserCreatedPublisher } from "../messages/publishers/user-created.publisher";
 import { UserUpdatedPublisher } from "../messages/publishers/user-updated.publisher";
-import { UserRepository } from "../data/repositories/interfaces/user.repository";
-import { UserProfileRepository } from "../data/repositories/interfaces/user-profile.repository";
+import { UserRepository } from "../repositories/interfaces/user.repository";
+import { UserProfileRepository } from "../repositories/interfaces/user-profile.repository";
+import { UserEntity, UserProfileEntity } from "../app/entities";
 
 export class CoreUserService implements UserService {
   constructor(
@@ -37,28 +36,14 @@ export class CoreUserService implements UserService {
     return await this.userRepository.findById(userId);
   };
 
-  /**
-   * Returns user, if user exists else returns null.
-   * @param email
-   * @returns
-   */
   private getUserByEmail = async (email: string) => {
     return await this.userRepository.findByEmail(email);
   };
 
-  /**
-   * Return Boolean indicating whether the user exists.
-   * @param email
-   * @returns
-   */
   private isUserExistsByEmail = async (email: string) => {
     return await this.userRepository.existsByEmail(email);
   };
 
-  /**
-   * Creates a new user with provided credentials
-   * @param credentials
-   */
   createUser = async (
     userRegistrationData: UserRegistrationData,
     inviteToken?: string,
@@ -139,11 +124,6 @@ export class CoreUserService implements UserService {
     });
   };
 
-  /**
-   * Verifies user password with provided credentials
-   * @throws Error if verification fails
-   * @returns nothing
-   */
   verifyPassword = async (credentials: AuthCredentials) => {
     const { email, password } = credentials;
 
@@ -156,10 +136,6 @@ export class CoreUserService implements UserService {
     if (!isHashValid) throw new UnauthorizedError();
   };
 
-  /**
-   * Verifies user email token, updates the status in the table
-   * @param token
-   */
   verifyEmail = async (token: string) => {
     let verifiedToken: UserCreatedPayload;
 
@@ -180,10 +156,6 @@ export class CoreUserService implements UserService {
     await this.userUpdatedPublisher.publish(user);
   };
 
-  /**
-   * Gets information about the existing user using their email.
-   * @returns user details
-   */
   getUserInfoByEmail = async (email: string) => {
     const user = await this.getUserByEmail(email);
     if (!user) throw new UserNotFoundError();

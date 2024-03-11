@@ -6,8 +6,8 @@ import {
   Subscriber,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { ProjectEntity } from "../../data/entities/project.entity";
-import { PostgresProjectRepository } from "../../data/repositories/postgres-project.repository";
+import { ProjectEntity } from "../../app/entities/project.entity";
+import { PostgresProjectRepository } from "../../repositories/postgres-project.repository";
 import { CasbinProjectGuardian } from "../../app/guardians/casbin/casbin-project.guardian";
 
 export class ProjectCreatedSubscriber extends Subscriber<ProjectPayload> {

@@ -1,13 +1,13 @@
 import { container } from "./app/containers";
-import { fastifyServer } from "./app/servers/fastify.server";
+import { server } from "./app/servers";
 
 const startServer = async () => {
   try {
     await container.initialize();
-    await container.get("postgresTypeormStore").connect();
+    await container.get("store").connect();
     await container.get("messenger").connect();
 
-    fastifyServer.listen({ port: 4000, host: "0.0.0.0" });
+    server.listen({ port: 4000, host: "0.0.0.0" });
   } catch (error) {
     container.get("logger").error(error);
     process.exit(1);

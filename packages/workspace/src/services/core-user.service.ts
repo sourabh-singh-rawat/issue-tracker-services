@@ -3,9 +3,9 @@ import {
   UserUpdatedPayload,
   VersionMismatchError,
 } from "@sourabhrawatcc/core-utils";
-import { UserEntity } from "../data/entities";
 import { UserService } from "./interfaces/user.service";
-import { UserRepository } from "../data/repositories/interface/user-repository";
+import { UserEntity } from "../app/entities";
+import { UserRepository } from "../repositories/interface/user-repository";
 
 export class CoreUserService implements UserService {
   constructor(private userRepository: UserRepository) {}

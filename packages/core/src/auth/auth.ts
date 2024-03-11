@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import "@fastify/cookie";
-import { BadRequestError, ForbiddenError, UnauthorizedError } from "../error";
+import { BadRequestError, ForbiddenError, UnauthorizedError } from "../errors";
 import { AccessToken, JwtToken } from "../crypto";
 
 declare module "fastify" {

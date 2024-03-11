@@ -6,18 +6,20 @@ import {
   NodeMailer,
   TypeormStore,
   AwilixContainer,
+  Mailer,
 } from "@sourabhrawatcc/core-utils";
+import { mailer } from "../mailers";
 import { DataSource } from "typeorm";
-import { dataSource, store } from "../stores/postgres-typeorm.store";
-import { natsMessenger } from "../messengers/nats.messenger";
-import { brevoNodeMailer } from "../mailers/brevo.nodemailer";
+import { dataSource } from "../stores/postgres-typeorm.store";
+import { store } from "../stores";
+import { messenger } from "../messengers";
 import { EmailService } from "../../services/interfaces/email.service";
-import { EmailRepository } from "../../data/repositories/interfaces/email.repository";
+import { EmailRepository } from "../../repositories/interfaces/email.repository";
 import { CoreEmailService } from "../../services/core-email.service";
-import { PostgresEmailRepository } from "../../data/repositories/postgres-email.repository";
+import { PostgresEmailRepository } from "../../repositories/postgres-email.repository";
 import { WorkspaceInviteCreatedSubscriber } from "../../messages/subscribers/workspace-invite-created.subscriber";
-import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
-import { UserRepository } from "../../data/repositories/interfaces/user.repository";
+import { PostgresUserRepository } from "../../repositories/postgres-user.repository";
+import { UserRepository } from "../../repositories/interfaces/user.repository";
 import { ProjectMemberCreatedSubscriber } from "../../messages/subscribers/project-member-created.subscriber";
 import { UserCreatedSubscriber } from "../../messages/subscribers/user-created.subscriber";
 import { EmailCreatedPublisher } from "../../messages/publishers/email-created.publisher";
@@ -27,7 +29,7 @@ export interface RegisteredServices {
   store: TypeormStore;
   messenger: NatsMessenger;
   dataSource: DataSource;
-  nodeMailer: NodeMailer;
+  mailer: Mailer;
   emailService: EmailService;
   userRepository: UserRepository;
   emailRepository: EmailRepository;
@@ -41,17 +43,17 @@ const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
 
-export const container = new AwilixContainer<RegisteredServices>(
+export const awilixContainer = new AwilixContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = container;
+const { add } = awilixContainer;
 
 add("logger", asValue(logger));
 add("dataSource", asValue(dataSource));
-add("messenger", asValue(natsMessenger));
-add("nodeMailer", asValue(brevoNodeMailer));
+add("messenger", asValue(messenger));
+add("mailer", asValue(mailer));
 add("store", asValue(store));
 add("emailService", asClass(CoreEmailService));
 add("userRepository", asClass(PostgresUserRepository));

@@ -1,6 +1,6 @@
 import { container } from "./app/containers";
 import { fastifyServer } from "./app/servers/fastify.server";
-import { ProjectMemberPermissions } from "./data/entities";
+import { ProjectMemberPermissions } from "./app/entities";
 
 const SERVER_PORT = 4000;
 const SERVER_HOST = "0.0.0.0";
@@ -8,7 +8,7 @@ const SERVER_HOST = "0.0.0.0";
 const startServer = async () => {
   try {
     await container.initialize();
-    await container.get("postgresTypeormStore").connect();
+    await container.get("store").connect();
     await container.get("messenger").connect();
     await container
       .get("casbinProjectGuardian")

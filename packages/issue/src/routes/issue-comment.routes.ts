@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { container } from "../app/containers/awilix.container";
+import { awilixContainer } from "../app/containers/awilix.container";
 import { Auth } from "@sourabhrawatcc/core-utils";
 
 export const issueCommentRoutes = (
@@ -7,7 +7,7 @@ export const issueCommentRoutes = (
   fastifyOptions: unknown,
   done: () => void,
 ) => {
-  const controller = container.get("issueCommentController");
+  const controller = awilixContainer.get("issueCommentController");
   const { requireTokens, setCurrentUser, requireAuth } = Auth;
   const auth: RouteShorthandOptions = {
     preHandler: [requireTokens, setCurrentUser, requireAuth],

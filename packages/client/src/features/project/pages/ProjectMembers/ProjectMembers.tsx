@@ -32,7 +32,7 @@ export default function ProjectMembers() {
           />
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <MemberList members={members?.rows} projectId={id} />
+          {members && <MemberList members={members} projectId={id} />}
         </MuiGrid>
       </MuiGrid>
       <AddProjectMemberModal open={open} handleClose={handleClose} />

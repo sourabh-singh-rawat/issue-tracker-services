@@ -1,10 +1,9 @@
-import { container } from "./app/containers/awilix.container";
-import { server } from "./app/servers/fastify.server";
-import { WorkspaceMemberPermissions } from "./data/entities/workspace-member-permission.entity";
+import { container } from "./app/containers";
+import { server } from "./app/servers";
+import { WorkspaceMemberPermissions } from "./app/entities/workspace-member-permission.entity";
 
 const startServer = async () => {
   try {
-    // Connect to necessary services
     await container.initialize();
     await container.get("store").connect();
     await container.get("messenger").connect();
@@ -14,7 +13,6 @@ const startServer = async () => {
         customCasbinRuleEntity: WorkspaceMemberPermissions,
       });
 
-    // Start the server
     server.listen({ port: 4000, host: "0.0.0.0" });
   } catch (error) {
     container.get("logger").error(error);
@@ -22,7 +20,6 @@ const startServer = async () => {
   }
 };
 
-// Start message subscription
 const startSubscriptions = () => {
   container.get("userCreatedSubscriber").fetchMessages();
   container.get("userUpdatedSubscriber").fetchMessages();

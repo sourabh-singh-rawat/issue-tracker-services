@@ -7,8 +7,8 @@ import {
   UserCreatedPayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { UserEntity } from "../../data/entities";
-import { UserRepository } from "../../data/repositories/interfaces/user.repository";
+import { UserEntity } from "../../app/entities";
+import { UserRepository } from "../../repositories/interfaces/user.repository";
 import { EmailService } from "../../services/interfaces/email.service";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {

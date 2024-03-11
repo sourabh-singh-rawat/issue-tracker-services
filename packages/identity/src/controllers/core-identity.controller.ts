@@ -7,11 +7,6 @@ import { IdentityService } from "../services/interfaces/identity.service";
 export class CoreIdentityController implements IdentityController {
   constructor(private readonly identityService: IdentityService) {}
 
-  /**
-   * Router handler to authenticate user with credentials.
-   * @param request
-   * @param reply
-   */
   generateTokens = async (
     request: FastifyRequest<{ Body: AuthCredentials }>,
     reply: FastifyReply,
@@ -33,9 +28,6 @@ export class CoreIdentityController implements IdentityController {
     return reply.send();
   };
 
-  /**
-   * Route handler to get new access and refresh tokens, if refresh token is valid
-   */
   refreshTokens = async (request: FastifyRequest, reply: FastifyReply) => {
     const accessToken = request.cookies.accessToken;
     const refreshToken = request.cookies.refreshToken;
@@ -61,10 +53,6 @@ export class CoreIdentityController implements IdentityController {
     return reply.send();
   };
 
-  /**
-   * Route handler to revoke the access and refresh tokens
-   * TODO: remove the token from the database
-   */
   revokeTokens = async (request: FastifyRequest, reply: FastifyReply) => {
     reply.clearCookie("accessToken", { path: "/" });
     reply.clearCookie("refreshToken", { path: "/" });

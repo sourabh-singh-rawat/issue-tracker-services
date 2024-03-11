@@ -38,7 +38,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-let mode: "dark" | "light" = "dark";
+let mode: "dark" | "light" = "light";
 if (!mode) mode = "light";
 
 export const theme = createTheme({

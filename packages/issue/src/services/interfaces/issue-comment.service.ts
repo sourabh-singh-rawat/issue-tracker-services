@@ -1,5 +1,5 @@
 import { ServiceResponse } from "@sourabhrawatcc/core-utils";
-import { IssueCommentEntity } from "../../data/entities";
+import { IssueCommentEntity } from "../../app/entities";
 
 export interface IssueCommentService {
   createIssueComment(
