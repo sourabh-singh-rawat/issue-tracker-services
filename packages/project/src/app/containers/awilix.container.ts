@@ -13,10 +13,8 @@ import {
   TypeormStore,
 } from "@sourabhrawatcc/core-utils";
 import { DataSource } from "typeorm";
-import {
-  dataSource,
-  postgresTypeormStore,
-} from "../stores/postgres-typeorm.store";
+import { dataSource } from "../stores/postgres-typeorm.store";
+import { store } from "../stores";
 import { natsMessenger } from "../messengers/nats.messenger";
 import { CasbinProjectGuardian, CasbinWorkspaceGuardian } from "../guardians";
 
@@ -25,21 +23,21 @@ import { ProjectController } from "../../controllers/interfaces/project.controll
 import { UserService } from "../../services/interfaces/user.service";
 import { ProjectService } from "../../services/interfaces/project.service";
 
-import { UserRepository } from "../../data/repositories/interfaces/user.repository";
-import { ProjectRepository } from "../../data/repositories/interfaces/project.repository";
-import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
-import { WorkspaceMemberRepository } from "../../data/repositories/interfaces/workspace-member.repository";
+import { UserRepository } from "../../repositories/interfaces/user.repository";
+import { ProjectRepository } from "../../repositories/interfaces/project.repository";
+import { WorkspaceRepository } from "../../repositories/interfaces/workspace.repository";
+import { WorkspaceMemberRepository } from "../../repositories/interfaces/workspace-member.repository";
 
 import { CoreProjectController } from "../../controllers/core-project.controller";
 
 import { CoreUserService } from "../../services/core-user.service";
 import { CoreProjectService } from "../../services/core-project.service";
 
-import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
-import { PostgresProjectRepository } from "../../data/repositories/postgres-project.repository";
-import { PostgresProjectMemberRepository } from "../../data/repositories/postgres-project-member.repository";
-import { PostgresWorkspaceRepository } from "../../data/repositories/postgres-workspace.repository";
-import { PostgresWorkspaceMemberRepository } from "../../data/repositories/postgres-workspace-member.repository";
+import { PostgresUserRepository } from "../../repositories/postgres-user.repository";
+import { PostgresProjectRepository } from "../../repositories/postgres-project.repository";
+import { PostgresProjectMemberRepository } from "../../repositories/postgres-project-member.repository";
+import { PostgresWorkspaceRepository } from "../../repositories/postgres-workspace.repository";
+import { PostgresWorkspaceMemberRepository } from "../../repositories/postgres-workspace-member.repository";
 
 import { UserCreatedSubscriber } from "../../messages/subscribers/user-created.subscriber";
 import { UserUpdatedSubscriber } from "../../messages/subscribers/user-updated.subscriber";
@@ -48,12 +46,12 @@ import { ProjectUpdatedPublisher } from "../../messages/publishers/project-updat
 import { ProjectMemberCreatedPublisher } from "../../messages/publishers/project-member-created.publisher";
 
 import { WorkspaceCreatedSubscriber } from "../../messages/subscribers/workspace-created.subscriber";
-import { ProjectMemberRepository } from "../../data/repositories/interfaces/project-member";
+import { ProjectMemberRepository } from "../../repositories/interfaces/project-member";
 
 export interface RegisteredServices {
   logger: Logger;
   dataSource: DataSource;
-  postgresTypeormStore: TypeormStore;
+  store: TypeormStore;
   messenger: NatsMessenger;
   casbinProjectGuardian: CasbinProjectGuardian;
   casbinWorkspaceGuardian: CasbinWorkspaceGuardian;
@@ -90,7 +88,7 @@ const options: BuildResolverOptions<
 add("logger", asValue(logger));
 add("messenger", asValue(natsMessenger));
 add("dataSource", asValue(dataSource));
-add("postgresTypeormStore", asValue(postgresTypeormStore));
+add("store", asValue(store));
 add("casbinProjectGuardian", asClass(CasbinProjectGuardian, options));
 add("casbinWorkspaceGuardian", asClass(CasbinWorkspaceGuardian, options));
 add("projectController", asClass(CoreProjectController));

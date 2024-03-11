@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Auth } from "../auth";
-import { BadRequestError, UnauthorizedError } from "../../error";
+import { BadRequestError, UnauthorizedError } from "../../errors";
 
 const mockCurrentUser = {
   email: "",

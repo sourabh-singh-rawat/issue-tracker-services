@@ -2,12 +2,12 @@ import {
   ProjectPayload,
   ServiceResponseInputs,
 } from "@sourabhrawatcc/core-utils";
-import { ProjectActivityEntity } from "../../data/entities";
+import { ProjectActivityEntity } from "../../app/entities";
 
 export interface ProjectActivityService {
-  logProjectCreated(payload: ProjectPayload): Promise<void>;
-  logProjectNameUpdated(payload: ProjectPayload): Promise<void>;
-  logProjectDescriptionUpdated(payload: ProjectPayload): Promise<void>;
+  logCreatedProject(payload: ProjectPayload): Promise<void>;
+  logUpdatedProjectName(payload: ProjectPayload): Promise<void>;
+  logUpdatedProjectDescription(payload: ProjectPayload): Promise<void>;
   getProjectActivityList(
     id: string,
   ): Promise<ServiceResponseInputs<ProjectActivityEntity[]>>;

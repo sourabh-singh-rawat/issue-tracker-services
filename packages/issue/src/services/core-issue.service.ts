@@ -3,7 +3,6 @@ import {
   IssueFormData,
   IssueListFilters,
   IssuePriority,
-  IssueStatus,
   NotFoundError,
   ServiceResponse,
   TransactionExecutionError,
@@ -13,18 +12,19 @@ import {
   ConflictError,
 } from "@sourabhrawatcc/core-utils";
 import { IssueService } from "./interfaces/issue.service";
-import { IssueRepository } from "../data/repositories/interfaces/issue.repository";
-import { IssueAssigneeEntity, IssueEntity } from "../data/entities";
-import { IssueAssigneeRepository } from "../data/repositories/interfaces/issue-assignee.repository";
-import { IssueCommentRepository } from "../data/repositories/interfaces/issue-comment.repository";
+import { IssueRepository } from "../repositories/interfaces/issue.repository";
+import { IssueAssigneeEntity, IssueEntity } from "../app/entities";
+import { IssueAssigneeRepository } from "../repositories/interfaces/issue-assignee.repository";
+import { IssueCommentRepository } from "../repositories/interfaces/issue-comment.repository";
 import { CasbinIssueGuardian } from "../app/guardians/casbin/casbin-issue.guardian";
 import { QueryRunner } from "typeorm";
 import { CasbinProjectGuardian } from "../app/guardians/casbin/casbin-project.guardian";
 import { IssueCreatedPublisher } from "../messages/publishers/issue-created.publisher";
+import { IssueStatus } from "@issue-tracker/common";
 
 export class CoreIssueService implements IssueService {
   constructor(
-    private postgresTypeormStore: TypeormStore,
+    private store: TypeormStore,
     private issueRepository: IssueRepository,
     private issueCommentRepository: IssueCommentRepository,
     private issueAssigneeRepository: IssueAssigneeRepository,
@@ -81,11 +81,11 @@ export class CoreIssueService implements IssueService {
     newIssue.dueDate = dueDate;
     newIssue.projectId = projectId;
     newIssue.resolution = resolution;
-    newIssue.ownerId = userId;
+    newIssue.createdById = userId;
     newIssue.reporterId = reporter.userId;
 
-    const queryRunner = this.postgresTypeormStore.createQueryRunner();
-    const result = await this.postgresTypeormStore.transaction(
+    const queryRunner = this.store.createQueryRunner();
+    const result = await this.store.transaction(
       queryRunner,
       async (queryRunner) => {
         const savedIssue = await this.issueRepository.save(newIssue, {
@@ -110,7 +110,15 @@ export class CoreIssueService implements IssueService {
     }
 
     await this.issueGuardian.createReporter(userId, result.id);
-    await this.issueCreatedPublisher.publish(result);
+    await this.issueCreatedPublisher.publish({
+      createdAt: result.createdAt,
+      id: result.id,
+      name: result.name,
+      description: result.description,
+      ownerId: result.createdById,
+      projectId: result.projectId,
+      reporterId: result.reporterId,
+    });
 
     return new ServiceResponse({ rows: result.id });
   };

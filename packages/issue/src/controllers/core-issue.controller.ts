@@ -1,22 +1,11 @@
-import {
-  FastifyBaseLogger,
-  FastifyReply,
-  FastifyRequest,
-  FastifySchema,
-  FastifyTypeProviderDefault,
-  RawServerDefault,
-  RouteGenericInterface,
-} from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { IssueController } from "./interfaces/issue-controller";
 import { IssueService } from "../services/interfaces/issue.service";
-import {
-  IssueListFilters,
-  IssueFormData,
-  IssueStatus,
-} from "@sourabhrawatcc/core-utils";
+import { IssueListFilters, IssueFormData } from "@sourabhrawatcc/core-utils";
 import { StatusCodes } from "http-status-codes";
 import { ResolveFastifyRequestType } from "fastify/types/type-provider";
 import { IncomingMessage, ServerResponse } from "node:http";
+import { IssueStatus } from "@issue-tracker/common";
 
 export class CoreIssueController implements IssueController {
   constructor(private issueService: IssueService) {}

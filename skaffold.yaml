@@ -4,85 +4,95 @@ metadata:
   name: issue-tracker
 build:
   artifacts:
-  - image: sourabhrawatcc/activity
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: activity
-  - image: sourabhrawatcc/attachment
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: attachment
-  - image: sourabhrawatcc/email
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: email
-  - image: sourabhrawatcc/identity
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: identity
-  - image: sourabhrawatcc/issue
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: issue
-  - image: sourabhrawatcc/project
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: user
-  - image: sourabhrawatcc/user
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: user
-  - image: sourabhrawatcc/workspace
-    context: .
-    docker:
-      dockerfile: Dockerfile
-      target: workspace
+    - image: sourabhrawatcc/activity
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: activity
+
+    - image: sourabhrawatcc/attachment
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: attachment
+
+    - image: sourabhrawatcc/email
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: email
+
+    - image: sourabhrawatcc/identity
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: identity
+
+    - image: sourabhrawatcc/issue
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: issue
+
+    - image: sourabhrawatcc/project
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: project
+
+    - image: sourabhrawatcc/user
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: user
+
+    - image: sourabhrawatcc/workspace
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        target: workspace
+
+  local:
+    concurrency: 0
 deploy:
   helm:
     releases:
-    - name: activity
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/activity.values.yaml
-  
-    - name: attachment
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/attachment.values.yaml
+      - name: activity
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/activity.values.yaml
 
-    - name: email
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/email.values.yaml
+      - name: attachment
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/attachment.values.yaml
 
-    - name: identity
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/identity.values.yaml
+      - name: email
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/email.values.yaml
 
-    - name: issue
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/issue.values.yaml
+      - name: identity
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/identity.values.yaml
 
-    - name: project
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/project.values.yaml
+      - name: issue
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/issue.values.yaml
 
-    - name: user
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/user.values.yaml
-      
-    - name: workspace
-      chartPath: ./k8s/microservice
-      valuesFiles:
-      - ./k8s/microservice/workspace.values.yaml
+      - name: project
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/project.values.yaml
+
+      - name: user
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/user.values.yaml
+
+      - name: workspace
+        chartPath: ./k8s/microservice
+        valuesFiles:
+          - ./k8s/microservice/workspace.values.yaml

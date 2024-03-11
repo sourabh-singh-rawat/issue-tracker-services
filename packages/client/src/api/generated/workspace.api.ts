@@ -101,8 +101,8 @@ export type CreateWorkspaceApiResponse = /** status 201 Workspace created */ {
 export type CreateWorkspaceApiArg = {
   /** Fields used to create a workspace */
   body: {
-    name: Name;
-    description?: Description;
+    name: string;
+    description?: string;
   };
 };
 export type GetWorkspaceApiResponse = /** status 200 Returns the workspace */ {
@@ -117,12 +117,12 @@ export type GetWorkspaceApiArg = {
   id: string;
 };
 export type CreateWorkspaceInviteApiResponse =
-  /** status 201 Workspace member created */ undefined;
+  /** status 201 Workspace member created */ void;
 export type CreateWorkspaceInviteApiArg = {
   /** Fields used to create a new workspace member invite */
   body: {
-    email: Email;
-    workspaceRole: Name;
+    email: string;
+    workspaceRole: string;
   };
 };
 export type GetWorkspaceRoleListApiResponse =
@@ -131,15 +131,6 @@ export type GetWorkspaceRoleListApiResponse =
     rowCount: number;
   };
 export type GetWorkspaceRoleListApiArg = void;
-export type Schema = {
-  errors?: {
-    message: string;
-    field?: string;
-  }[];
-};
-export type Name = string;
-export type Description = string;
-export type Email = string;
 export const {
   useGetProjectActivityListQuery,
   useGetWorkspaceMemberListQuery,

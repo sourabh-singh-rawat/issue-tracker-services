@@ -9,10 +9,10 @@ import {
   WorkspaceInvitePayload,
 } from "@sourabhrawatcc/core-utils";
 import { JsMsg } from "nats";
-import { UserEntity } from "../../data/entities";
-import { UserRepository } from "../../data/repositories/interfaces/user.repository";
-import { WorkspaceMemberRepository } from "../../data/repositories/interfaces/workspace-member.repository";
-import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
+import { UserEntity } from "../../app/entities";
+import { UserRepository } from "../../repositories/interfaces/user.repository";
+import { WorkspaceMemberRepository } from "../../repositories/interfaces/workspace-member.repository";
+import { WorkspaceMemberEntity } from "../../app/entities/workspace-member.entity";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
@@ -21,7 +21,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   constructor(
     private readonly messenger: Messenger,
     private readonly userRepository: UserRepository,
-    private readonly postgresTypeormStore: TypeormStore,
+    private readonly store: TypeormStore,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
   ) {
     super(messenger.client);
@@ -58,16 +58,13 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       newWorkspaceMember.userId = userId;
       newWorkspaceMember.workspaceId = token.workspaceId;
 
-      const queryRunner = this.postgresTypeormStore.createQueryRunner();
-      await this.postgresTypeormStore.transaction(
-        queryRunner,
-        async (queryRunner) => {
-          await this.userRepository.save(newUser, { queryRunner });
-          await this.workspaceMemberRepository.save(newWorkspaceMember, {
-            queryRunner,
-          });
-        },
-      );
+      const queryRunner = this.store.createQueryRunner();
+      await this.store.transaction(queryRunner, async (queryRunner) => {
+        await this.userRepository.save(newUser, { queryRunner });
+        await this.workspaceMemberRepository.save(newWorkspaceMember, {
+          queryRunner,
+        });
+      });
 
       message.ack();
       return console.log("Message processing completed");

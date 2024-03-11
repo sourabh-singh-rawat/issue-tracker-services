@@ -33,7 +33,7 @@ const injectedRtkApi = api
   });
 export { injectedRtkApi as issueTrackerApi };
 export type RegisterUserApiResponse =
-  /** status 201 User successfully registered */ undefined;
+  /** status 201 User successfully registered */ void;
 export type RegisterUserApiArg = {
   inviteToken?: string;
   body: {
@@ -43,18 +43,12 @@ export type RegisterUserApiArg = {
   };
 };
 export type SetDefaultWorkspaceApiResponse =
-  /** status 200 Default workspace updated successfully */ undefined;
+  /** status 200 Default workspace updated successfully */ void;
 export type SetDefaultWorkspaceApiArg = {
   body: {
     id: string;
     name: string;
   };
-};
-export type Schema = {
-  errors?: {
-    message: string;
-    field?: string;
-  }[];
 };
 export const { useRegisterUserMutation, useSetDefaultWorkspaceMutation } =
   injectedRtkApi;

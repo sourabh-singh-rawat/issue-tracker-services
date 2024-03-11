@@ -7,11 +7,9 @@ import {
   Messenger,
 } from "@sourabhrawatcc/core-utils";
 import { DataSource } from "typeorm";
-import {
-  dataSource,
-  postgresTypeormStore,
-} from "../stores/postgres-typeorm.store";
-import { messenger } from "../messengers/nats.messenger";
+import { dataSource } from "../stores/postgres-typeorm.store";
+import { store } from "../stores";
+import { messenger } from "../messengers";
 
 import { IssueController } from "../../controllers/interfaces/issue-controller";
 import { IssueCommentController } from "../../controllers/interfaces/issue-comment.controller";
@@ -22,11 +20,11 @@ import { IssueService } from "../../services/interfaces/issue.service";
 import { IssueCommentService } from "../../services/interfaces/issue-comment.service";
 import { IssueTaskService } from "../../services/interfaces/issue-task.service";
 
-import { UserRepository } from "../../data/repositories/interfaces/user.repository";
-import { IssueRepository } from "../../data/repositories/interfaces/issue.repository";
-import { IssueAssigneeRepository } from "../../data/repositories/interfaces/issue-assignee.repository";
-import { IssueCommentRepository } from "../../data/repositories/interfaces/issue-comment.repository";
-import { IssueTaskRepository } from "../../data/repositories/interfaces/issue-task.repository";
+import { UserRepository } from "../../repositories/interfaces/user.repository";
+import { IssueRepository } from "../../repositories/interfaces/issue.repository";
+import { IssueAssigneeRepository } from "../../repositories/interfaces/issue-assignee.repository";
+import { IssueCommentRepository } from "../../repositories/interfaces/issue-comment.repository";
+import { IssueTaskRepository } from "../../repositories/interfaces/issue-task.repository";
 
 import { CoreIssueController } from "../../controllers/core-issue.controller";
 import { CoreIssueCommentController } from "../../controllers/core-issue-comment.controller";
@@ -37,17 +35,17 @@ import { CoreIssueService } from "../../services/core-issue.service";
 import { CoreIssueCommentService } from "../../services/core-issue-comment.service";
 import { CoreIssueTaskService } from "../../services/core-issue-task.service";
 
-import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
-import { PostgresIssueRepository } from "../../data/repositories/postgres-issue.repository";
-import { PostgresIssueCommentRepository } from "../../data/repositories/postgres-issue-comment.repository";
-import { PostgresIssueAssigneeRepository } from "../../data/repositories/postgres-issue-assignee.repository";
-import { PostgresIssueTaskRepository } from "../../data/repositories/postgres-issue-task.repository";
+import { PostgresUserRepository } from "../../repositories/postgres-user.repository";
+import { PostgresIssueRepository } from "../../repositories/postgres-issue.repository";
+import { PostgresIssueCommentRepository } from "../../repositories/postgres-issue-comment.repository";
+import { PostgresIssueAssigneeRepository } from "../../repositories/postgres-issue-assignee.repository";
+import { PostgresIssueTaskRepository } from "../../repositories/postgres-issue-task.repository";
 
 import { UserCreatedSubscriber } from "../../messages/subscribers/user-created.subscriber";
 import { UserUpdatedSubscriber } from "../../messages/subscribers/user-updated.subscribers";
 import { ProjectCreatedSubscriber } from "../../messages/subscribers/project-created.subscriber";
-import { ProjectRepository } from "../../data/repositories/interfaces/project.repository";
-import { PostgresProjectRepository } from "../../data/repositories/postgres-project.repository";
+import { ProjectRepository } from "../../repositories/interfaces/project.repository";
+import { PostgresProjectRepository } from "../../repositories/postgres-project.repository";
 import {
   CasbinIssueGuardian,
   issueGuardian,
@@ -61,7 +59,7 @@ import { IssueCreatedPublisher } from "../../messages/publishers/issue-created.p
 export interface RegisteredServices {
   logger: Logger;
   dataSource: DataSource;
-  postgresTypeormStore: TypeormStore;
+  store: TypeormStore;
   messenger: Messenger;
   issueController: IssueController;
   issueCommentController: IssueCommentController;
@@ -88,16 +86,16 @@ const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
 
-export const container = new AwilixContainer<RegisteredServices>(
+export const awilixContainer = new AwilixContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = container;
+const { add } = awilixContainer;
 
 add("logger", asValue(logger));
 add("dataSource", asValue(dataSource));
-add("postgresTypeormStore", asValue(postgresTypeormStore));
+add("store", asValue(store));
 add("messenger", asValue(messenger));
 add("issueController", asClass(CoreIssueController));
 add("issueCommentController", asClass(CoreIssueCommentController));

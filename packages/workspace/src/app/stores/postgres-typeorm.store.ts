@@ -7,8 +7,8 @@ export const dbSource = new DataSource({
   username: process.env.user,
   password: process.env.password,
   database: process.env.dbname,
-  entities: ["src/data/entities/*.ts"],
+  entities: ["src/app/entities/*.ts"],
   synchronize: true,
 });
 
-export const store = new PostgresTypeormStore(dbSource, logger);
+export const postgresTypeormStore = new PostgresTypeormStore(dbSource, logger);

@@ -1,30 +1,27 @@
 import {
   EmailMessage,
   JwtToken,
+  Mailer,
   NodeMailer,
   NotFoundError,
   ProjectMemberPayload,
   UserCreatedPayload,
   WorkspaceInvitePayload,
 } from "@sourabhrawatcc/core-utils";
-import { EmailEntity } from "../data/entities/email.entity";
+import { EmailEntity } from "../app/entities/email.entity";
 import { EmailService } from "./interfaces/email.service";
-import { EmailRepository } from "../data/repositories/interfaces/email.repository";
-import { UserRepository } from "../data/repositories/interfaces/user.repository";
+import { EmailRepository } from "../repositories/interfaces/email.repository";
+import { UserRepository } from "../repositories/interfaces/user.repository";
 import { EmailCreatedPublisher } from "../messages/publishers/email-created.publisher";
 
 export class CoreEmailService implements EmailService {
   constructor(
-    private readonly nodeMailer: NodeMailer,
+    private readonly mailer: Mailer,
     private readonly userRepository: UserRepository,
     private readonly emailRepository: EmailRepository,
     private readonly emailCreatedPublisher: EmailCreatedPublisher,
   ) {}
 
-  /**
-   * Saves the email
-   * @param receiverEmail
-   */
   createEmail = async (receiverEmail: string) => {
     const newSentEmail = new EmailEntity();
     newSentEmail.receiverEmail = receiverEmail;
@@ -32,11 +29,6 @@ export class CoreEmailService implements EmailService {
     await this.emailRepository.save(newSentEmail);
   };
 
-  /**
-   * Creates a new token using the payload
-   * @param payload
-   * @returns
-   */
   createInviteToken = <T>(payload: T) => {
     return JwtToken.create(payload, process.env.JWT_SECRET!);
   };
@@ -53,7 +45,7 @@ export class CoreEmailService implements EmailService {
       `,
     };
 
-    await this.nodeMailer.send("noreply@test.com", email, message);
+    await this.mailer.send("noreply@test.com", email, message);
     await this.createEmail(email);
 
     const sentEmail = await this.emailRepository.findByEmail(email);
@@ -61,10 +53,6 @@ export class CoreEmailService implements EmailService {
     await this.emailCreatedPublisher.publish(sentEmail);
   };
 
-  /**
-   * Sends the workspace invitiation payload using nodemailer
-   * @param payload
-   */
   sendWorkspaceInvitation = async (payload: WorkspaceInvitePayload) => {
     const { senderEmail, receiverEmail, senderName, workspaceId } = payload;
     const token = this.createInviteToken(payload);
@@ -80,13 +68,10 @@ export class CoreEmailService implements EmailService {
       `,
     };
 
-    await this.nodeMailer.send(senderEmail, receiverEmail, message);
+    await this.mailer.send(senderEmail, receiverEmail, message);
     await this.createEmail(receiverEmail);
   };
 
-  /**
-   * Sends the project invitaton payload using nodemailer
-   */
   sendProjectInvitation = async (payload: ProjectMemberPayload) => {
     const { userId, projectId, role, createdBy } = payload;
 
@@ -108,7 +93,7 @@ export class CoreEmailService implements EmailService {
       </a> 
     `,
     };
-    await this.nodeMailer.send(sender.email, receiver.email, message);
+    await this.mailer.send(sender.email, receiver.email, message);
     await this.createEmail(receiver.email);
   };
 }

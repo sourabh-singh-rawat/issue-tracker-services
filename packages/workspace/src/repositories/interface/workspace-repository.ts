@@ -1,0 +1,7 @@
+import { Repository } from "@sourabhrawatcc/core-utils";
+import { WorkspaceEntity } from "../../app/entities";
+
+export interface WorkspaceRepository extends Repository<WorkspaceEntity> {
+  findById(id: string): Promise<WorkspaceEntity | null>;
+  find(userId: string): Promise<WorkspaceEntity[]>;
+}

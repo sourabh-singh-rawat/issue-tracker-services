@@ -1,18 +1,18 @@
 get:
-  tags: [ "project" ]
+  tags: ["project"]
   summary: Get all project members
   description: Get all project members
   operationId: getProjectMembers
-  parameters: 
+  parameters:
     - name: id
       in: path
-      schema: 
+      schema:
         type: string
       description: Numeric id of the project
-  responses: 
+  responses:
     200:
       description: Get all project members
-      content: 
+      content:
         application/json:
           schema:
             type: object
@@ -20,8 +20,23 @@ get:
               rows:
                 type: array
                 items:
-                  type: string
-              rowCount: 
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        displayName:
+                          type: string
+                        email:
+                          $ref: ../../components/schemas/error.yaml
+                    createdAt:
+                      type:
+                        $ref: ../../components/schemas/date.yaml
+                    role:
+                      type: string
+              rowCount:
                 type: number
             required: ["rows", "rowCount"]
     400:

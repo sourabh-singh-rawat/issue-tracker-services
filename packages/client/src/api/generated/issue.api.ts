@@ -155,7 +155,7 @@ const injectedRtkApi = api
   });
 export { injectedRtkApi as issueTrackerApi };
 export type CreateIssueAttachmentApiResponse =
-  /** status 201 Created a new issue attachment */ undefined;
+  /** status 201 Created a new issue attachment */ void;
 export type CreateIssueAttachmentApiArg = {
   /** The numeric Id of the issue */
   id?: string;
@@ -182,7 +182,7 @@ export type GetIssueListApiArg = {
   projectId?: string;
 };
 export type CreateIssueApiResponse =
-  /** status 201 Issue created successfully */ undefined;
+  /** status 201 Issue created successfully */ void;
 export type CreateIssueApiArg = {
   body: {
     name: string;
@@ -215,42 +215,44 @@ export type GetIssuePriorityListApiResponse =
   };
 export type GetIssuePriorityListApiArg = void;
 export type GetIssueApiResponse =
-  /** status 200 Returns the issue if it exists */ undefined;
+  /** status 200 Returns the issue if it exists */ void;
 export type GetIssueApiArg = {
   /** Numeric id of the issue to get */
   id?: string;
 };
-export type UpdateIssueApiResponse =
-  /** status 200 Updates the issue */ undefined;
+export type UpdateIssueApiResponse = /** status 200 Updates the issue */ void;
 export type UpdateIssueApiArg = {
   /** Numeric id of the issue to get */
   id?: string;
   body: {
-    name?: Name;
-    description?: Description;
-    status?: Status;
+    name?: string;
+    description?: string;
+    status?: string;
     priority?: string;
     resolution?: boolean;
     projectId?: string;
-    assignees?: Assignees;
+    assignees?: {
+      id: string;
+      name: string;
+    }[];
     reportedId?: {
       id: string;
       name: string;
     };
-    dueDate?: DueDate;
+    dueDate?: string | string;
   };
 };
 export type UpdateIssueStatusApiResponse =
-  /** status 200 Update issue status successfully */ undefined;
+  /** status 200 Update issue status successfully */ void;
 export type UpdateIssueStatusApiArg = {
   /** Numeric id of the issue to get */
   id?: string;
   body: {
-    status?: Status;
+    status?: string;
   };
 };
 export type UpdateIssueResolutionApiResponse =
-  /** status 200 Update issue resolution successfully */ undefined;
+  /** status 200 Update issue resolution successfully */ void;
 export type UpdateIssueResolutionApiArg = {
   /** Numeric id of the issue to get */
   id?: string;
@@ -259,12 +261,12 @@ export type UpdateIssueResolutionApiArg = {
   };
 };
 export type CreateIssueCommentApiResponse =
-  /** status 201 The comment has been created successfully */ undefined;
+  /** status 201 The comment has been created successfully */ void;
 export type CreateIssueCommentApiArg = {
   /** Numeric id of the issue in which the comment will be created */
   id?: string;
   body: {
-    description?: Description;
+    description?: string;
   };
 };
 export type GetIssueCommentListApiResponse =
@@ -277,7 +279,7 @@ export type GetIssueCommentListApiArg = {
   id?: string;
 };
 export type DeleteIssueCommentApiResponse =
-  /** status 201 The comment has been created successfully */ undefined;
+  /** status 201 The comment has been created successfully */ void;
 export type DeleteIssueCommentApiArg = {
   /** Numeric id of the issue in which the comment will be created */
   id?: string;
@@ -293,42 +295,28 @@ export type GetIssueTaskListApiArg = {
   id?: string;
 };
 export type CreateIssueTaskApiResponse =
-  /** status 201 Issue task created successfully */ undefined;
+  /** status 201 Issue task created successfully */ void;
 export type CreateIssueTaskApiArg = {
   id?: string;
   body: {
-    description: Description;
+    description: string;
     completed?: boolean;
-    dueDate?: DueDate;
+    dueDate?: string | string;
   };
 };
 export type UpdateIssueTaskApiResponse =
-  /** status 201 Issue task created successfully */ undefined;
+  /** status 201 Issue task created successfully */ void;
 export type UpdateIssueTaskApiArg = {
   /** Numeric id of the issue */
   id?: string;
   /** Numeric id of the task */
   taskId?: string;
   body: {
-    description: Description;
+    description: string;
     completed?: boolean;
-    dueDate?: DueDate;
+    dueDate?: string | string;
   };
 };
-export type Schema = {
-  errors?: {
-    message: string;
-    field?: string;
-  }[];
-};
-export type Name = string;
-export type Description = string;
-export type Status = string;
-export type Assignees = {
-  id: string;
-  name: string;
-}[];
-export type DueDate = string | string;
 export const {
   useCreateIssueAttachmentMutation,
   useGetIssueAttachmentListQuery,

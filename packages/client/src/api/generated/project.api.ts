@@ -87,13 +87,13 @@ export type GetProjectListApiResponse =
   /** status 200 All the projects created by a user or associated with them */ {
     rows?: {
       id?: string;
-      name?: Name;
-      description?: Description;
-      status?: Status;
+      name?: string;
+      description?: string;
+      status?: string;
       ownerUserId?: string;
       workspaceId?: string;
-      startDate?: DueDate;
-      endDate?: DueDate;
+      startDate?: string | string;
+      endDate?: string | string;
     }[];
     rowCount?: number;
   };
@@ -110,10 +110,10 @@ export type CreateProjectApiResponse =
 export type CreateProjectApiArg = {
   /** Fields used for creating a new project */
   body: {
-    name: Name;
-    description?: Description;
-    startDate?: DueDate;
-    endDate?: DueDate;
+    name: string;
+    description?: string;
+    startDate?: string | string;
+    endDate?: string | string;
     status: string;
   };
 };
@@ -124,22 +124,22 @@ export type GetProjectStatusListApiResponse =
   };
 export type GetProjectStatusListApiArg = void;
 export type GetProjectApiResponse =
-  /** status 200 Projects updated successfully */ undefined;
+  /** status 200 Projects updated successfully */ void;
 export type GetProjectApiArg = {
   /** Numeric id of the project to update */
   id?: string;
 };
 export type UpdateProjectApiResponse =
-  /** status 200 Projects updated successfully */ undefined;
+  /** status 200 Projects updated successfully */ void;
 export type UpdateProjectApiArg = {
   /** Numeric id of the project to update */
   id: string;
   body: {
-    name?: Name;
-    description?: Description;
-    status?: Status;
-    startDate?: DueDate;
-    endDate?: DueDate;
+    name?: string;
+    description?: string;
+    status?: string;
+    startDate?: string | string;
+    endDate?: string | string;
   };
 };
 export type GetProjectRoleListApiResponse =
@@ -152,7 +152,20 @@ export type GetProjectRoleListApiArg = {
 };
 export type GetProjectMembersApiResponse =
   /** status 200 Get all project members */ {
-    rows: string[];
+    rows: {
+      user?: {
+        id?: string;
+        displayName?: string;
+        email?: {
+          errors?: {
+            message: string;
+            field?: string;
+          }[];
+        };
+      };
+      createdAt?: any;
+      role?: string;
+    }[];
     rowCount: number;
   };
 export type GetProjectMembersApiArg = {
@@ -160,7 +173,7 @@ export type GetProjectMembersApiArg = {
   id?: string;
 };
 export type CreateProjectInviteApiResponse =
-  /** status 201 Invite created successfully */ undefined;
+  /** status 201 Invite created successfully */ void;
 export type CreateProjectInviteApiArg = {
   /** Numeric id of the project */
   id?: string;
@@ -170,16 +183,6 @@ export type CreateProjectInviteApiArg = {
     role: string;
     workspaceId: string;
   };
-};
-export type Name = string;
-export type Description = string;
-export type Status = string;
-export type DueDate = string | string;
-export type Schema = {
-  errors?: {
-    message: string;
-    field?: string;
-  }[];
 };
 export const {
   useGetProjectListQuery,

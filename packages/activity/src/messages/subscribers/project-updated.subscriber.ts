@@ -23,11 +23,11 @@ export class ProjectUpdatedSubscriber extends Subscriber<ProjectPayload> {
     const { name, description, status, startDate, endDate } = payload;
 
     if (name) {
-      await this.projectActivityService.logProjectNameUpdated(payload);
+      await this.projectActivityService.logUpdatedProjectName(payload);
     }
 
     if (description) {
-      await this.projectActivityService.logProjectDescriptionUpdated(payload);
+      await this.projectActivityService.logUpdatedProjectDescription(payload);
     }
     message.ack();
     console.log("Message processing completed");

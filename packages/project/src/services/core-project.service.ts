@@ -4,7 +4,6 @@ import {
   ProjectDetails,
   ProjectFormData,
   ProjectRoles,
-  ProjectStatus,
   ServiceResponse,
   TransactionExecutionError,
   UserAlreadyExists,
@@ -14,23 +13,25 @@ import {
   ProjectMemberPayload,
   JwtToken,
   InternalServerError,
+  ProjectNotFoundError,
 } from "@sourabhrawatcc/core-utils";
 import { CasbinProjectGuardian } from "../app/guardians/casbin/casbin-project.guardian";
 import { ProjectService } from "./interfaces/project.service";
-import { ProjectEntity, ProjectMemberEntity } from "../data/entities";
-import { ProjectRepository } from "../data/repositories/interfaces/project.repository";
-import { UserRepository } from "../data/repositories/interfaces/user.repository";
-import { ProjectMemberRepository } from "../data/repositories/interfaces/project-member";
+import { ProjectEntity, ProjectMemberEntity } from "../app/entities";
+import { ProjectRepository } from "../repositories/interfaces/project.repository";
+import { UserRepository } from "../repositories/interfaces/user.repository";
+import { ProjectMemberRepository } from "../repositories/interfaces/project-member";
 import { UserService } from "./interfaces/user.service";
 import { ProjectCreatedPublisher } from "../messages/publishers/project-created.publisher";
 import { ProjectUpdatedPublisher } from "../messages/publishers/project-updated.publisher";
-import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
+import { WorkspaceMemberRepository } from "../repositories/interfaces/workspace-member.repository";
 import { ProjectMemberCreatedPublisher } from "../messages/publishers/project-member-created.publisher";
+import { ProjectStatus } from "@issue-tracker/common";
 
 export class CoreProjectService implements ProjectService {
   constructor(
     private readonly casbinProjectGuardian: CasbinProjectGuardian,
-    private readonly postgresTypeormStore: TypeormStore,
+    private readonly store: TypeormStore,
     private readonly userService: UserService,
     private readonly userRepository: UserRepository,
     private readonly projectRepository: ProjectRepository,
@@ -71,11 +72,69 @@ export class CoreProjectService implements ProjectService {
     });
   };
 
-  /**
-   * Create a new project, adds the creator as project member, and creates permissions
-   * @param userId
-   * @param formData
-   */
+  getProjectStatusList = () => {
+    const statuses = this.getStatuses();
+
+    return new ServiceResponse({
+      rows: statuses,
+      filteredRowCount: statuses.length,
+    });
+  };
+
+  getProjectRoleList = () => {
+    const roles = this.getRoles();
+
+    return new ServiceResponse({ rows: roles, filteredRowCount: roles.length });
+  };
+
+  getProjectList = async (userId: string, filters: Filters) => {
+    const workspaceId = await this.userService.getDefaultWorkspaceId(userId);
+    const projects = await this.projectRepository.find(
+      userId,
+      workspaceId,
+      filters,
+    );
+    const rowCount = await this.projectRepository.findCount(
+      userId,
+      workspaceId,
+    );
+
+    const rows = await Promise.all(
+      projects.map(async (p) => {
+        const actions = await this.getProjectActions(userId, p.id);
+        const members = (await this.getProjectMembers(p.id)).rows;
+        const statuses = this.getStatuses();
+
+        return new ProjectDetails(p, actions, statuses, members);
+      }),
+    );
+
+    return new ServiceResponse({
+      rows,
+      rowCount,
+      filteredRowCount: rows.length,
+    });
+  };
+
+  getProject = async (id: string) => {
+    const project = await this.projectRepository.findOne(id);
+    if (!project) throw new ProjectNotFoundError();
+
+    return new ServiceResponse({ rows: project });
+  };
+
+  getWorkspaceMemberList = async (userId: string, projectId: string) => {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new UserNotFoundError();
+
+    const rows = await this.workspaceMemberRepository.find(
+      projectId,
+      user.defaultWorkspaceId,
+    );
+
+    return new ServiceResponse({ rows, filteredRowCount: rows.length });
+  };
+
   createProject = async (userId: string, formData: ProjectFormData) => {
     const user = await this.getUserById(userId);
     if (!user) throw new UserNotFoundError();
@@ -91,8 +150,8 @@ export class CoreProjectService implements ProjectService {
     newProject.ownerUserId = userId;
     newProject.workspaceId = user.defaultWorkspaceId;
 
-    const queryRunner = this.postgresTypeormStore.createQueryRunner();
-    const savedProject = await this.postgresTypeormStore.transaction(
+    const queryRunner = this.store.createQueryRunner();
+    const savedProject = await this.store.transaction(
       queryRunner,
       async (queryRunner) => {
         const savedProject = await this.projectRepository.save(newProject, {
@@ -102,7 +161,6 @@ export class CoreProjectService implements ProjectService {
         newProjectMember.projectId = savedProject.id;
         newProjectMember.userId = userId;
         newProjectMember.role = ProjectRoles.Owner;
-        newProjectMember.creatorId = userId;
         newProjectMember.workspaceId = user.defaultWorkspaceId;
         newProjectMember.inviteStatus = ProjectInviteStatus.ACCEPTED;
 
@@ -125,13 +183,6 @@ export class CoreProjectService implements ProjectService {
     return new ServiceResponse({ rows: savedProject.id });
   };
 
-  /**
-   * Check for invite permission
-   * @param userId - Member's user ID
-   * @param projectId - Project ID
-   * @param role - Role assigend to the member
-   * @param invitedBy - The user that invited the member (current user)
-   */
   createProjectInvite = async (
     userId: string,
     projectId: string,
@@ -172,16 +223,16 @@ export class CoreProjectService implements ProjectService {
       updatedProjectMember,
     );
 
-    if (role === ProjectRoles.Member) {
-      await this.casbinProjectGuardian.createMember(userId, projectId);
-    }
+    switch (role) {
+      case ProjectRoles.Member:
+        await this.casbinProjectGuardian.createMember(userId, projectId);
 
-    if (role === ProjectRoles.Admin) {
-      await this.casbinProjectGuardian.createAdmin(userId, projectId);
+      case ProjectRoles.Admin:
+        await this.casbinProjectGuardian.createAdmin(userId, projectId);
     }
 
     return new ServiceResponse({
-      rows: "Memeber added successfully(confirmed)",
+      rows: "Member added successfully(confirmed)",
     });
   };
 
@@ -204,7 +255,7 @@ export class CoreProjectService implements ProjectService {
     newProjectMember.userId = userId;
     newProjectMember.projectId = projectId;
     newProjectMember.role = role;
-    newProjectMember.creatorId = createdBy;
+    newProjectMember.createdById = createdBy;
     newProjectMember.workspaceId = workspaceId;
 
     await this.projectMemberRepository.save(newProjectMember);
@@ -215,78 +266,6 @@ export class CoreProjectService implements ProjectService {
       role,
       createdBy,
     });
-  };
-
-  /**
-   * Get the project status list
-   */
-  getProjectStatusList = () => {
-    const statuses = this.getStatuses();
-
-    return new ServiceResponse({
-      rows: statuses,
-      filteredRowCount: statuses.length,
-    });
-  };
-
-  getProjectRoleList = () => {
-    const roles = this.getRoles();
-
-    return new ServiceResponse({ rows: roles, filteredRowCount: roles.length });
-  };
-
-  /**
-   * Gets all user projects in a workspace with members, and permissions
-   * @param userId
-   * @param filters
-   */
-  getProjectList = async (userId: string, filters: Filters) => {
-    const { rows: workspaceId } =
-      await this.userService.getDefaultWorkspaceId(userId);
-
-    const projects = await this.projectRepository.find(
-      userId,
-      workspaceId,
-      filters,
-    );
-    const rowCount = await this.projectRepository.findCount(
-      userId,
-      workspaceId,
-    );
-
-    const rows = await Promise.all(
-      projects.map(async (p) => {
-        const actions = await this.getProjectActions(userId, p.id);
-        const members = (await this.getProjectMembers(p.id)).rows;
-        const statuses = this.getStatuses();
-
-        return new ProjectDetails(p, actions, statuses, members);
-      }),
-    );
-
-    return new ServiceResponse({
-      rows,
-      rowCount,
-      filteredRowCount: rows.length,
-    });
-  };
-
-  getProject = async (id: string) => {
-    const project = await this.projectRepository.findOne(id);
-
-    return new ServiceResponse({ rows: project });
-  };
-
-  getWorkspaceMemberList = async (userId: string, projectId: string) => {
-    const user = await this.userRepository.findById(userId);
-    if (!user) throw new UserNotFoundError();
-
-    const rows = await this.workspaceMemberRepository.find(
-      projectId,
-      user.defaultWorkspaceId,
-    );
-
-    return new ServiceResponse({ rows, filteredRowCount: rows.length });
   };
 
   updateProject = async (id: string, updatables: ProjectFormData) => {
@@ -300,6 +279,7 @@ export class CoreProjectService implements ProjectService {
 
     await this.projectRepository.update(id, updatedProject);
     const project = await this.projectRepository.findOne(id);
+    if (!project) throw new ProjectNotFoundError();
 
     await this.projectUpdatedPublisher.publish(project);
   };

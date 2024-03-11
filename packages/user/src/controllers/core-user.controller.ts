@@ -10,9 +10,6 @@ import { UserService } from "../services/interface/user.service";
 export class CoreUserController implements UserController {
   constructor(private readonly userService: UserService) {}
 
-  /**
-   * Route handler for registering new users.
-   */
   registerUser = async (
     request: FastifyRequest<{
       Body: UserRegistrationData;
@@ -35,9 +32,6 @@ export class CoreUserController implements UserController {
     return reply.status(StatusCodes.CREATED).send();
   };
 
-  /**
-   * Route handler for changing default workspace
-   */
   setDefaultWorkspace = async (
     request: FastifyRequest<{ Body: { id: string; name: string } }>,
     reply: FastifyReply,
@@ -49,9 +43,6 @@ export class CoreUserController implements UserController {
     return reply.send();
   };
 
-  /**
-   * Route handler for verifying password of existing users.
-   */
   verifyPassword = async (
     request: FastifyRequest<{ Body: AuthCredentials }>,
     reply: FastifyReply,
@@ -75,9 +66,6 @@ export class CoreUserController implements UserController {
     return reply.send({ confirmation: true });
   };
 
-  /**
-   * Route handler for getting information about currently authenticated user.
-   */
   getCurrentUser = async (request: FastifyRequest, reply: FastifyReply) => {
     const { currentUser } = request;
     const { email } = currentUser;

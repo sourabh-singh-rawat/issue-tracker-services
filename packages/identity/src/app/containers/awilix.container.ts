@@ -6,22 +6,22 @@ import {
   Messenger,
   TypeormStore,
 } from "@sourabhrawatcc/core-utils";
-import { store } from "../stores/postgres-typeorm.store";
-import { messenger } from "../messengers/nats.messenger";
+import { store } from "../stores";
+import { messenger } from "../messengers";
 
 import { IdentityController } from "../../controllers/interfaces/identity-controller";
 import { IdentityService } from "../../services/interfaces/identity.service";
-import { UserRepository } from "../../data/repositories/interfaces/user-repository";
+import { UserRepository } from "../../repositories/interfaces/user-repository";
 
 import { CoreIdentityController } from "../../controllers/core-identity.controller";
 import { CoreIdentityService } from "../../services/core-identity.service";
-import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
-import { PostgresAccessTokenRepository } from "../../data/repositories/postgres-access-token.repository";
-import { PostgresRefreshTokenRepository } from "../../data/repositories/postgres-refresh-token.repository";
+import { PostgresUserRepository } from "../../repositories/postgres-user.repository";
+import { PostgresAccessTokenRepository } from "../../repositories/postgres-access-token.repository";
+import { PostgresRefreshTokenRepository } from "../../repositories/postgres-refresh-token.repository";
 import { UserCreatedSubscriber } from "../../messages/subscribers/user-created.subscribers";
 import { UserUpdatedSubscriber } from "../../messages/subscribers/user-updated.subscribers";
-import { AccessTokenRepository } from "../../data/repositories/interfaces/access-token-repository";
-import { RefreshTokenRepository } from "../../data/repositories/interfaces/refresh-token-repository";
+import { AccessTokenRepository } from "../../repositories/interfaces/access-token-repository";
+import { RefreshTokenRepository } from "../../repositories/interfaces/refresh-token-repository";
 import { UserService } from "../../services/interfaces/user.service";
 import { CoreUserService } from "../../services/core-user.service";
 
@@ -43,12 +43,12 @@ const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
 
-export const container = new AwilixContainer<RegisteredServices>(
+export const awilixContainer = new AwilixContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = container;
+const { add } = awilixContainer;
 
 add("store", asValue(store));
 add("logger", asValue(logger));

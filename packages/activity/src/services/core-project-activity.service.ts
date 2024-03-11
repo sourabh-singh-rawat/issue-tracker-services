@@ -5,17 +5,16 @@ import {
   ProjectPayload,
   ServiceResponse,
 } from "@sourabhrawatcc/core-utils";
-import { ProjectActivityEntity } from "../data/entities";
 import { ProjectActivityService } from "./interfaces/project-activity.service";
-import { ProjectActivityRepository } from "../data/repositories/interfaces/project-activity.repository";
-import { IssueActivityEntity } from "../data/entities/issue-activity.entity";
+import { IssueActivityEntity, ProjectActivityEntity } from "../app/entities";
+import { ProjectActivityRepository } from "../repositories/interfaces/project-activity.repository";
 
 export class CoreProjectActivityService implements ProjectActivityService {
   constructor(
     private readonly projectActivityRepository: ProjectActivityRepository,
   ) {}
 
-  logIssueCreated = async (payload: IssueCreatedPayload) => {
+  logCreatedIssue = async (payload: IssueCreatedPayload) => {
     const { id, name, description, projectId, createdAt, reporterId } = payload;
 
     const newIssueActivity = new IssueActivityEntity();
@@ -24,7 +23,7 @@ export class CoreProjectActivityService implements ProjectActivityService {
     newIssueActivity.projectId = projectId;
   };
 
-  logProjectCreated = async (payload: ProjectPayload) => {
+  logCreatedProject = async (payload: ProjectPayload) => {
     const { id, ownerUserId, createdAt } = payload;
 
     const newProjectActivity = new ProjectActivityEntity();
@@ -36,7 +35,7 @@ export class CoreProjectActivityService implements ProjectActivityService {
     await this.projectActivityRepository.save(newProjectActivity);
   };
 
-  logProjectNameUpdated = async (payload: ProjectPayload) => {
+  logUpdatedProjectName = async (payload: ProjectPayload) => {
     const { id, ownerUserId, updatedAt } = payload;
 
     if (!updatedAt) {
@@ -52,7 +51,7 @@ export class CoreProjectActivityService implements ProjectActivityService {
     await this.projectActivityRepository.save(newProjectActivity);
   };
 
-  logProjectDescriptionUpdated = async (payload: ProjectPayload) => {
+  logUpdatedProjectDescription = async (payload: ProjectPayload) => {
     const { id, ownerUserId, updatedAt } = payload;
 
     if (!updatedAt) {

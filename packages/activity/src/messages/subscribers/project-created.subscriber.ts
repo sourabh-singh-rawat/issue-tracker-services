@@ -20,7 +20,7 @@ export class ProjectCreatedSubscriber extends Subscriber<ProjectPayload> {
   }
 
   onMessage = async (message: JsMsg, payload: ProjectPayload) => {
-    await this.projectActivityService.logProjectCreated(payload);
+    await this.projectActivityService.logCreatedProject(payload);
     message.ack();
     console.log("Message processing completed");
   };

@@ -2,12 +2,16 @@ import {
   Filters,
   ProjectDetails,
   ProjectFormData,
-  ProjectStatus,
   ServiceResponse,
-  ProjectMember,
   ProjectRoles,
 } from "@sourabhrawatcc/core-utils";
-import { ProjectEntity, UserEntity } from "../../data/entities";
+import {
+  ProjectEntity,
+  ProjectMemberEntity,
+  UserEntity,
+} from "../../app/entities";
+import { WorkspaceMemberEntity } from "../../app/entities/workspace-member.entity";
+import { ProjectStatus } from "@issue-tracker/common";
 
 export interface ProjectService {
   createProject(
@@ -34,14 +38,14 @@ export interface ProjectService {
   getProjectList(
     userId: string,
     filters: Filters,
-  ): Promise<ServiceResponse<ProjectDetails<ProjectMember>[]>>;
+  ): Promise<ServiceResponse<ProjectDetails<ProjectMemberEntity>[]>>;
   getProject: (id: string) => Promise<ServiceResponse<ProjectEntity>>;
   getProjectMembers(
     projectId: string,
-  ): Promise<ServiceResponse<ProjectMember[]>>;
+  ): Promise<ServiceResponse<ProjectMemberEntity[]>>;
   getWorkspaceMemberList(
     userId: string,
     projectId: string,
-  ): Promise<ServiceResponse<UserEntity[]>>;
+  ): Promise<ServiceResponse<WorkspaceMemberEntity[]>>;
   updateProject(id: string, updatables: ProjectFormData): Promise<void>;
 }

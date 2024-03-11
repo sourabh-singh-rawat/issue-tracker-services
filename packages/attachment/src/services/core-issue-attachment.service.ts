@@ -1,10 +1,10 @@
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import { MultipartFile } from "@fastify/multipart";
-import { adminStorage } from "../app/stores/firebase.store";
+import { adminStorage } from "../app/stores";
 import { IssueAttachmentService } from "./interfaces/issue-attachment.service";
-import { IssueAttachmentRepository } from "../data/repositories/interfaces/issue-attachment.repository";
-import { IssueAttachmentEntity } from "../data/entities";
+import { IssueAttachmentRepository } from "../repositories/interfaces/issue-attachment.repository";
+import { IssueAttachmentEntity } from "../app/entities";
 import { ServiceResponse } from "@sourabhrawatcc/core-utils";
 
 export class CoreIssueAttachmentService implements IssueAttachmentService {

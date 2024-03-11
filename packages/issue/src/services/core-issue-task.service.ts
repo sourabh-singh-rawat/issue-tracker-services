@@ -1,7 +1,7 @@
 import { ServiceResponse, TaskFormData } from "@sourabhrawatcc/core-utils";
 import { IssueTaskService } from "./interfaces/issue-task.service";
-import { IssueTaskRepository } from "../data/repositories/interfaces/issue-task.repository";
-import { IssueTaskEntity } from "../data/entities";
+import { IssueTaskRepository } from "../repositories/interfaces/issue-task.repository";
+import { IssueTaskEntity } from "../app/entities";
 
 export class CoreIssueTaskService implements IssueTaskService {
   constructor(private readonly issueTaskRepository: IssueTaskRepository) {}

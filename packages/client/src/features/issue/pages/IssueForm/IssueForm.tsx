@@ -91,12 +91,6 @@ function IssueForm({ projectId }: IssueFormProps) {
     });
   };
 
-  // useEffect(() => {
-  //   if (isSuccess && handleClose) {
-  //     handleClose();
-  //   }
-  // }, [isSuccess]);
-
   return (
     <MuiContainer
       component="form"

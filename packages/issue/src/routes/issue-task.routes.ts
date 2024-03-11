@@ -1,13 +1,13 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { Auth } from "@sourabhrawatcc/core-utils";
-import { container } from "../app/containers/awilix.container";
+import { awilixContainer } from "../app/containers/awilix.container";
 
 export const issueTaskRoutes = (
   fastify: FastifyInstance,
   fastifyOptions: {},
   done: () => void,
 ) => {
-  const controller = container.get("issueTaskController");
+  const controller = awilixContainer.get("issueTaskController");
   const { requireTokens, setCurrentUser, requireAuth } = Auth;
   const auth: RouteShorthandOptions = {
     preHandler: [requireTokens, setCurrentUser, requireAuth],

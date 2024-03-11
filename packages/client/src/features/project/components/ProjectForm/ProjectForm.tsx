@@ -22,6 +22,7 @@ import {
   useCreateProjectMutation,
   useGetProjectStatusListQuery,
 } from "../../../../api/generated/project.api";
+import { ProjectStatus } from "@issue-tracker/common";
 
 function ProjectForm() {
   const theme = useTheme();
@@ -36,11 +37,10 @@ function ProjectForm() {
       description: "",
       startDate: "",
       endDate: "",
-      status: "Not Started",
+      status: ProjectStatus.NotStarted,
     }),
     [],
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
       openapi.paths["/projects"].post.requestBody.content["application/json"]

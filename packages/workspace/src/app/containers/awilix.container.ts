@@ -7,38 +7,34 @@ import {
   TypeormStore,
   Messenger,
 } from "@sourabhrawatcc/core-utils";
-import { store, dbSource } from "../stores/postgres-typeorm.store";
-import { messenger } from "../messengers/nats.messenger";
+import { store } from "../stores";
+import { dbSource } from "../stores/postgres-typeorm.store";
+import { messenger } from "../messengers";
 import {
   WorkspaceGuardian,
   workspaceGuardian,
 } from "../guardians/casbin/workspace.guardian";
 
-// Controllers
 import { WorkspaceController } from "../../controllers/interfaces/workspace-controller";
 import { CoreWorkspaceController } from "../../controllers/core-workspace.controller";
 
-// Services
 import { UserService } from "../../services/interfaces/user.service";
 import { WorkspaceService } from "../../services/interfaces/workspace.service";
 import { CoreUserService } from "../../services/core-user.service";
 import { CoreWorkspaceService } from "../../services/core-workspace.service";
 
-// Repositories
-import { UserRepository } from "../../data/repositories/interface/user-repository";
-import { WorkspaceRepository } from "../../data/repositories/interface/workspace-repository";
-import { WorkspaceMemberRepository } from "../../data/repositories/interface/workspace-member";
-import { PostgresUserRepository } from "../../data/repositories/postgres-user.repository";
-import { PostgresWorkspaceRepository } from "../../data/repositories/postgres-workspace.repository";
-import { PostgresWorkspaceMemberRepository } from "../../data/repositories/postgres-workspace-member.repository";
-
-// Publishers and Subscribers
 import { WorkspaceCreatedPublisher } from "../../messages/publishers/workspace-created.publisher";
 import { UserCreatedSubscriber } from "../../messages/subscribers/user-created.subscribers";
 import { UserUpdatedSubscriber } from "../../messages/subscribers/user-updated.subscribers";
 import { WorkspaceInviteCreatedPublisher } from "../../messages/publishers/workspace-invite-created.publisher";
-import { WorkspaceMemberInviteRepository } from "../../data/repositories/interface/workspace-member-invite.repository";
-import { PostgresWorkspaceMemberInviteRepository } from "../../data/repositories/postgres-workspace-member-invite.repository";
+import { WorkspaceRepository } from "../../repositories/interface/workspace-repository";
+import { UserRepository } from "../../repositories/interface/user-repository";
+import { WorkspaceMemberRepository } from "../../repositories/interface/workspace-member";
+import { WorkspaceMemberInviteRepository } from "../../repositories/interface/workspace-member-invite.repository";
+import { PostgresUserRepository } from "../../repositories/postgres-user.repository";
+import { PostgresWorkspaceRepository } from "../../repositories/postgres-workspace.repository";
+import { PostgresWorkspaceMemberRepository } from "../../repositories/postgres-workspace-member.repository";
+import { PostgresWorkspaceMemberInviteRepository } from "../../repositories/postgres-workspace-member-invite.repository";
 
 export interface RegisteredServices {
   logger: Logger;
@@ -62,12 +58,12 @@ export interface RegisteredServices {
 const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
-export const container = new AwilixContainer<RegisteredServices>(
+export const awilixContainer = new AwilixContainer<RegisteredServices>(
   awilix,
   logger,
 );
 
-const { add } = container;
+const { add } = awilixContainer;
 
 add("logger", asValue(logger));
 add("dbSource", asValue(dbSource));

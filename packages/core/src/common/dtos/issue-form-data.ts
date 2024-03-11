@@ -1,5 +1,6 @@
 import { ProjectMember } from ".";
-import { IssuePriority, IssueStatus } from "../enums";
+import { IssuePriority } from "../enums";
+import { IssueStatus } from "@issue-tracker/common";
 
 interface IssueFormDataProps {
   name: string;

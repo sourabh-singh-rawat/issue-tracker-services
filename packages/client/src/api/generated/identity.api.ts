@@ -35,34 +35,24 @@ const injectedRtkApi = api
   });
 export { injectedRtkApi as issueTrackerApi };
 export type GenerateTokensApiResponse =
-  /** status 200 accessToken and refreshTokens are successfully generated. */ undefined;
+  /** status 200 accessToken and refreshTokens are successfully generated. */ void;
 export type GenerateTokensApiArg = {
   body: {
-    email?: Email;
-    password?: Password;
+    email?: string;
+    password?: string;
   };
 };
 export type RevokeTokensApiResponse =
-  /** status 200 Tokens were successfully removed */ undefined;
+  /** status 200 Tokens were successfully removed */ void;
 export type RevokeTokensApiArg = void;
 export type GetCurrentUserApiResponse =
   /** status 200 Returns the current logged in user or null */ {
-    email?: Email;
-    displayName?: DisplayName;
-    defaultWorkspaceId?: Name;
-    defaultWorkspaceName?: Name;
+    email?: string;
+    displayName?: string;
+    defaultWorkspaceId?: string;
+    defaultWorkspaceName?: string;
   };
 export type GetCurrentUserApiArg = void;
-export type Schema = {
-  errors?: {
-    message: string;
-    field?: string;
-  }[];
-};
-export type Email = string;
-export type Password = string;
-export type DisplayName = string;
-export type Name = string;
 export const {
   useGenerateTokensMutation,
   useRevokeTokensMutation,

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
@@ -8,19 +9,20 @@ import List from "../../../../common/components/List";
 import dayjs from "dayjs";
 import Avatar from "../../../../common/components/Avatar";
 import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
+import { GetProjectMembersApiResponse } from "../../../../api/generated/project.api";
 
 export interface MemberListProps {
-  members: [];
+  members: GetProjectMembersApiResponse;
   projectId: string;
 }
 
-function MemberList({ members, projectId }: MemberListProps) {
+export default function MemberList({ projectId, members }: MemberListProps) {
   const theme = useTheme();
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
       flex: 0.3,
-      field: "name",
+      field: "user.displayName",
       headerName: "Name",
       minWidth: 200,
       renderCell: ({ value, row: { photoUrl } }) => (
@@ -48,7 +50,7 @@ function MemberList({ members, projectId }: MemberListProps) {
     },
     {
       flex: 0.3,
-      field: "email",
+      field: "user.email",
       headerName: "Email",
       minWidth: 200,
       renderCell: ({ value }) => (
@@ -70,15 +72,25 @@ function MemberList({ members, projectId }: MemberListProps) {
     },
   ];
 
+  const rows = members?.rows?.map((row) => {
+    if (row.user) {
+      return {
+        ...row,
+        "user.id": row.user.id,
+        "user.email": row.user.email,
+        "user.displayName": row.user.displayName,
+      };
+    }
+    return { ...row };
+  });
+
   return (
     <List
-      rows={members}
-      rowCount={members?.length}
+      rows={rows}
+      rowCount={members?.rowCount}
       columns={columns}
       // isLoading={isLoading}
       hideFooter={true}
     />
   );
 }
-
-export default MemberList;

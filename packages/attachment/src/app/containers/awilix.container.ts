@@ -7,23 +7,21 @@ import {
   NatsMessenger,
   AwilixContainer,
 } from "@sourabhrawatcc/core-utils";
-import {
-  dataSource,
-  postgresTypeormStore,
-} from "../stores/postgres-typeorm.store";
+import { dataSource } from "../stores/postgres-typeorm.store";
+import { store } from "../stores";
 import { messenger } from "../messengers/nats.messenger";
 import { IssueAttachmentController } from "../../controllers/interfaces/issue-attachment.controller";
 import { IssueAttachmentService } from "../../services/interfaces/issue-attachment.service";
-import { IssueAttachmentRepository } from "../../data/repositories/interfaces/issue-attachment.repository";
+import { IssueAttachmentRepository } from "../../repositories/interfaces/issue-attachment.repository";
 import { CoreIssueAttachmentController } from "../../controllers/core-issue-attachment.controller";
 import { CoreIssueAttachmentService } from "../../services/core-issue-attachment.service";
-import { PostgresIssueAttachmentRepository } from "../../data/repositories/postgres-issue-attachment.repository";
+import { PostgresIssueAttachmentRepository } from "../../repositories/postgres-issue-attachment.repository";
 
 export interface RegisteredServices {
   logger: Logger;
   dataSource: DataSource;
   messenger: NatsMessenger;
-  postgresTypeormStore: TypeormStore;
+  store: TypeormStore;
   issueAttachmentController: IssueAttachmentController;
   issueAttachmentService: IssueAttachmentService;
   issueAttachmentRepository: IssueAttachmentRepository;
@@ -42,7 +40,7 @@ const { add } = awilixContainer;
 
 add("logger", asValue(logger));
 add("dataSource", asValue(dataSource));
-add("postgresTypeormStore", asValue(postgresTypeormStore));
+add("store", asValue(store));
 add("messenger", asValue(messenger));
 add("issueAttachmentController", asClass(CoreIssueAttachmentController));
 add("issueAttachmentService", asClass(CoreIssueAttachmentService));

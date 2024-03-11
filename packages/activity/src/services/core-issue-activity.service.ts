@@ -1,18 +1,17 @@
 import {
-  IssueActivity,
   IssueCreatedPayload,
   ProjectActivity,
 } from "@sourabhrawatcc/core-utils";
 import { IssueActivityService } from "./interfaces/issue-activity.service";
-import { ProjectActivityRepository } from "../data/repositories/interfaces/project-activity.repository";
-import { ProjectActivityEntity } from "../data/entities";
+import { ProjectActivityEntity } from "../app/entities";
+import { ProjectActivityRepository } from "../repositories/interfaces/project-activity.repository";
 
 export class CoreIssueActivityService implements IssueActivityService {
   constructor(
     private readonly projectActivityRepository: ProjectActivityRepository,
   ) {}
 
-  logIssueCreated = async (payload: IssueCreatedPayload) => {
+  logCreatedIssue = async (payload: IssueCreatedPayload) => {
     const { ownerId, projectId, createdAt } = payload;
 
     const newProjectActivity = new ProjectActivityEntity();

@@ -13,16 +13,16 @@ import {
 } from "@sourabhrawatcc/core-utils";
 import { v4 } from "uuid";
 import { WorkspaceService } from "./interfaces/workspace.service";
-import { UserEntity, WorkspaceEntity } from "../data/entities";
-import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
 import { WorkspaceCreatedPublisher } from "../messages/publishers/workspace-created.publisher";
 import { WorkspaceGuardian } from "../app/guardians/casbin/workspace.guardian";
-import { UserRepository } from "../data/repositories/interface/user-repository";
-import { WorkspaceRepository } from "../data/repositories/interface/workspace-repository";
-import { WorkspaceMemberRepository } from "../data/repositories/interface/workspace-member";
+import { UserRepository } from "../repositories/interface/user-repository";
+import { WorkspaceRepository } from "../repositories/interface/workspace-repository";
+import { WorkspaceMemberRepository } from "../repositories/interface/workspace-member";
+import { WorkspaceMemberInviteRepository } from "../repositories/interface/workspace-member-invite.repository";
 import { WorkspaceInviteCreatedPublisher } from "../messages/publishers/workspace-invite-created.publisher";
-import { WorkspaceMemberInviteRepository } from "../data/repositories/interface/workspace-member-invite.repository";
-import { WorkspaceMemberInviteEntity } from "../data/entities/workspace-member-invite.entity";
+import { UserEntity, WorkspaceEntity } from "../app/entities";
+import { WorkspaceMemberEntity } from "../app/entities/workspace-member.entity";
+import { WorkspaceMemberInviteEntity } from "../app/entities/workspace-member-invite.entity";
 
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(

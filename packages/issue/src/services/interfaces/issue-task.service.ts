@@ -1,5 +1,5 @@
 import { ServiceResponse, TaskFormData } from "@sourabhrawatcc/core-utils";
-import { IssueTaskEntity } from "../../data/entities";
+import { IssueTaskEntity } from "../../app/entities";
 
 export interface IssueTaskService {
   createTask(

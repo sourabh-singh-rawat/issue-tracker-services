@@ -1,5 +1,5 @@
-import { Errors } from "../../common/enums/errors";
-import { StandardError } from "../../error/standard.error";
+import { Errors } from "../../errors/errors";
+import { StandardError } from "../../errors/standard.error";
 
 export class QueryExecutionError extends StandardError {
   errorCode;
