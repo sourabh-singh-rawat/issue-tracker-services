@@ -17,6 +17,6 @@
     "node": ">=21.6.1"
   },
   "devDependencies": {
-    "@redocly/cli": "^1.10.3"
+    "@redocly/cli": "^1.10.6"
   }
 }
