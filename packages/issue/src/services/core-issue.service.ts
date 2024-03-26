@@ -82,7 +82,7 @@ export class CoreIssueService implements IssueService {
     newIssue.projectId = projectId;
     newIssue.resolution = resolution;
     newIssue.createdById = userId;
-    newIssue.reporterId = reporter.userId;
+    newIssue.reporterId = reporter.id;
 
     const queryRunner = this.store.createQueryRunner();
     const result = await this.store.transaction(
@@ -93,12 +93,7 @@ export class CoreIssueService implements IssueService {
         });
 
         assignees.forEach(async (assignee) => {
-          // TODO: 2 funcs to create issue assigne and add policy
-          await this.createAssignee(
-            assignee.userId,
-            savedIssue.id,
-            queryRunner,
-          );
+          await this.createAssignee(assignee.id, savedIssue.id, queryRunner);
         });
 
         return savedIssue;
@@ -120,7 +115,7 @@ export class CoreIssueService implements IssueService {
       reporterId: result.reporterId,
     });
 
-    return new ServiceResponse({ rows: result.id });
+    return result.id;
   };
 
   getIssueList = async (userId: string, filters: IssueListFilters) => {
@@ -156,10 +151,8 @@ export class CoreIssueService implements IssueService {
     const issueEntity = await this.issueRepository.findOne(issueId);
 
     if (!issueEntity) throw new NotFoundError("Issue not found");
-    const commentCount =
-      await this.issueCommentRepository.findCountByIssueId(issueId);
 
-    return new ServiceResponse({ rows: issueEntity });
+    return issueEntity;
   };
 
   updateIssue = async (

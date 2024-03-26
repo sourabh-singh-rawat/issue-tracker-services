@@ -6,14 +6,13 @@ import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
 import TabPanel from "../../../../common/components/TabPanel";
-import Description from "../../../../common/components/Description";
 import IssueAssignees from "../../../../common/components/IssueAssignees";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import {
-  useGetIssueAttachmentListQuery,
-  useGetIssuePriorityListQuery,
-  useGetIssueStatusListQuery,
   useUpdateIssueMutation,
+  useGetIssueStatusListQuery,
+  useGetIssuePriorityListQuery,
+  useGetIssueAttachmentListQuery,
 } from "../../../../api/generated/issue.api";
 import { useMessageBar } from "../../../message-bar/hooks";
 import Avatar from "../../../../common/components/Avatar";
@@ -27,17 +26,15 @@ import IssueStatusSelector from "../../../issue-list/components/IssueStatusSelec
 import DateTag from "../../../../common/components/DateTag";
 import ImageCard from "../../../issue-attachments/components/ImageCard";
 import IssueResolutionSelector from "../../components/IssueResolutionSelector";
+import Description2 from "../../../../common/components/Description2";
 
 export default function IssueOverview() {
   const theme = useTheme();
-  const { id, selectedTab, page, setPage, isLoading } = useSelectedTab();
+  const { id, selectedTab, page, isLoading } = useSelectedTab();
   const { showSuccess, showError } = useMessageBar();
 
   const [updateIssueMutation, { isSuccess, isError }] =
     useUpdateIssueMutation();
-  const updatePageQuery = async () => {
-    updateIssueMutation({ id, body: { description: page?.description } });
-  };
   const { data: statuses } = useGetIssueStatusListQuery();
   const { data: priorityList } = useGetIssuePriorityListQuery();
   const { data: attachments } = useGetIssueAttachmentListQuery({ id });
@@ -54,43 +51,15 @@ export default function IssueOverview() {
         <MuiGrid md={8} item>
           <MuiGrid spacing={2} container>
             <MuiGrid item xs={12}>
-              <Description
+              <Description2
+                defaultValue={page?.description}
                 isLoading={isLoading}
-                page={page}
-                setPage={setPage}
-                updateQuery={updatePageQuery}
                 isDisabled={isArchived}
+                handleSubmit={async (description) => {
+                  await updateIssueMutation({ id, body: { description } });
+                }}
               />
             </MuiGrid>
-            {/* <MuiGrid item>
-              <MuiTypography
-                variant="body1"
-                sx={{
-                  color: theme.palette.text.primary,
-                  fontWeight: theme.typography.fontWeightBold,
-                }}
-              >
-                Tasks
-              </MuiTypography>
-              <MuiTypography sx={{ marginTop: "6px" }} variant="body2">
-                No current incomplete tasks.{" "}
-                <Link
-                  style={{ textDecoration: "none" }}
-                  to={`/issues/${id}/tasks`}
-                >
-                  <MuiTypography
-                    component="span"
-                    sx={{
-                      color: theme.palette.primary.main,
-                      "&:hover": { color: theme.palette.primary.main },
-                    }}
-                    variant="body2"
-                  >
-                    Add task.
-                  </MuiTypography>
-                </Link>
-              </MuiTypography>
-            </MuiGrid> */}
             <MuiGrid xs={12} item>
               <MuiTypography
                 variant="body1"

@@ -1,42 +1,85 @@
-
 get:
   tags: ["project"]
   summary: Gets a project
-  parameters: 
+  parameters:
     - name: id
       in: path
-      schema: 
+      schema:
         type: string
       description: Numeric id of the project to update
   operationId: getProject
   responses:
     200:
       description: Projects updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              createdAt:
+                $ref: "../../components/schemas/date.yaml"
+              deletedAt:
+                $ref: "../../components/schemas/date.yaml"
+              description:
+                $ref: "../../components/schemas/description.yaml"
+              endDate:
+                $ref: "../../components/schemas/date.yaml"
+              id:
+                type: string
+              name:
+                type: string
+              ownerUserId:
+                type: string
+              startDate:
+                $ref: "../../components/schemas/date.yaml"
+              status:
+                type: string
+              updatedAt:
+                $ref: "../../components/schemas/date.yaml"
+              version:
+                type: number
+              workspaceId:
+                type: string
+            required:
+              [
+                "createdAt",
+                "deletedAt",
+                "description",
+                "endDate",
+                "id",
+                "name",
+                "ownerUserId",
+                "startDate",
+                "status",
+                "updatedAt",
+                "version",
+                "workspaceId",
+              ]
     400:
       description: Bad Request
-      content: 
+      content:
         application/json:
           schema:
             $ref: ../../components/schemas/error.yaml
 patch:
   tags: ["project"]
   summary: Updates the project with new properties
-  parameters: 
+  parameters:
     - name: id
       in: path
-      schema: 
+      schema:
         type: string
       required: true
-      description: Numeric id of the project to update  
+      description: Numeric id of the project to update
   description: Updates the project with new properties
   operationId: updateProject
-  requestBody: 
+  requestBody:
     content:
       application/json:
-        schema: 
+        schema:
           type: object
           properties:
-            name: 
+            name:
               $ref: ../../components/schemas/name.yaml
             description:
               $ref: ../../components/schemas/description.yaml
@@ -51,7 +94,7 @@ patch:
       description: Projects updated successfully
     400:
       description: Bad Request
-      content: 
+      content:
         application/json:
           schema:
             $ref: ../../components/schemas/error.yaml

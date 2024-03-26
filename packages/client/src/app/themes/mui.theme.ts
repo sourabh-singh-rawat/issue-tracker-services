@@ -38,8 +38,24 @@ declare module "@mui/material/styles" {
   }
 }
 
-let mode: "dark" | "light" = "light";
+let mode: "dark" | "light" = "dark";
 if (!mode) mode = "light";
+
+const shape = {
+  borderWidthDefault: "1px",
+  borderWidthInput: "2px",
+  borderWidthInputOverlayUnfocused: "1px",
+  borderWidthMarked: "3px",
+  borderWidthSpinner: "2px",
+  borderWidthTag: "2px",
+  borderRadiusNone: "0",
+  borderRadiusSmall: "0.2rem",
+  borderRadiusMedium: "0.4rem",
+  borderRadiusLarge: "0.6rem",
+  borderRadiusExtraLarge: "1rem",
+  borderRadiusExtraExtraLarge: "1.6rem",
+  borderRadiusRounded: "9000px",
+};
 
 export const theme = createTheme({
   spacing: 8,
@@ -87,21 +103,7 @@ export const theme = createTheme({
           success: { main: "#4df498" },
         }),
   },
-  shape: {
-    borderWidthDefault: "1px",
-    borderWidthInput: "2px",
-    borderWidthInputOverlayUnfocused: "1px",
-    borderWidthMarked: "3px",
-    borderWidthSpinner: "2px",
-    borderWidthTag: "2px",
-    borderRadiusNone: "0",
-    borderRadiusSmall: "0.2rem",
-    borderRadiusMedium: "0.4rem",
-    borderRadiusLarge: "0.6rem",
-    borderRadiusExtraLarge: "1rem",
-    borderRadiusExtraExtraLarge: "1.6rem",
-    borderRadiusRounded: "9000px",
-  },
+  shape,
   shadows: [
     "none",
     "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
@@ -140,5 +142,17 @@ export const theme = createTheme({
     h6: { fontSize: "1rem" },
     body1: { fontSize: "0.875rem" },
     body2: { fontSize: "0.8125rem" },
+  },
+  components: {
+    MuiIconButton: {
+      defaultProps: {
+        sx: { borderRadius: shape.borderRadiusMedium },
+      },
+    },
+    MuiAlert: {
+      defaultProps: {
+        sx: { borderRadius: shape.borderRadiusMedium },
+      },
+    },
   },
 });

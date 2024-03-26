@@ -1,39 +1,78 @@
 get:
   tags: ["issue"]
   summary: Gets a Issue
-  parameters: 
+  parameters:
     - name: id
       in: path
-      schema: 
+      schema:
         type: string
       description: Numeric id of the issue to get
   operationId: getIssue
   responses:
     200:
       description: Returns the issue if it exists
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              createdAt:
+                $ref: "../../components/schemas/date.yaml"
+              createdById:
+                type: string
+              deletedAt:
+                $ref: "../../components/schemas/date.yaml"
+              description:
+                $ref: "../../components/schemas/description.yaml"
+              dueDate:
+                $ref: "../../components/schemas/date.yaml"
+              id:
+                type: string
+              name:
+                type: string
+              priority:
+                type: string
+              projectId:
+                type: string
+              project:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                required: ["id", "name"]
+              reporterId:
+                type: string
+              resolution:
+                type: boolean
+              status:
+                type: string
+              updatedAt:
+                $ref: "../../components/schemas/date.yaml"
     400:
       description: Bad Request
-      content: 
+      content:
         application/json:
           schema:
             $ref: ../../components/schemas/error.yaml
 patch:
   tags: ["issue"]
-  summary: Updates the issue  
-  parameters: 
+  summary: Updates the issue
+  parameters:
     - name: id
       in: path
-      schema: 
+      schema:
         type: string
       description: Numeric id of the issue to get
   operationId: updateIssue
-  requestBody: 
-    content: 
+  requestBody:
+    content:
       application/json:
         schema:
           type: object
           properties:
-            name: 
+            name:
               $ref: ../../components/schemas/name.yaml
             description:
               $ref: ../../components/schemas/description.yaml
@@ -54,16 +93,15 @@ patch:
                   type: string
                 name:
                   type: string
-              required: [ "id", "name" ]   
+              required: ["id", "name"]
             dueDate:
-                $ref: ../../components/schemas/date.yaml
+              $ref: ../../components/schemas/date.yaml
   responses:
     200:
       description: Updates the issue
     400:
       description: Bad Request
-      content: 
+      content:
         application/json:
           schema:
-            $ref: ../../components/schemas/error.yaml      
-  
+            $ref: ../../components/schemas/error.yaml

@@ -504,7 +504,130 @@
                   "type": "object",
                   "properties": {
                     "rows": {
-                      "type": "array"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "assignees": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "user": {
+                                  "type": "object",
+                                  "properties": {
+                                    "displayName": {
+                                      "type": "string"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "displayName"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "user"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "createdById": {
+                            "type": "string"
+                          },
+                          "deletedAt": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string",
+                            "maxLength": 3000,
+                            "default": "No description"
+                          },
+                          "dueDate": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "format": "date"
+                              },
+                              {
+                                "type": "string",
+                                "maxLength": 0
+                              }
+                            ]
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "priority": {
+                            "type": "string"
+                          },
+                          "priorityList": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "project": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          },
+                          "reporter": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "displayName": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "displayName"
+                            ]
+                          },
+                          "resolution": {
+                            "type": "boolean"
+                          },
+                          "required": [
+                            "assignees",
+                            "createdAt",
+                            "deletedAt",
+                            "description",
+                            "dueDate",
+                            "id",
+                            "name",
+                            "priority",
+                            "priorityList",
+                            "project",
+                            "reporter",
+                            "resolution"
+                          ]
+                        }
+                      }
                     },
                     "filteredRowCount": {
                       "type": "number"
@@ -831,7 +954,108 @@
         "operationId": "getIssue",
         "responses": {
           "200": {
-            "description": "Returns the issue if it exists"
+            "description": "Returns the issue if it exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "createdById": {
+                      "type": "string"
+                    },
+                    "deletedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxLength": 3000,
+                      "default": "No description"
+                    },
+                    "dueDate": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "project": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    },
+                    "reporterId": {
+                      "type": "string"
+                    },
+                    "resolution": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -1919,7 +2143,113 @@
         "operationId": "getProject",
         "responses": {
           "200": {
-            "description": "Projects updated successfully"
+            "description": "Projects updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "deletedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxLength": 3000,
+                      "default": "No description"
+                    },
+                    "endDate": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "ownerUserId": {
+                      "type": "string"
+                    },
+                    "startDate": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 0
+                        }
+                      ]
+                    },
+                    "version": {
+                      "type": "number"
+                    },
+                    "workspaceId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "createdAt",
+                    "deletedAt",
+                    "description",
+                    "endDate",
+                    "id",
+                    "name",
+                    "ownerUserId",
+                    "startDate",
+                    "status",
+                    "updatedAt",
+                    "version",
+                    "workspaceId"
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -2174,28 +2504,18 @@
                                 "type": "string"
                               },
                               "email": {
-                                "type": "object",
-                                "properties": {
-                                  "errors": {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "message": {
-                                          "type": "string"
-                                        },
-                                        "field": {
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "message"
-                                      ]
-                                    }
-                                  }
-                                }
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80,
+                                "format": "email",
+                                "default": "Sourabh.rawatcc@gmail.com"
                               }
-                            }
+                            },
+                            "required": [
+                              "id",
+                              "displayName",
+                              "email"
+                            ]
                           },
                           "createdAt": {
                             "type": {
@@ -2214,7 +2534,12 @@
                           "role": {
                             "type": "string"
                           }
-                        }
+                        },
+                        "required": [
+                          "user",
+                          "createdAt",
+                          "role"
+                        ]
                       }
                     },
                     "rowCount": {

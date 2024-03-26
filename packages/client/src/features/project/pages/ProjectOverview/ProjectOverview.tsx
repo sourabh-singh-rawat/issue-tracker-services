@@ -4,22 +4,18 @@ import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 
 import TabPanel from "../../../../common/components/TabPanel";
-import Description from "../../../../common/components/Description";
 
 import { useMessageBar } from "../../../message-bar/hooks";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import { useUpdateProjectMutation } from "../../../../api/generated/project.api";
 import ProjectDetails from "../../components/ProjectDetails";
+import Description2 from "../../../../common/components/Description2";
 
 export default function ProjectOverview() {
   const theme = useTheme();
   const { showSuccess, showError } = useMessageBar();
-  const { id, selectedTab, page, setPage, isLoading } = useSelectedTab();
+  const { id, selectedTab, page, isLoading } = useSelectedTab();
   const [updateProject, { isSuccess, isError }] = useUpdateProjectMutation();
-
-  const updateDescriptionQuery = async () => {
-    updateProject({ id, body: { description: page.description } });
-  };
 
   useEffect(() => {
     if (isSuccess) return showSuccess("Description updated successfully");
@@ -32,10 +28,11 @@ export default function ProjectOverview() {
         <MuiGrid xs={12} md={8} item>
           <MuiGrid container>
             <MuiGrid item xs={12}>
-              <Description
-                page={page}
-                setPage={setPage}
-                updateQuery={updateDescriptionQuery}
+              <Description2
+                defaultValue={page?.description}
+                handleSubmit={async (value) => {
+                  await updateProject({ id, body: { description: value } });
+                }}
                 isLoading={isLoading}
               />
             </MuiGrid>

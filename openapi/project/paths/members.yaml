@@ -30,12 +30,14 @@ get:
                         displayName:
                           type: string
                         email:
-                          $ref: ../../components/schemas/error.yaml
+                          $ref: ../../components/schemas/email.yaml
+                      required: ["id", "displayName", "email"]
                     createdAt:
                       type:
                         $ref: ../../components/schemas/date.yaml
                     role:
                       type: string
+                  required: ["user", "createdAt", "role"]
               rowCount:
                 type: number
             required: ["rows", "rowCount"]

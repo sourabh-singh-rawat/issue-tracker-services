@@ -22,7 +22,7 @@ export default function Projects() {
 
       <MuiGrid item>
         <PrimaryButton
-          label="Create Project"
+          label="New Project"
           type="button"
           startIcon={<AddIcon />}
           onClick={() => navigate("./new")}

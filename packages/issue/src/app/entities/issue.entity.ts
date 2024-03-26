@@ -4,9 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { UserEntity } from "./user.entity";
+import { ProjectEntity } from "./project.entity";
+import { IssueAssigneeEntity } from "./issue-assignee.entity";
 
 @Entity({ name: "issues" })
 export class IssueEntity extends AuditEntity {
@@ -30,12 +33,19 @@ export class IssueEntity extends AuditEntity {
   @Column({ type: "boolean", default: false })
   resolution!: boolean;
 
+  @Column({ name: "reporter_id" })
+  reporterId!: string;
+
   @ManyToOne(() => UserEntity)
   @JoinColumn({ name: "reporter_id" })
-  reporterId!: string;
+  reporter!: UserEntity;
 
   @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
+
+  @ManyToOne(() => ProjectEntity)
+  @JoinColumn({ name: "project_id" })
+  project!: ProjectEntity;
 
   @Column({
     name: "due_date",
@@ -50,9 +60,12 @@ export class IssueEntity extends AuditEntity {
   @ManyToOne(() => UserEntity)
   createdBy!: UserEntity;
 
-  @Column({ name: "updated_by_id", type: "uuid" })
+  @Column({ name: "updated_by_id", type: "uuid", nullable: true })
   updatedById?: string;
 
   @ManyToOne(() => UserEntity)
   updatedBy?: UserEntity;
+
+  @OneToMany(() => IssueAssigneeEntity, ({ issue }) => issue)
+  assignees!: IssueAssigneeEntity;
 }

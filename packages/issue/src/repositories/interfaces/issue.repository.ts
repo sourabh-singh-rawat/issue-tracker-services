@@ -1,11 +1,9 @@
 import {
   IssueListFilters,
-  IssueFormData,
   QueryBuilderOptions,
   Repository,
 } from "@sourabhrawatcc/core-utils";
 import { IssueEntity } from "../../app/entities";
-import { ObjectLiteral } from "typeorm";
 
 export interface IssueRepository extends Repository<IssueEntity> {
   find(userId: string, filters: IssueListFilters): Promise<IssueEntity[]>;

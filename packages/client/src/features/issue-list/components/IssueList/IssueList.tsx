@@ -97,7 +97,16 @@ export default function IssueList({ projectId }: IssueListProps) {
       field: "assignees",
       headerName: "Assignee",
       renderCell: ({ value }) => {
-        return <AvatarGroup max={1} members={value} total={value.length} />;
+        return (
+          <AvatarGroup
+            max={2}
+            members={value?.map(({ id, user }) => ({
+              id: user.id,
+              name: user.displayName,
+            }))}
+            total={value?.length}
+          />
+        );
       },
     },
     {
@@ -111,20 +120,18 @@ export default function IssueList({ projectId }: IssueListProps) {
             alignItems: "center",
             textDecoration: "none",
           }}
-          to={`/profile/${value.userId}`}
+          to={`/profile/${value.id}`}
         >
-          <Avatar label={value.name} photoUrl={value.photoUrl} />
+          <Avatar label={value.displayName} />
           <MuiTypography
             sx={{
               pl: theme.spacing(1),
               color: theme.palette.text.primary,
-              "&:hover": {
-                color: theme.palette.primary.main,
-              },
+              "&:hover": { color: theme.palette.primary.main },
             }}
             variant="body2"
           >
-            {value.name}
+            {value.displayName}
           </MuiTypography>
         </Link>
       ),
@@ -156,8 +163,8 @@ export default function IssueList({ projectId }: IssueListProps) {
         ),
     },
     {
-      field: "projectId",
-      headerName: "Project Id",
+      field: "project.name",
+      headerName: "Project",
       width: 125,
       renderCell: ({ value }) => (
         <MuiTypography variant="body2" noWrap>
@@ -179,7 +186,12 @@ export default function IssueList({ projectId }: IssueListProps) {
 
   return (
     <List
-      rows={issueList?.rows}
+      rows={issueList?.rows?.map((row) => {
+        if (row.project) {
+          return { ...row, "project.name": row.project.name };
+        }
+        return row;
+      })}
       columns={columns}
       paginationModel={paginationModel}
       onPaginationModelChange={onPaginationModelChange}

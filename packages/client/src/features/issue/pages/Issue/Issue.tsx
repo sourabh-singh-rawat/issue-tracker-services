@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-import { useTheme } from "@mui/material";
+import { Link, useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 
 import Tab from "../../../../common/components/Tab";
@@ -14,12 +14,13 @@ import {
   useUpdateIssueMutation,
 } from "../../../../api/generated/issue.api";
 import { useMessageBar } from "../../../message-bar/hooks";
-import Title from "../../../../common/components/Title";
 
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
-import IssuePath from "../../components/IssuePath";
+
+import Title2 from "../../../../common/components/Title";
+import Chip from "../../../../common/components/Chip";
 
 export default function Issue() {
   const theme = useTheme();
@@ -57,7 +58,7 @@ export default function Issue() {
   }, [id, tabName]);
 
   useEffect(() => {
-    if (issueRequest.isSuccess) setIssue(data?.rows);
+    if (issueRequest.isSuccess) setIssue(data);
   }, [data]);
 
   const handleChange = (e, newValue) => {
@@ -77,24 +78,18 @@ export default function Issue() {
     <MuiGrid container>
       <MuiGrid xs={12} item>
         <MuiGrid xs={12} item>
-          {/* <TextButton
-            label="Back to all issues"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate("/issues")}
-          /> */}
-          <IssuePath
-            projectName={issue.projectName}
-            projectId={issue.projectId}
+          {/* <IssuePath
+            projectName={issue.project.name}
+            projectId={issue.project.id}
             tabName={tabName}
-          />
+          /> */}
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <Title
-            page={issue}
-            setPage={setIssue}
-            updateQuery={async () => {
+          <Title2
+            defaultValue={issue.name}
+            onTitleSubmit={async (name) => {
               if (!id) return;
-              await updateIssue({ id, body: { name: issue.name } });
+              await updateIssue({ id, body: { name } });
             }}
           />
         </MuiGrid>
@@ -107,15 +102,16 @@ export default function Issue() {
                 <MuiSkeleton width="80px" />
               ) : (
                 <MuiTypography component="span" variant="body2">
-                  Issue
-                  {/* {type.slice(1, -1)} */}
+                  <Chip label="Issue" color={theme.palette.error.main} /> in{" "}
+                  {""}
+                  <Link>{data?.project?.name}</Link>
                 </MuiTypography>
               )}
               {issueRequest.isLoading ? (
                 <MuiSkeleton width="80px" />
               ) : (
                 <MuiTypography component="span" variant="body2">
-                  {issue?.updatedAt && dayjs(issue?.updatedAt).fromNow()}
+                  {issue?.createdAt && dayjs(issue?.createdAt).fromNow()}
                 </MuiTypography>
               )}
             </MuiBreadcrumbs>

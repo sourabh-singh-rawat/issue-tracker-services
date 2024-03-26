@@ -124,7 +124,20 @@ export type GetProjectStatusListApiResponse =
   };
 export type GetProjectStatusListApiArg = void;
 export type GetProjectApiResponse =
-  /** status 200 Projects updated successfully */ void;
+  /** status 200 Projects updated successfully */ {
+    createdAt: string | string;
+    deletedAt: string | string;
+    description: string;
+    endDate: string | string;
+    id: string;
+    name: string;
+    ownerUserId: string;
+    startDate: string | string;
+    status: string;
+    updatedAt: string | string;
+    version: number;
+    workspaceId: string;
+  };
 export type GetProjectApiArg = {
   /** Numeric id of the project to update */
   id?: string;
@@ -153,18 +166,13 @@ export type GetProjectRoleListApiArg = {
 export type GetProjectMembersApiResponse =
   /** status 200 Get all project members */ {
     rows: {
-      user?: {
-        id?: string;
-        displayName?: string;
-        email?: {
-          errors?: {
-            message: string;
-            field?: string;
-          }[];
-        };
+      user: {
+        id: string;
+        displayName: string;
+        email: string;
       };
-      createdAt?: any;
-      role?: string;
+      createdAt: any;
+      role: string;
     }[];
     rowCount: number;
   };

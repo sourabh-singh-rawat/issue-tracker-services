@@ -1,19 +1,23 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import MuiChip from "@mui/material/Chip";
-import { styled, useTheme } from "@mui/material/styles";
+import { SxProps, styled, useTheme } from "@mui/material/styles";
+import { Theme } from "@emotion/react";
 
 const StyledChip = styled(MuiChip)(() => ({ fontWeight: 600 }));
 
 interface Props {
-  label: any;
+  label: string;
   color?: string;
 }
 
 export default function Chip({ label, color }: Props) {
   const theme = useTheme();
-  const chipStyles = { color, padding: theme.spacing(1) };
+  const chipStyles: SxProps<Theme> = {
+    color,
+    borderRadius: theme.shape.borderRadiusMedium,
+    border: `1px solid ${color}`,
+  };
 
   return (
     <StyledChip label={label} size="small" variant="outlined" sx={chipStyles} />

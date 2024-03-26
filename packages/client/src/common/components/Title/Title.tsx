@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import MuiGrid from "@mui/material/Grid";
-import MuiTextField from "@mui/material/TextField";
 import { alpha, styled, useTheme } from "@mui/material/styles";
-
-import TextButton from "../buttons/TextButton";
-import PrimaryButton from "../buttons/PrimaryButton";
+import MuiTextField from "@mui/material/TextField";
+import DoneIcon from "@mui/icons-material/Done";
+import MuiIconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
     overflow: "hidden",
-    paddingTop: theme.spacing(0.25),
-    paddingBottom: theme.spacing(0.25),
+    paddingTop: theme.spacing(0.35),
+    paddingBottom: theme.spacing(0.35),
     textOverflow: "ellipsis",
     borderRadius: theme.shape.borderRadiusMedium,
     paddingLeft: theme.spacing(1),
@@ -21,9 +20,7 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
     fontWeight: "bold",
     backgroundColor: "transparent",
     borderRadius: theme.shape.borderRadiusMedium,
-    "& fieldset": {
-      border: "2px solid transparent",
-    },
+    "& fieldset": { border: "2px solid transparent" },
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
       "& fieldset": { border: `2px solid ${theme.palette.grey[200]}` },
@@ -41,52 +38,71 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   },
 }));
 
-interface TitleProps<T extends { name: string }> {
-  page: T;
-  setPage: React.Dispatch<React.SetStateAction<T>>;
-  updateQuery: () => Promise<void>;
+interface Props {
+  defaultValue?: string;
+  onTitleSubmit: (value: string) => void;
 }
 
-export default function Title<T extends { name: string }>({
-  page,
-  setPage,
-  updateQuery,
-}: TitleProps<T>) {
+export default function Title({
+  defaultValue = "",
+  onTitleSubmit: handleSubmit,
+}: Props) {
   const theme = useTheme();
+  const [value, setValue] = useState(defaultValue);
+  const [previousValue, setPreviousValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [previousName, setPreviousName] = useState("");
 
-  const handleSubmit = async () => {
-    if (page?.name !== previousName) await updateQuery();
-    setIsFocused(false);
+  const handleChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const textValue = e.target.value;
+    setValue(textValue);
   };
 
   const handleClick = () => {
+    setPreviousValue(value);
     setIsFocused(true);
-    setPreviousName(page.name);
   };
 
   const handleCancel = () => {
     setIsFocused(false);
-    setPage({ ...page, name: previousName });
+    setValue(defaultValue);
   };
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   return (
     <MuiGrid columnSpacing={1} sx={{ marginLeft: theme.spacing(-2) }} container>
       <MuiGrid flexGrow={1} item>
         <TitleTextField
           name="name"
-          value={page?.name}
+          value={value}
           fullWidth
           onClick={handleClick}
-          onChange={(e) => setPage({ ...page, name: e.target.value })}
+          onChange={handleChange}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          type="text"
         />
       </MuiGrid>
+
       <MuiGrid item sx={{ display: isFocused ? "flex" : "none" }}>
-        <PrimaryButton label="Save" onClick={handleSubmit} />
+        <MuiIconButton
+          onClick={() => {
+            if (value !== previousValue) handleSubmit(value);
+            setIsFocused(false);
+          }}
+        >
+          <DoneIcon />
+        </MuiIconButton>
       </MuiGrid>
       <MuiGrid item sx={{ display: isFocused ? "flex" : "none" }}>
-        <TextButton label="Cancel" onClick={handleCancel} />
+        <MuiIconButton onClick={handleCancel}>
+          <CloseIcon />
+        </MuiIconButton>
       </MuiGrid>
     </MuiGrid>
   );
