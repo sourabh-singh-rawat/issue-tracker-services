@@ -4,7 +4,6 @@ import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 
 const StyledButton = styled(MuiButton)(({ theme }) => {
   return {
-    padding: `${theme.spacing(0.75)} ${theme.spacing(1)}`,
     borderRadius: theme.shape.borderRadiusLarge,
     "&:focus": {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,

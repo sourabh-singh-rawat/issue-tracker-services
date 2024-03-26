@@ -5,11 +5,7 @@ import {
   ServiceResponse,
   ProjectRoles,
 } from "@sourabhrawatcc/core-utils";
-import {
-  ProjectEntity,
-  ProjectMemberEntity,
-  UserEntity,
-} from "../../app/entities";
+import { ProjectEntity, ProjectMemberEntity } from "../../app/entities";
 import { WorkspaceMemberEntity } from "../../app/entities/workspace-member.entity";
 import { ProjectStatus } from "@issue-tracker/common";
 
@@ -39,7 +35,7 @@ export interface ProjectService {
     userId: string,
     filters: Filters,
   ): Promise<ServiceResponse<ProjectDetails<ProjectMemberEntity>[]>>;
-  getProject: (id: string) => Promise<ServiceResponse<ProjectEntity>>;
+  getProject: (id: string) => Promise<ProjectEntity>;
   getProjectMembers(
     projectId: string,
   ): Promise<ServiceResponse<ProjectMemberEntity[]>>;

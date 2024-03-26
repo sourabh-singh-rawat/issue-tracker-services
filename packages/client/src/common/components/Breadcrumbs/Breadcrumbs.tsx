@@ -6,7 +6,15 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiKeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-export default function Breadcrumbs({ items, isLoading }) {
+interface Props {
+  items: {
+    text: string;
+    onClick: () => void;
+  }[];
+  isLoading: boolean;
+}
+
+export default function Breadcrumbs({ items, isLoading }: Props) {
   const theme = useTheme();
 
   return (
@@ -15,15 +23,12 @@ export default function Breadcrumbs({ items, isLoading }) {
       sx={{ "& .MuiTypography-root": { color: theme.palette.text.secondary } }}
     >
       {items.map(({ text, onClick }) => (
-        <span key={onClick}>
+        <span key={text}>
           {isLoading ? (
             <MuiSkeleton height="20px" variant="text" width="75px" />
           ) : (
             <MuiLink
-              sx={{
-                cursor: "pointer",
-                color: theme.palette.grey[700],
-              }}
+              sx={{ cursor: "pointer", color: theme.palette.grey[700] }}
               underline="hover"
               onClick={onClick}
             >

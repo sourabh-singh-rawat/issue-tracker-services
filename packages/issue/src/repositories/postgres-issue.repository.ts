@@ -1,11 +1,7 @@
-import {
-  TypeormStore,
-  IssueListFilters,
-  IssueFormData,
-  QueryBuilderOptions,
-} from "@sourabhrawatcc/core-utils";
+import { TypeormStore, QueryBuilderOptions } from "@sourabhrawatcc/core-utils";
 import { IssueEntity } from "../app/entities";
 import { IssueRepository } from "./interfaces/issue.repository";
+import { IsNull, Not } from "typeorm";
 
 export class PostgresIssueRepository implements IssueRepository {
   constructor(private store: TypeormStore) {}
@@ -26,28 +22,34 @@ export class PostgresIssueRepository implements IssueRepository {
     return await IssueEntity.exists({ where: { id } });
   };
 
-  find = async (userId: string, filters: IssueListFilters) => {
-    const {
-      page = 0,
-      pageSize = 10,
-      sortBy = "updatedAt",
-      sortOrder = "ASC",
-      projectId,
-    } = filters;
-
-    return await IssueEntity.find({ where: { createdById: userId } });
+  find = async (userId: string) => {
+    return await IssueEntity.find({
+      select: {
+        reporter: { id: true, displayName: true },
+        project: { id: true, name: true },
+        assignees: { id: true, user: { id: true, displayName: true } },
+      },
+      where: { createdById: userId },
+      relations: { reporter: true, project: true, assignees: { user: true } },
+    });
   };
 
   findOne = async (id: string) => {
-    return await IssueEntity.findOne({ where: { id } });
+    return await IssueEntity.findOne({
+      select: {
+        assignees: { id: true, user: { id: true, displayName: true } },
+        project: { id: true, name: true },
+        reporter: { id: true, displayName: true },
+      },
+      where: { id },
+      relations: { assignees: true, project: true, reporter: true },
+    });
   };
 
   isIssueArchived = async (id: string) => {
-    const result = await this.store.query<{
-      isArchived: boolean;
-    }>("SELECT * FROM is_archived($1)", [id]);
-
-    return result[0].isArchived;
+    return await IssueEntity.exists({
+      where: { id, deletedAt: Not(IsNull()) },
+    });
   };
 
   update = async (

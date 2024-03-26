@@ -1,5 +1,11 @@
 import { AuditEntity } from "@sourabhrawatcc/core-utils";
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { UserEntity } from "./user.entity";
 import { IssueEntity } from "./issue.entity";
 
@@ -10,17 +16,16 @@ export class IssueAssigneeEntity extends AuditEntity {
   })
   id!: string;
 
-  @ManyToOne(() => IssueEntity)
   @JoinColumn({ name: "issue_id" })
   issueId!: string;
 
-  @ManyToOne(() => IssueEntity)
+  @ManyToOne(() => IssueEntity, ({ assignees }) => assignees)
   issue!: IssueEntity;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "user_id" })
+  @Column({ name: "user_id", type: "uuid" })
   userId!: string;
 
+  @JoinColumn({ name: "user_id" })
   @ManyToOne(() => UserEntity)
   user!: UserEntity;
 }

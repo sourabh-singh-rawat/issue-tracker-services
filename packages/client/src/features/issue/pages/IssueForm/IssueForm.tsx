@@ -163,7 +163,10 @@ function IssueForm({ projectId }: IssueFormProps) {
             title="Assignees"
             control={control}
             formState={formState}
-            options={members?.rows}
+            options={members?.rows.map(({ user: { id, displayName } }) => ({
+              id,
+              name: displayName,
+            }))}
             isMultiple
           />
         </MuiGrid>
@@ -172,7 +175,10 @@ function IssueForm({ projectId }: IssueFormProps) {
           <FormAutocomplete
             name="reporter"
             title="Reported By"
-            options={members?.rows}
+            options={members?.rows.map(({ user: { id, displayName } }) => ({
+              id,
+              name: displayName,
+            }))}
             control={control}
             formState={formState}
           />

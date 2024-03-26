@@ -17,12 +17,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
-import Title from "../../../../common/components/Title";
 import DateTag from "../../../../common/components/DateTag";
 import TextButton from "../../../../common/components/buttons/TextButton";
 
 import { useMessageBar } from "../../../message-bar/hooks";
 import Chip from "../../../../common/components/Chip";
+import Title from "../../../../common/components/Title";
 
 export default function Project() {
   const theme = useTheme();
@@ -32,16 +32,9 @@ export default function Project() {
   const { showSuccess } = useMessageBar();
   const { data, isLoading } = useGetProjectQuery({ id });
   const [updateProject, updateProjectOptions] = useUpdateProjectMutation();
-  const [project, setProject] = useState({
-    name: "",
-    ownerUserId: "",
-    updatedAt: "",
-    status: "",
-    members: [{ id: "", name: "" }],
-  });
 
   const tabName = location.pathname.split("/")[3] || "overview";
-  const mapPathToIndex: { [k: string]: number } = {
+  const mapPathToIndex: Record<string, number> = {
     overview: 0,
     issues: 1,
     members: 2,
@@ -64,16 +57,15 @@ export default function Project() {
     setSelectedTab(newValue);
   };
 
-  useEffect(() => {
-    setProject(data?.rows);
-  }, [data]);
+  const onTitleSubmit = async (value: string) => {
+    if (!id) return;
+    await updateProject({ id, body: { name: value } });
+  };
 
   useEffect(() => setSelectedTab(mapPathToIndex[tabName]), [tabName, id]);
 
   useEffect(() => {
-    if (updateProjectOptions.isSuccess) {
-      showSuccess("Title updated");
-    }
+    if (updateProjectOptions.isSuccess) showSuccess("Title updated");
   }, [updateProjectOptions.isSuccess]);
 
   return (
@@ -87,14 +79,7 @@ export default function Project() {
       </MuiGrid>
 
       <MuiGrid xs={12} item>
-        <Title
-          page={project}
-          setPage={setProject}
-          updateQuery={async () => {
-            if (!id) return;
-            await updateProject({ id, body: { name: project.name } });
-          }}
-        />
+        <Title defaultValue={data?.name} onTitleSubmit={onTitleSubmit} />
       </MuiGrid>
 
       <MuiGrid xs={12} container>
@@ -111,7 +96,7 @@ export default function Project() {
               <MuiSkeleton width="80px" />
             ) : (
               <MuiTypography component="span" variant="body2">
-                <DateTag date={project?.updatedAt} />
+                <DateTag date={data?.updatedAt} />
               </MuiTypography>
             )}
           </MuiBreadcrumbs>
@@ -133,8 +118,7 @@ export default function Project() {
           context={{
             id,
             selectedTab,
-            page: project,
-            setPage: setProject,
+            page: data,
             isLoading,
           }}
         />

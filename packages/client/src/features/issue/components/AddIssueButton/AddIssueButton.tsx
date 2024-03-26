@@ -15,7 +15,7 @@ function AddIssueButton({ projectId }: AddIssueButtonProps) {
   return (
     <>
       <PrimaryButton
-        label="Add Issue"
+        label="New Issue"
         onClick={handleOpen}
         startIcon={<PestControlIcon />}
       />

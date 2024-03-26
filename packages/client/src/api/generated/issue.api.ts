@@ -171,7 +171,34 @@ export type GetIssueAttachmentListApiArg = {
   id?: string;
 };
 export type GetIssueListApiResponse = /** status 200 A list of issues */ {
-  rows: any;
+  rows: {
+    assignees?: {
+      id: string;
+      user: {
+        displayName: string;
+        id: string;
+      };
+    }[];
+    createdAt?: string;
+    createdById?: string;
+    deletedAt?: string;
+    description?: string;
+    dueDate?: string | string;
+    id?: string;
+    name?: string;
+    priority?: string;
+    priorityList?: string[];
+    project?: {
+      id: string;
+      name: string;
+    };
+    reporter?: {
+      id: string;
+      displayName: string;
+    };
+    resolution?: boolean;
+    required?: any;
+  }[];
   filteredRowCount: number;
 };
 export type GetIssueListApiArg = {
@@ -215,7 +242,25 @@ export type GetIssuePriorityListApiResponse =
   };
 export type GetIssuePriorityListApiArg = void;
 export type GetIssueApiResponse =
-  /** status 200 Returns the issue if it exists */ void;
+  /** status 200 Returns the issue if it exists */ {
+    createdAt?: string | string;
+    createdById?: string;
+    deletedAt?: string | string;
+    description?: string;
+    dueDate?: string | string;
+    id?: string;
+    name?: string;
+    priority?: string;
+    projectId?: string;
+    project?: {
+      id: string;
+      name: string;
+    };
+    reporterId?: string;
+    resolution?: boolean;
+    status?: string;
+    updatedAt?: string | string;
+  };
 export type GetIssueApiArg = {
   /** Numeric id of the issue to get */
   id?: string;

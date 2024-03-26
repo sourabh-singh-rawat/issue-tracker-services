@@ -5,7 +5,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 interface TagProps {
-  date: string;
+  date?: string;
 }
 
 export default function DateTag({ date }: TagProps) {

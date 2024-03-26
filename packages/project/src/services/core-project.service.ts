@@ -120,7 +120,7 @@ export class CoreProjectService implements ProjectService {
     const project = await this.projectRepository.findOne(id);
     if (!project) throw new ProjectNotFoundError();
 
-    return new ServiceResponse({ rows: project });
+    return project;
   };
 
   getWorkspaceMemberList = async (userId: string, projectId: string) => {
@@ -226,9 +226,11 @@ export class CoreProjectService implements ProjectService {
     switch (role) {
       case ProjectRoles.Member:
         await this.casbinProjectGuardian.createMember(userId, projectId);
+        break;
 
       case ProjectRoles.Admin:
         await this.casbinProjectGuardian.createAdmin(userId, projectId);
+        break;
     }
 
     return new ServiceResponse({

@@ -10,11 +10,8 @@ import { ObjectLiteral } from "typeorm";
 import { IssueStatus } from "@issue-tracker/common";
 
 export interface IssueService {
-  createIssue(
-    userId: string,
-    issue: IssueFormData,
-  ): Promise<ServiceResponse<string>>;
-  getIssue(issueId: string): Promise<ServiceResponse<IssueEntity>>;
+  createIssue(userId: string, issue: IssueFormData): Promise<string>;
+  getIssue(issueId: string): Promise<IssueEntity>;
   getIssueList(
     userId: string,
     filters: IssueListFilters,
