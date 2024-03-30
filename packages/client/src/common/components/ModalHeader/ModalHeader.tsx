@@ -8,17 +8,13 @@ import MuiIconButton from "@mui/material/IconButton";
 
 import Close from "@mui/icons-material/Close";
 
-export interface ModalHeaderProps {
+export interface Props {
   title: string;
   subtitle: string;
   handleClose: () => void;
 }
 
-export default function ModalHeader({
-  title,
-  subtitle,
-  handleClose,
-}: ModalHeaderProps) {
+export default function ModalHeader({ title, subtitle, handleClose }: Props) {
   const theme = useTheme();
 
   return (

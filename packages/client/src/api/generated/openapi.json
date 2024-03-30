@@ -689,7 +689,8 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled"
+                    "default": "Untitled",
+                    "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
@@ -1114,7 +1115,8 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled"
+                    "default": "Untitled",
+                    "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
@@ -1886,7 +1888,8 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 255,
-                            "default": "Untitled"
+                            "default": "Untitled",
+                            "errorMessage": "\"name\" is not allowed to be empty"
                           },
                           "description": {
                             "type": "string",
@@ -1961,7 +1964,8 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled"
+                    "default": "Untitled",
+                    "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
@@ -2310,7 +2314,8 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled"
+                    "default": "Untitled",
+                    "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
@@ -3020,13 +3025,15 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 255,
-                      "default": "Untitled"
+                      "default": "Untitled",
+                      "errorMessage": "\"name\" is not allowed to be empty"
                     },
                     "defaultWorkspaceName": {
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 255,
-                      "default": "Untitled"
+                      "default": "Untitled",
+                      "errorMessage": "\"name\" is not allowed to be empty"
                     }
                   }
                 }
@@ -3204,12 +3211,15 @@
                 "type": "object",
                 "properties": {
                   "name": {
+                    "description": "A name for your workspace.",
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled"
+                    "default": "Untitled",
+                    "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
+                    "description": "A description for your workspace.",
                     "type": "string",
                     "maxLength": 3000,
                     "default": "No description"
@@ -3381,7 +3391,8 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled"
+                    "default": "Untitled",
+                    "errorMessage": "\"name\" is not allowed to be empty"
                   }
                 },
                 "required": [

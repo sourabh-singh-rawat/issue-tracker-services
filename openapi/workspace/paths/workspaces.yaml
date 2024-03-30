@@ -1,21 +1,21 @@
 get:
-  tags: [ "workspace" ]
+  tags: ["workspace"]
   summary: Get all workspaces
   description: Get all workspaces of the user
   operationId: getAllWorkspaces
-  responses: 
+  responses:
     200:
       description: all workspaces
-      content: 
+      content:
         application/json:
-          schema: 
+          schema:
             type: object
             properties:
               rows:
                 type: array
                 items:
                   type: object
-                  properties: 
+                  properties:
                     id:
                       type: string
                     name:
@@ -33,25 +33,27 @@ get:
           schema:
             $ref: ../../components/schemas/error.yaml
 post:
-  tags: [ "workspace" ]
+  tags: ["workspace"]
   summary: Create a workspace
   description: Create a new workspace to start adding projects
   operationId: createWorkspace
-  requestBody: 
+  requestBody:
     description: Fields used to create a workspace
     content:
       application/json:
-        schema: 
+        schema:
           type: object
-          properties: 
+          properties:
             name:
               $ref: ../../components/schemas/name.yaml
+              description: A name for your workspace.
             description:
               $ref: ../../components/schemas/description.yaml
-          required: 
-            -  name
+              description: A description for your workspace.
+          required:
+            - name
     required: true
-  responses: 
+  responses:
     201:
       description: Workspace created
       content:
@@ -61,12 +63,11 @@ post:
             properties:
               id:
                 type: string
-            required: 
-              -  id
+            required:
+              - id
     400:
       description: Bad request
       content:
         application/json:
           schema:
             $ref: ../../components/schemas/error.yaml
-    
