@@ -1,9 +1,9 @@
 import React from "react";
 
-interface ModalBodyProps {
+interface Props {
   children: React.ReactNode;
 }
 
-export default function ModalBody({ children }: ModalBodyProps) {
-  return <>{children}</>;
+export default function ModalBody({ children }: Props) {
+  return children;
 }

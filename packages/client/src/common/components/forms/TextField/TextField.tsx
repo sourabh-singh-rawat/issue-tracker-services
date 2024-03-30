@@ -1,6 +1,7 @@
 import React from "react";
 
 import MuiGrid from "@mui/material/Grid";
+import MuiTypography from "@mui/material/Typography";
 import MuiSkeleton from "@mui/material/Skeleton";
 import Label from "../Label";
 import {
@@ -12,12 +13,13 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import StyledTextField from "../../styled/StyledTextField";
-import { SxProps } from "@mui/material";
+import { SxProps, useTheme } from "@mui/material";
 
 interface TextFieldProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
   control: Control<DefaultValues>;
   formState: FormState<DefaultValues>;
+  defaultSchemas?: any;
   title?: string;
   type?: React.HTMLInputTypeAttribute;
   rules?: UseControllerProps<DefaultValues>["rules"];
@@ -40,7 +42,6 @@ export default function TextField<DefaultValues extends FieldValues>({
   placeholder,
   rules,
   type = "text",
-  helperText,
   rows = 0,
   isLoading,
   isDisabled,
@@ -48,14 +49,22 @@ export default function TextField<DefaultValues extends FieldValues>({
   endAdornment,
   onClick,
   sx,
+  defaultSchemas,
 }: TextFieldProps<DefaultValues>) {
   const isMultiline = rows > 0;
+  const theme = useTheme();
+  const isError = Boolean(formState.errors[name]);
 
   return (
     <MuiGrid container>
       {title && (
         <MuiGrid item xs={12} paddingBottom={1}>
-          <Label id={name} title={title} isLoading={isLoading} />
+          <Label
+            id={name}
+            title={title}
+            isLoading={isLoading}
+            color={isError ? theme.palette.error.main : ""}
+          />
         </MuiGrid>
       )}
       <MuiGrid item xs={12}>
@@ -72,27 +81,34 @@ export default function TextField<DefaultValues extends FieldValues>({
             control={control}
             rules={rules}
             render={({ field }) => (
-              <StyledTextField
-                type={type}
-                id={field.name}
-                name={field.name}
-                value={field.value}
-                onBlur={field.onBlur}
-                onChange={field.onChange}
-                placeholder={placeholder}
-                helperText={
-                  (formState.errors[name]?.message as string) || helperText
-                }
-                sx={sx}
-                size="small"
-                rows={rows}
-                error={Boolean(formState.errors[name])}
-                onClick={onClick}
-                disabled={isDisabled}
-                multiline={isMultiline}
-                InputProps={{ startAdornment, endAdornment }}
-                fullWidth
-              />
+              <MuiGrid container rowSpacing={1}>
+                <MuiGrid item xs={12}>
+                  <StyledTextField
+                    type={type}
+                    id={field.name}
+                    name={field.name}
+                    value={field.value}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                    placeholder={placeholder}
+                    helperText={formState.errors[name]?.message as string}
+                    sx={sx}
+                    size="small"
+                    rows={rows}
+                    error={isError}
+                    onClick={onClick}
+                    disabled={isDisabled}
+                    multiline={isMultiline}
+                    InputProps={{ startAdornment, endAdornment }}
+                    fullWidth
+                  />
+                </MuiGrid>
+                <MuiGrid item xs={12} color={theme.palette.text.secondary}>
+                  <MuiTypography variant="body1">
+                    {defaultSchemas?.properties[name].description}
+                  </MuiTypography>
+                </MuiGrid>
+              </MuiGrid>
             )}
           />
         )}

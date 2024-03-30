@@ -38,7 +38,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-let mode: "dark" | "light" = "dark";
+let mode: "dark" | "light" = "light";
 if (!mode) mode = "light";
 
 const shape = {
@@ -91,7 +91,7 @@ export const theme = createTheme({
             800: "#1f1f23",
             900: "#0e0e10",
           },
-          text: { primary: "#191919" },
+          text: { primary: "#191919", secondary: "#686868" },
           divider: "#d3d3d9",
           background: { default: "#ffffff", paper: "#f9fafb" },
         }

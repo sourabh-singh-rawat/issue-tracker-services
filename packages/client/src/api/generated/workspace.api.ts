@@ -101,7 +101,9 @@ export type CreateWorkspaceApiResponse = /** status 201 Workspace created */ {
 export type CreateWorkspaceApiArg = {
   /** Fields used to create a workspace */
   body: {
+    /** A name for your workspace. */
     name: string;
+    /** A description for your workspace. */
     description?: string;
   };
 };

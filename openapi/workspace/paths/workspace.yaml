@@ -1,26 +1,26 @@
 get:
-  tags: [ "workspace" ]
+  tags: ["workspace"]
   summary: Get workspace
-  parameters: 
+  parameters:
     - name: id
       in: path
-      schema: 
+      schema:
         type: string
       required: true
-      description: Numeric id of the workspace to get  
+      description: Numeric id of the workspace to get
   description: Get workspaces of the user
   operationId: getWorkspace
-  responses: 
+  responses:
     200:
       description: Returns the workspace
-      content: 
+      content:
         application/json:
-          schema: 
+          schema:
             type: object
             properties:
               data:
                 type: object
-                properties: 
+                properties:
                   id:
                     type: string
                   name:
