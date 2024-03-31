@@ -259,14 +259,16 @@
                     "minLength": 1,
                     "maxLength": 80,
                     "format": "email",
-                    "default": "Sourabh.rawatcc@gmail.com"
+                    "default": "Sourabh.rawatcc@gmail.com",
+                    "errorMessage": "\"email\" is not allowed to be empty and should be valid"
                   },
                   "password": {
                     "type": "string",
                     "minLength": 8,
                     "maxLength": 64,
                     "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
-                    "default": "Leipzigcool7023#"
+                    "default": "Leipzigcool7023#",
+                    "errorMessage": "\"password\" must contain at least one lowercase letter, one uppercase letter, one digit, one special character (@#$%^&+=!), and must be at least 8 characters long with no spaces."
                   }
                 }
               }
@@ -550,7 +552,7 @@
                           "description": {
                             "type": "string",
                             "maxLength": 3000,
-                            "default": "No description"
+                            "default": ""
                           },
                           "dueDate": {
                             "anyOf": [
@@ -689,13 +691,13 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled",
+                    "default": "",
                     "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   },
                   "status": {
                     "type": "string"
@@ -991,7 +993,7 @@
                     "description": {
                       "type": "string",
                       "maxLength": 3000,
-                      "default": "No description"
+                      "default": ""
                     },
                     "dueDate": {
                       "anyOf": [
@@ -1115,13 +1117,13 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled",
+                    "default": "",
                     "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   },
                   "status": {
                     "type": "string",
@@ -1390,7 +1392,7 @@
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   }
                 }
               }
@@ -1665,7 +1667,7 @@
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   },
                   "completed": {
                     "type": "boolean",
@@ -1763,7 +1765,7 @@
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   },
                   "completed": {
                     "type": "boolean",
@@ -1888,13 +1890,13 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 255,
-                            "default": "Untitled",
+                            "default": "",
                             "errorMessage": "\"name\" is not allowed to be empty"
                           },
                           "description": {
                             "type": "string",
                             "maxLength": 3000,
-                            "default": "No description"
+                            "default": ""
                           },
                           "status": {
                             "type": "string",
@@ -1964,13 +1966,13 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled",
+                    "default": "",
                     "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   },
                   "startDate": {
                     "anyOf": [
@@ -2180,7 +2182,7 @@
                     "description": {
                       "type": "string",
                       "maxLength": 3000,
-                      "default": "No description"
+                      "default": ""
                     },
                     "endDate": {
                       "anyOf": [
@@ -2314,13 +2316,13 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled",
+                    "default": "",
                     "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   },
                   "status": {
                     "type": "string",
@@ -2513,7 +2515,8 @@
                                 "minLength": 1,
                                 "maxLength": 80,
                                 "format": "email",
-                                "default": "Sourabh.rawatcc@gmail.com"
+                                "default": "Sourabh.rawatcc@gmail.com",
+                                "errorMessage": "\"email\" is not allowed to be empty and should be valid"
                               }
                             },
                             "required": [
@@ -2781,14 +2784,16 @@
                     "minLength": 1,
                     "maxLength": 80,
                     "format": "email",
-                    "default": "Sourabh.rawatcc@gmail.com"
+                    "default": "Sourabh.rawatcc@gmail.com",
+                    "errorMessage": "\"email\" is not allowed to be empty and should be valid"
                   },
                   "password": {
                     "type": "string",
                     "minLength": 8,
                     "maxLength": 64,
                     "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
-                    "default": "Leipzigcool7023#"
+                    "default": "Leipzigcool7023#",
+                    "errorMessage": "\"password\" must contain at least one lowercase letter, one uppercase letter, one digit, one special character (@#$%^&+=!), and must be at least 8 characters long with no spaces."
                   },
                   "displayName": {
                     "type": "string",
@@ -2900,14 +2905,16 @@
                     "minLength": 1,
                     "maxLength": 80,
                     "format": "email",
-                    "default": "Sourabh.rawatcc@gmail.com"
+                    "default": "Sourabh.rawatcc@gmail.com",
+                    "errorMessage": "\"email\" is not allowed to be empty and should be valid"
                   },
                   "password": {
                     "type": "string",
                     "minLength": 8,
                     "maxLength": 64,
                     "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$",
-                    "default": "Leipzigcool7023#"
+                    "default": "Leipzigcool7023#",
+                    "errorMessage": "\"password\" must contain at least one lowercase letter, one uppercase letter, one digit, one special character (@#$%^&+=!), and must be at least 8 characters long with no spaces."
                   }
                 },
                 "required": [
@@ -3013,7 +3020,8 @@
                       "minLength": 1,
                       "maxLength": 80,
                       "format": "email",
-                      "default": "Sourabh.rawatcc@gmail.com"
+                      "default": "Sourabh.rawatcc@gmail.com",
+                      "errorMessage": "\"email\" is not allowed to be empty and should be valid"
                     },
                     "displayName": {
                       "type": "string",
@@ -3025,14 +3033,14 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 255,
-                      "default": "Untitled",
+                      "default": "",
                       "errorMessage": "\"name\" is not allowed to be empty"
                     },
                     "defaultWorkspaceName": {
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 255,
-                      "default": "Untitled",
+                      "default": "",
                       "errorMessage": "\"name\" is not allowed to be empty"
                     }
                   }
@@ -3215,14 +3223,14 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled",
+                    "default": "",
                     "errorMessage": "\"name\" is not allowed to be empty"
                   },
                   "description": {
                     "description": "A description for your workspace.",
                     "type": "string",
                     "maxLength": 3000,
-                    "default": "No description"
+                    "default": ""
                   }
                 },
                 "required": [
@@ -3385,13 +3393,14 @@
                     "minLength": 1,
                     "maxLength": 80,
                     "format": "email",
-                    "default": "Sourabh.rawatcc@gmail.com"
+                    "default": "Sourabh.rawatcc@gmail.com",
+                    "errorMessage": "\"email\" is not allowed to be empty and should be valid"
                   },
                   "workspaceRole": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 255,
-                    "default": "Untitled",
+                    "default": "",
                     "errorMessage": "\"name\" is not allowed to be empty"
                   }
                 },

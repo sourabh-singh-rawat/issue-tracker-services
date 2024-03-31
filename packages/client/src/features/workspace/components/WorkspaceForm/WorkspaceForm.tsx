@@ -59,6 +59,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             control={control}
             formState={formState}
             defaultSchemas={defaultSchemas}
+            autoFocus
           />
         </MuiGrid>
         <MuiGrid item xs={12}>

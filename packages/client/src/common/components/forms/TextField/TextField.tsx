@@ -32,6 +32,7 @@ interface TextFieldProps<DefaultValues extends FieldValues> {
   endAdornment?: React.JSX.Element;
   onClick?: () => void;
   sx?: SxProps;
+  autoFocus?: boolean;
 }
 
 export default function TextField<DefaultValues extends FieldValues>({
@@ -50,6 +51,7 @@ export default function TextField<DefaultValues extends FieldValues>({
   onClick,
   sx,
   defaultSchemas,
+  autoFocus = false,
 }: TextFieldProps<DefaultValues>) {
   const isMultiline = rows > 0;
   const theme = useTheme();
@@ -101,6 +103,7 @@ export default function TextField<DefaultValues extends FieldValues>({
                     multiline={isMultiline}
                     InputProps={{ startAdornment, endAdornment }}
                     fullWidth
+                    autoFocus={autoFocus}
                   />
                 </MuiGrid>
                 <MuiGrid item xs={12} color={theme.palette.text.secondary}>
