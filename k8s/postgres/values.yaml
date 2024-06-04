@@ -71,7 +71,7 @@ instanceName: db
 
 # instanceSize sets the size of the volume that contains the data. This defaults
 # to the value below. Settings "instances" overrides this value.
-# instanceSize: 2Gi
+instanceSize: 1Gi
 
 # instanceStorageClassName sets the storage class for the volume that contains the data.
 # This defaults to the "default" storage class defined in the cluster.
@@ -82,17 +82,17 @@ instanceName: db
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
 # overrides this value.
-# instanceMemory: 1Gi
+instanceMemory: 0.5Gi
 
 # instanceCPU sets the CPU limit for the Postgres instances. This defaults to
 # no limit being set, but an example value is set below. Setting "instances"
 # overrides this value.
-# instanceCPU: 500m
+instanceCPU: 500m
 
 # instanceReplicas lets you set the total number of Postgres replicas. This
 # defaults to the value below. More than on replica enables high availability
 # (HA). Settings "instances" overrides this value.
-# instanceReplicas: 1
+instanceReplicas: 0
 
 ##############################
 # Advanced Postgres Settings #
@@ -131,7 +131,7 @@ patroni:
       pg_hba:
         - "host all all 0.0.0.0/0 trust" # this line enabled logical replication with programmatic access
 #       parameters:
-        # synchronous_commit: "on"
+# synchronous_commit: "on"
 # patroni: {}
 
 # users sets any custom Postgres users and databases that they have  access to
@@ -177,7 +177,7 @@ patroni:
 
 # backupsSize sets the storage size of the backups to a volume in Kubernetes.
 # can be overridden by "pgBackRestConfig", if set. Defaults to the value below.
-backupsSize: 2Gi
+# backupsSize: 2Gi
 
 # backupsStorageClassName sets the storage class to a class existing in Kubernetes.
 # Defaults to the "default" storage class defined in the cluster.

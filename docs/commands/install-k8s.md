@@ -1,34 +1,45 @@
 # Install k8s resources
 
-## Install Ingress Controller on GKE
+## Dashboard
 
 ```powershell
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin  --user $(gcloud config get-value account) # Optional for GKE
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
-kubectl apply -f ./k8s/ingress
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+kubectl apply -f ./k8s/dashboard
+kubectl -n kubernetes-dashboard create token admin-user
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
 ```
+
+## Ingress
+
+```powershell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+kubectl -n ingress-nginx apply -f ./k8s/ingress
+```
+
+## Secrets
 
 ```powershell
 kubectl apply -f ./k8s/secrets
 ```
 
-## Install PGO
+## Postgres Operator
 
 ```powershell
 helm install pgo ./k8s/pgo
 ```
 
-## Helm release for Postgres resources
+## Install postgres for each service
 
 ```powershell
-helm install activity-postgres ./k8s/postgres --values ./k8s/postgres/activity.values.yaml
-helm install attachment-postgres ./k8s/postgres --values ./k8s/postgres/attachment.values.yaml
-helm install email-postgres ./k8s/postgres --values ./k8s/postgres/email.values.yaml
-helm install identity-postgres ./k8s/postgres --values ./k8s/postgres/identity.values.yaml
-helm install issue-postgres ./k8s/postgres --values ./k8s/postgres/issue.values.yaml
-helm install project-postgres ./k8s/postgres --values ./k8s/postgres/project.values.yaml
-helm install user-postgres ./k8s/postgres --values ./k8s/postgres/user.values.yaml
-helm install workspace-postgres ./k8s/postgres --values ./k8s/postgres/workspace.values.yaml
+helm install activity-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install attachment-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install email-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install identity-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install issue-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install project-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install user-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install workspace-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 ```
 
 ## Helm release for Nats Controller

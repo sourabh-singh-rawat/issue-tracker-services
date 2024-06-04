@@ -1,0 +1,22 @@
+{
+  "name": "@issue-tracker/event-bus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@issue-tracker/common": "workspace:^",
+    "@issue-tracker/server-core": "workspace:^",
+    "nats": "^2.26.0",
+    "pino": "^8.21.0"
+  }
+}
