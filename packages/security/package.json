@@ -1,0 +1,32 @@
+{
+  "name": "@issue-tracker/security",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.12.13",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "@fastify/cors": "^9.0.1",
+    "@issue-tracker/common": "workspace:^",
+    "@issue-tracker/server-core": "workspace:^",
+    "argon2": "^0.31.2",
+    "awilix": "^8.0.1",
+    "casbin": "^5.30.0",
+    "fastify": "^4.27.0",
+    "jsonwebtoken": "^9.0.2",
+    "pino": "^8.21.0",
+    "typeorm": "^0.3.20",
+    "typeorm-adapter": "^1.7.0"
+  }
+}
