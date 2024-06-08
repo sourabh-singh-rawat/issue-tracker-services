@@ -39,7 +39,6 @@ import { PostgresIssueCommentRepository } from "./data/repositories/postgres-iss
 import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
 import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscriber";
 import { UserUpdatedSubscriber } from "./events/subscribers/user-updated.subscriber";
-import { ProjectCreatedSubscriber } from "./events/subscribers/project-created.subscriber";
 import { IssueCreatedPublisher } from "./events/publishers/issue-created.publisher";
 import { projectRoutes } from "./routes/project.routes";
 import { workspaceRoutes } from "./routes/workspace.routes";
@@ -98,7 +97,6 @@ export interface RegisteredServices {
   projectMemberCreatedPublisher: ProjectMemberCreatedPublisher;
   userCreatedSubscriber: UserCreatedSubscriber;
   userUpdatedSubscriber: UserUpdatedSubscriber;
-  projectCreatedSubscriber: ProjectCreatedSubscriber;
   issueCreatedPublisher: IssueCreatedPublisher;
 }
 
@@ -138,7 +136,6 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
 const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userCreatedSubscriber").fetchMessages();
   container.get("userUpdatedSubscriber").fetchMessages();
-  container.get("projectCreatedSubscriber").fetchMessages();
 };
 
 const main = async () => {
@@ -202,7 +199,6 @@ const main = async () => {
   );
   add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
   add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
-  add("projectCreatedSubscriber", asClass(ProjectCreatedSubscriber));
   add("issueCreatedPublisher", asClass(IssueCreatedPublisher));
 
   container.init();
