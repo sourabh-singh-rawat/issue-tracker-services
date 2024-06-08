@@ -1,0 +1,9 @@
+export interface WorkspaceController {
+  createWorkspace: (request: any, reply: any) => Promise<void>;
+  createWorkspaceInvite: (request: any, reply: any) => Promise<void>;
+  getAllWorkspaces: (request: any, reply: any) => Promise<void>;
+  getWorkspaceRoleList: (request: any, reply: any) => Promise<void>;
+  getWorkspace: (request: any, reply: any) => Promise<void>;
+  confirmWorkspaceInvite: (request: any, reply: any) => Promise<void>;
+  getWorkspaceMemberList: (request: any, reply: any) => Promise<void>;
+}

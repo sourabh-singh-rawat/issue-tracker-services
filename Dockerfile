@@ -37,7 +37,7 @@ FROM base AS activity
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F activity run start
+CMD pnpm -F activity start
 
 
 # Stage 3: Attachment Service
@@ -45,7 +45,7 @@ FROM base AS attachment
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F attachment run start
+CMD pnpm -F attachment start
 
 
 # Stage 3: Email Service
@@ -53,7 +53,7 @@ FROM base AS email
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F email run start
+CMD pnpm -F email start
 
 
 # Stage 3: Identity Service
@@ -61,23 +61,15 @@ FROM base AS identity
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F identity run start
+CMD pnpm -F identity start
 
 
-# Stage 3: Issue Service
-FROM base AS issue
+# Stage 3: Issue Tracker Service
+FROM base AS issue-tracker
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F issue run start
-
-
-# Stage 3: Project Service
-FROM base AS project
-COPY --from=build /usr/src/app /usr/src/app
-USER node
-EXPOSE 4000
-CMD pnpm -F project run start
+CMD pnpm -F @issue-tracker-services/issue-tracker start
 
 
 # Stage 3: User Service
@@ -85,12 +77,4 @@ FROM base AS user
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F user run start
-
-
-# Stage 3: Workspace Service
-FROM base AS workspace
-COPY --from=build /usr/src/app /usr/src/app
-USER node
-EXPOSE 4000
-CMD pnpm -F workspace run start
+CMD pnpm -F user start

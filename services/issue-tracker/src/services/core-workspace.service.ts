@@ -1,10 +1,5 @@
 import { v4 } from "uuid";
 import { WorkspaceService } from "./interfaces/workspace.service";
-import { UserRepository } from "../data/repositories/interface/user-repository";
-import { WorkspaceRepository } from "../data/repositories/interface/workspace-repository";
-import { WorkspaceMemberRepository } from "../data/repositories/interface/workspace-member";
-import { WorkspaceMemberInviteRepository } from "../data/repositories/interface/workspace-member-invite.repository";
-import { UserEntity, WorkspaceEntity } from "../data/entities";
 import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
 import { WorkspaceMemberInviteEntity } from "../data/entities/workspace-member-invite.entity";
 import { WorkspaceCreatedPublisher } from "../events/publishers/workspace-created.publisher";
@@ -21,6 +16,12 @@ import {
 } from "@issue-tracker/common";
 import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
+import { UserRepository } from "../data/repositories/interfaces/user.repository";
+import { WorkspaceRepository } from "../data/repositories/interfaces/workspace.repository";
+import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
+import { WorkspaceMemberInviteRepository } from "../data/repositories/interfaces/workspace-member-invite.repository";
+import { WorkspaceEntity } from "../data/entities/workspace.entity";
+import { UserEntity } from "../data/entities";
 
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(

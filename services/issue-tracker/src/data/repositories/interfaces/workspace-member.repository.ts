@@ -1,10 +1,8 @@
 import { Repository } from "@issue-tracker/orm";
-import { WorkspaceMemberEntity } from "../../app/entities/workspace-member.entity";
+import { WorkspaceMemberEntity } from "../../entities";
 
 export interface WorkspaceMemberRepository
   extends Repository<WorkspaceMemberEntity> {
-  find(
-    projectId: string,
-    workspaceId: string,
-  ): Promise<WorkspaceMemberEntity[]>;
+  find(workspaceId: string): Promise<WorkspaceMemberEntity[]>;
+  existsByUserId: (userId: string, workspaceId: string) => Promise<boolean>;
 }

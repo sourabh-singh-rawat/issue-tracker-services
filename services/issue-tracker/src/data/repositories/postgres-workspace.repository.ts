@@ -1,6 +1,6 @@
-import { WorkspaceRepository } from "./interface/workspace-repository";
-import { WorkspaceEntity } from "../entities";
 import { QueryBuilderOptions, Typeorm } from "@issue-tracker/orm";
+import { WorkspaceEntity } from "../entities/workspace.entity";
+import { WorkspaceRepository } from "./interfaces/workspace.repository";
 
 export class PostgresWorkspaceRepository implements WorkspaceRepository {
   constructor(private orm: Typeorm) {}
@@ -23,6 +23,10 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
 
   findById = async (id: string) => {
     return await WorkspaceEntity.findOne({ where: { id } });
+  };
+
+  findByUserId = async (userId: string) => {
+    return await WorkspaceEntity.find({ where: { ownerUserId: userId } });
   };
 
   find = async (userId: string) => {

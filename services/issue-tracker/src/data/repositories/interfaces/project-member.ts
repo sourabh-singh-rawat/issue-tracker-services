@@ -1,5 +1,5 @@
 import { QueryBuilderOptions, Repository } from "@issue-tracker/orm";
-import { ProjectMemberEntity } from "../../app/entities";
+import { ProjectMemberEntity } from "../../entities";
 
 export interface ProjectMemberRepository
   extends Repository<ProjectMemberEntity> {

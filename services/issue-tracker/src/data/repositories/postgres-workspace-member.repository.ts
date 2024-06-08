@@ -1,7 +1,7 @@
-import { WorkspaceMemberRepository } from "./interface/workspace-member";
 import { WorkspaceMemberEntity } from "../entities/workspace-member.entity";
 import { Typeorm } from "@issue-tracker/orm";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
+import { WorkspaceMemberRepository } from "./interfaces/workspace-member.repository";
 
 export class PostgresWorkspaceMemberRepository
   implements WorkspaceMemberRepository
