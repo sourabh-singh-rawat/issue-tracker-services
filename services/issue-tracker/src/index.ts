@@ -41,6 +41,29 @@ import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscri
 import { UserUpdatedSubscriber } from "./events/subscribers/user-updated.subscriber";
 import { ProjectCreatedSubscriber } from "./events/subscribers/project-created.subscriber";
 import { IssueCreatedPublisher } from "./events/publishers/issue-created.publisher";
+import { projectRoutes } from "./routes/project.routes";
+import { workspaceRoutes } from "./routes/workspace.routes";
+import { ProjectController } from "./controllers/interfaces/project.controller";
+import { CoreProjectController } from "./controllers/core-project.controller";
+import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
+import { CoreWorkspaceController } from "./controllers/core-workspace.controller";
+import { CoreProjectService } from "./services/core-project.service";
+import { ProjectService } from "./services/interfaces/project.service";
+import { WorkspaceService } from "./services/interfaces/workspace.service";
+import { CoreWorkspaceService } from "./services/core-workspace.service";
+import { WorkspaceRepository } from "./data/repositories/interfaces/workspace.repository";
+import { PostgresWorkspaceRepository } from "./data/repositories/postgres-workspace.repository";
+import { WorkspaceMemberRepository } from "./data/repositories/interfaces/workspace-member.repository";
+import { PostgresWorkspaceMemberRepository } from "./data/repositories/postgres-workspace-member.repository";
+import { PostgresProjectMemberRepository } from "./data/repositories/postgres-project-member.repository";
+import { ProjectMemberRepository } from "./data/repositories/interfaces/project-member";
+import { ProjectCreatedPublisher } from "./events/publishers/project-created.publisher";
+import { WorkspaceCreatedPublisher } from "./events/publishers/workspace-created.publisher";
+import { ProjectUpdatedPublisher } from "./events/publishers/project-updated.publisher";
+import { WorkspaceInviteCreatedPublisher } from "./events/publishers/workspace-invite-created.publisher";
+import { ProjectMemberCreatedPublisher } from "./events/publishers/project-member-created.publisher";
+import { WorkspaceMemberInviteRepository } from "./data/repositories/interfaces/workspace-member-invite.repository";
+import { PostgresWorkspaceMemberInviteRepository } from "./data/repositories/postgres-workspace-member-invite.repository";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -50,16 +73,29 @@ export interface RegisteredServices {
   issueController: IssueController;
   issueCommentController: IssueCommentController;
   issueTaskController: IssueTaskController;
+  projectController: ProjectController;
+  workspaceController: WorkspaceController;
   userService: UserService;
   issueService: IssueService;
+  projectService: ProjectService;
+  workspaceService: WorkspaceService;
   issueCommentService: IssueCommentService;
   issueTaskService: IssueTaskService;
+  projectMemberRepository: ProjectMemberRepository;
+  workspaceRepository: WorkspaceRepository;
+  workspaceMemberRepository: WorkspaceMemberRepository;
+  workspaceMemberInviteRepository: WorkspaceMemberInviteRepository;
   userRepository: UserRepository;
   issueRepository: IssueRepository;
   projectRepository: ProjectRepository;
   issueAssigneeRepository: IssueAssigneeRepository;
   issueCommentRepository: IssueCommentRepository;
   issueTaskRepository: IssueTaskRepository;
+  projectCreatedPublisher: ProjectCreatedPublisher;
+  projectUpdatedPublisher: ProjectUpdatedPublisher;
+  workspaceCreatedPublisher: WorkspaceCreatedPublisher;
+  workspaceInviteCreatedPublisher: WorkspaceInviteCreatedPublisher;
+  projectMemberCreatedPublisher: ProjectMemberCreatedPublisher;
   userCreatedSubscriber: UserCreatedSubscriber;
   userUpdatedSubscriber: UserUpdatedSubscriber;
   projectCreatedSubscriber: ProjectCreatedSubscriber;
@@ -81,6 +117,14 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         {
           prefix: "/api/v1/issues",
           route: issueTaskRoutes(container),
+        },
+        {
+          prefix: "/api/v1/projects",
+          route: projectRoutes(container),
+        },
+        {
+          prefix: "/api/v1/workspaces",
+          route: workspaceRoutes(container),
         },
       ],
     });
@@ -127,16 +171,35 @@ const main = async () => {
   add("issueController", asClass(CoreIssueController));
   add("issueCommentController", asClass(CoreIssueCommentController));
   add("issueTaskController", asClass(CoreIssueTaskController));
+  add("projectController", asClass(CoreProjectController));
+  add("workspaceController", asClass(CoreWorkspaceController));
   add("userService", asClass(CoreUserService));
   add("issueService", asClass(CoreIssueService));
   add("issueCommentService", asClass(CoreIssueCommentService));
   add("issueTaskService", asClass(CoreIssueTaskService));
+  add("projectService", asClass(CoreProjectService));
+  add("projectMemberRepository", asClass(PostgresProjectMemberRepository));
+  add("workspaceService", asClass(CoreWorkspaceService));
+  add("workspaceRepository", asClass(PostgresWorkspaceRepository));
+  add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
+  add(
+    "workspaceMemberInviteRepository",
+    asClass(PostgresWorkspaceMemberInviteRepository),
+  );
   add("userRepository", asClass(PostgresUserRepository));
   add("issueRepository", asClass(PostgresIssueRepository));
   add("projectRepository", asClass(PostgresProjectRepository));
   add("issueAssigneeRepository", asClass(PostgresIssueAssigneeRepository));
   add("issueCommentRepository", asClass(PostgresIssueCommentRepository));
   add("issueTaskRepository", asClass(PostgresIssueTaskRepository));
+  add("projectCreatedPublisher", asClass(ProjectCreatedPublisher));
+  add("projectUpdatedPublisher", asClass(ProjectUpdatedPublisher));
+  add("workspaceCreatedPublisher", asClass(WorkspaceCreatedPublisher));
+  add("projectMemberCreatedPublisher", asClass(ProjectMemberCreatedPublisher));
+  add(
+    "workspaceInviteCreatedPublisher",
+    asClass(WorkspaceInviteCreatedPublisher),
+  );
   add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
   add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
   add("projectCreatedSubscriber", asClass(ProjectCreatedSubscriber));

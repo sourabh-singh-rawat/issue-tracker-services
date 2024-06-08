@@ -3,8 +3,9 @@ import {
   WorkspaceRegistrationData,
   WorkspaceRoles,
 } from "@issue-tracker/common";
-import { UserEntity, WorkspaceEntity } from "../../data/entities";
+import { UserEntity } from "../../data/entities";
 import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
+import { WorkspaceEntity } from "../../data/entities/workspace.entity";
 
 export interface WorkspaceService {
   createWorkspace(

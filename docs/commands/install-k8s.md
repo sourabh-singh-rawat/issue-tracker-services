@@ -36,10 +36,8 @@ helm install activity-postgres ./k8s/postgres --values ./k8s/postgres/values.yam
 helm install attachment-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install email-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install identity-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
-helm install issue-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
-helm install project-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install issue-tracker-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install user-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
-helm install workspace-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 ```
 
 ## Helm release for Nats Controller
@@ -65,6 +63,7 @@ helm install workspace-stream ./k8s/nats-stream --set streamName=workspace
 # User
 helm install user-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/user.created.yaml
 helm install user-updated-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/user.updated.yaml
+
 # Project
 helm install project-created-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/project.created.yaml
 helm install project-updated-consumer ./k8s/nats-consumer --values ./k8s/nats-consumer/values/project.updated.yaml
@@ -93,17 +92,4 @@ forward . 8.8.8.8 8.8.4.4 {
 }
 
 kubectl rollout restart deployment coredns -n kube-system
-```
-
-<!-- Docker desktop -->
-
-```powershell
-kubectl port-forward activity-postgres-db-m7fv-0 5429:5432
-kubectl port-forward attachment-postgres-db-h4zj-0 5430:5432
-kubectl port-forward email-postgres-db-787b-0 5431:5432
-kubectl port-forward identity-postgres-db-2tw4-0 5432:5432
-kubectl port-forward issue-postgres-db-wngz-0 5433:5432
-kubectl port-forward project-postgres-db-s2cw-0 5434:5432
-kubectl port-forward user-postgres-db-8ljx-0 5435:5432
-kubectl port-forward workspace-postgres-db-hrzc-0 5436:5432
 ```

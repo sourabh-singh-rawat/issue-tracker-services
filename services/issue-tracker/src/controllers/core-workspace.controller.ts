@@ -1,9 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { WorkspaceController } from "./interfaces/workspace-controller";
 import { WorkspaceService } from "../services/interfaces/workspace.service";
 import { WorkspaceRoles } from "@issue-tracker/common";
 
-export class CoreWorkspaceController implements WorkspaceController {
+export class CoreWorkspaceController implements CoreWorkspaceController {
   constructor(private workspaceService: WorkspaceService) {}
 
   createWorkspace = async (

@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-node": "^10.9.2"
+    "@types/uuid": "^9.0.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@issue-tracker/common": "workspace:*",
@@ -25,6 +27,7 @@
     "http-status-codes": "^2.3.0",
     "nats": "^2.26.0",
     "typeorm": "^0.3.20",
-    "typeorm-adapter": "^1.7.0"
+    "typeorm-adapter": "^1.7.0",
+    "uuid": "^9.0.1"
   }
 }

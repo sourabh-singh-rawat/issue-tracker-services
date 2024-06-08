@@ -28,29 +28,17 @@ build:
         dockerfile: Dockerfile
         target: identity
 
-    - image: sourabhrawatcc/issue
+    - image: sourabhrawatcc/issue-tracker
       context: .
       docker:
         dockerfile: Dockerfile
-        target: issue
-
-    - image: sourabhrawatcc/project
-      context: .
-      docker:
-        dockerfile: Dockerfile
-        target: project
+        target: issue-tracker
 
     - image: sourabhrawatcc/user
       context: .
       docker:
         dockerfile: Dockerfile
         target: user
-
-    - image: sourabhrawatcc/workspace
-      context: .
-      docker:
-        dockerfile: Dockerfile
-        target: workspace
 
   local:
     concurrency: 0
@@ -77,22 +65,12 @@ deploy:
         valuesFiles:
           - ./k8s/microservice/identity.values.yaml
 
-      - name: issue
+      - name: issue-tracker
         chartPath: ./k8s/microservice
         valuesFiles:
-          - ./k8s/microservice/issue.values.yaml
-
-      - name: project
-        chartPath: ./k8s/microservice
-        valuesFiles:
-          - ./k8s/microservice/project.values.yaml
+          - ./k8s/microservice/issue-tracker.values.yaml
 
       - name: user
         chartPath: ./k8s/microservice
         valuesFiles:
           - ./k8s/microservice/user.values.yaml
-
-      - name: workspace
-        chartPath: ./k8s/microservice
-        valuesFiles:
-          - ./k8s/microservice/workspace.values.yaml

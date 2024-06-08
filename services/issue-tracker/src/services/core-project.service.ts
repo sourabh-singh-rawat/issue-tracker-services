@@ -1,12 +1,7 @@
 import { ProjectService } from "./interfaces/project.service";
-import { ProjectEntity, ProjectMemberEntity } from "../app/entities";
-import { ProjectRepository } from "../repositories/interfaces/project.repository";
-import { UserRepository } from "../repositories/interfaces/user.repository";
-import { ProjectMemberRepository } from "../repositories/interfaces/project-member";
 import { UserService } from "./interfaces/user.service";
 import { ProjectCreatedPublisher } from "../events/publishers/project-created.publisher";
 import { ProjectUpdatedPublisher } from "../events/publishers/project-updated.publisher";
-import { WorkspaceMemberRepository } from "../repositories/interfaces/workspace-member.repository";
 import { ProjectMemberCreatedPublisher } from "../events/publishers/project-member-created.publisher";
 import { Typeorm } from "@issue-tracker/orm";
 import { ProjectStatus } from "@issue-tracker/common/dist/constants/enums/project-status";
@@ -25,6 +20,11 @@ import {
 } from "@issue-tracker/common";
 import { ProjectMemberPayload } from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
+import { UserRepository } from "../data/repositories/interfaces/user.repository";
+import { ProjectRepository } from "../data/repositories/interfaces/project.repository";
+import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
+import { ProjectMemberRepository } from "../data/repositories/interfaces/project-member";
+import { ProjectEntity, ProjectMemberEntity } from "../data/entities";
 
 export class CoreProjectService implements ProjectService {
   constructor(
@@ -106,12 +106,11 @@ export class CoreProjectService implements ProjectService {
     return project;
   };
 
-  getWorkspaceMemberList = async (userId: string, projectId: string) => {
+  getWorkspaceMemberList = async (userId: string) => {
     const user = await this.userRepository.findById(userId);
     if (!user) throw new UserNotFoundError();
 
     const rows = await this.workspaceMemberRepository.find(
-      projectId,
       user.defaultWorkspaceId,
     );
 

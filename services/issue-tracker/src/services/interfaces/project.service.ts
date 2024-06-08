@@ -5,9 +5,12 @@ import {
   ProjectRoles,
   ServiceResponse,
 } from "@issue-tracker/common";
-import { ProjectEntity, ProjectMemberEntity } from "../../app/entities";
-import { WorkspaceMemberEntity } from "../../app/entities/workspace-member.entity";
 import { ProjectStatus } from "@issue-tracker/common/dist/constants/enums/project-status";
+import {
+  ProjectEntity,
+  ProjectMemberEntity,
+  WorkspaceMemberEntity,
+} from "../../data/entities";
 
 export interface ProjectService {
   createProject(

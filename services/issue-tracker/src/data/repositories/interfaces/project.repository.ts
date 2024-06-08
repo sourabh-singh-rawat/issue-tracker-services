@@ -1,6 +1,6 @@
 import { QueryBuilderOptions, Repository } from "@issue-tracker/orm";
-import { ProjectEntity } from "../../app/entities/project.entity";
 import { Filters } from "@issue-tracker/common";
+import { ProjectEntity } from "../../entities";
 
 export interface ProjectRepository extends Repository<ProjectEntity> {
   find(

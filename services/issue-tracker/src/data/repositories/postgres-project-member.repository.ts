@@ -1,7 +1,7 @@
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 import { ProjectMemberRepository } from "./interfaces/project-member";
-import { ProjectMemberEntity } from "../app/entities";
 import { Typeorm } from "@issue-tracker/orm";
+import { ProjectMemberEntity } from "../entities";
 
 export class PostgresProjectMemberRepository
   implements ProjectMemberRepository
