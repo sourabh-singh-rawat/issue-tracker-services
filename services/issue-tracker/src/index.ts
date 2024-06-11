@@ -63,6 +63,13 @@ import { WorkspaceInviteCreatedPublisher } from "./events/publishers/workspace-i
 import { ProjectMemberCreatedPublisher } from "./events/publishers/project-member-created.publisher";
 import { WorkspaceMemberInviteRepository } from "./data/repositories/interfaces/workspace-member-invite.repository";
 import { PostgresWorkspaceMemberInviteRepository } from "./data/repositories/postgres-workspace-member-invite.repository";
+import { projectActivityRoutes } from "./routes/project-activity.routes";
+import { ProjectActivityController } from "./controllers/interfaces/project-activity.controller";
+import { CoreProjectActivityController } from "./controllers/core-project-activity.controller";
+import { CoreProjectActivityService } from "./services/core-project-activity.service";
+import { ProjectActivityService } from "./services/interfaces/project-activity.service";
+import { PostgresProjectActivityRepository } from "./data/repositories/postgres-project-activity.repository";
+import { ProjectActivityRepository } from "./data/repositories/interfaces/project-activity.repository";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -74,9 +81,11 @@ export interface RegisteredServices {
   issueTaskController: IssueTaskController;
   projectController: ProjectController;
   workspaceController: WorkspaceController;
+  projectActivityController: ProjectActivityController;
   userService: UserService;
   issueService: IssueService;
   projectService: ProjectService;
+  projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
   issueCommentService: IssueCommentService;
   issueTaskService: IssueTaskService;
@@ -87,6 +96,7 @@ export interface RegisteredServices {
   userRepository: UserRepository;
   issueRepository: IssueRepository;
   projectRepository: ProjectRepository;
+  projectActivityRepository: ProjectActivityRepository;
   issueAssigneeRepository: IssueAssigneeRepository;
   issueCommentRepository: IssueCommentRepository;
   issueTaskRepository: IssueTaskRepository;
@@ -123,6 +133,10 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         {
           prefix: "/api/v1/workspaces",
           route: workspaceRoutes(container),
+        },
+        {
+          prefix: "/api/v1/activities",
+          route: projectActivityRoutes(container),
         },
       ],
     });
@@ -170,12 +184,15 @@ const main = async () => {
   add("issueTaskController", asClass(CoreIssueTaskController));
   add("projectController", asClass(CoreProjectController));
   add("workspaceController", asClass(CoreWorkspaceController));
+  add("projectActivityController", asClass(CoreProjectActivityController));
   add("userService", asClass(CoreUserService));
   add("issueService", asClass(CoreIssueService));
   add("issueCommentService", asClass(CoreIssueCommentService));
   add("issueTaskService", asClass(CoreIssueTaskService));
   add("projectService", asClass(CoreProjectService));
+  add("projectActivityService", asClass(CoreProjectActivityService));
   add("projectMemberRepository", asClass(PostgresProjectMemberRepository));
+  add("projectActivityRepository", asClass(PostgresProjectActivityRepository));
   add("workspaceService", asClass(CoreWorkspaceService));
   add("workspaceRepository", asClass(PostgresWorkspaceRepository));
   add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));

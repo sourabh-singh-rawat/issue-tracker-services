@@ -4,12 +4,6 @@ metadata:
   name: issue-tracker
 build:
   artifacts:
-    - image: sourabhrawatcc/activity
-      context: .
-      docker:
-        dockerfile: Dockerfile
-        target: activity
-
     - image: sourabhrawatcc/attachment
       context: .
       docker:
@@ -45,11 +39,6 @@ build:
 deploy:
   helm:
     releases:
-      - name: activity
-        chartPath: ./k8s/microservice
-        valuesFiles:
-          - ./k8s/microservice/activity.values.yaml
-
       - name: attachment
         chartPath: ./k8s/microservice
         valuesFiles:
