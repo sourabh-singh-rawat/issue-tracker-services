@@ -32,12 +32,10 @@ helm install pgo ./k8s/pgo
 ## Install postgres for each service
 
 ```powershell
-helm install activity-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install attachment-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install email-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
-helm install identity-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install auth-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install issue-tracker-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
-helm install user-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 ```
 
 ## Helm release for Nats Controller
