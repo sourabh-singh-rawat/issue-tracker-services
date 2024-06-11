@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ProjectActivityController } from "./interfaces/project-activity.controller";
 import { ProjectActivityService } from "../services/interfaces/project-activity.service";
+import { ProjectActivityController } from "./interfaces/project-activity.controller";
 
 interface Params {
   id: string;
