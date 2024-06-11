@@ -32,14 +32,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 RUN pnpm -r build
 
 
-# Stage 3: Activity Service
-FROM base AS activity
-COPY --from=build /usr/src/app /usr/src/app
-USER node
-EXPOSE 4000
-CMD pnpm -F activity start
-
-
 # Stage 3: Attachment Service
 FROM base AS attachment
 COPY --from=build /usr/src/app /usr/src/app
@@ -57,11 +49,11 @@ CMD pnpm -F email start
 
 
 # Stage 3: Identity Service
-FROM base AS identity
+FROM base AS auth
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F identity start
+CMD pnpm -F auth start
 
 
 # Stage 3: Issue Tracker Service
@@ -70,11 +62,3 @@ COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
 CMD pnpm -F @issue-tracker-services/issue-tracker start
-
-
-# Stage 3: User Service
-FROM base AS user
-COPY --from=build /usr/src/app /usr/src/app
-USER node
-EXPOSE 4000
-CMD pnpm -F user start
