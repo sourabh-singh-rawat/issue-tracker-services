@@ -1,3 +1,4 @@
 packages:
+  - clients/**
   - packages/**
   - services/**
