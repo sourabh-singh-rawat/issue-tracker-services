@@ -29,7 +29,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
     --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
-RUN pnpm -r build
+RUN pnpm -r --filter=!client build
 
 
 # Stage 3: Attachment Service

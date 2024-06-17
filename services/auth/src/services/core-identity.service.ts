@@ -1,9 +1,7 @@
 import { v4 } from "uuid";
-import axios from "axios";
 
 import { IdentityService } from "./interfaces/identity.service";
 import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
-import { StatusCodes } from "http-status-codes";
 import { TokenOptions } from "./interfaces/token-options";
 import { Typeorm } from "@issue-tracker/orm";
 import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
@@ -11,7 +9,6 @@ import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-
 import {
   AuthCredentials,
   EmailNotVerifiedError,
-  InvalidCredentialsError,
   ServiceResponse,
   Tokens,
   UnauthorizedError,
@@ -25,6 +22,7 @@ import {
   RefreshToken,
 } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
+import { UserService } from "./interfaces/user.service";
 
 export class CoreIdentityService implements IdentityService {
   constructor(
@@ -32,6 +30,7 @@ export class CoreIdentityService implements IdentityService {
     private readonly userRepository: UserRepository,
     private readonly accessTokenRepository: AccessTokenRepository,
     private readonly refreshTokenRepository: RefreshTokenRepository,
+    private readonly userService: UserService,
   ) {}
 
   private isUserExistsByEmail = async (email: string) => {
@@ -150,12 +149,7 @@ export class CoreIdentityService implements IdentityService {
     if (!user) throw new UserNotFoundError();
     if (!user.isEmailVerified) throw new EmailNotVerifiedError();
 
-    const response = await axios.post(
-      "http://user-service:4000/api/v1/users/verify-password",
-      { email, password },
-    );
-
-    if (response.status !== StatusCodes.OK) throw new InvalidCredentialsError();
+    await this.userService.verifyPassword({ email, password });
 
     const userDetails = new UserDetails({
       userId: user.id,

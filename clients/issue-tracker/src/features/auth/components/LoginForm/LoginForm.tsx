@@ -19,7 +19,7 @@ export default function LoginForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/identity/generate-tokens"].post.requestBody.content[
+      openapi.paths["/auth/identity/generate-tokens"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

@@ -6,7 +6,7 @@ import {
 } from "@issue-tracker/server-core";
 import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { IdentityController } from "./controllers/interfaces/identity-controller";
+import { IdentityController } from "./controllers/interfaces/identity.controller";
 import { IdentityService } from "./services/interfaces/identity.service";
 import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscribers";
 import { UserUpdatedSubscriber } from "./events/subscribers/user-updated.subscribers";
@@ -29,6 +29,7 @@ import { UserProfileRepository } from "./data/repositories/interfaces/user-profi
 import { PostgresUserProfileRepository } from "./data/repositories/postgres-user-profile.repository";
 import { UserCreatedPublisher } from "./events/publishers/user-created.publisher";
 import { UserUpdatedPublisher } from "./events/publishers/user-updated.publisher";
+import { userRoutes } from "./routes/user.routes";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -53,8 +54,12 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     const server = new FastifyServer({
       routes: [
         {
-          prefix: "/api/v1/identity",
+          prefix: "/api/v1/auth/identity",
           route: identityRoutes(container),
+        },
+        {
+          prefix: "/api/v1/auth/users",
+          route: userRoutes(container),
         },
       ],
     });
@@ -65,10 +70,10 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
   }
 };
 
-const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
-  container.get("userCreatedSubscriber").fetchMessages();
-  container.get("userUpdatedSubscriber").fetchMessages();
-};
+// const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
+//   container.get("userCreatedSubscriber").fetchMessages();
+//   container.get("userUpdatedSubscriber").fetchMessages();
+// };
 
 const main = async () => {
   const dataSource = new DataSource({
@@ -111,7 +116,7 @@ const main = async () => {
   container.init();
 
   await startServer(container);
-  startSubscriptions(container);
+  // startSubscriptions(container);
 };
 
 main();

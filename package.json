@@ -5,7 +5,7 @@
   "scripts": {
     "start:client": "pnpm -F client run start",
     "start:services": "skaffold dev",
-    "gen:openapi-client": "redocly bundle ./openapi/openapi.yaml --output ./packages/client/src/api/generated/openapi.json --remove-unused-components --dereferenced",
+    "gen:openapi-client": "redocly bundle ./openapi/openapi.yaml --output ./clients/issue-tracker/src/api/generated/openapi.json --remove-unused-components --dereferenced",
     "gen:hooks": "pnpm -F client run gen:hooks",
     "gen": "pnpm gen:openapi-client && pnpm gen:hooks"
   },

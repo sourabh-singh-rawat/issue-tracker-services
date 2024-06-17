@@ -31,7 +31,7 @@ export default function SignUpForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/users/register"].post.requestBody.content[
+      openapi.paths["/auth/users/register"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

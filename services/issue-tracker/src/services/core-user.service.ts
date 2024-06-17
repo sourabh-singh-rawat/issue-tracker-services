@@ -6,8 +6,8 @@ import { UserNotFoundError, VersionMismatchError } from "@issue-tracker/common";
 
 export class CoreUserService implements UserService {
   constructor(private userRepository: UserRepository) {}
-  getDefaultWorkspaceId(): Promise<string> {
-    throw new Error("Method not implemented.");
+  async getDefaultWorkspaceId(userId: string) {
+    return await this.userRepository.findById(userId);
   }
 
   private getUserById = async (userId: string) => {

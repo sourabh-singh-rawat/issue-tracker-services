@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { useLargeScreen } from "../../../hooks/useLargeScreen";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiDivider from "@mui/material/Divider";
 
-import MuiGridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import MuiPestControlOutlinedIcon from "@mui/icons-material/PestControlOutlined";
 import MuiArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import MuiAssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
@@ -54,7 +53,6 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
 export default function Sidebar() {
   const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
-  const theme = useTheme();
 
   useEffect(() => {
     setOpen(isLargeScreen);
@@ -80,12 +78,6 @@ export default function Sidebar() {
         <SidebarGroupLabel title="Manage" />
         {[
           {
-            icon: <MuiGridViewOutlinedIcon />,
-            to: "/",
-            title: "Dashboard",
-            isVisible: open,
-          },
-          {
             icon: <MuiArticleOutlinedIcon />,
             to: "/projects",
             title: "Projects",
@@ -103,7 +95,7 @@ export default function Sidebar() {
             title: "Tasks",
             isVisible: open,
           },
-        ].map(({ icon, to, title, isVisible }) => (
+        ].map(({ icon, to, title }) => (
           <SidebarGroupItem
             icon={icon}
             to={to}

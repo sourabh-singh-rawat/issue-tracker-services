@@ -11,7 +11,7 @@ const injectedRtkApi = api
         GenerateTokensApiArg
       >({
         query: (queryArg) => ({
-          url: `/identity/generate-tokens`,
+          url: `/auth/identity/generate-tokens`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -19,7 +19,10 @@ const injectedRtkApi = api
       }),
       revokeTokens: build.mutation<RevokeTokensApiResponse, RevokeTokensApiArg>(
         {
-          query: () => ({ url: `/identity/revoke-tokens`, method: "POST" }),
+          query: () => ({
+            url: `/auth/identity/revoke-tokens`,
+            method: "POST",
+          }),
           invalidatesTags: ["identity"],
         },
       ),
@@ -27,7 +30,7 @@ const injectedRtkApi = api
         GetCurrentUserApiResponse,
         GetCurrentUserApiArg
       >({
-        query: () => ({ url: `/users/me` }),
+        query: () => ({ url: `/auth/users/me` }),
         providesTags: ["identity"],
       }),
     }),

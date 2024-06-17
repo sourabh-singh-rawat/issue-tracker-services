@@ -34,7 +34,7 @@ export interface ProjectService {
   confirmProjectInvite(token: string): Promise<ServiceResponse<string>>;
   getProjectStatusList(): ServiceResponse<ProjectStatus[]>;
   getProjectRoleList(): ServiceResponse<ProjectRoles[]>;
-  getProjectList(
+  getAllProjects(
     userId: string,
     filters: Filters,
   ): Promise<ServiceResponse<ProjectDetails<ProjectMemberEntity>[]>>;

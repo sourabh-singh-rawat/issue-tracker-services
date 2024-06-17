@@ -11,7 +11,7 @@ const injectedRtkApi = api
         GetProjectListApiArg
       >({
         query: (queryArg) => ({
-          url: `/projects`,
+          url: `/issue-tracker/projects`,
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
@@ -26,7 +26,7 @@ const injectedRtkApi = api
         CreateProjectApiArg
       >({
         query: (queryArg) => ({
-          url: `/projects`,
+          url: `/issue-tracker/projects`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -36,11 +36,13 @@ const injectedRtkApi = api
         GetProjectStatusListApiResponse,
         GetProjectStatusListApiArg
       >({
-        query: () => ({ url: `/projects/status` }),
+        query: () => ({ url: `/issue-tracker/projects/status` }),
         providesTags: ["project"],
       }),
       getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
-        query: (queryArg) => ({ url: `/projects/${queryArg.id}` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/projects/${queryArg.id}`,
+        }),
         providesTags: ["project"],
       }),
       updateProject: build.mutation<
@@ -48,7 +50,7 @@ const injectedRtkApi = api
         UpdateProjectApiArg
       >({
         query: (queryArg) => ({
-          url: `/projects/${queryArg.id}`,
+          url: `/issue-tracker/projects/${queryArg.id}`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -58,14 +60,18 @@ const injectedRtkApi = api
         GetProjectRoleListApiResponse,
         GetProjectRoleListApiArg
       >({
-        query: (queryArg) => ({ url: `/projects/${queryArg.id}/role` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/projects/${queryArg.id}/role`,
+        }),
         providesTags: ["project"],
       }),
       getProjectMembers: build.query<
         GetProjectMembersApiResponse,
         GetProjectMembersApiArg
       >({
-        query: (queryArg) => ({ url: `/projects/${queryArg.id}/members` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/projects/${queryArg.id}/members`,
+        }),
         providesTags: ["project"],
       }),
       createProjectInvite: build.mutation<
@@ -73,7 +79,7 @@ const injectedRtkApi = api
         CreateProjectInviteApiArg
       >({
         query: (queryArg) => ({
-          url: `/projects/${queryArg.id}/members/invite`,
+          url: `/issue-tracker/projects/${queryArg.id}/members/invite`,
           method: "POST",
           body: queryArg.body,
         }),
