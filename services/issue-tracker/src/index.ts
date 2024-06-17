@@ -115,27 +115,27 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     const server = new FastifyServer({
       routes: [
         {
-          prefix: "/api/v1/issues",
+          prefix: "/api/v1/issue-tracker/issues",
           route: issueRoutes(container),
         },
         {
-          prefix: "/api/v1/issues",
+          prefix: "/api/v1/issue-tracker/issues",
           route: issueCommentRoutes(container),
         },
         {
-          prefix: "/api/v1/issues",
+          prefix: "/api/v1/issue-tracker/issues",
           route: issueTaskRoutes(container),
         },
         {
-          prefix: "/api/v1/projects",
+          prefix: "/api/v1/issue-tracker/projects",
           route: projectRoutes(container),
         },
         {
-          prefix: "/api/v1/workspaces",
+          prefix: "/api/v1/issue-tracker/workspaces",
           route: workspaceRoutes(container),
         },
         {
-          prefix: "/api/v1/activities",
+          prefix: "/api/v1/issue-tracker/activities",
           route: projectActivityRoutes(container),
         },
       ],

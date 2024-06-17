@@ -10,7 +10,9 @@ const injectedRtkApi = api
         GetProjectActivityListApiResponse,
         GetProjectActivityListApiArg
       >({
-        query: (queryArg) => ({ url: `/activities/projects/${queryArg.id}` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/activities/projects/${queryArg.id}`,
+        }),
         providesTags: ["issue"],
       }),
       getWorkspaceMemberList: build.query<
@@ -18,7 +20,7 @@ const injectedRtkApi = api
         GetWorkspaceMemberListApiArg
       >({
         query: (queryArg) => ({
-          url: `/projects/${queryArg.id}/workspace-members`,
+          url: `/issue-tracker/projects/${queryArg.id}/workspace-members`,
         }),
         providesTags: ["workspace"],
       }),
@@ -26,7 +28,7 @@ const injectedRtkApi = api
         GetAllWorkspacesApiResponse,
         GetAllWorkspacesApiArg
       >({
-        query: () => ({ url: `/workspaces` }),
+        query: () => ({ url: `/issue-tracker/workspaces` }),
         providesTags: ["workspace"],
       }),
       createWorkspace: build.mutation<
@@ -34,14 +36,16 @@ const injectedRtkApi = api
         CreateWorkspaceApiArg
       >({
         query: (queryArg) => ({
-          url: `/workspaces`,
+          url: `/issue-tracker/workspaces`,
           method: "POST",
           body: queryArg.body,
         }),
         invalidatesTags: ["workspace"],
       }),
       getWorkspace: build.query<GetWorkspaceApiResponse, GetWorkspaceApiArg>({
-        query: (queryArg) => ({ url: `/workspaces/${queryArg.id}` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/workspaces/${queryArg.id}`,
+        }),
         providesTags: ["workspace"],
       }),
       createWorkspaceInvite: build.mutation<
@@ -49,7 +53,7 @@ const injectedRtkApi = api
         CreateWorkspaceInviteApiArg
       >({
         query: (queryArg) => ({
-          url: `/workspaces/invite`,
+          url: `/issue-tracker/workspaces/invite`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -59,7 +63,7 @@ const injectedRtkApi = api
         GetWorkspaceRoleListApiResponse,
         GetWorkspaceRoleListApiArg
       >({
-        query: () => ({ url: `/workspaces/role` }),
+        query: () => ({ url: `/issue-tracker/workspaces/role` }),
         providesTags: ["workspace"],
       }),
     }),

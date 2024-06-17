@@ -14,10 +14,16 @@ declare module "fastify" {
 }
 
 export class Auth {
-  static requireTokens = (request: FastifyRequest) => {
+  static requireTokens = (
+    request: FastifyRequest,
+    _reply: FastifyReply,
+    done: HookHandlerDoneFunction,
+  ) => {
     if (!request.cookies.accessToken || !request.cookies.refreshToken) {
       throw new BadRequestError("Bad request!");
     }
+
+    return done();
   };
 
   static setCurrentUser = (
@@ -26,6 +32,7 @@ export class Auth {
     done: HookHandlerDoneFunction,
   ) => {
     const accessToken = request.cookies.accessToken;
+    console.log(accessToken);
     if (accessToken) {
       try {
         request.currentUser = JwtToken.verify(

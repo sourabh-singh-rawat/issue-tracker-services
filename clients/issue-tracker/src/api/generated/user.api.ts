@@ -9,7 +9,7 @@ const injectedRtkApi = api
       registerUser: build.mutation<RegisterUserApiResponse, RegisterUserApiArg>(
         {
           query: (queryArg) => ({
-            url: `/users/register`,
+            url: `/auth/users/register`,
             method: "POST",
             body: queryArg.body,
             params: { inviteToken: queryArg.inviteToken },
@@ -22,7 +22,7 @@ const injectedRtkApi = api
         SetDefaultWorkspaceApiArg
       >({
         query: (queryArg) => ({
-          url: `/users/default-workspace`,
+          url: `/auth/users/default-workspace`,
           method: "POST",
           body: queryArg.body,
         }),

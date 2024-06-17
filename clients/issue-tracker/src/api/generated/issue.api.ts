@@ -26,7 +26,7 @@ const injectedRtkApi = api
       }),
       getIssueList: build.query<GetIssueListApiResponse, GetIssueListApiArg>({
         query: (queryArg) => ({
-          url: `/issues`,
+          url: `/issue-tracker/issues`,
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
@@ -39,7 +39,7 @@ const injectedRtkApi = api
       }),
       createIssue: build.mutation<CreateIssueApiResponse, CreateIssueApiArg>({
         query: (queryArg) => ({
-          url: `/issues`,
+          url: `/issue-tracker/issues`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -49,23 +49,23 @@ const injectedRtkApi = api
         GetIssueStatusListApiResponse,
         GetIssueStatusListApiArg
       >({
-        query: () => ({ url: `/issues/status` }),
+        query: () => ({ url: `/issue-tracker/issues/status` }),
         providesTags: ["issue"],
       }),
       getIssuePriorityList: build.query<
         GetIssuePriorityListApiResponse,
         GetIssuePriorityListApiArg
       >({
-        query: () => ({ url: `/issues/priority` }),
+        query: () => ({ url: `/issue-tracker/issues/priority` }),
         providesTags: ["issue"],
       }),
       getIssue: build.query<GetIssueApiResponse, GetIssueApiArg>({
-        query: (queryArg) => ({ url: `/issues/${queryArg.id}` }),
+        query: (queryArg) => ({ url: `/issue-tracker/issues/${queryArg.id}` }),
         providesTags: ["issue"],
       }),
       updateIssue: build.mutation<UpdateIssueApiResponse, UpdateIssueApiArg>({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}`,
+          url: `/issue-tracker/issues/${queryArg.id}`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -76,7 +76,7 @@ const injectedRtkApi = api
         UpdateIssueStatusApiArg
       >({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}/status`,
+          url: `/issue-tracker/issues/${queryArg.id}/status`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -87,7 +87,7 @@ const injectedRtkApi = api
         UpdateIssueResolutionApiArg
       >({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}/resolution`,
+          url: `/issue-tracker/issues/${queryArg.id}/resolution`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -98,7 +98,7 @@ const injectedRtkApi = api
         CreateIssueCommentApiArg
       >({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}/comments`,
+          url: `/issue-tracker/issues/${queryArg.id}/comments`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -108,7 +108,9 @@ const injectedRtkApi = api
         GetIssueCommentListApiResponse,
         GetIssueCommentListApiArg
       >({
-        query: (queryArg) => ({ url: `/issues/${queryArg.id}/comments` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/issues/${queryArg.id}/comments`,
+        }),
         providesTags: ["issue"],
       }),
       deleteIssueComment: build.mutation<
@@ -116,7 +118,7 @@ const injectedRtkApi = api
         DeleteIssueCommentApiArg
       >({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}/comments/${queryArg.commentId}`,
+          url: `/issue-tracker/issues/${queryArg.id}/comments/${queryArg.commentId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["issue", "comment"],
@@ -125,7 +127,9 @@ const injectedRtkApi = api
         GetIssueTaskListApiResponse,
         GetIssueTaskListApiArg
       >({
-        query: (queryArg) => ({ url: `/issues/${queryArg.id}/tasks` }),
+        query: (queryArg) => ({
+          url: `/issue-tracker/issues/${queryArg.id}/tasks`,
+        }),
         providesTags: ["issue"],
       }),
       createIssueTask: build.mutation<
@@ -133,7 +137,7 @@ const injectedRtkApi = api
         CreateIssueTaskApiArg
       >({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}/tasks`,
+          url: `/issue-tracker/issues/${queryArg.id}/tasks`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -144,7 +148,7 @@ const injectedRtkApi = api
         UpdateIssueTaskApiArg
       >({
         query: (queryArg) => ({
-          url: `/issues/${queryArg.id}/tasks/${queryArg.taskId}`,
+          url: `/issue-tracker/issues/${queryArg.id}/tasks/${queryArg.taskId}`,
           method: "PATCH",
           body: queryArg.body,
         }),

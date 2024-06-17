@@ -68,7 +68,7 @@ export class CoreProjectController implements ProjectController {
     const { userId } = request.currentUser;
     const filters = request.query;
 
-    const response = await this.projectService.getProjectList(userId, filters);
+    const response = await this.projectService.getAllProjects(userId, filters);
 
     return reply.send(response);
   };

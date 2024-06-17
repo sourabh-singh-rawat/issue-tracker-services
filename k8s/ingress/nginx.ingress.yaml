@@ -13,13 +13,6 @@ spec:
       http:
         paths:
           - pathType: ImplementationSpecific
-            path: /api/v1/activities/?(.*)
-            backend:
-              service:
-                name: activity-service
-                port:
-                  number: 4000
-          - pathType: ImplementationSpecific
             path: /api/v1/attachments/?(.*)
             backend:
               service:
@@ -27,37 +20,23 @@ spec:
                 port:
                   number: 4000
           - pathType: ImplementationSpecific
-            path: /api/v1/identity/?(.*)
+            path: /api/v1/auth/?(.*)
             backend:
               service:
-                name: identity-service
+                name: auth-service
                 port:
                   number: 4000
           - pathType: ImplementationSpecific
-            path: /api/v1/issues/?(.*)
+            path: /api/v1/email/?(.*)
             backend:
               service:
-                name: issue-service
+                name: email-service
                 port:
                   number: 4000
           - pathType: ImplementationSpecific
-            path: /api/v1/projects/?(.*)
+            path: /api/v1/issue-tracker/?(.*)
             backend:
               service:
-                name: project-service
-                port:
-                  number: 4000
-          - pathType: ImplementationSpecific
-            path: /api/v1/users/?(.*)
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 4000
-          - pathType: ImplementationSpecific
-            path: /api/v1/workspaces/?(.*)
-            backend:
-              service:
-                name: workspace-service
+                name: issue-tracker-service
                 port:
                   number: 4000

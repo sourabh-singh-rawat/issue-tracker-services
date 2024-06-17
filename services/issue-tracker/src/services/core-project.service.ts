@@ -71,8 +71,11 @@ export class CoreProjectService implements ProjectService {
     return new ServiceResponse({ rows: roles, filteredRowCount: roles.length });
   };
 
-  getProjectList = async (userId: string, filters: Filters) => {
-    const workspaceId = await this.userService.getDefaultWorkspaceId(userId);
+  getAllProjects = async (userId: string, filters: Filters) => {
+    const user = await this.userService.getDefaultWorkspaceId(userId);
+
+    if (!user) throw new UserNotFoundError();
+    const workspaceId = user.defaultWorkspaceId;
     const projects = await this.projectRepository.find(
       userId,
       workspaceId,

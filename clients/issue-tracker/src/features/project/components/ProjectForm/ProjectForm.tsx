@@ -43,8 +43,9 @@ function ProjectForm() {
   );
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/projects"].post.requestBody.content["application/json"]
-        .schema,
+      openapi.paths["/issue-tracker/projects"].post.requestBody.content[
+        "application/json"
+      ].schema,
     [],
   );
   const { control, formState, handleSubmit } = useForm({
