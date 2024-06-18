@@ -1,19 +1,19 @@
-post: 
+post:
   tags: ["project"]
   summary: Invite new member
-  description: Invite new member
+  description: Invite new member to the project
   operationId: createProjectInvite
-  parameters: 
-    - name: id 
+  parameters:
+    - name: id
       in: path
-      schema: 
+      schema:
         type: string
       description: Numeric id of the project
-  requestBody: 
+  requestBody:
     description: Fields used for creating a new project member
     content:
       application/json:
-        schema: 
+        schema:
           type: object
           properties:
             userId:
@@ -22,8 +22,8 @@ post:
               type: string
             workspaceId:
               type: string
-          required: [ "userId", "role", "workspaceId" ]
-  responses: 
+          required: ["userId", "role", "workspaceId"]
+  responses:
     201:
       description: Invite created successfully
     400:

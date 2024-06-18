@@ -1,7 +1,7 @@
 get:
   tags: ["project"]
   summary: Get all project members
-  description: Get all project members
+  description: Get all project members for a given project
   operationId: getProjectMembers
   parameters:
     - name: id

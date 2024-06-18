@@ -3,12 +3,12 @@ post:
   tags:
     - user
   summary: Create user
-  description: Creates a new user
-  parameters: 
+  description: Create a new user with email, password and display name
+  parameters:
     - name: inviteToken
       in: query
-      required: false 
-      schema: 
+      required: false
+      schema:
         type: string
   requestBody:
     content:
