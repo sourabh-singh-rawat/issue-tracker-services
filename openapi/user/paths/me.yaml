@@ -1,5 +1,6 @@
 get:
   operationId: getCurrentUser
+  description: Get the current user details if logged in
   tags:
     - identity
   summary: Get current user

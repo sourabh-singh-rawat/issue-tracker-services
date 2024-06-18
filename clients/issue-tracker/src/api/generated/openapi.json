@@ -2476,7 +2476,7 @@
           "project"
         ],
         "summary": "Get all project members",
-        "description": "Get all project members",
+        "description": "Get all project members for a given project",
         "operationId": "getProjectMembers",
         "parameters": [
           {
@@ -2601,7 +2601,7 @@
           "project"
         ],
         "summary": "Invite new member",
-        "description": "Invite new member",
+        "description": "Invite new member to the project",
         "operationId": "createProjectInvite",
         "parameters": [
           {
@@ -2762,7 +2762,7 @@
           "user"
         ],
         "summary": "Create user",
-        "description": "Creates a new user",
+        "description": "Creates a new user with the provided details",
         "parameters": [
           {
             "name": "inviteToken",
@@ -2893,7 +2893,7 @@
           "user"
         ],
         "summary": "Verify password",
-        "description": "Verifies user password",
+        "description": "Verifies user password with the provided password",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3003,6 +3003,7 @@
       "description": "Gets the current logged in user",
       "get": {
         "operationId": "getCurrentUser",
+        "description": "Get the current user details if logged in",
         "tags": [
           "identity"
         ],
@@ -3310,7 +3311,7 @@
             "description": "Numeric id of the workspace to get"
           }
         ],
-        "description": "Get workspaces of the user",
+        "description": "Get workspace by id - Retrieve details of a workspace by its unique identifier",
         "operationId": "getWorkspace",
         "responses": {
           "200": {
@@ -3455,7 +3456,7 @@
           "workspace"
         ],
         "summary": "Get list of all workspace roles",
-        "description": "Get workspace roles",
+        "description": "Get all the workspace roles available",
         "operationId": "getWorkspaceRoleList",
         "responses": {
           "200": {

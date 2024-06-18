@@ -1,12 +1,12 @@
 get:
-  tags: [ "workspace" ]
+  tags: ["workspace"]
   summary: Get list of all workspace roles
-  description: Get workspace roles
+  description: Get all the default roles that are available in the workspace
   operationId: getWorkspaceRoleList
-  responses: 
+  responses:
     200:
       description: Get workspace roles list
-      content: 
+      content:
         application/json:
           schema:
             type: object
@@ -15,7 +15,7 @@ get:
                 type: array
                 items:
                   type: string
-              rowCount: 
+              rowCount:
                 type: number
             required: ["rows", "rowCount"]
     400:

@@ -8,7 +8,7 @@ get:
         type: string
       required: true
       description: Numeric id of the workspace to get
-  description: Get workspaces of the user
+  description: Get workspace by id - Retrieve details of a workspace by its unique identifier
   operationId: getWorkspace
   responses:
     200:
