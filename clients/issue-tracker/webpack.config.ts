@@ -9,6 +9,7 @@ interface Configuration extends WebpackConfiguration {
 
 const config: Configuration = {
   entry: "./src/index.tsx",
+  devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "index.bundle.js",
