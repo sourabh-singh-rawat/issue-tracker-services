@@ -8,7 +8,6 @@ export * from "./tokens";
 export * from "./user";
 export * from "./service-response";
 export * from "./workspace-registration-data";
-export * from "./issue-form-data";
 export * from "./project-member";
 export * from "./issue";
 export * from "./task-form-data";

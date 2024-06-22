@@ -176,32 +176,31 @@ export type GetIssueAttachmentListApiArg = {
 };
 export type GetIssueListApiResponse = /** status 200 A list of issues */ {
   rows: {
-    assignees?: {
+    assignees: {
       id: string;
       user: {
         displayName: string;
         id: string;
       };
     }[];
-    createdAt?: string;
+    createdAt: string;
     createdById?: string;
-    deletedAt?: string;
-    description?: string;
-    dueDate?: string | string;
-    id?: string;
-    name?: string;
-    priority?: string;
-    priorityList?: string[];
-    project?: {
+    deletedAt: string;
+    description: string;
+    dueDate: string | string;
+    id: string;
+    name: string;
+    priority: string;
+    priorityList: string[];
+    project: {
       id: string;
       name: string;
     };
-    reporter?: {
+    reporter: {
       id: string;
       displayName: string;
     };
-    resolution?: boolean;
-    required?: any;
+    resolution: boolean;
   }[];
   filteredRowCount: number;
 };
@@ -226,7 +225,7 @@ export type CreateIssueApiArg = {
       id: string;
       name: string;
     }[];
-    reporterId?: {
+    reporter?: {
       id: string;
       name: string;
     };
