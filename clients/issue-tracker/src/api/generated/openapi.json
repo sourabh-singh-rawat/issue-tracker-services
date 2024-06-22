@@ -613,22 +613,22 @@
                           },
                           "resolution": {
                             "type": "boolean"
-                          },
-                          "required": [
-                            "assignees",
-                            "createdAt",
-                            "deletedAt",
-                            "description",
-                            "dueDate",
-                            "id",
-                            "name",
-                            "priority",
-                            "priorityList",
-                            "project",
-                            "reporter",
-                            "resolution"
-                          ]
-                        }
+                          }
+                        },
+                        "required": [
+                          "assignees",
+                          "createdAt",
+                          "deletedAt",
+                          "description",
+                          "dueDate",
+                          "id",
+                          "name",
+                          "priority",
+                          "priorityList",
+                          "project",
+                          "reporter",
+                          "resolution"
+                        ]
                       }
                     },
                     "filteredRowCount": {
@@ -731,7 +731,7 @@
                       ]
                     }
                   },
-                  "reporterId": {
+                  "reporter": {
                     "type": "object",
                     "properties": {
                       "id": {

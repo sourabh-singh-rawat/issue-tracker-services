@@ -96,22 +96,19 @@ get:
                       required: ["id", "displayName"]
                     resolution:
                       type: boolean
-
-                    required:
-                      [
-                        "assignees",
-                        "createdAt",
-                        "deletedAt",
-                        "description",
-                        "dueDate",
-                        "id",
-                        "name",
-                        "priority",
-                        "priorityList",
-                        "project",
-                        "reporter",
-                        "resolution",
-                      ]
+                  required:
+                    - "assignees"
+                    - "createdAt"
+                    - "deletedAt"
+                    - "description"
+                    - "dueDate"
+                    - "id"
+                    - "name"
+                    - "priority"
+                    - "priorityList"
+                    - "project"
+                    - "reporter"
+                    - "resolution"
               filteredRowCount:
                 type: number
             required: ["rows", "filteredRowCount"]
@@ -147,7 +144,7 @@ post:
               type: string
             assignees:
               $ref: ../../components/schemas/assignee.yaml
-            reporterId:
+            reporter:
               type: object
               properties:
                 id:

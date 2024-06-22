@@ -53,7 +53,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     newUser.photoUrl = photoUrl;
 
     const queryRunner = this.orm.createQueryRunner();
-    this.orm.transaction(queryRunner, async () => {
+    await this.orm.transaction(queryRunner, async () => {
       await this.userRepository.save(newUser, { queryRunner });
 
       const newWorkspace = new WorkspaceEntity();
@@ -76,7 +76,6 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
         await this.workspaceMemberRepository.save(newWorkspaceMember, {
           queryRunner,
         });
-        message.ack();
       }
     });
 

@@ -84,7 +84,7 @@ function IssueForm({ projectId }: IssueFormProps) {
         dueDate: dueDate ? dueDate : undefined,
         priority,
         projectId,
-        reporterId: reporter,
+        reporter,
         assignees,
         status,
         resolution,

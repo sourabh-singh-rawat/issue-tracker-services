@@ -1,4 +1,11 @@
-import { JSONCodec, JsMsg, NatsConnection } from "nats";
+import {
+  AckPolicy,
+  DeliverPolicy,
+  JSONCodec,
+  JsMsg,
+  NatsConnection,
+  ReplayPolicy,
+} from "nats";
 import { Streams, Consumers } from "./enums";
 
 export abstract class Subscriber<T> {
@@ -17,7 +24,13 @@ export abstract class Subscriber<T> {
     const jsm = await this.jetstreamClient.jetstreamManager();
     jsm.consumers.add(this.stream, {
       name: this.consumer,
+      durable_name: this.consumer,
+      deliver_policy: DeliverPolicy.All,
       filter_subject: this.subject,
+      max_deliver: 100,
+      ack_wait: 30 * 1000 * 1000 * 1000,
+      ack_policy: AckPolicy.Explicit,
+      replay_policy: ReplayPolicy.Instant,
     });
     const consumer = await this.jetstreamClient.consumers.get(
       this.stream,
