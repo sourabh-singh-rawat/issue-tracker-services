@@ -99,6 +99,7 @@ export class CoreUserService implements UserService {
       userId: savedUser.id,
       email: savedUser.email,
       isEmailVerified: savedUser.isEmailVerified,
+      defaultWorkspaceName: savedUser.defaultWorkspaceName,
       defaultWorkspaceId: savedUser.defaultWorkspaceId,
       displayName: savedUserProfile.displayName,
       photoUrl: savedUserProfile.photoUrl,

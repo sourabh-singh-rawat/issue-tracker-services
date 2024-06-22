@@ -14,6 +14,8 @@ import {
 } from "@issue-tracker/event-bus";
 import { Typeorm } from "@issue-tracker/orm";
 import { JwtToken } from "@issue-tracker/security";
+import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
+import { WorkspaceEntity } from "../../data/entities/workspace.entity";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
@@ -24,6 +26,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     private readonly eventBus: EventBus,
     private readonly userRepository: UserRepository,
     private readonly orm: Typeorm,
+    private readonly workspaceRepository: WorkspaceRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
   ) {
     super(eventBus.client);
@@ -34,6 +37,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       userId,
       email,
       isEmailVerified,
+      defaultWorkspaceName,
       defaultWorkspaceId,
       displayName,
       photoUrl,
@@ -48,22 +52,34 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     newUser.displayName = displayName;
     newUser.photoUrl = photoUrl;
 
-    if (inviteToken) {
-      const token: WorkspaceInvitePayload = JwtToken.verify(
-        inviteToken,
-        process.env.JWT_SECRET!,
-      );
+    const queryRunner = this.orm.createQueryRunner();
+    this.orm.transaction(queryRunner, async () => {
+      await this.userRepository.save(newUser, { queryRunner });
 
-      const newWorkspaceMember = new WorkspaceMemberEntity();
-      newWorkspaceMember.userId = userId;
-      newWorkspaceMember.workspaceId = token.workspaceId;
+      const newWorkspace = new WorkspaceEntity();
+      newWorkspace.id = defaultWorkspaceId;
+      newWorkspace.ownerUserId = userId;
+      newWorkspace.name = defaultWorkspaceName;
 
-      // await this.userRepository.save(newUser);
-      // await this.workspaceMemberRepository.save(newWorkspaceMember);
-      message.ack();
-    }
+      await this.workspaceRepository.save(newWorkspace, { queryRunner });
 
-    await this.userRepository.save(newUser);
+      if (inviteToken) {
+        const token: WorkspaceInvitePayload = JwtToken.verify(
+          inviteToken,
+          process.env.JWT_SECRET!,
+        );
+
+        const newWorkspaceMember = new WorkspaceMemberEntity();
+        newWorkspaceMember.userId = userId;
+        newWorkspaceMember.workspaceId = token.workspaceId;
+
+        await this.workspaceMemberRepository.save(newWorkspaceMember, {
+          queryRunner,
+        });
+        message.ack();
+      }
+    });
+
     message.ack();
   };
 }
