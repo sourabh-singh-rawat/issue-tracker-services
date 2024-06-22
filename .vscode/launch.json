@@ -2,6 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "issue-tracker-client(scoop)",
+      "request": "launch",
+      "type": "chrome",
+      "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
+      "userDataDir": true,
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "runtimeArgs": ["--remote-debugging-port=9222"]
+    },
+    {
       "name": "issue-tracker",
       "type": "node",
       "request": "launch",
