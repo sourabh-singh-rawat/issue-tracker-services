@@ -46,14 +46,9 @@ export default function WorkspaceListItem({
   const handleClickSetDefaultWorkspace = async () => {
     if (id === selectedOption?.id) return;
 
-    try {
-      await setDefaultWorkspace({ body: { id, name } });
-      setSelectedOption(option);
-    } catch (error) {
-      throw new Error(error);
-    } finally {
-      handleClose();
-    }
+    await setDefaultWorkspace({ body: { id, name } });
+    setSelectedOption(option);
+    handleClose();
   };
 
   return (
@@ -63,7 +58,7 @@ export default function WorkspaceListItem({
       label={option.name}
       indicatorIcon={
         isLoading ? (
-          <AppLoader size="1rem" />
+          <AppLoader size={1} />
         ) : id === selectedOption?.id ? (
           <DoneIcon
             fontSize="small"
