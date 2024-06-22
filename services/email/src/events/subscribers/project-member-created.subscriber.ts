@@ -5,12 +5,14 @@ import {
   EventBus,
   ProjectMemberPayload,
   Streams,
+  Subjects,
   Subscriber,
 } from "@issue-tracker/event-bus";
 
 export class ProjectMemberCreatedSubscriber extends Subscriber<ProjectMemberPayload> {
   readonly stream = Streams.PROJECT;
   readonly consumer = Consumers.ProjectMemberCreatedConsumerEmail;
+  readonly subject = Subjects.PROJECT_MEMBERS_CREATED;
 
   constructor(
     private eventBus: EventBus,
@@ -22,6 +24,5 @@ export class ProjectMemberCreatedSubscriber extends Subscriber<ProjectMemberPayl
   onMessage = async (message: JsMsg, payload: ProjectMemberPayload) => {
     await this.emailService.sendProjectInvitation(payload);
     message.ack();
-    console.log("Message processing completed");
   };
 }

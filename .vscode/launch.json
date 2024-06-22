@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "issue-tracker",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["issue-tracker"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "auth",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["auth"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

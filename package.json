@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "A mono repo for web application that track issues in your projects",
   "scripts": {
-    "start:client": "pnpm -F client run start",
-    "start:services": "skaffold dev",
+    "client": "pnpm -F client run start",
+    "server": "skaffold dev",
+    "issue-tracker": "pnpm -F @issue-tracker-services/issue-tracker run start",
+    "auth": "pnpm -F auth run start",
     "gen:openapi-client": "redocly bundle ./openapi/openapi.yaml --output ./clients/issue-tracker/src/api/generated/openapi.json --remove-unused-components --dereferenced",
     "gen:hooks": "pnpm -F client run gen:hooks",
-    "gen": "pnpm gen:openapi-client && pnpm gen:hooks"
+    "gen": "pnpm gen:openapi-client && pnpm gen:hooks",
+    "build": "pnpm -r --filter=!client build"
   },
   "keywords": [],
   "author": "",

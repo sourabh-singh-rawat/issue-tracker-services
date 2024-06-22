@@ -106,8 +106,8 @@ export class CoreUserService implements UserService {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateUser = async (user: UserUpdatedPayload) => {
-    console.log(user);
     throw new Error("Method not implemented.");
   };
 
@@ -170,8 +170,6 @@ export class CoreUserService implements UserService {
 
     const userProfile = await this.userProfileRepository.findByUserId(user.id);
     if (!userProfile) throw new UserProfileNotFoundError();
-
-    console.log(userProfile);
 
     const userDetails = new UserDetails({
       userId: user.id,

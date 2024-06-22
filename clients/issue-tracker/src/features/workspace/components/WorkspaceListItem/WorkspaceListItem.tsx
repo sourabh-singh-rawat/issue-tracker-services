@@ -50,7 +50,7 @@ export default function WorkspaceListItem({
       await setDefaultWorkspace({ body: { id, name } });
       setSelectedOption(option);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     } finally {
       handleClose();
     }

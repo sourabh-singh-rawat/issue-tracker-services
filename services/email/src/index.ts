@@ -65,7 +65,7 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({ servers: ["nats"] }, logger);
+  const eventBus = new NatsEventBus({ servers: ["nats"] }, ["email"], logger);
   await eventBus.init();
 
   const brevoTransporter = nodemailer.createTransport({

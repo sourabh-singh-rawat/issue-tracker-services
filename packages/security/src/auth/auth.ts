@@ -32,7 +32,6 @@ export class Auth {
     done: HookHandlerDoneFunction,
   ) => {
     const accessToken = request.cookies.accessToken;
-    console.log(accessToken);
     if (accessToken) {
       try {
         request.currentUser = JwtToken.verify(

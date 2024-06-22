@@ -27,7 +27,6 @@ export class PostgresTypeorm implements Typeorm {
       await this.dataSource.initialize();
       this.logger.info("Server connected to postgres cluster");
     } catch (error) {
-      console.log(error);
       throw new ConnectionRefusedError(error!.toString());
     }
   };

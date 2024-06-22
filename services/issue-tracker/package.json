@@ -23,6 +23,7 @@
     "@issue-tracker/security": "workspace:*",
     "@issue-tracker/server-core": "workspace:*",
     "awilix": "^8.0.1",
+    "dotenv": "^16.4.5",
     "fastify": "^4.27.0",
     "http-status-codes": "^2.3.0",
     "nats": "^2.26.0",

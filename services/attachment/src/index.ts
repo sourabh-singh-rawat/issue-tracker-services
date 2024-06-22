@@ -70,7 +70,7 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({ servers: ["nats"] }, logger);
+  const eventBus = new NatsEventBus({ servers: ["nats"] }, [], logger);
   await eventBus.init();
 
   const awilix = createContainer<RegisteredServices>({

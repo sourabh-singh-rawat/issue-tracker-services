@@ -8,7 +8,7 @@ import {
 import { Mutex } from "async-mutex";
 
 const mutex = new Mutex();
-const URL = "https://localhost/api/v1";
+const URL = "http://localhost:4000/api/v1";
 const baseQuery = fetchBaseQuery({
   baseUrl: URL,
   credentials: "include",
@@ -35,7 +35,10 @@ const baseQueryWithReAuth: BaseQueryFn<
       const release = await mutex.acquire();
       try {
         const refreshResponse = await baseQuery(
-          { url: `${URL}/auth/identity/refresh-tokens`, method: "POST" },
+          {
+            url: "https://localhost:4001/api/v1/auth/identity/refresh-tokens",
+            method: "POST",
+          },
           api,
           extraOptions,
         );
@@ -58,7 +61,7 @@ const baseQueryWithReAuth: BaseQueryFn<
 };
 
 export const apiSlice = createApi({
-  reducerPath: "api",
+  reducerPath: "issue-tracker-api",
   baseQuery: baseQueryWithReAuth,
   endpoints: () => ({}),
 });

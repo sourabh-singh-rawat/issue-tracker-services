@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:80/api/v1"
+      "url": "https://localhost:443/api/v1"
     }
   ],
   "security": [],
@@ -2762,7 +2762,7 @@
           "user"
         ],
         "summary": "Create user",
-        "description": "Creates a new user with the provided details",
+        "description": "Create a new user with email, password and display name",
         "parameters": [
           {
             "name": "inviteToken",
@@ -2893,7 +2893,7 @@
           "user"
         ],
         "summary": "Verify password",
-        "description": "Verifies user password with the provided password",
+        "description": "Verifies a user password with the provided email and password",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3456,7 +3456,7 @@
           "workspace"
         ],
         "summary": "Get list of all workspace roles",
-        "description": "Get all the workspace roles available",
+        "description": "Get all the default roles that are available in the workspace",
         "operationId": "getWorkspaceRoleList",
         "responses": {
           "200": {

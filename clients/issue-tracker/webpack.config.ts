@@ -54,7 +54,7 @@ const config: Configuration = {
     compress: true,
     port: 3000,
     historyApiFallback: true,
-    https: true,
+    // https: true,
   },
   stats: {
     preset: "minimal",

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
@@ -155,10 +156,10 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
 const main = async () => {
   const dataSource = new DataSource({
     type: "postgres",
-    host: process.env.host,
-    username: process.env.user,
-    password: process.env.password,
-    database: process.env.dbname,
+    host: process.env.DB_HOST,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     entities: ["src/data/entities/*.ts"],
     synchronize: true,
   });
@@ -166,7 +167,11 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({ servers: ["nats"] }, logger);
+  const eventBus = new NatsEventBus(
+    { servers: [process.env.NATS_SERVER_URL || "nats"] },
+    ["issue", "workspace", "project", "user"],
+    logger,
+  );
   await eventBus.init();
 
   const awilix = createContainer<RegisteredServices>({

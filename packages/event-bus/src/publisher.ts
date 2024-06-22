@@ -17,7 +17,5 @@ export abstract class Publisher<T extends Message> {
   publish = async (message: T["payload"]) => {
     const codec = JSONCodec<T["payload"]>();
     await this.jetstreamClient.publish(this.subject, codec.encode(message));
-
-    console.log(`Message published on ${this.subject} to stream`);
   };
 }

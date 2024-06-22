@@ -34,7 +34,6 @@ function IssueAttachments() {
   };
 
   const handleDrop = (e: React.DragEvent<HTMLButtonElement>) => {
-    console.log("onChange");
     e.preventDefault();
     e.stopPropagation();
     const { files } = e.dataTransfer;

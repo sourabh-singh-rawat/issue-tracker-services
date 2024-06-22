@@ -52,8 +52,9 @@ function IssueForm({ projectId }: IssueFormProps) {
   );
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/issues"].post.requestBody.content["application/json"]
-        .schema,
+      openapi.paths["/issue-tracker/issues"].post.requestBody.content[
+        "application/json"
+      ].schema,
     [],
   );
 
@@ -80,10 +81,10 @@ function IssueForm({ projectId }: IssueFormProps) {
       body: {
         name,
         description,
-        dueDate: dueDate ? dueDate : null,
+        dueDate: dueDate ? dueDate : undefined,
         priority,
         projectId,
-        reporter,
+        reporterId: reporter,
         assignees,
         status,
         resolution,

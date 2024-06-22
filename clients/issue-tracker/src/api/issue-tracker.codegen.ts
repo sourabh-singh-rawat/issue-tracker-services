@@ -2,12 +2,9 @@ import type { ConfigFile } from "@rtk-query/codegen-openapi";
 
 const config: ConfigFile = {
   schemaFile: "./generated/openapi.json",
-  apiFile: "./api.config.ts",
+  apiFile: "./issue-tracker.config.ts",
   apiImport: "apiSlice",
   outputFiles: {
-    "./generated/identity.api.ts": {
-      filterEndpoints: ["generateTokens", "getCurrentUser", "revokeTokens"],
-    },
     "./generated/issue.api.ts": {
       filterEndpoints: [
         "createIssue",
