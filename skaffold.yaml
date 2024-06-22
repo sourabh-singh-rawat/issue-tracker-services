@@ -1,7 +1,7 @@
 apiVersion: skaffold/v4beta6
 kind: Config
 metadata:
-  name: issue-tracker
+  name: issue-tracker-services
 build:
   artifacts:
     - image: sourabhrawatcc/attachment
