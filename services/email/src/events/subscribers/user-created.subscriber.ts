@@ -5,6 +5,7 @@ import {
   Consumers,
   EventBus,
   Streams,
+  Subjects,
   Subscriber,
   UserCreatedPayload,
 } from "@issue-tracker/event-bus";
@@ -14,6 +15,7 @@ import { UserRepository } from "../../data/repositories/interfaces/user.reposito
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserCreatedConsumerEmail;
+  readonly subject = Subjects.USER_CREATED;
 
   constructor(
     private readonly eventBus: EventBus,
@@ -45,6 +47,5 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     await this.userRepository.save(newUser);
     await this.emailService.sendVerificationEmail(payload);
     message.ack();
-    console.log("Message processing completed");
   };
 }

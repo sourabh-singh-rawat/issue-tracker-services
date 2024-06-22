@@ -1,4 +1,4 @@
-import { apiSlice as api } from "../api.config";
+import { apiSlice as api } from "../issue-tracker.config";
 export const addTagTypes = ["issue", "workspace"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({

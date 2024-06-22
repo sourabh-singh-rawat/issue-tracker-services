@@ -14,7 +14,7 @@ import StyledIconButton from "../../../../common/components/styled/StyledIconBut
 import StyledList from "../../../../common/components/styled/StyledList";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../auth.slice";
-import apiSlice from "../../../../api/api.config";
+import apiSlice from "../../../../api/issue-tracker.config";
 
 export default function AccountSwitcher() {
   const navigate = useNavigate();

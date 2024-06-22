@@ -1,7 +1,8 @@
 import logger from "redux-logger";
 import { configureStore } from "@reduxjs/toolkit";
 
-import apiSlice from "../../api/api.config";
+import issueTrackerSlice from "../../api/issue-tracker.config";
+import authApiSlice from "../../api/auth.config";
 import authSlice from "../../features/auth/auth.slice";
 import issueListSlice from "../../features/issue-list/issue-list.slice";
 import issueSlice from "../../features/issue/issue.slice";
@@ -13,7 +14,8 @@ import taskListSlice from "../../features/task-list/task-list.slice";
 
 export const store = configureStore({
   reducer: {
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    [issueTrackerSlice.reducerPath]: issueTrackerSlice.reducer,
+    [authApiSlice.reducerPath]: authApiSlice.reducer,
     auth: authSlice,
     issue: issueSlice,
     issueList: issueListSlice,
@@ -24,7 +26,10 @@ export const store = configureStore({
     taskList: taskListSlice,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(logger).concat(apiSlice.middleware),
+    getDefaultMiddleware()
+      .concat(logger)
+      .concat(issueTrackerSlice.middleware)
+      .concat(authApiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

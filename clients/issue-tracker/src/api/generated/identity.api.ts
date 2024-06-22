@@ -1,4 +1,4 @@
-import { apiSlice as api } from "../api.config";
+import { apiSlice as api } from "../auth.config";
 export const addTagTypes = ["identity"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({

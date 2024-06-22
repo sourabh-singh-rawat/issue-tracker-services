@@ -4,6 +4,7 @@ import {
   Consumers,
   EventBus,
   Streams,
+  Subjects,
   Subscriber,
   WorkspaceInvitePayload,
 } from "@issue-tracker/event-bus";
@@ -11,6 +12,7 @@ import {
 export class WorkspaceInviteCreatedSubscriber extends Subscriber<WorkspaceInvitePayload> {
   readonly stream = Streams.WORKSPACE;
   readonly consumer = Consumers.WorkspaceInviteCreatedConsumerEmail;
+  readonly subject = Subjects.WORKSPACE_INVITE_CREATED;
 
   constructor(
     private eventBus: EventBus,
@@ -23,6 +25,5 @@ export class WorkspaceInviteCreatedSubscriber extends Subscriber<WorkspaceInvite
     await this.emailService.sendWorkspaceInvitation(payload);
 
     message.ack();
-    console.log("Message processing completed");
   };
 }

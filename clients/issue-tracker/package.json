@@ -7,7 +7,9 @@
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack",
-    "gen:hooks": "npx @rtk-query/codegen-openapi ./src/api/codegen.config.ts"
+    "gen:issue-tracker-hooks": "npx @rtk-query/codegen-openapi ./src/api/issue-tracker.codegen.ts",
+    "gen:auth-hooks": "npx @rtk-query/codegen-openapi ./src/api/auth.codegen.ts",
+    "gen:hooks": "pnpm gen:issue-tracker-hooks && pnpm gen:auth-hooks"
   },
   "repository": {
     "type": "git",

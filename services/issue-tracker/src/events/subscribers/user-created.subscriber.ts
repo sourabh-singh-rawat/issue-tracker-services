@@ -7,6 +7,7 @@ import {
   Consumers,
   EventBus,
   Streams,
+  Subjects,
   Subscriber,
   UserCreatedPayload,
   WorkspaceInvitePayload,
@@ -17,6 +18,7 @@ import { JwtToken } from "@issue-tracker/security";
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
   readonly consumer = Consumers.UserCreatedConsumerProject;
+  readonly subject = Subjects.USER_CREATED;
 
   constructor(
     private readonly eventBus: EventBus,
@@ -59,12 +61,9 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       // await this.userRepository.save(newUser);
       // await this.workspaceMemberRepository.save(newWorkspaceMember);
       message.ack();
-
-      return console.log("Message processing completed");
     }
 
     await this.userRepository.save(newUser);
     message.ack();
-    console.log("Message processing completed");
   };
 }

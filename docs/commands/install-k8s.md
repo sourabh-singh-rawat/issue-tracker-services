@@ -14,7 +14,7 @@ kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy
 
 ```powershell
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
-kubectl -n ingress-nginx apply -f ./k8s/ingress
+kubectl apply -f ./k8s/ingress
 ```
 
 ## Secrets

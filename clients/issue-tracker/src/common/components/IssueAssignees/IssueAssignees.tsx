@@ -17,7 +17,6 @@ export default function IssueAssignees({
   value,
   options = [],
 }: Props) {
-  console.log(projectId);
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const { showSuccess, showError } = useMessageBar();

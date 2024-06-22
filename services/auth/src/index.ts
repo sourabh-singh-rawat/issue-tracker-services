@@ -1,3 +1,4 @@
+import "dotenv/config";
 import {
   AppLogger,
   AwilixDi,
@@ -52,6 +53,7 @@ export interface RegisteredServices {
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
     const server = new FastifyServer({
+      port: 4001,
       routes: [
         {
           prefix: "/api/v1/auth/identity",
@@ -78,10 +80,11 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
 const main = async () => {
   const dataSource = new DataSource({
     type: "postgres",
-    host: process.env.host,
-    username: process.env.user,
-    password: process.env.password,
-    database: process.env.dbname,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT!),
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     entities: ["src/data/entities/*.ts"],
     synchronize: true,
   });
@@ -89,7 +92,11 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({ servers: ["nats"] }, logger);
+  const eventBus = new NatsEventBus(
+    { servers: [process.env.NATS_SERVER_URL || "nats"] },
+    ["user"],
+    logger,
+  );
   await eventBus.init();
 
   const awilix = createContainer<RegisteredServices>({
