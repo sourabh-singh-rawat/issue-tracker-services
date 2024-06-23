@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { ThemeOptions, createTheme } from "@mui/material";
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -41,7 +41,7 @@ declare module "@mui/material/styles" {
 let mode: "dark" | "light" = "light";
 if (!mode) mode = "light";
 
-const shape = {
+const shape: ThemeOptions["shape"] = {
   borderWidthDefault: "1px",
   borderWidthInput: "2px",
   borderWidthInputOverlayUnfocused: "1px",
@@ -55,6 +55,19 @@ const shape = {
   borderRadiusExtraLarge: "1rem",
   borderRadiusExtraExtraLarge: "1.6rem",
   borderRadiusRounded: "9000px",
+};
+
+const typography: ThemeOptions["typography"] = {
+  fontFamily: "inter",
+  fontSize: 14,
+  h1: { fontWeight: 600, fontSize: "2rem" },
+  h2: { fontSize: "2rem" },
+  h3: { fontSize: "1.75rem" },
+  h4: { fontSize: "1.5rem" },
+  h5: { fontSize: "1.25rem" },
+  h6: { fontSize: "1rem" },
+  body1: { fontSize: "0.875rem" },
+  body2: { fontSize: "0.8125rem" },
 };
 
 export const theme = createTheme({
@@ -131,19 +144,37 @@ export const theme = createTheme({
     "0 4px 8px rgba(0,0,0,.16), 0 0px 4px rgba(0,0,0,.08)",
     "0 4px 8px rgba(0,0,0,.16), 0 0px 4px rgba(0,0,0,.08)",
   ],
-  typography: {
-    fontFamily: "inter",
-    fontSize: 14,
-    h1: { fontWeight: 600, fontSize: "2rem" },
-    h2: { fontSize: "2rem" },
-    h3: { fontSize: "1.75rem" },
-    h4: { fontSize: "1.5rem" },
-    h5: { fontSize: "1.25rem" },
-    h6: { fontSize: "1rem" },
-    body1: { fontSize: "0.875rem" },
-    body2: { fontSize: "0.8125rem" },
-  },
+  typography,
   components: {
+    MuiListItem: {
+      defaultProps: {
+        disablePadding: true,
+        disableGutters: true,
+      },
+    },
+    MuiListItemButton: {
+      defaultProps: {
+        disableRipple: true,
+        sx: {
+          borderRadius: shape.borderRadiusMedium,
+        },
+      },
+    },
+    MuiListItemIcon: {
+      defaultProps: {
+        sx: {
+          minWidth: 32,
+        },
+      },
+    },
+    MuiListItemText: {
+      defaultProps: {
+        primaryTypographyProps: {
+          fontSize: typography.body2?.fontSize,
+          fontWeight: 500,
+        },
+      },
+    },
     MuiIconButton: {
       defaultProps: {
         sx: { borderRadius: shape.borderRadiusMedium },
