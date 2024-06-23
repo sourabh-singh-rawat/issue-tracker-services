@@ -3,13 +3,15 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useCreateWorkspaceMutation } from "../../../../api/generated/workspace.api";
 import AjvFormats from "ajv-formats";
 import { ajvResolver } from "@hookform/resolvers/ajv";
-import openapi from "../../../../api/generated/openapi.json";
 
-import MuiContainer from "@mui/material/Container";
-import MuiGrid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
+
 import TextField from "../../../../common/components/forms/TextField";
 import ModalFooter from "../../../../common/components/ModalFooter";
-import MuiDivider from "@mui/material/Divider";
+
+import openapi from "../../../../api/generated/openapi.json";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
@@ -23,8 +25,9 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   );
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/workspaces"].post.requestBody.content["application/json"]
-        .schema,
+      openapi.paths["/issue-tracker/workspaces"].post.requestBody.content[
+        "application/json"
+      ].schema,
     [],
   );
 
@@ -45,13 +48,13 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   };
 
   return (
-    <MuiContainer
+    <Container
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <MuiGrid rowSpacing={3} container>
-        <MuiGrid item xs={12}>
+      <Grid rowSpacing={3} container>
+        <Grid item xs={12}>
           <TextField
             name="name"
             title="Name"
@@ -61,11 +64,11 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             defaultSchemas={defaultSchemas}
             autoFocus
           />
-        </MuiGrid>
-        <MuiGrid item xs={12}>
-          <MuiDivider />
-        </MuiGrid>
-        <MuiGrid item xs={12}>
+        </Grid>
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+        <Grid item xs={12}>
           <TextField
             name="description"
             title="Description"
@@ -75,9 +78,9 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             rows={4}
             defaultSchemas={defaultSchemas}
           />
-        </MuiGrid>
-      </MuiGrid>
+        </Grid>
+      </Grid>
       <ModalFooter handleClose={handleClose} />
-    </MuiContainer>
+    </Container>
   );
 }
