@@ -72,7 +72,7 @@ export default function Sidebar() {
     <Drawer open={open} variant="permanent">
       <MuiToolbar variant="dense" disableGutters />
       <MuiList disablePadding>
-        <WorkspaceSwitcher isLargeScreen={isLargeScreen} />
+        <WorkspaceSwitcher />
       </MuiList>
       <MuiDivider />
       <MuiList disablePadding>

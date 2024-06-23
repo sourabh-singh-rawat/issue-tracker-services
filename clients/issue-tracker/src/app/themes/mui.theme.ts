@@ -155,9 +155,6 @@ export const theme = createTheme({
     MuiListItemButton: {
       defaultProps: {
         disableRipple: true,
-        sx: {
-          borderRadius: shape.borderRadiusMedium,
-        },
       },
     },
     MuiListItemIcon: {
