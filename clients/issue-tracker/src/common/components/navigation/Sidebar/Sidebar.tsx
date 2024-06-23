@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { useLargeScreen } from "../../../hooks/useLargeScreen";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiDivider from "@mui/material/Divider";
+import MuiList from "@mui/material/List";
+import MuiListItem from "@mui/material/ListItem";
+import MuiListItemText from "@mui/material/ListItemText";
+import MuiListItemIcon from "@mui/material/ListItemIcon";
+import MuiListItemButton from "@mui/material/ListItemButton";
 
 import MuiPestControlOutlinedIcon from "@mui/icons-material/PestControlOutlined";
 import MuiArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import MuiAssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
-import MuiStarOutlinedIcon from "@mui/icons-material/StarOutlined";
+import MuiKeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
-import SidebarGroup from "../SidebarGroup";
-import SidebarGroupItem from "../SidebarGroupItem";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
-import StyledList from "../../styled/StyledList";
-import SidebarGroupLabel from "../SidebarGroupLabel";
+import { useNavigate } from "react-router-dom";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
@@ -51,67 +53,70 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
 });
 
 export default function Sidebar() {
+  const theme = useTheme();
+  const navigate = useNavigate();
   const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
+  const sx = {
+    ":hover": {
+      backgroundColor: "transparent",
+      color: theme.palette.primary.main,
+    },
+  };
 
   useEffect(() => {
     setOpen(isLargeScreen);
   }, [isLargeScreen]);
 
   return (
-    <Drawer
-      open={open}
-      variant="permanent"
-      onMouseEnter={() => {
-        if (!isLargeScreen) setOpen(true);
-      }}
-      onMouseLeave={() => {
-        if (!isLargeScreen) setOpen(false);
-      }}
-    >
+    <Drawer open={open} variant="permanent">
       <MuiToolbar variant="dense" disableGutters />
-      <StyledList disablePadding>
+      <MuiList disablePadding>
         <WorkspaceSwitcher isLargeScreen={isLargeScreen} />
-      </StyledList>
+      </MuiList>
       <MuiDivider />
-      <StyledList disablePadding>
-        <SidebarGroupLabel title="Manage" />
+      <MuiList disablePadding>
         {[
-          {
-            icon: <MuiArticleOutlinedIcon />,
-            to: "/projects",
-            title: "Projects",
-            isVisible: open,
-          },
           {
             icon: <MuiPestControlOutlinedIcon />,
             to: "/issues",
-            title: "Issues",
+            text: "Issues",
+            isVisible: open,
+          },
+          {
+            icon: <MuiArticleOutlinedIcon />,
+            to: "/projects",
+            text: "Projects",
             isVisible: open,
           },
           {
             icon: <MuiAssignmentTurnedInOutlinedIcon />,
             to: "/tasks",
-            title: "Tasks",
+            text: "Tasks",
             isVisible: open,
           },
-        ].map(({ icon, to, title }) => (
-          <SidebarGroupItem
-            icon={icon}
-            to={to}
-            title={title}
-            isVisible={open}
-          />
-        ))}
-      </StyledList>
+        ].map(({ icon, text, to }) => {
+          return (
+            <MuiListItem onClick={() => navigate(to)}>
+              <MuiListItemButton sx={sx}>
+                <MuiListItemIcon>{icon}</MuiListItemIcon>
+                <MuiListItemText primary={text} />
+              </MuiListItemButton>
+            </MuiListItem>
+          );
+        })}
+      </MuiList>
       <MuiDivider />
-      <StyledList disablePadding>
-        <SidebarGroup
-          title="Favourites"
-          isVisible={open}
-          icon={<MuiStarOutlinedIcon />}
-        />
-      </StyledList>
+      <MuiList>
+        <MuiListItem>
+          <MuiListItemButton>
+            <MuiListItemIcon>
+              <MuiKeyboardDoubleArrowRightIcon />
+            </MuiListItemIcon>
+            <MuiListItemText primary="Close" />
+          </MuiListItemButton>
+        </MuiListItem>
+      </MuiList>
     </Drawer>
   );
 }
