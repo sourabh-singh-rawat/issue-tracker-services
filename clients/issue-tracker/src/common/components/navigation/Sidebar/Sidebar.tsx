@@ -18,6 +18,7 @@ import MuiKeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleA
 
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 import { useNavigate } from "react-router-dom";
+import { MenuItem } from "../../../enums/menu-item";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
@@ -63,6 +64,26 @@ export default function Sidebar() {
       color: theme.palette.primary.main,
     },
   };
+  const list: MenuItem[] = [
+    {
+      icon: <MuiPestControlOutlinedIcon />,
+      to: "/issues",
+      text: "Issues",
+      isVisible: open,
+    },
+    {
+      icon: <MuiArticleOutlinedIcon />,
+      to: "/projects",
+      text: "Projects",
+      isVisible: open,
+    },
+    {
+      icon: <MuiAssignmentTurnedInOutlinedIcon />,
+      to: "/tasks",
+      text: "Tasks",
+      isVisible: open,
+    },
+  ];
 
   useEffect(() => {
     setOpen(isLargeScreen);
@@ -76,28 +97,13 @@ export default function Sidebar() {
       </MuiList>
       <MuiDivider />
       <MuiList disablePadding>
-        {[
-          {
-            icon: <MuiPestControlOutlinedIcon />,
-            to: "/issues",
-            text: "Issues",
-            isVisible: open,
-          },
-          {
-            icon: <MuiArticleOutlinedIcon />,
-            to: "/projects",
-            text: "Projects",
-            isVisible: open,
-          },
-          {
-            icon: <MuiAssignmentTurnedInOutlinedIcon />,
-            to: "/tasks",
-            text: "Tasks",
-            isVisible: open,
-          },
-        ].map(({ icon, text, to }) => {
+        {list.map(({ icon, text, to }) => {
           return (
-            <MuiListItem onClick={() => navigate(to)}>
+            <MuiListItem
+              onClick={() => {
+                if (to) navigate(to);
+              }}
+            >
               <MuiListItemButton sx={sx}>
                 <MuiListItemIcon>{icon}</MuiListItemIcon>
                 <MuiListItemText primary={text} />

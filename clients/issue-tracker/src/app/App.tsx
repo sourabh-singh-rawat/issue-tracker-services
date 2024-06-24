@@ -82,7 +82,10 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route element={<WorkspacesSettings />} path="workspaces"></Route>
+          <Route
+            element={<WorkspacesSettings />}
+            path="workspaces/:id/settings"
+          ></Route>
           {/* 
               <Route element={<IssueSettings />} path="settings" /> */}
         </Route>
