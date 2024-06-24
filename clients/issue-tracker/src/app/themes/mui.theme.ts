@@ -38,7 +38,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-let mode: "dark" | "light" = "light";
+let mode: "dark" | "light" = "dark";
 if (!mode) mode = "light";
 
 const shape: ThemeOptions["shape"] = {
@@ -146,6 +146,11 @@ export const theme = createTheme({
   ],
   typography,
   components: {
+    MuiMenu: {
+      defaultProps: {
+        sx: { borderRadius: shape.borderRadiusExtraExtraLarge },
+      },
+    },
     MuiListItem: {
       defaultProps: {
         disablePadding: true,
@@ -155,11 +160,16 @@ export const theme = createTheme({
     MuiListItemButton: {
       defaultProps: {
         disableRipple: true,
+        sx: {
+          paddingTop: 0.5,
+          paddingBottom: 0.5,
+        },
       },
     },
     MuiListItemIcon: {
       defaultProps: {
         sx: {
+          color: "inherit",
           minWidth: 32,
         },
       },

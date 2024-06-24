@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 
-import MuiDivider from "@mui/material/Divider";
-
 import WorkspaceModal from "../CreateWorkspaceModal";
-import WorkspaceListItem from "../WorkspaceListItem";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Menu from "@mui/material/Menu";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemButton from "@mui/material/ListItemButton";
+import Divider from "@mui/material/Divider";
 
-import MenuItem from "../../../../common/components/MenuItem";
-import StyledMenu from "../../../../common/components/styled/StyledMenu";
-import SettingsTwoToneIcon from "@mui/icons-material/SettingsTwoTone";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
+import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
+
 import MemberModal from "../MemberModal";
-import PersonAddAlt1TwoToneIcon from "@mui/icons-material/PersonAddAlt1TwoTone";
 import StyledList from "../../../../common/components/styled/StyledList";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../../common/hooks";
+import { MenuItem } from "../../../../common/enums/menu-item";
+import WorkspaceListItem from "../WorkspaceListItem";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
@@ -32,53 +39,65 @@ export default function WorkspaceMenu({
   selectedOption,
   setSelectedOption,
 }: WorkspaceMenuProps) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openMember, setOpenMember] = useState(false);
-  const navigate = useNavigate();
+  const workspaceId = useAppSelector(({ auth }) => auth.currentWorkspace.id);
 
-  const onClickOpenWorkspace = () => {
-    setOpen(true);
-    handleClose();
-  };
+  const menuItems: MenuItem[] = [
+    {
+      icon: <SettingsOutlinedIcon />,
+      text: "Settings",
+      to: `/workspaces/${workspaceId}/settings`,
+    },
+    {
+      icon: <PeopleAltOutlinedIcon />,
+      text: "Members",
+      to: `/workspaces/${workspaceId}/members`,
+    },
+  ];
 
-  const onClickOpenWorkspaceMembers = () => {
-    setOpenMember(true);
-    handleClose();
-  };
+  const workspaceActions: MenuItem[] = [
+    {
+      icon: <AddBoxOutlinedIcon />,
+      text: "Create workspace",
+      onClick: () => {
+        setOpen(true);
+        handleClose();
+      },
+    },
+    { icon: <LoopOutlinedIcon />, text: "Switch workspace" },
+  ];
 
   return (
     <>
-      <StyledMenu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <StyledList disablePadding>
-          <MenuItem
-            avatarIcon={<AddCircleIcon />}
-            label="Create new Workspace"
-            onClick={onClickOpenWorkspace}
-          />
-          <MenuItem
-            label="Invite Members"
-            onClick={onClickOpenWorkspaceMembers}
-            avatarIcon={<PersonAddAlt1TwoToneIcon />}
-          />
-          <MenuItem
-            label="Settings"
-            onClick={() => {
-              navigate("/workspaces");
-              handleClose();
-            }}
-            avatarIcon={<SettingsTwoToneIcon />}
-          />
-          <MenuItem
-            label="Manage Workspaces"
-            onClick={handleClose}
-            avatarIcon={<SettingsTwoToneIcon />}
-          />
-        </StyledList>
-        <MuiDivider />
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <List>
+          {menuItems.map(({ text, to, icon }) => (
+            <ListItem
+              onClick={() => {
+                if (to) navigate(to);
+                handleClose();
+              }}
+            >
+              <ListItemButton>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {workspaceActions.map(({ text, icon, onClick }) => (
+            <ListItem onClick={onClick}>
+              <ListItemButton>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
         {options.length > 0 && (
           <StyledList disablePadding>
             {options.map((option) => (
@@ -93,7 +112,7 @@ export default function WorkspaceMenu({
             ))}
           </StyledList>
         )}
-      </StyledMenu>
+      </Menu>
       <MemberModal open={openMember} handleClose={() => setOpenMember(false)} />
       <WorkspaceModal open={open} handleClose={() => setOpen(false)} />
     </>
