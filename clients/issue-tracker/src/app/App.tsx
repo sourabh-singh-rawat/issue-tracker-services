@@ -32,7 +32,9 @@ import IssueComments from "../features/issue-comments/pages/IssueComments";
 import IssueAttachments from "../features/issue-attachments/pages/IssueAttachments";
 import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 import Profile from "../features/user/pages/Profile";
-import WorkspacesSettings from "../features/workspace/pages/WorkspaceSettings";
+import Workspace from "../features/workspace/pages/Workspace";
+import WorkspaceSettings from "../features/workspace/pages/WorkspaceSettings";
+import WorkspaceMembers from "../features/workspace/pages/WorkspaceMembers";
 
 // import Team from "./features/team/pages/Team";
 // import TeamActivity from "./features/team/pages/TeamActivity";
@@ -82,12 +84,12 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route
-            element={<WorkspacesSettings />}
-            path="workspaces/:id/settings"
-          ></Route>
-          {/* 
-              <Route element={<IssueSettings />} path="settings" /> */}
+          <Route path="workspaces">
+            <Route path=":id" element={<Workspace />}>
+              <Route path="settings" element={<WorkspaceSettings />} />
+              <Route path="members" element={<WorkspaceMembers />} />
+            </Route>
+          </Route>
         </Route>
       </Route>
       <Route element={<NoComponent />} path="*" />
