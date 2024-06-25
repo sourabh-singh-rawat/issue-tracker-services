@@ -42,7 +42,7 @@ export default function Project() {
     settings: 4,
   };
 
-  const mapIndexToTab: { [k: number]: string } = {
+  const mapIndexToTab: Record<number, string> = {
     0: `/projects/${id}/overview`,
     1: `/projects/${id}/issues`,
     2: `/projects/${id}/members`,
