@@ -18,7 +18,7 @@ get:
           schema:
             type: object
             properties:
-              data:
+              rows:
                 type: object
                 properties:
                   id:
@@ -27,8 +27,45 @@ get:
                     type: string
                   createdAt:
                     type: string
+                  description:
+                    type: string
+                required: ["id", "name"]
     400:
       description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml
+patch:
+  tags: ["workspace"]
+  parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+      description: Numeric id of the workspace to update
+  summary: Update workspace fields
+  description: Update various fields of a particular workspace
+  operationId: updateWorkspace
+  requestBody:
+    description: Fields used to update workspace
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              $ref: ../../components/schemas/name.yaml
+            description:
+              type: string
+          required:
+            - name
+    required: true
+  responses:
+    200:
+      description: Workspace updated successfully
+    400:
+      description: Bad Request
       content:
         application/json:
           schema:

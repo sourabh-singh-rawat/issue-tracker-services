@@ -11,6 +11,7 @@ import {
   UserAlreadyExists,
   UserNotFoundError,
   WorkspaceMemberStatus,
+  WorkspaceNotFound,
   WorkspaceRegistrationData,
   WorkspaceRoles,
 } from "@issue-tracker/common";
@@ -150,8 +151,9 @@ export class CoreWorkspaceService implements WorkspaceService {
     if (!sender) throw new UserNotFoundError();
     const { defaultWorkspaceId } = sender;
 
-    const isReceiverMember =
-      await this.workspaceMemberRepository.existsById(email);
+    const isReceiverMember = await this.workspaceMemberRepository.existsById(
+      email,
+    );
     if (isReceiverMember) throw new UserAlreadyExists();
 
     const newWorkspaceMemberInvite = new WorkspaceMemberInviteEntity();
@@ -214,12 +216,8 @@ export class CoreWorkspaceService implements WorkspaceService {
   };
 
   getWorkspace = async (id: string) => {
-    const doesWorkspaceExists = await this.workspaceRepository.existsById(id);
-    if (!doesWorkspaceExists) {
-      throw Error("Workspace does not exist");
-    }
-
     const workspace = await this.workspaceRepository.findById(id);
+    if (!workspace) throw new WorkspaceNotFound();
 
     return new ServiceResponse({ rows: workspace });
   };
@@ -232,5 +230,18 @@ export class CoreWorkspaceService implements WorkspaceService {
     const rows = await this.workspaceMemberRepository.find(workspaceId);
 
     return new ServiceResponse({ rows, filteredRowCount: rows.length });
+  };
+
+  updateWorkspace = async (id: string, updateables: { name?: string }) => {
+    const workspace = await WorkspaceEntity.findOne({ where: { id } });
+
+    if (!workspace) throw new WorkspaceNotFound();
+
+    const { name } = updateables;
+    if (name) workspace.name = name;
+
+    await workspace.save();
+
+    return new ServiceResponse({ rows: id });
   };
 }

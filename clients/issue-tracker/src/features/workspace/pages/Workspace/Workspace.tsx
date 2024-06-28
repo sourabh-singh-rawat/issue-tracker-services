@@ -47,7 +47,7 @@ export default function Workspace() {
       </Grid>
 
       <Grid xs={12}>
-        <Outlet />
+        <Outlet context={{ selectedTab }} />
       </Grid>
     </Grid>
   );
