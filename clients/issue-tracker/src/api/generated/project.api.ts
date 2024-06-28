@@ -200,11 +200,16 @@ export type CreateProjectInviteApiArg = {
 };
 export const {
   useGetProjectListQuery,
+  useLazyGetProjectListQuery,
   useCreateProjectMutation,
   useGetProjectStatusListQuery,
+  useLazyGetProjectStatusListQuery,
   useGetProjectQuery,
+  useLazyGetProjectQuery,
   useUpdateProjectMutation,
   useGetProjectRoleListQuery,
+  useLazyGetProjectRoleListQuery,
   useGetProjectMembersQuery,
+  useLazyGetProjectMembersQuery,
   useCreateProjectInviteMutation,
 } = injectedRtkApi;

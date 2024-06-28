@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { WorkspaceService } from "../services/interfaces/workspace.service";
 import { WorkspaceRoles } from "@issue-tracker/common";
+import { WorkspaceController } from "./interfaces/workspace.controller";
 
-export class CoreWorkspaceController implements CoreWorkspaceController {
+export class CoreWorkspaceController implements WorkspaceController {
   constructor(private workspaceService: WorkspaceService) {}
 
   createWorkspace = async (
@@ -44,8 +45,9 @@ export class CoreWorkspaceController implements CoreWorkspaceController {
   ) => {
     const { inviteToken } = request.query;
 
-    const response =
-      await this.workspaceService.confirmWorkspaceInvite(inviteToken);
+    const response = await this.workspaceService.confirmWorkspaceInvite(
+      inviteToken,
+    );
 
     return reply.redirect(response.rows);
   };
@@ -64,6 +66,7 @@ export class CoreWorkspaceController implements CoreWorkspaceController {
     const { id } = request.params;
 
     const response = await this.workspaceService.getWorkspace(id);
+
     return reply.send(response);
   };
 
@@ -82,6 +85,20 @@ export class CoreWorkspaceController implements CoreWorkspaceController {
   ) => {
     const { id } = request.params;
     const response = await this.workspaceService.getWorkspaceMemberList(id);
+
+    return reply.send(response);
+  };
+
+  updateWorkspace = async (
+    request: FastifyRequest<{
+      Params: { id: string };
+      Body: { name?: string };
+    }>,
+    reply: FastifyReply,
+  ) => {
+    const { id } = request.params;
+    const { name } = request.body;
+    const response = await this.workspaceService.updateWorkspace(id, { name });
 
     return reply.send(response);
   };

@@ -6,4 +6,5 @@ export interface WorkspaceController {
   getWorkspace: (request: any, reply: any) => Promise<void>;
   confirmWorkspaceInvite: (request: any, reply: any) => Promise<void>;
   getWorkspaceMemberList: (request: any, reply: any) => Promise<void>;
+  updateWorkspace: (request: any, reply: any) => Promise<void>;
 }

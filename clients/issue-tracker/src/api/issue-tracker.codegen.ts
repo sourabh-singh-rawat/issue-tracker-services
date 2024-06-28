@@ -43,17 +43,18 @@ const config: ConfigFile = {
     "./generated/workspace.api.ts": {
       filterEndpoints: [
         "createWorkspace",
+        "createWorkspaceInvite",
         "getAllWorkspaces",
         "getWorkspace",
         "getWorkspaceRoleList",
-        "createWorkspaceInvite",
         "getProjectActivityList",
         "getWorkspaceMemberList",
+        "updateWorkspace",
       ],
     },
   },
   exportName: "issueTrackerApi",
-  hooks: true,
+  hooks: { queries: true, mutations: true, lazyQueries: true },
   tag: true,
 };
 

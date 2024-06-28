@@ -25,9 +25,13 @@ export interface WorkspaceService {
   ): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
   getAllWorkspaces(userId: string): Promise<ServiceResponse<WorkspaceEntity[]>>;
-  getWorkspace(id: string): Promise<ServiceResponse<WorkspaceEntity | null>>;
+  getWorkspace(id: string): Promise<ServiceResponse<WorkspaceEntity>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceRoles[]>>;
   getWorkspaceMemberList(
     workspaceId: string,
   ): Promise<ServiceResponse<WorkspaceMemberEntity[]>>;
+  updateWorkspace(
+    id: string,
+    updateables: { name?: string },
+  ): Promise<ServiceResponse<string>>;
 }

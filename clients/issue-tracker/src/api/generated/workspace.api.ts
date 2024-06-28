@@ -48,6 +48,17 @@ const injectedRtkApi = api
         }),
         providesTags: ["workspace"],
       }),
+      updateWorkspace: build.mutation<
+        UpdateWorkspaceApiResponse,
+        UpdateWorkspaceApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/issue-tracker/workspaces/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["workspace"],
+      }),
       createWorkspaceInvite: build.mutation<
         CreateWorkspaceInviteApiResponse,
         CreateWorkspaceInviteApiArg
@@ -112,15 +123,27 @@ export type CreateWorkspaceApiArg = {
   };
 };
 export type GetWorkspaceApiResponse = /** status 200 Returns the workspace */ {
-  data?: {
-    id?: string;
-    name?: string;
+  rows?: {
+    id: string;
+    name: string;
     createdAt?: string;
+    description?: string;
   };
 };
 export type GetWorkspaceApiArg = {
   /** Numeric id of the workspace to get */
   id: string;
+};
+export type UpdateWorkspaceApiResponse =
+  /** status 200 Workspace updated successfully */ void;
+export type UpdateWorkspaceApiArg = {
+  /** Numeric id of the workspace to update */
+  id?: string;
+  /** Fields used to update workspace */
+  body: {
+    name: string;
+    description?: string;
+  };
 };
 export type CreateWorkspaceInviteApiResponse =
   /** status 201 Workspace member created */ void;
@@ -139,10 +162,16 @@ export type GetWorkspaceRoleListApiResponse =
 export type GetWorkspaceRoleListApiArg = void;
 export const {
   useGetProjectActivityListQuery,
+  useLazyGetProjectActivityListQuery,
   useGetWorkspaceMemberListQuery,
+  useLazyGetWorkspaceMemberListQuery,
   useGetAllWorkspacesQuery,
+  useLazyGetAllWorkspacesQuery,
   useCreateWorkspaceMutation,
   useGetWorkspaceQuery,
+  useLazyGetWorkspaceQuery,
+  useUpdateWorkspaceMutation,
   useCreateWorkspaceInviteMutation,
   useGetWorkspaceRoleListQuery,
+  useLazyGetWorkspaceRoleListQuery,
 } = injectedRtkApi;

@@ -3321,7 +3321,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": {
+                    "rows": {
                       "type": "object",
                       "properties": {
                         "id": {
@@ -3332,8 +3332,15 @@
                         },
                         "createdAt": {
                           "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
                         }
-                      }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
                     }
                   }
                 }
@@ -3342,6 +3349,84 @@
           },
           "400": {
             "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "workspace"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric id of the workspace to update"
+          }
+        ],
+        "summary": "Update workspace fields",
+        "description": "Update various fields of a particular workspace",
+        "operationId": "updateWorkspace",
+        "requestBody": {
+          "description": "Fields used to update workspace",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "default": "",
+                    "errorMessage": "\"name\" is not allowed to be empty"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Workspace updated successfully"
+          },
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {

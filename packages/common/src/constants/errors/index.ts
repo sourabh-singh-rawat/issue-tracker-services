@@ -18,3 +18,4 @@ export * from "./user-profile-not-found.error";
 export * from "./utility.error";
 export * from "./validation";
 export * from "./version-missmatch.error";
+export * from "./workspace-not-found";
