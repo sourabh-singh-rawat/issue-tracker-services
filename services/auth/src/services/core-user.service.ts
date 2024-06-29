@@ -15,7 +15,6 @@ import {
   TransactionExecutionError,
   UnauthorizedError,
   UserAlreadyExists,
-  UserDetails,
   UserNotFoundError,
   UserProfileNotFoundError,
   UserRegistrationData,
@@ -107,6 +106,22 @@ export class CoreUserService implements UserService {
     });
   };
 
+  getUserInfoByEmail = async (email: string) => {
+    const user = await this.getUserByEmail(email);
+    if (!user) throw new UserNotFoundError();
+
+    const userProfile = await this.userProfileRepository.findByUserId(user.id);
+    if (!userProfile) throw new UserProfileNotFoundError();
+
+    return {
+      userId: user.id,
+      email: user.email,
+      displayName: userProfile.displayName,
+      createdAt: user.createdAt,
+      isEmailVerified: user.isEmailVerified,
+    };
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateUser = async (user: UserUpdatedPayload) => {
     throw new Error("Method not implemented.");
@@ -163,25 +178,5 @@ export class CoreUserService implements UserService {
 
     await this.userRepository.update(userId, updatedUser);
     await this.userUpdatedPublisher.publish(user);
-  };
-
-  getUserInfoByEmail = async (email: string) => {
-    const user = await this.getUserByEmail(email);
-    if (!user) throw new UserNotFoundError();
-
-    const userProfile = await this.userProfileRepository.findByUserId(user.id);
-    if (!userProfile) throw new UserProfileNotFoundError();
-
-    const userDetails = new UserDetails({
-      userId: user.id,
-      email: user.email,
-      displayName: userProfile.displayName,
-      defaultWorkspaceId: user.defaultWorkspaceId,
-      defaultWorkspaceName: user.defaultWorkspaceName,
-      createdAt: user.createdAt,
-      isEmailVerified: user.isEmailVerified,
-    });
-
-    return userDetails;
   };
 }

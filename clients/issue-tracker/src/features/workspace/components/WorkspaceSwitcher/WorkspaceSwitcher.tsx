@@ -1,8 +1,4 @@
-import React, { useState } from "react";
-
-import { useAppSelector } from "../../../../common/hooks";
-import { useGetAllWorkspacesQuery } from "../../../../api/generated/workspace.api";
-
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -15,14 +11,18 @@ import WorkspaceMenu from "../WorkspaceMenu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useTheme } from "@mui/material";
+import { useAppSelector } from "../../../../common/hooks";
+import { GetWorkspaceApiResponse } from "../../../../api/generated/workspace.api";
 
 export default function WorkspaceSwitcher() {
   const theme = useTheme();
-  const { data: workspaces } = useGetAllWorkspacesQuery();
-  const { id, name } = useAppSelector(({ auth }) => auth.currentWorkspace);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedOption, setSelectedOption] = useState({ id, name });
+  const { workspaces, defaultWorkspace } = useAppSelector((s) => s.workspace);
+  const { name } = defaultWorkspace;
+  const [selectedOption, setSelectedOption] = useState<
+    GetWorkspaceApiResponse["rows"]
+  >({ id: "", name: "" });
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -30,20 +30,24 @@ export default function WorkspaceSwitcher() {
 
   const handleClose = () => setAnchorEl(null);
 
+  useEffect(() => {
+    if (defaultWorkspace) setSelectedOption(defaultWorkspace);
+  }, [defaultWorkspace]);
+
   return (
     <List>
       <ListItem>
         <ListItemButton onClick={handleClick}>
           <ListItemIcon>
             <Avatar
-              alt={name[0]}
+              alt={"Default"}
               sx={{
                 height: 24,
                 width: 24,
                 bgcolor: theme.palette.primary.main,
               }}
             >
-              <Typography>{name[0]}</Typography>
+              <Typography>{name && name[0]}</Typography>
             </Avatar>
           </ListItemIcon>
           <ListItemText primary={name} />
@@ -52,13 +56,15 @@ export default function WorkspaceSwitcher() {
           </ListItemIcon>
         </ListItemButton>
       </ListItem>
-      <WorkspaceMenu
-        anchorEl={anchorEl}
-        options={workspaces?.rows}
-        selectedOption={selectedOption}
-        setSelectedOption={setSelectedOption}
-        handleClose={handleClose}
-      />
+      {selectedOption && (
+        <WorkspaceMenu
+          anchorEl={anchorEl}
+          options={workspaces}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+          handleClose={handleClose}
+        />
+      )}
     </List>
   );
 }

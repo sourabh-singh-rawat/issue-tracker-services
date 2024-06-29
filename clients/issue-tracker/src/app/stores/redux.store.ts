@@ -11,12 +11,14 @@ import profileSlice from "../../features/profile/profile.slice";
 import projectListSlice from "../../features/project-list/project-list.slice";
 import projectSlice from "../../features/project/project.slice";
 import taskListSlice from "../../features/task-list/task-list.slice";
+import workspaceSlice from "../../features/workspace/workspace.slice";
 
 export const store = configureStore({
   reducer: {
     [issueTrackerSlice.reducerPath]: issueTrackerSlice.reducer,
     [authApiSlice.reducerPath]: authApiSlice.reducer,
     auth: authSlice,
+    workspace: workspaceSlice,
     issue: issueSlice,
     issueList: issueListSlice,
     profile: profileSlice,

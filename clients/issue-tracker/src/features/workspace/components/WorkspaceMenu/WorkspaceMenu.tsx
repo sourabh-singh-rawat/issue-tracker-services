@@ -18,18 +18,18 @@ import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 import MemberModal from "../MemberModal";
 import StyledList from "../../../../common/components/styled/StyledList";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../../common/hooks";
 import { MenuItem } from "../../../../common/enums/menu-item";
 import WorkspaceListItem from "../WorkspaceListItem";
+import { GetWorkspaceApiResponse } from "../../../../api/generated/workspace.api";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
-  options?: { name: string; id: string; createdAt: string }[];
-  selectedOption: { id: string; name: string };
+  selectedOption: GetWorkspaceApiResponse["rows"];
   setSelectedOption: React.Dispatch<
-    React.SetStateAction<{ name: string; id: string }>
+    React.SetStateAction<GetWorkspaceApiResponse["rows"]>
   >;
+  options?: GetWorkspaceApiResponse["rows"][];
 }
 
 export default function WorkspaceMenu({
@@ -42,7 +42,7 @@ export default function WorkspaceMenu({
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openMember, setOpenMember] = useState(false);
-  const workspaceId = useAppSelector(({ auth }) => auth.currentWorkspace.id);
+  const workspaceId = selectedOption?.id;
 
   const menuItems: MenuItem[] = [
     {
@@ -102,7 +102,7 @@ export default function WorkspaceMenu({
           <StyledList disablePadding>
             {options.map((option) => (
               <WorkspaceListItem
-                key={option.id}
+                key={option?.id}
                 isOpen={open}
                 option={option}
                 selectedOption={selectedOption}

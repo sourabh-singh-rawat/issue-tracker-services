@@ -105,6 +105,7 @@ export type GetAllWorkspacesApiResponse = /** status 200 all workspaces */ {
   rows: {
     id: string;
     name: string;
+    status: string;
     createdAt: string;
   }[];
   rowCount: number;

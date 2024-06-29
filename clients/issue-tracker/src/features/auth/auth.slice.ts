@@ -7,11 +7,9 @@ const initialState: {
     isEmailVerified: boolean;
     userId: string;
   };
-  currentWorkspace: { id: string; name: string };
   isLoading: boolean;
 } = {
   currentUser: null,
-  currentWorkspace: { id: "", name: "" },
   isLoading: true,
 };
 

@@ -8,11 +8,11 @@ import { useMessageBar } from "../../../message-bar/hooks";
 import { useTheme } from "@mui/material";
 
 interface WorkspaceListItemProps {
-  option: { name: string; id: string };
-  selectedOption: { name: string; id: string } | undefined;
+  option: GetWorkspaceApiResponse["rows"];
+  selectedOption: GetWorkspaceApiResponse["rows"] | undefined;
   isOpen: boolean;
   setSelectedOption: React.Dispatch<
-    React.SetStateAction<{ name: string; id: string }>
+    React.SetStateAction<GetWorkspaceApiResponse["rows"]>
   >;
   handleClose: () => void;
 }
@@ -20,6 +20,7 @@ interface WorkspaceListItemProps {
 import MenuItem from "../../../../common/components/MenuItem";
 import Avatar from "../../../../common/components/Avatar";
 import { useSetDefaultWorkspaceMutation } from "../../../../api/generated/user.api";
+import { GetWorkspaceApiResponse } from "../../../../api/generated/workspace.api";
 
 export default function WorkspaceListItem({
   option,
@@ -28,6 +29,9 @@ export default function WorkspaceListItem({
   handleClose,
 }: WorkspaceListItemProps) {
   const theme = useTheme();
+
+  if (!option) return "Render Error";
+
   const { id, name } = option;
   const { showSuccess, showError } = useMessageBar();
   const [setDefaultWorkspace, { isLoading, isSuccess, isError }] =
