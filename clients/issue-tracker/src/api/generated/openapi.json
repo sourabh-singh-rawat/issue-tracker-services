@@ -3151,6 +3151,9 @@
                           "name": {
                             "type": "string"
                           },
+                          "status": {
+                            "type": "string"
+                          },
                           "createdAt": {
                             "type": "string"
                           }
@@ -3158,6 +3161,7 @@
                         "required": [
                           "id",
                           "name",
+                          "status",
                           "createdAt"
                         ]
                       }

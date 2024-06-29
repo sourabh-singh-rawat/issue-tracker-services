@@ -20,9 +20,11 @@ get:
                       type: string
                     name:
                       type: string
+                    status:
+                      type: string
                     createdAt:
                       type: string
-                  required: ["id", "name", "createdAt"]
+                  required: ["id", "name", "status", "createdAt"]
               rowCount:
                 type: number
             required: ["rows", "rowCount"]

@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { AuditEntity } from "@issue-tracker/orm";
+import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
 
 @Entity({ name: "workspaces" })
 export class WorkspaceEntity extends AuditEntity {
@@ -29,4 +30,16 @@ export class WorkspaceEntity extends AuditEntity {
   })
   @Column({ name: "owner_user_id", type: "uuid", nullable: false })
   ownerUserId!: string;
+
+  @Column({
+    name: "status",
+    enum: [
+      WORKSPACE_STATUS.ACTIVE,
+      WORKSPACE_STATUS.ARCHIVED,
+      WORKSPACE_STATUS.DEFAULT,
+      WORKSPACE_STATUS.PENDING,
+      WORKSPACE_STATUS.TEMPLATE,
+    ],
+  })
+  status!: WorkspaceStatus;
 }

@@ -16,6 +16,7 @@ import { Typeorm } from "@issue-tracker/orm";
 import { JwtToken } from "@issue-tracker/security";
 import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
 import { WorkspaceEntity } from "../../data/entities/workspace.entity";
+import { WORKSPACE_NAME, WORKSPACE_STATUS } from "@issue-tracker/common";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
@@ -37,31 +38,35 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       userId,
       email,
       isEmailVerified,
-      defaultWorkspaceName,
-      defaultWorkspaceId,
       displayName,
       photoUrl,
       inviteToken,
     } = payload;
 
-    const newUser = new UserEntity();
-    newUser.id = userId;
-    newUser.email = email;
-    newUser.defaultWorkspaceId = defaultWorkspaceId;
-    newUser.isEmailVerified = isEmailVerified;
-    newUser.displayName = displayName;
-    newUser.photoUrl = photoUrl;
-
     const queryRunner = this.orm.createQueryRunner();
     await this.orm.transaction(queryRunner, async () => {
-      await this.userRepository.save(newUser, { queryRunner });
+      const newUser = new UserEntity();
+      newUser.id = userId;
+      newUser.email = email;
+      newUser.isEmailVerified = isEmailVerified;
+      newUser.displayName = displayName;
+      newUser.photoUrl = photoUrl;
+      const savedUser = await this.userRepository.save(newUser, {
+        queryRunner,
+      });
 
       const newWorkspace = new WorkspaceEntity();
-      newWorkspace.id = defaultWorkspaceId;
-      newWorkspace.ownerUserId = userId;
-      newWorkspace.name = defaultWorkspaceName;
+      newWorkspace.ownerUserId = savedUser.id;
+      newWorkspace.name = WORKSPACE_NAME.DEFAULT;
+      newWorkspace.status = WORKSPACE_STATUS.DEFAULT;
 
-      await this.workspaceRepository.save(newWorkspace, { queryRunner });
+      const savedWorkspace = await this.workspaceRepository.save(newWorkspace, {
+        queryRunner,
+      });
+
+      newUser.defaultWorkspaceId = savedWorkspace.id;
+
+      await this.userRepository.updateUser(savedUser.id, newUser);
 
       if (inviteToken) {
         const token: WorkspaceInvitePayload = JwtToken.verify(
@@ -76,7 +81,17 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
         await this.workspaceMemberRepository.save(newWorkspaceMember, {
           queryRunner,
         });
+
+        return;
       }
+
+      const newWorkspaceMember = new WorkspaceMemberEntity();
+      newWorkspaceMember.userId = userId;
+      newWorkspaceMember.workspaceId = savedWorkspace.id;
+
+      await this.workspaceMemberRepository.save(newWorkspaceMember, {
+        queryRunner,
+      });
     });
 
     message.ack();

@@ -11,7 +11,7 @@ export class UserEntity extends AuditEntity {
   @Column({ type: "text", unique: true })
   email!: string;
 
-  @Column({ name: "default_workspace_id", type: "uuid" })
+  @Column({ name: "default_workspace_id", type: "uuid", nullable: true })
   defaultWorkspaceId!: string;
 
   @Column({

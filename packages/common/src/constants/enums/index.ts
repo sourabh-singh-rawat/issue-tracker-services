@@ -16,3 +16,5 @@ export * from "./issue-priority";
 export * from "./workspace-member-status";
 export * from "./issue-activity";
 export * from "./project-status";
+export * from "./workspace-status";
+export * from "./workspace-name";
