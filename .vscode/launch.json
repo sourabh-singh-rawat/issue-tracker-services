@@ -1,8 +1,28 @@
 {
   "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "start",
+      "configurations": [
+        "auth (service)",
+        "issue-tracker (service)",
+        "issue-tracker (client)",
+        "brave (debug - scoop)"
+      ]
+    }
+  ],
   "configurations": [
     {
-      "name": "issue-tracker-client(scoop)",
+      "name": "issue-tracker (client)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["client"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "brave (debug - scoop)",
       "request": "launch",
       "type": "chrome",
       "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
@@ -12,21 +32,21 @@
       "runtimeArgs": ["--remote-debugging-port=9222"]
     },
     {
-      "name": "issue-tracker",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issue-tracker"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "auth",
+      "name": "auth (service)",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["auth"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "issue-tracker (service)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["issue-tracker"],
       "console": "integratedTerminal"
     }
   ]
