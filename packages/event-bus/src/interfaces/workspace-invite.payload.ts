@@ -1,4 +1,7 @@
-import { WorkspaceMemberStatus, WorkspaceRoles } from "@issue-tracker/common";
+import {
+  WorkspaceMemberStatus,
+  WorkspaceMemberRoles,
+} from "@issue-tracker/common";
 
 export interface WorkspaceInvitePayload {
   senderId: string;
@@ -6,6 +9,6 @@ export interface WorkspaceInvitePayload {
   senderName: string;
   receiverEmail: string;
   receiverStatus: WorkspaceMemberStatus;
-  receiverRole: WorkspaceRoles;
+  receiverRole: WorkspaceMemberRoles;
   workspaceId: string;
 }

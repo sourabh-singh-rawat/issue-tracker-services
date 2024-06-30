@@ -1,6 +1,6 @@
 import { JsMsg } from "nats";
 import {
-  Consumers,
+  CONSUMERS,
   EventBus,
   Streams,
   Subjects,
@@ -11,7 +11,7 @@ import { UserService } from "../../services/interfaces/user.service";
 
 export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = Consumers.UserUpdatedConsumerIdentity;
+  readonly consumer = CONSUMERS.USER_UPDATED_CONSUMER_ISSUE_TRACKER;
   readonly subject = Subjects.USER_UPDATED;
 
   constructor(

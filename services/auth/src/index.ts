@@ -9,7 +9,6 @@ import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { IdentityController } from "./controllers/interfaces/identity.controller";
 import { IdentityService } from "./services/interfaces/identity.service";
-import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscribers";
 import { UserUpdatedSubscriber } from "./events/subscribers/user-updated.subscribers";
 import { AccessTokenRepository } from "./data/repositories/interfaces/access-token-repository";
 import { RefreshTokenRepository } from "./data/repositories/interfaces/refresh-token-repository";
@@ -46,7 +45,6 @@ export interface RegisteredServices {
   refreshTokenRepository: RefreshTokenRepository;
   userCreatedPublisher: UserCreatedPublisher;
   userUpdatedPublisher: UserUpdatedPublisher;
-  userCreatedSubscriber: UserCreatedSubscriber;
   userUpdatedSubscriber: UserUpdatedSubscriber;
 }
 
@@ -117,7 +115,6 @@ const main = async () => {
   add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
   add("userCreatedPublisher", asClass(UserCreatedPublisher));
   add("userUpdatedPublisher", asClass(UserUpdatedPublisher));
-  add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
   add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
 
   container.init();

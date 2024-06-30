@@ -4,7 +4,7 @@ import { UserRepository } from "../../data/repositories/interfaces/user.reposito
 import { WorkspaceMemberRepository } from "../../data/repositories/interfaces/workspace-member.repository";
 import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
 import {
-  Consumers,
+  CONSUMERS,
   EventBus,
   Streams,
   Subjects,
@@ -25,7 +25,7 @@ import {
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = Consumers.UserCreatedConsumerProject;
+  readonly consumer = CONSUMERS.USER_CREATED_CONSUMER_ISSUE_TRACKER;
   readonly subject = Subjects.USER_CREATED;
 
   constructor(
