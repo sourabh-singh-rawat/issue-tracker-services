@@ -1,28 +1,7 @@
-export enum Consumers {
-  UserCreatedConsumerActivity = "user-created-consumer-activity",
-  UserCreatedConsumerEmail = "user-created-consumer-email",
-  UserCreatedConsumerIdentity = "user-created-consumer-identity",
-  UserCreatedConsumerIssue = "user-created-consumer-issue",
-  UserCreatedConsumerProject = "user-created-consumer-project",
-  UserCreatedConsumerWorkspace = "user-created-consumer-workspace",
+export const CONSUMERS = {
+  USER_CREATED_CONSUMER_ISSUE_TRACKER: "user-created-consumer-issue-tracker",
+  USER_UPDATED_CONSUMER_ISSUE_TRACKER: "user-updated-consumer-issue-tracker",
+  EMAIL_CREATED_CONSUMER_AUTH: "email-created-consumer-auth",
+} as const;
 
-  UserUpdatedConsumerActivity = "user-updated-consumer-activity",
-  UserUpdatedConsumerIdentity = "user-updated-consumer-identity",
-  UserUpdatedConsumerWorkspace = "user-updated-consumer-workspace",
-  UserUpdatedConsumerProject = "user-updated-consumer-project",
-  UserUpdatedConsumerIssue = "user-updated-consumer-issue",
-
-  EmailCreatedConsumerUser = "email-created-consumer-user",
-
-  ProjectCreatedConsumerIssue = "project-created-consumer-issue",
-  ProjectCreatedConsumerActivity = "project-created-consumer-activity",
-  ProjectMemberCreatedConsumerEmail = "project-member-created-consumer-email",
-  ProjectUpdatedConsumerActivity = "project-updated-consumer-activity",
-
-  IssueCreatedConsumerActivity = "issue-created-consumer-activity",
-
-  WorkspaceCreatedConsumerProject = "workspace-created-consumer-project",
-  WorkspaceUpdatedConsumerProject = "workspace-updated-consumer-project",
-
-  WorkspaceInviteCreatedConsumerEmail = "workspace-invite-created-consumer-email",
-}
+export type Consumers = (typeof CONSUMERS)[keyof typeof CONSUMERS];
