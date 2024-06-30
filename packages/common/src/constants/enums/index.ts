@@ -7,7 +7,7 @@ export * from "./log-levels";
 export * from "./project-activity";
 export * from "./project-invite-status";
 export * from "./workspace-permissions";
-export * from "./workspace-roles";
+export * from "./workspace-member-roles";
 export * from "./project-permissions";
 export * from "./project-roles";
 export * from "./issue-roles";
