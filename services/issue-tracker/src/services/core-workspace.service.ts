@@ -10,7 +10,7 @@ import {
   TransactionExecutionError,
   UserAlreadyExists,
   UserNotFoundError,
-  WorkspaceMemberStatus,
+  WORKSPACE_MEMBER_STATUS,
   WorkspaceNotFound,
   WorkspaceRegistrationData,
   WorkspaceRoles,
@@ -160,7 +160,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     newWorkspaceMemberInvite.senderId = userId;
     newWorkspaceMemberInvite.receiverEmail = email;
     newWorkspaceMemberInvite.workspaceId = defaultWorkspaceId;
-    newWorkspaceMemberInvite.status = WorkspaceMemberStatus.PENDING;
+    newWorkspaceMemberInvite.status = WORKSPACE_MEMBER_STATUS.PENDING;
 
     const { status } = await this.workspaceMemberInviteRepository.save(
       newWorkspaceMemberInvite,
