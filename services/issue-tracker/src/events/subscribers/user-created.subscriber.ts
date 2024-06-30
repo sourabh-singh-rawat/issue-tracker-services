@@ -66,7 +66,9 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
 
       newUser.defaultWorkspaceId = savedWorkspace.id;
 
-      await this.userRepository.updateUser(savedUser.id, newUser);
+      await this.userRepository.updateUser(savedUser.id, newUser, {
+        queryRunner,
+      });
 
       if (inviteToken) {
         const token: WorkspaceInvitePayload = JwtToken.verify(
