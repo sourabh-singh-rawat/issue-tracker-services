@@ -30,17 +30,6 @@ export class CoreUserController implements UserController {
     return reply.status(StatusCodes.CREATED).send();
   };
 
-  setDefaultWorkspace = async (
-    request: FastifyRequest<{ Body: { id: string; name: string } }>,
-    reply: FastifyReply,
-  ) => {
-    const { userId } = request.currentUser;
-    const { id, name } = request.body;
-
-    await this.userService.setDefaultWorkspace(userId, id, name);
-    return reply.send();
-  };
-
   verifyPassword = async (
     request: FastifyRequest<{ Body: AuthCredentials }>,
     reply: FastifyReply,

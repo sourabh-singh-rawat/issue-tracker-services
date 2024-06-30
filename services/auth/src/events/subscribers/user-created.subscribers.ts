@@ -27,7 +27,6 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       userId,
       email,
       isEmailVerified,
-      defaultWorkspaceId,
       // displayName,
       // photoUrl,
     } = payload;
@@ -35,7 +34,6 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     const newUser = new UserEntity();
     newUser.id = userId;
     newUser.email = email;
-    newUser.defaultWorkspaceId = defaultWorkspaceId;
     newUser.isEmailVerified = isEmailVerified;
     // newUser.displayName = displayName;
     // newUser.photoUrl = photoUrl;

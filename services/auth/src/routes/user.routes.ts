@@ -22,7 +22,6 @@ export const userRoutes = (container: AwilixDi<RegisteredServices>) => {
 
     fastify.post("/register", noAuth, controller.registerUser);
     fastify.post("/verify-password", controller.verifyPassword);
-    fastify.post("/default-workspace", auth, controller.setDefaultWorkspace);
     fastify.get("/me", auth, controller.getCurrentUser);
     fastify.get("/:id/confirm", controller.verifyEmail);
 
