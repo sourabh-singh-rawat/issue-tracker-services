@@ -1,7 +1,7 @@
 import {
   ServiceResponse,
   WorkspaceRegistrationData,
-  WorkspaceRoles,
+  WorkspaceMemberRoles,
 } from "@issue-tracker/common";
 import { UserEntity } from "../../data/entities";
 import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
@@ -16,17 +16,17 @@ export interface WorkspaceService {
   createWorkspaceMember(
     userId: string,
     workspaceId: string,
-    role: WorkspaceRoles,
+    role: WorkspaceMemberRoles,
   ): Promise<void>;
   createWorkspaceInvite(
     userId: string,
     email: string,
-    role: WorkspaceRoles,
+    role: WorkspaceMemberRoles,
   ): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
   getAllWorkspaces(userId: string): Promise<ServiceResponse<WorkspaceEntity[]>>;
   getWorkspace(id: string): Promise<ServiceResponse<WorkspaceEntity>>;
-  getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceRoles[]>>;
+  getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceMemberRoles[]>>;
   getWorkspaceMemberList(
     workspaceId: string,
   ): Promise<ServiceResponse<WorkspaceMemberEntity[]>>;

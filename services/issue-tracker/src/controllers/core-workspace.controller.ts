@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { WorkspaceService } from "../services/interfaces/workspace.service";
-import { WorkspaceRoles } from "@issue-tracker/common";
+import { WorkspaceMemberRoles } from "@issue-tracker/common";
 import { WorkspaceController } from "./interfaces/workspace.controller";
 
 export class CoreWorkspaceController implements WorkspaceController {
@@ -23,7 +23,7 @@ export class CoreWorkspaceController implements WorkspaceController {
 
   createWorkspaceInvite = async (
     request: FastifyRequest<{
-      Body: { email: string; workspaceRole: WorkspaceRoles };
+      Body: { email: string; workspaceRole: WorkspaceMemberRoles };
     }>,
     reply: FastifyReply,
   ) => {

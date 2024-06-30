@@ -16,7 +16,12 @@ import { Typeorm } from "@issue-tracker/orm";
 import { JwtToken } from "@issue-tracker/security";
 import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
 import { WorkspaceEntity } from "../../data/entities/workspace.entity";
-import { WORKSPACE_NAME, WORKSPACE_STATUS } from "@issue-tracker/common";
+import {
+  WORKSPACE_MEMBER_ROLES,
+  WORKSPACE_MEMBER_STATUS,
+  WORKSPACE_NAME,
+  WORKSPACE_STATUS,
+} from "@issue-tracker/common";
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
@@ -90,6 +95,8 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       const newWorkspaceMember = new WorkspaceMemberEntity();
       newWorkspaceMember.userId = userId;
       newWorkspaceMember.workspaceId = savedWorkspace.id;
+      newWorkspaceMember.role = WORKSPACE_MEMBER_ROLES.OWNER;
+      newWorkspaceMember.status = WORKSPACE_MEMBER_STATUS.ACTIVE;
 
       await this.workspaceMemberRepository.save(newWorkspaceMember, {
         queryRunner,
