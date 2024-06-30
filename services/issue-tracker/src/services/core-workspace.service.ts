@@ -13,7 +13,8 @@ import {
   WORKSPACE_MEMBER_STATUS,
   WorkspaceNotFound,
   WorkspaceRegistrationData,
-  WorkspaceRoles,
+  WorkspaceMemberRoles,
+  WORKSPACE_MEMBER_ROLES,
 } from "@issue-tracker/common";
 import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
@@ -145,7 +146,7 @@ export class CoreWorkspaceService implements WorkspaceService {
   createWorkspaceInvite = async (
     userId: string,
     email: string,
-    role: WorkspaceRoles,
+    role: WorkspaceMemberRoles,
   ) => {
     const sender = await this.userRepository.findById(userId);
     if (!sender) throw new UserNotFoundError();
@@ -223,7 +224,7 @@ export class CoreWorkspaceService implements WorkspaceService {
   };
 
   getWorkspaceRoleList = async () => {
-    return new ServiceResponse({ rows: Object.values(WorkspaceRoles) });
+    return new ServiceResponse({ rows: Object.values(WORKSPACE_MEMBER_ROLES) });
   };
 
   getWorkspaceMemberList = async (workspaceId: string) => {

@@ -30,7 +30,7 @@ export class WorkspaceMemberInviteEntity extends AuditEntity {
   workspaceId!: string;
 
   @Column({
-    type: "text",
+    type: "enum",
     default: WORKSPACE_MEMBER_STATUS.PENDING,
     enum: [
       WORKSPACE_MEMBER_STATUS.ACTIVE,
