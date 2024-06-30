@@ -63,7 +63,6 @@ export class CoreUserService implements UserService {
     newUser.email = email;
     newUser.passwordHash = hash;
     newUser.passwordSalt = salt;
-    newUser.defaultWorkspaceName = "Default Workspace";
 
     // Create user and their profile
     const queryRunner = this.orm.createQueryRunner();
@@ -98,8 +97,6 @@ export class CoreUserService implements UserService {
       userId: savedUser.id,
       email: savedUser.email,
       isEmailVerified: savedUser.isEmailVerified,
-      defaultWorkspaceName: savedUser.defaultWorkspaceName,
-      defaultWorkspaceId: savedUser.defaultWorkspaceId,
       displayName: savedUserProfile.displayName,
       photoUrl: savedUserProfile.photoUrl,
       inviteToken,
@@ -125,27 +122,6 @@ export class CoreUserService implements UserService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateUser = async (user: UserUpdatedPayload) => {
     throw new Error("Method not implemented.");
-  };
-
-  setDefaultWorkspace = async (userId: string, id: string, name: string) => {
-    const user = await this.getUserById(userId);
-    if (!user) {
-      throw new UserNotFoundError();
-    }
-
-    const updatedUser = new UserEntity();
-    updatedUser.defaultWorkspaceId = id;
-    updatedUser.defaultWorkspaceName = name;
-
-    await this.userRepository.update(userId, updatedUser);
-
-    // publish user updated
-    this.userUpdatedPublisher.publish({
-      id: userId,
-      defaultWorkspaceId: id,
-      version: user.version,
-      isEmailVerified: user.isEmailVerified,
-    });
   };
 
   verifyPassword = async (credentials: AuthCredentials) => {
