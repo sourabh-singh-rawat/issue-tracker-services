@@ -1,0 +1,24 @@
+get:
+  tags: ["workspace"]
+  summary: Get all workspace members
+  description: Get all workspace members
+  operationId: getWorkspaceMembers
+  parameters:
+    - name: id
+      in: path
+      description: Numeric id of the workspace
+      schema:
+        type: string
+  responses:
+    200:
+      description: All the workspace members
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/workspace-member.yaml
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/error.yaml

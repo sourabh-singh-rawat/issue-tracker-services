@@ -1,12 +1,12 @@
 get:
-  tags: [ "project" ]
+  tags: ["project"]
   summary: Get list of all project statuses available
   description: Get project statuses
   operationId: getProjectStatusList
-  responses: 
+  responses:
     200:
       description: Get project status list
-      content: 
+      content:
         application/json:
           schema:
             type: object
@@ -15,7 +15,7 @@ get:
                 type: array
                 items:
                   type: string
-              rowCount: 
+              rowCount:
                 type: number
             required: ["rows", "rowCount"]
     400:
