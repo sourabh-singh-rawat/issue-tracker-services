@@ -114,6 +114,9 @@ paths:
   /issue-tracker/workspaces/invite:
     description: Creates a workspace member
     $ref: workspace/paths/invite.yaml
+  /issue-tracker/workspaces/{id}/members:
+    description: Get all workspace members
+    $ref: workspace/paths/workspace-members.yaml
   /issue-tracker/workspaces/role:
     description: Get a list of workspace roles
     $ref: workspace/paths/role.yaml

@@ -1,0 +1,12 @@
+type: object
+properties:
+  id:
+    type: string
+  userId:
+    type: string
+  workspaceId:
+    type: string
+  status:
+    type: string
+  role:
+    type: string

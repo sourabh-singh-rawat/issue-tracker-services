@@ -121,13 +121,6 @@ export class CoreWorkspaceService implements WorkspaceService {
     return new ServiceResponse({ rows: savedWorkspace.id });
   };
 
-  /**
-   * Should create a workspace member if they do not exists
-   * @param userId
-   * @param workspaceId
-   * @param role
-   * @returns
-   */
   createWorkspaceMember = async (userId: string, workspaceId: string) => {
     const isMember = await this.workspaceMemberRepository.existsByUserId(
       userId,

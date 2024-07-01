@@ -3538,6 +3538,85 @@
         }
       }
     },
+    "/issue-tracker/workspaces/{id}/members": {
+      "description": "Get all workspace members",
+      "get": {
+        "tags": [
+          "workspace"
+        ],
+        "summary": "Get all workspace members",
+        "description": "Get all workspace members",
+        "operationId": "getWorkspaceMembers",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric id of the workspace",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All the workspace members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "workspaceId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/issue-tracker/workspaces/role": {
       "description": "Get a list of workspace roles",
       "get": {
