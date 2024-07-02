@@ -8,6 +8,7 @@ export * from "./project-activity";
 export * from "./project-invite-status";
 export * from "./workspace-permissions";
 export * from "./workspace-member-roles";
+export * from "./workspace-member-invite-status";
 export * from "./project-permissions";
 export * from "./project-roles";
 export * from "./issue-roles";

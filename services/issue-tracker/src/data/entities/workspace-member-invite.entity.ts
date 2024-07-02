@@ -9,7 +9,7 @@ import { WorkspaceEntity } from "./workspace.entity";
 import { UserEntity } from "./user.entity";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
-  WORKSPACE_MEMBER_STATUS,
+  WORKSPACE_MEMBER_INVITE_STATUS,
   WorkspaceMemberStatus,
 } from "@issue-tracker/common";
 
@@ -31,15 +31,14 @@ export class WorkspaceMemberInviteEntity extends AuditEntity {
 
   @Column({
     type: "enum",
-    default: WORKSPACE_MEMBER_STATUS.PENDING,
+    default: WORKSPACE_MEMBER_INVITE_STATUS.PENDING,
     enum: [
-      WORKSPACE_MEMBER_STATUS.ACTIVE,
-      WORKSPACE_MEMBER_STATUS.BLOCKED,
-      WORKSPACE_MEMBER_STATUS.DELETED,
-      WORKSPACE_MEMBER_STATUS.INVITED,
-      WORKSPACE_MEMBER_STATUS.PENDING,
-      WORKSPACE_MEMBER_STATUS.REMOVED,
-      WORKSPACE_MEMBER_STATUS.SUSPENED,
+      WORKSPACE_MEMBER_INVITE_STATUS.ACCEPTED,
+      WORKSPACE_MEMBER_INVITE_STATUS.DECLINED,
+      WORKSPACE_MEMBER_INVITE_STATUS.ERROR,
+      WORKSPACE_MEMBER_INVITE_STATUS.EXPIRED,
+      WORKSPACE_MEMBER_INVITE_STATUS.PENDING,
+      WORKSPACE_MEMBER_INVITE_STATUS.REVOKED,
     ],
   })
   status!: WorkspaceMemberStatus;
