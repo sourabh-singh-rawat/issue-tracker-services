@@ -1,11 +1,6 @@
 import { EventBus } from "./interfaces/event-bus";
 import { AppLogger } from "@issue-tracker/server-core";
-import {
-  ConnectionOptions,
-  NatsConnection,
-  RetentionPolicy,
-  connect,
-} from "nats";
+import { ConnectionOptions, NatsConnection, connect } from "nats";
 
 export class NatsEventBus implements EventBus {
   public client?: NatsConnection;
@@ -25,7 +20,6 @@ export class NatsEventBus implements EventBus {
       await jsm?.streams.add({
         name: stream,
         subjects: [`${stream}.*`],
-        retention: RetentionPolicy.Workqueue,
       });
     });
   };
