@@ -5,6 +5,6 @@ export interface WorkspaceController {
   getWorkspaceRoleList: (request: any, reply: any) => Promise<void>;
   getWorkspace: (request: any, reply: any) => Promise<void>;
   confirmWorkspaceInvite: (request: any, reply: any) => Promise<void>;
-  getWorkspaceMemberList: (request: any, reply: any) => Promise<void>;
+  getWorkspaceMembers: (request: any, reply: any) => Promise<void>;
   updateWorkspace: (request: any, reply: any) => Promise<void>;
 }

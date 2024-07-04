@@ -33,7 +33,14 @@ export class PostgresWorkspaceMemberRepository
   };
 
   find = async (workspaceId: string) => {
-    return await WorkspaceMemberEntity.find({ where: { workspaceId } });
+    const members = await WorkspaceMemberEntity.find({
+      where: { workspaceId },
+      relations: { user: true },
+    });
+
+    console.log(members);
+
+    return members;
   };
 
   softDelete = async () => {

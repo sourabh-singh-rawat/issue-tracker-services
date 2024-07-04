@@ -15,15 +15,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["issue"],
       }),
-      getWorkspaceMemberList: build.query<
-        GetWorkspaceMemberListApiResponse,
-        GetWorkspaceMemberListApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/issue-tracker/projects/${queryArg.id}/workspace-members`,
-        }),
-        providesTags: ["workspace"],
-      }),
       getAllWorkspaces: build.query<
         GetAllWorkspacesApiResponse,
         GetAllWorkspacesApiArg
@@ -70,6 +61,15 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["workspace"],
       }),
+      getWorkspaceMembers: build.query<
+        GetWorkspaceMembersApiResponse,
+        GetWorkspaceMembersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/issue-tracker/workspaces/${queryArg.id}/members`,
+        }),
+        providesTags: ["workspace"],
+      }),
       getWorkspaceRoleList: build.query<
         GetWorkspaceRoleListApiResponse,
         GetWorkspaceRoleListApiArg
@@ -88,18 +88,6 @@ export type GetProjectActivityListApiResponse =
   };
 export type GetProjectActivityListApiArg = {
   id?: string;
-};
-export type GetWorkspaceMemberListApiResponse =
-  /** status 200 Returns the workspace members */ {
-    rows?: {
-      id?: string;
-      displayName?: string;
-      createdAt?: string;
-    };
-  };
-export type GetWorkspaceMemberListApiArg = {
-  /** Numeric id of the workspace */
-  id: string;
 };
 export type GetAllWorkspacesApiResponse = /** status 200 all workspaces */ {
   rows: {
@@ -155,6 +143,21 @@ export type CreateWorkspaceInviteApiArg = {
     workspaceRole: string;
   };
 };
+export type GetWorkspaceMembersApiResponse =
+  /** status 200 All the workspace members */ {
+    rows?: {
+      id?: string;
+      userId?: string;
+      workspaceId?: string;
+      status?: string;
+      role?: string;
+    }[];
+    filteredRowCount?: number;
+  };
+export type GetWorkspaceMembersApiArg = {
+  /** Numeric id of the workspace */
+  id?: string;
+};
 export type GetWorkspaceRoleListApiResponse =
   /** status 200 Get workspace roles list */ {
     rows: string[];
@@ -164,8 +167,6 @@ export type GetWorkspaceRoleListApiArg = void;
 export const {
   useGetProjectActivityListQuery,
   useLazyGetProjectActivityListQuery,
-  useGetWorkspaceMemberListQuery,
-  useLazyGetWorkspaceMemberListQuery,
   useGetAllWorkspacesQuery,
   useLazyGetAllWorkspacesQuery,
   useCreateWorkspaceMutation,
@@ -173,6 +174,8 @@ export const {
   useLazyGetWorkspaceQuery,
   useUpdateWorkspaceMutation,
   useCreateWorkspaceInviteMutation,
+  useGetWorkspaceMembersQuery,
+  useLazyGetWorkspaceMembersQuery,
   useGetWorkspaceRoleListQuery,
   useLazyGetWorkspaceRoleListQuery,
 } = injectedRtkApi;

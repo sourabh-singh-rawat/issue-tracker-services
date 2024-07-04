@@ -1,5 +1,6 @@
 import { AuditEntity } from "@issue-tracker/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { WorkspaceMemberEntity } from "./workspace-member.entity";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
@@ -26,4 +27,7 @@ export class UserEntity extends AuditEntity {
 
   @Column({ name: "photo_url", type: "text", nullable: true })
   photoUrl?: string;
+
+  @OneToMany(() => WorkspaceMemberEntity, ({ user }) => user)
+  memberWorkspaces?: WorkspaceMemberEntity[];
 }

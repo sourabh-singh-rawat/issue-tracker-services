@@ -3565,20 +3565,31 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "string"
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "workspaceId": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "role": {
+                            "type": "string"
+                          }
+                        }
+                      }
                     },
-                    "userId": {
-                      "type": "string"
-                    },
-                    "workspaceId": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "role": {
-                      "type": "string"
+                    "filteredRowCount": {
+                      "type": "number"
                     }
                   }
                 }

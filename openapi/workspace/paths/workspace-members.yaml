@@ -15,7 +15,14 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../components/schemas/workspace-member.yaml
+            type: object
+            properties:
+              rows:
+                type: array
+                items:
+                  $ref: ../../components/schemas/workspace-member.yaml
+              filteredRowCount:
+                type: number
     400:
       description: Bad request
       content:
