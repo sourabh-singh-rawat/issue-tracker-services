@@ -28,9 +28,9 @@ export default function AddProjectMemberModal({
 }: AddProjectMemberModalProps) {
   const { id } = useSelectedTab();
 
-  const { data: workspaceMemberList } = useGetWorkspaceMemberListQuery({
-    id,
-  });
+  // const { data: workspaceMemberList } = useGetWorkspaceMemberListQuery({
+  //   id,
+  // });
 
   return (
     <Modal open={open} handleClose={handleClose}>
@@ -41,50 +41,52 @@ export default function AddProjectMemberModal({
       />
       <ModalBody>
         <MuiList dense>
-          {workspaceMemberList?.rows?.map(
-            ({
-              id,
-              displayName,
-              email,
-              createdAt,
-              role,
-              workspaceId,
-              inviteStatus,
-            }) => (
-              <MuiListItem
-                xs={12}
-                key={id}
-                secondaryAction={
-                  <RoleSelector
-                    defaultRole={role}
-                    inviteStatus={inviteStatus}
-                    userId={id}
-                    workspaceId={workspaceId}
-                  />
-                }
-                item
-              >
-                <MuiListItemAvatar>
-                  <Avatar label={displayName} width="24" height="24" />
-                </MuiListItemAvatar>
-                <MuiListItemText
-                  primary={
-                    <MuiTypography fontWeight={600}>
-                      {displayName}
-                    </MuiTypography>
-                  }
-                  secondary={
-                    <MuiBreadcrumbs separator="•">
-                      <MuiTypography variant="body2">{email}</MuiTypography>
-                      <MuiTypography variant="body2">
-                        {dayjs(createdAt).fromNow()}
-                      </MuiTypography>
-                    </MuiBreadcrumbs>
-                  }
-                />
-              </MuiListItem>
-            ),
-          )}
+          {
+            // {workspaceMemberList?.rows?.map(
+            //   ({
+            //     id,
+            //     displayName,
+            //     email,
+            //     createdAt,
+            //     role,
+            //     workspaceId,
+            //     inviteStatus,
+            //   }) => (
+            //     <MuiListItem
+            //       xs={12}
+            //       key={id}
+            //       secondaryAction={
+            //         <RoleSelector
+            //           defaultRole={role}
+            //           inviteStatus={inviteStatus}
+            //           userId={id}
+            //           workspaceId={workspaceId}
+            //         />
+            //       }
+            //       item
+            //     >
+            //       <MuiListItemAvatar>
+            //         <Avatar label={displayName} width="24" height="24" />
+            //       </MuiListItemAvatar>
+            //       <MuiListItemText
+            //         primary={
+            //           <MuiTypography fontWeight={600}>
+            //             {displayName}
+            //           </MuiTypography>
+            //         }
+            //         secondary={
+            //           <MuiBreadcrumbs separator="•">
+            //             <MuiTypography variant="body2">{email}</MuiTypography>
+            //             <MuiTypography variant="body2">
+            //               {dayjs(createdAt).fromNow()}
+            //             </MuiTypography>
+            //           </MuiBreadcrumbs>
+            //         }
+            //       />
+            //     </MuiListItem>
+            //   ),
+            // )}
+          }
         </MuiList>
       </ModalBody>
     </Modal>

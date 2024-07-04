@@ -220,7 +220,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     return new ServiceResponse({ rows: Object.values(WORKSPACE_MEMBER_ROLES) });
   };
 
-  getWorkspaceMemberList = async (workspaceId: string) => {
+  getWorkspaceMembers = async (workspaceId: string) => {
     const rows = await this.workspaceMemberRepository.find(workspaceId);
 
     return new ServiceResponse({ rows, filteredRowCount: rows.length });

@@ -48,7 +48,7 @@ const config: ConfigFile = {
         "getWorkspace",
         "getWorkspaceRoleList",
         "getProjectActivityList",
-        "getWorkspaceMemberList",
+        "getWorkspaceMembers",
         "updateWorkspace",
       ],
     },

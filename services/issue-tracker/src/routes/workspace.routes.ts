@@ -22,7 +22,7 @@ export const workspaceRoutes =
     fastify.get("/role", auth, controller.getWorkspaceRoleList);
     fastify.get("/:id", auth, controller.getWorkspace);
     fastify.get("/:id/invite/confirm", controller.confirmWorkspaceInvite);
-    // fastify.get("/:id/members", controller.getWorkspaceMemberList);
+    fastify.get("/:id/members", controller.getWorkspaceMembers);
     fastify.patch("/:id", controller.updateWorkspace);
 
     done();
