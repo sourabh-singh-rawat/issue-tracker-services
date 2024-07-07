@@ -1,7 +1,9 @@
+import { UserEmailConfirmationStatus } from "@issue-tracker/common";
+
 export interface UserCreatedPayload {
   userId: string;
   email: string;
-  isEmailVerified: boolean;
+  emailConfirmationStatus: UserEmailConfirmationStatus;
   displayName: string;
   photoUrl?: string;
   inviteToken?: string;

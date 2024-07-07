@@ -1,12 +1,14 @@
 import {
   ProjectMemberPayload,
-  UserCreatedPayload,
   WorkspaceInvitePayload,
 } from "@issue-tracker/event-bus";
+import { UserEmailConfirmationEntity } from "../../data/entities/user-email-confirmation.entity";
 
 export interface EmailService {
   createInviteToken(payload: WorkspaceInvitePayload): string;
-  sendVerificationEmail(payload: UserCreatedPayload): Promise<void>;
+  sendUserEmailConfirmation(
+    userEmailConfirmation: UserEmailConfirmationEntity,
+  ): Promise<void>;
   sendWorkspaceInvitation(payload: WorkspaceInvitePayload): Promise<void>;
   sendProjectInvitation(payload: ProjectMemberPayload): Promise<void>;
 }

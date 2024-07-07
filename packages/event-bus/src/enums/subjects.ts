@@ -1,5 +1,5 @@
 export enum Subjects {
-  EMAIL_CREATED = "email.created",
+  USER_CONFIRMATION_EMAIL_SENT = "user.confirmation-email-sent",
   USER_CREATED = "user.created",
   USER_UPDATED = "user.updated",
   PROJECT_CREATED = "project.created",

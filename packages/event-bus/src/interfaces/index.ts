@@ -1,5 +1,5 @@
 export * from "./event-bus";
-export * from "./email-created.payload";
+export * from "./user-confirmation-email-sent.payload";
 export * from "./user-created.payload";
 export * from "./user-updated.payload";
 export * from "./workspace-created.payload";

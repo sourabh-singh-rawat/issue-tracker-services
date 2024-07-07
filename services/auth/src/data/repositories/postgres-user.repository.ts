@@ -44,8 +44,7 @@ export class PostgresUserRepository implements UserRepository {
       .createQueryBuilder(queryRunner)
       .update(UserEntity)
       .set(updatedUser)
-      .where("id = :id", { id })
-      .returning("*");
+      .where("id = :id", { id });
 
     await query.execute();
   };

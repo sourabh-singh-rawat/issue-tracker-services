@@ -1,7 +1,7 @@
 import { JsMsg } from "nats";
 import { EmailService } from "../../services/interfaces/email.service";
 import {
-  Consumers,
+  CONSUMERS,
   EventBus,
   ProjectMemberPayload,
   Streams,
@@ -11,7 +11,7 @@ import {
 
 export class ProjectMemberCreatedSubscriber extends Subscriber<ProjectMemberPayload> {
   readonly stream = Streams.PROJECT;
-  readonly consumer = Consumers.ProjectMemberCreatedConsumerEmail;
+  readonly consumer = CONSUMERS.PROJECT_MEMBER_INVITE_CREATED_MAIL;
   readonly subject = Subjects.PROJECT_MEMBERS_CREATED;
 
   constructor(

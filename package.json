@@ -7,6 +7,7 @@
     "server": "skaffold dev",
     "issue-tracker": "pnpm -F @issue-tracker-services/issue-tracker run start",
     "auth": "pnpm -F auth run start",
+    "mail": "pnpm -F mail run start",
     "gen:openapi-client": "redocly bundle ./openapi/openapi.yaml --output ./clients/issue-tracker/src/api/generated/openapi.json --remove-unused-components --dereferenced",
     "gen:hooks": "pnpm -F client run gen:hooks",
     "gen": "pnpm gen:openapi-client && pnpm gen:hooks",

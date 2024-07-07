@@ -3,21 +3,19 @@ import { EmailEntity } from "../data/entities/email.entity";
 import { EmailService } from "./interfaces/email.service";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { EmailRepository } from "../data/repositories/interfaces/email.repository";
-import { EmailCreatedPublisher } from "../events/publishers/email-created.publisher";
 import {
   ProjectMemberPayload,
-  UserCreatedPayload,
   WorkspaceInvitePayload,
 } from "@issue-tracker/event-bus";
 import { NotFoundError } from "@issue-tracker/common";
 import { JwtToken } from "@issue-tracker/security";
+import { UserEmailConfirmationEntity } from "../data/entities/user-email-confirmation.entity";
 
 export class CoreEmailService implements EmailService {
   constructor(
     private readonly mailer: Mailer,
     private readonly userRepository: UserRepository,
     private readonly emailRepository: EmailRepository,
-    private readonly emailCreatedPublisher: EmailCreatedPublisher,
   ) {}
 
   createEmail = async (receiverEmail: string) => {
@@ -31,24 +29,27 @@ export class CoreEmailService implements EmailService {
     return JwtToken.create(payload, process.env.JWT_SECRET!);
   };
 
-  sendVerificationEmail = async (payload: UserCreatedPayload) => {
-    const { email, userId } = payload;
-    const token = this.createInviteToken(payload);
+  sendUserEmailConfirmation = async (
+    userEmailConfirmation: UserEmailConfirmationEntity,
+  ) => {
+    if (!userEmailConfirmation) {
+      throw new NotFoundError("User email confirmation not found");
+    }
+
+    const { userId } = userEmailConfirmation;
+
+    const email = userEmailConfirmation.email;
+    const token = userEmailConfirmation.confirmationToken;
     const message: EmailMessage = {
       title: "Please confirm your email",
       html: `
         <strong>
-          <p>Please click this <a href="https://localhost/api/v1/users/${userId}/confirm?inviteToken=${token}">link</a> to confirm your email </p>
+          <p>Please click this <a href="https://localhost/api/v1/users/${userId}/confirm?confirmationEmail=${token}">link</a> to confirm your email </p>
         </strong>
       `,
     };
 
-    await this.mailer.send("noreply@test.com", email, message);
-    await this.createEmail(email);
-
-    const sentEmail = await this.emailRepository.findByEmail(email);
-    if (!sentEmail) throw new NotFoundError("Email not found");
-    await this.emailCreatedPublisher.publish(sentEmail);
+    await this.mailer.send("noreply@issue-tracker.com", email, message);
   };
 
   sendWorkspaceInvitation = async (payload: WorkspaceInvitePayload) => {

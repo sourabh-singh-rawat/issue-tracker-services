@@ -11,7 +11,7 @@ import {
 
 export class UserUpdatedSubscriber extends Subscriber<UserUpdatedPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = CONSUMERS.USER_UPDATED_CONSUMER_ISSUE_TRACKER;
+  readonly consumer = CONSUMERS.USER_UPDATED_ISSUE_TRACKER;
   readonly subject = Subjects.USER_UPDATED;
 
   constructor(private eventBus: EventBus, private userService: UserService) {
