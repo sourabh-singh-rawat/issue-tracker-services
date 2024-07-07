@@ -1,9 +1,5 @@
 import { Typeorm } from "@issue-tracker/orm";
-import {
-  EventBus,
-  UserCreatedPayload,
-  UserUpdatedPayload,
-} from "@issue-tracker/event-bus";
+import { EventBus, UserCreatedPayload } from "@issue-tracker/event-bus";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { UserProfileRepository } from "../data/repositories/interfaces/user-profile.repository";
 import { UserCreatedPublisher } from "../events/publishers/user-created.publisher";
@@ -13,6 +9,7 @@ import {
   InternalServerError,
   NotFoundError,
   TransactionExecutionError,
+  USER_EMAIL_CONFIRMATION_STATUS,
   UnauthorizedError,
   UserAlreadyExists,
   UserNotFoundError,
@@ -52,11 +49,9 @@ export class CoreUserService implements UserService {
   ) => {
     const { email, password, displayName } = userRegistrationData;
 
-    // Check if the user already exists
     const isUserExists = await this.isUserExistsByEmail(email);
     if (isUserExists) throw new UserAlreadyExists();
 
-    // Hash the password and create a new user
     const { hash, salt } = await Hash.create(password);
 
     const newUser = new UserEntity();
@@ -64,7 +59,6 @@ export class CoreUserService implements UserService {
     newUser.passwordHash = hash;
     newUser.passwordSalt = salt;
 
-    // Create user and their profile
     const queryRunner = this.orm.createQueryRunner();
     const result = await this.orm.transaction(
       queryRunner,
@@ -96,9 +90,9 @@ export class CoreUserService implements UserService {
     await this.userCreatedPublisher.publish({
       userId: savedUser.id,
       email: savedUser.email,
-      isEmailVerified: savedUser.isEmailVerified,
       displayName: savedUserProfile.displayName,
       photoUrl: savedUserProfile.photoUrl,
+      emailConfirmationStatus: savedUser.emailConfirmationStatus,
       inviteToken,
     });
   };
@@ -115,13 +109,12 @@ export class CoreUserService implements UserService {
       email: user.email,
       displayName: userProfile.displayName,
       createdAt: user.createdAt,
-      isEmailVerified: user.isEmailVerified,
+      emailConfirmationStatus: user.emailConfirmationStatus,
     };
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateUser = async (user: UserUpdatedPayload) => {
-    throw new Error("Method not implemented.");
+  update = async (id: string, user: UserEntity) => {
+    await this.userRepository.update(id, user);
   };
 
   verifyPassword = async (credentials: AuthCredentials) => {
@@ -150,7 +143,8 @@ export class CoreUserService implements UserService {
     if (!user) throw new NotFoundError("User not found");
 
     const updatedUser = new UserEntity();
-    updatedUser.isEmailVerified = true;
+    updatedUser.emailConfirmationStatus =
+      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED;
 
     await this.userRepository.update(userId, updatedUser);
     await this.userUpdatedPublisher.publish(user);

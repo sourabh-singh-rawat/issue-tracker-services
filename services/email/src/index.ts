@@ -1,3 +1,4 @@
+import "dotenv/config";
 import {
   AppLogger,
   AwilixDi,
@@ -15,11 +16,15 @@ import { Mailer, NodeMailer } from "@issue-tracker/comm";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { EmailRepository } from "./data/repositories/interfaces/email.repository";
 import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscriber";
-import { EmailCreatedPublisher } from "./events/publishers/email-created.publisher";
+import { UserEmailConfirmationSentPublisher } from "./events/publishers/user-email-confirmation-sent.publisher";
 import { ProjectMemberCreatedSubscriber } from "./events/subscribers/project-member-created.subscriber";
 import { WorkspaceInviteCreatedSubscriber } from "./events/subscribers/workspace-invite-created.subscriber";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
 import { PostgresEmailRepository } from "./data/repositories/postgres-email.repository";
+import { UserService } from "./services/interfaces/user.service";
+import { CoreUserService } from "./services/core-user.service";
+import { UserEmailConfirmationRepository } from "./data/repositories/interfaces/user-email-confirmation.repository";
+import { PostgresUserEmailConfirmationRepository } from "./data/repositories/postgres-user-confirmation-email.repository";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -28,17 +33,19 @@ export interface RegisteredServices {
   dataSource: DataSource;
   mailer: Mailer;
   emailService: EmailService;
+  userService: UserService;
   userRepository: UserRepository;
   emailRepository: EmailRepository;
+  userEmailConfirmationRepository: UserEmailConfirmationRepository;
   userCreatedSubscriber: UserCreatedSubscriber;
-  emailCreatedPublisher: EmailCreatedPublisher;
+  userEmailConfirmationSentPublisher: UserEmailConfirmationSentPublisher;
   projectMemberCreatedSubscriber: ProjectMemberCreatedSubscriber;
   workspaceInviteCreatedSubsciber: WorkspaceInviteCreatedSubscriber;
 }
 
 const startServer = async () => {
   try {
-    const server = new FastifyServer({});
+    const server = new FastifyServer({ port: 4002 });
     server.init();
   } catch (error) {
     process.exit(1);
@@ -51,21 +58,26 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("workspaceInviteCreatedSubsciber").fetchMessages();
 };
 
-const main = async () => {
-  const dataSource = new DataSource({
-    type: "postgres",
-    host: process.env.host,
-    username: process.env.user,
-    password: process.env.password,
-    database: process.env.dbname,
-    entities: ["src/data/entities/*.ts"],
-    synchronize: true,
-  });
+export const dataSource = new DataSource({
+  type: "postgres",
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT!),
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: ["src/data/entities/*.ts"],
+  synchronize: true,
+});
 
+const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({ servers: ["nats"] }, ["email"], logger);
+  const eventBus = new NatsEventBus(
+    { servers: [process.env.NATS_SERVER_URL || "nats"] },
+    ["email"],
+    logger,
+  );
   await eventBus.init();
 
   const brevoTransporter = nodemailer.createTransport({
@@ -88,10 +100,18 @@ const main = async () => {
   add("mailer", asValue(mailer));
   add("orm", asValue(orm));
   add("emailService", asClass(CoreEmailService));
+  add("userService", asClass(CoreUserService));
   add("userRepository", asClass(PostgresUserRepository));
   add("emailRepository", asClass(PostgresEmailRepository));
+  add(
+    "userEmailConfirmationRepository",
+    asClass(PostgresUserEmailConfirmationRepository),
+  );
   add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
-  add("emailCreatedPublisher", asClass(EmailCreatedPublisher));
+  add(
+    "userEmailConfirmationSentPublisher",
+    asClass(UserEmailConfirmationSentPublisher),
+  );
   add(
     "projectMemberCreatedSubscriber",
     asClass(ProjectMemberCreatedSubscriber),

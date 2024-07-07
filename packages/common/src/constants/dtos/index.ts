@@ -12,3 +12,4 @@ export * from "./project-member";
 export * from "./issue";
 export * from "./task-form-data";
 export * from "./task-group-form-data";
+export * from "./user-update-data";

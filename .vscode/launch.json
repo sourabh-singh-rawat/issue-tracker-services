@@ -6,6 +6,7 @@
       "configurations": [
         "auth (service)",
         "issue-tracker (service)",
+        "mail (service)",
         "issue-tracker (client)",
         "brave (debug - scoop)"
       ]
@@ -38,6 +39,15 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["auth"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "mail (service)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["mail"],
       "console": "integratedTerminal"
     },
     {

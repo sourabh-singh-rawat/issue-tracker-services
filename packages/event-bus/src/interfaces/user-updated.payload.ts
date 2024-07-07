@@ -1,5 +1,7 @@
+import { UserEmailConfirmationStatus } from "@issue-tracker/common";
+
 export interface UserUpdatedPayload {
   id: string;
   version: number;
-  isEmailVerified: boolean;
+  emailConfirmationStatus: UserEmailConfirmationStatus;
 }

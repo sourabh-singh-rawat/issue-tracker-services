@@ -25,7 +25,7 @@ import {
 
 export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = CONSUMERS.USER_CREATED_CONSUMER_ISSUE_TRACKER;
+  readonly consumer = CONSUMERS.USER_CREATED_ISSUE_TRACKER;
   readonly subject = Subjects.USER_CREATED;
 
   constructor(
@@ -42,7 +42,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     const {
       userId,
       email,
-      isEmailVerified,
+      emailConfirmationStatus,
       displayName,
       photoUrl,
       inviteToken,
@@ -53,7 +53,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       const newUser = new UserEntity();
       newUser.id = userId;
       newUser.email = email;
-      newUser.isEmailVerified = isEmailVerified;
+      newUser.emailConfirmationStatus = emailConfirmationStatus;
       newUser.displayName = displayName;
       newUser.photoUrl = photoUrl;
       const savedUser = await this.userRepository.save(newUser, {

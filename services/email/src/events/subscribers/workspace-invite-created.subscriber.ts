@@ -1,7 +1,7 @@
 import { JsMsg } from "nats";
 import { EmailService } from "../../services/interfaces/email.service";
 import {
-  Consumers,
+  CONSUMERS,
   EventBus,
   Streams,
   Subjects,
@@ -11,7 +11,7 @@ import {
 
 export class WorkspaceInviteCreatedSubscriber extends Subscriber<WorkspaceInvitePayload> {
   readonly stream = Streams.WORKSPACE;
-  readonly consumer = Consumers.WorkspaceInviteCreatedConsumerEmail;
+  readonly consumer = CONSUMERS.WORKSPACE_INVITE_CREATED_MAIL;
   readonly subject = Subjects.WORKSPACE_INVITE_CREATED;
 
   constructor(

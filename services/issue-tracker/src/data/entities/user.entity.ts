@@ -1,6 +1,10 @@
 import { AuditEntity } from "@issue-tracker/orm";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { WorkspaceMemberEntity } from "./workspace-member.entity";
+import {
+  USER_EMAIL_CONFIRMATION_STATUS,
+  UserEmailConfirmationStatus,
+} from "@issue-tracker/common";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
@@ -16,11 +20,18 @@ export class UserEntity extends AuditEntity {
   defaultWorkspaceId!: string;
 
   @Column({
-    name: "is_email_verified",
-    type: "boolean",
-    default: false,
+    name: "email_confirmation_status",
+    type: "enum",
+    default: USER_EMAIL_CONFIRMATION_STATUS.PENDING,
+    enum: [
+      USER_EMAIL_CONFIRMATION_STATUS.PENDING,
+      USER_EMAIL_CONFIRMATION_STATUS.SENT,
+      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED,
+      USER_EMAIL_CONFIRMATION_STATUS.EXPIRED,
+      USER_EMAIL_CONFIRMATION_STATUS.REVOKED,
+    ],
   })
-  isEmailVerified!: boolean;
+  emailConfirmationStatus!: UserEmailConfirmationStatus;
 
   @Column({ name: "display_name", type: "text" })
   displayName!: string;

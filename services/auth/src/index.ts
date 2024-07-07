@@ -9,7 +9,6 @@ import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { IdentityController } from "./controllers/interfaces/identity.controller";
 import { IdentityService } from "./services/interfaces/identity.service";
-import { UserUpdatedSubscriber } from "./events/subscribers/user-updated.subscribers";
 import { AccessTokenRepository } from "./data/repositories/interfaces/access-token-repository";
 import { RefreshTokenRepository } from "./data/repositories/interfaces/refresh-token-repository";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
@@ -30,6 +29,7 @@ import { PostgresUserProfileRepository } from "./data/repositories/postgres-user
 import { UserCreatedPublisher } from "./events/publishers/user-created.publisher";
 import { UserUpdatedPublisher } from "./events/publishers/user-updated.publisher";
 import { userRoutes } from "./routes/user.routes";
+import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -45,7 +45,7 @@ export interface RegisteredServices {
   refreshTokenRepository: RefreshTokenRepository;
   userCreatedPublisher: UserCreatedPublisher;
   userUpdatedPublisher: UserUpdatedPublisher;
-  userUpdatedSubscriber: UserUpdatedSubscriber;
+  userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
 }
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
@@ -70,10 +70,9 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
   }
 };
 
-// const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
-//   container.get("userCreatedSubscriber").fetchMessages();
-//   container.get("userUpdatedSubscriber").fetchMessages();
-// };
+const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
+  container.get("userEmailConfirmationSentSubscriber").fetchMessages();
+};
 
 const main = async () => {
   const dataSource = new DataSource({
@@ -115,12 +114,15 @@ const main = async () => {
   add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
   add("userCreatedPublisher", asClass(UserCreatedPublisher));
   add("userUpdatedPublisher", asClass(UserUpdatedPublisher));
-  add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
+  add(
+    "userEmailConfirmationSentSubscriber",
+    asClass(UserEmailConfirmationSentSubscriber),
+  );
 
   container.init();
 
   await startServer(container);
-  // startSubscriptions(container);
+  startSubscriptions(container);
 };
 
 main();

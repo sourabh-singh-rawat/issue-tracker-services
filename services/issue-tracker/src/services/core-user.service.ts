@@ -15,7 +15,7 @@ export class CoreUserService implements UserService {
   };
 
   updateUser = async (payload: UserUpdatedPayload) => {
-    const { id, version, isEmailVerified } = payload;
+    const { id, version, emailConfirmationStatus } = payload;
 
     const user = await this.getUserById(id);
     if (!user) throw new UserNotFoundError();
@@ -23,7 +23,7 @@ export class CoreUserService implements UserService {
     if (user.version !== version) throw new VersionMismatchError();
 
     const updatedUser = new UserEntity();
-    updatedUser.isEmailVerified = isEmailVerified;
+    updatedUser.emailConfirmationStatus = emailConfirmationStatus;
 
     await this.userRepository.updateUser(id, updatedUser);
   };

@@ -1,12 +1,14 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserProfileEntity } from "./user-profile.entity";
 import { AuditEntity } from "@issue-tracker/orm";
+import {
+  USER_EMAIL_CONFIRMATION_STATUS,
+  UserEmailConfirmationStatus,
+} from "@issue-tracker/common";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "users_pkey",
-  })
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ type: "text", unique: true })
@@ -19,11 +21,18 @@ export class UserEntity extends AuditEntity {
   passwordSalt!: string;
 
   @Column({
-    name: "is_email_verified",
-    type: "boolean",
-    default: false,
+    name: "email_confirmation_status",
+    type: "enum",
+    default: USER_EMAIL_CONFIRMATION_STATUS.PENDING,
+    enum: [
+      USER_EMAIL_CONFIRMATION_STATUS.PENDING,
+      USER_EMAIL_CONFIRMATION_STATUS.SENT,
+      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED,
+      USER_EMAIL_CONFIRMATION_STATUS.EXPIRED,
+      USER_EMAIL_CONFIRMATION_STATUS.REVOKED,
+    ],
   })
-  isEmailVerified!: boolean;
+  emailConfirmationStatus!: UserEmailConfirmationStatus;
 
   @OneToOne(() => UserProfileEntity, ({ user }) => user)
   profile!: UserProfileEntity;
