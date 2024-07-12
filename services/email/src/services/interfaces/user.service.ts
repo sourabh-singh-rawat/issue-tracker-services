@@ -1,5 +1,5 @@
-import { UserCreatedPayload } from "@issue-tracker/event-bus";
+import { UserRegisteredPayload } from "@issue-tracker/event-bus";
 
 export interface UserService {
-  createUserAndEmailConfirmation(payload: UserCreatedPayload): Promise<void>;
+  createUserAndEmailConfirmation(payload: UserRegisteredPayload): Promise<void>;
 }

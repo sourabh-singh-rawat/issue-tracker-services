@@ -15,7 +15,7 @@ import { CoreEmailService } from "./services/core-email.service";
 import { Mailer, NodeMailer } from "@issue-tracker/comm";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { EmailRepository } from "./data/repositories/interfaces/email.repository";
-import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscriber";
+import { UserCreatedSubscriber } from "./events/subscribers/user-registered.subscriber";
 import { UserEmailConfirmationSentPublisher } from "./events/publishers/user-email-confirmation-sent.publisher";
 import { ProjectMemberCreatedSubscriber } from "./events/subscribers/project-member-created.subscriber";
 import { WorkspaceInviteCreatedSubscriber } from "./events/subscribers/workspace-invite-created.subscriber";

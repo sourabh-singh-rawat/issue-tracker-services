@@ -1,10 +1,17 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { UserProfileEntity } from "./user-profile.entity";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
-  USER_EMAIL_CONFIRMATION_STATUS,
-  UserEmailConfirmationStatus,
+  EMAIL_VERIFICATION_STATUS,
+  EmailVerificationStatus,
 } from "@issue-tracker/common";
+import { EmailVerificationTokenEntity } from "./email-verification-token.entity";
 
 @Entity({ name: "users" })
 export class UserEntity extends AuditEntity {
@@ -21,19 +28,20 @@ export class UserEntity extends AuditEntity {
   passwordSalt!: string;
 
   @Column({
-    name: "email_confirmation_status",
+    name: "email_verification_status",
     type: "enum",
-    default: USER_EMAIL_CONFIRMATION_STATUS.PENDING,
+    default: EMAIL_VERIFICATION_STATUS.UNVERIFIED,
     enum: [
-      USER_EMAIL_CONFIRMATION_STATUS.PENDING,
-      USER_EMAIL_CONFIRMATION_STATUS.SENT,
-      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED,
-      USER_EMAIL_CONFIRMATION_STATUS.EXPIRED,
-      USER_EMAIL_CONFIRMATION_STATUS.REVOKED,
+      EMAIL_VERIFICATION_STATUS.UNVERIFIED,
+      EMAIL_VERIFICATION_STATUS.VERIFIED,
+      EMAIL_VERIFICATION_STATUS.FAILED,
     ],
   })
-  emailConfirmationStatus!: UserEmailConfirmationStatus;
+  emailVerificationStatus!: EmailVerificationStatus;
 
   @OneToOne(() => UserProfileEntity, ({ user }) => user)
   profile!: UserProfileEntity;
+
+  @OneToMany(() => EmailVerificationTokenEntity, ({ user }) => user)
+  emailVerificationTokens?: EmailVerificationTokenEntity[];
 }

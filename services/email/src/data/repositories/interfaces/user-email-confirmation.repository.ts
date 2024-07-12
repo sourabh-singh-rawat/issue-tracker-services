@@ -1,11 +1,11 @@
 import { QueryBuilderOptions, Repository } from "@issue-tracker/orm";
-import { UserEmailConfirmationEntity } from "../../entities/user-email-confirmation.entity";
+import { ConfirmationEmailEntity } from "../../entities/confirmation-email.entity";
 
 export interface UserEmailConfirmationRepository
-  extends Repository<UserEmailConfirmationEntity> {
+  extends Repository<ConfirmationEmailEntity> {
   update(
     id: string,
-    entity: UserEmailConfirmationEntity,
+    entity: ConfirmationEmailEntity,
     options?: QueryBuilderOptions,
   ): Promise<void>;
 }

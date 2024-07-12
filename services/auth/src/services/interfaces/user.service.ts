@@ -13,5 +13,5 @@ export interface UserService {
   getUserInfoByEmail(email: string): Promise<UserDetails>;
   update(id: string, user: UserUpdateData): Promise<void>;
   verifyPassword(credentials: AuthCredentials): Promise<void>;
-  verifyEmail(inviteToken: string): Promise<void>;
+  verifyEmail(userId: string, inviteToken: string): Promise<void>;
 }

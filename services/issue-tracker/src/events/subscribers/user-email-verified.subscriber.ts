@@ -7,9 +7,9 @@ import {
   CONSUMERS,
   EventBus,
   Streams,
-  Subjects,
+  SUBJECTS,
   Subscriber,
-  UserCreatedPayload,
+  UserEmailVerifiedPayload,
   WorkspaceInvitePayload,
 } from "@issue-tracker/event-bus";
 import { Typeorm } from "@issue-tracker/orm";
@@ -23,10 +23,10 @@ import {
   WORKSPACE_STATUS,
 } from "@issue-tracker/common";
 
-export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
+export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = CONSUMERS.USER_CREATED_ISSUE_TRACKER;
-  readonly subject = Subjects.USER_CREATED;
+  readonly consumer = CONSUMERS.USER_EMAIL_VERIFIED_ISSUE_TRACKER;
+  readonly subject = SUBJECTS.USER_EMAIL_VERIFIED;
 
   constructor(
     private readonly eventBus: EventBus,
@@ -38,11 +38,11 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     super(eventBus.client);
   }
 
-  onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {
+  onMessage = async (message: JsMsg, payload: UserEmailVerifiedPayload) => {
     const {
       userId,
       email,
-      emailConfirmationStatus,
+      emailVerificationStatus,
       displayName,
       photoUrl,
       inviteToken,
@@ -53,7 +53,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
       const newUser = new UserEntity();
       newUser.id = userId;
       newUser.email = email;
-      newUser.emailConfirmationStatus = emailConfirmationStatus;
+      newUser.emailVerificationStatus = emailVerificationStatus;
       newUser.displayName = displayName;
       newUser.photoUrl = photoUrl;
       const savedUser = await this.userRepository.save(newUser, {

@@ -8,12 +8,12 @@ import {
 import { UserEntity } from "./user.entity";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
-  USER_EMAIL_CONFIRMATION_STATUS,
-  UserEmailConfirmationStatus,
+  CONFIRMATION_EMAIL_STATUS,
+  ConfirmationEmailStatus,
 } from "@issue-tracker/common";
 
-@Entity({ name: "user_email_confirmations" })
-export class UserEmailConfirmationEntity extends AuditEntity {
+@Entity({ name: "confirmation_emails" })
+export class ConfirmationEmailEntity extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -21,23 +21,24 @@ export class UserEmailConfirmationEntity extends AuditEntity {
   userId!: string;
 
   @Column({ name: "email", type: "text" })
-  email!: string;
+  emailAddress!: string;
 
-  @Column({ name: "confirmation_token", type: "text" })
-  confirmationToken!: string;
+  @Column({ name: "email_verification_token", type: "text" })
+  emailVerificationToken!: string;
 
   @Column({
     name: "status",
     type: "enum",
+    default: CONFIRMATION_EMAIL_STATUS.NOT_SENT,
     enum: [
-      USER_EMAIL_CONFIRMATION_STATUS.PENDING,
-      USER_EMAIL_CONFIRMATION_STATUS.SENT,
-      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED,
-      USER_EMAIL_CONFIRMATION_STATUS.EXPIRED,
-      USER_EMAIL_CONFIRMATION_STATUS.REVOKED,
+      CONFIRMATION_EMAIL_STATUS.SENT,
+      CONFIRMATION_EMAIL_STATUS.NOT_SENT,
+      CONFIRMATION_EMAIL_STATUS.DELIVERED,
+      CONFIRMATION_EMAIL_STATUS.FAILED,
     ],
+    nullable: true,
   })
-  status!: UserEmailConfirmationStatus;
+  status?: ConfirmationEmailStatus;
 
   @Column({ name: "expires_at", type: "timestamptz" })
   expiresAt!: Date;

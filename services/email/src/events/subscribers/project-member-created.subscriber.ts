@@ -5,14 +5,14 @@ import {
   EventBus,
   ProjectMemberPayload,
   Streams,
-  Subjects,
+  SUBJECTS,
   Subscriber,
 } from "@issue-tracker/event-bus";
 
 export class ProjectMemberCreatedSubscriber extends Subscriber<ProjectMemberPayload> {
   readonly stream = Streams.PROJECT;
   readonly consumer = CONSUMERS.PROJECT_MEMBER_INVITE_CREATED_MAIL;
-  readonly subject = Subjects.PROJECT_MEMBERS_CREATED;
+  readonly subject = SUBJECTS.PROJECT_MEMBERS_CREATED;
 
   constructor(
     private eventBus: EventBus,

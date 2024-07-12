@@ -4,17 +4,17 @@ import {
   CONSUMERS,
   EventBus,
   Streams,
-  Subjects,
+  SUBJECTS,
   Subscriber,
-  UserCreatedPayload,
+  UserRegisteredPayload,
 } from "@issue-tracker/event-bus";
 import { Typeorm } from "@issue-tracker/orm";
 import { UserService } from "../../services/interfaces/user.service";
 
-export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
+export class UserCreatedSubscriber extends Subscriber<UserRegisteredPayload> {
   readonly stream = Streams.USER;
-  readonly consumer = CONSUMERS.USER_CREATED_MAIL;
-  readonly subject = Subjects.USER_CREATED;
+  readonly consumer = CONSUMERS.USER_REGISTERED_MAIL;
+  readonly subject = SUBJECTS.USER_REGISTERED;
 
   constructor(
     private readonly eventBus: EventBus,
@@ -25,7 +25,7 @@ export class UserCreatedSubscriber extends Subscriber<UserCreatedPayload> {
     super(eventBus.client);
   }
 
-  onMessage = async (message: JsMsg, payload: UserCreatedPayload) => {
+  onMessage = async (message: JsMsg, payload: UserRegisteredPayload) => {
     await this.userService.createUserAndEmailConfirmation(payload);
     message.ack();
   };

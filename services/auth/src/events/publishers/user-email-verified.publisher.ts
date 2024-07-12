@@ -1,15 +1,16 @@
 import {
   EventBus,
   Publisher,
+  SUBJECTS,
   Subjects,
-  UserCreatedPayload,
+  UserEmailVerifiedPayload,
 } from "@issue-tracker/event-bus";
 
-export class UserCreatedPublisher extends Publisher<{
-  payload: UserCreatedPayload;
+export class UserEmailVerifiedPublisher extends Publisher<{
+  payload: UserEmailVerifiedPayload;
   subject: Subjects;
 }> {
-  subject = Subjects.USER_CREATED;
+  subject = SUBJECTS.USER_EMAIL_VERIFIED;
 
   constructor(eventBus: EventBus) {
     super(eventBus.client);

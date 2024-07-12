@@ -1,9 +1,9 @@
-import { UserEmailConfirmationStatus } from "../enums";
+import { EmailVerificationStatus } from "../enums";
 
 export interface UserDetails {
   userId: string;
   email: string;
-  emailConfirmationStatus: UserEmailConfirmationStatus;
+  emailVerificationStatus: EmailVerificationStatus;
   displayName?: string;
   createdAt: Date;
   photoUrl?: string;

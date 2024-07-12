@@ -43,12 +43,15 @@ export class CoreUserController implements UserController {
   };
 
   verifyEmail = async (
-    request: FastifyRequest<{ Querystring: { inviteToken: string } }>,
+    request: FastifyRequest<{
+      Querystring: { confirmationEmail: string };
+      Params: { id: string };
+    }>,
     reply: FastifyReply,
   ) => {
-    const { inviteToken } = request.query;
-    // confirm this invite token
-    await this.userService.verifyEmail(inviteToken);
+    const { confirmationEmail } = request.query;
+    const { id } = request.params;
+    await this.userService.verifyEmail(id, confirmationEmail);
 
     return reply.send({ confirmation: true });
   };
