@@ -33,6 +33,7 @@ export class WorkspaceEntity extends AuditEntity {
 
   @Column({
     name: "status",
+    default: WORKSPACE_STATUS.ACTIVE,
     enum: [
       WORKSPACE_STATUS.ACTIVE,
       WORKSPACE_STATUS.ARCHIVED,

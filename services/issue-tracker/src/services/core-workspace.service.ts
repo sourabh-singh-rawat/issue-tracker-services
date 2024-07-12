@@ -57,7 +57,17 @@ export class CoreWorkspaceService implements WorkspaceService {
           { queryRunner },
         );
 
-        return { savedWorkspace, savedWorkspaceMember };
+        await this.workspaceCreatedPublisher.publish({
+          id: savedWorkspace.id,
+          name: savedWorkspace.name,
+          ownerId: savedWorkspace.ownerUserId,
+          member: {
+            userId: savedWorkspaceMember.userId,
+            workspaceId: savedWorkspaceMember.workspaceId,
+          },
+        });
+
+        return { savedWorkspace };
       },
     );
 
@@ -67,16 +77,7 @@ export class CoreWorkspaceService implements WorkspaceService {
       );
     }
 
-    const { savedWorkspace, savedWorkspaceMember } = result;
-    await this.workspaceCreatedPublisher.publish({
-      id: savedWorkspace.id,
-      name: savedWorkspace.name,
-      ownerId: savedWorkspace.ownerUserId,
-      member: {
-        userId: savedWorkspaceMember.userId,
-        workspaceId: savedWorkspaceMember.workspaceId,
-      },
-    });
+    const { savedWorkspace } = result;
 
     return savedWorkspace;
   };
@@ -145,9 +146,8 @@ export class CoreWorkspaceService implements WorkspaceService {
     if (!sender) throw new UserNotFoundError();
     const { defaultWorkspaceId } = sender;
 
-    const isReceiverMember = await this.workspaceMemberRepository.existsById(
-      email,
-    );
+    const isReceiverMember =
+      await this.workspaceMemberRepository.existsById(email);
     if (isReceiverMember) throw new UserAlreadyExists();
 
     const newWorkspaceMemberInvite = new WorkspaceMemberInviteEntity();
