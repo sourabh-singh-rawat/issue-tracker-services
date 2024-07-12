@@ -1,15 +1,16 @@
 import { Typeorm } from "@issue-tracker/orm";
-import { EventBus, UserCreatedPayload } from "@issue-tracker/event-bus";
+import { EventBus } from "@issue-tracker/event-bus";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { UserProfileRepository } from "../data/repositories/interfaces/user-profile.repository";
-import { UserCreatedPublisher } from "../events/publishers/user-created.publisher";
-import { UserUpdatedPublisher } from "../events/publishers/user-updated.publisher";
+import { UserRegisteredPublisher } from "../events/publishers/user-registered.publisher";
+import { UserEmailVerifiedPublisher } from "../events/publishers/user-email-verified.publisher";
 import {
   AuthCredentials,
+  EMAIL_VERIFICATION_STATUS,
+  EMAIL_VERIFICATION_TOKEN_STATUS,
+  EmailVerificationTokenPayload,
   InternalServerError,
   NotFoundError,
-  TransactionExecutionError,
-  USER_EMAIL_CONFIRMATION_STATUS,
   UnauthorizedError,
   UserAlreadyExists,
   UserNotFoundError,
@@ -20,6 +21,9 @@ import { Hash, JwtToken } from "@issue-tracker/security";
 import { UserEntity } from "../data/entities";
 import { UserService } from "./interfaces/user.service";
 import { UserProfileEntity } from "../data/entities/user-profile.entity";
+import { EmailVerificationTokenRepository } from "../data/repositories/interfaces/email-verification.repository";
+import { EmailVerificationTokenEntity } from "../data/entities/email-verification-token.entity";
+import { v4 } from "uuid";
 
 export class CoreUserService implements UserService {
   constructor(
@@ -27,8 +31,9 @@ export class CoreUserService implements UserService {
     private readonly eventBus: EventBus,
     private readonly userRepository: UserRepository,
     private readonly userProfileRepository: UserProfileRepository,
-    private readonly userCreatedPublisher: UserCreatedPublisher,
-    private readonly userUpdatedPublisher: UserUpdatedPublisher,
+    private readonly emailVerificationTokenRepository: EmailVerificationTokenRepository,
+    private readonly userRegisteredPublisher: UserRegisteredPublisher,
+    private readonly userEmailVerifiedPublisher: UserEmailVerifiedPublisher,
   ) {}
 
   private getUserById = async (userId: string) => {
@@ -60,40 +65,60 @@ export class CoreUserService implements UserService {
     newUser.passwordSalt = salt;
 
     const queryRunner = this.orm.createQueryRunner();
-    const result = await this.orm.transaction(
-      queryRunner,
-      async (queryRunner) => {
-        const savedUser = await this.userRepository.save(newUser, {
-          queryRunner,
-        });
+    await this.orm.transaction(queryRunner, async (queryRunner) => {
+      const savedUser = await this.userRepository.save(newUser, {
+        queryRunner,
+      });
 
-        const newUserProfile = new UserProfileEntity();
-        newUserProfile.userId = savedUser.id;
-        newUserProfile.displayName = displayName;
+      const userId = savedUser.id;
 
-        const savedUserProfile = await this.userProfileRepository.save(
-          newUserProfile,
-          { queryRunner },
+      const newUserProfile = new UserProfileEntity();
+      newUserProfile.userId = userId;
+      newUserProfile.displayName = displayName;
+
+      const savedUserProfile = await this.userProfileRepository.save(
+        newUserProfile,
+        { queryRunner },
+      );
+
+      const iat = Math.floor(Date.now() / 1000);
+      const exp = iat + 86400;
+      const tokenId = v4();
+      const emailVerificationToken =
+        JwtToken.create<EmailVerificationTokenPayload>(
+          {
+            sub: "@issue-tracker/auth",
+            iss: "@issue-tracker/auth",
+            aud: "@issue-tracker/mail",
+            iat,
+            exp,
+            userId,
+            tokenId,
+          },
+          process.env.JWT_SECRET!,
         );
 
-        return {
-          savedUser,
-          savedUserProfile,
-        };
-      },
-    );
+      const newEmailVerificationToken = new EmailVerificationTokenEntity();
+      newEmailVerificationToken.id = tokenId;
+      newEmailVerificationToken.token = emailVerificationToken;
+      newEmailVerificationToken.expiresAt = new Date(exp * 1000);
+      newEmailVerificationToken.userId = userId;
 
-    if (!result) throw new TransactionExecutionError("User creation failed");
+      await this.emailVerificationTokenRepository.save(
+        newEmailVerificationToken,
+        { queryRunner },
+      );
 
-    const { savedUser, savedUserProfile } = result;
-
-    await this.userCreatedPublisher.publish({
-      userId: savedUser.id,
-      email: savedUser.email,
-      displayName: savedUserProfile.displayName,
-      photoUrl: savedUserProfile.photoUrl,
-      emailConfirmationStatus: savedUser.emailConfirmationStatus,
-      inviteToken,
+      await this.userRegisteredPublisher.publish({
+        emailVerificationToken: emailVerificationToken,
+        userId,
+        email: savedUser.email,
+        displayName: savedUserProfile.displayName,
+        photoUrl: savedUserProfile.photoUrl,
+        emailVerificationStatus: savedUser.emailVerificationStatus,
+        emailVerificationTokenExp: exp,
+        inviteToken,
+      });
     });
   };
 
@@ -109,7 +134,7 @@ export class CoreUserService implements UserService {
       email: user.email,
       displayName: userProfile.displayName,
       createdAt: user.createdAt,
-      emailConfirmationStatus: user.emailConfirmationStatus,
+      emailVerificationStatus: user.emailVerificationStatus,
     };
   };
 
@@ -129,24 +154,45 @@ export class CoreUserService implements UserService {
     if (!isHashValid) throw new UnauthorizedError();
   };
 
-  verifyEmail = async (token: string) => {
-    let verifiedToken: UserCreatedPayload;
+  verifyEmail = async (userId: string, token: string) => {
+    let verifiedToken: any;
 
     try {
       verifiedToken = JwtToken.verify(token, process.env.JWT_SECRET!);
     } catch (error) {
       throw new InternalServerError("Token verification failed");
     }
-
-    const { userId } = verifiedToken;
+    const { tokenId } = verifiedToken;
     const user = await this.userRepository.findById(userId);
     if (!user) throw new NotFoundError("User not found");
 
-    const updatedUser = new UserEntity();
-    updatedUser.emailConfirmationStatus =
-      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED;
+    const userProfile = await this.userProfileRepository.findByUserId(userId);
+    if (!userProfile) throw new UserProfileNotFoundError();
 
-    await this.userRepository.update(userId, updatedUser);
-    await this.userUpdatedPublisher.publish(user);
+    const emailVerificationToken =
+      await this.emailVerificationTokenRepository.findOne(tokenId);
+    if (!emailVerificationToken) throw new InternalServerError("Invalid Token");
+
+    if (emailVerificationToken.status !== EMAIL_VERIFICATION_TOKEN_STATUS.VALID)
+      throw new Error("Invalid Token");
+
+    const queryRunner = this.orm.createQueryRunner();
+    this.orm.transaction(queryRunner, async (queryRunner) => {
+      user.emailVerificationStatus = EMAIL_VERIFICATION_STATUS.VERIFIED;
+      emailVerificationToken.status = EMAIL_VERIFICATION_TOKEN_STATUS.USED;
+
+      await this.userRepository.update(userId, user, { queryRunner });
+      await this.emailVerificationTokenRepository.update(
+        tokenId,
+        emailVerificationToken,
+        { queryRunner },
+      );
+      await this.userEmailVerifiedPublisher.publish({
+        displayName: userProfile.displayName,
+        email: user.email,
+        emailVerificationStatus: user.emailVerificationStatus,
+        userId,
+      });
+    });
   };
 }

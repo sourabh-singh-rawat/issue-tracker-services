@@ -9,7 +9,7 @@ import {
 } from "@issue-tracker/event-bus";
 import { NotFoundError } from "@issue-tracker/common";
 import { JwtToken } from "@issue-tracker/security";
-import { UserEmailConfirmationEntity } from "../data/entities/user-email-confirmation.entity";
+import { ConfirmationEmailEntity } from "../data/entities/confirmation-email.entity";
 
 export class CoreEmailService implements EmailService {
   constructor(
@@ -30,21 +30,21 @@ export class CoreEmailService implements EmailService {
   };
 
   sendUserEmailConfirmation = async (
-    userEmailConfirmation: UserEmailConfirmationEntity,
+    userEmailConfirmation: ConfirmationEmailEntity,
   ) => {
     if (!userEmailConfirmation) {
-      throw new NotFoundError("User email confirmation not found");
+      throw new NotFoundError("User confirmation email not found");
     }
 
     const { userId } = userEmailConfirmation;
 
-    const email = userEmailConfirmation.email;
-    const token = userEmailConfirmation.confirmationToken;
+    const email = userEmailConfirmation.emailAddress;
+    const token = userEmailConfirmation.emailVerificationToken;
     const message: EmailMessage = {
       title: "Please confirm your email",
       html: `
         <strong>
-          <p>Please click this <a href="https://localhost/api/v1/users/${userId}/confirm?confirmationEmail=${token}">link</a> to confirm your email </p>
+          <p>Please click this <a href="https://localhost:4001/api/v1/auth/users/${userId}/confirm?confirmationEmail=${token}">link</a> to confirm your email </p>
         </strong>
       `,
     };

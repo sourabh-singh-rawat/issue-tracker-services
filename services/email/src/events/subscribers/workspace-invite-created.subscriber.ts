@@ -4,7 +4,7 @@ import {
   CONSUMERS,
   EventBus,
   Streams,
-  Subjects,
+  SUBJECTS,
   Subscriber,
   WorkspaceInvitePayload,
 } from "@issue-tracker/event-bus";
@@ -12,7 +12,7 @@ import {
 export class WorkspaceInviteCreatedSubscriber extends Subscriber<WorkspaceInvitePayload> {
   readonly stream = Streams.WORKSPACE;
   readonly consumer = CONSUMERS.WORKSPACE_INVITE_CREATED_MAIL;
-  readonly subject = Subjects.WORKSPACE_INVITE_CREATED;
+  readonly subject = SUBJECTS.WORKSPACE_INVITE_CREATED;
 
   constructor(
     private eventBus: EventBus,

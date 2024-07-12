@@ -59,13 +59,13 @@ export class CoreIdentityService implements IdentityService {
   ) => {
     const { exp, jwtid } = options;
 
-    const { userId, email, emailConfirmationStatus, displayName, createdAt } =
+    const { userId, email, emailVerificationStatus, displayName, createdAt } =
       userDetails;
 
     const payload: AccessToken = {
       userId,
       email,
-      emailConfirmationStatus,
+      emailVerificationStatus,
       createdAt,
       displayName,
       userMetadata: { language: "en" },
@@ -140,14 +140,14 @@ export class CoreIdentityService implements IdentityService {
 
     const user = await this.getUserByEmail(email);
     if (!user) throw new UserNotFoundError();
-    if (!user.emailConfirmationStatus) throw new EmailNotVerifiedError();
+    if (!user.emailVerificationStatus) throw new EmailNotVerifiedError();
 
     await this.userService.verifyPassword({ email, password });
 
     const { access, refresh } = this.generateTokens({
       userId: user.id,
       email: user.email,
-      emailConfirmationStatus: user.emailConfirmationStatus,
+      emailVerificationStatus: user.emailVerificationStatus,
       createdAt: user.createdAt,
     });
 
@@ -177,7 +177,7 @@ export class CoreIdentityService implements IdentityService {
       userId: user.id,
       email: user.email,
       createdAt: user.createdAt,
-      emailConfirmationStatus: user.emailConfirmationStatus,
+      emailVerificationStatus: user.emailVerificationStatus,
     });
 
     await this.saveTokens(access, refresh);

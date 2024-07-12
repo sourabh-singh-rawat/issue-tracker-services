@@ -1,5 +1,5 @@
 import { QueryBuilderOptions, Typeorm } from "@issue-tracker/orm";
-import { UserEmailConfirmationEntity } from "../entities/user-email-confirmation.entity";
+import { ConfirmationEmailEntity } from "../entities/confirmation-email.entity";
 import { UserEmailConfirmationRepository } from "./interfaces/user-email-confirmation.repository";
 import { NotFoundError } from "@issue-tracker/common";
 
@@ -9,34 +9,33 @@ export class PostgresUserEmailConfirmationRepository
   constructor(private readonly orm: Typeorm) {}
 
   save = async (
-    userEmailConfirmation: UserEmailConfirmationEntity,
+    userEmailConfirmation: ConfirmationEmailEntity,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(UserEmailConfirmationEntity)
+      .into(ConfirmationEmailEntity)
       .values(userEmailConfirmation)
       .returning("*");
 
-    return (await query.execute())
-      .generatedMaps[0] as UserEmailConfirmationEntity;
+    return (await query.execute()).generatedMaps[0] as ConfirmationEmailEntity;
   };
 
   existsById = async (id: string) => {
-    return await UserEmailConfirmationEntity.existsBy({ id });
+    return await ConfirmationEmailEntity.existsBy({ id });
   };
 
   update = async (
     id: string,
-    entity: UserEmailConfirmationEntity,
+    entity: ConfirmationEmailEntity,
     options?: QueryBuilderOptions | undefined,
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
-      .update(UserEmailConfirmationEntity)
+      .update(ConfirmationEmailEntity)
       .set(entity)
       .where("id = :id", { id });
 
@@ -44,7 +43,7 @@ export class PostgresUserEmailConfirmationRepository
   };
 
   softDelete = async (id: string) => {
-    const userEmailConfirmation = await UserEmailConfirmationEntity.findOne({
+    const userEmailConfirmation = await ConfirmationEmailEntity.findOne({
       where: { id },
     });
     if (!userEmailConfirmation) {

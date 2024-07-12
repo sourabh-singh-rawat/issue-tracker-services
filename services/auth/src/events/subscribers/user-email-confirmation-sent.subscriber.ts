@@ -2,18 +2,19 @@ import {
   CONSUMERS,
   EventBus,
   Streams,
-  Subjects,
+  SUBJECTS,
   Subscriber,
   UserEmailConfirmationSentPayload,
 } from "@issue-tracker/event-bus";
+import { EMAIL_VERIFICATION_STATUS } from "@issue-tracker/common";
 import { JsMsg } from "nats";
 import { UserService } from "../../services/interfaces/user.service";
-import { USER_EMAIL_CONFIRMATION_STATUS } from "@issue-tracker/common";
+import { EmailVerificationTokenEntity } from "../../data/entities/email-verification-token.entity";
 
 export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailConfirmationSentPayload> {
   readonly stream = Streams.USER;
   readonly consumer = CONSUMERS.USER_EMAIL_CONFIRMATION_SENT_AUTH;
-  readonly subject = Subjects.USER_CONFIRMATION_EMAIL_SENT;
+  readonly subject = SUBJECTS.USER_CONFIRMATION_EMAIL_SENT;
 
   constructor(
     private readonly eventBus: EventBus,
@@ -26,11 +27,18 @@ export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailCon
     message: JsMsg,
     payload: UserEmailConfirmationSentPayload,
   ) => {
-    const { userId } = payload;
+    const { userId, sentAt } = payload;
 
-    await this.userService.update(userId, {
-      emailConfirmationStatus: USER_EMAIL_CONFIRMATION_STATUS.SENT,
-    });
+    if (!sentAt) {
+      await this.userService.update(userId, {
+        emailConfirmationStatus: EMAIL_VERIFICATION_STATUS.FAILED,
+      });
+    } else {
+      await EmailVerificationTokenEntity.update(
+        { sentAt: new Date(sentAt * 1000) },
+        { userId },
+      );
+    }
     message.ack();
   };
 }

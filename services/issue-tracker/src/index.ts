@@ -38,8 +38,7 @@ import { PostgresProjectRepository } from "./data/repositories/postgres-project.
 import { PostgresIssueAssigneeRepository } from "./data/repositories/postgres-issue-assignee.repository";
 import { PostgresIssueCommentRepository } from "./data/repositories/postgres-issue-comment.repository";
 import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
-import { UserCreatedSubscriber } from "./events/subscribers/user-created.subscriber";
-import { UserUpdatedSubscriber } from "./events/subscribers/user-updated.subscriber";
+import { UserEmailVerifiedSubscriber } from "./events/subscribers/user-email-verified.subscriber";
 import { IssueCreatedPublisher } from "./events/publishers/issue-created.publisher";
 import { projectRoutes } from "./routes/project.routes";
 import { workspaceRoutes } from "./routes/workspace.routes";
@@ -106,8 +105,7 @@ export interface RegisteredServices {
   workspaceCreatedPublisher: WorkspaceCreatedPublisher;
   workspaceInviteCreatedPublisher: WorkspaceInviteCreatedPublisher;
   projectMemberCreatedPublisher: ProjectMemberCreatedPublisher;
-  userCreatedSubscriber: UserCreatedSubscriber;
-  userUpdatedSubscriber: UserUpdatedSubscriber;
+  userEmailVerifiedSubscriber: UserEmailVerifiedSubscriber;
   issueCreatedPublisher: IssueCreatedPublisher;
 }
 
@@ -149,8 +147,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
 };
 
 const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
-  container.get("userCreatedSubscriber").fetchMessages();
-  container.get("userUpdatedSubscriber").fetchMessages();
+  container.get("userEmailVerifiedSubscriber").fetchMessages();
 };
 
 const main = async () => {
@@ -219,8 +216,7 @@ const main = async () => {
     "workspaceInviteCreatedPublisher",
     asClass(WorkspaceInviteCreatedPublisher),
   );
-  add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
-  add("userUpdatedSubscriber", asClass(UserUpdatedSubscriber));
+  add("userEmailVerifiedSubscriber", asClass(UserEmailVerifiedSubscriber));
   add("issueCreatedPublisher", asClass(IssueCreatedPublisher));
 
   container.init();

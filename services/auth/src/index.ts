@@ -26,10 +26,12 @@ import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { CoreUserService } from "./services/core-user.service";
 import { UserProfileRepository } from "./data/repositories/interfaces/user-profile.repository";
 import { PostgresUserProfileRepository } from "./data/repositories/postgres-user-profile.repository";
-import { UserCreatedPublisher } from "./events/publishers/user-created.publisher";
-import { UserUpdatedPublisher } from "./events/publishers/user-updated.publisher";
+import { UserRegisteredPublisher } from "./events/publishers/user-registered.publisher";
+import { UserEmailVerifiedPublisher } from "./events/publishers/user-email-verified.publisher";
 import { userRoutes } from "./routes/user.routes";
 import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
+import { EmailVerificationTokenEntity } from "./data/entities/email-verification-token.entity";
+import { PostgresEmailVerificationTokenRepository as PostgresEmailVerificationTokenRepository } from "./data/repositories/postgres-email-verification-token.repository";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -43,8 +45,9 @@ export interface RegisteredServices {
   userProfileRepository: UserProfileRepository;
   accessTokenRepository: AccessTokenRepository;
   refreshTokenRepository: RefreshTokenRepository;
-  userCreatedPublisher: UserCreatedPublisher;
-  userUpdatedPublisher: UserUpdatedPublisher;
+  emailVerificationTokenRepository: EmailVerificationTokenEntity;
+  userRegisteredPublisher: UserRegisteredPublisher;
+  userEmailVerifiedPublisher: UserEmailVerifiedPublisher;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
 }
 
@@ -112,8 +115,12 @@ const main = async () => {
   add("userProfileRepository", asClass(PostgresUserProfileRepository));
   add("accessTokenRepository", asClass(PostgresAccessTokenRepository));
   add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
-  add("userCreatedPublisher", asClass(UserCreatedPublisher));
-  add("userUpdatedPublisher", asClass(UserUpdatedPublisher));
+  add(
+    "emailVerificationTokenRepository",
+    asClass(PostgresEmailVerificationTokenRepository),
+  );
+  add("userRegisteredPublisher", asClass(UserRegisteredPublisher));
+  add("userEmailVerifiedPublisher", asClass(UserEmailVerifiedPublisher));
   add(
     "userEmailConfirmationSentSubscriber",
     asClass(UserEmailConfirmationSentSubscriber),

@@ -2,14 +2,15 @@ import {
   EventBus,
   Publisher,
   Subjects,
-  UserUpdatedPayload,
+  SUBJECTS,
+  UserRegisteredPayload,
 } from "@issue-tracker/event-bus";
 
-export class UserUpdatedPublisher extends Publisher<{
-  payload: UserUpdatedPayload;
+export class UserRegisteredPublisher extends Publisher<{
+  payload: UserRegisteredPayload;
   subject: Subjects;
 }> {
-  subject = Subjects.USER_UPDATED;
+  subject = SUBJECTS.USER_REGISTERED;
 
   constructor(eventBus: EventBus) {
     super(eventBus.client);

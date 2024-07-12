@@ -1,9 +1,9 @@
 import { AuditEntity } from "@issue-tracker/orm";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { UserEmailConfirmationEntity } from "./user-email-confirmation.entity";
+import { ConfirmationEmailEntity } from "./confirmation-email.entity";
 import {
-  USER_EMAIL_CONFIRMATION_STATUS,
-  UserEmailConfirmationStatus,
+  EMAIL_VERIFICATION_STATUS,
+  EmailVerificationStatus,
 } from "@issue-tracker/common";
 
 @Entity({ name: "users" })
@@ -15,18 +15,16 @@ export class UserEntity extends AuditEntity {
   email!: string;
 
   @Column({
-    name: "email_confirmation_status",
+    name: "email_verification_status",
     type: "enum",
-    default: USER_EMAIL_CONFIRMATION_STATUS.PENDING,
+    default: EMAIL_VERIFICATION_STATUS.UNVERIFIED,
     enum: [
-      USER_EMAIL_CONFIRMATION_STATUS.PENDING,
-      USER_EMAIL_CONFIRMATION_STATUS.SENT,
-      USER_EMAIL_CONFIRMATION_STATUS.ACCEPTED,
-      USER_EMAIL_CONFIRMATION_STATUS.EXPIRED,
-      USER_EMAIL_CONFIRMATION_STATUS.REVOKED,
+      EMAIL_VERIFICATION_STATUS.UNVERIFIED,
+      EMAIL_VERIFICATION_STATUS.VERIFIED,
+      EMAIL_VERIFICATION_STATUS.FAILED,
     ],
   })
-  emailConfirmationStatus!: UserEmailConfirmationStatus;
+  emailVerificationStatus!: EmailVerificationStatus;
 
   @Column({ name: "display_name", type: "text" })
   displayName!: string;
@@ -34,6 +32,6 @@ export class UserEntity extends AuditEntity {
   @Column({ name: "photo_url", type: "text", nullable: true })
   photoUrl?: string;
 
-  @OneToMany(() => UserEmailConfirmationEntity, ({ user }) => user)
-  emailConfirmations!: UserEmailConfirmationEntity[];
+  @OneToMany(() => ConfirmationEmailEntity, ({ user }) => user)
+  emailConfirmations!: ConfirmationEmailEntity[];
 }
