@@ -2,3 +2,4 @@ packages:
   - clients/**
   - packages/**
   - services/**
+  - shared-ui/**
