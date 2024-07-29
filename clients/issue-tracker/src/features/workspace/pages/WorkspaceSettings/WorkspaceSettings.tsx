@@ -6,7 +6,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import WorkspaceName from "../../components/WorkspaceName";
 
-import openapi from "../../../../api/generated/openapi.json";
+import schema from "../../../../api/generated/issue-tracker.openapi.json";
 import { useForm } from "react-hook-form";
 import AjvFormats from "ajv-formats";
 import { ajvResolver } from "@hookform/resolvers/ajv";
@@ -35,7 +35,7 @@ export default function WorkspaceSettings() {
   };
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/issue-tracker/workspaces/{id}"].patch.requestBody.content[
+      schema.paths["/api/v1/workspaces/{id}"].patch.requestBody.content[
         "application/json"
       ].schema,
     [],

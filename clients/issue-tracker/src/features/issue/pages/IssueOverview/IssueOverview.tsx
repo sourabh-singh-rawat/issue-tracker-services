@@ -12,7 +12,6 @@ import {
   useUpdateIssueMutation,
   useGetIssueStatusListQuery,
   useGetIssuePriorityListQuery,
-  useGetIssueAttachmentListQuery,
 } from "../../../../api/generated/issue.api";
 import { useMessageBar } from "../../../message-bar/hooks";
 import Avatar from "../../../../common/components/Avatar";
@@ -27,6 +26,7 @@ import DateTag from "../../../../common/components/DateTag";
 import ImageCard from "../../../issue-attachments/components/ImageCard";
 import IssueResolutionSelector from "../../components/IssueResolutionSelector";
 import Description2 from "../../../../common/components/Description2";
+import { useGetIssueAttachmentListQuery } from "../../../../api/generated/storage.api";
 
 export default function IssueOverview() {
   const theme = useTheme();

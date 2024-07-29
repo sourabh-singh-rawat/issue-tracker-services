@@ -6,12 +6,23 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: (build) => ({
+      createProject: build.mutation<
+        CreateProjectApiResponse,
+        CreateProjectApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v1/projects`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["project"],
+      }),
       getProjectList: build.query<
         GetProjectListApiResponse,
         GetProjectListApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/projects`,
+          url: `/api/v1/projects`,
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
@@ -21,13 +32,17 @@ const injectedRtkApi = api
         }),
         providesTags: ["project"],
       }),
-      createProject: build.mutation<
-        CreateProjectApiResponse,
-        CreateProjectApiArg
+      getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
+        query: (queryArg) => ({ url: `/api/v1/projects/${queryArg.id}` }),
+        providesTags: ["project"],
+      }),
+      updateProject: build.mutation<
+        UpdateProjectApiResponse,
+        UpdateProjectApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/projects`,
-          method: "POST",
+          url: `/api/v1/projects/${queryArg.id}`,
+          method: "PATCH",
           body: queryArg.body,
         }),
         invalidatesTags: ["project"],
@@ -36,33 +51,7 @@ const injectedRtkApi = api
         GetProjectStatusListApiResponse,
         GetProjectStatusListApiArg
       >({
-        query: () => ({ url: `/issue-tracker/projects/status` }),
-        providesTags: ["project"],
-      }),
-      getProject: build.query<GetProjectApiResponse, GetProjectApiArg>({
-        query: (queryArg) => ({
-          url: `/issue-tracker/projects/${queryArg.id}`,
-        }),
-        providesTags: ["project"],
-      }),
-      updateProject: build.mutation<
-        UpdateProjectApiResponse,
-        UpdateProjectApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/issue-tracker/projects/${queryArg.id}`,
-          method: "PATCH",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["project"],
-      }),
-      getProjectRoleList: build.query<
-        GetProjectRoleListApiResponse,
-        GetProjectRoleListApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/issue-tracker/projects/${queryArg.id}/role`,
-        }),
+        query: () => ({ url: `/api/v1/projects/status` }),
         providesTags: ["project"],
       }),
       getProjectMembers: build.query<
@@ -70,25 +59,27 @@ const injectedRtkApi = api
         GetProjectMembersApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/projects/${queryArg.id}/members`,
+          url: `/api/v1/projects/${queryArg.id}/members`,
         }),
         providesTags: ["project"],
-      }),
-      createProjectInvite: build.mutation<
-        CreateProjectInviteApiResponse,
-        CreateProjectInviteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/issue-tracker/projects/${queryArg.id}/members/invite`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["project"],
       }),
     }),
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
+export type CreateProjectApiResponse =
+  /** status 201 Project created successfully */ {
+    rows: string;
+  };
+export type CreateProjectApiArg = {
+  body: {
+    name: string;
+    description?: string;
+    startDate?: string;
+    endDate?: string;
+    status: string;
+  };
+};
 export type GetProjectListApiResponse =
   /** status 200 All the projects created by a user or associated with them */ {
     rows?: {
@@ -98,77 +89,52 @@ export type GetProjectListApiResponse =
       status?: string;
       ownerUserId?: string;
       workspaceId?: string;
-      startDate?: string | string;
-      endDate?: string | string;
+      startDate?: string;
+      endDate?: string;
     }[];
     rowCount?: number;
   };
 export type GetProjectListApiArg = {
-  page?: string;
-  pageSize?: string;
+  page?: number;
+  pageSize?: number;
   sortBy?: string;
   sortOrder?: string;
 };
-export type CreateProjectApiResponse =
-  /** status 201 Project created successfully */ {
-    rows: string;
-  };
-export type CreateProjectApiArg = {
-  /** Fields used for creating a new project */
-  body: {
-    name: string;
-    description?: string;
-    startDate?: string | string;
-    endDate?: string | string;
-    status: string;
-  };
+export type GetProjectApiResponse = /** status 200 Default Response */ {
+  createdAt: string;
+  deletedAt: string;
+  description: string;
+  endDate: string;
+  id: string;
+  name: string;
+  ownerUserId: string;
+  startDate: string;
+  status: string;
+  updatedAt: string;
+  version: number;
+  workspaceId: string;
 };
-export type GetProjectStatusListApiResponse =
-  /** status 200 Get project status list */ {
-    rows: string[];
-    rowCount: number;
-  };
-export type GetProjectStatusListApiArg = void;
-export type GetProjectApiResponse =
-  /** status 200 Projects updated successfully */ {
-    createdAt: string | string;
-    deletedAt: string | string;
-    description: string;
-    endDate: string | string;
-    id: string;
-    name: string;
-    ownerUserId: string;
-    startDate: string | string;
-    status: string;
-    updatedAt: string | string;
-    version: number;
-    workspaceId: string;
-  };
 export type GetProjectApiArg = {
-  /** Numeric id of the project to update */
-  id?: string;
+  id: string;
 };
 export type UpdateProjectApiResponse =
-  /** status 200 Projects updated successfully */ void;
+  /** status 200 Project updated successfully */ string;
 export type UpdateProjectApiArg = {
-  /** Numeric id of the project to update */
   id: string;
   body: {
     name?: string;
     description?: string;
     status?: string;
-    startDate?: string | string;
-    endDate?: string | string;
+    startDate?: string;
+    endDate?: string;
   };
 };
-export type GetProjectRoleListApiResponse =
-  /** status 200 Get project roles list */ {
-    rows: string[];
+export type GetProjectStatusListApiResponse =
+  /** status 200 Get project status list */ {
+    rows: any;
     rowCount: number;
   };
-export type GetProjectRoleListApiArg = {
-  id?: string;
-};
+export type GetProjectStatusListApiArg = void;
 export type GetProjectMembersApiResponse =
   /** status 200 Get all project members */ {
     rows: {
@@ -177,39 +143,23 @@ export type GetProjectMembersApiResponse =
         displayName: string;
         email: string;
       };
-      createdAt: any;
+      createdAt: string;
       role: string;
     }[];
     rowCount: number;
   };
 export type GetProjectMembersApiArg = {
-  /** Numeric id of the project */
-  id?: string;
-};
-export type CreateProjectInviteApiResponse =
-  /** status 201 Invite created successfully */ void;
-export type CreateProjectInviteApiArg = {
-  /** Numeric id of the project */
-  id?: string;
-  /** Fields used for creating a new project member */
-  body: {
-    userId: string;
-    role: string;
-    workspaceId: string;
-  };
+  id: string;
 };
 export const {
+  useCreateProjectMutation,
   useGetProjectListQuery,
   useLazyGetProjectListQuery,
-  useCreateProjectMutation,
-  useGetProjectStatusListQuery,
-  useLazyGetProjectStatusListQuery,
   useGetProjectQuery,
   useLazyGetProjectQuery,
   useUpdateProjectMutation,
-  useGetProjectRoleListQuery,
-  useLazyGetProjectRoleListQuery,
+  useGetProjectStatusListQuery,
+  useLazyGetProjectStatusListQuery,
   useGetProjectMembersQuery,
   useLazyGetProjectMembersQuery,
-  useCreateProjectInviteMutation,
 } = injectedRtkApi;

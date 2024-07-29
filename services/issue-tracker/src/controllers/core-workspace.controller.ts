@@ -45,9 +45,8 @@ export class CoreWorkspaceController implements WorkspaceController {
   ) => {
     const { inviteToken } = request.query;
 
-    const response = await this.workspaceService.confirmWorkspaceInvite(
-      inviteToken,
-    );
+    const response =
+      await this.workspaceService.confirmWorkspaceInvite(inviteToken);
 
     return reply.redirect(response.rows);
   };

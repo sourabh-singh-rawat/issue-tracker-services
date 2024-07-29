@@ -14,11 +14,11 @@ import AppLoader from "../../../../common/components/AppLoader";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
+import { useMessageBar } from "../../../message-bar/hooks";
 import {
   useCreateIssueAttachmentMutation,
   useGetIssueAttachmentListQuery,
-} from "../../../../api/generated/issue.api";
-import { useMessageBar } from "../../../message-bar/hooks";
+} from "../../../../api/generated/storage.api";
 
 function IssueAttachments() {
   const theme = useTheme();

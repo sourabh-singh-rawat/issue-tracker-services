@@ -11,32 +11,48 @@ const injectedRtkApi = api
         GetProjectActivityListApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/activities/projects/${queryArg.id}`,
+          url: `/api/v1/projects/${queryArg.id}/activities`,
         }),
         providesTags: ["issue"],
-      }),
-      getAllWorkspaces: build.query<
-        GetAllWorkspacesApiResponse,
-        GetAllWorkspacesApiArg
-      >({
-        query: () => ({ url: `/issue-tracker/workspaces` }),
-        providesTags: ["workspace"],
       }),
       createWorkspace: build.mutation<
         CreateWorkspaceApiResponse,
         CreateWorkspaceApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/workspaces`,
+          url: `/api/v1/workspaces`,
           method: "POST",
           body: queryArg.body,
         }),
         invalidatesTags: ["workspace"],
       }),
-      getWorkspace: build.query<GetWorkspaceApiResponse, GetWorkspaceApiArg>({
+      getAllWorkspaces: build.query<
+        GetAllWorkspacesApiResponse,
+        GetAllWorkspacesApiArg
+      >({
+        query: () => ({ url: `/api/v1/workspaces` }),
+        providesTags: ["workspace"],
+      }),
+      createWorkspaceInvite: build.mutation<
+        CreateWorkspaceInviteApiResponse,
+        CreateWorkspaceInviteApiArg
+      >({
         query: (queryArg) => ({
-          url: `/issue-tracker/workspaces/${queryArg.id}`,
+          url: `/api/v1/workspaces/invite`,
+          method: "POST",
+          body: queryArg.body,
         }),
+        invalidatesTags: ["workspace"],
+      }),
+      getWorkspaceRoleList: build.query<
+        GetWorkspaceRoleListApiResponse,
+        GetWorkspaceRoleListApiArg
+      >({
+        query: () => ({ url: `/api/v1/workspaces/role` }),
+        providesTags: ["workspace"],
+      }),
+      getWorkspace: build.query<GetWorkspaceApiResponse, GetWorkspaceApiArg>({
+        query: (queryArg) => ({ url: `/api/v1/workspaces/${queryArg.id}` }),
         providesTags: ["workspace"],
       }),
       updateWorkspace: build.mutation<
@@ -44,19 +60,8 @@ const injectedRtkApi = api
         UpdateWorkspaceApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/workspaces/${queryArg.id}`,
+          url: `/api/v1/workspaces/${queryArg.id}`,
           method: "PATCH",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["workspace"],
-      }),
-      createWorkspaceInvite: build.mutation<
-        CreateWorkspaceInviteApiResponse,
-        CreateWorkspaceInviteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/issue-tracker/workspaces/invite`,
-          method: "POST",
           body: queryArg.body,
         }),
         invalidatesTags: ["workspace"],
@@ -66,15 +71,8 @@ const injectedRtkApi = api
         GetWorkspaceMembersApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/workspaces/${queryArg.id}/members`,
+          url: `/api/v1/workspaces/${queryArg.id}/members`,
         }),
-        providesTags: ["workspace"],
-      }),
-      getWorkspaceRoleList: build.query<
-        GetWorkspaceRoleListApiResponse,
-        GetWorkspaceRoleListApiArg
-      >({
-        query: () => ({ url: `/issue-tracker/workspaces/role` }),
         providesTags: ["workspace"],
       }),
     }),
@@ -87,9 +85,21 @@ export type GetProjectActivityListApiResponse =
     rowCount: number;
   };
 export type GetProjectActivityListApiArg = {
-  id?: string;
+  id: string;
 };
-export type GetAllWorkspacesApiResponse = /** status 200 all workspaces */ {
+export type CreateWorkspaceApiResponse = /** status 201 Workspace created */ {
+  id: string;
+};
+export type CreateWorkspaceApiArg = {
+  /** Fields used to create a workspace */
+  body: {
+    /** A name for your workspace */
+    name: string;
+    /** A description for your workspace */
+    description?: string;
+  };
+};
+export type GetAllWorkspacesApiResponse = /** status 200 All workspaces */ {
   rows: {
     id: string;
     name: string;
@@ -99,48 +109,37 @@ export type GetAllWorkspacesApiResponse = /** status 200 all workspaces */ {
   rowCount: number;
 };
 export type GetAllWorkspacesApiArg = void;
-export type CreateWorkspaceApiResponse = /** status 201 Workspace created */ {
-  id: string;
-};
-export type CreateWorkspaceApiArg = {
-  /** Fields used to create a workspace */
-  body: {
-    /** A name for your workspace. */
-    name: string;
-    /** A description for your workspace. */
-    description?: string;
-  };
-};
-export type GetWorkspaceApiResponse = /** status 200 Returns the workspace */ {
-  rows?: {
-    id: string;
-    name: string;
-    createdAt?: string;
-    description?: string;
-  };
-};
-export type GetWorkspaceApiArg = {
-  /** Numeric id of the workspace to get */
-  id: string;
-};
-export type UpdateWorkspaceApiResponse =
-  /** status 200 Workspace updated successfully */ void;
-export type UpdateWorkspaceApiArg = {
-  /** Numeric id of the workspace to update */
-  id?: string;
-  /** Fields used to update workspace */
-  body: {
-    name: string;
-    description?: string;
-  };
-};
 export type CreateWorkspaceInviteApiResponse =
-  /** status 201 Workspace member created */ void;
+  /** status 201 Workspace member created */ string;
 export type CreateWorkspaceInviteApiArg = {
   /** Fields used to create a new workspace member invite */
   body: {
     email: string;
     workspaceRole: string;
+  };
+};
+export type GetWorkspaceRoleListApiResponse =
+  /** status 200 Get workspace role list */ {
+    rows: string[];
+    rowCount: number;
+  };
+export type GetWorkspaceRoleListApiArg = void;
+export type GetWorkspaceApiResponse = /** status 200 Returns the workspace */ {
+  id: string;
+  name: string;
+  createdAt?: string;
+  description?: string;
+};
+export type GetWorkspaceApiArg = {
+  id: string;
+};
+export type UpdateWorkspaceApiResponse =
+  /** status 200 Workspace updated successfully */ string;
+export type UpdateWorkspaceApiArg = {
+  id: string;
+  body: {
+    name: string;
+    description?: string;
   };
 };
 export type GetWorkspaceMembersApiResponse =
@@ -155,27 +154,20 @@ export type GetWorkspaceMembersApiResponse =
     filteredRowCount?: number;
   };
 export type GetWorkspaceMembersApiArg = {
-  /** Numeric id of the workspace */
-  id?: string;
+  id: string;
 };
-export type GetWorkspaceRoleListApiResponse =
-  /** status 200 Get workspace roles list */ {
-    rows: string[];
-    rowCount: number;
-  };
-export type GetWorkspaceRoleListApiArg = void;
 export const {
   useGetProjectActivityListQuery,
   useLazyGetProjectActivityListQuery,
+  useCreateWorkspaceMutation,
   useGetAllWorkspacesQuery,
   useLazyGetAllWorkspacesQuery,
-  useCreateWorkspaceMutation,
+  useCreateWorkspaceInviteMutation,
+  useGetWorkspaceRoleListQuery,
+  useLazyGetWorkspaceRoleListQuery,
   useGetWorkspaceQuery,
   useLazyGetWorkspaceQuery,
   useUpdateWorkspaceMutation,
-  useCreateWorkspaceInviteMutation,
   useGetWorkspaceMembersQuery,
   useLazyGetWorkspaceMembersQuery,
-  useGetWorkspaceRoleListQuery,
-  useLazyGetWorkspaceRoleListQuery,
 } = injectedRtkApi;

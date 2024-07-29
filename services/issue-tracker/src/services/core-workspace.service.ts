@@ -205,7 +205,7 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     return new ServiceResponse({
       rows: workspaces,
-      filteredRowCount: workspaces.length,
+      rowCount: workspaces.length,
     });
   };
 

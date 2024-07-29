@@ -1,3 +1,0 @@
-type: string
-maxLength: 3000
-default: ""

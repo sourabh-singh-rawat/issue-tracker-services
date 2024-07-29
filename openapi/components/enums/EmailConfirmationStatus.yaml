@@ -1,6 +1,0 @@
-type: string
-enum:
-  - "email:sent"
-  - "email:confirmationPending"
-  - "email:userClicked"
-  - "email:confirmed"

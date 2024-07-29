@@ -1,6 +1,0 @@
-type: string
-minLength: 1
-maxLength: 80
-format: email
-default: Sourabh.rawatcc@gmail.com
-errorMessage: '"email" is not allowed to be empty and should be valid'

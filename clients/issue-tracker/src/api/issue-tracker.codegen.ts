@@ -1,7 +1,7 @@
 import type { ConfigFile } from "@rtk-query/codegen-openapi";
 
 const config: ConfigFile = {
-  schemaFile: "./generated/openapi.json",
+  schemaFile: "./generated/issue-tracker.openapi.json",
   apiFile: "./issue-tracker.config.ts",
   apiImport: "apiSlice",
   outputFiles: {
@@ -36,9 +36,6 @@ const config: ConfigFile = {
         "getProjectMembers",
         "updateProject",
       ],
-    },
-    "./generated/user.api.ts": {
-      filterEndpoints: ["registerUser", "setDefaultWorkspace"],
     },
     "./generated/workspace.api.ts": {
       filterEndpoints: [

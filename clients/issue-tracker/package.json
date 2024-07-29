@@ -5,11 +5,12 @@
   "private": "true",
   "main": "src/index.tsx",
   "scripts": {
-    "start": "webpack serve --mode development --open",
+    "dev": "webpack serve --mode development --open",
     "build": "webpack",
     "gen:issue-tracker-hooks": "npx @rtk-query/codegen-openapi ./src/api/issue-tracker.codegen.ts",
     "gen:auth-hooks": "npx @rtk-query/codegen-openapi ./src/api/auth.codegen.ts",
-    "gen:hooks": "pnpm gen:issue-tracker-hooks && pnpm gen:auth-hooks"
+    "gen:storage-hooks": "npx @rtk-query/codegen-openapi ./src/api/storage.codegen.ts",
+    "gen:hooks": "pnpm gen:issue-tracker-hooks && pnpm gen:auth-hooks && pnpm gen:storage-hooks"
   },
   "repository": {
     "type": "git",

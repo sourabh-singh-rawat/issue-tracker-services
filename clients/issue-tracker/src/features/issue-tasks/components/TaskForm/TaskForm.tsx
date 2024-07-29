@@ -9,7 +9,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 
-import openapi from "../../../../api/generated/openapi.json";
+import schema from "../../../../api/generated/issue-tracker.openapi.json";
 import TextField from "../../../../common/components/forms/TextField";
 import DatePicker from "../../../../common/components/DatePicker";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
@@ -29,7 +29,7 @@ export default function TaskForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/issues/{id}/tasks"].post.requestBody.content[
+      schema.paths["/api/v1/issues/{id}/tasks"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

@@ -19,7 +19,7 @@ interface WorkspaceListItemProps {
 
 import MenuItem from "../../../../common/components/MenuItem";
 import Avatar from "../../../../common/components/Avatar";
-import { useSetDefaultWorkspaceMutation } from "../../../../api/generated/user.api";
+// import { useSetDefaultWorkspaceMutation } from "../../../../api/generated/user.api";
 import { GetWorkspaceApiResponse } from "../../../../api/generated/workspace.api";
 
 export default function WorkspaceListItem({
@@ -34,23 +34,24 @@ export default function WorkspaceListItem({
 
   const { id, name } = option;
   const { showSuccess, showError } = useMessageBar();
-  const [setDefaultWorkspace, { isLoading, isSuccess, isError }] =
-    useSetDefaultWorkspaceMutation();
+  // const [setDefaultWorkspace, { isLoading, isSuccess, isError }] =
+  //   useSetDefaultWorkspaceMutation();
+  const isLoading = false;
 
-  useEffect(() => {
-    if (isSuccess) {
-      showSuccess("Workspace successfully selected");
-    }
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     showSuccess("Workspace successfully selected");
+  //   }
 
-    if (isError) {
-      showError("Failed to select workspace");
-    }
-  }, [isSuccess]);
+  //   if (isError) {
+  //     showError("Failed to select workspace");
+  //   }
+  // }, [isSuccess]);
 
   const handleClickSetDefaultWorkspace = async () => {
     if (id === selectedOption?.id) return;
 
-    await setDefaultWorkspace({ body: { id, name } });
+    // await setDefaultWorkspace({ body: { id, name } });
     setSelectedOption(option);
     handleClose();
   };

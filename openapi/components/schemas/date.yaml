@@ -1,5 +1,0 @@
-anyOf: 
-  - type: string
-    format: date
-  - type: string
-    maxLength: 0

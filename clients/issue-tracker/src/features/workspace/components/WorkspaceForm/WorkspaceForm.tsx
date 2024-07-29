@@ -10,8 +10,7 @@ import Divider from "@mui/material/Divider";
 
 import TextField from "../../../../common/components/forms/TextField";
 import ModalFooter from "../../../../common/components/ModalFooter";
-
-import openapi from "../../../../api/generated/openapi.json";
+import schema from "../../../../api/generated/issue-tracker.openapi.json";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
@@ -25,7 +24,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   );
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/issue-tracker/workspaces"].post.requestBody.content[
+      schema.paths["/api/v1/workspaces"].post.requestBody.content[
         "application/json"
       ].schema,
     [],
