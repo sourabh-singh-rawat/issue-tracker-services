@@ -15,7 +15,7 @@ import TextField from "../../../../common/components/forms/TextField";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 
-import openapi from "../../../../api/generated/openapi.json";
+import schema from "../../../../api/generated/auth.openapi.json";
 
 export default function SignUpForm() {
   const [searchParams] = useSearchParams();
@@ -31,7 +31,7 @@ export default function SignUpForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/auth/users/register"].post.requestBody.content[
+      schema.paths["/api/v1/users/register"].post.requestBody.content[
         "application/json"
       ].schema,
     [],
@@ -40,9 +40,9 @@ export default function SignUpForm() {
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    resolver: ajvResolver(defaultSchemas, {
-      formats: { email: AjvFormats.get("email") },
-    }),
+    // resolver: ajvResolver(defaultSchemas, {
+    //   formats: { email: AjvFormats.get("email") },
+    // }),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({

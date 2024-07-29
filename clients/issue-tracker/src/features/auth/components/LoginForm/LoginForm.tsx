@@ -10,7 +10,7 @@ import TextField from "../../../../common/components/forms/TextField";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 
-import openapi from "../../../../api/generated/openapi.json";
+import schema from "../../../../api/generated/auth.openapi.json";
 import { useGenerateTokensMutation } from "../../../../api/generated/identity.api";
 
 export default function LoginForm() {
@@ -19,7 +19,7 @@ export default function LoginForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/auth/identity/generate-tokens"].post.requestBody.content[
+      schema.paths["/api/v1/identity/generate-tokens"].post.requestBody.content[
         "application/json"
       ].schema,
     [],
@@ -28,9 +28,9 @@ export default function LoginForm() {
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    resolver: ajvResolver(defaultSchemas, {
-      formats: { email: AjvFormats.get("email") },
-    }),
+    // resolver: ajvResolver(defaultSchemas, {
+    //   formats: { email: AjvFormats.get("email") },
+    // }),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({

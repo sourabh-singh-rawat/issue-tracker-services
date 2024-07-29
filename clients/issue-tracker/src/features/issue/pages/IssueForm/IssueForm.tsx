@@ -10,7 +10,7 @@ import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import TextField from "../../../../common/components/forms/TextField";
 import DatePicker from "../../../../common/components/DatePicker";
 import { useGetProjectMembersQuery } from "../../../../api/generated/project.api";
-import openapi from "../../../../api/generated/openapi.json";
+import schema from "../../../../api/generated/issue-tracker.openapi.json";
 import {
   useCreateIssueMutation,
   useGetIssuePriorityListQuery,
@@ -32,7 +32,7 @@ function IssueForm({ projectId }: IssueFormProps) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [createIssue] = useCreateIssueMutation();
-  const { data: members } = useGetProjectMembersQuery({ id });
+  const { data: members } = useGetProjectMembersQuery({ id: id || "" });
   const { data: statusList } = useGetIssueStatusListQuery();
   const { data: priorityList } = useGetIssuePriorityListQuery();
 
@@ -52,7 +52,7 @@ function IssueForm({ projectId }: IssueFormProps) {
   );
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/issue-tracker/issues"].post.requestBody.content[
+      schema.paths["/api/v1/issues"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

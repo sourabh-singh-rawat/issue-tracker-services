@@ -1,5 +1,5 @@
 import { apiSlice as api } from "../auth.config";
-export const addTagTypes = ["user", "project", "issue"] as const;
+export const addTagTypes = ["user"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -9,7 +9,7 @@ const injectedRtkApi = api
       registerUser: build.mutation<RegisterUserApiResponse, RegisterUserApiArg>(
         {
           query: (queryArg) => ({
-            url: `/auth/users/register`,
+            url: `/api/v1/users/register`,
             method: "POST",
             body: queryArg.body,
             params: { inviteToken: queryArg.inviteToken },
@@ -17,23 +17,11 @@ const injectedRtkApi = api
           invalidatesTags: ["user"],
         },
       ),
-      setDefaultWorkspace: build.mutation<
-        SetDefaultWorkspaceApiResponse,
-        SetDefaultWorkspaceApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/auth/users/default-workspace`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["user", "project", "issue"],
-      }),
     }),
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
-export type RegisterUserApiResponse =
-  /** status 201 User successfully registered */ void;
+export type RegisterUserApiResponse = /** status 200 Default Response */ {};
 export type RegisterUserApiArg = {
   inviteToken?: string;
   body: {
@@ -42,13 +30,4 @@ export type RegisterUserApiArg = {
     displayName: string;
   };
 };
-export type SetDefaultWorkspaceApiResponse =
-  /** status 200 Default workspace updated successfully */ void;
-export type SetDefaultWorkspaceApiArg = {
-  body: {
-    id: string;
-    name: string;
-  };
-};
-export const { useRegisterUserMutation, useSetDefaultWorkspaceMutation } =
-  injectedRtkApi;
+export const { useRegisterUserMutation } = injectedRtkApi;

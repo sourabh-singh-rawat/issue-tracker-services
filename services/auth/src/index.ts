@@ -5,6 +5,7 @@ import {
   FastifyServer,
   logger,
 } from "@issue-tracker/server-core";
+import swagger from "@fastify/swagger";
 import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { IdentityController } from "./controllers/interfaces/identity.controller";
@@ -32,6 +33,7 @@ import { userRoutes } from "./routes/user.routes";
 import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
 import { EmailVerificationTokenEntity } from "./data/entities/email-verification-token.entity";
 import { PostgresEmailVerificationTokenRepository as PostgresEmailVerificationTokenRepository } from "./data/repositories/postgres-email-verification-token.repository";
+import { writeFile } from "fs";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -54,20 +56,67 @@ export interface RegisteredServices {
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
     const server = new FastifyServer({
-      port: 4001,
+      configuration: {
+        host: "0.0.0.0",
+        port: 4001,
+        environment: "development",
+        version: 1,
+      },
+      security: {
+        cors: { credentials: true, origin: "http://localhost:3000" },
+        cookie: { secret: process.env.JWT_SECRET! },
+      },
       routes: [
-        {
-          prefix: "/api/v1/auth/identity",
-          route: identityRoutes(container),
-        },
-        {
-          prefix: "/api/v1/auth/users",
-          route: userRoutes(container),
-        },
+        { route: identityRoutes(container) },
+        { route: userRoutes(container) },
       ],
     });
 
+    server.instance.register(swagger, {
+      openapi: {
+        openapi: "3.0.0",
+        info: {
+          title: "Auth Service",
+          version: "1.0.0",
+          description: "Authentication service",
+          license: {
+            name: "ISC",
+            url: "https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE",
+          },
+        },
+        servers: [
+          { url: "https://localhost:443", description: "development server" },
+        ],
+        tags: [{ name: "user", description: "User related end-points" }],
+        components: {
+          securitySchemes: {
+            cookieAuth: { type: "apiKey", in: "cookie", name: "accessToken" },
+          },
+        },
+        security: [],
+      },
+    });
+
+    server.instance.addSchema({
+      $id: "emailSchema",
+      type: "string",
+      minLength: 1,
+      maxLength: 80,
+      format: "email",
+      default: "Sourabh.rawatcc@gmail.com",
+      // errorMessage: "email is not allowed to be empty and should be valid",
+    });
+
     server.init();
+    await server.instance.ready();
+    const files = server.instance.swagger();
+    writeFile(
+      "../../openapi/auth.openapi.json",
+      JSON.stringify(files),
+      (err) => {
+        err;
+      },
+    );
   } catch (error) {
     process.exit(1);
   }

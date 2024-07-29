@@ -1,0 +1,201 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Storage Service",
+    "version": "1.0.0",
+    "description": "Storage service",
+    "license": {
+      "name": "ISC",
+      "url": "https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://localhost:443",
+      "description": "development server"
+    }
+  ],
+  "security": [],
+  "tags": [],
+  "paths": {
+    "/api/v1/issues/{id}": {
+      "post": {
+        "operationId": "createIssueAttachment",
+        "summary": "Create a new issue attachment",
+        "tags": [
+          "attachment"
+        ],
+        "description": "Create a new issue attachment",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created a new issue attachment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "Created a new issue attachment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains invalid body parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "The request contains invalid body parameters"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User credentials are invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "User credentials are invalid"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User may be blocked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "User may be blocked"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "User is blocked for sending too many request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "User is blocked for sending too many request"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Something went wrong",
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "field": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getIssueAttachmentList",
+        "summary": "Get issue attachment list",
+        "tags": [
+          "attachment"
+        ],
+        "description": "Get issue attachment list",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of issue attachments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "List of issue attachments",
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array"
+                    },
+                    "filteredRowCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rows",
+                    "rowCount"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request contains invalid body parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "The request contains invalid body parameters"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "accessToken"
+      }
+    }
+  }
+}

@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
-import openapi from "../../../../api/generated/openapi.json";
 
 import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
@@ -23,6 +22,7 @@ import {
   useGetProjectStatusListQuery,
 } from "../../../../api/generated/project.api";
 import { ProjectStatus } from "@issue-tracker/common";
+import schema from "../../../../api/generated/issue-tracker.openapi.json";
 
 function ProjectForm() {
   const theme = useTheme();
@@ -43,7 +43,7 @@ function ProjectForm() {
   );
   const defaultSchemas: any = useMemo(
     () =>
-      openapi.paths["/issue-tracker/projects"].post.requestBody.content[
+      schema.paths["/api/v1/projects"].post.requestBody.content[
         "application/json"
       ].schema,
     [],

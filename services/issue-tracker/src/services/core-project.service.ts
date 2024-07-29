@@ -61,7 +61,7 @@ export class CoreProjectService implements ProjectService {
 
     return new ServiceResponse({
       rows: statuses,
-      filteredRowCount: statuses.length,
+      rowCount: statuses.length,
     });
   };
 

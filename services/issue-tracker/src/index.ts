@@ -20,10 +20,8 @@ import {
   logger,
 } from "@issue-tracker/server-core";
 import { DataSource } from "typeorm";
+import swagger from "@fastify/swagger";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { issueRoutes } from "./routes/issue.routes";
-import { issueCommentRoutes } from "./routes/issue-comment.routes";
-import { issueTaskRoutes } from "./routes/issue-task.routes";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { CoreIssueController } from "./controllers/core-issue.controller";
 import { CoreIssueCommentController } from "./controllers/core-issue-comment.controller";
@@ -40,8 +38,6 @@ import { PostgresIssueCommentRepository } from "./data/repositories/postgres-iss
 import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
 import { UserEmailVerifiedSubscriber } from "./events/subscribers/user-email-verified.subscriber";
 import { IssueCreatedPublisher } from "./events/publishers/issue-created.publisher";
-import { projectRoutes } from "./routes/project.routes";
-import { workspaceRoutes } from "./routes/workspace.routes";
 import { ProjectController } from "./controllers/interfaces/project.controller";
 import { CoreProjectController } from "./controllers/core-project.controller";
 import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
@@ -63,13 +59,19 @@ import { WorkspaceInviteCreatedPublisher } from "./events/publishers/workspace-i
 import { ProjectMemberCreatedPublisher } from "./events/publishers/project-member-created.publisher";
 import { WorkspaceMemberInviteRepository } from "./data/repositories/interfaces/workspace-member-invite.repository";
 import { PostgresWorkspaceMemberInviteRepository } from "./data/repositories/postgres-workspace-member-invite.repository";
-import { projectActivityRoutes } from "./routes/project-activity.routes";
 import { ProjectActivityController } from "./controllers/interfaces/project-activity.controller";
 import { CoreProjectActivityController } from "./controllers/core-project-activity.controller";
 import { CoreProjectActivityService } from "./services/core-project-activity.service";
 import { ProjectActivityService } from "./services/interfaces/project-activity.service";
 import { PostgresProjectActivityRepository } from "./data/repositories/postgres-project-activity.repository";
 import { ProjectActivityRepository } from "./data/repositories/interfaces/project-activity.repository";
+import { writeFile } from "fs";
+import { issueRoutes } from "./routes/issue.routes";
+import { issueCommentRoutes } from "./routes/issue-comment.routes";
+import { projectActivityRoutes } from "./routes/project-activity.routes";
+import { issueTaskRoutes } from "./routes/issue-task.routes";
+import { projectRoutes } from "./routes/project.routes";
+import { workspaceRoutes } from "./routes/workspace.routes";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -112,36 +114,81 @@ export interface RegisteredServices {
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
     const server = new FastifyServer({
+      configuration: {
+        host: "0.0.0.0",
+        port: 4000,
+        environment: "development",
+        version: 1,
+      },
+      security: {
+        cors: { credentials: true, origin: "http://localhost:3000" },
+        cookie: { secret: process.env.JWT_SECRET! },
+      },
       routes: [
-        {
-          prefix: "/api/v1/issue-tracker/issues",
-          route: issueRoutes(container),
-        },
-        {
-          prefix: "/api/v1/issue-tracker/issues",
-          route: issueCommentRoutes(container),
-        },
-        {
-          prefix: "/api/v1/issue-tracker/issues",
-          route: issueTaskRoutes(container),
-        },
-        {
-          prefix: "/api/v1/issue-tracker/projects",
-          route: projectRoutes(container),
-        },
-        {
-          prefix: "/api/v1/issue-tracker/workspaces",
-          route: workspaceRoutes(container),
-        },
-        {
-          prefix: "/api/v1/issue-tracker/activities",
-          route: projectActivityRoutes(container),
-        },
+        { route: issueRoutes(container) },
+        { route: issueCommentRoutes(container) },
+        { route: issueTaskRoutes(container) },
+        { route: projectRoutes(container) },
+        { route: projectActivityRoutes(container) },
+        { route: workspaceRoutes(container) },
       ],
+    });
+    const fastify = server.instance;
+    fastify.register(swagger, {
+      openapi: {
+        openapi: "3.0.0",
+        info: {
+          title: "Issue Tracker Service",
+          version: "1.0.0",
+          description: "Issue tracker service",
+          license: {
+            name: "ISC",
+            url: "https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE",
+          },
+        },
+        servers: [
+          { url: "https://localhost:443", description: "development server" },
+        ],
+        tags: [],
+        components: {
+          securitySchemes: {
+            cookieAuth: { type: "apiKey", in: "cookie", name: "accessToken" },
+          },
+        },
+        security: [],
+      },
+    });
+
+    fastify.addSchema({
+      $id: "errorSchema",
+      type: "object",
+      properties: {
+        errors: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              message: { type: "string" },
+              field: { type: "string" },
+            },
+            required: ["message"],
+          },
+        },
+      },
     });
 
     server.init();
+    await fastify.ready();
+    const files = fastify.swagger();
+    writeFile(
+      "../../openapi/issue-tracker.openapi.json",
+      JSON.stringify(files),
+      (err) => {
+        err;
+      },
+    );
   } catch (error) {
+    console.log(error);
     process.exit(1);
   }
 };
@@ -150,23 +197,23 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userEmailVerifiedSubscriber").fetchMessages();
 };
 
-const main = async () => {
-  const dataSource = new DataSource({
-    type: "postgres",
-    host: process.env.DB_HOST,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    entities: ["src/data/entities/*.ts"],
-    synchronize: true,
-  });
+export const dataSource = new DataSource({
+  type: "postgres",
+  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: ["src/data/entities/*.ts"],
+  synchronize: true,
+});
 
+const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
   const eventBus = new NatsEventBus(
     { servers: [process.env.NATS_SERVER_URL || "nats"] },
-    ["issue", "workspace", "project", "user"],
+    ["issue", "workspace", "project"],
     logger,
   );
   await eventBus.init();

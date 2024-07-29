@@ -1,32 +1,21 @@
 import { apiSlice as api } from "../issue-tracker.config";
-export const addTagTypes = ["attachment", "issue", "comment"] as const;
+export const addTagTypes = ["issue", "comment"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
   })
   .injectEndpoints({
     endpoints: (build) => ({
-      createIssueAttachment: build.mutation<
-        CreateIssueAttachmentApiResponse,
-        CreateIssueAttachmentApiArg
-      >({
+      createIssue: build.mutation<CreateIssueApiResponse, CreateIssueApiArg>({
         query: (queryArg) => ({
-          url: `/attachments/issues/${queryArg.id}`,
+          url: `/api/v1/issues`,
           method: "POST",
           body: queryArg.body,
         }),
-        invalidatesTags: ["attachment"],
-      }),
-      getIssueAttachmentList: build.query<
-        GetIssueAttachmentListApiResponse,
-        GetIssueAttachmentListApiArg
-      >({
-        query: (queryArg) => ({ url: `/attachments/issues/${queryArg.id}` }),
-        providesTags: ["attachment"],
       }),
       getIssueList: build.query<GetIssueListApiResponse, GetIssueListApiArg>({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues`,
+          url: `/api/v1/issues`,
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
@@ -37,35 +26,25 @@ const injectedRtkApi = api
         }),
         providesTags: ["issue"],
       }),
-      createIssue: build.mutation<CreateIssueApiResponse, CreateIssueApiArg>({
-        query: (queryArg) => ({
-          url: `/issue-tracker/issues`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["issue"],
+      getIssuePriorityList: build.query<
+        GetIssuePriorityListApiResponse,
+        GetIssuePriorityListApiArg
+      >({
+        query: () => ({ url: `/api/v1/issues/priority` }),
       }),
       getIssueStatusList: build.query<
         GetIssueStatusListApiResponse,
         GetIssueStatusListApiArg
       >({
-        query: () => ({ url: `/issue-tracker/issues/status` }),
-        providesTags: ["issue"],
-      }),
-      getIssuePriorityList: build.query<
-        GetIssuePriorityListApiResponse,
-        GetIssuePriorityListApiArg
-      >({
-        query: () => ({ url: `/issue-tracker/issues/priority` }),
-        providesTags: ["issue"],
+        query: () => ({ url: `/api/v1/issues/status` }),
       }),
       getIssue: build.query<GetIssueApiResponse, GetIssueApiArg>({
-        query: (queryArg) => ({ url: `/issue-tracker/issues/${queryArg.id}` }),
+        query: (queryArg) => ({ url: `/api/v1/issues/${queryArg.id}` }),
         providesTags: ["issue"],
       }),
       updateIssue: build.mutation<UpdateIssueApiResponse, UpdateIssueApiArg>({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}`,
+          url: `/api/v1/issues/${queryArg.id}`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -76,18 +55,17 @@ const injectedRtkApi = api
         UpdateIssueStatusApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/status`,
+          url: `/api/v1/issues/${queryArg.id}/status`,
           method: "PATCH",
           body: queryArg.body,
         }),
-        invalidatesTags: ["issue"],
       }),
       updateIssueResolution: build.mutation<
         UpdateIssueResolutionApiResponse,
         UpdateIssueResolutionApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/resolution`,
+          url: `/api/v1/issues/${queryArg.id}/resolution`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -98,7 +76,7 @@ const injectedRtkApi = api
         CreateIssueCommentApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/comments`,
+          url: `/api/v1/issues/${queryArg.id}/comments`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -109,46 +87,42 @@ const injectedRtkApi = api
         GetIssueCommentListApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/comments`,
+          url: `/api/v1/issues/${queryArg.id}/comments`,
         }),
-        providesTags: ["issue"],
       }),
       deleteIssueComment: build.mutation<
         DeleteIssueCommentApiResponse,
         DeleteIssueCommentApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/comments/${queryArg.commentId}`,
+          url: `/api/v1/issues/${queryArg.id}/comments/${queryArg.commentId}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["issue", "comment"],
-      }),
-      getIssueTaskList: build.query<
-        GetIssueTaskListApiResponse,
-        GetIssueTaskListApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/tasks`,
-        }),
-        providesTags: ["issue"],
       }),
       createIssueTask: build.mutation<
         CreateIssueTaskApiResponse,
         CreateIssueTaskApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/tasks`,
+          url: `/api/v1/issues/${queryArg.id}/tasks`,
           method: "POST",
           body: queryArg.body,
         }),
         invalidatesTags: ["issue"],
+      }),
+      getIssueTaskList: build.query<
+        GetIssueTaskListApiResponse,
+        GetIssueTaskListApiArg
+      >({
+        query: () => ({ url: `/api/v1/issues/tasks` }),
+        providesTags: ["issue"],
       }),
       updateIssueTask: build.mutation<
         UpdateIssueTaskApiResponse,
         UpdateIssueTaskApiArg
       >({
         query: (queryArg) => ({
-          url: `/issue-tracker/issues/${queryArg.id}/tasks/${queryArg.taskId}`,
+          url: `/api/v1/issues/${queryArg.id}/tasks/${queryArg.taskId}`,
           method: "PATCH",
           body: queryArg.body,
         }),
@@ -158,52 +132,39 @@ const injectedRtkApi = api
     overrideExisting: false,
   });
 export { injectedRtkApi as issueTrackerApi };
-export type CreateIssueAttachmentApiResponse =
-  /** status 201 Created a new issue attachment */ void;
-export type CreateIssueAttachmentApiArg = {
-  /** The numeric Id of the issue */
-  id?: string;
-  body: string;
-};
-export type GetIssueAttachmentListApiResponse =
-  /** status 200 List of issue attachments */ {
-    rows: any;
-    filteredRowCount?: number;
-  };
-export type GetIssueAttachmentListApiArg = {
-  /** The numeric Id of the issue */
-  id?: string;
-};
-export type GetIssueListApiResponse = /** status 200 A list of issues */ {
-  rows: {
-    assignees: {
-      id: string;
-      user: {
-        displayName: string;
-        id: string;
-      };
-    }[];
-    createdAt: string;
-    createdById?: string;
-    deletedAt: string;
-    description: string;
-    dueDate: string | string;
-    id: string;
-    name: string;
-    priority: string;
-    priorityList: string[];
-    project: {
+export type CreateIssueApiResponse =
+  /** status 201 Issue created successfully */ string;
+export type CreateIssueApiArg = {
+  body: {
+    name?: string;
+    projectId?: string;
+    status?: string;
+    priority?: string;
+    reporter?: {
       id: string;
       name: string;
+      userId?: string;
+      email: string;
+      createdAt?: string;
+      updatedAt?: string;
+      role?: string;
     };
-    reporter: {
+    assignees?: {
       id: string;
-      displayName: string;
-    };
-    resolution: boolean;
-  }[];
-  filteredRowCount: number;
+      name: string;
+      userId?: string;
+      email: string;
+      createdAt?: string;
+      updatedAt?: string;
+      role?: string;
+    }[];
+    resolution?: boolean;
+    dueDate?: string;
+    id?: string;
+    description?: string;
+  };
 };
+export type GetIssueListApiResponse = unknown;
 export type GetIssueListApiArg = {
   page?: string;
   pageSize?: string;
@@ -211,46 +172,25 @@ export type GetIssueListApiArg = {
   sortOrder?: string;
   projectId?: string;
 };
-export type CreateIssueApiResponse =
-  /** status 201 Issue created successfully */ void;
-export type CreateIssueApiArg = {
-  body: {
-    name: string;
-    description?: string;
-    status?: string;
-    priority?: string;
-    resolution?: boolean;
-    projectId?: string;
-    assignees: {
-      id: string;
-      name: string;
-    }[];
-    reporter?: {
-      id: string;
-      name: string;
-    };
-    dueDate?: string | string;
+export type GetIssuePriorityListApiResponse =
+  /** status 200 Get issue priority list */ {
+    rows: string[];
+    rowCount: string;
   };
-};
+export type GetIssuePriorityListApiArg = void;
 export type GetIssueStatusListApiResponse =
-  /** status 200 Get issue status list */ {
+  /** status 200 Get issues status list */ {
     rows: string[];
     rowCount: number;
   };
 export type GetIssueStatusListApiArg = void;
-export type GetIssuePriorityListApiResponse =
-  /** status 200 Get issue priority list */ {
-    rows: string[];
-    rowCount: number;
-  };
-export type GetIssuePriorityListApiArg = void;
 export type GetIssueApiResponse =
   /** status 200 Returns the issue if it exists */ {
-    createdAt?: string | string;
+    createdAt?: string;
     createdById?: string;
-    deletedAt?: string | string;
+    deletedAt?: string;
     description?: string;
-    dueDate?: string | string;
+    dueDate?: string;
     id?: string;
     name?: string;
     priority?: string;
@@ -262,16 +202,14 @@ export type GetIssueApiResponse =
     reporterId?: string;
     resolution?: boolean;
     status?: string;
-    updatedAt?: string | string;
+    updatedAt?: string;
   };
 export type GetIssueApiArg = {
-  /** Numeric id of the issue to get */
-  id?: string;
+  id: string;
 };
-export type UpdateIssueApiResponse = /** status 200 Updates the issue */ void;
+export type UpdateIssueApiResponse = /** status 200 Update the issue */ object;
 export type UpdateIssueApiArg = {
-  /** Numeric id of the issue to get */
-  id?: string;
+  id: string;
   body: {
     name?: string;
     description?: string;
@@ -283,99 +221,86 @@ export type UpdateIssueApiArg = {
       id: string;
       name: string;
     }[];
-    reportedId?: {
-      id: string;
-      name: string;
+    reporterId?: {
+      id?: string;
+      name?: string;
     };
-    dueDate?: string | string;
+    dueDate?: string;
   };
 };
 export type UpdateIssueStatusApiResponse =
-  /** status 200 Update issue status successfully */ void;
+  /** status 200 Update issue status successfully */ string;
 export type UpdateIssueStatusApiArg = {
-  /** Numeric id of the issue to get */
-  id?: string;
+  id: string;
   body: {
     status?: string;
   };
 };
 export type UpdateIssueResolutionApiResponse =
-  /** status 200 Update issue resolution successfully */ void;
+  /** status 200 Update issue resolution successfully */ string;
 export type UpdateIssueResolutionApiArg = {
-  /** Numeric id of the issue to get */
-  id?: string;
+  id: string;
   body: {
     resolution?: boolean;
   };
 };
 export type CreateIssueCommentApiResponse =
-  /** status 201 The comment has been created successfully */ void;
+  /** status 201 The comment has been created successfully */ string;
 export type CreateIssueCommentApiArg = {
-  /** Numeric id of the issue in which the comment will be created */
-  id?: string;
+  id: string;
   body: {
     description?: string;
   };
 };
 export type GetIssueCommentListApiResponse =
-  /** status 200 List of all the issue comments */ {
+  /** status 200 Default Response */ {
     rows: any;
     filteredRowCount: number;
   };
 export type GetIssueCommentListApiArg = {
-  /** Numeric id of the issue who's comments will be returned */
-  id?: string;
+  id: string;
 };
 export type DeleteIssueCommentApiResponse =
-  /** status 201 The comment has been created successfully */ void;
+  /** status 201 The comment has been created successfully */ string;
 export type DeleteIssueCommentApiArg = {
-  /** Numeric id of the issue in which the comment will be created */
-  id?: string;
-  /** Numeric id of the comment */
-  commentId?: string;
+  id: string;
+  commentId: string;
+};
+export type CreateIssueTaskApiResponse =
+  /** status 201 Issue task created successfully */ string;
+export type CreateIssueTaskApiArg = {
+  id: string;
+  body: {
+    description: string;
+    completed?: boolean;
+    dueDate?: string;
+  };
 };
 export type GetIssueTaskListApiResponse =
   /** status 200 Issue task created successfully */ {
-    rows: any;
+    row: any;
     rowCount: number;
   };
-export type GetIssueTaskListApiArg = {
-  id?: string;
-};
-export type CreateIssueTaskApiResponse =
-  /** status 201 Issue task created successfully */ void;
-export type CreateIssueTaskApiArg = {
-  id?: string;
-  body: {
-    description: string;
-    completed?: boolean;
-    dueDate?: string | string;
-  };
-};
+export type GetIssueTaskListApiArg = void;
 export type UpdateIssueTaskApiResponse =
-  /** status 201 Issue task created successfully */ void;
+  /** status 201 Issue task created successfully */ string;
 export type UpdateIssueTaskApiArg = {
-  /** Numeric id of the issue */
-  id?: string;
-  /** Numeric id of the task */
-  taskId?: string;
+  id: string;
+  taskId: string;
   body: {
     description: string;
     completed?: boolean;
-    dueDate?: string | string;
+    dueDate?: string;
   };
 };
 export const {
-  useCreateIssueAttachmentMutation,
-  useGetIssueAttachmentListQuery,
-  useLazyGetIssueAttachmentListQuery,
+  useCreateIssueMutation,
   useGetIssueListQuery,
   useLazyGetIssueListQuery,
-  useCreateIssueMutation,
-  useGetIssueStatusListQuery,
-  useLazyGetIssueStatusListQuery,
   useGetIssuePriorityListQuery,
   useLazyGetIssuePriorityListQuery,
+  useGetIssueStatusListQuery,
+  useLazyGetIssueStatusListQuery,
   useGetIssueQuery,
   useLazyGetIssueQuery,
   useUpdateIssueMutation,
@@ -385,8 +310,8 @@ export const {
   useGetIssueCommentListQuery,
   useLazyGetIssueCommentListQuery,
   useDeleteIssueCommentMutation,
+  useCreateIssueTaskMutation,
   useGetIssueTaskListQuery,
   useLazyGetIssueTaskListQuery,
-  useCreateIssueTaskMutation,
   useUpdateIssueTaskMutation,
 } = injectedRtkApi;

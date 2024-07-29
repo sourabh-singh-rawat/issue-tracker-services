@@ -8,7 +8,7 @@ import {
 import { Mutex } from "async-mutex";
 
 const mutex = new Mutex();
-const URL = "http://localhost:4000/api/v1";
+const URL = "http://localhost:4000";
 const baseQuery = fetchBaseQuery({
   baseUrl: URL,
   credentials: "include",
@@ -36,7 +36,7 @@ const baseQueryWithReAuth: BaseQueryFn<
       try {
         const refreshResponse = await baseQuery(
           {
-            url: "http://localhost:4001/api/v1/auth/identity/refresh-tokens",
+            url: "http://localhost:4001/api/v1/refresh-tokens",
             method: "POST",
           },
           api,

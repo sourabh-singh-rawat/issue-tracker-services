@@ -1,63 +1,85 @@
-import { ErrorHandlerUtil } from "@issue-tracker/common";
+import { Environment, ErrorHandlerUtil } from "@issue-tracker/common";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import cors, { FastifyCorsOptions } from "@fastify/cors";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 import { AppLogger } from "../logger";
 
-interface FastifyServerOptions {
-  port?: number;
-  routes?: { prefix: string; route: FastifyPluginCallback }[];
+interface ServerConfigurationOptions {
+  port: number;
+  host: string;
+  environment: Environment;
+  version: number;
+}
+
+interface RouteOptions {
+  route: FastifyPluginCallback;
+  prefix?: string;
+}
+
+interface SecurityOptions {
+  cors?: FastifyCorsOptions;
+  cookie?: FastifyCookieOptions;
+}
+
+interface ServerOptions {
+  configuration: ServerConfigurationOptions;
+  security?: SecurityOptions;
+  routes?: RouteOptions[];
   cookie?: { secret: string };
   logger?: AppLogger;
 }
 
 export class FastifyServer {
   readonly instance: FastifyInstance;
-  private readonly SERVER_PORT = 4000;
-  private readonly SERVER_HOST = "0.0.0.0";
-  private port: number;
-  private readonly cookie?: { secret?: string };
-  private readonly routes?: { prefix: string; route: FastifyPluginCallback }[];
+  private configuration: ServerConfigurationOptions;
+  private readonly routes?: RouteOptions[];
   private readonly logger?: AppLogger;
+  private security?: SecurityOptions;
 
-  constructor(options: FastifyServerOptions) {
+  constructor(options: ServerOptions) {
     this.instance = fastify();
-    this.port = options?.port || this.SERVER_PORT;
-    this.cookie = options?.cookie;
     this.routes = options?.routes;
     this.logger = options?.logger;
+    this.configuration = options?.configuration;
+    this.security = options?.security;
   }
 
-  private setCors(opts: FastifyCorsOptions) {
+  private setCors = (opts?: FastifyCorsOptions) => {
     this.instance.register(cors, opts);
-  }
+  };
 
-  private setCookie(opts: FastifyCookieOptions) {
+  private setCookie = (opts: FastifyCookieOptions) => {
     this.instance.register(cookie, opts);
-  }
+  };
 
-  private setErrorHandler() {
+  private setErrorHandler = () => {
     this.instance.setErrorHandler(ErrorHandlerUtil.handleError);
-  }
+  };
 
-  private setRoutes() {
-    this.routes?.forEach(({ route, prefix }) => {
-      this.instance.register(route, { prefix });
+  private setRoutes = () => {
+    this.routes?.forEach(({ route }) => {
+      const { version } = this.configuration;
+
+      this.instance.register(route, { prefix: `/api/v${version}` });
     });
-  }
+  };
 
-  private startServer() {
-    this.instance.listen({ host: this.SERVER_HOST, port: this.port });
-  }
+  private startListening = async () => {
+    const { host, port } = this.configuration;
+    await this.instance.ready();
+    this.instance.listen({ host, port });
+  };
+
+  private setupSwagger = () => {};
 
   init() {
-    this.setCors({ credentials: true, origin: "http://localhost:3000" });
-    this.setCookie({ secret: this.cookie?.secret });
+    this.setCors(this.security?.cors);
+    this.setCookie({ secret: this.security?.cookie?.secret });
     this.setErrorHandler();
     this.setRoutes();
-    this.startServer();
+    this.startListening();
     this.logger?.info(
-      `🚀 Server started on port ${this.SERVER_HOST}:${this.SERVER_PORT}`,
+      `🚀 Server started on port ${this.configuration.host}:${this.configuration.port}`,
     );
   }
 }

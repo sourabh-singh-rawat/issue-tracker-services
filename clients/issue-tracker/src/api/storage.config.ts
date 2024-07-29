@@ -8,7 +8,7 @@ import {
 import { Mutex } from "async-mutex";
 
 const mutex = new Mutex();
-const URL = "http://localhost:4001";
+const URL = "http://localhost:4003";
 const baseQuery = fetchBaseQuery({
   baseUrl: URL,
   credentials: "include",
@@ -61,7 +61,7 @@ const baseQueryWithReAuth: BaseQueryFn<
 };
 
 export const apiSlice = createApi({
-  reducerPath: "auth-api",
+  reducerPath: "storage-api",
   baseQuery: baseQueryWithReAuth,
   endpoints: () => ({}),
 });

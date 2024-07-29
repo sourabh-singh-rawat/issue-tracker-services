@@ -1,10 +1,5 @@
 import "dotenv/config";
-import {
-  AppLogger,
-  AwilixDi,
-  FastifyServer,
-  logger,
-} from "@issue-tracker/server-core";
+import { AppLogger, AwilixDi, logger } from "@issue-tracker/server-core";
 import nodemailer from "nodemailer";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
@@ -43,15 +38,6 @@ export interface RegisteredServices {
   workspaceInviteCreatedSubsciber: WorkspaceInviteCreatedSubscriber;
 }
 
-const startServer = async () => {
-  try {
-    const server = new FastifyServer({ port: 4002 });
-    server.init();
-  } catch (error) {
-    process.exit(1);
-  }
-};
-
 const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userCreatedSubscriber").fetchMessages();
   container.get("projectMemberCreatedSubscriber").fetchMessages();
@@ -71,7 +57,7 @@ export const dataSource = new DataSource({
 
 const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
-  orm.init();
+  await orm.init();
 
   const eventBus = new NatsEventBus(
     { servers: [process.env.NATS_SERVER_URL || "nats"] },
@@ -122,7 +108,6 @@ const main = async () => {
   );
   container.init();
 
-  await startServer();
   startSubscriptions(container);
 };
 
