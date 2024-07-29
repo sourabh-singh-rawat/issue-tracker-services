@@ -141,11 +141,11 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus(
-    { servers: [process.env.NATS_SERVER_URL || "nats"] },
-    ["user"],
+  const eventBus = new NatsEventBus({
+    servers: [process.env.NATS_SERVER_URL || "nats"],
+    streams: ["user"],
     logger,
-  );
+  });
   await eventBus.init();
 
   const awilix = createContainer<RegisteredServices>({
