@@ -1,5 +1,5 @@
 {
-  "name": "attachment",
+  "name": "storage",
   "version": "1.0.0",
   "description": "Create and manage attachments",
   "main": "src/index.ts",

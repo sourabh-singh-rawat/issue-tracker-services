@@ -2,11 +2,12 @@
   "version": "0.2.0",
   "compounds": [
     {
-      "name": "start",
+      "name": "dev",
       "configurations": [
         "auth (service)",
         "issue-tracker (service)",
         "mail (service)",
+        "storage (service)",
         "issue-tracker (client)",
         "brave (debug - scoop)"
       ]
@@ -57,6 +58,15 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["issue-tracker"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "storage (service)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["storage"],
       "console": "integratedTerminal"
     }
   ]
