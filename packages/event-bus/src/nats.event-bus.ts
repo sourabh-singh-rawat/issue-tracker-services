@@ -1,34 +1,35 @@
 import { EventBus } from "./interfaces/event-bus";
 import { AppLogger } from "@issue-tracker/server-core";
-import { ConnectionOptions, NatsConnection, connect } from "nats";
+import { NatsConnection, connect } from "nats";
+
+interface NatsEventBusOptions {
+  servers: string[];
+  streams?: string[];
+  logger?: AppLogger;
+}
 
 export class NatsEventBus implements EventBus {
   public client?: NatsConnection;
 
-  constructor(
-    private readonly opts: ConnectionOptions,
-    private readonly streams: string[],
-    private readonly logger?: AppLogger,
-  ) {
-    this.logger = logger;
-    this.opts = opts;
-  }
+  constructor(private readonly options: NatsEventBusOptions) {}
 
-  private createStreams = async (streams: string[]) => {
+  private createStreams = async (streams: string[] = []) => {
     const jsm = await this.client?.jetstreamManager();
     streams.forEach(async (stream) => {
-      await jsm?.streams.add({
-        name: stream,
-        subjects: [`${stream}.*`],
-      });
+      const found = jsm?.streams.get(stream);
+      if (!found) {
+        await jsm?.streams.add({ name: stream, subjects: [`${stream}.*`] });
+      }
     });
   };
 
   init = async () => {
-    const client = await connect(this.opts);
+    const client = await connect({ servers: this.options.servers });
     this.client = client;
-    this.createStreams(this.streams);
+    this.createStreams(this.options.streams);
 
-    this.logger?.info(`✅ Server connected to ${client.info?.server_name}`);
+    this.options.logger?.info(
+      `✅ Server connected to ${client.info?.server_name}`,
+    );
   };
 }

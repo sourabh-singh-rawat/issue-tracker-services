@@ -59,11 +59,11 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   await orm.init();
 
-  const eventBus = new NatsEventBus(
-    { servers: [process.env.NATS_SERVER_URL || "nats"] },
-    ["email"],
+  const eventBus = new NatsEventBus({
+    servers: [process.env.NATS_SERVER_URL || "nats"],
+    streams: ["email"],
     logger,
-  );
+  });
   await eventBus.init();
 
   const brevoTransporter = nodemailer.createTransport({
