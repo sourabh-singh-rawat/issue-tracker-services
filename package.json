@@ -8,11 +8,7 @@
     "issue-tracker": "pnpm -F @issue-tracker-services/issue-tracker run dev",
     "auth": "pnpm -F auth run dev",
     "mail": "pnpm -F mail run dev",
-    "gen:auth-client": "redocly bundle ./openapi/auth.openapi.json --output ./clients/issue-tracker/src/api/generated/auth.openapi.json --remove-unused-components --dereferenced",
-    "gen:issue-tracker-client": "redocly bundle ./openapi/issue-tracker.openapi.json --output ./clients/issue-tracker/src/api/generated/issue-tracker.openapi.json --remove-unused-components --dereferenced",
-    "gen:storage-client": "redocly bundle ./openapi/storage.openapi.json --output ./clients/issue-tracker/src/api/generated/storage.openapi.json --remove-unused-components --dereferenced",
-    "gen:hooks": "pnpm -F client run gen:hooks",
-    "gen": "pnpm gen:auth-client && pnpm gen:issue-tracker-client && pnpm gen:storage-client && pnpm gen:hooks",
+    "gen": "pnpm -F client run gen:hooks",
     "build": "pnpm -r --filter=!client build"
   },
   "keywords": [],

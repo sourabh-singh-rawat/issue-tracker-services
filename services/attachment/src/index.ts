@@ -102,7 +102,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     await fastify.ready();
     const files = fastify.swagger();
     writeFile(
-      "../../openapi/storage.openapi.json",
+      "../../clients/issue-tracker/src/api/generated/storage.openapi.json",
       JSON.stringify(files),
       (err) => {
         err;

@@ -151,6 +151,12 @@ export type GetProjectMembersApiResponse =
 export type GetProjectMembersApiArg = {
   id: string;
 };
+export type ErrorSchema = {
+  errors?: {
+    message: string;
+    field?: string;
+  }[];
+};
 export const {
   useCreateProjectMutation,
   useGetProjectListQuery,
