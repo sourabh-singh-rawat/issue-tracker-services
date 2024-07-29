@@ -156,6 +156,12 @@ export type GetWorkspaceMembersApiResponse =
 export type GetWorkspaceMembersApiArg = {
   id: string;
 };
+export type ErrorSchema = {
+  errors?: {
+    message: string;
+    field?: string;
+  }[];
+};
 export const {
   useGetProjectActivityListQuery,
   useLazyGetProjectActivityListQuery,

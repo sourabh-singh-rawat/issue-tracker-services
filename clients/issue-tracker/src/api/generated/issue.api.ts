@@ -293,6 +293,12 @@ export type UpdateIssueTaskApiArg = {
     dueDate?: string;
   };
 };
+export type ErrorSchema = {
+  errors?: {
+    message: string;
+    field?: string;
+  }[];
+};
 export const {
   useCreateIssueMutation,
   useGetIssueListQuery,

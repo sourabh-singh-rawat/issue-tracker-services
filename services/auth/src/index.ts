@@ -111,7 +111,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     await server.instance.ready();
     const files = server.instance.swagger();
     writeFile(
-      "../../openapi/auth.openapi.json",
+      "../../clients/issue-tracker/src/api/generated/auth.openapi.json",
       JSON.stringify(files),
       (err) => {
         err;

@@ -53,11 +53,12 @@ export type RevokeTokensApiArg = {
 export type GetCurrentUserApiResponse = /** status 200 Default Response */ {
   userId?: string;
   displayName?: string;
-  email?: string;
+  email?: EmailSchema;
   emailVerificationStatus?: string;
   createdAt?: string;
 };
 export type GetCurrentUserApiArg = void;
+export type EmailSchema = string;
 export const {
   useGenerateTokensMutation,
   useRevokeTokensMutation,
