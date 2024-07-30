@@ -52,7 +52,7 @@ export class CoreProjectService implements ProjectService {
 
     return new ServiceResponse({
       rows,
-      filteredRowCount: rows.length,
+      rowCount: rows.length,
     });
   };
 
