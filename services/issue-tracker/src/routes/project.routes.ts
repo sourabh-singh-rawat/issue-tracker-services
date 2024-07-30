@@ -84,10 +84,25 @@ export const projectRoutes = (container: AwilixDi<RegisteredServices>) => {
                     properties: {
                       id: { type: "string" },
                       name: { type: "string" },
-                      description: { type: "string" },
                       status: { type: "string" },
+                      statuses: { type: "array", items: { type: "string" } },
+                      inviteStatus: { type: "string" },
+                      members: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            user: {
+                              type: "object",
+                              properties: {
+                                id: { type: "string" },
+                                displayName: { type: "string" },
+                              },
+                            },
+                          },
+                        },
+                      },
                       ownerUserId: { type: "string" },
-                      workspaceId: { type: "string" },
                       startDate: { type: "string", format: "date" },
                       endDate: { type: "string", format: "date" },
                     },
@@ -215,6 +230,7 @@ export const projectRoutes = (container: AwilixDi<RegisteredServices>) => {
                   items: {
                     type: "object",
                     properties: {
+                      id: { type: "string" },
                       user: {
                         type: "object",
                         properties: {

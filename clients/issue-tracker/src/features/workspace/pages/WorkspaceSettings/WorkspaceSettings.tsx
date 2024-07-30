@@ -25,7 +25,7 @@ export default function WorkspaceSettings() {
     if (!id) return { name: "", description: "" };
     const { data } = await getWorkspace({ id });
 
-    const row = data?.rows;
+    const row = data;
     if (row) {
       return {
         name: row.name,

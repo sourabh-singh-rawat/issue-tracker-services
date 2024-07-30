@@ -6,7 +6,7 @@ import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
 
 export default function WorkspaceMembers() {
   const { id } = useParams();
-  const { data } = useGetWorkspaceMembersQuery({ id });
+  const { data } = useGetWorkspaceMembersQuery({ id: id || "" });
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {

@@ -119,19 +119,13 @@ export class CoreIssueService implements IssueService {
   getIssueStatusList = async () => {
     const statues = this.getStatuses();
 
-    return new ServiceResponse({
-      rows: statues,
-      filteredRowCount: statues.length,
-    });
+    return new ServiceResponse({ rows: statues, rowCount: statues.length });
   };
 
   getIssuePriorityList = async () => {
     const priority = this.getPriorities();
 
-    return new ServiceResponse({
-      rows: priority,
-      filteredRowCount: priority.length,
-    });
+    return new ServiceResponse({ rows: priority, rowCount: priority.length });
   };
 
   getIssue = async (issueId: string) => {

@@ -150,6 +150,18 @@ export type GetWorkspaceMembersApiResponse =
       workspaceId?: string;
       status?: string;
       role?: string;
+      user?: {
+        createdAt?: string;
+        updatedAt?: string;
+        deletedAt?: string;
+        version?: number;
+        id: string;
+        email: string;
+        defaultWorkspaceId: string;
+        emailVerificationStatus?: string;
+        displayName: string;
+        photoUrl?: string;
+      };
     }[];
     filteredRowCount?: number;
   };

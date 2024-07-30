@@ -18,43 +18,28 @@ export const issueRoutes = (container: AwilixDi<RegisteredServices>) => {
       {
         preHandler,
         schema: {
+          tags: ["issue"],
           operationId: "createIssue",
           summary: "Create a new issue",
           description: "Create a new issue",
           body: {
             type: "object",
             properties: {
-              name: { type: "string" },
+              name: { type: "string", minLength: 1 },
               projectId: { type: "string" },
               status: { type: "string" },
               priority: { type: "string" },
               reporter: {
                 type: "object",
-                properties: {
-                  id: { type: "string" },
-                  name: { type: "string" },
-                  userId: { type: "string" },
-                  email: { type: "string" },
-                  createdAt: { type: "string" },
-                  updatedAt: { type: "string" },
-                  role: { type: "string" },
-                },
-                required: ["id", "name", "email"],
+                properties: { id: { type: "string" } },
+                required: ["id"],
               },
               assignees: {
                 type: "array",
                 items: {
                   type: "object",
-                  properties: {
-                    id: { type: "string" },
-                    name: { type: "string" },
-                    userId: { type: "string" },
-                    email: { type: "string" },
-                    createdAt: { type: "string" },
-                    updatedAt: { type: "string" },
-                    role: { type: "string" },
-                  },
-                  required: ["id", "name", "email"],
+                  properties: { id: { type: "string" } },
+                  required: ["id"],
                 },
               },
               resolution: { type: "boolean" },

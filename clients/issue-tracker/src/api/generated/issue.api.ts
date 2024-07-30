@@ -12,6 +12,7 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.body,
         }),
+        invalidatesTags: ["issue"],
       }),
       getIssueList: build.query<GetIssueListApiResponse, GetIssueListApiArg>({
         query: (queryArg) => ({
@@ -143,20 +144,10 @@ export type CreateIssueApiArg = {
     reporter?: {
       id: string;
       name: string;
-      userId?: string;
-      email: string;
-      createdAt?: string;
-      updatedAt?: string;
-      role?: string;
     };
     assignees?: {
       id: string;
       name: string;
-      userId?: string;
-      email: string;
-      createdAt?: string;
-      updatedAt?: string;
-      role?: string;
     }[];
     resolution?: boolean;
     dueDate?: string;

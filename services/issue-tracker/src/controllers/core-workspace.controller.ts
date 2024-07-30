@@ -66,7 +66,7 @@ export class CoreWorkspaceController implements WorkspaceController {
 
     const response = await this.workspaceService.getWorkspace(id);
 
-    return reply.send(response);
+    return reply.send(response.rows);
   };
 
   getWorkspaceRoleList = async (

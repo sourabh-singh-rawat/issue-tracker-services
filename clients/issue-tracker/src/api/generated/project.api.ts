@@ -138,6 +138,7 @@ export type GetProjectStatusListApiArg = void;
 export type GetProjectMembersApiResponse =
   /** status 200 Get all project members */ {
     rows: {
+      id?: string;
       user: {
         id: string;
         displayName: string;
