@@ -36,7 +36,7 @@ const baseQueryWithReAuth: BaseQueryFn<
       try {
         const refreshResponse = await baseQuery(
           {
-            url: "http://localhost:4001/api/v1/refresh-tokens",
+            url: "http://localhost:4001/api/v1/identity/refresh-tokens",
             method: "POST",
           },
           api,
