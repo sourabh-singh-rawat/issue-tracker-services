@@ -17,11 +17,11 @@ export class ProjectMemberEntity extends AuditEntity {
   @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
 
-  @Column({ name: "user_id", type: "uuid" })
+  @Column({ name: "user_id", type: "uuid", nullable: true })
   userId!: string;
 
   @JoinColumn({ name: "user_id", foreignKeyConstraintName: "user_fkey" })
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { nullable: true })
   user!: UserEntity;
 
   @Column({ name: "created_by_id", type: "uuid", nullable: true })

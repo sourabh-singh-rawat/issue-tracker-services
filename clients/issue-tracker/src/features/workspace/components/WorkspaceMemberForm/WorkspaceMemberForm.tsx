@@ -13,25 +13,37 @@ import MuiContainer from "@mui/material/Container";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import WorkspaceRoleSelector from "../WorkspaceMemberSelector/WorkspaceRoleSelector";
 import EmailIcon from "@mui/icons-material/Email";
+import { ajvResolver } from "@hookform/resolvers/ajv";
+import AjvFormats from "ajv-formats";
+import schema from "../../../../api/generated/issue-tracker.openapi.json";
 
 export default function WorkspaceMemberForm() {
   const { id } = useParams();
   const { data: roleList } = useGetWorkspaceRoleListQuery();
-  const [createWorkspaceInvite] = useCreateWorkspaceInviteMutation();
+  const [createWorkspaceInvite, { isLoading }] =
+    useCreateWorkspaceInviteMutation();
 
   const defaultValues = useMemo(() => ({ email: "", workspaceRole: "" }), []);
+  const defaultSchemas: any = useMemo(
+    () =>
+      schema.paths["/api/v1/workspaces/{id}/invite"].post.requestBody.content[
+        "application/json"
+      ].schema,
+    [],
+  );
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
-    mode: "all",
-    // resolver: ajvResolver(defaultSchemas, {
-    //   formats: { email: AjvFormats.get("email") },
-    // }),
+    mode: "onBlur",
+    resolver: ajvResolver(defaultSchemas, {
+      formats: { email: AjvFormats.get("email") },
+    }),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = async ({
     email,
     workspaceRole,
   }) => {
+    if (!id) return;
     await createWorkspaceInvite({ id, body: { email, workspaceRole } });
   };
 
@@ -65,6 +77,7 @@ export default function WorkspaceMemberForm() {
             label="Send Invite"
             type="submit"
             startIcon={<EmailIcon />}
+            loading={isLoading}
           />
         </MuiGrid>
       </MuiGrid>

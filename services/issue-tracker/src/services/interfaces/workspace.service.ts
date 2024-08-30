@@ -18,7 +18,7 @@ export interface WorkspaceService {
     workspaceId: string,
     role: WorkspaceMemberRoles,
   ): Promise<void>;
-  createWorkspaceInvite(
+  createWorkspaceMember(
     userId: string,
     email: string,
     role: WorkspaceMemberRoles,

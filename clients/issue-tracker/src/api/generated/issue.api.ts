@@ -143,11 +143,9 @@ export type CreateIssueApiArg = {
     priority?: string;
     reporter?: {
       id: string;
-      name: string;
     };
     assignees?: {
       id: string;
-      name: string;
     }[];
     resolution?: boolean;
     dueDate?: string;

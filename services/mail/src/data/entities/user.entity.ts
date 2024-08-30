@@ -1,6 +1,5 @@
 import { AuditEntity } from "@issue-tracker/orm";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ConfirmationEmailEntity } from "./confirmation-email.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
@@ -31,7 +30,4 @@ export class UserEntity extends AuditEntity {
 
   @Column({ name: "photo_url", type: "text", nullable: true })
   photoUrl?: string;
-
-  @OneToMany(() => ConfirmationEmailEntity, ({ user }) => user)
-  emailConfirmations!: ConfirmationEmailEntity[];
 }

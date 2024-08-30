@@ -28,9 +28,9 @@ export default function LoginForm() {
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    // resolver: ajvResolver(defaultSchemas, {
-    //   formats: { email: AjvFormats.get("email") },
-    // }),
+    resolver: ajvResolver(defaultSchemas, {
+      formats: { email: AjvFormats.get("email") },
+    }),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({

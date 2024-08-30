@@ -50,7 +50,7 @@ export class CoreUserService implements UserService {
 
   createUser = async (
     userRegistrationData: UserRegistrationData,
-    inviteToken?: string,
+    workspaceInviteToken?: string,
   ) => {
     const { email, password, displayName } = userRegistrationData;
 
@@ -117,7 +117,7 @@ export class CoreUserService implements UserService {
         photoUrl: savedUserProfile.photoUrl,
         emailVerificationStatus: savedUser.emailVerificationStatus,
         emailVerificationTokenExp: exp,
-        inviteToken,
+        workspaceInviteToken,
       });
     });
   };

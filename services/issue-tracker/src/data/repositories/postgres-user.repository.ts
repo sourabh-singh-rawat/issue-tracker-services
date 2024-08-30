@@ -6,9 +6,9 @@ import { Typeorm } from "@issue-tracker/orm";
 export class PostgresUserRepository implements UserRepository {
   constructor(private orm: Typeorm) {}
 
-  findByEmail(): Promise<UserEntity | null> {
-    throw new Error("Method not implemented.");
-  }
+  findByEmail = async (email: string) => {
+    return await UserEntity.findOne({ where: { email } });
+  };
 
   save = async (user: UserEntity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;

@@ -8,5 +8,5 @@ export interface UserRegisteredPayload {
   emailVerificationToken: string;
   emailVerificationTokenExp: number;
   photoUrl?: string;
-  inviteToken?: string;
+  workspaceInviteToken?: string;
 }

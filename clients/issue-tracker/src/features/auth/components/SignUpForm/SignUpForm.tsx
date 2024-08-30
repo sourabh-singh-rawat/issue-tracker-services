@@ -40,9 +40,9 @@ export default function SignUpForm() {
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    // resolver: ajvResolver(defaultSchemas, {
-    //   formats: { email: AjvFormats.get("email") },
-    // }),
+    resolver: ajvResolver(defaultSchemas, {
+      formats: { email: AjvFormats.get("email") },
+    }),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({
@@ -66,19 +66,12 @@ export default function SignUpForm() {
     <MuiContainer component="form" onSubmit={handleSubmit(onSubmit)}>
       <MuiGrid container rowSpacing={2} marginTop={4}>
         <MuiGrid item xs={12}>
-          <MuiTypography variant="h1">
-            Get started with Issue Tracker
-          </MuiTypography>
-          <MuiTypography>
-            Create your account and start using Issue Tracker.
-          </MuiTypography>
-          <MuiTypography variant="body2">
-            Already have an account?
-          </MuiTypography>
+          <MuiTypography variant="h1">Get Started</MuiTypography>
         </MuiGrid>
         <MuiGrid item xs={12}>
           <TextField
             name="displayName"
+            placeholder=""
             title="Display Name"
             control={control}
             formState={formState}
@@ -102,7 +95,7 @@ export default function SignUpForm() {
           />
         </MuiGrid>
         <MuiGrid item xs={12}>
-          <PrimaryButton type="submit" label="Sign up for free" />
+          <PrimaryButton type="submit" label="Continue" />
         </MuiGrid>
       </MuiGrid>
     </MuiContainer>

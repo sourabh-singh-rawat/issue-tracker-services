@@ -30,6 +30,7 @@ export class UserEntity extends AuditEntity {
     ],
   })
   emailVerificationStatus!: EmailVerificationStatus;
+
   @Column({ name: "display_name", type: "text" })
   displayName!: string;
 

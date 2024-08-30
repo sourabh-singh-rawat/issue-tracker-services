@@ -55,10 +55,10 @@ import { ProjectMemberRepository } from "./data/repositories/interfaces/project-
 import { ProjectCreatedPublisher } from "./events/publishers/project-created.publisher";
 import { WorkspaceCreatedPublisher } from "./events/publishers/workspace-created.publisher";
 import { ProjectUpdatedPublisher } from "./events/publishers/project-updated.publisher";
-import { WorkspaceInviteCreatedPublisher } from "./events/publishers/workspace-invite-created.publisher";
+import { WorkspaceMemberInvitedPublisher } from "./events/publishers/workspace-member-invited.publisher";
 import { ProjectMemberCreatedPublisher } from "./events/publishers/project-member-created.publisher";
-import { WorkspaceMemberInviteRepository } from "./data/repositories/interfaces/workspace-member-invite.repository";
-import { PostgresWorkspaceMemberInviteRepository } from "./data/repositories/postgres-workspace-member-invite.repository";
+import { WorkspaceInviteTokenRepository } from "./data/repositories/interfaces/workspace-invite-token.repository";
+import { PostgresWorkspaceInviteTokenRepository } from "./data/repositories/postgres-workspace-invite-token.repository";
 import { ProjectActivityController } from "./controllers/interfaces/project-activity.controller";
 import { CoreProjectActivityController } from "./controllers/core-project-activity.controller";
 import { CoreProjectActivityService } from "./services/core-project-activity.service";
@@ -94,7 +94,7 @@ export interface RegisteredServices {
   projectMemberRepository: ProjectMemberRepository;
   workspaceRepository: WorkspaceRepository;
   workspaceMemberRepository: WorkspaceMemberRepository;
-  workspaceMemberInviteRepository: WorkspaceMemberInviteRepository;
+  workspaceInviteTokenRepository: WorkspaceInviteTokenRepository;
   userRepository: UserRepository;
   issueRepository: IssueRepository;
   projectRepository: ProjectRepository;
@@ -105,7 +105,7 @@ export interface RegisteredServices {
   projectCreatedPublisher: ProjectCreatedPublisher;
   projectUpdatedPublisher: ProjectUpdatedPublisher;
   workspaceCreatedPublisher: WorkspaceCreatedPublisher;
-  workspaceInviteCreatedPublisher: WorkspaceInviteCreatedPublisher;
+  workspaceMemberInvitedPublisher: WorkspaceMemberInvitedPublisher;
   projectMemberCreatedPublisher: ProjectMemberCreatedPublisher;
   userEmailVerifiedSubscriber: UserEmailVerifiedSubscriber;
   issueCreatedPublisher: IssueCreatedPublisher;
@@ -209,7 +209,7 @@ export const dataSource = new DataSource({
 
 const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
-  orm.init();
+  await orm.init();
 
   const eventBus = new NatsEventBus({
     servers: [process.env.NATS_SERVER_URL || "nats"],
@@ -246,8 +246,8 @@ const main = async () => {
   add("workspaceRepository", asClass(PostgresWorkspaceRepository));
   add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
   add(
-    "workspaceMemberInviteRepository",
-    asClass(PostgresWorkspaceMemberInviteRepository),
+    "workspaceInviteTokenRepository",
+    asClass(PostgresWorkspaceInviteTokenRepository),
   );
   add("userRepository", asClass(PostgresUserRepository));
   add("issueRepository", asClass(PostgresIssueRepository));
@@ -260,8 +260,8 @@ const main = async () => {
   add("workspaceCreatedPublisher", asClass(WorkspaceCreatedPublisher));
   add("projectMemberCreatedPublisher", asClass(ProjectMemberCreatedPublisher));
   add(
-    "workspaceInviteCreatedPublisher",
-    asClass(WorkspaceInviteCreatedPublisher),
+    "workspaceMemberInvitedPublisher",
+    asClass(WorkspaceMemberInvitedPublisher),
   );
   add("userEmailVerifiedSubscriber", asClass(UserEmailVerifiedSubscriber));
   add("issueCreatedPublisher", asClass(IssueCreatedPublisher));

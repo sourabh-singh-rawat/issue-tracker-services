@@ -1,14 +1,10 @@
-import {
-  WorkspaceMemberStatus,
-  WorkspaceMemberRoles,
-} from "@issue-tracker/common";
+import { EmailVerificationTokenStatus } from "@issue-tracker/common";
 
 export interface WorkspaceInvitePayload {
-  senderId: string;
-  senderEmail: string;
-  senderName: string;
-  receiverEmail: string;
-  receiverStatus: WorkspaceMemberStatus;
-  receiverRole: WorkspaceMemberRoles;
+  userId: string;
   workspaceId: string;
+  workspaceName: string;
+  email: string;
+  token: string;
+  status: EmailVerificationTokenStatus;
 }
