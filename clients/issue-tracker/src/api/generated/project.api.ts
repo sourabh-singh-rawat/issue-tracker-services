@@ -85,10 +85,16 @@ export type GetProjectListApiResponse =
     rows?: {
       id?: string;
       name?: string;
-      description?: string;
       status?: string;
+      statuses?: string[];
+      inviteStatus?: string;
+      members?: {
+        user?: {
+          id?: string;
+          displayName?: string;
+        };
+      }[];
       ownerUserId?: string;
-      workspaceId?: string;
       startDate?: string;
       endDate?: string;
     }[];

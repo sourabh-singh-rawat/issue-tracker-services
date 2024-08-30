@@ -10,7 +10,7 @@ export class ProjectMemberCreatedPublisher extends Publisher<{
   payload: ProjectMemberPayload;
   subject: Subjects;
 }> {
-  subject = SUBJECTS.PROJECT_MEMBERS_CREATED;
+  subject = SUBJECTS.PROJECT_MEMBERS_INVITED;
 
   constructor(eventBus: EventBus) {
     super(eventBus.client);

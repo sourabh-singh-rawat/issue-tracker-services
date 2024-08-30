@@ -26,6 +26,10 @@ export class PostgresWorkspaceMemberRepository
     return await WorkspaceMemberEntity.exists({ where: { id } });
   };
 
+  existsByEmail = async (email: string) => {
+    return await WorkspaceMemberEntity.exists({ where: { email } });
+  };
+
   existsByUserId = async (userId: string, workspaceId: string) => {
     return await WorkspaceMemberEntity.exists({
       where: { userId, workspaceId },
@@ -37,8 +41,6 @@ export class PostgresWorkspaceMemberRepository
       where: { workspaceId },
       relations: { user: true },
     });
-
-    console.log(members);
 
     return members;
   };

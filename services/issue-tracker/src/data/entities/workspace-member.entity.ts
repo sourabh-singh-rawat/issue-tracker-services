@@ -20,10 +20,12 @@ export class WorkspaceMemberEntity extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ name: "user_id", type: "uuid" })
-  userId!: string;
+  @Column({ name: "user_id", type: "uuid", nullable: true })
+  userId?: string;
 
-  @ManyToOne(() => UserEntity, ({ memberWorkspaces }) => memberWorkspaces)
+  @ManyToOne(() => UserEntity, ({ memberWorkspaces }) => memberWorkspaces, {
+    nullable: true,
+  })
   @JoinColumn({ name: "user_id" })
   user!: UserEntity;
 
@@ -31,6 +33,9 @@ export class WorkspaceMemberEntity extends AuditEntity {
   @Column({ name: "workspace_id", type: "uuid" })
   @JoinColumn({ name: "workspace_id" })
   workspaceId!: string;
+
+  @Column({ type: "text" })
+  email!: string;
 
   @Column({
     type: "enum",

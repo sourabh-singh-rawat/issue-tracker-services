@@ -30,7 +30,7 @@ export class CoreWorkspaceController implements WorkspaceController {
     const { userId } = request.currentUser;
     const { email, workspaceRole } = request.body;
 
-    await this.workspaceService.createWorkspaceInvite(
+    await this.workspaceService.createWorkspaceMember(
       userId,
       email,
       workspaceRole,

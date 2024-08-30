@@ -4,22 +4,22 @@ import nodemailer from "nodemailer";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { EmailService } from "./services/interfaces/email.service";
 import { DataSource } from "typeorm";
-import { CoreEmailService } from "./services/core-email.service";
 import { Mailer, NodeMailer } from "@issue-tracker/comm";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { EmailRepository } from "./data/repositories/interfaces/email.repository";
-import { UserCreatedSubscriber } from "./events/subscribers/user-registered.subscriber";
+import { UserRegisteredSubscriber } from "./events/subscribers/user-registered.subscriber";
 import { UserEmailConfirmationSentPublisher } from "./events/publishers/user-email-confirmation-sent.publisher";
-import { ProjectMemberCreatedSubscriber } from "./events/subscribers/project-member-created.subscriber";
-import { WorkspaceInviteCreatedSubscriber } from "./events/subscribers/workspace-invite-created.subscriber";
+import { ProjectMemberInvitedSubscriber } from "./events/subscribers/project-member-invited.subscriber";
+import { WorkspaceMemberInvitedSubscriber } from "./events/subscribers/workspace-member-invited.subscriber";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
 import { PostgresEmailRepository } from "./data/repositories/postgres-email.repository";
-import { UserService } from "./services/interfaces/user.service";
-import { CoreUserService } from "./services/core-user.service";
-import { UserEmailConfirmationRepository } from "./data/repositories/interfaces/user-email-confirmation.repository";
-import { PostgresUserEmailConfirmationRepository } from "./data/repositories/postgres-user-confirmation-email.repository";
+import { UserEmailService } from "./services/interfaces/user-email.service";
+import { CoreUserEmailService } from "./services/core-user-email.service";
+import { CoreWorkspaceEmailService } from "./services/core-workspace-email.service";
+import { WorkspaceEmailService } from "./services/interfaces/workspace-email.service";
+import { ProjectEmailService } from "./services/interfaces/project-email.service";
+import { CoreProjectEmailService } from "./services/core-project-email.service";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -27,21 +27,21 @@ export interface RegisteredServices {
   eventBus: EventBus;
   dataSource: DataSource;
   mailer: Mailer;
-  emailService: EmailService;
-  userService: UserService;
+  userEmailService: UserEmailService;
+  projectEmailService: ProjectEmailService;
+  workspaceEmailService: WorkspaceEmailService;
   userRepository: UserRepository;
   emailRepository: EmailRepository;
-  userEmailConfirmationRepository: UserEmailConfirmationRepository;
-  userCreatedSubscriber: UserCreatedSubscriber;
+  userRegisteredSubscriber: UserRegisteredSubscriber;
   userEmailConfirmationSentPublisher: UserEmailConfirmationSentPublisher;
-  projectMemberCreatedSubscriber: ProjectMemberCreatedSubscriber;
-  workspaceInviteCreatedSubsciber: WorkspaceInviteCreatedSubscriber;
+  projectMemberCreatedSubscriber: ProjectMemberInvitedSubscriber;
+  workspaceMemberInvitedSubscriber: WorkspaceMemberInvitedSubscriber;
 }
 
 const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
-  container.get("userCreatedSubscriber").fetchMessages();
+  container.get("userRegisteredSubscriber").fetchMessages();
   container.get("projectMemberCreatedSubscriber").fetchMessages();
-  container.get("workspaceInviteCreatedSubsciber").fetchMessages();
+  container.get("workspaceMemberInvitedSubscriber").fetchMessages();
 };
 
 export const dataSource = new DataSource({
@@ -85,26 +85,23 @@ const main = async () => {
   add("eventBus", asValue(eventBus));
   add("mailer", asValue(mailer));
   add("orm", asValue(orm));
-  add("emailService", asClass(CoreEmailService));
-  add("userService", asClass(CoreUserService));
+  add("userEmailService", asClass(CoreUserEmailService));
+  add("projectEmailService", asClass(CoreProjectEmailService));
+  add("workspaceEmailService", asClass(CoreWorkspaceEmailService));
   add("userRepository", asClass(PostgresUserRepository));
   add("emailRepository", asClass(PostgresEmailRepository));
-  add(
-    "userEmailConfirmationRepository",
-    asClass(PostgresUserEmailConfirmationRepository),
-  );
-  add("userCreatedSubscriber", asClass(UserCreatedSubscriber));
+  add("userRegisteredSubscriber", asClass(UserRegisteredSubscriber));
   add(
     "userEmailConfirmationSentPublisher",
     asClass(UserEmailConfirmationSentPublisher),
   );
   add(
     "projectMemberCreatedSubscriber",
-    asClass(ProjectMemberCreatedSubscriber),
+    asClass(ProjectMemberInvitedSubscriber),
   );
   add(
-    "workspaceInviteCreatedSubsciber",
-    asClass(WorkspaceInviteCreatedSubscriber),
+    "workspaceMemberInvitedSubscriber",
+    asClass(WorkspaceMemberInvitedSubscriber),
   );
   container.init();
 

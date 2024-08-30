@@ -15,7 +15,6 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 
-import MemberModal from "../MemberModal";
 import StyledList from "../../../../common/components/styled/StyledList";
 import { useNavigate } from "react-router-dom";
 import { MenuItem } from "../../../../common/enums/menu-item";
@@ -41,7 +40,6 @@ export default function WorkspaceMenu({
 }: WorkspaceMenuProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [openMember, setOpenMember] = useState(false);
   const workspaceId = selectedOption?.id;
 
   const menuItems: MenuItem[] = [
@@ -113,7 +111,6 @@ export default function WorkspaceMenu({
           </StyledList>
         )}
       </Menu>
-      <MemberModal open={openMember} handleClose={() => setOpenMember(false)} />
       <WorkspaceModal open={open} handleClose={() => setOpen(false)} />
     </>
   );

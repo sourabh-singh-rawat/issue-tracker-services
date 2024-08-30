@@ -22,16 +22,20 @@ export abstract class Subscriber<T> {
 
   fetchMessages = async () => {
     const jsm = await this.jetstreamClient.jetstreamManager();
-    jsm.consumers.add(this.stream, {
-      name: this.consumer,
-      durable_name: this.consumer,
-      deliver_policy: DeliverPolicy.All,
-      filter_subject: this.subject,
-      max_deliver: 100,
-      ack_wait: 30 * 1000 * 1000 * 1000,
-      ack_policy: AckPolicy.Explicit,
-      replay_policy: ReplayPolicy.Instant,
-    });
+    const found = await jsm.consumers.info(this.stream, this.consumer);
+
+    if (!found) {
+      await jsm.consumers.add(this.stream, {
+        name: this.consumer,
+        durable_name: this.consumer,
+        deliver_policy: DeliverPolicy.All,
+        filter_subject: this.subject,
+        max_deliver: 100,
+        ack_wait: 30 * 1000 * 1000 * 1000,
+        ack_policy: AckPolicy.Explicit,
+        replay_policy: ReplayPolicy.Instant,
+      });
+    }
     const consumer = await this.jetstreamClient.consumers.get(
       this.stream,
       this.consumer,

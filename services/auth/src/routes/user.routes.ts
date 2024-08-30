@@ -25,14 +25,14 @@ export const userRoutes = (container: AwilixDi<RegisteredServices>) => {
         tags: ["user"],
         querystring: {
           type: "object",
-          properties: { inviteToken: { type: "string" } },
+          properties: { workspaceInviteToken: { type: "string" } },
         },
         body: {
           type: "object",
           properties: {
-            email: { type: "string" },
-            password: { type: "string" },
-            displayName: { type: "string" },
+            email: { type: "string", minLength: 1 },
+            password: { type: "string", minLength: 1 },
+            displayName: { type: "string", minLength: 1 },
           },
           required: ["email", "password", "displayName"],
         },
@@ -99,7 +99,13 @@ export const userRoutes = (container: AwilixDi<RegisteredServices>) => {
           required: ["id"],
         },
         response: {
-          200: {},
+          200: {
+            description: "Email token is verified successfully",
+            type: "object",
+            properties: {
+              confirmation: { type: "boolean" },
+            },
+          },
           401: {
             type: "string",
             description: "Unauthorized",

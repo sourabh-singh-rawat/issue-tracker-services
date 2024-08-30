@@ -1,7 +1,7 @@
 import { Typeorm } from "@issue-tracker/orm";
 import { EmailRepository } from "./interfaces/email.repository";
-import { EmailEntity } from "../entities";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
+import { EmailEntity } from "../entities/email.entity";
 
 export class PostgresEmailRepository implements EmailRepository {
   constructor(private readonly orm: Typeorm) {}
@@ -24,6 +24,21 @@ export class PostgresEmailRepository implements EmailRepository {
 
   findByEmail = async (email: string) => {
     return await EmailEntity.findOne({ where: { receiverEmail: email } });
+  };
+
+  update = async (
+    id: string,
+    entity: EmailEntity,
+    options?: QueryBuilderOptions,
+  ) => {
+    const queryRunner = options?.queryRunner;
+    const query = this.orm
+      .createQueryBuilder(queryRunner)
+      .update(EmailEntity)
+      .set(entity)
+      .where("id = :id", { id });
+
+    await query.execute();
   };
 
   softDelete = async () => {

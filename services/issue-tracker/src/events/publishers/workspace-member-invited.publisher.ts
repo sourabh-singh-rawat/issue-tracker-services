@@ -6,11 +6,11 @@ import {
   WorkspaceInvitePayload,
 } from "@issue-tracker/event-bus";
 
-export class WorkspaceInviteCreatedPublisher extends Publisher<{
+export class WorkspaceMemberInvitedPublisher extends Publisher<{
   payload: WorkspaceInvitePayload;
   subject: Subjects;
 }> {
-  subject = SUBJECTS.WORKSPACE_INVITE_CREATED;
+  subject = SUBJECTS.WORKSPACE_MEMBER_INVITED;
 
   constructor(eventBus: EventBus) {
     super(eventBus.client);

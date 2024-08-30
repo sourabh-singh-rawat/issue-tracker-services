@@ -10,7 +10,7 @@ export const workspaceRoutes = (container: AwilixDi<RegisteredServices>) => {
     done: () => void,
   ) => {
     const controller = container.get("workspaceController");
-    const { requireTokens, setCurrentUser, requireAuth } = Auth;
+    const { requireTokens, setCurrentUser, requireAuth, requireNoAuth } = Auth;
     const preHandler = [requireTokens, setCurrentUser, requireAuth];
 
     fastify.post(
@@ -58,37 +58,38 @@ export const workspaceRoutes = (container: AwilixDi<RegisteredServices>) => {
       controller.createWorkspace,
     );
     fastify.post(
-      "/workspaces/invite",
+      "/workspaces/:id/invite",
       {
         preHandler,
         schema: {
           tags: ["workspace"],
-          summary: "Create a workspace member invite",
-          description: "Create a new workspace member invite",
+          summary: "Create a workspce member and invite them",
+          description: "Create a workspce member and invite them",
           operationId: "createWorkspaceInvite",
+          params: { type: "object", properties: { id: { type: "string" } } },
           body: {
-            description: "Fields used to create a new workspace member invite",
             type: "object",
             properties: {
-              email: {
-                type: "string",
-                minLength: 1,
-                maxLength: 80,
-                format: "email",
-                default: "Sourabh.rawatcc@gmail.com",
-              },
-              workspaceRole: { type: "string" },
+              email: { type: "string", minLength: 1 },
+              workspaceRole: { type: "string", minLength: 1 },
             },
             required: ["email", "workspaceRole"],
           },
           response: {
-            201: { description: "Workspace member created", type: "string" },
-            400: { description: "Bad request", $ref: "errorSchema#" },
+            201: {
+              description: "Workspace member created and invite is sent",
+              type: "string",
+            },
+            400: {
+              description: "Bad request",
+              $ref: "errorSchema#",
+            },
           },
         },
       },
       controller.createWorkspaceInvite,
     );
+
     fastify.get(
       "/workspaces",
       {
@@ -195,7 +196,18 @@ export const workspaceRoutes = (container: AwilixDi<RegisteredServices>) => {
     );
     fastify.get(
       "/workspaces/:id/invite/confirm",
-      { preHandler, schema: {} },
+      {
+        preHandler: [requireNoAuth],
+        schema: {
+          querystring: {
+            type: "object",
+            properties: {
+              inviteToken: { type: "string" },
+            },
+            required: ["inviteToken"],
+          },
+        },
+      },
       controller.confirmWorkspaceInvite,
     );
     fastify.get(
@@ -228,6 +240,7 @@ export const workspaceRoutes = (container: AwilixDi<RegisteredServices>) => {
                       workspaceId: { type: "string" },
                       status: { type: "string" },
                       role: { type: "string" },
+                      email: { type: "string" },
                       user: {
                         type: "object",
                         properties: {

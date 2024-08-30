@@ -11,11 +11,11 @@ export class CoreUserController implements UserController {
   registerUser = async (
     request: FastifyRequest<{
       Body: UserRegistrationData;
-      Querystring: { inviteToken: string };
+      Querystring: { workspaceInviteToken: string };
     }>,
     reply: FastifyReply,
   ) => {
-    const { inviteToken } = request.query;
+    const { workspaceInviteToken } = request.query;
     const { email, password, displayName } = request.body;
 
     const userRegistrationData = new UserRegistrationData({
@@ -23,7 +23,10 @@ export class CoreUserController implements UserController {
       password,
       displayName,
     });
-    await this.userService.createUser(userRegistrationData, inviteToken);
+    await this.userService.createUser(
+      userRegistrationData,
+      workspaceInviteToken,
+    );
     reply.clearCookie("accessToken", { path: "/" });
     reply.clearCookie("refreshToken", { path: "/" });
 

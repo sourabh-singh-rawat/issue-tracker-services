@@ -1,27 +1,29 @@
 import { v4 } from "uuid";
 import { WorkspaceService } from "./interfaces/workspace.service";
 import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
-import { WorkspaceMemberInviteEntity } from "../data/entities/workspace-member-invite.entity";
+import { WorkspaceInviteTokenEntity } from "../data/entities/workspace-invite-token.entity";
 import { WorkspaceCreatedPublisher } from "../events/publishers/workspace-created.publisher";
-import { WorkspaceInviteCreatedPublisher } from "../events/publishers/workspace-invite-created.publisher";
+import { WorkspaceMemberInvitedPublisher } from "../events/publishers/workspace-member-invited.publisher";
 import { Typeorm } from "@issue-tracker/orm";
 import {
   ServiceResponse,
   TransactionExecutionError,
-  UserAlreadyExists,
   UserNotFoundError,
   WORKSPACE_MEMBER_STATUS,
   WorkspaceNotFound,
   WorkspaceRegistrationData,
   WorkspaceMemberRoles,
   WORKSPACE_MEMBER_ROLES,
+  UserAlreadyMember,
+  EMAIL_VERIFICATION_TOKEN_STATUS,
+  NotFoundError,
 } from "@issue-tracker/common";
 import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { WorkspaceRepository } from "../data/repositories/interfaces/workspace.repository";
 import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
-import { WorkspaceMemberInviteRepository } from "../data/repositories/interfaces/workspace-member-invite.repository";
+import { WorkspaceInviteTokenRepository } from "../data/repositories/interfaces/workspace-invite-token.repository";
 import { WorkspaceEntity } from "../data/entities/workspace.entity";
 import { UserEntity } from "../data/entities";
 
@@ -32,8 +34,8 @@ export class CoreWorkspaceService implements WorkspaceService {
     private workspaceRepository: WorkspaceRepository,
     private workspaceMemberRepository: WorkspaceMemberRepository,
     private workspaceCreatedPublisher: WorkspaceCreatedPublisher,
-    private workspaceMemberInviteRepository: WorkspaceMemberInviteRepository,
-    private workspaceInviteCreatedPublisher: WorkspaceInviteCreatedPublisher,
+    private workspaceInviteTokenRepository: WorkspaceInviteTokenRepository,
+    private workspaceMemberInvitedPublisher: WorkspaceMemberInvitedPublisher,
   ) {}
 
   private saveWorkspace = async (
@@ -56,6 +58,8 @@ export class CoreWorkspaceService implements WorkspaceService {
           workspaceMember,
           { queryRunner },
         );
+
+        if (!savedWorkspaceMember.userId) throw new Error("userId is required");
 
         await this.workspaceCreatedPublisher.publish({
           id: savedWorkspace.id,
@@ -122,61 +126,72 @@ export class CoreWorkspaceService implements WorkspaceService {
     return new ServiceResponse({ rows: savedWorkspace.id });
   };
 
-  createWorkspaceMember = async (userId: string, workspaceId: string) => {
-    const isMember = await this.workspaceMemberRepository.existsByUserId(
-      userId,
-      workspaceId,
-    );
-
-    if (isMember) throw new UserAlreadyExists();
-
-    const newWorkspaceMember = new WorkspaceMemberEntity();
-    newWorkspaceMember.userId = userId;
-    newWorkspaceMember.workspaceId = workspaceId;
-
-    await this.workspaceMemberRepository.save(newWorkspaceMember);
-  };
-
-  createWorkspaceInvite = async (
+  createWorkspaceMember = async (
     userId: string,
     email: string,
     role: WorkspaceMemberRoles,
   ) => {
+    const isReceiverMember =
+      await this.workspaceMemberRepository.existsByEmail(email);
+    if (isReceiverMember) throw new UserAlreadyMember();
+
     const sender = await this.userRepository.findById(userId);
     if (!sender) throw new UserNotFoundError();
     const { defaultWorkspaceId } = sender;
 
-    const isReceiverMember =
-      await this.workspaceMemberRepository.existsById(email);
-    if (isReceiverMember) throw new UserAlreadyExists();
+    const workspace =
+      await this.workspaceRepository.findById(defaultWorkspaceId);
+    if (!workspace) throw new NotFoundError("Workspace Not Found");
 
-    const newWorkspaceMemberInvite = new WorkspaceMemberInviteEntity();
-    newWorkspaceMemberInvite.senderId = userId;
-    newWorkspaceMemberInvite.receiverEmail = email;
-    newWorkspaceMemberInvite.workspaceId = defaultWorkspaceId;
-    newWorkspaceMemberInvite.status = WORKSPACE_MEMBER_STATUS.PENDING;
+    const workspaceMember = new WorkspaceMemberEntity();
+    workspaceMember.email = email;
+    workspaceMember.role = role;
+    workspaceMember.workspaceId = defaultWorkspaceId;
+    workspaceMember.status = WORKSPACE_MEMBER_STATUS.PENDING;
 
-    const { status } = await this.workspaceMemberInviteRepository.save(
-      newWorkspaceMemberInvite,
+    const jwtid = v4();
+    const exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60;
+    const token = JwtToken.create(
+      {
+        userId,
+        iss: "@issue-tracker/issue-tracker",
+        aud: "client",
+        sub: userId,
+        exp,
+        jwtid,
+        email,
+        role,
+      },
+      process.env.JWT_SECRET!,
     );
 
-    await this.workspaceInviteCreatedPublisher.publish({
-      senderId: userId,
-      senderEmail: sender.email,
-      senderName: sender.displayName,
-      receiverEmail: email,
-      receiverStatus: status,
-      receiverRole: role,
-      workspaceId: defaultWorkspaceId,
+    const newWorkspaceInviteToken = new WorkspaceInviteTokenEntity();
+    newWorkspaceInviteToken.id = jwtid;
+    newWorkspaceInviteToken.userId = userId;
+    newWorkspaceInviteToken.sentAt = new Date();
+    newWorkspaceInviteToken.status = EMAIL_VERIFICATION_TOKEN_STATUS.VALID;
+    newWorkspaceInviteToken.token = token;
+    newWorkspaceInviteToken.expiresAt = new Date(exp * 1000);
+
+    const queryRunner = this.orm.createQueryRunner();
+    this.orm.transaction(queryRunner, async (queryRunner) => {
+      await this.workspaceMemberRepository.save(workspaceMember, {
+        queryRunner,
+      });
+      await this.workspaceInviteTokenRepository.save(newWorkspaceInviteToken, {
+        queryRunner,
+      });
+      await this.workspaceMemberInvitedPublisher.publish({
+        userId,
+        email,
+        token,
+        status: EMAIL_VERIFICATION_TOKEN_STATUS.VALID,
+        workspaceId: workspace.id,
+        workspaceName: workspace.name,
+      });
     });
   };
 
-  /**
-   * Should confirm workspace invites,
-   * if confirmed and user is already logged in then add the user as member
-   *
-   * redirect the user to signup page with token
-   */
   confirmWorkspaceInvite = async (token: string) => {
     let verifedToken: WorkspaceInvitePayload;
     try {
@@ -185,18 +200,17 @@ export class CoreWorkspaceService implements WorkspaceService {
       throw new Error("Token verification failed");
     }
 
-    // Token verified, check if the user is a account holder
-    const { receiverEmail } = verifedToken;
-    const userExists = await this.userRepository.findByEmail(receiverEmail);
+    const { email } = verifedToken;
+    const userExists = await this.userRepository.findByEmail(email);
 
     if (!userExists) {
       return new ServiceResponse({
-        rows: `https://localhost:3000/signup?inviteToken=${token}`,
+        rows: `http://localhost:3000/signup?inviteToken=${token}`,
       });
     }
 
     return new ServiceResponse({
-      rows: `http://localhost:3000/login?inviteToken=${token}`,
+      rows: `htt://localhost:3000/login?inviteToken=${token}`,
     });
   };
 
@@ -217,7 +231,8 @@ export class CoreWorkspaceService implements WorkspaceService {
   };
 
   getWorkspaceRoleList = async () => {
-    return new ServiceResponse({ rows: Object.values(WORKSPACE_MEMBER_ROLES) });
+    const rows = Object.values(WORKSPACE_MEMBER_ROLES);
+    return new ServiceResponse({ rows, rowCount: rows.length });
   };
 
   getWorkspaceMembers = async (workspaceId: string) => {

@@ -1,5 +1,4 @@
 import { JsMsg } from "nats";
-import { EmailService } from "../../services/interfaces/email.service";
 import {
   CONSUMERS,
   EventBus,
@@ -8,21 +7,23 @@ import {
   SUBJECTS,
   Subscriber,
 } from "@issue-tracker/event-bus";
+import { ProjectEmailService } from "../../services/interfaces/project-email.service";
 
-export class ProjectMemberCreatedSubscriber extends Subscriber<ProjectMemberPayload> {
+export class ProjectMemberInvitedSubscriber extends Subscriber<ProjectMemberPayload> {
   readonly stream = Streams.PROJECT;
   readonly consumer = CONSUMERS.PROJECT_MEMBER_INVITE_CREATED_MAIL;
-  readonly subject = SUBJECTS.PROJECT_MEMBERS_CREATED;
+  readonly subject = SUBJECTS.PROJECT_MEMBERS_INVITED;
 
   constructor(
     private eventBus: EventBus,
-    private emailService: EmailService,
+    private readonly projectEmailService: ProjectEmailService,
   ) {
     super(eventBus.client);
   }
 
   onMessage = async (message: JsMsg, payload: ProjectMemberPayload) => {
-    await this.emailService.sendProjectInvitation(payload);
+    await this.projectEmailService.sendProjectInvitationEmail(payload);
+
     message.ack();
   };
 }

@@ -38,7 +38,7 @@ const injectedRtkApi = api
         CreateWorkspaceInviteApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v1/workspaces/invite`,
+          url: `/api/v1/workspaces/${queryArg.id}/invite`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -110,9 +110,9 @@ export type GetAllWorkspacesApiResponse = /** status 200 All workspaces */ {
 };
 export type GetAllWorkspacesApiArg = void;
 export type CreateWorkspaceInviteApiResponse =
-  /** status 201 Workspace member created */ string;
+  /** status 201 Workspace member created and invite is sent */ string;
 export type CreateWorkspaceInviteApiArg = {
-  /** Fields used to create a new workspace member invite */
+  id: string;
   body: {
     email: string;
     workspaceRole: string;
@@ -150,6 +150,7 @@ export type GetWorkspaceMembersApiResponse =
       workspaceId?: string;
       status?: string;
       role?: string;
+      email?: string;
       user?: {
         createdAt?: string;
         updatedAt?: string;
