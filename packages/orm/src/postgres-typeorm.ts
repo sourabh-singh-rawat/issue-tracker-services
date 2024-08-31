@@ -17,19 +17,18 @@ export class PostgresTypeorm implements Typeorm {
     this.logger = logger;
     this.dataSource = dataSource;
   }
-
   /**
    * Initializes the connection to the postgres cluster
    * Must have an data source
    */
-  init = async () => {
+  async init() {
     try {
       await this.dataSource.initialize();
       this.logger.info("Server connected to postgres cluster");
     } catch (error) {
       throw new ConnectionRefusedError(error!.toString());
     }
-  };
+  }
 
   /**
    * Executes a sql statement and transforms the result into entity
@@ -37,39 +36,39 @@ export class PostgresTypeorm implements Typeorm {
    * @param params The parameters to query
    * @returns Result object
    */
-  query = async <T extends ObjectLiteral>(
+  async query<T extends ObjectLiteral>(
     sql: string,
     params?: (string | number | undefined)[],
-  ) => {
+  ) {
     const result = await this.dataSource.query<T[]>(sql, params);
     const { default: camelCaseKeys } = await import("camelcase-keys");
 
     return camelCaseKeys(result, { deep: true }) as T[];
-  };
+  }
 
-  createQueryRunner = () => {
+  createQueryRunner() {
     return this.dataSource.createQueryRunner();
-  };
+  }
 
   /**
    * Creates a query builder with dataSource for a given entity and name.
    * @returns
    */
-  createQueryBuilder = (queryRunner?: QueryRunner) => {
+  createQueryBuilder(queryRunner?: QueryRunner) {
     return this.dataSource.createQueryBuilder(
       queryRunner,
     ) as unknown as SelectQueryBuilder<ObjectLiteral>;
-  };
+  }
 
   /**
    * Execute transactions
    * @param callback
    * @returns
    */
-  transaction = async <TReturnValue>(
+  async transaction<TReturnValue>(
     queryRunner: QueryRunner,
     callback: (queryRunner: QueryRunner) => TReturnValue,
-  ): Promise<TReturnValue | null> => {
+  ): Promise<TReturnValue | null> {
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -85,5 +84,5 @@ export class PostgresTypeorm implements Typeorm {
       await queryRunner.release();
     }
     return returnValue;
-  };
+  }
 }
