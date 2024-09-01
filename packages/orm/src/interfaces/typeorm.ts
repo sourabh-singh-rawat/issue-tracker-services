@@ -2,10 +2,6 @@ import { ObjectLiteral, QueryRunner } from "typeorm";
 import { SelectQueryBuilder } from "typeorm/browser";
 
 export interface Typeorm {
-  query<T extends ObjectLiteral>(
-    sql: string,
-    params?: (string | number | undefined)[],
-  ): Promise<T[]>;
   createQueryRunner(): QueryRunner;
   createQueryBuilder(
     queryRunner?: QueryRunner,

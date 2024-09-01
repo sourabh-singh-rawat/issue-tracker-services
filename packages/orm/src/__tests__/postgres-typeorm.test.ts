@@ -42,18 +42,18 @@ describe("Postgres Typeorm", () => {
     jest.clearAllMocks();
   });
 
-  it("should initialize a connection with postgres", async () => {
+  it("initializes a connection with postgres", async () => {
     expect(dataSource.initialize).toHaveBeenCalledTimes(1);
   });
 
-  it("should create a query runner using typeorm's createQueryRunner", async () => {
+  it("creates a query runner using typeorm's createQueryRunner", async () => {
     const queryRunner = postgres.createQueryRunner();
     postgres.createQueryBuilder(queryRunner);
 
     expect(dataSource.createQueryBuilder).toHaveBeenCalledTimes(1);
   });
 
-  it("should create a query builder using typeorm's createQueryBuilder", async () => {
+  it("creates a query builder using typeorm's createQueryBuilder", async () => {
     const queryRunner = postgres.createQueryRunner();
     postgres.createQueryBuilder(queryRunner);
 

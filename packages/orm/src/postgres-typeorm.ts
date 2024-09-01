@@ -30,22 +30,6 @@ export class PostgresTypeorm implements Typeorm {
     }
   }
 
-  /**
-   * Executes a sql statement and transforms the result into entity
-   * @param sql The sql statement to execute
-   * @param params The parameters to query
-   * @returns Result object
-   */
-  async query<T extends ObjectLiteral>(
-    sql: string,
-    params?: (string | number | undefined)[],
-  ) {
-    const result = await this.dataSource.query<T[]>(sql, params);
-    const { default: camelCaseKeys } = await import("camelcase-keys");
-
-    return camelCaseKeys(result, { deep: true }) as T[];
-  }
-
   createQueryRunner() {
     return this.dataSource.createQueryRunner();
   }
