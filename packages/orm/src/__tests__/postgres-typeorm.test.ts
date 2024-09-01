@@ -93,6 +93,10 @@ describe("Postgres Typeorm", () => {
   it.todo(
     "rollbacks transaction using typeorm's queryRunner.rollbackTransaction()",
   );
+
+  it.todo(
+    "releases the client back to pool after rolling back the failed transaction",
+  );
   // it("rollbacks transaction using typeorm's queryRunner.rollbackTransaction()", async () => {
   //   const queryRunner = dataSource.createQueryRunner();
 
