@@ -6,7 +6,6 @@ import {
   logger,
 } from "@issue-tracker/server-core";
 import swagger from "@fastify/swagger";
-import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { IdentityController } from "./controllers/interfaces/identity.controller";
 import { IdentityService } from "./services/interfaces/identity.service";
@@ -27,18 +26,22 @@ import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { CoreUserService } from "./services/core-user.service";
 import { UserProfileRepository } from "./data/repositories/interfaces/user-profile.repository";
 import { PostgresUserProfileRepository } from "./data/repositories/postgres-user-profile.repository";
-import { UserRegisteredPublisher } from "./events/publishers/user-registered.publisher";
-import { UserEmailVerifiedPublisher } from "./events/publishers/user-email-verified.publisher";
 import { userRoutes } from "./routes/user.routes";
 import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
 import { EmailVerificationTokenEntity } from "./data/entities/email-verification-token.entity";
 import { PostgresEmailVerificationTokenRepository as PostgresEmailVerificationTokenRepository } from "./data/repositories/postgres-email-verification-token.repository";
 import { writeFile } from "fs";
+import {
+  NatsBroker,
+  NatsPublisher,
+  Publisher,
+  Subjects,
+} from "@issue-tracker/event-bus";
 
 export interface RegisteredServices {
   orm: Typeorm;
   logger: AppLogger;
-  eventBus: EventBus;
+  publisher: Publisher<Subjects>;
   identityController: IdentityController;
   userController: UserController;
   identityService: IdentityService;
@@ -48,8 +51,6 @@ export interface RegisteredServices {
   accessTokenRepository: AccessTokenRepository;
   refreshTokenRepository: RefreshTokenRepository;
   emailVerificationTokenRepository: EmailVerificationTokenEntity;
-  userRegisteredPublisher: UserRegisteredPublisher;
-  userEmailVerifiedPublisher: UserEmailVerifiedPublisher;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
 }
 
@@ -141,12 +142,12 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({
+  const broker = new NatsBroker({
     servers: [process.env.NATS_SERVER_URL || "nats"],
     streams: ["user"],
     logger,
   });
-  await eventBus.init();
+  await broker.init();
 
   const awilix = createContainer<RegisteredServices>({
     injectionMode: InjectionMode.CLASSIC,
@@ -155,7 +156,8 @@ const main = async () => {
   const { add } = container;
   add("orm", asValue(orm));
   add("logger", asValue(logger));
-  add("eventBus", asValue(eventBus));
+  add("broker", asValue(broker));
+  add("publisher", asClass(NatsPublisher));
   add("userController", asClass(CoreUserController));
   add("identityController", asClass(CoreIdentityController));
   add("userService", asClass(CoreUserService));
@@ -168,8 +170,6 @@ const main = async () => {
     "emailVerificationTokenRepository",
     asClass(PostgresEmailVerificationTokenRepository),
   );
-  add("userRegisteredPublisher", asClass(UserRegisteredPublisher));
-  add("userEmailVerifiedPublisher", asClass(UserEmailVerifiedPublisher));
   add(
     "userEmailConfirmationSentSubscriber",
     asClass(UserEmailConfirmationSentSubscriber),

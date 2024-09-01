@@ -1,6 +1,6 @@
 import {
+  Broker,
   CONSUMERS,
-  EventBus,
   Streams,
   SUBJECTS,
   Subscriber,
@@ -17,10 +17,10 @@ export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailCon
   readonly subject = SUBJECTS.USER_CONFIRMATION_EMAIL_SENT;
 
   constructor(
-    private readonly eventBus: EventBus,
+    private readonly broker: Broker,
     private readonly userService: UserService,
   ) {
-    super(eventBus.client);
+    super(broker.client);
   }
 
   onMessage = async (

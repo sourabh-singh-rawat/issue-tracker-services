@@ -86,6 +86,21 @@ services:
       - "8222"
       - -js
 
+  nats-test:
+    image: nats:latest
+    container_name: nats-test
+    restart: unless-stopped
+    ports:
+      - "14222:4222"
+      - "16222:6222"
+      - "18222:8222"
+    command:
+      - -p
+      - "4222"
+      - -m
+      - "8222"
+      - -js
+
   issue-tracker-services-pgadmin:
     image: dpage/pgadmin4:latest
     container_name: issue-tracker-services-pgadmin

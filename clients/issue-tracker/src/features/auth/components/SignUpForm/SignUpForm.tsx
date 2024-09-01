@@ -51,7 +51,10 @@ export default function SignUpForm() {
     displayName,
   }) => {
     if (inviteToken) {
-      return signup({ body: { email, password, displayName }, inviteToken });
+      return signup({
+        body: { email, password, displayName },
+        workspaceInviteToken: inviteToken,
+      });
     }
     signup({ body: { email, password, displayName } });
   };

@@ -2,7 +2,6 @@ import { IssueService } from "./interfaces/issue.service";
 import { IssueRepository } from "../data/repositories/interfaces/issue.repository";
 import { IssueAssigneeEntity, IssueEntity } from "../data/entities";
 import { IssueAssigneeRepository } from "../data/repositories/interfaces/issue-assignee.repository";
-import { IssueCommentRepository } from "../data/repositories/interfaces/issue-comment.repository";
 import { QueryRunner } from "typeorm";
 import {
   ConflictError,
@@ -16,15 +15,14 @@ import {
   UserAlreadyExists,
 } from "@issue-tracker/common";
 import { Typeorm } from "@issue-tracker/orm";
-import { IssueCreatedPublisher } from "../events/publishers/issue-created.publisher";
+import { NatsPublisher } from "@issue-tracker/event-bus";
 
 export class CoreIssueService implements IssueService {
   constructor(
     private orm: Typeorm,
+    private readonly publisher: NatsPublisher,
     private issueRepository: IssueRepository,
-    private issueCommentRepository: IssueCommentRepository,
     private issueAssigneeRepository: IssueAssigneeRepository,
-    private issueCreatedPublisher: IssueCreatedPublisher,
   ) {}
 
   private getStatuses = () => Object.values(IssueStatus);
@@ -91,8 +89,7 @@ export class CoreIssueService implements IssueService {
     if (!result) {
       throw new TransactionExecutionError("Failed to save issue");
     }
-
-    await this.issueCreatedPublisher.publish({
+    await this.publisher.send("issue.created", {
       createdAt: result.createdAt,
       id: result.id,
       name: result.name,

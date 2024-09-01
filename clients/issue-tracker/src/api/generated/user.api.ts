@@ -12,7 +12,7 @@ const injectedRtkApi = api
             url: `/api/v1/users/register`,
             method: "POST",
             body: queryArg.body,
-            params: { inviteToken: queryArg.inviteToken },
+            params: { workspaceInviteToken: queryArg.workspaceInviteToken },
           }),
           invalidatesTags: ["user"],
         },
@@ -23,7 +23,7 @@ const injectedRtkApi = api
 export { injectedRtkApi as issueTrackerApi };
 export type RegisterUserApiResponse = /** status 200 Default Response */ {};
 export type RegisterUserApiArg = {
-  inviteToken?: string;
+  workspaceInviteToken?: string;
   body: {
     email: string;
     password: string;

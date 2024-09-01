@@ -1,4 +1,6 @@
-export * from "./event-bus";
+export * from "./broker";
+export * from "./broker-options";
+export * from "./publisher";
 export * from "./user-confirmation-email-sent.payload";
 export * from "./user-registered.payload";
 export * from "./user-email-verified.payload";

@@ -2,14 +2,12 @@ import "dotenv/config";
 import { AppLogger, AwilixDi, logger } from "@issue-tracker/server-core";
 import nodemailer from "nodemailer";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { DataSource } from "typeorm";
 import { Mailer, NodeMailer } from "@issue-tracker/comm";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { EmailRepository } from "./data/repositories/interfaces/email.repository";
 import { UserRegisteredSubscriber } from "./events/subscribers/user-registered.subscriber";
-import { UserEmailConfirmationSentPublisher } from "./events/publishers/user-email-confirmation-sent.publisher";
 import { ProjectMemberInvitedSubscriber } from "./events/subscribers/project-member-invited.subscriber";
 import { WorkspaceMemberInvitedSubscriber } from "./events/subscribers/workspace-member-invited.subscriber";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
@@ -20,11 +18,13 @@ import { CoreWorkspaceEmailService } from "./services/core-workspace-email.servi
 import { WorkspaceEmailService } from "./services/interfaces/workspace-email.service";
 import { ProjectEmailService } from "./services/interfaces/project-email.service";
 import { CoreProjectEmailService } from "./services/core-project-email.service";
+import { Broker, NatsBroker, NatsPublisher } from "@issue-tracker/event-bus";
 
 export interface RegisteredServices {
   logger: AppLogger;
   orm: Typeorm;
-  eventBus: EventBus;
+  broker: Broker;
+  publisher: NatsPublisher;
   dataSource: DataSource;
   mailer: Mailer;
   userEmailService: UserEmailService;
@@ -33,7 +33,6 @@ export interface RegisteredServices {
   userRepository: UserRepository;
   emailRepository: EmailRepository;
   userRegisteredSubscriber: UserRegisteredSubscriber;
-  userEmailConfirmationSentPublisher: UserEmailConfirmationSentPublisher;
   projectMemberCreatedSubscriber: ProjectMemberInvitedSubscriber;
   workspaceMemberInvitedSubscriber: WorkspaceMemberInvitedSubscriber;
 }
@@ -59,12 +58,12 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   await orm.init();
 
-  const eventBus = new NatsEventBus({
+  const broker = new NatsBroker({
     servers: [process.env.NATS_SERVER_URL || "nats"],
     streams: ["email"],
     logger,
   });
-  await eventBus.init();
+  await broker.init();
 
   const brevoTransporter = nodemailer.createTransport({
     host: "smtp-relay.sendinblue.com",
@@ -82,19 +81,16 @@ const main = async () => {
   const { add } = container;
   add("logger", asValue(logger));
   add("dataSource", asValue(dataSource));
-  add("eventBus", asValue(eventBus));
+  add("broker", asValue(broker));
   add("mailer", asValue(mailer));
   add("orm", asValue(orm));
+  add("publisher", asClass(NatsPublisher));
   add("userEmailService", asClass(CoreUserEmailService));
   add("projectEmailService", asClass(CoreProjectEmailService));
   add("workspaceEmailService", asClass(CoreWorkspaceEmailService));
   add("userRepository", asClass(PostgresUserRepository));
   add("emailRepository", asClass(PostgresEmailRepository));
   add("userRegisteredSubscriber", asClass(UserRegisteredSubscriber));
-  add(
-    "userEmailConfirmationSentPublisher",
-    asClass(UserEmailConfirmationSentPublisher),
-  );
   add(
     "projectMemberCreatedSubscriber",
     asClass(ProjectMemberInvitedSubscriber),
