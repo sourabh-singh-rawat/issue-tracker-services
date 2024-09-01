@@ -4,7 +4,7 @@
   "description": "Email management",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --verbose",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc"
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/nodemailer": "^6.4.15",
     "@types/uuid": "^9.0.8",
     "eslint": "^8.57.0",
@@ -33,7 +34,8 @@
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "uuid": "^9.0.1"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
@@ -52,7 +54,7 @@
     "nodemailer": "^6.9.13",
     "pg": "^8.11.5",
     "pino": "^8.21.0",
-    "typeorm": "^0.3.20",
-    "uuid": "^9.0.1"
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   }
 }
