@@ -43,6 +43,18 @@ services:
       - postgres
       - -c
       - max_connections=1000
+  mail-postgres-test:
+    image: postgres:latest
+    container_name: mail-postgres-test
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "15433:5432"
+    command:
+      - postgres
+      - -c
+      - max_connections=1000
 
   storage-postgres:
     image: postgres:latest
