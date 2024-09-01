@@ -1,9 +1,7 @@
 import { Typeorm } from "@issue-tracker/orm";
-import { EventBus } from "@issue-tracker/event-bus";
+import { NatsPublisher } from "@issue-tracker/event-bus";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { UserProfileRepository } from "../data/repositories/interfaces/user-profile.repository";
-import { UserRegisteredPublisher } from "../events/publishers/user-registered.publisher";
-import { UserEmailVerifiedPublisher } from "../events/publishers/user-email-verified.publisher";
 import {
   AuthCredentials,
   EMAIL_VERIFICATION_STATUS,
@@ -28,12 +26,10 @@ import { v4 } from "uuid";
 export class CoreUserService implements UserService {
   constructor(
     private readonly orm: Typeorm,
-    private readonly eventBus: EventBus,
+    private readonly publisher: NatsPublisher,
     private readonly userRepository: UserRepository,
     private readonly userProfileRepository: UserProfileRepository,
     private readonly emailVerificationTokenRepository: EmailVerificationTokenRepository,
-    private readonly userRegisteredPublisher: UserRegisteredPublisher,
-    private readonly userEmailVerifiedPublisher: UserEmailVerifiedPublisher,
   ) {}
 
   private getUserById = async (userId: string) => {
@@ -109,7 +105,7 @@ export class CoreUserService implements UserService {
         { queryRunner },
       );
 
-      await this.userRegisteredPublisher.publish({
+      await this.publisher.send("user.registered", {
         emailVerificationToken: emailVerificationToken,
         userId,
         email: savedUser.email,
@@ -187,7 +183,7 @@ export class CoreUserService implements UserService {
         emailVerificationToken,
         { queryRunner },
       );
-      await this.userEmailVerifiedPublisher.publish({
+      await this.publisher.send("user.email-verified", {
         displayName: userProfile.displayName,
         email: user.email,
         emailVerificationStatus: user.emailVerificationStatus,

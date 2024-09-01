@@ -4,8 +4,8 @@ import { UserRepository } from "../../data/repositories/interfaces/user.reposito
 import { WorkspaceMemberRepository } from "../../data/repositories/interfaces/workspace-member.repository";
 import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
 import {
+  Broker,
   CONSUMERS,
-  EventBus,
   Streams,
   SUBJECTS,
   Subscriber,
@@ -29,13 +29,13 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
   readonly subject = SUBJECTS.USER_EMAIL_VERIFIED;
 
   constructor(
-    private readonly eventBus: EventBus,
+    private readonly broker: Broker,
     private readonly userRepository: UserRepository,
     private readonly orm: Typeorm,
     private readonly workspaceRepository: WorkspaceRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
   ) {
-    super(eventBus.client);
+    super(broker.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserEmailVerifiedPayload) => {

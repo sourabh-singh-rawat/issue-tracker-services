@@ -1,8 +1,5 @@
 import { ProjectService } from "./interfaces/project.service";
 import { UserService } from "./interfaces/user.service";
-import { ProjectCreatedPublisher } from "../events/publishers/project-created.publisher";
-import { ProjectUpdatedPublisher } from "../events/publishers/project-updated.publisher";
-import { ProjectMemberCreatedPublisher } from "../events/publishers/project-member-created.publisher";
 import { Typeorm } from "@issue-tracker/orm";
 import { ProjectStatus } from "@issue-tracker/common/dist/constants/enums/project-status";
 import {
@@ -18,7 +15,7 @@ import {
   UserAlreadyExists,
   UserNotFoundError,
 } from "@issue-tracker/common";
-import { ProjectMemberPayload } from "@issue-tracker/event-bus";
+import { NatsPublisher, ProjectMemberPayload } from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { ProjectRepository } from "../data/repositories/interfaces/project.repository";
@@ -29,14 +26,12 @@ import { ProjectEntity, ProjectMemberEntity } from "../data/entities";
 export class CoreProjectService implements ProjectService {
   constructor(
     private readonly orm: Typeorm,
+    private readonly publisher: NatsPublisher,
     private readonly userService: UserService,
     private readonly userRepository: UserRepository,
     private readonly projectRepository: ProjectRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
     private readonly projectMemberRepository: ProjectMemberRepository,
-    private readonly projectCreatedPublisher: ProjectCreatedPublisher,
-    private readonly projectUpdatedPublisher: ProjectUpdatedPublisher,
-    private readonly projectMemberCreatedPublisher: ProjectMemberCreatedPublisher,
   ) {}
 
   private getUserById = async (userId: string) => {
@@ -160,8 +155,7 @@ export class CoreProjectService implements ProjectService {
     if (!savedProject) {
       throw new TransactionExecutionError("Cannot create project");
     }
-
-    await this.projectCreatedPublisher.publish(savedProject);
+    await this.publisher.send("project.created", savedProject);
 
     return new ServiceResponse({ rows: savedProject.id });
   };
@@ -228,8 +222,7 @@ export class CoreProjectService implements ProjectService {
     newProjectMember.workspaceId = workspaceId;
 
     await this.projectMemberRepository.save(newProjectMember);
-
-    await this.projectMemberCreatedPublisher.publish({
+    await this.publisher.send("project.member-invited", {
       userId,
       projectId,
       role,
@@ -250,6 +243,6 @@ export class CoreProjectService implements ProjectService {
     const project = await this.projectRepository.findOne(id);
     if (!project) throw new ProjectNotFoundError();
 
-    await this.projectUpdatedPublisher.publish(project);
+    await this.publisher.send("project.updated", project);
   };
 }

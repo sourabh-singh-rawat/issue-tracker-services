@@ -1,5 +1,11 @@
 import "dotenv/config";
-import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
+import {
+  Broker,
+  NatsBroker,
+  NatsPublisher,
+  Publisher,
+  Subjects,
+} from "@issue-tracker/event-bus";
 import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
 import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
@@ -37,7 +43,6 @@ import { PostgresIssueAssigneeRepository } from "./data/repositories/postgres-is
 import { PostgresIssueCommentRepository } from "./data/repositories/postgres-issue-comment.repository";
 import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
 import { UserEmailVerifiedSubscriber } from "./events/subscribers/user-email-verified.subscriber";
-import { IssueCreatedPublisher } from "./events/publishers/issue-created.publisher";
 import { ProjectController } from "./controllers/interfaces/project.controller";
 import { CoreProjectController } from "./controllers/core-project.controller";
 import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
@@ -52,12 +57,6 @@ import { WorkspaceMemberRepository } from "./data/repositories/interfaces/worksp
 import { PostgresWorkspaceMemberRepository } from "./data/repositories/postgres-workspace-member.repository";
 import { PostgresProjectMemberRepository } from "./data/repositories/postgres-project-member.repository";
 import { ProjectMemberRepository } from "./data/repositories/interfaces/project-member";
-import { ProjectCreatedPublisher } from "./events/publishers/project-created.publisher";
-import { WorkspaceCreatedPublisher } from "./events/publishers/workspace-created.publisher";
-import { ProjectUpdatedPublisher } from "./events/publishers/project-updated.publisher";
-import { WorkspaceMemberInvitedPublisher } from "./events/publishers/workspace-member-invited.publisher";
-import { ProjectMemberCreatedPublisher } from "./events/publishers/project-member-created.publisher";
-import { WorkspaceInviteTokenRepository } from "./data/repositories/interfaces/workspace-invite-token.repository";
 import { PostgresWorkspaceInviteTokenRepository } from "./data/repositories/postgres-workspace-invite-token.repository";
 import { ProjectActivityController } from "./controllers/interfaces/project-activity.controller";
 import { CoreProjectActivityController } from "./controllers/core-project-activity.controller";
@@ -77,7 +76,7 @@ export interface RegisteredServices {
   logger: AppLogger;
   dataSource: DataSource;
   orm: Typeorm;
-  eventBus: EventBus;
+  broker: Broker;
   issueController: IssueController;
   issueCommentController: IssueCommentController;
   issueTaskController: IssueTaskController;
@@ -94,7 +93,6 @@ export interface RegisteredServices {
   projectMemberRepository: ProjectMemberRepository;
   workspaceRepository: WorkspaceRepository;
   workspaceMemberRepository: WorkspaceMemberRepository;
-  workspaceInviteTokenRepository: WorkspaceInviteTokenRepository;
   userRepository: UserRepository;
   issueRepository: IssueRepository;
   projectRepository: ProjectRepository;
@@ -102,13 +100,8 @@ export interface RegisteredServices {
   issueAssigneeRepository: IssueAssigneeRepository;
   issueCommentRepository: IssueCommentRepository;
   issueTaskRepository: IssueTaskRepository;
-  projectCreatedPublisher: ProjectCreatedPublisher;
-  projectUpdatedPublisher: ProjectUpdatedPublisher;
-  workspaceCreatedPublisher: WorkspaceCreatedPublisher;
-  workspaceMemberInvitedPublisher: WorkspaceMemberInvitedPublisher;
-  projectMemberCreatedPublisher: ProjectMemberCreatedPublisher;
   userEmailVerifiedSubscriber: UserEmailVerifiedSubscriber;
-  issueCreatedPublisher: IssueCreatedPublisher;
+  publisher: Publisher<Subjects>;
 }
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
@@ -211,12 +204,12 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   await orm.init();
 
-  const eventBus = new NatsEventBus({
+  const natsBroker = new NatsBroker({
     servers: [process.env.NATS_SERVER_URL || "nats"],
-    streams: ["issue", "workspace", "project"],
+    streams: ["issue", "workspace", "project", "user"],
     logger,
   });
-  await eventBus.init();
+  await natsBroker.init();
 
   const awilix = createContainer<RegisteredServices>({
     injectionMode: InjectionMode.CLASSIC,
@@ -227,7 +220,7 @@ const main = async () => {
   add("logger", asValue(logger));
   add("dataSource", asValue(dataSource));
   add("orm", asValue(orm));
-  add("eventBus", asValue(eventBus));
+  add("broker", asValue(natsBroker));
   add("issueController", asClass(CoreIssueController));
   add("issueCommentController", asClass(CoreIssueCommentController));
   add("issueTaskController", asClass(CoreIssueTaskController));
@@ -255,16 +248,8 @@ const main = async () => {
   add("issueAssigneeRepository", asClass(PostgresIssueAssigneeRepository));
   add("issueCommentRepository", asClass(PostgresIssueCommentRepository));
   add("issueTaskRepository", asClass(PostgresIssueTaskRepository));
-  add("projectCreatedPublisher", asClass(ProjectCreatedPublisher));
-  add("projectUpdatedPublisher", asClass(ProjectUpdatedPublisher));
-  add("workspaceCreatedPublisher", asClass(WorkspaceCreatedPublisher));
-  add("projectMemberCreatedPublisher", asClass(ProjectMemberCreatedPublisher));
-  add(
-    "workspaceMemberInvitedPublisher",
-    asClass(WorkspaceMemberInvitedPublisher),
-  );
   add("userEmailVerifiedSubscriber", asClass(UserEmailVerifiedSubscriber));
-  add("issueCreatedPublisher", asClass(IssueCreatedPublisher));
+  add("publisher", asClass(NatsPublisher));
 
   container.init();
 

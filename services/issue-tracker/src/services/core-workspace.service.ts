@@ -2,8 +2,6 @@ import { v4 } from "uuid";
 import { WorkspaceService } from "./interfaces/workspace.service";
 import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
 import { WorkspaceInviteTokenEntity } from "../data/entities/workspace-invite-token.entity";
-import { WorkspaceCreatedPublisher } from "../events/publishers/workspace-created.publisher";
-import { WorkspaceMemberInvitedPublisher } from "../events/publishers/workspace-member-invited.publisher";
 import { Typeorm } from "@issue-tracker/orm";
 import {
   ServiceResponse,
@@ -18,7 +16,10 @@ import {
   EMAIL_VERIFICATION_TOKEN_STATUS,
   NotFoundError,
 } from "@issue-tracker/common";
-import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
+import {
+  NatsPublisher,
+  WorkspaceInvitePayload,
+} from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { WorkspaceRepository } from "../data/repositories/interfaces/workspace.repository";
@@ -30,12 +31,11 @@ import { UserEntity } from "../data/entities";
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(
     private orm: Typeorm,
+    private readonly publisher: NatsPublisher,
     private userRepository: UserRepository,
     private workspaceRepository: WorkspaceRepository,
     private workspaceMemberRepository: WorkspaceMemberRepository,
-    private workspaceCreatedPublisher: WorkspaceCreatedPublisher,
     private workspaceInviteTokenRepository: WorkspaceInviteTokenRepository,
-    private workspaceMemberInvitedPublisher: WorkspaceMemberInvitedPublisher,
   ) {}
 
   private saveWorkspace = async (
@@ -61,7 +61,7 @@ export class CoreWorkspaceService implements WorkspaceService {
 
         if (!savedWorkspaceMember.userId) throw new Error("userId is required");
 
-        await this.workspaceCreatedPublisher.publish({
+        await this.publisher.send("workspace.created", {
           id: savedWorkspace.id,
           name: savedWorkspace.name,
           ownerId: savedWorkspace.ownerUserId,
@@ -181,7 +181,7 @@ export class CoreWorkspaceService implements WorkspaceService {
       await this.workspaceInviteTokenRepository.save(newWorkspaceInviteToken, {
         queryRunner,
       });
-      await this.workspaceMemberInvitedPublisher.publish({
+      await this.publisher.send("workspace.member-invited", {
         userId,
         email,
         token,

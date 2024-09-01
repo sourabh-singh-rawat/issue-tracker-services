@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { EventBus, NatsEventBus } from "@issue-tracker/event-bus";
+import { Broker, NatsBroker } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { DataSource } from "typeorm";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
@@ -25,7 +25,7 @@ import { writeFile } from "fs";
 export interface RegisteredServices {
   logger: AppLogger;
   dataSource: DataSource;
-  eventBus: EventBus;
+  broker: Broker;
   orm: Typeorm;
   issueAttachmentController: IssueAttachmentController;
   issueAttachmentService: IssueAttachmentService;
@@ -131,11 +131,11 @@ const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
-  const eventBus = new NatsEventBus({
+  const broker = new NatsBroker({
     servers: [process.env.NATS_SERVER_URL || "nats"],
     logger,
   });
-  await eventBus.init();
+  await broker.init();
 
   const awilix = createContainer<RegisteredServices>({
     injectionMode: InjectionMode.CLASSIC,
@@ -145,11 +145,11 @@ const main = async () => {
   add("logger", asValue(logger));
   add("dataSource", asValue(dataSource));
   add("orm", asValue(orm));
-  add("eventBus", asValue(eventBus));
+  add("eventBus", asValue(broker));
   add("issueAttachmentController", asClass(CoreIssueAttachmentController));
   add("issueAttachmentService", asClass(CoreIssueAttachmentService));
   add("issueAttachmentRepository", asClass(PostgresIssueAttachmentRepository));
-  await container.init();
+  container.init();
 
   await startServer(container);
   startSubscriptions();

@@ -1,7 +1,7 @@
 import { JsMsg } from "nats";
 import {
   CONSUMERS,
-  EventBus,
+  NatsBroker,
   Streams,
   SUBJECTS,
   Subscriber,
@@ -15,10 +15,10 @@ export class WorkspaceMemberInvitedSubscriber extends Subscriber<WorkspaceInvite
   readonly subject = SUBJECTS.WORKSPACE_MEMBER_INVITED;
 
   constructor(
-    private eventBus: EventBus,
+    private broker: NatsBroker,
     private workspaceEmailService: WorkspaceEmailService,
   ) {
-    super(eventBus.client);
+    super(broker.client);
   }
 
   onMessage = async (message: JsMsg, payload: WorkspaceInvitePayload) => {

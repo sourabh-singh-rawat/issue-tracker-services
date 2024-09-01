@@ -9,7 +9,7 @@ import {
 import { Streams, Consumers } from "./enums";
 
 export abstract class Subscriber<T> {
-  private readonly jetstreamClient;
+  private readonly jetstream;
   abstract readonly stream: Streams;
   abstract readonly consumer: Consumers;
   abstract readonly subject: string;
@@ -17,26 +17,23 @@ export abstract class Subscriber<T> {
   constructor(client?: NatsConnection) {
     if (!client) throw Error("client must be specified");
 
-    this.jetstreamClient = client.jetstream();
+    this.jetstream = client.jetstream();
   }
 
   fetchMessages = async () => {
-    const jsm = await this.jetstreamClient.jetstreamManager();
-    const found = await jsm.consumers.info(this.stream, this.consumer);
+    const jetstreamManager = await this.jetstream.jetstreamManager();
+    await jetstreamManager.consumers.add(this.stream, {
+      name: this.consumer,
+      durable_name: this.consumer,
+      deliver_policy: DeliverPolicy.All,
+      filter_subject: this.subject,
+      max_deliver: 100,
+      ack_wait: 30 * 1000 * 1000 * 1000,
+      ack_policy: AckPolicy.Explicit,
+      replay_policy: ReplayPolicy.Instant,
+    });
 
-    if (!found) {
-      await jsm.consumers.add(this.stream, {
-        name: this.consumer,
-        durable_name: this.consumer,
-        deliver_policy: DeliverPolicy.All,
-        filter_subject: this.subject,
-        max_deliver: 100,
-        ack_wait: 30 * 1000 * 1000 * 1000,
-        ack_policy: AckPolicy.Explicit,
-        replay_policy: ReplayPolicy.Instant,
-      });
-    }
-    const consumer = await this.jetstreamClient.consumers.get(
+    const consumer = await this.jetstream.consumers.get(
       this.stream,
       this.consumer,
     );

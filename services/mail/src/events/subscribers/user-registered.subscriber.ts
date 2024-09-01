@@ -1,7 +1,7 @@
 import { JsMsg } from "nats";
 import {
   CONSUMERS,
-  EventBus,
+  NatsBroker,
   Streams,
   SUBJECTS,
   Subscriber,
@@ -16,11 +16,11 @@ export class UserRegisteredSubscriber extends Subscriber<UserRegisteredPayload> 
   readonly subject = SUBJECTS.USER_REGISTERED;
 
   constructor(
-    private readonly eventBus: EventBus,
+    private readonly broker: NatsBroker,
     private readonly userEmailService: UserEmailService,
     private readonly orm: Typeorm,
   ) {
-    super(eventBus.client);
+    super(broker.client);
   }
 
   onMessage = async (message: JsMsg, payload: UserRegisteredPayload) => {

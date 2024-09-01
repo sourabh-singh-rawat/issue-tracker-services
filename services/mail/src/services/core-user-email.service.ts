@@ -2,14 +2,13 @@ import { Typeorm } from "@issue-tracker/orm";
 import { UserEmailService } from "./interfaces/user-email.service";
 import { dataSource } from "..";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
-import { UserRegisteredPayload } from "@issue-tracker/event-bus";
+import { NatsPublisher, UserRegisteredPayload } from "@issue-tracker/event-bus";
 import { EmailEntity, UserEntity } from "../data/entities";
 import {
   EMAIL_STATUS,
   EMAIL_TYPE,
   UserAlreadyExists,
 } from "@issue-tracker/common";
-import { UserEmailConfirmationSentPublisher } from "../events/publishers/user-email-confirmation-sent.publisher";
 import { EmailRepository } from "../data/repositories/interfaces/email.repository";
 import { EmailMessage, NodeMailer } from "@issue-tracker/comm";
 
@@ -18,10 +17,10 @@ export class CoreUserEmailService implements UserEmailService {
 
   constructor(
     private readonly orm: Typeorm,
+    private readonly publisher: NatsPublisher,
     private readonly emailRepository: EmailRepository,
     private readonly userRepository: UserRepository,
     private readonly mailer: NodeMailer,
-    private readonly userEmailConfirmationSentPublisher: UserEmailConfirmationSentPublisher,
   ) {}
 
   createUserAndSendRegistrationEmail = async (
@@ -74,7 +73,7 @@ export class CoreUserEmailService implements UserEmailService {
       const id = savedEmail.id;
       await this.emailRepository.update(id, savedEmail, { queryRunner });
       await this.userRepository.updateUser(userId, savedUser, { queryRunner });
-      await this.userEmailConfirmationSentPublisher.publish({
+      await this.publisher.send("user.confirmation-email-sent", {
         userId: id,
         email: receiverEmail,
         sentAt,
