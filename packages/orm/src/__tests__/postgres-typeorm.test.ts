@@ -22,20 +22,13 @@ jest.mock("typeorm", () => {
 });
 
 describe("Postgres Typeorm", () => {
-  const dataSource = new DataSource({
-    type: "postgres",
-    host: "localhost",
-    username: "postgres",
-    password: "postgres",
-    database: "postgres",
-    port: 5432,
-  });
+  const mockDataSource = new DataSource({ type: "postgres" });
   const logger = new PinoAppLogger({ level: "info", timestamp: true });
-  let postgres: Typeorm;
+  let orm: Typeorm;
 
   beforeAll(async () => {
-    postgres = new PostgresTypeorm(dataSource, logger);
-    await postgres.init();
+    orm = new PostgresTypeorm(mockDataSource, logger);
+    await orm.init();
   });
 
   afterEach(() => {
@@ -43,71 +36,71 @@ describe("Postgres Typeorm", () => {
   });
 
   it("initializes a connection with postgres", async () => {
-    expect(dataSource.initialize).toHaveBeenCalledTimes(1);
+    expect(mockDataSource.initialize).toHaveBeenCalledTimes(1);
   });
 
   it("creates a query runner using typeorm's createQueryRunner", async () => {
-    const queryRunner = postgres.createQueryRunner();
-    postgres.createQueryBuilder(queryRunner);
+    const queryRunner = orm.createQueryRunner();
+    orm.createQueryBuilder(queryRunner);
 
-    expect(dataSource.createQueryBuilder).toHaveBeenCalledTimes(1);
+    expect(mockDataSource.createQueryBuilder).toHaveBeenCalledTimes(1);
   });
 
   it("creates a query builder using typeorm's createQueryBuilder", async () => {
-    const queryRunner = postgres.createQueryRunner();
-    postgres.createQueryBuilder(queryRunner);
+    const queryRunner = orm.createQueryRunner();
+    orm.createQueryBuilder(queryRunner);
 
-    expect(dataSource.createQueryRunner).toHaveBeenCalledTimes(1);
-    expect(dataSource.createQueryBuilder).toHaveBeenCalledTimes(1);
+    expect(mockDataSource.createQueryRunner).toHaveBeenCalledTimes(1);
+    expect(mockDataSource.createQueryBuilder).toHaveBeenCalledTimes(1);
   });
 
   it("picks a client from pool using typeorm's queryRunner.connect()", async () => {
-    const queryRunner = dataSource.createQueryRunner();
-    await postgres.transaction(queryRunner, async () => {});
+    const queryRunner = mockDataSource.createQueryRunner();
+    await orm.transaction(queryRunner, async () => {});
 
     expect(queryRunner.connect).toHaveBeenCalledTimes(1);
   });
 
   it("starts transaction using typeorm's queryRunner.startTransaction()", async () => {
-    const queryRunner = dataSource.createQueryRunner();
-    await postgres.transaction(queryRunner, async () => {});
+    const queryRunner = mockDataSource.createQueryRunner();
+    await orm.transaction(queryRunner, async () => {});
 
     expect(queryRunner.startTransaction).toHaveBeenCalledTimes(1);
   });
 
   it("commits a transaction using typeorm's queryRunner.commitTransaction()", async () => {
-    const queryRunner = dataSource.createQueryRunner();
-    await postgres.transaction(queryRunner, async () => {});
+    const queryRunner = mockDataSource.createQueryRunner();
+    await orm.transaction(queryRunner, async () => {});
 
     expect(queryRunner.commitTransaction).toHaveBeenCalledTimes(1);
     expect(queryRunner.rollbackTransaction).not.toHaveBeenCalledTimes(1);
   });
 
   it("releases the client back to pool when done", async () => {
-    const queryRunner = dataSource.createQueryRunner();
-    await postgres.transaction(queryRunner, async () => {});
+    const queryRunner = mockDataSource.createQueryRunner();
+    await orm.transaction(queryRunner, async () => {});
 
     expect(queryRunner.release).toHaveBeenCalledTimes(1);
   });
 
-  it.todo(
-    "rollbacks transaction using typeorm's queryRunner.rollbackTransaction()",
-  );
+  it("rollbacks transaction using typeorm's queryRunner.rollbackTransaction()", async () => {
+    const queryRunner = mockDataSource.createQueryRunner();
 
-  it.todo(
-    "releases the client back to pool after rolling back the failed transaction",
-  );
-  // it("rollbacks transaction using typeorm's queryRunner.rollbackTransaction()", async () => {
-  //   const queryRunner = dataSource.createQueryRunner();
+    await orm.transaction(queryRunner, async () => {
+      throw new Error("Some error");
+    });
+    expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
+    expect(queryRunner.rollbackTransaction).toHaveBeenCalledTimes(1);
+  });
 
-  //   expect(
-  //     postgres.transaction(queryRunner, async () => {
-  //       throw new Error();
-  //     }),
-  //   ).rejects.toThrow();
+  it("releases the client back to pool after rolling back the failed transaction", async () => {
+    const queryRunner = mockDataSource.createQueryRunner();
 
-  //   expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
-  //   expect(queryRunner.rollbackTransaction).toHaveBeenCalledTimes(1);
-  //   expect(queryRunner.release).toHaveBeenCalledTimes(1);
-  // });
+    await orm.transaction(queryRunner, async () => {
+      throw new Error("Some error");
+    });
+
+    expect(queryRunner.rollbackTransaction).toHaveBeenCalledTimes(1);
+    expect(queryRunner.release).toHaveBeenCalledTimes(1);
+  });
 });

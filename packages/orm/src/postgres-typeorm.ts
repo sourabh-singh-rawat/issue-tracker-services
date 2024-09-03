@@ -17,10 +17,7 @@ export class PostgresTypeorm implements Typeorm {
     this.logger = logger;
     this.dataSource = dataSource;
   }
-  /**
-   * Initializes the connection to the postgres cluster
-   * Must have an data source
-   */
+
   async init() {
     try {
       await this.dataSource.initialize();
@@ -34,21 +31,12 @@ export class PostgresTypeorm implements Typeorm {
     return this.dataSource.createQueryRunner();
   }
 
-  /**
-   * Creates a query builder with dataSource for a given entity and name.
-   * @returns
-   */
   createQueryBuilder(queryRunner?: QueryRunner) {
     return this.dataSource.createQueryBuilder(
       queryRunner,
     ) as unknown as SelectQueryBuilder<ObjectLiteral>;
   }
 
-  /**
-   * Execute transactions
-   * @param callback
-   * @returns
-   */
   async transaction<TReturnValue>(
     queryRunner: QueryRunner,
     callback: (queryRunner: QueryRunner) => TReturnValue,
@@ -63,7 +51,7 @@ export class PostgresTypeorm implements Typeorm {
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error;
+      console.log(error);
     } finally {
       await queryRunner.release();
     }
