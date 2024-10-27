@@ -2,14 +2,14 @@
   "version": "0.2.0",
   "compounds": [
     {
-      "name": "dev",
+      "name": "dev (linux)",
       "configurations": [
-        "auth (service)",
-        "issue-tracker (service)",
-        "mail (service)",
-        "storage (service)",
+        "auth",
+        "issue-tracker",
         "issue-tracker (client)",
-        "brave (debug - scoop)"
+        "mail",
+        "storage",
+        "brave (debug)",
       ]
     }
   ],
@@ -20,7 +20,9 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["client"],
+      "runtimeArgs": [
+        "client"
+      ],
       "console": "integratedTerminal"
     },
     {
@@ -31,42 +33,64 @@
       "userDataDir": true,
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": ["--remote-debugging-port=9222"]
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
     },
     {
-      "name": "auth (service)",
+      "name": "brave (debug)",
+      "request": "launch",
+      "type": "chrome",
+      "runtimeExecutable": "/usr/bin/brave",
+      "userDataDir": true,
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
+    },
+    {
+      "name": "auth",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["auth"],
+      "runtimeArgs": [
+        "auth"
+      ],
       "console": "integratedTerminal"
     },
     {
-      "name": "mail (service)",
+      "name": "mail",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["mail"],
+      "runtimeArgs": [
+        "mail"
+      ],
       "console": "integratedTerminal"
     },
     {
-      "name": "issue-tracker (service)",
+      "name": "issue-tracker",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issue-tracker"],
+      "runtimeArgs": [
+        "issue-tracker"
+      ],
       "console": "integratedTerminal"
     },
     {
-      "name": "storage (service)",
+      "name": "storage",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["storage"],
+      "runtimeArgs": [
+        "storage"
+      ],
       "console": "integratedTerminal"
     }
   ]
