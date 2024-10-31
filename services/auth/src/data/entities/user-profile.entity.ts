@@ -34,7 +34,4 @@ export class UserProfileEntity extends AuditEntity {
 
   @Column({ name: "photo_url", type: "text", nullable: true })
   photoUrl?: string;
-
-  @Column({ name: "default_workspace_id", type: "uuid", nullable: true })
-  defaultWorkspaceId?: string;
 }

@@ -46,10 +46,7 @@ export class CoreWorkspaceEmailService implements WorkspaceEmailService {
 
       const newEmail = new EmailEntity();
       newEmail.type = EMAIL_TYPE.WORKSPACE_INVITATION;
-      newEmail.message = JSON.stringify(message);
-      newEmail.senderId = userId;
-      newEmail.receiverEmail = receiverEmail;
-      newEmail.token = token;
+      newEmail.email = receiverEmail;
 
       await this.emailRepository.save(newEmail, { queryRunner });
       await this.mailer.send(this.senderEmail, receiverEmail, message);
