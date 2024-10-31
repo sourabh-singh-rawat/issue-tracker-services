@@ -22,11 +22,8 @@ export class EmailEntity extends BaseEntity {
   })
   type!: EmailType;
 
-  @Column({ name: "sender_id", type: "uuid" })
-  senderId!: string;
-
-  @Column({ name: "receiver_email", type: "text" })
-  receiverEmail!: string;
+  @Column({ name: "email", type: "text" })
+  email!: string;
 
   @Column({
     name: "status",
@@ -46,8 +43,5 @@ export class EmailEntity extends BaseEntity {
   status!: EmailStatus;
 
   @Column({ name: "message", type: "json" })
-  message!: string;
-
-  @Column({ name: "token", type: "text", nullable: true })
-  token?: string;
+  html!: string;
 }

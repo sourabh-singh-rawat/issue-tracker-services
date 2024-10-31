@@ -17,7 +17,7 @@ import {
 } from "@issue-tracker/common";
 import { Hash, JwtToken } from "@issue-tracker/security";
 import { UserEntity } from "../data/entities";
-import { UserService } from "./interfaces/user.service";
+import { UserService } from "./Interfaces/user.service";
 import { UserProfileEntity } from "../data/entities/user-profile.entity";
 import { EmailVerificationTokenRepository } from "../data/repositories/interfaces/email-verification.repository";
 import { EmailVerificationTokenEntity } from "../data/entities/email-verification-token.entity";

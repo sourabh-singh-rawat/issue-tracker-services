@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
 
-import { IdentityService } from "./interfaces/identity.service";
+import { IdentityService } from "./Interfaces/identity.service";
 import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
-import { TokenOptions } from "./interfaces/token-options";
+import { TokenOptions } from "./Interfaces/token-options";
 import { Typeorm } from "@issue-tracker/orm";
 import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
 import { RefreshTokenRepository } from "../data/repositories/interfaces/refresh-token-repository";
@@ -22,7 +22,7 @@ import {
   RefreshToken,
 } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
-import { UserService } from "./interfaces/user.service";
+import { UserService } from "./Interfaces/user.service";
 
 export class CoreIdentityService implements IdentityService {
   constructor(

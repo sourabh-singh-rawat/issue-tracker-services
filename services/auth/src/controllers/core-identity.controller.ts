@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { StatusCodes } from "http-status-codes";
 import { IdentityController } from "./interfaces/identity.controller";
-import { IdentityService } from "../services/interfaces/identity.service";
+import { IdentityService } from "../Services/Interfaces/identity.service";
 import { AuthCredentials } from "@issue-tracker/common";
 
 export class CoreIdentityController implements IdentityController {

@@ -3,10 +3,15 @@ import { StatusCodes } from "http-status-codes";
 
 import { UserController } from "./interfaces/user.controller";
 import { AuthCredentials, UserRegistrationData } from "@issue-tracker/common";
-import { UserService } from "../services/interfaces/user.service";
+import { UserService } from "../Services/Interfaces/user.service";
+import { UserAuthenticationService } from "../Services/Interfaces";
+import { dataSource } from "..";
 
 export class CoreUserController implements UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userAuthenticationService: UserAuthenticationService,
+  ) {}
 
   registerUser = async (
     request: FastifyRequest<{
@@ -17,16 +22,18 @@ export class CoreUserController implements UserController {
   ) => {
     const { workspaceInviteToken } = request.query;
     const { email, password, displayName } = request.body;
-
-    const userRegistrationData = new UserRegistrationData({
-      email,
-      password,
-      displayName,
+    // await this.userService.createUser(
+    //   userRegistrationData,
+    //   workspaceInviteToken,
+    // );
+    await dataSource.transaction(async (manager) => {
+      await this.userAuthenticationService.createUserWithEmailAndPassword({
+        manager,
+        displayName,
+        email,
+        password,
+      });
     });
-    await this.userService.createUser(
-      userRegistrationData,
-      workspaceInviteToken,
-    );
     reply.clearCookie("accessToken", { path: "/" });
     reply.clearCookie("refreshToken", { path: "/" });
 

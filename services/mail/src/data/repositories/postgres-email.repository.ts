@@ -23,7 +23,7 @@ export class PostgresEmailRepository implements EmailRepository {
   };
 
   findByEmail = async (email: string) => {
-    return await EmailEntity.findOne({ where: { receiverEmail: email } });
+    return await EmailEntity.findOne({ where: { email: email } });
   };
 
   update = async (

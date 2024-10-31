@@ -8,12 +8,12 @@ import {
 import swagger from "@fastify/swagger";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { IdentityController } from "./controllers/interfaces/identity.controller";
-import { IdentityService } from "./services/interfaces/identity.service";
+import { IdentityService } from "./Services/Interfaces/identity.service";
 import { AccessTokenRepository } from "./data/repositories/interfaces/access-token-repository";
 import { RefreshTokenRepository } from "./data/repositories/interfaces/refresh-token-repository";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { CoreIdentityController } from "./controllers/core-identity.controller";
-import { CoreIdentityService } from "./services/core-identity.service";
+import { CoreIdentityService } from "./Services/core-identity.service";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
 import { PostgresAccessTokenRepository } from "./data/repositories/postgres-access-token.repository";
 import { PostgresRefreshTokenRepository } from "./data/repositories/postgres-refresh-token.repository";
@@ -21,9 +21,9 @@ import { DataSource } from "typeorm";
 import { identityRoutes } from "./routes/identity.routes";
 import { UserController } from "./controllers/interfaces/user.controller";
 import { CoreUserController } from "./controllers/core-user.controller";
-import { UserService } from "./services/interfaces/user.service";
+import { UserService } from "./Services/Interfaces/user.service";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
-import { CoreUserService } from "./services/core-user.service";
+import { CoreUserService } from "./Services/core-user.service";
 import { UserProfileRepository } from "./data/repositories/interfaces/user-profile.repository";
 import { PostgresUserProfileRepository } from "./data/repositories/postgres-user-profile.repository";
 import { userRoutes } from "./routes/user.routes";
@@ -37,6 +37,8 @@ import {
   Publisher,
   Subjects,
 } from "@issue-tracker/event-bus";
+import { UserAuthenticationService } from "./Services/Interfaces";
+import { CoreUserAuthenticationService } from "./Services/CoreUserAuthenticationService";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -52,6 +54,7 @@ export interface RegisteredServices {
   refreshTokenRepository: RefreshTokenRepository;
   emailVerificationTokenRepository: EmailVerificationTokenEntity;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
+  userAuthenticationService: UserAuthenticationService;
 }
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
@@ -127,18 +130,18 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userEmailConfirmationSentSubscriber").fetchMessages();
 };
 
-const main = async () => {
-  const dataSource = new DataSource({
-    type: "postgres",
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT!),
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    entities: ["src/data/entities/*.ts"],
-    synchronize: true,
-  });
+export const dataSource = new DataSource({
+  type: "postgres",
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT!),
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: ["src/data/entities/*.ts"],
+  synchronize: true,
+});
 
+const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   orm.init();
 
@@ -166,6 +169,7 @@ const main = async () => {
   add("userProfileRepository", asClass(PostgresUserProfileRepository));
   add("accessTokenRepository", asClass(PostgresAccessTokenRepository));
   add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
+  add("userAuthenticationService", asClass(CoreUserAuthenticationService));
   add(
     "emailVerificationTokenRepository",
     asClass(PostgresEmailVerificationTokenRepository),
