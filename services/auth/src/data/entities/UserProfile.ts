@@ -5,11 +5,11 @@ import {
   JoinColumn,
   Entity,
 } from "typeorm";
-import { UserEntity } from "./user.entity";
 import { AuditEntity } from "@issue-tracker/orm";
+import { User } from "./User";
 
 @Entity("user_profiles")
-export class UserProfileEntity extends AuditEntity {
+export class UserProfile extends AuditEntity {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "user_profiles_pkey",
   })
@@ -18,13 +18,13 @@ export class UserProfileEntity extends AuditEntity {
   @Column({ name: "user_id", type: "uuid" })
   userId!: string;
 
-  @OneToOne(() => UserEntity, ({ profile }) => profile)
+  @OneToOne(() => User, ({ profile }) => profile)
   @JoinColumn({
     name: "user_id",
     foreignKeyConstraintName: "user_profiles_fkey",
     referencedColumnName: "id",
   })
-  user!: UserEntity;
+  user!: User;
 
   @Column({ name: "display_name", type: "text" })
   displayName!: string;

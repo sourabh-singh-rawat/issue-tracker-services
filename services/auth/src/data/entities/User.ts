@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserProfileEntity } from "./user-profile.entity";
+import { UserProfile } from "./UserProfile";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
   EMAIL_VERIFICATION_STATUS,
@@ -14,7 +14,7 @@ import {
 import { EmailVerificationTokenEntity } from "./email-verification-token.entity";
 
 @Entity({ name: "users" })
-export class UserEntity extends AuditEntity {
+export class User extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -39,8 +39,8 @@ export class UserEntity extends AuditEntity {
   })
   emailVerificationStatus!: EmailVerificationStatus;
 
-  @OneToOne(() => UserProfileEntity, ({ user }) => user)
-  profile!: UserProfileEntity;
+  @OneToOne(() => UserProfile, ({ user }) => user)
+  profile!: UserProfile;
 
   @OneToMany(() => EmailVerificationTokenEntity, ({ user }) => user)
   emailVerificationTokens?: EmailVerificationTokenEntity[];

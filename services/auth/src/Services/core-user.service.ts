@@ -16,9 +16,9 @@ import {
   UserRegistrationData,
 } from "@issue-tracker/common";
 import { Hash, JwtToken } from "@issue-tracker/security";
-import { UserEntity } from "../data/entities";
+import { User } from "../data/entities";
 import { UserService } from "./Interfaces/user.service";
-import { UserProfileEntity } from "../data/entities/user-profile.entity";
+import { UserProfile } from "../data/entities/UserProfile";
 import { EmailVerificationTokenRepository } from "../data/repositories/interfaces/email-verification.repository";
 import { EmailVerificationTokenEntity } from "../data/entities/email-verification-token.entity";
 import { v4 } from "uuid";
@@ -55,7 +55,7 @@ export class CoreUserService implements UserService {
 
     const { hash, salt } = await Hash.create(password);
 
-    const newUser = new UserEntity();
+    const newUser = new User();
     newUser.email = email;
     newUser.passwordHash = hash;
     newUser.passwordSalt = salt;
@@ -68,7 +68,7 @@ export class CoreUserService implements UserService {
 
       const userId = savedUser.id;
 
-      const newUserProfile = new UserProfileEntity();
+      const newUserProfile = new UserProfile();
       newUserProfile.userId = userId;
       newUserProfile.displayName = displayName;
 
@@ -134,7 +134,7 @@ export class CoreUserService implements UserService {
     };
   };
 
-  update = async (id: string, user: UserEntity) => {
+  update = async (id: string, user: User) => {
     await this.userRepository.update(id, user);
   };
 

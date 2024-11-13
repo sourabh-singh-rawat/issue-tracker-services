@@ -1,48 +1,48 @@
 import { Typeorm } from "@issue-tracker/orm";
 import { UserRepository } from "./interfaces/user.repository";
-import { UserEntity } from "../entities";
+import { User } from "../entities";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 
 export class PostgresUserRepository implements UserRepository {
   constructor(private readonly orm: Typeorm) {}
 
-  save = async (user: UserEntity, options?: QueryBuilderOptions) => {
+  save = async (user: User, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(UserEntity)
+      .into(User)
       .values(user)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as UserEntity;
+    return (await query.execute()).generatedMaps[0] as User;
   };
 
   existsById = async (id: string) => {
-    return await UserEntity.exists({ where: { id } });
+    return await User.exists({ where: { id } });
   };
 
   findById = async (id: string) => {
-    return await UserEntity.findOne({ where: { id } });
+    return await User.findOne({ where: { id } });
   };
 
   existsByEmail = async (email: string) => {
-    return await UserEntity.exists({ where: { email } });
+    return await User.exists({ where: { email } });
   };
 
   findByEmail = async (email: string) => {
-    return await UserEntity.findOne({ where: { email } });
+    return await User.findOne({ where: { email } });
   };
 
   update = async (
     id: string,
-    updatedUser: UserEntity,
+    updatedUser: User,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
-      .update(UserEntity)
+      .update(User)
       .set(updatedUser)
       .where("id = :id", { id });
 

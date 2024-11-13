@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 
 import { IdentityService } from "./Interfaces/identity.service";
-import { AccessTokenEntity, RefreshTokenEntity } from "../data/entities";
+import { AccessToken, RefreshToken } from "../data/entities";
 import { TokenOptions } from "./Interfaces/token-options";
 import { Typeorm } from "@issue-tracker/orm";
 import { AccessTokenRepository } from "../data/repositories/interfaces/access-token-repository";
@@ -79,7 +79,7 @@ export class CoreIdentityService implements IdentityService {
 
     const secret = process.env.JWT_SECRET!;
 
-    const newAccessToken = new AccessTokenEntity();
+    const newAccessToken = new AccessToken();
     newAccessToken.id = jwtid;
     newAccessToken.userId = userDetails.userId;
     newAccessToken.tokenValue = JwtToken.create(payload, secret);
@@ -101,7 +101,7 @@ export class CoreIdentityService implements IdentityService {
 
     const secret = process.env.JWT_SECRET!;
 
-    const newRefreshToken = new RefreshTokenEntity();
+    const newRefreshToken = new RefreshToken();
     newRefreshToken.id = jwtid;
     newRefreshToken.userId = userId;
     newRefreshToken.tokenValue = JwtToken.create(payload, secret);
@@ -125,8 +125,8 @@ export class CoreIdentityService implements IdentityService {
   };
 
   private saveTokens = async (
-    accessToken: AccessTokenEntity,
-    refreshToken: RefreshTokenEntity,
+    accessToken: AccessToken,
+    refreshToken: RefreshToken,
   ) => {
     const queryRunner = this.orm.createQueryRunner();
     await this.orm.transaction(queryRunner, async (queryRunner) => {

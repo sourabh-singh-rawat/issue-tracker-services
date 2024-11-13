@@ -1,12 +1,12 @@
 import { QueryBuilderOptions, Repository } from "@issue-tracker/orm";
-import { UserEntity } from "../../entities";
+import { User } from "../../entities";
 
-export interface UserRepository extends Repository<UserEntity> {
-  findById(id: string): Promise<UserEntity | null>;
-  findByEmail(email: string): Promise<UserEntity | null>;
+export interface UserRepository extends Repository<User> {
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
   update(
     id: string,
-    updatedUser: UserEntity,
+    updatedUser: User,
     options?: QueryBuilderOptions,
   ): Promise<void>;
   existsByEmail(email: string): Promise<boolean>;

@@ -4,7 +4,7 @@
   "description": "Authentication and authorization functionalities",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --logHeapUsage",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc"
@@ -14,6 +14,7 @@
     "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
   },
   "keywords": [
+    "user",
     "identity",
     "authentication"
   ],

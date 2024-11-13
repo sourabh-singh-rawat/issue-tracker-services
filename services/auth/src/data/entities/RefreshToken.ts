@@ -5,21 +5,21 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "./user.entity";
+import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 
-@Entity("access_tokens")
-export class AccessTokenEntity extends AuditEntity {
+@Entity("refresh_tokens")
+export class RefreshToken extends AuditEntity {
   @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "access_tokens_pkey",
+    primaryKeyConstraintName: "refresh_tokens_pkey",
   })
   id!: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => User)
   @JoinColumn({
     name: "user_id",
     referencedColumnName: "id",
-    foreignKeyConstraintName: "access_tokens_fkey",
+    foreignKeyConstraintName: "refresh_token_fkey",
   })
   userId!: string;
 

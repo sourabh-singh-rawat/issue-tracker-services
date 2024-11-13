@@ -1,7 +1,13 @@
-import { RequiredFieldError, UserAlreadyExists } from "@issue-tracker/common";
-import { UserEntity, UserProfileEntity } from "../data/entities";
-import { PostgresUserProfileRepository } from "../data/repositories/postgres-user-profile.repository";
-import { PostgresUserRepository } from "../data/repositories/postgres-user.repository";
+import {
+  EMAIL_VERIFICATION_STATUS,
+  EmailNotVerifiedError,
+  EmailVerificationStatus,
+  RequiredFieldError,
+  UnauthorizedError,
+  UserAlreadyExists,
+  UserNotFoundError,
+} from "@issue-tracker/common";
+import { User } from "../data/entities";
 import {
   CreateUserWithEmailAndPasswordOptions,
   GeneratePasswordResetLinkOptions,
@@ -10,12 +16,12 @@ import {
   SendPasswordResetLinkToEmailOptions,
   SignInWithEmailAndPasswordOptions,
   UserAuthenticationService,
+  UserProfileService,
   VerifyEmailVerificationLinkOptions,
   VerifyPasswordResetLinkOptions,
 } from "./Interfaces";
-import { Hash, JwtToken } from "@issue-tracker/security";
+import { AccessToken, Hash, JwtToken } from "@issue-tracker/security";
 import { v4 } from "uuid";
-import { userInfo } from "os";
 import { NatsPublisher } from "@issue-tracker/event-bus";
 
 interface CreateVerificationLinkOptions {
@@ -27,10 +33,83 @@ interface CreateVerificationTokenOptions {
   expiresIn: number;
 }
 
+interface VerifyUserPassword {
+  user: User;
+  password: string;
+}
+
+interface CreateAccessTokenOptions {
+  userId: string;
+  email: string;
+  emailVerificationStatus: EmailVerificationStatus;
+  displayName: string;
+  createdAt: string;
+}
+
+interface CreateRefreshTokenOptions {
+  userId: string;
+  email: string;
+  emailVerificationStatus: EmailVerificationStatus;
+  displayName: string;
+  createdAt: string;
+}
+
 export class CoreUserAuthenticationService
   implements UserAuthenticationService
 {
-  constructor(private readonly publisher: NatsPublisher) {}
+  private readonly AUTH_SERVICE = "@issue-tracker/auth";
+  private readonly MAIL_SERVICE = "@issue-tracker/mail";
+
+  constructor(
+    private readonly publisher: NatsPublisher,
+    private readonly userProfileService: UserProfileService,
+  ) {}
+
+  private createAccessToken(options: CreateAccessTokenOptions) {
+    const { createdAt, displayName, email, emailVerificationStatus, userId } =
+      options;
+    const payload: AccessToken = {
+      createdAt,
+      displayName,
+      email,
+      emailVerificationStatus,
+      userId,
+      jwtid: v4(),
+      iss: this.AUTH_SERVICE,
+      aud: this.AUTH_SERVICE,
+      sub: this.MAIL_SERVICE,
+      exp: 11111,
+      userMetadata: { language: "en" },
+      appMetadata: { roles: ["user"] },
+    };
+
+    const secret = process.env.JWT_SECRET!;
+
+    return JwtToken.create(payload, secret);
+  }
+
+  private createRefreshToken(options: CreateRefreshTokenOptions) {
+    const { createdAt, displayName, email, emailVerificationStatus, userId } =
+      options;
+    const payload: AccessToken = {
+      createdAt,
+      displayName,
+      email,
+      emailVerificationStatus,
+      userId,
+      jwtid: v4(),
+      iss: this.AUTH_SERVICE,
+      aud: this.AUTH_SERVICE,
+      sub: this.MAIL_SERVICE,
+      exp: 11111,
+      userMetadata: { language: "en" },
+      appMetadata: { roles: ["user"] },
+    };
+
+    const secret = process.env.JWT_SECRET!;
+
+    return JwtToken.create(payload, secret);
+  }
 
   private createVerificationToken(options: CreateVerificationTokenOptions) {
     const { userId, expiresIn } = options;
@@ -68,12 +147,19 @@ export class CoreUserAuthenticationService
     return verificationLink;
   }
 
+  private async verifyUserPassword(options: VerifyUserPassword) {
+    const { password, user } = options;
+    const { passwordHash, passwordSalt } = user;
+
+    const isHashValid = await Hash.verify(passwordHash, passwordSalt, password);
+    if (!isHashValid) throw new UnauthorizedError();
+  }
+
   async createUserWithEmailAndPassword(
     options: CreateUserWithEmailAndPasswordOptions,
   ) {
     const { email, password, displayName, manager } = options;
-    const UserRepo = manager.getRepository(UserEntity);
-    const UserProfileRepo = manager.getRepository(UserProfileEntity);
+    const UserRepo = manager.getRepository(User);
 
     const isAlreadyRegistered = await UserRepo.exists({ where: { email } });
     if (isAlreadyRegistered) throw new UserAlreadyExists();
@@ -84,7 +170,11 @@ export class CoreUserAuthenticationService
       passwordHash: hash,
       passwordSalt: salt,
     });
-    await UserProfileRepo.save({ userId, displayName });
+    await this.userProfileService.createUserProfile({
+      displayName,
+      userId,
+      manager,
+    });
     await this.sendVerificationLinkToEmail({
       manager,
       userId,
@@ -93,11 +183,21 @@ export class CoreUserAuthenticationService
     });
   }
 
-  signInWithEmailAndPassword(
-    options: SignInWithEmailAndPasswordOptions,
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
+  async signInWithEmailAndPassword(options: SignInWithEmailAndPasswordOptions) {
+    const { manager, email, password } = options;
+    const UserRepo = manager.getRepository(User);
+
+    const user = await UserRepo.findOne({ where: { email } });
+    if (!user) throw new UserNotFoundError();
+    if (user.emailVerificationStatus !== EMAIL_VERIFICATION_STATUS.VERIFIED) {
+      throw new EmailNotVerifiedError();
+    }
+
+    await this.verifyUserPassword({ user, password });
+
+    // user is valid so generate their token
   }
+
   generateVerificationLink(
     options: GenerateVerificationLinkOptions,
   ): Promise<void> {
