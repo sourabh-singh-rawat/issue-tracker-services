@@ -1,5 +1,4 @@
 import { Repository } from "@issue-tracker/orm";
-import { RefreshTokenEntity } from "../../entities";
+import { RefreshToken } from "../../entities";
 
-export interface RefreshTokenRepository
-  extends Repository<RefreshTokenEntity> {}
+export interface RefreshTokenRepository extends Repository<RefreshToken> {}

@@ -10,7 +10,7 @@ import {
   EMAIL_VERIFICATION_TOKEN_STATUS,
   EmailVerificationTokenStatus,
 } from "@issue-tracker/common";
-import { UserEntity } from "./user.entity";
+import { User } from "./User";
 
 @Entity({ name: "email_verification_tokens" })
 export class EmailVerificationTokenEntity extends AuditEntity {
@@ -22,10 +22,10 @@ export class EmailVerificationTokenEntity extends AuditEntity {
 
   @JoinColumn({ name: "user_id" })
   @ManyToOne(
-    () => UserEntity,
+    () => User,
     ({ emailVerificationTokens }) => emailVerificationTokens,
   )
-  user!: UserEntity;
+  user!: User;
 
   @Column({ name: "token", type: "text" })
   token!: string;

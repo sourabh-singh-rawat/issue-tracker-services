@@ -1,4 +1,4 @@
 import { Repository } from "@issue-tracker/orm";
-import { AccessTokenEntity } from "../../entities";
+import { AccessToken } from "../../entities";
 
-export interface AccessTokenRepository extends Repository<AccessTokenEntity> {}
+export interface AccessTokenRepository extends Repository<AccessToken> {}
