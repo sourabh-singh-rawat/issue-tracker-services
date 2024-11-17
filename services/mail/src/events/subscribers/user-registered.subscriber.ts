@@ -26,8 +26,8 @@ export class UserRegisteredSubscriber extends Subscriber<UserRegisteredPayload> 
 
   onMessage = async (message: JsMsg, payload: UserRegisteredPayload) => {
     await dataSource.transaction(async (manager) => {
-      const { email, html } = payload;
-      await this.userEmailService.sendEmail({ email, html, manager });
+      const { userId, email, html } = payload;
+      await this.userEmailService.sendEmail({ userId, email, html, manager });
     });
 
     message.ack();

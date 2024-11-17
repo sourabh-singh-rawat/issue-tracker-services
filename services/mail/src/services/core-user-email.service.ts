@@ -22,7 +22,7 @@ export class CoreUserEmailService implements UserEmailService {
   ) {}
 
   async sendEmail(payload: SendEmailOptions) {
-    const { email, html, manager } = payload;
+    const { email, html, userId, manager } = payload;
     const EmailRepo = manager.getRepository(EmailEntity);
     const message: EmailMessage = { title: "Please verify your email", html };
 
@@ -35,6 +35,7 @@ export class CoreUserEmailService implements UserEmailService {
     savedEmail.status = "Sent";
     await EmailRepo.save(savedEmail);
     await this.publisher.send("user.confirmation-email-sent", {
+      userId,
       email,
       sentAt: new Date(),
     });

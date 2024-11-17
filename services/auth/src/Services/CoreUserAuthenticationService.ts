@@ -230,7 +230,7 @@ export class CoreUserAuthenticationService
         </table>
       </body>
     `;
-    await this.publisher.send("user.registered", { email, html });
+    await this.publisher.send("user.registered", { userId, email, html });
   }
 
   sendPasswordResetLinkToEmail(
