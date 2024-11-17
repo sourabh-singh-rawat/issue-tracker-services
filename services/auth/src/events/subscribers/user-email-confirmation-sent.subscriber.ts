@@ -29,16 +29,16 @@ export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailCon
   ) => {
     const { userId, sentAt } = payload;
 
-    if (!sentAt) {
-      await this.userService.update(userId, {
-        emailConfirmationStatus: EMAIL_VERIFICATION_STATUS.FAILED,
-      });
-    } else {
-      await EmailVerificationTokenEntity.update(
-        { sentAt: new Date(sentAt * 1000) },
-        { userId },
-      );
-    }
+    // if (!sentAt) {
+    //   await this.userService.update(userId, {
+    //     emailConfirmationStatus: EMAIL_VERIFICATION_STATUS.FAILED,
+    //   });
+    // } else {
+    //   await EmailVerificationTokenEntity.update(
+    //     { sentAt: new Date(sentAt * 1000) },
+    //     { userId },
+    //   );
+    // }
     message.ack();
   };
 }
