@@ -238,11 +238,13 @@ export class CoreUserAuthenticationService
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   verifyVerificationLink(
     options: VerifyEmailVerificationLinkOptions,
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   verifyPasswordResetLink(
     options: VerifyPasswordResetLinkOptions,
   ): Promise<void> {
