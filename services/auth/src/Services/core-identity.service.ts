@@ -15,12 +15,7 @@ import {
   UserDetails,
   UserNotFoundError,
 } from "@issue-tracker/common";
-import {
-  AccessToken,
-  BaseToken,
-  JwtToken,
-  RefreshToken,
-} from "@issue-tracker/security";
+import { BaseToken, JwtToken } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { UserService } from "./Interfaces/user.service";
 
@@ -62,7 +57,7 @@ export class CoreIdentityService implements IdentityService {
     const { userId, email, emailVerificationStatus, displayName, createdAt } =
       userDetails;
 
-    const payload: AccessToken = {
+    const payload: any = {
       userId,
       email,
       emailVerificationStatus,
@@ -90,7 +85,7 @@ export class CoreIdentityService implements IdentityService {
 
   private createRefreshToken = (userId: string, options: TokenOptions) => {
     const { exp, jwtid } = options;
-    const payload: RefreshToken = {
+    const payload: any = {
       userId,
       iss: "identity-service",
       aud: "client",
