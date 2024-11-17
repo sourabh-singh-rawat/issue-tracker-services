@@ -37,8 +37,12 @@ import {
   Publisher,
   Subjects,
 } from "@issue-tracker/event-bus";
-import { UserAuthenticationService } from "./Services/Interfaces";
+import {
+  UserAuthenticationService,
+  UserProfileService,
+} from "./Services/Interfaces";
 import { CoreUserAuthenticationService } from "./Services/CoreUserAuthenticationService";
+import { CoreUserProfileService } from "./Services";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -55,6 +59,7 @@ export interface RegisteredServices {
   emailVerificationTokenRepository: EmailVerificationTokenEntity;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
   userAuthenticationService: UserAuthenticationService;
+  userProfileService: UserProfileService;
 }
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
@@ -156,28 +161,40 @@ const main = async () => {
     injectionMode: InjectionMode.CLASSIC,
   });
   const container = new AwilixDi<RegisteredServices>(awilix, logger);
-  const { add } = container;
-  add("orm", asValue(orm));
-  add("logger", asValue(logger));
-  add("broker", asValue(broker));
-  add("publisher", asClass(NatsPublisher));
-  add("userController", asClass(CoreUserController));
-  add("identityController", asClass(CoreIdentityController));
-  add("userService", asClass(CoreUserService));
-  add("identityService", asClass(CoreIdentityService));
-  add("userRepository", asClass(PostgresUserRepository));
-  add("userProfileRepository", asClass(PostgresUserProfileRepository));
-  add("accessTokenRepository", asClass(PostgresAccessTokenRepository));
-  add("refreshTokenRepository", asClass(PostgresRefreshTokenRepository));
-  add("userAuthenticationService", asClass(CoreUserAuthenticationService));
-  add(
+  container.add("orm", asValue(orm));
+  container.add("logger", asValue(logger));
+  container.add("broker", asValue(broker));
+  container.add("publisher", asClass(NatsPublisher));
+  container.add("userController", asClass(CoreUserController));
+  container.add("identityController", asClass(CoreIdentityController));
+  container.add("userService", asClass(CoreUserService));
+  container.add("identityService", asClass(CoreIdentityService));
+  container.add("userRepository", asClass(PostgresUserRepository));
+  container.add(
+    "userProfileRepository",
+    asClass(PostgresUserProfileRepository),
+  );
+  container.add(
+    "accessTokenRepository",
+    asClass(PostgresAccessTokenRepository),
+  );
+  container.add(
+    "refreshTokenRepository",
+    asClass(PostgresRefreshTokenRepository),
+  );
+  container.add(
+    "userAuthenticationService",
+    asClass(CoreUserAuthenticationService),
+  );
+  container.add(
     "emailVerificationTokenRepository",
     asClass(PostgresEmailVerificationTokenRepository),
   );
-  add(
+  container.add(
     "userEmailConfirmationSentSubscriber",
     asClass(UserEmailConfirmationSentSubscriber),
   );
+  container.add("userProfileService", asClass(CoreUserProfileService));
 
   container.init();
 
