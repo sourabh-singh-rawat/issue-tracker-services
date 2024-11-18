@@ -1,5 +1,5 @@
 import { Repository } from "@issue-tracker/orm";
-import { WorkspaceInviteTokenEntity } from "../../entities/workspace-invite-token.entity";
+import { WorkspaceInvitation } from "../../entities/WorkspaceInvitation";
 
 export interface WorkspaceInviteTokenRepository
-  extends Repository<WorkspaceInviteTokenEntity> {}
+  extends Repository<WorkspaceInvitation> {}

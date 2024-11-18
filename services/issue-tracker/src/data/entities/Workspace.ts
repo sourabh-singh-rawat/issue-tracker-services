@@ -5,15 +5,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "./user.entity";
+import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
 
 @Entity({ name: "workspaces" })
-export class WorkspaceEntity extends AuditEntity {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "workspaces_pkey",
-  })
+export class Workspce extends AuditEntity {
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ type: "text" })
@@ -22,12 +20,8 @@ export class WorkspaceEntity extends AuditEntity {
   @Column({ type: "text", nullable: true })
   description?: string;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({
-    name: "owner_user_id",
-    referencedColumnName: "id",
-    foreignKeyConstraintName: "workspaces_fkey",
-  })
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "owner_user_id", referencedColumnName: "id" })
   @Column({ name: "owner_user_id", type: "uuid", nullable: false })
   ownerUserId!: string;
 

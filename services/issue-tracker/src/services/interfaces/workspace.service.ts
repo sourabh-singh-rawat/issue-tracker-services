@@ -3,16 +3,16 @@ import {
   WorkspaceRegistrationData,
   WorkspaceMemberRoles,
 } from "@issue-tracker/common";
-import { UserEntity } from "../../data/entities";
-import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
-import { WorkspaceEntity } from "../../data/entities/workspace.entity";
+import { User } from "../../data/entities";
+import { WorkspaceMember } from "../../data/entities/WorkspaceMember";
+import { Workspce } from "../../data/entities/Workspace";
 
 export interface WorkspaceService {
   createWorkspace(
     userId: string,
     workspace: WorkspaceRegistrationData,
   ): Promise<ServiceResponse<string>>;
-  createDefaultWorkspace(user: UserEntity): Promise<void>;
+  createDefaultWorkspace(user: User): Promise<void>;
   createWorkspaceMember(
     userId: string,
     workspaceId: string,
@@ -24,12 +24,12 @@ export interface WorkspaceService {
     role: WorkspaceMemberRoles,
   ): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
-  getAllWorkspaces(userId: string): Promise<ServiceResponse<WorkspaceEntity[]>>;
-  getWorkspace(id: string): Promise<ServiceResponse<WorkspaceEntity>>;
+  getAllWorkspaces(userId: string): Promise<ServiceResponse<Workspce[]>>;
+  getWorkspace(id: string): Promise<ServiceResponse<Workspce>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceMemberRoles[]>>;
   getWorkspaceMembers(
     workspaceId: string,
-  ): Promise<ServiceResponse<WorkspaceMemberEntity[]>>;
+  ): Promise<ServiceResponse<WorkspaceMember[]>>;
   updateWorkspace(
     id: string,
     updateables: { name?: string },

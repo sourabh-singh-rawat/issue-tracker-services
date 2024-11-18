@@ -1,12 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
   EMAIL_VERIFICATION_TOKEN_STATUS,
   EmailVerificationTokenStatus,
 } from "@issue-tracker/common";
 
-@Entity({ name: "workspace_invite_tokens" })
-export class WorkspaceInviteTokenEntity extends AuditEntity {
+@Entity({ name: "workspace_invitations" })
+export class WorkspaceInvitation extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -31,6 +36,6 @@ export class WorkspaceInviteTokenEntity extends AuditEntity {
   })
   status!: EmailVerificationTokenStatus;
 
-  @Column({ name: "sent_at", type: "timestamptz" })
-  sentAt!: Date;
+  @CreateDateColumn({ name: "sent_at", type: "timestamptz" })
+  createdAt!: Date;
 }

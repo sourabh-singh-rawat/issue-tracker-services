@@ -1,11 +1,11 @@
 import { QueryBuilderOptions, Repository } from "@issue-tracker/orm";
-import { IssueTaskEntity } from "../../entities";
+import { CheckListItem } from "../../entities";
 
-export interface IssueTaskRepository extends Repository<IssueTaskEntity> {
-  find(issueId: string): Promise<IssueTaskEntity[]>;
+export interface IssueTaskRepository extends Repository<CheckListItem> {
+  find(issueId: string): Promise<CheckListItem[]>;
   update(
     id: string,
-    updatedTask: IssueTaskEntity,
+    updatedTask: CheckListItem,
     options?: QueryBuilderOptions,
   ): Promise<void>;
 }

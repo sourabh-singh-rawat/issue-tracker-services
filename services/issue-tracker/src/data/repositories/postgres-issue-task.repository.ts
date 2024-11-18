@@ -1,40 +1,40 @@
 import { Typeorm } from "@issue-tracker/orm";
-import { IssueTaskEntity } from "../entities";
+import { CheckListItem } from "../entities";
 import { IssueTaskRepository } from "./interfaces/issue-task.repository";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 
 export class PostgresIssueTaskRepository implements IssueTaskRepository {
   constructor(private readonly orm: Typeorm) {}
 
-  save = async (task: IssueTaskEntity, options?: QueryBuilderOptions) => {
+  save = async (task: CheckListItem, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(IssueTaskEntity)
+      .into(CheckListItem)
       .values(task)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as IssueTaskEntity;
+    return (await query.execute()).generatedMaps[0] as CheckListItem;
   };
 
   existsById = async (id: string) => {
-    return await IssueTaskEntity.exists({ where: { id } });
+    return await CheckListItem.exists({ where: { id } });
   };
 
   find = async (issueId: string) => {
-    return await IssueTaskEntity.find({ where: { issueId } });
+    return await CheckListItem.find({ where: { issueId } });
   };
 
   update = async (
     id: string,
-    updatedTask: IssueTaskEntity,
+    updatedTask: CheckListItem,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
-      .update(IssueTaskEntity)
+      .update(CheckListItem)
       .set(updatedTask)
       .where("id = :id", { id });
 

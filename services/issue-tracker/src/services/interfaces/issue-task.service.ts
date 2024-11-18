@@ -1,5 +1,5 @@
 import { ServiceResponse, TaskFormData } from "@issue-tracker/common";
-import { IssueTaskEntity } from "../../data/entities";
+import { CheckListItem } from "../../data/entities";
 
 export interface IssueTaskService {
   createTask(
@@ -7,8 +7,6 @@ export interface IssueTaskService {
     issueId: string,
     taskFormData: TaskFormData,
   ): Promise<void>;
-  getIssueTaskList(
-    issueId: string,
-  ): Promise<ServiceResponse<IssueTaskEntity[]>>;
+  getIssueTaskList(issueId: string): Promise<ServiceResponse<CheckListItem[]>>;
   updateIssueTask(id: string, taskFormData: TaskFormData): Promise<void>;
 }

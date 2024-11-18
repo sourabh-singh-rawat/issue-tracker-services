@@ -1,4 +1,4 @@
-import { WorkspaceMemberEntity } from "../entities/workspace-member.entity";
+import { WorkspaceMember } from "../entities/WorkspaceMember";
 import { Typeorm } from "@issue-tracker/orm";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 import { WorkspaceMemberRepository } from "./interfaces/workspace-member.repository";
@@ -8,36 +8,33 @@ export class PostgresWorkspaceMemberRepository
 {
   constructor(private orm: Typeorm) {}
 
-  save = async (
-    workspace: WorkspaceMemberEntity,
-    options?: QueryBuilderOptions,
-  ) => {
+  save = async (workspace: WorkspaceMember, options?: QueryBuilderOptions) => {
     const query = this.orm
       .createQueryBuilder(options?.queryRunner)
       .insert()
-      .into(WorkspaceMemberEntity)
+      .into(WorkspaceMember)
       .values(workspace)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as WorkspaceMemberEntity;
+    return (await query.execute()).generatedMaps[0] as WorkspaceMember;
   };
 
   existsById = async (id: string) => {
-    return await WorkspaceMemberEntity.exists({ where: { id } });
+    return await WorkspaceMember.exists({ where: { id } });
   };
 
   existsByEmail = async (email: string) => {
-    return await WorkspaceMemberEntity.exists({ where: { email } });
+    return await WorkspaceMember.exists({ where: { email } });
   };
 
   existsByUserId = async (userId: string, workspaceId: string) => {
-    return await WorkspaceMemberEntity.exists({
+    return await WorkspaceMember.exists({
       where: { userId, workspaceId },
     });
   };
 
   find = async (workspaceId: string) => {
-    const members = await WorkspaceMemberEntity.find({
+    const members = await WorkspaceMember.find({
       where: { workspaceId },
       relations: { user: true },
     });

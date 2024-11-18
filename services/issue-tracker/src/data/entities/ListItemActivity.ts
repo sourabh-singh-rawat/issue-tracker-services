@@ -1,20 +1,21 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { UserEntity } from "./user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { User } from "./User";
 import { ProjectActivity } from "@issue-tracker/common";
 import { AuditEntity } from "@issue-tracker/orm";
 
-@Entity({ name: "project_activities" })
-export class ProjectActivityEntity extends AuditEntity {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "project_activities_pkey",
-  })
+@Entity({ name: "list_item_activities" })
+export class ListItemActivity extends AuditEntity {
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ name: "user_id", type: "uuid" })
   userId!: string;
-
-  @ManyToOne(() => UserEntity)
-  user!: UserEntity;
 
   @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
@@ -22,8 +23,8 @@ export class ProjectActivityEntity extends AuditEntity {
   @Column({ type: "text" })
   action!: ProjectActivity;
 
-  @Column({ name: "timestamp", type: "timestamp with time zone" })
-  timestamp!: Date;
+  @CreateDateColumn({ type: "timestamp with time zone" })
+  createdAt!: Date;
 
   @Column({ name: "old_value", type: "text", nullable: true })
   oldValue?: string;

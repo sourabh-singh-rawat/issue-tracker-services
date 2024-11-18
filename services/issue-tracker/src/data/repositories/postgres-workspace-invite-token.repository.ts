@@ -1,4 +1,4 @@
-import { WorkspaceInviteTokenEntity } from "../entities/workspace-invite-token.entity";
+import { WorkspaceInvitation } from "../entities/WorkspaceInvitation";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 import { Typeorm } from "@issue-tracker/orm";
 import { WorkspaceInviteTokenRepository } from "./interfaces/workspace-invite-token.repository";
@@ -8,23 +8,19 @@ export class PostgresWorkspaceInviteTokenRepository
 {
   constructor(private readonly orm: Typeorm) {}
 
-  save = async (
-    invite: WorkspaceInviteTokenEntity,
-    options?: QueryBuilderOptions,
-  ) => {
+  save = async (invite: WorkspaceInvitation, options?: QueryBuilderOptions) => {
     const query = this.orm
       .createQueryBuilder(options?.queryRunner)
       .insert()
-      .into(WorkspaceInviteTokenEntity)
+      .into(WorkspaceInvitation)
       .values(invite)
       .returning("*");
 
-    return (await query.execute())
-      .generatedMaps[0] as WorkspaceInviteTokenEntity;
+    return (await query.execute()).generatedMaps[0] as WorkspaceInvitation;
   };
 
   existsById = async (id: string) => {
-    return await WorkspaceInviteTokenEntity.exists({ where: { id } });
+    return await WorkspaceInvitation.exists({ where: { id } });
   };
 
   softDelete(): Promise<void> {

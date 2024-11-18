@@ -208,55 +208,6 @@ export const projectRoutes = (container: AwilixDi<RegisteredServices>) => {
       controller.getProjectStatusList,
     );
     fastify.get(
-      "/projects/:id/members",
-      {
-        preHandler,
-        schema: {
-          tags: ["project"],
-          summary: "Get all project members",
-          description: "Get all project members for a given project",
-          operationId: "getProjectMembers",
-          params: {
-            type: "object",
-            properties: { id: { type: "string" } },
-          },
-          response: {
-            200: {
-              description: "Get all project members",
-              type: "object",
-              properties: {
-                rows: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      id: { type: "string" },
-                      user: {
-                        type: "object",
-                        properties: {
-                          id: { type: "string" },
-                          displayName: { type: "string" },
-                          email: { type: "string" },
-                        },
-                        required: ["id", "displayName", "email"],
-                      },
-                      createdAt: { type: "string", format: "date" },
-                      role: { type: "string" },
-                    },
-                    required: ["user", "createdAt", "role"],
-                  },
-                },
-                rowCount: { type: "number" },
-              },
-              required: ["rows", "rowCount"],
-            },
-            400: { description: "Bad request", $ref: "errorSchema#" },
-          },
-        },
-      },
-      controller.getProjectMembers,
-    );
-    fastify.get(
       "/projects/:id/role",
       { preHandler },
       controller.getProjectRoleList,

@@ -1,6 +1,6 @@
 import { Typeorm } from "@issue-tracker/orm";
 import { ProjectActivityRepository } from "./interfaces/project-activity.repository";
-import { ProjectActivityEntity } from "../entities";
+import { ListItemActivity } from "../entities";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 
 export class PostgresProjectActivityRepository
@@ -8,27 +8,24 @@ export class PostgresProjectActivityRepository
 {
   constructor(private readonly orm: Typeorm) {}
 
-  save = async (
-    activity: ProjectActivityEntity,
-    options?: QueryBuilderOptions,
-  ) => {
+  save = async (activity: ListItemActivity, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(ProjectActivityEntity)
+      .into(ListItemActivity)
       .values(activity)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as ProjectActivityEntity;
+    return (await query.execute()).generatedMaps[0] as ListItemActivity;
   };
 
   existsById = async (id: string) => {
-    return await ProjectActivityEntity.exists({ where: { id } });
+    return await ListItemActivity.exists({ where: { id } });
   };
 
   findActivityByProjectId = async (projectId: string) => {
-    return await ProjectActivityEntity.find({ where: { projectId } });
+    return await ListItemActivity.find({ where: { projectId } });
   };
 
   softDelete(): Promise<void> {

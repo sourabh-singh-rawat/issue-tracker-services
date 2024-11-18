@@ -1,7 +1,7 @@
 import { Repository } from "@issue-tracker/orm";
-import { ProjectActivityEntity } from "../../entities";
+import { ListItemActivity } from "../../entities";
 
 export interface ProjectActivityRepository
-  extends Repository<ProjectActivityEntity> {
-  findActivityByProjectId(id: string): Promise<ProjectActivityEntity[]>;
+  extends Repository<ListItemActivity> {
+  findActivityByProjectId(id: string): Promise<ListItemActivity[]>;
 }

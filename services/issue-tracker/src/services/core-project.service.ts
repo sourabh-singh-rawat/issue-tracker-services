@@ -21,7 +21,7 @@ import { UserRepository } from "../data/repositories/interfaces/user.repository"
 import { ProjectRepository } from "../data/repositories/interfaces/project.repository";
 import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
 import { ProjectMemberRepository } from "../data/repositories/interfaces/project-member";
-import { ProjectEntity, ProjectMemberEntity } from "../data/entities";
+import { List } from "../data/entities";
 
 export class CoreProjectService implements ProjectService {
   constructor(
@@ -31,7 +31,6 @@ export class CoreProjectService implements ProjectService {
     private readonly userRepository: UserRepository,
     private readonly projectRepository: ProjectRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
-    private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
   private getUserById = async (userId: string) => {
@@ -41,15 +40,6 @@ export class CoreProjectService implements ProjectService {
   private getStatuses = () => Object.values(ProjectStatus);
 
   private getRoles = () => Object.values(ProjectRoles);
-
-  getProjectMembers = async (projectId: string) => {
-    const rows = await this.projectMemberRepository.findByProjectId(projectId);
-
-    return new ServiceResponse({
-      rows,
-      rowCount: rows.length,
-    });
-  };
 
   getProjectStatusList = () => {
     const statuses = this.getStatuses();
@@ -83,10 +73,9 @@ export class CoreProjectService implements ProjectService {
 
     const rows = await Promise.all(
       projects.map(async (p) => {
-        const members = (await this.getProjectMembers(p.id)).rows;
         const statuses = this.getStatuses();
 
-        return new ProjectDetails(p, [], statuses, members);
+        return new ProjectDetails(p, [], statuses, []);
       }),
     );
 
@@ -121,7 +110,7 @@ export class CoreProjectService implements ProjectService {
 
     const { name, description, startDate, endDate, status } = formData;
 
-    const newProject = new ProjectEntity();
+    const newProject = new List();
     newProject.name = name;
     newProject.description = description;
     newProject.startDate = startDate;
@@ -137,17 +126,6 @@ export class CoreProjectService implements ProjectService {
         const savedProject = await this.projectRepository.save(newProject, {
           queryRunner,
         });
-        const newProjectMember = new ProjectMemberEntity();
-        newProjectMember.projectId = savedProject.id;
-        newProjectMember.userId = userId;
-        newProjectMember.role = ProjectRoles.Owner;
-        newProjectMember.workspaceId = user.defaultWorkspaceId;
-        newProjectMember.inviteStatus = ProjectInviteStatus.ACCEPTED;
-
-        await this.projectMemberRepository.save(newProjectMember, {
-          queryRunner,
-        });
-
         return savedProject;
       },
     );
@@ -186,13 +164,6 @@ export class CoreProjectService implements ProjectService {
     }
 
     const { userId } = verifiedToken;
-    const updatedProjectMember = new ProjectMemberEntity();
-    updatedProjectMember.inviteStatus = ProjectInviteStatus.ACCEPTED;
-
-    await this.projectMemberRepository.updateByUserId(
-      userId,
-      updatedProjectMember,
-    );
 
     return new ServiceResponse({
       rows: "Member added successfully(confirmed)",
@@ -206,22 +177,6 @@ export class CoreProjectService implements ProjectService {
     createdBy: string,
     workspaceId: string,
   ) => {
-    const alreadyMember = await this.projectMemberRepository.existsByProjectId(
-      userId,
-      projectId,
-    );
-    if (alreadyMember) throw new UserAlreadyExists();
-
-    // TODO: check if the user is member of project's workspace
-
-    const newProjectMember = new ProjectMemberEntity();
-    newProjectMember.userId = userId;
-    newProjectMember.projectId = projectId;
-    newProjectMember.role = role;
-    newProjectMember.createdById = createdBy;
-    newProjectMember.workspaceId = workspaceId;
-
-    await this.projectMemberRepository.save(newProjectMember);
     await this.publisher.send("project.member-invited", {
       userId,
       projectId,
@@ -232,7 +187,7 @@ export class CoreProjectService implements ProjectService {
 
   updateProject = async (id: string, updatables: ProjectFormData) => {
     const { name, description, status, startDate, endDate } = updatables;
-    const updatedProject = new ProjectEntity();
+    const updatedProject = new List();
     updatedProject.name = name;
     updatedProject.description = description;
     updatedProject.status = status;

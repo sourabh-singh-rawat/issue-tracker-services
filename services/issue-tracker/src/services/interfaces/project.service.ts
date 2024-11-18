@@ -6,11 +6,7 @@ import {
   ServiceResponse,
 } from "@issue-tracker/common";
 import { ProjectStatus } from "@issue-tracker/common/dist/constants/enums/project-status";
-import {
-  ProjectEntity,
-  ProjectMemberEntity,
-  WorkspaceMemberEntity,
-} from "../../data/entities";
+import { List, WorkspaceMember } from "../../data/entities";
 
 export interface ProjectService {
   createProject(
@@ -34,17 +30,10 @@ export interface ProjectService {
   confirmProjectInvite(token: string): Promise<ServiceResponse<string>>;
   getProjectStatusList(): ServiceResponse<ProjectStatus[]>;
   getProjectRoleList(): ServiceResponse<ProjectRoles[]>;
-  getAllProjects(
-    userId: string,
-    filters: Filters,
-  ): Promise<ServiceResponse<ProjectDetails<ProjectMemberEntity>[]>>;
-  getProject: (id: string) => Promise<ProjectEntity>;
-  getProjectMembers(
-    projectId: string,
-  ): Promise<ServiceResponse<ProjectMemberEntity[]>>;
+  getProject: (id: string) => Promise<List>;
   getWorkspaceMemberList(
     userId: string,
     projectId: string,
-  ): Promise<ServiceResponse<WorkspaceMemberEntity[]>>;
+  ): Promise<ServiceResponse<WorkspaceMember[]>>;
   updateProject(id: string, updatables: ProjectFormData): Promise<void>;
 }

@@ -55,8 +55,6 @@ import { WorkspaceRepository } from "./data/repositories/interfaces/workspace.re
 import { PostgresWorkspaceRepository } from "./data/repositories/postgres-workspace.repository";
 import { WorkspaceMemberRepository } from "./data/repositories/interfaces/workspace-member.repository";
 import { PostgresWorkspaceMemberRepository } from "./data/repositories/postgres-workspace-member.repository";
-import { PostgresProjectMemberRepository } from "./data/repositories/postgres-project-member.repository";
-import { ProjectMemberRepository } from "./data/repositories/interfaces/project-member";
 import { PostgresWorkspaceInviteTokenRepository } from "./data/repositories/postgres-workspace-invite-token.repository";
 import { ProjectActivityController } from "./controllers/interfaces/project-activity.controller";
 import { CoreProjectActivityController } from "./controllers/core-project-activity.controller";
@@ -90,7 +88,6 @@ export interface RegisteredServices {
   workspaceService: WorkspaceService;
   issueCommentService: IssueCommentService;
   issueTaskService: IssueTaskService;
-  projectMemberRepository: ProjectMemberRepository;
   workspaceRepository: WorkspaceRepository;
   workspaceMemberRepository: WorkspaceMemberRepository;
   userRepository: UserRepository;
@@ -233,7 +230,6 @@ const main = async () => {
   add("issueTaskService", asClass(CoreIssueTaskService));
   add("projectService", asClass(CoreProjectService));
   add("projectActivityService", asClass(CoreProjectActivityService));
-  add("projectMemberRepository", asClass(PostgresProjectMemberRepository));
   add("projectActivityRepository", asClass(PostgresProjectActivityRepository));
   add("workspaceService", asClass(CoreWorkspaceService));
   add("workspaceRepository", asClass(PostgresWorkspaceRepository));

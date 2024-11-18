@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 import { WorkspaceService } from "./interfaces/workspace.service";
-import { WorkspaceMemberEntity } from "../data/entities/workspace-member.entity";
-import { WorkspaceInviteTokenEntity } from "../data/entities/workspace-invite-token.entity";
+import { WorkspaceMember } from "../data/entities/WorkspaceMember";
+import { WorkspaceInvitation } from "../data/entities/WorkspaceInvitation";
 import { Typeorm } from "@issue-tracker/orm";
 import {
   ServiceResponse,
@@ -25,8 +25,8 @@ import { UserRepository } from "../data/repositories/interfaces/user.repository"
 import { WorkspaceRepository } from "../data/repositories/interfaces/workspace.repository";
 import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
 import { WorkspaceInviteTokenRepository } from "../data/repositories/interfaces/workspace-invite-token.repository";
-import { WorkspaceEntity } from "../data/entities/workspace.entity";
-import { UserEntity } from "../data/entities";
+import { Workspce } from "../data/entities/Workspace";
+import { User } from "../data/entities";
 
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(
@@ -39,9 +39,9 @@ export class CoreWorkspaceService implements WorkspaceService {
   ) {}
 
   private saveWorkspace = async (
-    workspace: WorkspaceEntity,
-    workspaceMember: WorkspaceMemberEntity,
-    user?: UserEntity,
+    workspace: Workspce,
+    workspaceMember: WorkspaceMember,
+    user?: User,
   ) => {
     const queryRunner = this.orm.createQueryRunner();
     const result = await this.orm.transaction(
@@ -86,15 +86,15 @@ export class CoreWorkspaceService implements WorkspaceService {
     return savedWorkspace;
   };
 
-  createDefaultWorkspace = async (user: UserEntity) => {
+  createDefaultWorkspace = async (user: User) => {
     const { defaultWorkspaceId, id } = user;
 
-    const newWorkspace = new WorkspaceEntity();
+    const newWorkspace = new Workspce();
     newWorkspace.id = defaultWorkspaceId;
     newWorkspace.name = "Default Workspace";
     newWorkspace.ownerUserId = id;
 
-    const newWorkspaceMember = new WorkspaceMemberEntity();
+    const newWorkspaceMember = new WorkspaceMember();
     newWorkspaceMember.userId = id;
     newWorkspaceMember.workspaceId = defaultWorkspaceId;
 
@@ -108,13 +108,13 @@ export class CoreWorkspaceService implements WorkspaceService {
     const { name, description } = workspace;
     const workspaceId = v4();
 
-    const newWorkspace = new WorkspaceEntity();
+    const newWorkspace = new Workspce();
     newWorkspace.id = workspaceId;
     newWorkspace.name = name;
     newWorkspace.description = description;
     newWorkspace.ownerUserId = userId;
 
-    const newWorkspaceMember = new WorkspaceMemberEntity();
+    const newWorkspaceMember = new WorkspaceMember();
     newWorkspaceMember.userId = userId;
     newWorkspaceMember.workspaceId = workspaceId;
 
@@ -143,7 +143,7 @@ export class CoreWorkspaceService implements WorkspaceService {
       await this.workspaceRepository.findById(defaultWorkspaceId);
     if (!workspace) throw new NotFoundError("Workspace Not Found");
 
-    const workspaceMember = new WorkspaceMemberEntity();
+    const workspaceMember = new WorkspaceMember();
     workspaceMember.email = email;
     workspaceMember.role = role;
     workspaceMember.workspaceId = defaultWorkspaceId;
@@ -165,10 +165,10 @@ export class CoreWorkspaceService implements WorkspaceService {
       process.env.JWT_SECRET!,
     );
 
-    const newWorkspaceInviteToken = new WorkspaceInviteTokenEntity();
+    const newWorkspaceInviteToken = new WorkspaceInvitation();
     newWorkspaceInviteToken.id = jwtid;
     newWorkspaceInviteToken.userId = userId;
-    newWorkspaceInviteToken.sentAt = new Date();
+    newWorkspaceInviteToken.createdAt = new Date();
     newWorkspaceInviteToken.status = EMAIL_VERIFICATION_TOKEN_STATUS.VALID;
     newWorkspaceInviteToken.token = token;
     newWorkspaceInviteToken.expiresAt = new Date(exp * 1000);
@@ -242,7 +242,7 @@ export class CoreWorkspaceService implements WorkspaceService {
   };
 
   updateWorkspace = async (id: string, updateables: { name?: string }) => {
-    const workspace = await WorkspaceEntity.findOne({ where: { id } });
+    const workspace = await Workspce.findOne({ where: { id } });
 
     if (!workspace) throw new WorkspaceNotFound();
 

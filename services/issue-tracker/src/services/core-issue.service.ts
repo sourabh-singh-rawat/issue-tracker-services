@@ -1,6 +1,6 @@
 import { IssueService } from "./interfaces/issue.service";
 import { IssueRepository } from "../data/repositories/interfaces/issue.repository";
-import { IssueAssigneeEntity, IssueEntity } from "../data/entities";
+import { IssueAssigneeEntity, ListItem } from "../data/entities";
 import { IssueAssigneeRepository } from "../data/repositories/interfaces/issue-assignee.repository";
 import { QueryRunner } from "typeorm";
 import {
@@ -59,7 +59,7 @@ export class CoreIssueService implements IssueService {
       assignees,
     } = issueFormData;
 
-    const newIssue = new IssueEntity();
+    const newIssue = new ListItem();
     newIssue.name = name;
     newIssue.description = description;
     newIssue.status = status;
@@ -141,7 +141,7 @@ export class CoreIssueService implements IssueService {
     await this.isArchived(id);
 
     const { name, description, priority, dueDate, resolution } = issueFormData;
-    const updatedIssue = new IssueEntity();
+    const updatedIssue = new ListItem();
     updatedIssue.name = name;
     updatedIssue.description = description;
     updatedIssue.priority = priority;
@@ -158,7 +158,7 @@ export class CoreIssueService implements IssueService {
   ) => {
     await this.isArchived(id);
 
-    const updatedIssue = new IssueEntity();
+    const updatedIssue = new ListItem();
     updatedIssue.status = status;
     await this.issueRepository.update(id, updatedIssue);
   };
@@ -168,7 +168,7 @@ export class CoreIssueService implements IssueService {
     id: string,
     resolution: boolean,
   ) => {
-    const updatedIssue = new IssueEntity();
+    const updatedIssue = new ListItem();
     updatedIssue.resolution = resolution;
 
     await this.issueRepository.updateResolution(id, updatedIssue);

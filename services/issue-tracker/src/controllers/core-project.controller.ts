@@ -68,9 +68,7 @@ export class CoreProjectController implements ProjectController {
     const { userId } = request.currentUser;
     const filters = request.query;
 
-    const response = await this.projectService.getAllProjects(userId, filters);
-
-    return reply.send(response);
+    return reply.send([]);
   };
 
   getProject = async (
@@ -79,16 +77,6 @@ export class CoreProjectController implements ProjectController {
   ) => {
     const { id } = request.params;
     const response = await this.projectService.getProject(id);
-
-    return reply.send(response);
-  };
-
-  getProjectMembers = async (
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) => {
-    const { id } = request.params;
-    const response = await this.projectService.getProjectMembers(id);
 
     return reply.send(response);
   };

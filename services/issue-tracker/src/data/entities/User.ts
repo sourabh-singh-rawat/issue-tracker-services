@@ -1,13 +1,13 @@
 import { AuditEntity } from "@issue-tracker/orm";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { WorkspaceMemberEntity } from "./workspace-member.entity";
+import { WorkspaceMember } from "./WorkspaceMember";
 import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
 } from "@issue-tracker/common";
 
 @Entity({ name: "users" })
-export class UserEntity extends AuditEntity {
+export class User extends AuditEntity {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "users_pkey",
   })
@@ -37,6 +37,6 @@ export class UserEntity extends AuditEntity {
   @Column({ name: "photo_url", type: "text", nullable: true })
   photoUrl?: string;
 
-  @OneToMany(() => WorkspaceMemberEntity, ({ user }) => user)
-  memberWorkspaces?: WorkspaceMemberEntity[];
+  @OneToMany(() => WorkspaceMember, ({ user }) => user)
+  memberWorkspaces?: WorkspaceMember[];
 }

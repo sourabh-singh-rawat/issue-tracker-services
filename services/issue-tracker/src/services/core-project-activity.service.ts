@@ -1,5 +1,5 @@
 import { ProjectActivityService } from "./interfaces/project-activity.service";
-import { IssueActivityEntity, ProjectActivityEntity } from "../data/entities";
+import { IssueActivityEntity, ListItemActivity } from "../data/entities";
 import { IssueCreatedPayload, ProjectPayload } from "@issue-tracker/event-bus";
 import {
   IssueActivity,
@@ -25,11 +25,11 @@ export class CoreProjectActivityService implements ProjectActivityService {
   logCreatedProject = async (payload: ProjectPayload) => {
     const { id, ownerUserId, createdAt } = payload;
 
-    const newProjectActivity = new ProjectActivityEntity();
+    const newProjectActivity = new ListItemActivity();
     newProjectActivity.userId = ownerUserId;
     newProjectActivity.projectId = id;
     newProjectActivity.action = ProjectActivity.CREATED;
-    newProjectActivity.timestamp = createdAt;
+    newProjectActivity.createdAt = createdAt;
 
     await this.projectActivityRepository.save(newProjectActivity);
   };
@@ -41,11 +41,11 @@ export class CoreProjectActivityService implements ProjectActivityService {
       throw new Error("Cannot update project description without timestamp");
     }
 
-    const newProjectActivity = new ProjectActivityEntity();
+    const newProjectActivity = new ListItemActivity();
     newProjectActivity.action = ProjectActivity.UPDATED_NAME;
     newProjectActivity.projectId = id;
     newProjectActivity.userId = ownerUserId;
-    newProjectActivity.timestamp = updatedAt;
+    newProjectActivity.createdAt = updatedAt;
 
     await this.projectActivityRepository.save(newProjectActivity);
   };
@@ -57,11 +57,11 @@ export class CoreProjectActivityService implements ProjectActivityService {
       throw new Error("Cannot update project description without timestamp");
     }
 
-    const newProjectActivity = new ProjectActivityEntity();
+    const newProjectActivity = new ListItemActivity();
     newProjectActivity.userId = ownerUserId;
     newProjectActivity.projectId = id;
     newProjectActivity.action = ProjectActivity.UPDATED_DESCRIPTION;
-    newProjectActivity.timestamp = updatedAt;
+    newProjectActivity.createdAt = updatedAt;
 
     await this.projectActivityRepository.save(newProjectActivity);
   };
