@@ -1,8 +1,8 @@
 import { JsMsg } from "nats";
-import { UserEntity } from "../../data/entities/user.entity";
+import { User } from "../../data/entities/User";
 import { UserRepository } from "../../data/repositories/interfaces/user.repository";
 import { WorkspaceMemberRepository } from "../../data/repositories/interfaces/workspace-member.repository";
-import { WorkspaceMemberEntity } from "../../data/entities/workspace-member.entity";
+import { WorkspaceMember } from "../../data/entities/WorkspaceMember";
 import {
   Broker,
   CONSUMERS,
@@ -15,7 +15,7 @@ import {
 import { Typeorm } from "@issue-tracker/orm";
 import { JwtToken } from "@issue-tracker/security";
 import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
-import { WorkspaceEntity } from "../../data/entities/workspace.entity";
+import { Workspce } from "../../data/entities/Workspace";
 import {
   WORKSPACE_MEMBER_ROLES,
   WORKSPACE_MEMBER_STATUS,
@@ -50,7 +50,7 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
 
     const queryRunner = this.orm.createQueryRunner();
     await this.orm.transaction(queryRunner, async () => {
-      const newUser = new UserEntity();
+      const newUser = new User();
       newUser.id = userId;
       newUser.email = email;
       newUser.emailVerificationStatus = emailVerificationStatus;
@@ -60,7 +60,7 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
         queryRunner,
       });
 
-      const newWorkspace = new WorkspaceEntity();
+      const newWorkspace = new Workspce();
       newWorkspace.ownerUserId = savedUser.id;
       newWorkspace.name = WORKSPACE_NAME.DEFAULT;
       newWorkspace.status = WORKSPACE_STATUS.DEFAULT;
@@ -81,7 +81,7 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
           process.env.JWT_SECRET!,
         );
 
-        const newWorkspaceMember = new WorkspaceMemberEntity();
+        const newWorkspaceMember = new WorkspaceMember();
         newWorkspaceMember.userId = userId;
         newWorkspaceMember.workspaceId = token.workspaceId;
         // newWorkspaceMember.role
@@ -95,7 +95,7 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
         return;
       }
 
-      const newWorkspaceMember = new WorkspaceMemberEntity();
+      const newWorkspaceMember = new WorkspaceMember();
       newWorkspaceMember.userId = userId;
       newWorkspaceMember.workspaceId = savedWorkspace.id;
       newWorkspaceMember.role = WORKSPACE_MEMBER_ROLES.OWNER;

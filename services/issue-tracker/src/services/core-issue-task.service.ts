@@ -1,6 +1,6 @@
 import { IssueTaskService } from "./interfaces/issue-task.service";
 import { IssueTaskRepository } from "../data/repositories/interfaces/issue-task.repository";
-import { IssueTaskEntity } from "../data/entities";
+import { CheckListItem } from "../data/entities";
 import { ServiceResponse, TaskFormData } from "@issue-tracker/common";
 
 export class CoreIssueTaskService implements IssueTaskService {
@@ -13,7 +13,7 @@ export class CoreIssueTaskService implements IssueTaskService {
   ) => {
     const { description, dueDate } = taskFormData;
 
-    const newIssueTask = new IssueTaskEntity();
+    const newIssueTask = new CheckListItem();
     newIssueTask.description = description;
     newIssueTask.ownerId = userId;
     newIssueTask.issueId = issueId;
@@ -30,7 +30,7 @@ export class CoreIssueTaskService implements IssueTaskService {
 
   updateIssueTask = async (id: string, taskFormData: TaskFormData) => {
     const { description, completed, dueDate } = taskFormData;
-    const updatedIssueTask = new IssueTaskEntity();
+    const updatedIssueTask = new CheckListItem();
     updatedIssueTask.description = description;
     updatedIssueTask.completed = completed;
     updatedIssueTask.dueDate = dueDate;

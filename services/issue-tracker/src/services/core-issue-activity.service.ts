@@ -1,5 +1,5 @@
 import { IssueActivityService } from "./interfaces/issue-activity.service";
-import { ProjectActivityEntity } from "../data/entities";
+import { ListItemActivity } from "../data/entities";
 import { IssueCreatedPayload } from "@issue-tracker/event-bus";
 import { ProjectActivity } from "@issue-tracker/common";
 import { ProjectActivityRepository } from "../data/repositories/interfaces/project-activity.repository";
@@ -12,11 +12,11 @@ export class CoreIssueActivityService implements IssueActivityService {
   logCreatedIssue = async (payload: IssueCreatedPayload) => {
     const { ownerId, projectId, createdAt } = payload;
 
-    const newProjectActivity = new ProjectActivityEntity();
+    const newProjectActivity = new ListItemActivity();
     newProjectActivity.userId = ownerId;
     newProjectActivity.projectId = projectId;
     newProjectActivity.action = ProjectActivity.ISSUE_CREATED;
-    newProjectActivity.timestamp = createdAt;
+    newProjectActivity.createdAt = createdAt;
 
     await this.projectActivityRepository.save(newProjectActivity);
   };

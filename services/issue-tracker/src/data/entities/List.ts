@@ -5,11 +5,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "./user.entity";
+import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 
-@Entity({ name: "projects" })
-export class ProjectEntity extends AuditEntity {
+@Entity({ name: "lists" })
+export class List extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -22,7 +22,7 @@ export class ProjectEntity extends AuditEntity {
   @Column({ type: "text" })
   status!: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => User)
   @JoinColumn({
     name: "owner_user_id",
     referencedColumnName: "id",

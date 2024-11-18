@@ -1,11 +1,9 @@
 import { AuditEntity } from "@issue-tracker/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: "issue_tasks" })
-export class IssueTaskEntity extends AuditEntity {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "issue_tasks_pkey",
-  })
+@Entity({ name: "check_list_items" })
+export class CheckListItem extends AuditEntity {
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ nullable: true })

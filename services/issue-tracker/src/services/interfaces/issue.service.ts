@@ -1,4 +1,4 @@
-import { IssueEntity } from "../../data/entities";
+import { ListItem } from "../../data/entities";
 import { ObjectLiteral } from "typeorm";
 import {
   IssueFormData,
@@ -10,7 +10,7 @@ import { IssueStatus } from "@issue-tracker/common/dist/constants/enums/issue-st
 
 export interface IssueService {
   createIssue(userId: string, issue: IssueFormData): Promise<string>;
-  getIssue(issueId: string): Promise<IssueEntity>;
+  getIssue(issueId: string): Promise<ListItem>;
   getIssueList(
     userId: string,
     filters: IssueListFilters,

@@ -10,7 +10,6 @@ export interface ProjectController {
   getProjectRoleList(req: FastifyRequest, rep: FastifyReply): Promise<void>;
   getProject(req: FastifyRequest, rep: FastifyReply): Promise<void>;
   getWorkspaceMemberList(req: FastifyRequest, rep: FastifyReply): Promise<void>;
-  getProjectMembers(req: FastifyRequest, rep: FastifyReply): Promise<void>;
   updateProject(req: FastifyRequest, rep: FastifyReply): Promise<void>;
   // deleteProject(req: FastifyRequest, rep: FastifyReply): Promise<void>;
 }

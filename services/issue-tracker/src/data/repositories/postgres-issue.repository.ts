@@ -1,5 +1,5 @@
 import { Typeorm } from "@issue-tracker/orm";
-import { IssueEntity } from "../entities";
+import { ListItem } from "../entities";
 import { IssueRepository } from "./interfaces/issue.repository";
 import { IsNull, Not } from "typeorm";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
@@ -7,24 +7,24 @@ import { QueryBuilderOptions } from "@issue-tracker/orm";
 export class PostgresIssueRepository implements IssueRepository {
   constructor(private orm: Typeorm) {}
 
-  save = async (issue: IssueEntity, options?: QueryBuilderOptions) => {
+  save = async (issue: ListItem, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(IssueEntity)
+      .into(ListItem)
       .values(issue)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as IssueEntity;
+    return (await query.execute()).generatedMaps[0] as ListItem;
   };
 
   existsById = async (id: string) => {
-    return await IssueEntity.exists({ where: { id } });
+    return await ListItem.exists({ where: { id } });
   };
 
   find = async (userId: string) => {
-    return await IssueEntity.find({
+    return await ListItem.find({
       select: {
         reporter: { id: true, displayName: true },
         project: { id: true, name: true },
@@ -36,7 +36,7 @@ export class PostgresIssueRepository implements IssueRepository {
   };
 
   findOne = async (id: string) => {
-    return await IssueEntity.findOne({
+    return await ListItem.findOne({
       select: {
         assignees: { id: true, user: { id: true, displayName: true } },
         project: { id: true, name: true },
@@ -48,20 +48,20 @@ export class PostgresIssueRepository implements IssueRepository {
   };
 
   isIssueArchived = async (id: string) => {
-    return await IssueEntity.exists({
+    return await ListItem.exists({
       where: { id, deletedAt: Not(IsNull()) },
     });
   };
 
   update = async (
     id: string,
-    updatedIssue: IssueEntity,
+    updatedIssue: ListItem,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
-      .update(IssueEntity)
+      .update(ListItem)
       .set(updatedIssue)
       .where("id = :id AND deletedAt IS NULL", { id });
 
@@ -70,13 +70,13 @@ export class PostgresIssueRepository implements IssueRepository {
 
   updateResolution = async (
     id: string,
-    updatedIssue: IssueEntity,
+    updatedIssue: ListItem,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
-      .update(IssueEntity)
+      .update(ListItem)
       .set(updatedIssue)
       .where("id = :id", { id });
 
@@ -88,7 +88,7 @@ export class PostgresIssueRepository implements IssueRepository {
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .softDelete()
-      .from(IssueEntity)
+      .from(ListItem)
       .where("id = :id", { id });
 
     await query.execute();
@@ -99,7 +99,7 @@ export class PostgresIssueRepository implements IssueRepository {
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .restore()
-      .from(IssueEntity)
+      .from(ListItem)
       .where("id = :id", { id });
 
     await query.execute();

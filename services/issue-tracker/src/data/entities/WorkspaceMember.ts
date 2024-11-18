@@ -5,8 +5,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { WorkspaceEntity } from "./workspace.entity";
-import { UserEntity } from "./user.entity";
+import { Workspce } from "./Workspace";
+import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
   WORKSPACE_MEMBER_ROLES,
@@ -16,20 +16,18 @@ import {
 } from "@issue-tracker/common";
 
 @Entity({ name: "workspace_members" })
-export class WorkspaceMemberEntity extends AuditEntity {
+export class WorkspaceMember extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ name: "user_id", type: "uuid", nullable: true })
   userId?: string;
 
-  @ManyToOne(() => UserEntity, ({ memberWorkspaces }) => memberWorkspaces, {
-    nullable: true,
-  })
+  @ManyToOne(() => User, (x) => x.memberWorkspaces, { nullable: true })
   @JoinColumn({ name: "user_id" })
-  user!: UserEntity;
+  user!: User;
 
-  @ManyToOne(() => WorkspaceEntity)
+  @ManyToOne(() => Workspce)
   @Column({ name: "workspace_id", type: "uuid" })
   @JoinColumn({ name: "workspace_id" })
   workspaceId!: string;

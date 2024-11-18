@@ -1,8 +1,8 @@
 import { Repository } from "@issue-tracker/orm";
-import { WorkspaceEntity } from "../../entities/workspace.entity";
+import { Workspce } from "../../entities/Workspace";
 
-export interface WorkspaceRepository extends Repository<WorkspaceEntity> {
-  find(userId: string): Promise<WorkspaceEntity[]>;
-  findByUserId(userId: string): Promise<WorkspaceEntity[]>;
-  findById(id: string): Promise<WorkspaceEntity | null>;
+export interface WorkspaceRepository extends Repository<Workspce> {
+  find(userId: string): Promise<Workspce[]>;
+  findByUserId(userId: string): Promise<Workspce[]>;
+  findById(id: string): Promise<Workspce | null>;
 }

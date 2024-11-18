@@ -6,13 +6,13 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "./user.entity";
-import { ProjectEntity } from "./project.entity";
+import { User } from "./User";
+import { List } from "./List";
 import { IssueAssigneeEntity } from "./issue-assignee.entity";
 import { AuditEntity } from "@issue-tracker/orm";
 
-@Entity({ name: "issues" })
-export class IssueEntity extends AuditEntity {
+@Entity({ name: "list_items" })
+export class ListItem extends AuditEntity {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "issues_pkey",
   })
@@ -36,16 +36,16 @@ export class IssueEntity extends AuditEntity {
   @Column({ name: "reporter_id" })
   reporterId!: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => User)
   @JoinColumn({ name: "reporter_id" })
-  reporter!: UserEntity;
+  reporter!: User;
 
   @Column({ name: "project_id", type: "uuid" })
   projectId!: string;
 
-  @ManyToOne(() => ProjectEntity)
+  @ManyToOne(() => List)
   @JoinColumn({ name: "project_id" })
-  project!: ProjectEntity;
+  project!: List;
 
   @Column({
     name: "due_date",
@@ -57,14 +57,14 @@ export class IssueEntity extends AuditEntity {
   @Column({ name: "created_by_id", type: "uuid" })
   createdById!: string;
 
-  @ManyToOne(() => UserEntity)
-  createdBy!: UserEntity;
+  @ManyToOne(() => User)
+  createdBy!: User;
 
   @Column({ name: "updated_by_id", type: "uuid", nullable: true })
   updatedById?: string;
 
-  @ManyToOne(() => UserEntity)
-  updatedBy?: UserEntity;
+  @ManyToOne(() => User)
+  updatedBy?: User;
 
   @OneToMany(() => IssueAssigneeEntity, ({ issue }) => issue)
   assignees!: IssueAssigneeEntity;

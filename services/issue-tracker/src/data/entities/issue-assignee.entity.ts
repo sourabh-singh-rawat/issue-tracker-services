@@ -5,8 +5,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "./user.entity";
-import { IssueEntity } from "./issue.entity";
+import { User } from "./User";
+import { ListItem } from "./ListItem";
 import { AuditEntity } from "@issue-tracker/orm";
 
 @Entity({ name: "issue_assignees" })
@@ -19,13 +19,13 @@ export class IssueAssigneeEntity extends AuditEntity {
   @JoinColumn({ name: "issue_id" })
   issueId!: string;
 
-  @ManyToOne(() => IssueEntity, ({ assignees }) => assignees)
-  issue!: IssueEntity;
+  @ManyToOne(() => ListItem, ({ assignees }) => assignees)
+  issue!: ListItem;
 
   @Column({ name: "user_id", type: "uuid" })
   userId!: string;
 
   @JoinColumn({ name: "user_id" })
-  @ManyToOne(() => UserEntity)
-  user!: UserEntity;
+  @ManyToOne(() => User)
+  user!: User;
 }
