@@ -15,7 +15,7 @@ import {
 import { Typeorm } from "@issue-tracker/orm";
 import { JwtToken } from "@issue-tracker/security";
 import { WorkspaceRepository } from "../../data/repositories/interfaces/workspace.repository";
-import { Workspce } from "../../data/entities/Workspace";
+import { Workspace } from "../../data/entities/Workspace";
 import {
   WORKSPACE_MEMBER_ROLES,
   WORKSPACE_MEMBER_STATUS,
@@ -60,7 +60,7 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
         queryRunner,
       });
 
-      const newWorkspace = new Workspce();
+      const newWorkspace = new Workspace();
       newWorkspace.ownerUserId = savedUser.id;
       newWorkspace.name = WORKSPACE_NAME.DEFAULT;
       newWorkspace.status = WORKSPACE_STATUS.DEFAULT;

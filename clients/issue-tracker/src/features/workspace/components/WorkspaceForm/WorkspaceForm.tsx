@@ -1,8 +1,5 @@
 import React, { useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useCreateWorkspaceMutation } from "../../../../api/generated/workspace.api";
-import AjvFormats from "ajv-formats";
-import { ajvResolver } from "@hookform/resolvers/ajv";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -10,46 +7,36 @@ import Divider from "@mui/material/Divider";
 
 import TextField from "../../../../common/components/forms/TextField";
 import ModalFooter from "../../../../common/components/ModalFooter";
-import schema from "../../../../api/generated/issue-tracker.openapi.json";
+import { issueTrackerService } from "../../../../app/trpc";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
 }
 
 export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
-  const [createWorkspace] = useCreateWorkspaceMutation();
+  const createWorkspace = issueTrackerService.createWorkspace.useMutation();
   const defaultValues = useMemo(
     () => ({ name: "Workspace Name", description: "" }),
     [],
   );
-  // const defaultSchemas: any = useMemo(
-  //   () =>
-  //     schema.paths["/api/v1/workspaces"].post.requestBody.content[
-  //       "application/json"
-  //     ].schema,
-  //   [],
-  // );
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "all",
-    resolver: ajvResolver({}, {
-      formats: { email: AjvFormats.get("email") },
-    }),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = async ({
     name,
     description,
   }) => {
-    await createWorkspace({ body: { name, description } });
+    createWorkspace.mutate({ name, description });
     handleClose();
   };
 
   return (
     <Container
       component="form"
-    onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
       <Grid rowSpacing={3} container>
@@ -60,7 +47,6 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             placeholder="Name"
             control={control}
             formState={formState}
-            defaultSchemas={defaultSchemas}
             autoFocus
           />
         </Grid>
@@ -75,7 +61,6 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             control={control}
             formState={formState}
             rows={4}
-            defaultSchemas={defaultSchemas}
           />
         </Grid>
       </Grid>

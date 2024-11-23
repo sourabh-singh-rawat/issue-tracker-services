@@ -144,8 +144,6 @@ export class CoreIdentityService implements IdentityService {
       email: user.email,
       emailVerificationStatus: user.emailVerificationStatus,
       createdAt: user.createdAt,
-      defaultWorkspaceId: "1",
-      defaultWorkspaceName: "2",
     });
 
     await this.saveTokens(access, refresh);
@@ -170,8 +168,6 @@ export class CoreIdentityService implements IdentityService {
       email: user.email,
       createdAt: user.createdAt,
       emailVerificationStatus: user.emailVerificationStatus,
-      defaultWorkspaceId: "1",
-      defaultWorkspaceName: "2",
     });
 
     await this.saveTokens(access, refresh);

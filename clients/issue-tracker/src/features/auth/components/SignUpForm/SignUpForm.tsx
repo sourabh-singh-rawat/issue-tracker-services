@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ajvResolver } from "@hookform/resolvers/ajv";
-import AjvFormats from "ajv-formats";
 
 import { useMessageBar } from "../../../message-bar/hooks";
 import { useRegisterUserMutation } from "../../../../api/generated/user.api";
@@ -14,13 +12,16 @@ import MuiTypography from "@mui/material/Typography";
 import TextField from "../../../../common/components/forms/TextField";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-
-import { client } from "../../../..";
+import { authService } from "../../../../app/trpc";
 
 export default function SignUpForm() {
   const [searchParams] = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
-  const [signup, { error, status }] = useRegisterUserMutation();
+  const registerUser = authService.registerUser.useMutation({
+    onError: (error) => {
+      messageBar.showError(error.message);
+    },
+  });
   const messageBar = useMessageBar();
 
   const defaultValues = useMemo(
@@ -39,19 +40,13 @@ export default function SignUpForm() {
     displayName,
   }) => {
     if (inviteToken) {
-      return signup({
-        body: { email, password, displayName },
-        workspaceInviteToken: inviteToken,
-      });
+      // return signup({
+      //   body: { email, password, displayName },
+      //   workspaceInviteToken: inviteToken,
+      // });
     }
-    await client.registerUser.mutate({ email, password, displayName });
+    registerUser.mutate({ email, password, displayName });
   };
-
-  useEffect(() => {
-    if (error) {
-      messageBar.showError("Some error");
-    }
-  }, [status]);
 
   return (
     <MuiContainer component="form" onSubmit={handleSubmit(onSubmit)}>

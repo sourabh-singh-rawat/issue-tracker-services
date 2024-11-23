@@ -6,6 +6,11 @@ import {
   Publisher,
   Subjects,
 } from "@issue-tracker/event-bus";
+import {
+  CreateFastifyContextOptions,
+  fastifyTRPCPlugin,
+  FastifyTRPCPluginOptions,
+} from "@trpc/server/adapters/fastify";
 import fastify from "fastify";
 import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
@@ -50,8 +55,8 @@ import { WorkspaceController } from "./controllers/interfaces/workspace.controll
 import { CoreWorkspaceController } from "./controllers/core-workspace.controller";
 import { CoreProjectService } from "./services/core-project.service";
 import { ProjectService } from "./services/interfaces/project.service";
-import { WorkspaceService } from "./services/interfaces/workspace.service";
-import { CoreWorkspaceService } from "./services/core-workspace.service";
+import { WorkspaceService } from "./services/interfaces/WorkspaceService";
+import { CoreWorkspaceService } from "./services/CoreWorkspaceService";
 import { WorkspaceRepository } from "./data/repositories/interfaces/workspace.repository";
 import { PostgresWorkspaceRepository } from "./data/repositories/postgres-workspace.repository";
 import { WorkspaceMemberRepository } from "./data/repositories/interfaces/workspace-member.repository";
@@ -70,6 +75,10 @@ import { projectActivityRoutes } from "./routes/project-activity.routes";
 import { issueTaskRoutes } from "./routes/issue-task.routes";
 import { projectRoutes } from "./routes/project.routes";
 import { workspaceRoutes } from "./routes/workspace.routes";
+import { JwtToken } from "@issue-tracker/security";
+import { initTRPC } from "@trpc/server";
+import { z } from "zod";
+import { UnauthorizedError } from "@issue-tracker/common";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -102,9 +111,81 @@ export interface RegisteredServices {
   publisher: Publisher<Subjects>;
 }
 
+export async function createContext({ req, res }: CreateFastifyContextOptions) {
+  const { accessToken } = req.cookies;
+
+  let token: any;
+  if (accessToken) {
+    try {
+      token = JwtToken.verify(accessToken, process.env.JWT_SECRET!);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  token;
+
+  if (token) {
+    return { req, res, user: { email: token.email, userId: token.userId } };
+  }
+
+  return { req, res, user: { id: "", email: "" } };
+}
+
+export type Context = Awaited<ReturnType<typeof createContext>>;
+
+const t = initTRPC.context<Context>().create();
+export const router = t.router;
+export const publicProcedure = t.procedure;
+
+export const issueTrackerRouter = router({
+  createWorkspace: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const service = container.get("workspaceService");
+      const { user } = ctx;
+
+      return await dataSource.transaction(async (manager) => {
+        return await service.createWorkspace({
+          ...input,
+          userId: user.userId,
+          manager,
+        });
+      });
+    }),
+  getAllWorkspaces: publicProcedure
+    .input(
+      z.object({
+        page: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx }) => {
+      if (!ctx.user) throw new UnauthorizedError();
+      const { user } = ctx;
+      const { userId } = user;
+
+      const service = container.get("workspaceService");
+      return await service.getAllWorkspaces(userId);
+    }),
+});
+
+export type IssueTrackerRouter = typeof issueTrackerRouter;
+
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
     const fastifyInstance = fastify();
+    await fastifyInstance.register(fastifyTRPCPlugin, {
+      prefix: "/trpc",
+      trpcOptions: {
+        router: issueTrackerRouter,
+        createContext,
+      } satisfies FastifyTRPCPluginOptions<IssueTrackerRouter>["trpcOptions"],
+    });
     const server = new FastifyServer({
       fastify: fastifyInstance,
       configuration: {
@@ -118,14 +199,15 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         cookie: { secret: process.env.JWT_SECRET! },
       },
       routes: [
-        { route: issueRoutes(container) },
-        { route: issueCommentRoutes(container) },
-        { route: issueTaskRoutes(container) },
-        { route: projectRoutes(container) },
-        { route: projectActivityRoutes(container) },
-        { route: workspaceRoutes(container) },
+        // { route: issueRoutes(container) },
+        // { route: issueCommentRoutes(container) },
+        // { route: issueTaskRoutes(container) },
+        // { route: projectRoutes(container) },
+        // { route: projectActivityRoutes(container) },
+        // { route: workspaceRoutes(container) },
       ],
     });
+    server.init();
   } catch (error) {
     console.log(error);
     process.exit(1);
@@ -146,6 +228,11 @@ export const dataSource = new DataSource({
   synchronize: true,
 });
 
+const awilix = createContainer<RegisteredServices>({
+  injectionMode: InjectionMode.CLASSIC,
+});
+const container = new AwilixDi<RegisteredServices>(awilix, logger);
+
 const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);
   await orm.init();
@@ -157,44 +244,56 @@ const main = async () => {
   });
   await natsBroker.init();
 
-  const awilix = createContainer<RegisteredServices>({
-    injectionMode: InjectionMode.CLASSIC,
-  });
-  const container = new AwilixDi<RegisteredServices>(awilix, logger);
-  const { add } = container;
-
-  add("logger", asValue(logger));
-  add("dataSource", asValue(dataSource));
-  add("orm", asValue(orm));
-  add("broker", asValue(natsBroker));
-  add("issueController", asClass(CoreIssueController));
-  add("issueCommentController", asClass(CoreIssueCommentController));
-  add("issueTaskController", asClass(CoreIssueTaskController));
-  add("projectController", asClass(CoreProjectController));
-  add("workspaceController", asClass(CoreWorkspaceController));
-  add("projectActivityController", asClass(CoreProjectActivityController));
-  add("userService", asClass(CoreUserService));
-  add("issueService", asClass(CoreIssueService));
-  add("issueCommentService", asClass(CoreIssueCommentService));
-  add("issueTaskService", asClass(CoreIssueTaskService));
-  add("projectService", asClass(CoreProjectService));
-  add("projectActivityService", asClass(CoreProjectActivityService));
-  add("projectActivityRepository", asClass(PostgresProjectActivityRepository));
-  add("workspaceService", asClass(CoreWorkspaceService));
-  add("workspaceRepository", asClass(PostgresWorkspaceRepository));
-  add("workspaceMemberRepository", asClass(PostgresWorkspaceMemberRepository));
-  add(
+  container.add("logger", asValue(logger));
+  container.add("dataSource", asValue(dataSource));
+  container.add("orm", asValue(orm));
+  container.add("broker", asValue(natsBroker));
+  container.add("issueController", asClass(CoreIssueController));
+  container.add("issueCommentController", asClass(CoreIssueCommentController));
+  container.add("issueTaskController", asClass(CoreIssueTaskController));
+  container.add("projectController", asClass(CoreProjectController));
+  container.add("workspaceController", asClass(CoreWorkspaceController));
+  container.add(
+    "projectActivityController",
+    asClass(CoreProjectActivityController),
+  );
+  container.add("userService", asClass(CoreUserService));
+  container.add("issueService", asClass(CoreIssueService));
+  container.add("issueCommentService", asClass(CoreIssueCommentService));
+  container.add("issueTaskService", asClass(CoreIssueTaskService));
+  container.add("projectService", asClass(CoreProjectService));
+  container.add("projectActivityService", asClass(CoreProjectActivityService));
+  container.add(
+    "projectActivityRepository",
+    asClass(PostgresProjectActivityRepository),
+  );
+  container.add("workspaceService", asClass(CoreWorkspaceService));
+  container.add("workspaceRepository", asClass(PostgresWorkspaceRepository));
+  container.add(
+    "workspaceMemberRepository",
+    asClass(PostgresWorkspaceMemberRepository),
+  );
+  container.add(
     "workspaceInviteTokenRepository",
     asClass(PostgresWorkspaceInviteTokenRepository),
   );
-  add("userRepository", asClass(PostgresUserRepository));
-  add("issueRepository", asClass(PostgresIssueRepository));
-  add("projectRepository", asClass(PostgresProjectRepository));
-  add("issueAssigneeRepository", asClass(PostgresIssueAssigneeRepository));
-  add("issueCommentRepository", asClass(PostgresIssueCommentRepository));
-  add("issueTaskRepository", asClass(PostgresIssueTaskRepository));
-  add("userEmailVerifiedSubscriber", asClass(UserEmailVerifiedSubscriber));
-  add("publisher", asClass(NatsPublisher));
+  container.add("userRepository", asClass(PostgresUserRepository));
+  container.add("issueRepository", asClass(PostgresIssueRepository));
+  container.add("projectRepository", asClass(PostgresProjectRepository));
+  container.add(
+    "issueAssigneeRepository",
+    asClass(PostgresIssueAssigneeRepository),
+  );
+  container.add(
+    "issueCommentRepository",
+    asClass(PostgresIssueCommentRepository),
+  );
+  container.add("issueTaskRepository", asClass(PostgresIssueTaskRepository));
+  container.add(
+    "userEmailVerifiedSubscriber",
+    asClass(UserEmailVerifiedSubscriber),
+  );
+  container.add("publisher", asClass(NatsPublisher));
 
   container.init();
 

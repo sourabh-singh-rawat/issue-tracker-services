@@ -1,36 +1,36 @@
 import { QueryBuilderOptions, Typeorm } from "@issue-tracker/orm";
-import { Workspce } from "../entities/Workspace";
+import { Workspace } from "../entities/Workspace";
 import { WorkspaceRepository } from "./interfaces/workspace.repository";
 
 export class PostgresWorkspaceRepository implements WorkspaceRepository {
   constructor(private orm: Typeorm) {}
 
-  save = async (workspace: Workspce, options?: QueryBuilderOptions) => {
+  save = async (workspace: Workspace, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(Workspce)
+      .into(Workspace)
       .values(workspace)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as Workspce;
+    return (await query.execute()).generatedMaps[0] as Workspace;
   };
 
   existsById = async (id: string) => {
-    return await Workspce.exists({ where: { id } });
+    return await Workspace.exists({ where: { id } });
   };
 
   findById = async (id: string) => {
-    return await Workspce.findOne({ where: { id } });
+    return await Workspace.findOne({ where: { id } });
   };
 
   findByUserId = async (userId: string) => {
-    return await Workspce.find({ where: { ownerUserId: userId } });
+    return await Workspace.find({ where: { ownerUserId: userId } });
   };
 
   find = async (userId: string) => {
-    return await Workspce.find({ where: { ownerUserId: userId } });
+    return await Workspace.find({ where: { ownerUserId: userId } });
   };
 
   softDelete(): Promise<void> {

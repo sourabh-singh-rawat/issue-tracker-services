@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import Dashboard from "../features/dashboard/pages/Dashboard";
@@ -35,64 +35,93 @@ import Profile from "../features/user/pages/Profile";
 import Workspace from "../features/workspace/pages/Workspace";
 import WorkspaceSettings from "../features/workspace/pages/WorkspaceSettings";
 import WorkspaceMembers from "../features/workspace/pages/WorkspaceMembers";
-
-// import Team from "./features/team/pages/Team";
-// import TeamActivity from "./features/team/pages/TeamActivity";
-// import TeamForm from "./features/team/pages/TeamForm";
-// import TeamList from "./features/team-list/components/TeamList";
-// import TeamOverview from "./features/team/pages/TeamOverview";
-// import Teams from "./features/team-list/pages/Teams";
-// import TeamSettings from "./features/team/pages/TeamSettings";
-
-// import Profile from "./features/profile/pages/Profile";
-// import TeamMembers from "./features/team/pages/TeamMembers";
-// import TeamProjects from "./features/team/pages/TeamProjects";
+import { authService, issueTrackerService } from "./trpc";
+import { httpLink } from "@trpc/client";
+import { QueryClient } from "@tanstack/react-query";
 
 function NoComponent() {
   return <h1>404</h1>;
 }
 
 export default function App() {
+  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient2] = useState(() => new QueryClient());
+
+  const [issueTrackerClient] = useState(() =>
+    issueTrackerService.createClient({
+      links: [
+        httpLink({
+          url: "http://localhost:4002/trpc",
+          fetch(url, options) {
+            return fetch(url, { ...options, credentials: "include" });
+          },
+        }),
+      ],
+    }),
+  );
+  const [authClient] = useState(() =>
+    authService.createClient({
+      links: [
+        httpLink({
+          url: "http://localhost:4001/trpc",
+          fetch(url, options) {
+            return fetch(url, { ...options, credentials: "include" });
+          },
+        }),
+      ],
+    }),
+  );
+
+  console.log(authClient);
+  console.log(issueTrackerClient);
+
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route element={<Login />} path="login" />
-        <Route element={<SignUp />} path="signup" />
-        <Route element={<PrivateRoutes />}>
-          <Route element={<Dashboard />} index />
+    <authService.Provider client={authClient} queryClient={queryClient2}>
+      <issueTrackerService.Provider
+        client={issueTrackerClient}
+        queryClient={queryClient}
+      >
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route element={<Login />} path="login" />
+            <Route element={<SignUp />} path="signup" />
+            <Route element={<PrivateRoutes />}>
+              <Route element={<Dashboard />} index />
 
-          <Route element={<Profile />} path="me" />
+              <Route element={<Profile />} path="me" />
 
-          <Route element={<Projects />} path="projects">
-            <Route element={<ProjectForm />} path="new" />
-            <Route element={<Project />} path=":id">
-              <Route element={<ProjectOverview />} path="overview" />
-              <Route element={<ProjectIssues />} path="issues" />
-              <Route element={<ProjectMembers />} path="members" />
-              <Route element={<ProjectActivity />} path="activity" />
-              <Route element={<ProjectSettings />} path="settings" />
+              <Route element={<Projects />} path="projects">
+                <Route element={<ProjectForm />} path="new" />
+                <Route element={<Project />} path=":id">
+                  <Route element={<ProjectOverview />} path="overview" />
+                  <Route element={<ProjectIssues />} path="issues" />
+                  <Route element={<ProjectMembers />} path="members" />
+                  <Route element={<ProjectActivity />} path="activity" />
+                  <Route element={<ProjectSettings />} path="settings" />
+                </Route>
+              </Route>
+
+              <Route element={<Issues />} path="issues">
+                <Route element={<IssueForm />} path="new" />
+                <Route element={<Issue />} path=":id">
+                  <Route element={<IssueOverview />} path="overview" />
+                  <Route element={<IssueComments />} path="comments" />
+                  <Route element={<IssueTasks />} path="tasks" />
+                  <Route element={<IssueAttachments />} path="attachments" />
+                </Route>
+              </Route>
+
+              <Route path="workspaces">
+                <Route path=":id" element={<Workspace />}>
+                  <Route path="settings" element={<WorkspaceSettings />} />
+                  <Route path="members" element={<WorkspaceMembers />} />
+                </Route>
+              </Route>
             </Route>
           </Route>
-
-          <Route element={<Issues />} path="issues">
-            <Route element={<IssueForm />} path="new" />
-            <Route element={<Issue />} path=":id">
-              <Route element={<IssueOverview />} path="overview" />
-              <Route element={<IssueComments />} path="comments" />
-              <Route element={<IssueTasks />} path="tasks" />
-              <Route element={<IssueAttachments />} path="attachments" />
-            </Route>
-          </Route>
-
-          <Route path="workspaces">
-            <Route path=":id" element={<Workspace />}>
-              <Route path="settings" element={<WorkspaceSettings />} />
-              <Route path="members" element={<WorkspaceMembers />} />
-            </Route>
-          </Route>
-        </Route>
-      </Route>
-      <Route element={<NoComponent />} path="*" />
-    </Routes>
+          <Route element={<NoComponent />} path="*" />
+        </Routes>
+      </issueTrackerService.Provider>
+    </authService.Provider>
   );
 }

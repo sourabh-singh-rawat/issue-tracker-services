@@ -40,11 +40,13 @@ interface VerifyUserPassword {
 
 interface CreateUserAccessTokenOptions {
   user: User;
+  iat: number;
   exp: number;
 }
 
 interface CreateUserRefreshTokenOptions {
   user: User;
+  iat: number;
   exp: number;
 }
 
@@ -60,7 +62,7 @@ export class CoreUserAuthenticationService
   ) {}
 
   private createUserAccessToken(options: CreateUserAccessTokenOptions) {
-    const { user, exp } = options;
+    const { user, iat, exp } = options;
     const { createdAt, email, emailVerificationStatus, id, profile } = user;
     const { displayName } = profile;
     const payload: AccessToken = {
@@ -70,6 +72,7 @@ export class CoreUserAuthenticationService
       emailVerificationStatus,
       userId: id,
       jwtid: v4(),
+      iat,
       iss: this.AUTH_SERVICE,
       aud: this.AUTH_SERVICE,
       sub: this.MAIL_SERVICE,
@@ -194,10 +197,15 @@ export class CoreUserAuthenticationService
 
     await this.verifyUserPassword({ user, password });
 
-    const exp = 30 * 1000;
+    const iat = Math.floor(Date.now() / 1000);
+    const exp = iat + 60 * 60 * 10000000;
     return {
-      accessToken: this.createUserAccessToken({ user, exp }),
-      refreshToken: this.createUserRefreshToken({ user, exp: exp * 5 }),
+      accessToken: this.createUserAccessToken({ user, iat, exp }),
+      refreshToken: this.createUserRefreshToken({
+        user,
+        iat,
+        exp: exp + 60 * 60 * 24 * 7,
+      }),
     };
   }
 

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { WorkspaceService } from "../services/interfaces/workspace.service";
+import { WorkspaceService } from "../services/interfaces/WorkspaceService";
 import { WorkspaceMemberRoles } from "@issue-tracker/common";
 import { WorkspaceController } from "./interfaces/workspace.controller";
 
@@ -13,12 +13,12 @@ export class CoreWorkspaceController implements WorkspaceController {
     const { userId } = request.currentUser;
     const { name, description } = request.body;
 
-    const workspace = await this.workspaceService.createWorkspace(userId, {
-      name,
-      description,
-    });
+    // const workspace = await this.workspaceService.createWorkspace(userId, {
+    //   name,
+    //   description,
+    // });
 
-    return reply.send(workspace);
+    // return reply.send(workspace);
   };
 
   createWorkspaceInvite = async (
@@ -45,8 +45,9 @@ export class CoreWorkspaceController implements WorkspaceController {
   ) => {
     const { inviteToken } = request.query;
 
-    const response =
-      await this.workspaceService.confirmWorkspaceInvite(inviteToken);
+    const response = await this.workspaceService.confirmWorkspaceInvite(
+      inviteToken,
+    );
 
     return reply.redirect(response.rows);
   };

@@ -1,5 +1,10 @@
 import { v4 } from "uuid";
-import { WorkspaceService } from "./interfaces/workspace.service";
+import {
+  CreateDefaultWorkspaceOptions,
+  CreateWorkspaceOptions,
+  ServiceOptions,
+  WorkspaceService,
+} from "./interfaces/WorkspaceService";
 import { WorkspaceMember } from "../data/entities/WorkspaceMember";
 import { WorkspaceInvitation } from "../data/entities/WorkspaceInvitation";
 import { Typeorm } from "@issue-tracker/orm";
@@ -9,7 +14,6 @@ import {
   UserNotFoundError,
   WORKSPACE_MEMBER_STATUS,
   WorkspaceNotFound,
-  WorkspaceRegistrationData,
   WorkspaceMemberRoles,
   WORKSPACE_MEMBER_ROLES,
   UserAlreadyMember,
@@ -25,8 +29,14 @@ import { UserRepository } from "../data/repositories/interfaces/user.repository"
 import { WorkspaceRepository } from "../data/repositories/interfaces/workspace.repository";
 import { WorkspaceMemberRepository } from "../data/repositories/interfaces/workspace-member.repository";
 import { WorkspaceInviteTokenRepository } from "../data/repositories/interfaces/workspace-invite-token.repository";
-import { Workspce } from "../data/entities/Workspace";
+import { Workspace } from "../data/entities/Workspace";
 import { User } from "../data/entities";
+
+export interface SaveWorkspaceOptions extends ServiceOptions {
+  workspace: Workspace;
+  workspaceMember: WorkspaceMember;
+  user?: User;
+}
 
 export class CoreWorkspaceService implements WorkspaceService {
   constructor(
@@ -38,109 +48,89 @@ export class CoreWorkspaceService implements WorkspaceService {
     private workspaceInviteTokenRepository: WorkspaceInviteTokenRepository,
   ) {}
 
-  private saveWorkspace = async (
-    workspace: Workspce,
-    workspaceMember: WorkspaceMember,
-    user?: User,
-  ) => {
-    const queryRunner = this.orm.createQueryRunner();
-    const result = await this.orm.transaction(
-      queryRunner,
-      async (queryRunner) => {
-        if (user) {
-          await this.userRepository.save(user, { queryRunner });
-        }
+  private async saveWorkspace(options: SaveWorkspaceOptions) {
+    const { manager, workspace, workspaceMember, user } = options;
+    const UserRepo = manager.getRepository(User);
+    const WorkspaceRepo = manager.getRepository(Workspace);
+    const WorkspaceMemberRepo = manager.getRepository(WorkspaceMember);
 
-        const savedWorkspace = await this.workspaceRepository.save(workspace, {
-          queryRunner,
-        });
-        const savedWorkspaceMember = await this.workspaceMemberRepository.save(
-          workspaceMember,
-          { queryRunner },
-        );
-
-        if (!savedWorkspaceMember.userId) throw new Error("userId is required");
-
-        await this.publisher.send("workspace.created", {
-          id: savedWorkspace.id,
-          name: savedWorkspace.name,
-          ownerId: savedWorkspace.ownerUserId,
-          member: {
-            userId: savedWorkspaceMember.userId,
-            workspaceId: savedWorkspaceMember.workspaceId,
-          },
-        });
-
-        return { savedWorkspace };
-      },
+    if (user) await UserRepo.save(user);
+    const savedWorkspace = await WorkspaceRepo.save(workspace);
+    const savedWorkspaceMember = await WorkspaceMemberRepo.save(
+      workspaceMember,
     );
 
-    if (!result) {
-      throw new TransactionExecutionError(
-        "Failed to save workspace, member, and policies",
-      );
-    }
+    if (!savedWorkspaceMember.userId) throw new Error("userId is required");
 
-    const { savedWorkspace } = result;
+    await this.publisher.send("workspace.created", {
+      id: savedWorkspace.id,
+      name: savedWorkspace.name,
+      ownerId: savedWorkspace.ownerUserId,
+      member: {
+        userId: savedWorkspaceMember.userId,
+        workspaceId: savedWorkspaceMember.workspaceId,
+      },
+    });
 
     return savedWorkspace;
-  };
+  }
 
-  createDefaultWorkspace = async (user: User) => {
+  async createDefaultWorkspace(options: CreateDefaultWorkspaceOptions) {
+    const { manager, user } = options;
     const { defaultWorkspaceId, id } = user;
 
-    const newWorkspace = new Workspce();
-    newWorkspace.id = defaultWorkspaceId;
-    newWorkspace.name = "Default Workspace";
-    newWorkspace.ownerUserId = id;
+    const workspace = new Workspace();
+    workspace.id = defaultWorkspaceId;
+    workspace.name = "Default Workspace";
+    workspace.ownerUserId = id;
 
-    const newWorkspaceMember = new WorkspaceMember();
-    newWorkspaceMember.userId = id;
-    newWorkspaceMember.workspaceId = defaultWorkspaceId;
+    const workspaceMember = new WorkspaceMember();
+    workspaceMember.userId = id;
+    workspaceMember.workspaceId = defaultWorkspaceId;
 
-    await this.saveWorkspace(newWorkspace, newWorkspaceMember, user);
-  };
+    await this.saveWorkspace({ workspace, workspaceMember, user, manager });
+  }
 
-  createWorkspace = async (
-    userId: string,
-    workspace: WorkspaceRegistrationData,
-  ) => {
-    const { name, description } = workspace;
-    const workspaceId = v4();
+  async createWorkspace(options: CreateWorkspaceOptions) {
+    const { name, description, userId, manager } = options;
+    const id = v4();
 
-    const newWorkspace = new Workspce();
-    newWorkspace.id = workspaceId;
-    newWorkspace.name = name;
-    newWorkspace.description = description;
-    newWorkspace.ownerUserId = userId;
+    const workspace = new Workspace();
+    workspace.id = id;
+    workspace.name = name;
+    workspace.description = description;
+    workspace.ownerUserId = userId;
 
-    const newWorkspaceMember = new WorkspaceMember();
-    newWorkspaceMember.userId = userId;
-    newWorkspaceMember.workspaceId = workspaceId;
+    const workspaceMember = new WorkspaceMember();
+    workspaceMember.userId = userId;
+    workspaceMember.workspaceId = id;
 
-    const savedWorkspace = await this.saveWorkspace(
-      newWorkspace,
-      newWorkspaceMember,
-    );
+    const savedWorkspace = await this.saveWorkspace({
+      workspace,
+      workspaceMember,
+      manager,
+    });
 
-    return new ServiceResponse({ rows: savedWorkspace.id });
-  };
+    return savedWorkspace.id;
+  }
 
   createWorkspaceMember = async (
     userId: string,
     email: string,
     role: WorkspaceMemberRoles,
   ) => {
-    const isReceiverMember =
-      await this.workspaceMemberRepository.existsByEmail(email);
+    const isReceiverMember = await this.workspaceMemberRepository.existsByEmail(
+      email,
+    );
     if (isReceiverMember) throw new UserAlreadyMember();
 
     const sender = await this.userRepository.findById(userId);
     if (!sender) throw new UserNotFoundError();
     const { defaultWorkspaceId } = sender;
 
-    const workspace =
-      await this.workspaceRepository.findById(defaultWorkspaceId);
+    const workspace = await this.workspaceRepository.findById(
+      defaultWorkspaceId,
+    );
     if (!workspace) throw new NotFoundError("Workspace Not Found");
 
     const workspaceMember = new WorkspaceMember();
@@ -214,14 +204,9 @@ export class CoreWorkspaceService implements WorkspaceService {
     });
   };
 
-  getAllWorkspaces = async (userId: string) => {
-    const workspaces = await this.workspaceRepository.find(userId);
-
-    return new ServiceResponse({
-      rows: workspaces,
-      rowCount: workspaces.length,
-    });
-  };
+  async getAllWorkspaces(userId: string) {
+    return await this.workspaceRepository.find(userId);
+  }
 
   getWorkspace = async (id: string) => {
     const workspace = await this.workspaceRepository.findById(id);
@@ -242,7 +227,7 @@ export class CoreWorkspaceService implements WorkspaceService {
   };
 
   updateWorkspace = async (id: string, updateables: { name?: string }) => {
-    const workspace = await Workspce.findOne({ where: { id } });
+    const workspace = await Workspace.findOne({ where: { id } });
 
     if (!workspace) throw new WorkspaceNotFound();
 
