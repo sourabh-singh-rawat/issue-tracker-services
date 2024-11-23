@@ -22,7 +22,7 @@ import {
   useGetProjectStatusListQuery,
 } from "../../../../api/generated/project.api";
 import { ProjectStatus } from "@issue-tracker/common";
-import schema from "../../../../api/generated/issue-tracker.openapi.json";
+// import schema from "../../../../api/generated/issue-tracker.openapi.json";
 
 function ProjectForm() {
   const theme = useTheme();
@@ -41,17 +41,17 @@ function ProjectForm() {
     }),
     [],
   );
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/projects"].post.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
+  // const defaultSchemas: any = useMemo(
+  //   () =>
+  //     schema.paths["/api/v1/projects"].post.requestBody.content[
+  //       "application/json"
+  //     ].schema,
+  //   [],
+  // );
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "all",
-    resolver: ajvResolver(defaultSchemas, {
+    resolver: ajvResolver({}, {
       formats: { date: AjvFormats.get("date") },
     }),
   });

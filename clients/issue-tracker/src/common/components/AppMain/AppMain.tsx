@@ -23,7 +23,7 @@ export default function AppMain() {
   const isLargeScreen = useLargeScreen();
   const dispatch = useAppDispatch();
   const { data: workspaces } = useGetAllWorkspacesQuery();
-  const { id } = useAppSelector(({ workspace }) => workspace.defaultWorkspace);
+  const { id } = useAppSelector(({ workspace }) => workspace?.defaultWorkspace || {id: "something", name: "Something2"});
 
   useEffect(() => {
     if (workspaces) {

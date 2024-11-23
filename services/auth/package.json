@@ -52,6 +52,7 @@
     "@issue-tracker/orm": "workspace:^",
     "@issue-tracker/security": "workspace:^",
     "@issue-tracker/server-core": "workspace:^",
+    "@trpc/server": "11.0.0-rc.642",
     "awilix": "^8.0.1",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
@@ -62,6 +63,7 @@
     "pino": "^8.21.0",
     "typeorm": "^0.3.20",
     "typescript-json-schema": "^0.64.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.23.8"
   }
 }

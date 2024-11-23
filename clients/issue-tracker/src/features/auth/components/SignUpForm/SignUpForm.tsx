@@ -15,7 +15,7 @@ import TextField from "../../../../common/components/forms/TextField";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 
-import schema from "../../../../api/generated/auth.openapi.json";
+import { client } from "../../../..";
 
 export default function SignUpForm() {
   const [searchParams] = useSearchParams();
@@ -28,24 +28,12 @@ export default function SignUpForm() {
     [],
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/users/register"].post.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
-
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    resolver: ajvResolver(defaultSchemas, {
-      formats: { email: AjvFormats.get("email") },
-    }),
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = ({
+  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
     email,
     password,
     displayName,
@@ -56,7 +44,7 @@ export default function SignUpForm() {
         workspaceInviteToken: inviteToken,
       });
     }
-    signup({ body: { email, password, displayName } });
+    await client.registerUser.mutate({ email, password, displayName });
   };
 
   useEffect(() => {

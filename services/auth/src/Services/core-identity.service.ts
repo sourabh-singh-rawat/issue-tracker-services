@@ -144,16 +144,13 @@ export class CoreIdentityService implements IdentityService {
       email: user.email,
       emailVerificationStatus: user.emailVerificationStatus,
       createdAt: user.createdAt,
+      defaultWorkspaceId: "1",
+      defaultWorkspaceName: "2",
     });
 
     await this.saveTokens(access, refresh);
 
-    return new ServiceResponse({
-      rows: {
-        accessToken: access.tokenValue,
-        refreshToken: refresh.tokenValue,
-      },
-    });
+    return { accessToken: access.tokenValue, refreshToken: refresh.tokenValue };
   };
 
   refreshToken = async (token: Tokens) => {
@@ -173,6 +170,8 @@ export class CoreIdentityService implements IdentityService {
       email: user.email,
       createdAt: user.createdAt,
       emailVerificationStatus: user.emailVerificationStatus,
+      defaultWorkspaceId: "1",
+      defaultWorkspaceName: "2",
     });
 
     await this.saveTokens(access, refresh);

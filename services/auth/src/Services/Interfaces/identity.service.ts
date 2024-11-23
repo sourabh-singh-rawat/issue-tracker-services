@@ -5,7 +5,7 @@ import {
 } from "@issue-tracker/common";
 
 export interface IdentityService {
-  authenticate(credentials: AuthCredentials): Promise<ServiceResponse<Tokens>>;
+  authenticate(credentials: AuthCredentials): Promise<Tokens>;
   refreshToken(token: Tokens): Promise<ServiceResponse<Tokens>>;
   // updatePassword(
   //   id: string,

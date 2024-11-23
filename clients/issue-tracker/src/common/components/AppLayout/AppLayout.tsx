@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { useGetCurrentUserQuery } from "../../../api/generated/identity.api";
 import { useAppDispatch } from "../../hooks";
 import {
   setCurrentUser,
@@ -10,26 +9,34 @@ import {
 
 import MuiBox from "@mui/material/Box";
 import AppLoader from "../AppLoader";
+import { client } from "../../..";
 
 export default function AppLayout() {
   const dispatch = useAppDispatch();
-  const { data, isLoading, isSuccess, isError } = useGetCurrentUserQuery();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isSuccess && data) {
-      const workspace = {
-        id: data?.defaultWorkspaceId,
-        name: data?.defaultWorkspaceName,
-      };
+    (async () => {
+      try {
+        setIsLoading(true);
+        const user = await client.getCurrentUser.query();
 
-      dispatch(setCurrentUser({ ...data }));
-      dispatch(setCurrentWorkspace(workspace));
-    }
+        if (!user) throw new Error("Temp: User not found");
+        dispatch(setCurrentUser(user));
+        dispatch(
+          setCurrentWorkspace({
+            id: user.defaultWorkspaceId,
+            name: user.defaultWorkspaceName,
+          }),
+        );
 
-    if (isError) {
-      dispatch(setCurrentUser(null));
-    }
-  }, [isLoading, isSuccess, isError]);
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
+        dispatch(setCurrentUser(null));
+      }
+    })();
+  }, []);
 
   return (
     <MuiBox width="100vw" height="100vh">

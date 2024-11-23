@@ -33,18 +33,18 @@ export default function WorkspaceSettings() {
       };
     }
   };
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/workspaces/{id}"].patch.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
+  // const defaultSchemas: any = useMemo(
+  //   () =>
+  //     schema.paths["/api/v1/workspaces/{id}"].patch.requestBody.content[
+  //       "application/json"
+  //     ].schema,
+  //   [],
+  // );
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "all",
-    resolver: ajvResolver(defaultSchemas, {
+    resolver: ajvResolver({}, {
       formats: { email: AjvFormats.get("email") },
     }),
   });
@@ -56,7 +56,7 @@ export default function WorkspaceSettings() {
           <WorkspaceName
             control={control}
             formState={formState}
-            defaultSchemas={defaultSchemas}
+            defaultSchemas={{}}
             handleSubmit={handleSubmit}
           />
         </Grid>
@@ -64,7 +64,7 @@ export default function WorkspaceSettings() {
           <WorkspaceDescription
             control={control}
             formState={formState}
-            defaultSchemas={defaultSchemas}
+            defaultSchemas={{}}
             handleSubmit={handleSubmit}
           />
         </Grid>

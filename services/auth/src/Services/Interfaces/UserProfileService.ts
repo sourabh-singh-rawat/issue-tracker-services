@@ -1,3 +1,4 @@
+import { UserDetails } from "@issue-tracker/common";
 import { EntityManager } from "typeorm";
 
 export interface ServiceOptions {
@@ -27,7 +28,7 @@ export interface UpdatePhotoOptions extends ServiceOptions {
 
 export interface UserProfileService {
   createUserProfile(options: CreateUserProfileOptions): Promise<void>;
-  // getUserProfileWithEmail(email: string): Promise<void>;
+  getUserProfileWithEmail(email: string): Promise<UserDetails>;
   // getUserProfileWithId(id: string): Promise<string>;
   // updateDisplayName(options: UpdateDisplayNameOptions): Promise<void>;
   // updateDescription(options: UpdateDescriptionOptions): Promise<void>;

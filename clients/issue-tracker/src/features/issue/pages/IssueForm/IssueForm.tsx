@@ -50,18 +50,18 @@ function IssueForm({ projectId }: IssueFormProps) {
     }),
     [],
   );
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/issues"].post.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
+  // const defaultSchemas: any = useMemo(
+  //   () =>
+  //     schema.paths["/api/v1/issues"].post.requestBody.content[
+  //       "application/json"
+  //     ].schema,
+  //   [],
+  // );
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "all",
-    resolver: ajvResolver(defaultSchemas, {
+    resolver: ajvResolver({}, {
       formats: { date: AjvFormats.get("date") },
     }),
   });
