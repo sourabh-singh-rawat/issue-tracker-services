@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Workspce } from "./Workspace";
+import { Workspace } from "./Workspace";
 import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
@@ -27,7 +27,7 @@ export class WorkspaceMember extends AuditEntity {
   @JoinColumn({ name: "user_id" })
   user!: User;
 
-  @ManyToOne(() => Workspce)
+  @ManyToOne(() => Workspace)
   @Column({ name: "workspace_id", type: "uuid" })
   @JoinColumn({ name: "workspace_id" })
   workspaceId!: string;

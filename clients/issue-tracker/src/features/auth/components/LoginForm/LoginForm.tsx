@@ -9,12 +9,14 @@ import MuiTypography from "@mui/material/Typography";
 import TextField from "../../../../common/components/forms/TextField";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import PasswordField from "../../../../common/components/forms/PasswordField";
-
-import { client } from "../../../..";
+import { authService } from "../../../../app/trpc";
+import { useAppDispatch } from "../../../../common/hooks";
 
 export default function LoginForm() {
   const defaultValues = useMemo(() => ({ email: "", password: "" }), []);
- 
+  const dispatch = useAppDispatch();
+  const signInWithEmailAndPassword =
+    authService.signInWithEmailAndPassword.useMutation();
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
@@ -25,7 +27,7 @@ export default function LoginForm() {
     email,
     password,
   }) => {
-    await client.signInWithEmailAndPassword.mutate({ email, password });
+    signInWithEmailAndPassword.mutate({ email, password });
   };
 
   return (

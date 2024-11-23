@@ -5,14 +5,27 @@ import {
 } from "@issue-tracker/common";
 import { User } from "../../data/entities";
 import { WorkspaceMember } from "../../data/entities/WorkspaceMember";
-import { Workspce } from "../../data/entities/Workspace";
+import { Workspace } from "../../data/entities/Workspace";
+import { EntityManager } from "typeorm";
+
+export interface ServiceOptions {
+  manager: EntityManager;
+}
+
+export interface CreateWorkspaceOptions extends ServiceOptions {
+  userId: string;
+  name: string;
+  id?: string;
+  description?: string;
+}
+
+export interface CreateDefaultWorkspaceOptions extends ServiceOptions {
+  user: User;
+}
 
 export interface WorkspaceService {
-  createWorkspace(
-    userId: string,
-    workspace: WorkspaceRegistrationData,
-  ): Promise<ServiceResponse<string>>;
-  createDefaultWorkspace(user: User): Promise<void>;
+  createWorkspace(options: CreateWorkspaceOptions): Promise<string>;
+  createDefaultWorkspace(options: CreateDefaultWorkspaceOptions): Promise<void>;
   createWorkspaceMember(
     userId: string,
     workspaceId: string,
@@ -24,8 +37,8 @@ export interface WorkspaceService {
     role: WorkspaceMemberRoles,
   ): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
-  getAllWorkspaces(userId: string): Promise<ServiceResponse<Workspce[]>>;
-  getWorkspace(id: string): Promise<ServiceResponse<Workspce>>;
+  getAllWorkspaces(userId: string): Promise<Workspace[]>;
+  getWorkspace(id: string): Promise<ServiceResponse<Workspace>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceMemberRoles[]>>;
   getWorkspaceMembers(
     workspaceId: string,

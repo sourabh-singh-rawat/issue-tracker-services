@@ -10,7 +10,7 @@ import { AuditEntity } from "@issue-tracker/orm";
 import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
 
 @Entity({ name: "workspaces" })
-export class Workspce extends AuditEntity {
+export class Workspace extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

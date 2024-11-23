@@ -56,9 +56,6 @@ export const issueRoutes = (container: AwilixDi<RegisteredServices>) => {
             400: {
               description: "Bad request",
               type: "object",
-              properties: {
-                errors: { $ref: "errorSchema#" },
-              },
               required: ["errors"],
             },
           },
@@ -110,16 +107,6 @@ export const issueRoutes = (container: AwilixDi<RegisteredServices>) => {
                       rowCount: { type: "string" },
                     },
                     required: ["rows", "rowCount"],
-                  },
-                },
-              },
-            },
-            400: {
-              description: "Bad request",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "errorSchema#",
                   },
                 },
               },

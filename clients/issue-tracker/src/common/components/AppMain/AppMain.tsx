@@ -17,21 +17,27 @@ import {
   setWorkspaces,
 } from "../../../features/workspace/workspace.slice";
 import { WORKSPACE_STATUS } from "@issue-tracker/common";
+import { issueTrackerService } from "../../../app/trpc";
 
 export default function AppMain() {
   const theme = useTheme();
   const isLargeScreen = useLargeScreen();
   const dispatch = useAppDispatch();
-  const { data: workspaces } = useGetAllWorkspacesQuery();
-  const { id } = useAppSelector(({ workspace }) => workspace?.defaultWorkspace || {id: "something", name: "Something2"});
+  const { data: workspaces } = issueTrackerService.getAllWorkspaces.useQuery({
+    page: 1,
+  });
+  const { id } = useAppSelector(
+    ({ workspace }) =>
+      workspace?.defaultWorkspace || { id: "something", name: "Something2" },
+  );
 
   useEffect(() => {
     if (workspaces) {
-      const defaultWorkspace = workspaces.rows?.find(
+      const defaultWorkspace = workspaces?.find(
         ({ status }) => status === WORKSPACE_STATUS.DEFAULT,
       );
       dispatch(setDefaultWorkspace(defaultWorkspace));
-      dispatch(setWorkspaces(workspaces.rows));
+      dispatch(setWorkspaces(workspaces));
     }
   }, [workspaces]);
 

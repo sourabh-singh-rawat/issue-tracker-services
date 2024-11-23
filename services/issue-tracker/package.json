@@ -25,6 +25,7 @@
     "@issue-tracker/orm": "workspace:*",
     "@issue-tracker/security": "workspace:*",
     "@issue-tracker/server-core": "workspace:*",
+    "@trpc/server": "11.0.0-rc.643",
     "awilix": "^8.0.1",
     "dotenv": "^16.4.5",
     "fastify": "^4.27.0",
@@ -34,6 +35,7 @@
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20",
     "typeorm-adapter": "^1.7.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.23.8"
   }
 }

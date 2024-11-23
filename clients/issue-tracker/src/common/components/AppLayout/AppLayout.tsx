@@ -9,34 +9,28 @@ import {
 
 import MuiBox from "@mui/material/Box";
 import AppLoader from "../AppLoader";
-import { client } from "../../..";
+import { authService } from "../../../app/trpc";
 
 export default function AppLayout() {
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, data: user } = authService.getCurrentUser.useQuery();
 
   useEffect(() => {
     (async () => {
       try {
-        setIsLoading(true);
-        const user = await client.getCurrentUser.query();
-
         if (!user) throw new Error("Temp: User not found");
         dispatch(setCurrentUser(user));
         dispatch(
           setCurrentWorkspace({
-            id: user.defaultWorkspaceId,
-            name: user.defaultWorkspaceName,
+            // id: user.defaultWorkspaceId,
+            // name: user.defaultWorkspaceName,
           }),
         );
-
-        setIsLoading(false);
       } catch (err) {
-        setIsLoading(false);
         dispatch(setCurrentUser(null));
       }
     })();
-  }, []);
+  }, [isLoading]);
 
   return (
     <MuiBox width="100vw" height="100vh">

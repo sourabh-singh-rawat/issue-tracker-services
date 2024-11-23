@@ -48,6 +48,7 @@ import {
 } from "./Services/Interfaces";
 import { CoreUserAuthenticationService } from "./Services/CoreUserAuthenticationService";
 import { CoreUserProfileService } from "./Services";
+import { JwtToken } from "@issue-tracker/security";
 
 export interface RegisteredServices {
   orm: Typeorm;
@@ -99,7 +100,7 @@ const authRouter = router({
     const service = container.get("userProfileService");
     const { user } = ctx;
 
-    return await service.getUserProfileWithEmail("Sourabh.rawatcc@gmail.com");
+    return await service.getUserProfileWithEmail(user.email);
   }),
   verifyVerificationLink: publicProcedure
     .input(z.object({ confirmationEmail: z.string() }))
@@ -147,7 +148,22 @@ export const dataSource = new DataSource({
 });
 
 export async function createContext({ req, res }: CreateFastifyContextOptions) {
-  const { accessToken, refreshToken } = req.cookies;
+  const { accessToken } = req.cookies;
+
+  let token: any;
+  if (accessToken) {
+    try {
+      token = JwtToken.verify(accessToken, process.env.JWT_SECRET!);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  token;
+
+  if (token) {
+    return { req, res, user: { email: token.email, userId: token.userId } };
+  }
 
   return { req, res, user: { id: "", email: "" } };
 }
