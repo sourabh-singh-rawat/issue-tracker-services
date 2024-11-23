@@ -1,8 +1,4 @@
-import {
-  ServiceResponse,
-  WorkspaceRegistrationData,
-  WorkspaceMemberRoles,
-} from "@issue-tracker/common";
+import { ServiceResponse, WorkspaceMemberRoles } from "@issue-tracker/common";
 import { User } from "../../data/entities";
 import { WorkspaceMember } from "../../data/entities/WorkspaceMember";
 import { Workspace } from "../../data/entities/Workspace";

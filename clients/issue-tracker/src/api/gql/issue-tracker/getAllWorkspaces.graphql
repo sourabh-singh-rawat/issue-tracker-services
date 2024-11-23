@@ -1,0 +1,9 @@
+query GetAllWorkspaces {
+  getAllWorkspaces {
+    description
+    id
+    name
+    ownerUserId
+    status
+  }
+}

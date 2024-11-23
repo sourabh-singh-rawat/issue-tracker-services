@@ -1,5 +1,5 @@
 import "dotenv/config";
-import cookie from "@fastify/cookie";
+import "reflect-metadata";
 import {
   AppLogger,
   AwilixDi,
@@ -31,11 +31,7 @@ import { PostgresUserProfileRepository } from "./data/repositories/postgres-user
 import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
 import { EmailVerificationTokenEntity } from "./data/entities/email-verification-token.entity";
 import { PostgresEmailVerificationTokenRepository } from "./data/repositories/postgres-email-verification-token.repository";
-import {
-  CreateFastifyContextOptions,
-  fastifyTRPCPlugin,
-  FastifyTRPCPluginOptions,
-} from "@trpc/server/adapters/fastify";
+import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 import {
   NatsBroker,
   NatsPublisher,
@@ -48,6 +44,14 @@ import {
 } from "./Services/Interfaces";
 import { CoreUserAuthenticationService } from "./Services/CoreUserAuthenticationService";
 import { CoreUserProfileService } from "./Services";
+import { buildSchema } from "type-graphql";
+import { CoreUserAuthenticationResolver } from "./resolvers";
+import { ApolloServer } from "@apollo/server";
+import fastifyApollo, {
+  ApolloFastifyContextFunction,
+  fastifyApolloDrainPlugin,
+  fastifyApolloHandler,
+} from "@as-integrations/fastify";
 import { JwtToken } from "@issue-tracker/security";
 
 export interface RegisteredServices {
@@ -68,7 +72,7 @@ export interface RegisteredServices {
   userProfileService: UserProfileService;
 }
 
-const t = initTRPC.context<Context>().create();
+const t = initTRPC.context<{ user: any; res: any }>().create();
 export const router = t.router;
 export const publicProcedure = t.procedure;
 
@@ -79,7 +83,7 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
 const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
-const container = new AwilixDi<RegisteredServices>(awilix, logger);
+export const container = new AwilixDi<RegisteredServices>(awilix, logger);
 const authRouter = router({
   registerUser: publicProcedure
     .input(
@@ -147,7 +151,7 @@ export const dataSource = new DataSource({
   synchronize: true,
 });
 
-export async function createContext({ req, res }: CreateFastifyContextOptions) {
+const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
   let token: any;
@@ -162,29 +166,30 @@ export async function createContext({ req, res }: CreateFastifyContextOptions) {
   token;
 
   if (token) {
-    return { req, res, user: { email: token.email, userId: token.userId } };
+    return { req, rep, user: { email: token.email, userId: token.userId } };
   }
 
-  return { req, res, user: { id: "", email: "" } };
-}
+  return { req, rep };
+};
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
-
-const startServer = async (container: AwilixDi<RegisteredServices>) => {
+const startServer = async () => {
   try {
-    const instance = fastify();
-    await instance.register(fastifyTRPCPlugin, {
-      prefix: "/trpc",
-      trpcOptions: {
-        router: authRouter,
-        createContext,
-      } satisfies FastifyTRPCPluginOptions<AuthRouter>["trpcOptions"],
+    const schema = await buildSchema({
+      emitSchemaFile: true,
+      resolvers: [CoreUserAuthenticationResolver],
     });
+    const instance = fastify();
+    const apollo = new ApolloServer<any>({
+      schema,
+      plugins: [fastifyApolloDrainPlugin(instance)],
+    });
+    await apollo.start();
+
     const server = new FastifyServer({
       fastify: instance,
       configuration: {
         host: "0.0.0.0",
-        port: 4001,
+        port: 5000,
         environment: "development",
         version: 1,
       },
@@ -195,6 +200,11 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     });
 
     server.init();
+    instance.route({
+      url: "/graphql",
+      method: ["POST", "GET"],
+      handler: fastifyApolloHandler(apollo, { context: createContext }),
+    });
   } catch (error) {
     process.exit(1);
   }
@@ -248,7 +258,7 @@ const main = async () => {
 
   container.init();
 
-  await startServer(container);
+  await startServer();
   startSubscriptions(container);
 };
 

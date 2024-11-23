@@ -10,7 +10,6 @@ import { WorkspaceInvitation } from "../data/entities/WorkspaceInvitation";
 import { Typeorm } from "@issue-tracker/orm";
 import {
   ServiceResponse,
-  TransactionExecutionError,
   UserNotFoundError,
   WORKSPACE_MEMBER_STATUS,
   WorkspaceNotFound,

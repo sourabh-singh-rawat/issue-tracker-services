@@ -54,7 +54,7 @@ export class FastifyServer {
       ...opts,
       parseOptions: {
         path: "/",
-        httpOnly: true,
+        httpOnly: false,
         sameSite: true,
         secure: true,
       },

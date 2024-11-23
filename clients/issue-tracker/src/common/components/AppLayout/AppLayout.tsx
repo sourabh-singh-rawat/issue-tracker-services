@@ -9,11 +9,11 @@ import {
 
 import MuiBox from "@mui/material/Box";
 import AppLoader from "../AppLoader";
-import { authService } from "../../../app/trpc";
+import { useGetCurrentUserQuery } from "../../../api/codegen/gql/graphql";
 
 export default function AppLayout() {
   const dispatch = useAppDispatch();
-  const { isLoading, data: user } = authService.getCurrentUser.useQuery();
+  const { loading: isLoading, data: user } = useGetCurrentUserQuery();
 
   useEffect(() => {
     (async () => {
