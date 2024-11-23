@@ -1,0 +1,11 @@
+query GetCurrentUser {
+  getCurrentUser {
+    userId
+    email
+    emailVerificationStatus
+    createdAt
+    displayName
+    photoUrl
+    description
+  }
+}

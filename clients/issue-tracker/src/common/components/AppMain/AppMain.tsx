@@ -10,22 +10,19 @@ import MuiContainer from "@mui/material/Container";
 import Navbar from "../navigation/Navbar";
 import MenuSidebar from "../navigation/Sidebar";
 import { useLargeScreen } from "../../hooks/useLargeScreen";
-import { useGetAllWorkspacesQuery } from "../../../api/generated/workspace.api";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   setDefaultWorkspace,
   setWorkspaces,
 } from "../../../features/workspace/workspace.slice";
 import { WORKSPACE_STATUS } from "@issue-tracker/common";
-import { issueTrackerService } from "../../../app/trpc";
+import { useGetAllWorkspacesQuery } from "../../../api/codegen/gql/graphql";
 
 export default function AppMain() {
   const theme = useTheme();
   const isLargeScreen = useLargeScreen();
   const dispatch = useAppDispatch();
-  const { data: workspaces } = issueTrackerService.getAllWorkspaces.useQuery({
-    page: 1,
-  });
+  const { data: workspaces } = useGetAllWorkspacesQuery();
   const { id } = useAppSelector(
     ({ workspace }) =>
       workspace?.defaultWorkspace || { id: "something", name: "Something2" },
@@ -33,7 +30,7 @@ export default function AppMain() {
 
   useEffect(() => {
     if (workspaces) {
-      const defaultWorkspace = workspaces?.find(
+      const defaultWorkspace = workspaces.getAllWorkspaces?.find(
         ({ status }) => status === WORKSPACE_STATUS.DEFAULT,
       );
       dispatch(setDefaultWorkspace(defaultWorkspace));

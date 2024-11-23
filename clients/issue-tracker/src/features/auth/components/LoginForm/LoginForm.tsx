@@ -11,12 +11,13 @@ import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 import { authService } from "../../../../app/trpc";
 import { useAppDispatch } from "../../../../common/hooks";
+import { useSignInWithEmailAndPasswordMutation } from "../../../../api/codegen/gql/graphql";
 
 export default function LoginForm() {
   const defaultValues = useMemo(() => ({ email: "", password: "" }), []);
   const dispatch = useAppDispatch();
-  const signInWithEmailAndPassword =
-    authService.signInWithEmailAndPassword.useMutation();
+
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation();
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
@@ -27,7 +28,9 @@ export default function LoginForm() {
     email,
     password,
   }) => {
-    signInWithEmailAndPassword.mutate({ email, password });
+    await signInWithEmailAndPassword({
+      variables: { input: { email, password } },
+    });
   };
 
   return (

@@ -32,7 +32,6 @@ import {
   logger,
 } from "@issue-tracker/server-core";
 import { DataSource } from "typeorm";
-import swagger from "@fastify/swagger";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { CoreIssueController } from "./controllers/core-issue.controller";
@@ -68,17 +67,18 @@ import { CoreProjectActivityService } from "./services/core-project-activity.ser
 import { ProjectActivityService } from "./services/interfaces/project-activity.service";
 import { PostgresProjectActivityRepository } from "./data/repositories/postgres-project-activity.repository";
 import { ProjectActivityRepository } from "./data/repositories/interfaces/project-activity.repository";
-import { writeFile } from "fs";
-import { issueRoutes } from "./routes/issue.routes";
-import { issueCommentRoutes } from "./routes/issue-comment.routes";
-import { projectActivityRoutes } from "./routes/project-activity.routes";
-import { issueTaskRoutes } from "./routes/issue-task.routes";
-import { projectRoutes } from "./routes/project.routes";
-import { workspaceRoutes } from "./routes/workspace.routes";
 import { JwtToken } from "@issue-tracker/security";
 import { initTRPC } from "@trpc/server";
 import { z } from "zod";
 import { UnauthorizedError } from "@issue-tracker/common";
+import { buildSchema } from "type-graphql";
+import { CoreWorkspaceResolver } from "./resolvers/CoreWorkspaceResolver";
+import { ApolloServer } from "@apollo/server";
+import {
+  ApolloFastifyContextFunction,
+  fastifyApolloDrainPlugin,
+  fastifyApolloHandler,
+} from "@as-integrations/fastify";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -111,7 +111,7 @@ export interface RegisteredServices {
   publisher: Publisher<Subjects>;
 }
 
-export async function createContext({ req, res }: CreateFastifyContextOptions) {
+const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
   let token: any;
@@ -123,18 +123,14 @@ export async function createContext({ req, res }: CreateFastifyContextOptions) {
     }
   }
 
-  token;
-
   if (token) {
-    return { req, res, user: { email: token.email, userId: token.userId } };
+    return { req, rep, user: { email: token.email, userId: token.userId } };
   }
 
-  return { req, res, user: { id: "", email: "" } };
-}
+  return { req, rep };
+};
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
-
-const t = initTRPC.context<Context>().create();
+const t = initTRPC.context<{ user: any; res: any }>().create();
 export const router = t.router;
 export const publicProcedure = t.procedure;
 
@@ -178,19 +174,22 @@ export type IssueTrackerRouter = typeof issueTrackerRouter;
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
-    const fastifyInstance = fastify();
-    await fastifyInstance.register(fastifyTRPCPlugin, {
-      prefix: "/trpc",
-      trpcOptions: {
-        router: issueTrackerRouter,
-        createContext,
-      } satisfies FastifyTRPCPluginOptions<IssueTrackerRouter>["trpcOptions"],
+    const instance = fastify();
+    const schema = await buildSchema({
+      emitSchemaFile: true,
+      resolvers: [CoreWorkspaceResolver],
     });
+    const apollo = new ApolloServer({
+      schema,
+      plugins: [fastifyApolloDrainPlugin(instance)],
+    });
+    await apollo.start();
+
     const server = new FastifyServer({
-      fastify: fastifyInstance,
+      fastify: instance,
       configuration: {
         host: "0.0.0.0",
-        port: 4000,
+        port: 5001,
         environment: "development",
         version: 1,
       },
@@ -206,6 +205,11 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         // { route: projectActivityRoutes(container) },
         // { route: workspaceRoutes(container) },
       ],
+    });
+    instance.route({
+      url: "/graphql",
+      method: ["POST", "GET"],
+      handler: fastifyApolloHandler(apollo, { context: createContext }),
     });
     server.init();
   } catch (error) {
@@ -231,7 +235,7 @@ export const dataSource = new DataSource({
 const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
-const container = new AwilixDi<RegisteredServices>(awilix, logger);
+export const container = new AwilixDi<RegisteredServices>(awilix, logger);
 
 const main = async () => {
   const orm = new PostgresTypeorm(dataSource, logger);

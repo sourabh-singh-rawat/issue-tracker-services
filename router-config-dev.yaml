@@ -1,0 +1,21 @@
+supergraph:
+  listen: 127.0.0.1:4000
+
+telemetry:
+  instrumentation:
+    spans:
+      mode: spec_compliant
+
+headers:
+  all:
+    request:
+      - propagate:
+          matching: .*
+
+cors:
+  origins:
+    - http://localhost:3000
+    - https://studio.apollographql.com
+  allow_credentials: true
+rhai:
+  main: "main.rhai"

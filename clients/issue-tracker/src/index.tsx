@@ -10,23 +10,33 @@ import { store } from "./app/stores/redux.store";
 
 import App from "./app/App";
 import MessageBar from "./features/message-bar/components/MessageBar";
-import { QueryClient } from "@tanstack/react-query";
+import {
+  ApolloClient,
+  ApolloProvider,
+  createHttpLink,
+  InMemoryCache,
+} from "@apollo/client";
 
 const element = document.getElementById("root");
 if (!element) throw new Error("Cannot find root element in DOM");
 
 const root = createRoot(element);
-
-export const queryClient = new QueryClient();
+const client = new ApolloClient({
+  uri: "http://localhost:4000",
+  cache: new InMemoryCache(),
+  credentials: "include",
+});
 
 root.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-        <MessageBar />
-      </ThemeProvider>
-    </BrowserRouter>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+          <MessageBar />
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
+  </ApolloProvider>,
 );
