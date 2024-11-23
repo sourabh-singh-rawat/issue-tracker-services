@@ -24,17 +24,17 @@ export default function WorkspaceMemberForm() {
     useCreateWorkspaceInviteMutation();
 
   const defaultValues = useMemo(() => ({ email: "", workspaceRole: "" }), []);
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/workspaces/{id}/invite"].post.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
+  // const defaultSchemas: any = useMemo(
+  //   () =>
+  //     schema.paths["/api/v1/workspaces/{id}/invite"].post.requestBody.content[
+  //       "application/json"
+  //     ].schema,
+  //   [],
+  // );
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    resolver: ajvResolver(defaultSchemas, {
+    resolver: ajvResolver({}, {
       formats: { email: AjvFormats.get("email") },
     }),
   });

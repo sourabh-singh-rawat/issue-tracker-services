@@ -6,6 +6,7 @@ import {
   Publisher,
   Subjects,
 } from "@issue-tracker/event-bus";
+import fastify from "fastify";
 import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
 import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
@@ -103,7 +104,9 @@ export interface RegisteredServices {
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
+    const fastifyInstance = fastify();
     const server = new FastifyServer({
+      fastify: fastifyInstance,
       configuration: {
         host: "0.0.0.0",
         port: 4000,
@@ -123,60 +126,6 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         { route: workspaceRoutes(container) },
       ],
     });
-    const fastify = server.instance;
-    fastify.register(swagger, {
-      openapi: {
-        openapi: "3.0.0",
-        info: {
-          title: "Issue Tracker Service",
-          version: "1.0.0",
-          description: "Issue tracker service",
-          license: {
-            name: "ISC",
-            url: "https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE",
-          },
-        },
-        servers: [
-          { url: "https://localhost:443", description: "development server" },
-        ],
-        tags: [],
-        components: {
-          securitySchemes: {
-            cookieAuth: { type: "apiKey", in: "cookie", name: "accessToken" },
-          },
-        },
-        security: [],
-      },
-    });
-
-    fastify.addSchema({
-      $id: "errorSchema",
-      type: "object",
-      properties: {
-        errors: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              message: { type: "string" },
-              field: { type: "string" },
-            },
-            required: ["message"],
-          },
-        },
-      },
-    });
-
-    server.init();
-    await fastify.ready();
-    const files = fastify.swagger();
-    writeFile(
-      "../../clients/issue-tracker/src/api/generated/issue-tracker.openapi.json",
-      JSON.stringify(files),
-      (err) => {
-        err;
-      },
-    );
   } catch (error) {
     console.log(error);
     process.exit(1);

@@ -19,7 +19,8 @@ export default function WorkspaceSwitcher() {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { workspaces, defaultWorkspace } = useAppSelector((s) => s.workspace);
-  const { name } = defaultWorkspace;
+  // const { name } = defaultWorkspace;
+  const name = "temp"
   const [selectedOption, setSelectedOption] = useState<
     GetWorkspaceApiResponse["rows"]
   >({ id: "", name: "" });

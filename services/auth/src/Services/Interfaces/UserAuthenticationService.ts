@@ -38,7 +38,7 @@ export interface UserAuthenticationService {
   ): Promise<void>;
   signInWithEmailAndPassword(
     options: SignInWithEmailAndPasswordOptions,
-  ): Promise<void>;
+  ): Promise<{ accessToken: string; refreshToken: string }>;
   generateVerificationLink(
     options: GenerateVerificationLinkOptions,
   ): Promise<void>;

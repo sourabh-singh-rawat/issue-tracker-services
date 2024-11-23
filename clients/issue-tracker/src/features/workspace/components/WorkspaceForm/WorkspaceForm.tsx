@@ -22,18 +22,18 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
     () => ({ name: "Workspace Name", description: "" }),
     [],
   );
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/workspaces"].post.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
+  // const defaultSchemas: any = useMemo(
+  //   () =>
+  //     schema.paths["/api/v1/workspaces"].post.requestBody.content[
+  //       "application/json"
+  //     ].schema,
+  //   [],
+  // );
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "all",
-    resolver: ajvResolver(defaultSchemas, {
+    resolver: ajvResolver({}, {
       formats: { email: AjvFormats.get("email") },
     }),
   });
@@ -49,7 +49,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   return (
     <Container
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+    onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
       <Grid rowSpacing={3} container>

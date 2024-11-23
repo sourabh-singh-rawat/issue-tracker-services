@@ -1,4 +1,5 @@
 import "dotenv/config";
+import fastify from "fastify";
 import { Broker, NatsBroker } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { DataSource } from "typeorm";
@@ -42,7 +43,9 @@ export const adminStorage = getStorage(firebaseApp).bucket();
 
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
+    const fastifyInstance = fastify();
     const server = new FastifyServer({
+      fastify: fastifyInstance,
       configuration: {
         host: "0.0.0.0",
         port: 4003,
@@ -55,59 +58,8 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
       },
       routes: [{ route: issueAttachmentRoutes(container) }],
     });
-    const fastify = server.instance;
-    fastify.register(swagger, {
-      openapi: {
-        openapi: "3.0.0",
-        info: {
-          title: "Storage Service",
-          version: "1.0.0",
-          description: "Storage service",
-          license: {
-            name: "ISC",
-            url: "https://github.com/sourabh-singh-rawat/issue-tracker/blob/master/LICENSE",
-          },
-        },
-        servers: [
-          { url: "https://localhost:443", description: "development server" },
-        ],
-        tags: [],
-        components: {
-          securitySchemes: {
-            cookieAuth: { type: "apiKey", in: "cookie", name: "accessToken" },
-          },
-        },
-        security: [],
-      },
-    });
-    fastify.addSchema({
-      $id: "errorSchema",
-      type: "object",
-      properties: {
-        errors: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              message: { type: "string" },
-              field: { type: "string" },
-            },
-            required: ["message"],
-          },
-        },
-      },
-    });
 
     server.init();
-    await fastify.ready();
-    const files = fastify.swagger();
-    writeFile(
-      "../../clients/issue-tracker/src/api/generated/storage.openapi.json",
-      JSON.stringify(files),
-      (err) => {
-        err;
-      },
-    );
   } catch (error) {
     console.log(error);
     process.exit(1);

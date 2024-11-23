@@ -27,18 +27,18 @@ export default function TaskForm() {
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const defaultSchemas: any = useMemo(
-    () =>
-      schema.paths["/api/v1/issues/{id}/tasks"].post.requestBody.content[
-        "application/json"
-      ].schema,
-    [],
-  );
+  // const defaultSchemas: any = useMemo(
+  //   () =>
+  //     schema.paths["/api/v1/issues/{id}/tasks"].post.requestBody.content[
+  //       "application/json"
+  //     ].schema,
+  //   [],
+  // );
 
   const { control, formState, handleSubmit, reset } = useForm({
     defaultValues,
     mode: "all",
-    resolver: ajvResolver(defaultSchemas, {
+    resolver: ajvResolver({}, {
       formats: { date: AjvFormats.get("date") },
     }),
   });

@@ -38,20 +38,14 @@ interface VerifyUserPassword {
   password: string;
 }
 
-interface CreateAccessTokenOptions {
-  userId: string;
-  email: string;
-  emailVerificationStatus: EmailVerificationStatus;
-  displayName: string;
-  createdAt: string;
+interface CreateUserAccessTokenOptions {
+  user: User;
+  exp: number;
 }
 
-interface CreateRefreshTokenOptions {
-  userId: string;
-  email: string;
-  emailVerificationStatus: EmailVerificationStatus;
-  displayName: string;
-  createdAt: string;
+interface CreateUserRefreshTokenOptions {
+  user: User;
+  exp: number;
 }
 
 export class CoreUserAuthenticationService
@@ -65,20 +59,21 @@ export class CoreUserAuthenticationService
     private readonly userProfileService: UserProfileService,
   ) {}
 
-  private createAccessToken(options: CreateAccessTokenOptions) {
-    const { createdAt, displayName, email, emailVerificationStatus, userId } =
-      options;
+  private createUserAccessToken(options: CreateUserAccessTokenOptions) {
+    const { user, exp } = options;
+    const { createdAt, email, emailVerificationStatus, id, profile } = user;
+    const { displayName } = profile;
     const payload: AccessToken = {
       createdAt,
       displayName,
       email,
       emailVerificationStatus,
-      userId,
+      userId: id,
       jwtid: v4(),
       iss: this.AUTH_SERVICE,
       aud: this.AUTH_SERVICE,
       sub: this.MAIL_SERVICE,
-      exp: 11111,
+      exp,
       userMetadata: { language: "en" },
       appMetadata: { roles: ["user"] },
     };
@@ -88,20 +83,21 @@ export class CoreUserAuthenticationService
     return JwtToken.create(payload, secret);
   }
 
-  private createRefreshToken(options: CreateRefreshTokenOptions) {
-    const { createdAt, displayName, email, emailVerificationStatus, userId } =
-      options;
+  private createUserRefreshToken(options: CreateUserRefreshTokenOptions) {
+    const { user, exp } = options;
+    const { createdAt, email, emailVerificationStatus, id, profile } = user;
+    const { displayName } = profile;
     const payload: AccessToken = {
       createdAt,
       displayName,
       email,
       emailVerificationStatus,
-      userId,
+      userId: id,
       jwtid: v4(),
       iss: this.AUTH_SERVICE,
       aud: this.AUTH_SERVICE,
       sub: this.MAIL_SERVICE,
-      exp: 11111,
+      exp,
       userMetadata: { language: "en" },
       appMetadata: { roles: ["user"] },
     };
@@ -187,7 +183,10 @@ export class CoreUserAuthenticationService
     const { manager, email, password } = options;
     const UserRepo = manager.getRepository(User);
 
-    const user = await UserRepo.findOne({ where: { email } });
+    const user = await UserRepo.findOne({
+      where: { email },
+      relations: { profile: true },
+    });
     if (!user) throw new UserNotFoundError();
     if (user.emailVerificationStatus !== EMAIL_VERIFICATION_STATUS.VERIFIED) {
       throw new EmailNotVerifiedError();
@@ -195,7 +194,11 @@ export class CoreUserAuthenticationService
 
     await this.verifyUserPassword({ user, password });
 
-    // user is valid so generate their token
+    const exp = 30 * 1000;
+    return {
+      accessToken: this.createUserAccessToken({ user, exp }),
+      refreshToken: this.createUserRefreshToken({ user, exp: exp * 5 }),
+    };
   }
 
   generateVerificationLink(
@@ -203,6 +206,7 @@ export class CoreUserAuthenticationService
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   generatePasswordResetLink(
     options: GeneratePasswordResetLinkOptions,
   ): Promise<void> {

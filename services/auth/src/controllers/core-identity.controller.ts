@@ -13,8 +13,8 @@ export class CoreIdentityController implements IdentityController {
   ) => {
     const credentials = new AuthCredentials(request.body);
 
-    const { rows } = await this.identityService.authenticate(credentials);
-    const { accessToken, refreshToken } = rows;
+    const { accessToken, refreshToken } =
+      await this.identityService.authenticate(credentials);
 
     const cookieOptions = {
       path: "/",

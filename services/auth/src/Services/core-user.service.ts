@@ -131,6 +131,8 @@ export class CoreUserService implements UserService {
       displayName: userProfile.displayName,
       createdAt: user.createdAt,
       emailVerificationStatus: user.emailVerificationStatus,
+      defaultWorkspaceId: "some temp default Workspace",
+      defaultWorkspaceName: "some default workspace name",
     };
   };
 

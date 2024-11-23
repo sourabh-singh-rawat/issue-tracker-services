@@ -69,6 +69,8 @@
     "@mui/x-data-grid": "^6.20.0",
     "@mui/x-date-pickers": "^6.20.0",
     "@reduxjs/toolkit": "^1.9.7",
+    "@trpc/client": "11.0.0-rc.642",
+    "@trpc/server": "11.0.0-rc.642",
     "ajv": "^8.17.1",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^3.0.1",

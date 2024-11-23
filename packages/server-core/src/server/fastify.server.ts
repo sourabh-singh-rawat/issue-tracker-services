@@ -1,7 +1,7 @@
 import { Environment, ErrorHandlerUtil } from "@issue-tracker/common";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import cors, { FastifyCorsOptions } from "@fastify/cors";
-import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
+import { FastifyInstance, FastifyPluginCallback } from "fastify";
 import { AppLogger } from "../logger";
 
 interface ServerConfigurationOptions {
@@ -22,6 +22,7 @@ interface SecurityOptions {
 }
 
 interface ServerOptions {
+  fastify: FastifyInstance;
   configuration: ServerConfigurationOptions;
   security?: SecurityOptions;
   routes?: RouteOptions[];
@@ -37,7 +38,7 @@ export class FastifyServer {
   private security?: SecurityOptions;
 
   constructor(options: ServerOptions) {
-    this.instance = fastify();
+    this.instance = options.fastify;
     this.routes = options?.routes;
     this.logger = options?.logger;
     this.configuration = options?.configuration;
@@ -49,7 +50,15 @@ export class FastifyServer {
   };
 
   private setCookie = (opts: FastifyCookieOptions) => {
-    this.instance.register(cookie, opts);
+    this.instance.register(cookie, {
+      ...opts,
+      parseOptions: {
+        path: "/",
+        httpOnly: false,
+        sameSite: false,
+        secure: false,
+      },
+    });
   };
 
   private setErrorHandler = () => {
