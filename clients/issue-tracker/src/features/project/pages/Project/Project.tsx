@@ -43,11 +43,11 @@ export default function Project() {
   };
 
   const mapIndexToTab: Record<number, string> = {
-    0: `/projects/${id}/overview`,
-    1: `/projects/${id}/issues`,
-    2: `/projects/${id}/members`,
-    3: `/projects/${id}/activity`,
-    4: `/projects/${id}/settings`,
+    0: `/lists/${id}/overview`,
+    1: `/lists/${id}/issues`,
+    2: `/lists/${id}/members`,
+    3: `/lists/${id}/activity`,
+    4: `/lists/${id}/settings`,
   };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tabName]);
@@ -89,7 +89,7 @@ export default function Project() {
               <MuiSkeleton width="80px" />
             ) : (
               <MuiTypography component="span" variant="body2">
-                <Chip label="Project" />
+                <Chip label="List" />
               </MuiTypography>
             )}
             {isLoading ? (

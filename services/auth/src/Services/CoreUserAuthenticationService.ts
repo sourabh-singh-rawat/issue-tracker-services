@@ -1,7 +1,8 @@
 import {
   EMAIL_VERIFICATION_STATUS,
+  EMAIL_VERIFICATION_TOKEN_STATUS,
   EmailNotVerifiedError,
-  EmailVerificationStatus,
+  InternalServerError,
   RequiredFieldError,
   UnauthorizedError,
   UserAlreadyExists,
@@ -23,6 +24,7 @@ import {
 import { AccessToken, Hash, JwtToken } from "@issue-tracker/security";
 import { v4 } from "uuid";
 import { NatsPublisher } from "@issue-tracker/event-bus";
+import { EmailVerificationToken } from "../data/entities/email-verification-token.entity";
 
 interface CreateVerificationLinkOptions {
   userId: string;
@@ -141,7 +143,7 @@ export class CoreUserAuthenticationService
       userId,
     });
 
-    const verificationLink = `${process.env.AUTH_SERVER}/api/v1/users/${userId}/confirm?confirmationEmail=${verificationToken}`;
+    const verificationLink = `http://localhost:4000/${userId}/confirm?confirmationEmail=${verificationToken}`;
 
     return verificationLink;
   }
@@ -222,7 +224,7 @@ export class CoreUserAuthenticationService
   }
 
   async sendVerificationLinkToEmail(options: SendEmailVerificationLinkOptions) {
-    const { userId, displayName, email } = options;
+    const { userId, displayName, email, manager } = options;
     const verificationLink = this.createVerificationLink({ userId });
     if (!verificationLink) throw new RequiredFieldError("verificationLink");
 
@@ -251,10 +253,27 @@ export class CoreUserAuthenticationService
     throw new Error("Method not implemented.");
   }
 
-  verifyVerificationLink(
-    options: VerifyEmailVerificationLinkOptions,
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
+  async verifyVerificationLink(options: VerifyEmailVerificationLinkOptions) {
+    const { manager, token } = options;
+    const UserRepo = manager.getRepository(User);
+
+    const verifiedToken = JwtToken.verify<any>(token, process.env.JWT_SECRET!);
+    const { userId } = verifiedToken;
+
+    const user = await UserRepo.findOneOrFail({
+      where: { id: userId },
+      relations: { profile: true },
+    });
+    await UserRepo.update(
+      { id: userId },
+      { emailVerificationStatus: EMAIL_VERIFICATION_STATUS.VERIFIED },
+    );
+    await this.publisher.send("user.email-verified", {
+      displayName: user.profile.displayName,
+      email: user.email,
+      emailVerificationStatus: user.emailVerificationStatus,
+      userId,
+    });
   }
 
   verifyPasswordResetLink(

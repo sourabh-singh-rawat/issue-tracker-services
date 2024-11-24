@@ -19,9 +19,6 @@ export class List extends AuditEntity {
   @Column({ type: "text" })
   description?: string;
 
-  @Column({ type: "text" })
-  status!: string;
-
   @ManyToOne(() => User)
   @JoinColumn({
     name: "owner_user_id",

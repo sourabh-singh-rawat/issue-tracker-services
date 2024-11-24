@@ -11,7 +11,7 @@ import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
 } from "@issue-tracker/common";
-import { EmailVerificationTokenEntity } from "./email-verification-token.entity";
+import { EmailVerificationToken } from "./email-verification-token.entity";
 
 @Entity({ name: "users" })
 export class User extends AuditEntity {
@@ -42,6 +42,6 @@ export class User extends AuditEntity {
   @OneToOne(() => UserProfile, ({ user }) => user)
   profile!: UserProfile;
 
-  @OneToMany(() => EmailVerificationTokenEntity, ({ user }) => user)
-  emailVerificationTokens?: EmailVerificationTokenEntity[];
+  @OneToMany(() => EmailVerificationToken, ({ user }) => user)
+  emailVerificationTokens?: EmailVerificationToken[];
 }

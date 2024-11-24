@@ -4,7 +4,7 @@ import MuiGrid from "@mui/material/Grid";
 import ProjectList from "../../../project-list/components/ProjectList";
 import PageHeader from "../../../../common/components/PageHeader";
 
-export default function Projects() {
+export default function Lists() {
   const { pathname } = useLocation();
   const id = pathname.split("/")[2];
   const isNoProjectSelected = !id;
@@ -12,7 +12,7 @@ export default function Projects() {
   return isNoProjectSelected ? (
     <MuiGrid container rowGap={2}>
       <MuiGrid item xs={12}>
-        <PageHeader title="Projects" />
+        <PageHeader title="Lists" />
       </MuiGrid>
       <MuiGrid item xs={12}>
         <ProjectList />

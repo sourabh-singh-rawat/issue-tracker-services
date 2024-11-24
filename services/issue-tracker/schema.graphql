@@ -3,6 +3,11 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreateListInput {
+  description: String
+  name: String!
+}
+
 input CreateWorkspaceInput {
   description: String
   id: String
@@ -10,11 +15,23 @@ input CreateWorkspaceInput {
   userId: String!
 }
 
+type List {
+  id: String!
+  name: String!
+}
+
 type Mutation {
+  createList(input: CreateListInput!): String!
   createWorkspace(input: CreateWorkspaceInput!): String!
 }
 
+type PaginatedList {
+  rowCount: Float!
+  rows: [List!]!
+}
+
 type Query {
+  findLists: PaginatedList!
   getAllWorkspaces: [Workspace!]!
 }
 

@@ -13,7 +13,7 @@ import {
 import { User } from "./User";
 
 @Entity({ name: "email_verification_tokens" })
-export class EmailVerificationTokenEntity extends AuditEntity {
+export class EmailVerificationToken extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

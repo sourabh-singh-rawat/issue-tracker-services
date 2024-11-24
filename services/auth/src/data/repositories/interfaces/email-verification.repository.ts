@@ -1,12 +1,12 @@
 import { QueryBuilderOptions, Repository } from "@issue-tracker/orm";
-import { EmailVerificationTokenEntity } from "../../entities/email-verification-token.entity";
+import { EmailVerificationToken } from "../../entities/email-verification-token.entity";
 
 export interface EmailVerificationTokenRepository
-  extends Repository<EmailVerificationTokenEntity> {
-  findOne(id: string): Promise<EmailVerificationTokenEntity | null>;
+  extends Repository<EmailVerificationToken> {
+  findOne(id: string): Promise<EmailVerificationToken | null>;
   update(
     id: string,
-    entity: EmailVerificationTokenEntity,
+    entity: EmailVerificationToken,
     options?: QueryBuilderOptions,
   ): Promise<void>;
 }

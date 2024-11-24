@@ -8,16 +8,14 @@ import {
   GridPaginationModel,
   GridValidRowModel,
 } from "@mui/x-data-grid";
-
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
-
-import { useGetProjectListQuery } from "../../../../api/generated/project.api";
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 import { setProjectList } from "../../project-list.slice";
 import List from "../../../../common/components/List";
 import ProjectActionsButton from "../ProjectActionsButton";
 import ProjectStatusSelector from "../ProjectStatusSelector";
+import { useFindListsQuery } from "../../../../api/codegen/gql/graphql";
 
 export default function ProjectList() {
   const theme = useTheme();
@@ -30,18 +28,11 @@ export default function ProjectList() {
     setPaginationModel(model);
   };
 
-  const { data, isSuccess, isLoading } = useGetProjectListQuery({
-    page: paginationModel.page,
-    pageSize: paginationModel.pageSize,
-    sortBy: "updatedAt",
-    sortOrder: "desc",
-  });
+  const { data, loading: isLoading } = useFindListsQuery();
   const { rows, rowCount } = useAppSelector((store) => store.projectList);
 
   useEffect(() => {
-    if (isSuccess) {
-      dispatch(setProjectList(data));
-    }
+    if (data) dispatch(setProjectList(data.findLists));
   }, [data]);
 
   const columns: GridColDef<GridValidRowModel>[] = [
@@ -53,7 +44,7 @@ export default function ProjectList() {
       renderCell: (params) => (
         <Link
           style={{ textDecoration: "none" }}
-          to={`/projects/${params.row.id}/overview`}
+          to={`/lists/${params.row.id}/overview`}
         >
           <MuiTypography
             variant="body2"
@@ -69,31 +60,6 @@ export default function ProjectList() {
           </MuiTypography>
         </Link>
       ),
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 150,
-      flex: 0.1,
-      renderCell: ({ id, row, value }) => (
-        <ProjectStatusSelector
-          id={id as string}
-          options={row?.statuses}
-          value={value}
-        />
-      ),
-    },
-    {
-      field: "members",
-      headerName: "Members",
-      minWidth: 50,
-      renderCell: ({ value }) => {
-        return (
-          <MuiTypography variant="body2" width="100%">
-            {value?.length}
-          </MuiTypography>
-        );
-      },
     },
     {
       field: "updatedAt",
