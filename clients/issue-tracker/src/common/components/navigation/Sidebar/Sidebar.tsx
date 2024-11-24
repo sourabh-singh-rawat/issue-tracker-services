@@ -66,15 +66,9 @@ export default function Sidebar() {
   };
   const list: MenuItem[] = [
     {
-      icon: <MuiPestControlOutlinedIcon />,
-      to: "/issues",
-      text: "Issues",
-      isVisible: open,
-    },
-    {
       icon: <MuiArticleOutlinedIcon />,
-      to: "/projects",
-      text: "Projects",
+      to: "/lists",
+      text: "Lists",
       isVisible: open,
     },
     {

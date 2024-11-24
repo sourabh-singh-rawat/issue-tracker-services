@@ -24,7 +24,7 @@ export default function PageHeader({ title, showButton = true }: Props) {
       {showButton && (
         <MuiGrid item>
           <PrimaryButton
-            label="New Project"
+            label="New List"
             type="button"
             startIcon={<AddIcon />}
             onClick={() => navigate("./new")}

@@ -15,7 +15,7 @@ import fastify from "fastify";
 import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
 import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
-import { UserService } from "./services/interfaces/user.service";
+import { UserService } from "./services/interfaces/UserService";
 import { IssueService } from "./services/interfaces/issue.service";
 import { IssueCommentService } from "./services/interfaces/issue-comment.service";
 import { IssueTaskService } from "./services/interfaces/issue-task.service";
@@ -37,7 +37,7 @@ import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { CoreIssueController } from "./controllers/core-issue.controller";
 import { CoreIssueCommentController } from "./controllers/core-issue-comment.controller";
 import { CoreIssueTaskController } from "./controllers/core-issue-task.controller";
-import { CoreUserService } from "./services/core-user.service";
+import { CoreUserService } from "./services/CoreUserService";
 import { CoreIssueService } from "./services/core-issue.service";
 import { CoreIssueCommentService } from "./services/core-issue-comment.service";
 import { CoreIssueTaskService } from "./services/core-issue-task.service";
@@ -52,8 +52,8 @@ import { ProjectController } from "./controllers/interfaces/project.controller";
 import { CoreProjectController } from "./controllers/core-project.controller";
 import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
 import { CoreWorkspaceController } from "./controllers/core-workspace.controller";
-import { CoreProjectService } from "./services/core-project.service";
-import { ProjectService } from "./services/interfaces/project.service";
+import { CoreListService } from "./services/CoreListService";
+import { ListService } from "./services/interfaces/ListService";
 import { WorkspaceService } from "./services/interfaces/WorkspaceService";
 import { CoreWorkspaceService } from "./services/CoreWorkspaceService";
 import { WorkspaceRepository } from "./data/repositories/interfaces/workspace.repository";
@@ -79,6 +79,7 @@ import {
   fastifyApolloDrainPlugin,
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
+import { CoreListResolver } from "./resolvers/CoreListResolver";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -93,7 +94,7 @@ export interface RegisteredServices {
   projectActivityController: ProjectActivityController;
   userService: UserService;
   issueService: IssueService;
-  projectService: ProjectService;
+  projectService: ListService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
   issueCommentService: IssueCommentService;
@@ -177,7 +178,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     const instance = fastify();
     const schema = await buildSchema({
       emitSchemaFile: true,
-      resolvers: [CoreWorkspaceResolver],
+      resolvers: [CoreListResolver, CoreWorkspaceResolver],
     });
     const apollo = new ApolloServer({
       schema,
@@ -213,7 +214,6 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     });
     server.init();
   } catch (error) {
-    console.log(error);
     process.exit(1);
   }
 };
@@ -265,7 +265,7 @@ const main = async () => {
   container.add("issueService", asClass(CoreIssueService));
   container.add("issueCommentService", asClass(CoreIssueCommentService));
   container.add("issueTaskService", asClass(CoreIssueTaskService));
-  container.add("projectService", asClass(CoreProjectService));
+  container.add("projectService", asClass(CoreListService));
   container.add("projectActivityService", asClass(CoreProjectActivityService));
   container.add(
     "projectActivityRepository",

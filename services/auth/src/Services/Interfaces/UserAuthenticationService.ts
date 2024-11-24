@@ -18,8 +18,7 @@ export interface SendEmailVerificationLinkOptions extends ServiceOptions {
 }
 
 export interface VerifyEmailVerificationLinkOptions extends ServiceOptions {
-  userId: string;
-  inviteToken: string;
+  token: string;
 }
 
 export interface SendPasswordResetLinkToEmailOptions extends ServiceOptions {

@@ -1,0 +1,9 @@
+query FindLists {
+  findLists {
+    rows {
+      id
+      name
+    }
+    rowCount
+  }
+}

@@ -18,6 +18,11 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any; }
 };
 
+export type CreateListInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
 export type CreateWorkspaceInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -25,11 +30,24 @@ export type CreateWorkspaceInput = {
   userId: Scalars['String']['input'];
 };
 
+export type List = {
+  __typename?: 'List';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createList: Scalars['String']['output'];
   createWorkspace: Scalars['String']['output'];
   registerUser: Scalars['String']['output'];
   signInWithEmailAndPassword: Scalars['Boolean']['output'];
+  verifyVerificationLink: Scalars['String']['output'];
+};
+
+
+export type MutationCreateListArgs = {
+  input: CreateListInput;
 };
 
 
@@ -47,8 +65,20 @@ export type MutationSignInWithEmailAndPasswordArgs = {
   input: SignInWithEmailAndPasswordInput;
 };
 
+
+export type MutationVerifyVerificationLinkArgs = {
+  input: VerifyVerificationLinkInput;
+};
+
+export type PaginatedList = {
+  __typename?: 'PaginatedList';
+  rowCount: Scalars['Float']['output'];
+  rows: Array<List>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  findLists: PaginatedList;
   getAllWorkspaces: Array<Workspace>;
   getCurrentUser: User;
 };
@@ -75,6 +105,10 @@ export type User = {
   userId: Scalars['String']['output'];
 };
 
+export type VerifyVerificationLinkInput = {
+  token: Scalars['String']['input'];
+};
+
 export type Workspace = {
   __typename?: 'Workspace';
   description?: Maybe<Scalars['String']['output']>;
@@ -89,12 +123,31 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', userId: string, email: string, emailVerificationStatus: string, createdAt: any, displayName?: string | null, photoUrl?: string | null, description?: string | null } };
 
+export type RegisterUserMutationVariables = Exact<{
+  input: RegisterUserInput;
+}>;
+
+
+export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: string };
+
 export type SignInWithEmailAndPasswordMutationVariables = Exact<{
   input: SignInWithEmailAndPasswordInput;
 }>;
 
 
 export type SignInWithEmailAndPasswordMutation = { __typename?: 'Mutation', signInWithEmailAndPassword: boolean };
+
+export type CreateListMutationVariables = Exact<{
+  input: CreateListInput;
+}>;
+
+
+export type CreateListMutation = { __typename?: 'Mutation', createList: string };
+
+export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindListsQuery = { __typename?: 'Query', findLists: { __typename?: 'PaginatedList', rowCount: number, rows: Array<{ __typename?: 'List', id: string, name: string }> } };
 
 export type GetAllWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -147,6 +200,37 @@ export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQ
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
 export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const RegisterUserDocument = gql`
+    mutation RegisterUser($input: RegisterUserInput!) {
+  registerUser(input: $input)
+}
+    `;
+export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutation, RegisterUserMutationVariables>;
+
+/**
+ * __useRegisterUserMutation__
+ *
+ * To run a mutation, you first call `useRegisterUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerUserMutation, { data, loading, error }] = useRegisterUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterUserMutation, RegisterUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
+      }
+export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
+export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
+export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
 export const SignInWithEmailAndPasswordDocument = gql`
     mutation SignInWithEmailAndPassword($input: SignInWithEmailAndPasswordInput!) {
   signInWithEmailAndPassword(input: $input)
@@ -178,6 +262,80 @@ export function useSignInWithEmailAndPasswordMutation(baseOptions?: Apollo.Mutat
 export type SignInWithEmailAndPasswordMutationHookResult = ReturnType<typeof useSignInWithEmailAndPasswordMutation>;
 export type SignInWithEmailAndPasswordMutationResult = Apollo.MutationResult<SignInWithEmailAndPasswordMutation>;
 export type SignInWithEmailAndPasswordMutationOptions = Apollo.BaseMutationOptions<SignInWithEmailAndPasswordMutation, SignInWithEmailAndPasswordMutationVariables>;
+export const CreateListDocument = gql`
+    mutation CreateList($input: CreateListInput!) {
+  createList(input: $input)
+}
+    `;
+export type CreateListMutationFn = Apollo.MutationFunction<CreateListMutation, CreateListMutationVariables>;
+
+/**
+ * __useCreateListMutation__
+ *
+ * To run a mutation, you first call `useCreateListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createListMutation, { data, loading, error }] = useCreateListMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateListMutation(baseOptions?: Apollo.MutationHookOptions<CreateListMutation, CreateListMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateListMutation, CreateListMutationVariables>(CreateListDocument, options);
+      }
+export type CreateListMutationHookResult = ReturnType<typeof useCreateListMutation>;
+export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>;
+export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
+export const FindListsDocument = gql`
+    query FindLists {
+  findLists {
+    rows {
+      id
+      name
+    }
+    rowCount
+  }
+}
+    `;
+
+/**
+ * __useFindListsQuery__
+ *
+ * To run a query within a React component, call `useFindListsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindListsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindListsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindListsQuery(baseOptions?: Apollo.QueryHookOptions<FindListsQuery, FindListsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindListsQuery, FindListsQueryVariables>(FindListsDocument, options);
+      }
+export function useFindListsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindListsQuery, FindListsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindListsQuery, FindListsQueryVariables>(FindListsDocument, options);
+        }
+export function useFindListsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindListsQuery, FindListsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindListsQuery, FindListsQueryVariables>(FindListsDocument, options);
+        }
+export type FindListsQueryHookResult = ReturnType<typeof useFindListsQuery>;
+export type FindListsLazyQueryHookResult = ReturnType<typeof useFindListsLazyQuery>;
+export type FindListsSuspenseQueryHookResult = ReturnType<typeof useFindListsSuspenseQuery>;
+export type FindListsQueryResult = Apollo.QueryResult<FindListsQuery, FindListsQueryVariables>;
 export const GetAllWorkspacesDocument = gql`
     query GetAllWorkspaces {
   getAllWorkspaces {

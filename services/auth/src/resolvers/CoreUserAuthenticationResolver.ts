@@ -5,6 +5,7 @@ import {
   RegisterUserInput,
   SignInWithEmailAndPasswordInput,
   User,
+  VerifyVerificationLinkInput,
 } from "./types";
 
 @Resolver()
@@ -23,10 +24,10 @@ export class CoreUserAuthenticationResolver
   }
 
   @Query(() => User)
-  async getCurrentUser() {
+  async getCurrentUser(@Ctx() ctx: any) {
     const service = container.get("userProfileService");
 
-    return await service.getUserProfileWithEmail("Sourabh.rawatcc@gmail.com");
+    return await service.getUserProfileWithEmail(ctx.user.email);
   }
 
   @Mutation(() => Boolean)
@@ -49,5 +50,19 @@ export class CoreUserAuthenticationResolver
     ctx.rep.setCookie("refreshToken", refreshToken);
 
     return true;
+  }
+
+  @Mutation(() => String)
+  async verifyVerificationLink(
+    @Arg("input") input: VerifyVerificationLinkInput,
+  ) {
+    const { token } = input;
+    const service = container.get("userAuthenticationService");
+
+    await dataSource.transaction(async (manager) => {
+      await service.verifyVerificationLink({ token, manager });
+    });
+
+    return "Thanks, Your email is verified successfully";
   }
 }

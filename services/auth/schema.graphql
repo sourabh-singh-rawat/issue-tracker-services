@@ -11,6 +11,7 @@ scalar DateTimeISO
 type Mutation {
   registerUser(input: RegisterUserInput!): String!
   signInWithEmailAndPassword(input: SignInWithEmailAndPasswordInput!): Boolean!
+  verifyVerificationLink(input: VerifyVerificationLinkInput!): String!
 }
 
 type Query {
@@ -36,4 +37,8 @@ type User {
   emailVerificationStatus: String!
   photoUrl: String
   userId: String!
+}
+
+input VerifyVerificationLinkInput {
+  token: String!
 }

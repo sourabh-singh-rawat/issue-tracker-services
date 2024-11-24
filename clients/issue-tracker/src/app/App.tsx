@@ -10,13 +10,13 @@ import SignUp from "../features/auth/pages/Signup";
 // import CollaboratorList from "./features/collaborator-list/components/CollaboratorList";
 // import Collaborators from "./features/collaborator-list/pages/Collaborators/Collaborators";
 
-import Projects from "../features/project/pages/Projects";
+import Lists from "../features/project/pages/Lists";
 // import Project from "../features/project/pages/Project";
 // import ProjectActivity from "./features/project/pages/ProjectActivity";
 // import ProjectForm from "./features/project/pages/ProjectForm";
 // import ProjectMembers from "./features/project/pages/ProjectMembers";
 import ProjectOverview from "../features/project/pages/ProjectOverview";
-import ProjectForm from "../features/project/components/ProjectForm";
+import ListForm from "../features/project/components/ListForm";
 import Project from "../features/project/pages/Project";
 import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
@@ -72,9 +72,6 @@ export default function App() {
     }),
   );
 
-  console.log(authClient);
-  console.log(issueTrackerClient);
-
   return (
     <authService.Provider client={authClient} queryClient={queryClient2}>
       <issueTrackerService.Provider
@@ -90,8 +87,8 @@ export default function App() {
 
               <Route element={<Profile />} path="me" />
 
-              <Route element={<Projects />} path="projects">
-                <Route element={<ProjectForm />} path="new" />
+              <Route element={<Lists />} path="lists">
+                <Route element={<ListForm />} path="new" />
                 <Route element={<Project />} path=":id">
                   <Route element={<ProjectOverview />} path="overview" />
                   <Route element={<ProjectIssues />} path="issues" />

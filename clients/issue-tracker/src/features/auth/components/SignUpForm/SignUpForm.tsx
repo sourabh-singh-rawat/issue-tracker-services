@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import { useMessageBar } from "../../../message-bar/hooks";
-import { useRegisterUserMutation } from "../../../../api/generated/user.api";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
@@ -12,19 +11,25 @@ import MuiTypography from "@mui/material/Typography";
 import TextField from "../../../../common/components/forms/TextField";
 import PasswordField from "../../../../common/components/forms/PasswordField";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { authService } from "../../../../app/trpc";
+import {
+  RegisterUserInput,
+  useRegisterUserMutation,
+} from "../../../../api/codegen/gql/graphql";
 
 export default function SignUpForm() {
   const [searchParams] = useSearchParams();
   const inviteToken = searchParams.get("inviteToken");
-  const registerUser = authService.registerUser.useMutation({
-    onError: (error) => {
+  const messageBar = useMessageBar();
+  const [registerUser] = useRegisterUserMutation({
+    onCompleted(response) {
+      messageBar.showSuccess(response.registerUser);
+    },
+    onError(error) {
       messageBar.showError(error.message);
     },
   });
-  const messageBar = useMessageBar();
 
-  const defaultValues = useMemo(
+  const defaultValues: RegisterUserInput = useMemo(
     () => ({ displayName: "", email: "", password: "" }),
     [],
   );
@@ -34,7 +39,7 @@ export default function SignUpForm() {
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
+  const onSubmit: SubmitHandler<RegisterUserInput> = async ({
     email,
     password,
     displayName,
@@ -45,7 +50,9 @@ export default function SignUpForm() {
       //   workspaceInviteToken: inviteToken,
       // });
     }
-    registerUser.mutate({ email, password, displayName });
+    await registerUser({
+      variables: { input: { email, password, displayName } },
+    });
   };
 
   return (

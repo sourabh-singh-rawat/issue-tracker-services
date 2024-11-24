@@ -61,7 +61,6 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
 
     server.init();
   } catch (error) {
-    console.log(error);
     process.exit(1);
   }
 };

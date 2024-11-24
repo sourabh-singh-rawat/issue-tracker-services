@@ -1,7 +1,7 @@
 import { EmailVerificationTokenRepository } from "./interfaces/email-verification.repository";
 import { Typeorm } from "@issue-tracker/orm";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
-import { EmailVerificationTokenEntity } from "../entities/email-verification-token.entity";
+import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 
 export class PostgresEmailVerificationTokenRepository
   implements EmailVerificationTokenRepository
@@ -9,38 +9,37 @@ export class PostgresEmailVerificationTokenRepository
   constructor(private readonly orm: Typeorm) {}
 
   save = async (
-    email: EmailVerificationTokenEntity,
+    email: EmailVerificationToken,
     options?: QueryBuilderOptions,
   ) => {
     const query = this.orm
       .createQueryBuilder(options?.queryRunner)
       .insert()
-      .into(EmailVerificationTokenEntity)
+      .into(EmailVerificationToken)
       .values(email)
       .returning("*");
 
-    return (await query.execute())
-      .generatedMaps[0] as EmailVerificationTokenEntity;
+    return (await query.execute()).generatedMaps[0] as EmailVerificationToken;
   };
 
   findOne = async (id: string) => {
-    return await EmailVerificationTokenEntity.findOne({ where: { id } });
+    return await EmailVerificationToken.findOne({ where: { id } });
   };
 
   existsById = async (id: string) => {
-    return await EmailVerificationTokenEntity.exists({ where: { id } });
+    return await EmailVerificationToken.exists({ where: { id } });
   };
 
   update = async (
     id: string,
-    entity: EmailVerificationTokenEntity,
+    entity: EmailVerificationToken,
     options?: QueryBuilderOptions,
   ) => {
     const queryRunner = options?.queryRunner;
 
     const query = this.orm
       .createQueryBuilder(queryRunner)
-      .update(EmailVerificationTokenEntity)
+      .update(EmailVerificationToken)
       .set(entity)
       .where("id = :id", { id });
 

@@ -29,7 +29,7 @@ import { CoreUserService } from "./Services/core-user.service";
 import { UserProfileRepository } from "./data/repositories/interfaces/user-profile.repository";
 import { PostgresUserProfileRepository } from "./data/repositories/postgres-user-profile.repository";
 import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
-import { EmailVerificationTokenEntity } from "./data/entities/email-verification-token.entity";
+import { EmailVerificationToken } from "./data/entities/email-verification-token.entity";
 import { PostgresEmailVerificationTokenRepository } from "./data/repositories/postgres-email-verification-token.repository";
 import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 import {
@@ -66,7 +66,7 @@ export interface RegisteredServices {
   userProfileRepository: UserProfileRepository;
   accessTokenRepository: AccessTokenRepository;
   refreshTokenRepository: RefreshTokenRepository;
-  emailVerificationTokenRepository: EmailVerificationTokenEntity;
+  emailVerificationTokenRepository: EmailVerificationToken;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
   userAuthenticationService: UserAuthenticationService;
   userProfileService: UserProfileService;
@@ -116,8 +116,7 @@ const authRouter = router({
       await dataSource.transaction(async (manager) => {
         await service.verifyVerificationLink({
           manager,
-          userId: user.email,
-          inviteToken: confirmationEmail,
+          token: confirmationEmail,
         });
       });
     }),
