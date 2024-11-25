@@ -6,15 +6,15 @@ import { container, dataSource } from "..";
 @Resolver()
 export class CoreWorkspaceResolver implements WorkspaceResolver {
   @Mutation(() => String)
-  async createWorkspace(@Arg("input") input: CreateWorkspaceInput) {
+  async createWorkspace(
+    @Ctx() ctx: any,
+    @Arg("input") input: CreateWorkspaceInput,
+  ) {
     const service = container.get("workspaceService");
+    const userId = ctx.user.userId;
 
     return await dataSource.transaction(async (manager) => {
-      return await service.createWorkspace({
-        ...input,
-        userId: "userId",
-        manager,
-      });
+      return await service.createWorkspace({ ...input, userId, manager });
     });
   }
 

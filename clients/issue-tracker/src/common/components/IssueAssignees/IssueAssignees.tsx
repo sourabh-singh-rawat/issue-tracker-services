@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
 import AvatarGroup from "../AvatarGroup";
 import { useMessageBar } from "../../../features/message-bar/hooks";
 import AddIssueAssigneeModal from "../../../features/issue/components/AddIssueAssigneeModal";

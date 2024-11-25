@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-
 import Grid from "@mui/material/Grid";
-
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
 import PageHeader from "../../../../common/components/PageHeader";

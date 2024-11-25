@@ -7,14 +7,14 @@ import Divider from "@mui/material/Divider";
 
 import TextField from "../../../../common/components/forms/TextField";
 import ModalFooter from "../../../../common/components/ModalFooter";
-import { issueTrackerService } from "../../../../app/trpc";
+import { useCreateWorkspaceMutation } from "../../../../api/codegen/gql/graphql";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
 }
 
 export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
-  const createWorkspace = issueTrackerService.createWorkspace.useMutation();
+  const [createWorkspace] = useCreateWorkspaceMutation();
   const defaultValues = useMemo(
     () => ({ name: "Workspace Name", description: "" }),
     [],
@@ -29,7 +29,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
     name,
     description,
   }) => {
-    createWorkspace.mutate({ name, description });
+    await createWorkspace({ variables: { input: { name, description } } });
     handleClose();
   };
 
