@@ -1,5 +1,6 @@
 import {
   CreateItemOptions,
+  CreateSubItemOptions,
   FindItemOptions,
   FindItemsOptions,
   ItemService,
@@ -11,7 +12,6 @@ import { IssueAssigneeRepository } from "../data/repositories/interfaces/issue-a
 import { QueryRunner } from "typeorm";
 import {
   ConflictError,
-  IssueFormData,
   IssuePriority,
   IssueStatus,
   NotFoundError,
@@ -82,6 +82,18 @@ export class CoreItemService implements ItemService {
     }
 
     return item.id;
+  }
+
+  async createSubItem(options: CreateSubItemOptions) {
+    const { manager, parentItemId, ...inputs } = options;
+    const ItemRepo = manager.getRepository(Item);
+    const parentItem = await ItemRepo.findOne({ where: { id: parentItemId } });
+
+    if (!parentItem) throw new NotFoundError("Parent Item");
+
+    await ItemRepo.save({ ...inputs, parent: parentItem });
+
+    return "Child item created successfully";
   }
 
   async findItems(options: FindItemsOptions) {

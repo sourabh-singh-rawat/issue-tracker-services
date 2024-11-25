@@ -4,11 +4,12 @@ import {
   useFindItemQuery,
   useUpdateItemMutation,
 } from "../../../../api/codegen/gql/graphql";
+import { useMessageBar } from "../../../message-bar/hooks";
 import ItemName from "../../../../common/components/ItemName";
 import ItemDescription from "../../../../common/components/ItemDescription";
-import { useMessageBar } from "../../../message-bar/hooks";
 import ItemFields from "../../../../common/components/ItemFields";
 import MuiGrid from "@mui/material/Grid";
+import MuiTypography from "@mui/material/Typography";
 
 export interface ItemProps {}
 
@@ -57,6 +58,9 @@ export default function Item(props: ItemProps) {
           }}
           defaultValue={item?.findItem?.description}
         />
+      </MuiGrid>
+      <MuiGrid item xs={12}>
+        <MuiTypography variant="h4">Sub Items</MuiTypography>
       </MuiGrid>
     </MuiGrid>
   );
