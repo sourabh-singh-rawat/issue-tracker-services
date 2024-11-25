@@ -1,0 +1,3 @@
+mutation CreateWorkspace($input: CreateWorkspaceInput!) {
+  createWorkspace(input: $input)
+}
