@@ -5,12 +5,20 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
 } from "typeorm";
 import { User } from "./User";
 import { List } from "./List";
 import { ItemAssignee } from "./ItemAssignee";
 import { AuditEntity } from "@issue-tracker/orm";
 
+@Tree("closure-table", {
+  closureTableName: "item",
+  ancestorColumnName: (column) => "ancestor_" + column.propertyName,
+  descendantColumnName: (column) => "descendant_" + column.propertyName,
+})
 @Entity({ name: "items" })
 export class Item extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
@@ -60,4 +68,10 @@ export class Item extends AuditEntity {
 
   @OneToMany(() => ItemAssignee, ({ issue }) => issue)
   assignees!: ItemAssignee;
+
+  @TreeChildren()
+  children!: Item[];
+
+  @TreeParent()
+  parent!: Item;
 }
