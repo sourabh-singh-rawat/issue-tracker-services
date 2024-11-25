@@ -21,7 +21,7 @@ import TextButton from "../../../../common/components/buttons/TextButton";
 
 import { useMessageBar } from "../../../message-bar/hooks";
 import Chip from "../../../../common/components/Chip";
-import Title from "../../../../common/components/ItemTitle";
+import Title from "../../../../common/components/ItemName";
 
 export default function Project() {
   const theme = useTheme();

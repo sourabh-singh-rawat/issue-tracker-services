@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import MuiGrid from "@mui/material/Grid";
 
-import Title from "../ItemTitle";
+import Title from "../ItemName";
 
 interface TitleSectionProps {
   isLoading: boolean;

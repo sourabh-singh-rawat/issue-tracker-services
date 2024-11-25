@@ -6,6 +6,7 @@ query FindItem($id: String!) {
       name
     }
     name
+    description
     priority
     status
   }

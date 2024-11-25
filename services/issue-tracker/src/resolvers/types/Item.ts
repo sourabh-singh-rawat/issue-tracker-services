@@ -9,6 +9,9 @@ export class Item {
   @Field()
   name!: string;
 
+  @Field({ nullable: true })
+  description?: string;
+
   @Field()
   status!: string;
 

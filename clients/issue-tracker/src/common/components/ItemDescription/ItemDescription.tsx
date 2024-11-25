@@ -11,11 +11,11 @@ import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
   handleSubmit: (value: string) => void;
-  defaultValue?: string;
+  defaultValue?: string | null;
   isDisabled?: boolean;
   isLoading?: boolean;
 }
-export default function Description2({
+export default function ItemDescription({
   defaultValue = "",
   handleSubmit: handleSubmit,
   isDisabled,
@@ -50,22 +50,13 @@ export default function Description2({
   return (
     <MuiGrid rowSpacing={1} container>
       <MuiGrid xs={12} item>
-        <MuiTypography
-          variant="body1"
-          sx={{
-            color: theme.palette.text.primary,
-            fontWeight: theme.typography.fontWeightBold,
-          }}
-        >
-          Description
-        </MuiTypography>
         {isFocused && !isDisabled ? (
           <TextField
             size="small"
             value={value}
             onChange={handleChange}
             inputProps={{
-              style: { fontSize: theme.typography.body2.fontSize },
+              style: { fontSize: theme.typography.h6.fontSize },
             }}
             sx={{
               "& .MuiOutlinedInput-root": {
@@ -90,15 +81,17 @@ export default function Description2({
             ) : (
               <MuiTypography
                 sx={{
+                  fontSize: theme.typography.h6.fontSize,
                   padding: theme.spacing(1),
                   marginLeft: theme.spacing(-1),
                   borderRadius: theme.shape.borderRadiusMedium,
-                  "&:hover": { backgroundColor: "action.hover" },
+                  color: theme.palette.text.secondary,
+                  "&:hover": { backgroundColor: theme.palette.action.hover },
                 }}
                 variant="body2"
                 onClick={handleClick}
               >
-                {value ? value : "Add a description..."}
+                {value ? value : "Add a description"}
               </MuiTypography>
             )}
           </>
@@ -112,7 +105,7 @@ export default function Description2({
               <MuiIconButton
                 size="small"
                 onClick={() => {
-                  if (value !== previousValue) handleSubmit(value);
+                  if (value && value !== previousValue) handleSubmit(value);
                   setIsFocused(false);
                 }}
               >
