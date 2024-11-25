@@ -21,6 +21,7 @@ interface ItemStatusSelectorProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
   control: Control<DefaultValues>;
   formState: FormState<DefaultValues>;
+  onSubmit: (value: string) => void;
   title?: string;
   options?: string[];
   helperText?: string;
@@ -31,6 +32,7 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
   name,
   control,
   rules,
+  onSubmit,
   title,
   options = [],
   helperText,
@@ -58,7 +60,11 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
                   name={field.name}
                   value={field.value}
                   options={options}
-                  onChange={(e) => field.onChange(e.target.value)}
+                  onChange={(e) => {
+                    if (!e.target.value) return;
+                    onSubmit(e.target.value as string);
+                    field.onChange(e.target.value);
+                  }}
                 />
               );
             }}

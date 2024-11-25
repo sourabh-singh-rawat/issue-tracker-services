@@ -32,14 +32,14 @@ export interface SelectProps<Value = unknown> {
   isDisabled?: boolean;
 }
 
-export default function Select<Value = unknown>({
+export default function Select({
   value = "",
   name,
   options = [],
   variant,
   onChange,
   isDisabled,
-}: SelectProps<Value>) {
+}: SelectProps) {
   const theme = useTheme();
 
   const MenuProps = {
