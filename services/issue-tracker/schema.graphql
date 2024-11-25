@@ -3,6 +3,17 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreateItemInput {
+  assigneeIds: [String!]!
+  description: String
+  dueDate: DateTimeISO
+  listId: String!
+  name: String!
+  priority: String!
+  status: String!
+  type: String!
+}
+
 input CreateListInput {
   description: String
   name: String!
@@ -15,14 +26,34 @@ input CreateWorkspaceInput {
   userId: String!
 }
 
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+type Item {
+  id: String!
+  list: List!
+  name: String!
+  priority: String!
+  status: String!
+}
+
 type List {
   id: String!
   name: String!
 }
 
 type Mutation {
+  createItem(input: CreateItemInput!): String!
   createList(input: CreateListInput!): String!
   createWorkspace(input: CreateWorkspaceInput!): String!
+  updateItem(input: UpdateItemInput!): String!
+}
+
+type PaginatedItem {
+  rowCount: Float!
+  rows: [Item!]!
 }
 
 type PaginatedList {
@@ -31,8 +62,20 @@ type PaginatedList {
 }
 
 type Query {
+  findItem(id: String!): Item
+  findItems: PaginatedItem!
   findLists: PaginatedList!
   getAllWorkspaces: [Workspace!]!
+}
+
+input UpdateItemInput {
+  description: String
+  dueDate: DateTimeISO
+  itemId: String!
+  name: String
+  priority: String
+  status: String
+  type: String
 }
 
 type Workspace {

@@ -3,7 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
-import IssueList from "../../components/IssueList";
+import IssueList from "../../components/ItemList";
 
 export default function Issues() {
   const { pathname } = useLocation();

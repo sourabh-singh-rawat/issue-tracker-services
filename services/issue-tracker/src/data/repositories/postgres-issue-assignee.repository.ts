@@ -1,5 +1,5 @@
 import { Typeorm } from "@issue-tracker/orm";
-import { IssueAssigneeEntity } from "../entities";
+import { ItemAssignee } from "../entities";
 import { IssueAssigneeRepository } from "./interfaces/issue-assignee.repository";
 import { QueryBuilderOptions } from "@issue-tracker/orm";
 
@@ -11,27 +11,24 @@ export class PostgresIssueAssigneeRepository
     throw new Error("Method not implemented.");
   }
 
-  save = async (
-    assignee: IssueAssigneeEntity,
-    options?: QueryBuilderOptions,
-  ) => {
+  save = async (assignee: ItemAssignee, options?: QueryBuilderOptions) => {
     const queryRunner = options?.queryRunner;
     const query = this.orm
       .createQueryBuilder(queryRunner)
       .insert()
-      .into(IssueAssigneeEntity)
+      .into(ItemAssignee)
       .values(assignee)
       .returning("*");
 
-    return (await query.execute()).generatedMaps[0] as IssueAssigneeEntity;
+    return (await query.execute()).generatedMaps[0] as ItemAssignee;
   };
 
   findAssigneeByUserId = async (userId: string) => {
-    return await IssueAssigneeEntity.findOne({ where: { userId } });
+    return await ItemAssignee.findOne({ where: { userId } });
   };
 
   findByIssueId = async (issueId: string) => {
-    return await IssueAssigneeEntity.find({ where: { issueId } });
+    return await ItemAssignee.find({ where: { issueId } });
   };
 
   softDelete = async () => {

@@ -16,7 +16,7 @@ import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
 import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
 import { UserService } from "./services/interfaces/UserService";
-import { IssueService } from "./services/interfaces/issue.service";
+import { ItemService } from "./services/interfaces/ItemService";
 import { IssueCommentService } from "./services/interfaces/issue-comment.service";
 import { IssueTaskService } from "./services/interfaces/issue-task.service";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
@@ -38,7 +38,7 @@ import { CoreIssueController } from "./controllers/core-issue.controller";
 import { CoreIssueCommentController } from "./controllers/core-issue-comment.controller";
 import { CoreIssueTaskController } from "./controllers/core-issue-task.controller";
 import { CoreUserService } from "./services/CoreUserService";
-import { CoreIssueService } from "./services/core-issue.service";
+import { CoreItemService } from "./services/CoreItemService";
 import { CoreIssueCommentService } from "./services/core-issue-comment.service";
 import { CoreIssueTaskService } from "./services/core-issue-task.service";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
@@ -80,6 +80,7 @@ import {
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
 import { CoreListResolver } from "./resolvers/CoreListResolver";
+import { CoreItemResolver } from "./resolvers/CoreItemResolver";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -93,7 +94,7 @@ export interface RegisteredServices {
   workspaceController: WorkspaceController;
   projectActivityController: ProjectActivityController;
   userService: UserService;
-  issueService: IssueService;
+  itemService: ItemService;
   projectService: ListService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
@@ -178,7 +179,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     const instance = fastify();
     const schema = await buildSchema({
       emitSchemaFile: true,
-      resolvers: [CoreListResolver, CoreWorkspaceResolver],
+      resolvers: [CoreItemResolver, CoreListResolver, CoreWorkspaceResolver],
     });
     const apollo = new ApolloServer({
       schema,
@@ -262,7 +263,7 @@ const main = async () => {
     asClass(CoreProjectActivityController),
   );
   container.add("userService", asClass(CoreUserService));
-  container.add("issueService", asClass(CoreIssueService));
+  container.add("itemService", asClass(CoreItemService));
   container.add("issueCommentService", asClass(CoreIssueCommentService));
   container.add("issueTaskService", asClass(CoreIssueTaskService));
   container.add("projectService", asClass(CoreListService));

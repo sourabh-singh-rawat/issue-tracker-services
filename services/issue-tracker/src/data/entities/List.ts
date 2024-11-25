@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
+import { Item } from "./Item";
 
 @Entity({ name: "lists" })
 export class List extends AuditEntity {
@@ -44,4 +46,7 @@ export class List extends AuditEntity {
     nullable: true,
   })
   endDate?: Date;
+
+  @OneToMany(() => Item, (x) => x.list)
+  items!: Item[];
 }

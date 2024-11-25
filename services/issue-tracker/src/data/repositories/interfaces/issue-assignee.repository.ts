@@ -1,8 +1,7 @@
 import { Repository } from "@issue-tracker/orm";
-import { IssueAssigneeEntity } from "../../entities";
+import { ItemAssignee } from "../../entities";
 
-export interface IssueAssigneeRepository
-  extends Repository<IssueAssigneeEntity> {
-  findByIssueId(issueId: string): Promise<IssueAssigneeEntity[]>;
-  findAssigneeByUserId(id: string): Promise<IssueAssigneeEntity | null>;
+export interface IssueAssigneeRepository extends Repository<ItemAssignee> {
+  findByIssueId(issueId: string): Promise<ItemAssignee[]>;
+  findAssigneeByUserId(id: string): Promise<ItemAssignee | null>;
 }

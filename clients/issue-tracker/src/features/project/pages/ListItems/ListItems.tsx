@@ -3,7 +3,7 @@ import React from "react";
 import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import TabPanel from "../../../../common/components/TabPanel";
-import IssueList from "../../../issue-list/components/IssueList";
+import IssueList from "../../../issue-list/components/ItemList";
 import AddIssueButton from "../../../issue/components/AddIssueButton";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 

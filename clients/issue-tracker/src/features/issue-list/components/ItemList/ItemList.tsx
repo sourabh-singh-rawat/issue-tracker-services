@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import daysjs from "dayjs";
 import MuiTypography from "@mui/material/Typography";
 import List from "../../../../common/components/List";
-import { useGetIssueListQuery } from "../../../../api/generated/issue.api";
 import {
   GridColDef,
   GridValidRowModel,
   GridPaginationModel,
 } from "@mui/x-data-grid";
-import Avatar from "../../../../common/components/Avatar";
 import AvatarGroup from "../../../../common/components/AvatarGroup";
 import IssueStatusSelector from "../IssueStatusSelector";
 import IssuePrioritySelector from "../IssuePrioritySelector";
+import { useFindItemsQuery } from "../../../../api/codegen/gql/graphql";
 
 interface IssueListProps {
   projectId?: string;
 }
 
-export default function IssueList({ projectId }: IssueListProps) {
+export default function ItemList({ projectId }: IssueListProps) {
   const theme = useTheme();
+  const urlParams = useParams<{ id: string }>();
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -28,14 +28,7 @@ export default function IssueList({ projectId }: IssueListProps) {
   const onPaginationModelChange = (model: GridPaginationModel) => {
     setPaginationModel(model);
   };
-
-  const { data: issueList, isLoading } = useGetIssueListQuery({
-    projectId,
-    page: paginationModel.page,
-    pageSize: paginationModel.pageSize,
-    sortBy: "updatedAt",
-    sortOrder: "desc",
-  });
+  const { data: items, loading: isLoading } = useFindItemsQuery();
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -49,7 +42,7 @@ export default function IssueList({ projectId }: IssueListProps) {
             overflow: "hidden",
             textDecoration: "none",
           }}
-          to={`/issues/${params.row.id}/overview`}
+          to={`/lists/${urlParams.id}/items/${params.row.id}`}
         >
           <MuiTypography
             sx={{
@@ -120,9 +113,9 @@ export default function IssueList({ projectId }: IssueListProps) {
             alignItems: "center",
             textDecoration: "none",
           }}
-          to={`/profile/${value.id}`}
+          // to={`/profile/${value.id}`}
         >
-          <Avatar label={value.displayName} />
+          {/* <Avatar label={value.displayName} /> */}
           <MuiTypography
             sx={{
               pl: theme.spacing(1),
@@ -131,7 +124,7 @@ export default function IssueList({ projectId }: IssueListProps) {
             }}
             variant="body2"
           >
-            {value.displayName}
+            {/* {value.displayName} */}
           </MuiTypography>
         </Link>
       ),
@@ -186,16 +179,16 @@ export default function IssueList({ projectId }: IssueListProps) {
 
   return (
     <List
-      rows={issueList?.rows?.map((row) => {
-        if (row.project) {
-          return { ...row, "project.name": row.project.name };
+      rows={items?.findItems.rows?.map((row) => {
+        if (row.list) {
+          return { ...row, "project.name": row.list.name };
         }
         return row;
       })}
       columns={columns}
       paginationModel={paginationModel}
       onPaginationModelChange={onPaginationModelChange}
-      rowCount={issueList?.filteredRowCount}
+      rowCount={items?.findItems.rowCount}
       isLoading={isLoading}
     />
   );

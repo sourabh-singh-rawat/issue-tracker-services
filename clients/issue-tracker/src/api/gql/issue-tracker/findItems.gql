@@ -1,0 +1,15 @@
+query FindItems {
+  findItems {
+    rowCount
+    rows {
+      id
+      name
+      status
+      priority
+      list {
+        id
+        name
+      }
+    }
+  }
+}

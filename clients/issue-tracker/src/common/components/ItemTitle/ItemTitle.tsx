@@ -38,15 +38,15 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   },
 }));
 
-interface Props {
+interface ItemTitleProps {
   defaultValue?: string;
-  onTitleSubmit: (value: string) => void;
+  handleSubmit: (value: string) => void;
 }
 
-export default function Title({
+export default function ItemTitle({
   defaultValue = "",
-  onTitleSubmit: handleSubmit,
-}: Props) {
+  handleSubmit,
+}: ItemTitleProps) {
   const theme = useTheme();
   const [value, setValue] = useState(defaultValue);
   const [previousValue, setPreviousValue] = useState("");
