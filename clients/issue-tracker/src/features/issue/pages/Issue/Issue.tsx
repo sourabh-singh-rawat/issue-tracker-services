@@ -19,7 +19,7 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
-import Title2 from "../../../../common/components/Title";
+import Title2 from "../../../../common/components/ItemTitle";
 import Chip from "../../../../common/components/Chip";
 
 export default function Issue() {
@@ -63,11 +63,11 @@ export default function Issue() {
 
   const handleChange = (e, newValue) => {
     const mapIndexToTab: { [k: number]: string } = {
-      0: `/issues/${id}/overview`,
-      1: `/issues/${id}/tasks`,
-      2: `/issues/${id}/attachments `,
-      3: `/issues/${id}/comments`,
-      4: `/issues/${id}/settings`,
+      0: `/items/${id}/overview`,
+      1: `/items/${id}/tasks`,
+      2: `/items/${id}/attachments `,
+      3: `/items/${id}/comments`,
+      4: `/items/${id}/settings`,
     };
 
     navigate(`${mapIndexToTab[newValue]}`);
@@ -87,7 +87,7 @@ export default function Issue() {
         <MuiGrid xs={12} item>
           <Title2
             defaultValue={issue.name}
-            onTitleSubmit={async (name) => {
+            handleSubmit={async (name) => {
               if (!id) return;
               await updateIssue({ id, body: { name } });
             }}

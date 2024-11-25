@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { IssueController } from "./interfaces/issue-controller";
-import { IssueService } from "../services/interfaces/issue.service";
+import { ItemService } from "../services/interfaces/ItemService";
 import { StatusCodes } from "http-status-codes";
 import {
   IssueFormData,
@@ -9,7 +9,7 @@ import {
 } from "@issue-tracker/common";
 
 export class CoreIssueController implements IssueController {
-  constructor(private issueService: IssueService) {}
+  constructor(private issueService: ItemService) {}
 
   createIssue = async (
     request: FastifyRequest<{ Body: IssueFormData }>,
@@ -18,9 +18,9 @@ export class CoreIssueController implements IssueController {
     const { userId } = request.currentUser;
     const issue = request.body;
 
-    const response = await this.issueService.createIssue(userId, issue);
+    // const response = await this.issueService.createItem(userId, issue);
 
-    return reply.status(StatusCodes.CREATED).send(response);
+    return reply.status(StatusCodes.CREATED).send();
   };
 
   getIssueList = async (
@@ -30,7 +30,7 @@ export class CoreIssueController implements IssueController {
     const { userId } = request.currentUser;
     const filters = request.query;
 
-    const response = await this.issueService.getIssueList(userId, filters);
+    const response = await this.issueService.findItems({ userId });
 
     return reply.send(response);
   };
@@ -69,7 +69,7 @@ export class CoreIssueController implements IssueController {
     const { id } = request.params;
     const issueFormData = request.body;
 
-    await this.issueService.updateIssue(userId, id, issueFormData);
+    // await this.issueService.updateItem(userId, id, issueFormData);
 
     return reply.send();
   };

@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 import { setProjectList } from "../../project-list.slice";
 import List from "../../../../common/components/List";
 import ProjectActionsButton from "../ProjectActionsButton";
-import ProjectStatusSelector from "../ProjectStatusSelector";
 import { useFindListsQuery } from "../../../../api/codegen/gql/graphql";
 
 export default function ProjectList() {
@@ -50,9 +49,7 @@ export default function ProjectList() {
             variant="body2"
             sx={{
               color: theme.palette.text.primary,
-              ":hover": {
-                color: theme.palette.primary.main,
-              },
+              ":hover": { color: theme.palette.primary.main },
             }}
             noWrap
           >

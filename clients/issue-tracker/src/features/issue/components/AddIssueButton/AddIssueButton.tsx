@@ -7,7 +7,7 @@ interface AddIssueButtonProps {
   projectId: string;
 }
 
-function AddIssueButton({ projectId }: AddIssueButtonProps) {
+export default function AddIssueButton({ projectId }: AddIssueButtonProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -15,7 +15,7 @@ function AddIssueButton({ projectId }: AddIssueButtonProps) {
   return (
     <>
       <PrimaryButton
-        label="New Issue"
+        label="Add"
         onClick={handleOpen}
         startIcon={<PestControlIcon />}
       />
@@ -23,5 +23,3 @@ function AddIssueButton({ projectId }: AddIssueButtonProps) {
     </>
   );
 }
-
-export default AddIssueButton;

@@ -37,7 +37,7 @@ export default function IssueOverview() {
     useUpdateIssueMutation();
   const { data: statuses } = useGetIssueStatusListQuery();
   const { data: priorityList } = useGetIssuePriorityListQuery();
-  const { data: attachments } = useGetIssueAttachmentListQuery({ id });
+  // const { data: attachments } = useGetIssueAttachmentListQuery({ id });
   const isArchived = Boolean(page?.deletedAt);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function IssueOverview() {
               >
                 Attachments
               </MuiTypography>
-              {attachments?.rows <= 0 ? (
+              {/* {attachments?.rows <= 0 ? (
                 <MuiTypography sx={{ marginTop: "6px" }} variant="body2">
                   <MuiTypography variant="body2">
                     No attachments.{" "}
@@ -105,7 +105,7 @@ export default function IssueOverview() {
                     <ImageCard key={id} path={path} />
                   ))}
                 </ImageList>
-              )}
+              )} */}
             </MuiGrid>
           </MuiGrid>
         </MuiGrid>

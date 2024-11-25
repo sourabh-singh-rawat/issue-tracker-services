@@ -6,21 +6,19 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
-import { ListItem } from "./ListItem";
+import { Item } from "./Item";
 import { AuditEntity } from "@issue-tracker/orm";
 
-@Entity({ name: "issue_assignees" })
-export class IssueAssigneeEntity extends AuditEntity {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "issue_assignees_pkey",
-  })
+@Entity({ name: "item_assignees" })
+export class ItemAssignee extends AuditEntity {
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @JoinColumn({ name: "issue_id" })
   issueId!: string;
 
-  @ManyToOne(() => ListItem, ({ assignees }) => assignees)
-  issue!: ListItem;
+  @ManyToOne(() => Item, ({ assignees }) => assignees)
+  issue!: Item;
 
   @Column({ name: "user_id", type: "uuid" })
   userId!: string;

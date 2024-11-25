@@ -13,7 +13,6 @@ import MuiGrid from "@mui/material/Grid";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
@@ -22,7 +21,7 @@ import TextButton from "../../../../common/components/buttons/TextButton";
 
 import { useMessageBar } from "../../../message-bar/hooks";
 import Chip from "../../../../common/components/Chip";
-import Title from "../../../../common/components/Title";
+import Title from "../../../../common/components/ItemTitle";
 
 export default function Project() {
   const theme = useTheme();
@@ -36,16 +35,14 @@ export default function Project() {
   const tabName = location.pathname.split("/")[3] || "overview";
   const mapPathToIndex: Record<string, number> = {
     overview: 0,
-    issues: 1,
-    members: 2,
+    items: 1,
     activity: 3,
     settings: 4,
   };
 
   const mapIndexToTab: Record<number, string> = {
     0: `/lists/${id}/overview`,
-    1: `/lists/${id}/issues`,
-    2: `/lists/${id}/members`,
+    1: `/lists/${id}/items`,
     3: `/lists/${id}/activity`,
     4: `/lists/${id}/settings`,
   };
@@ -70,16 +67,8 @@ export default function Project() {
 
   return (
     <MuiGrid container>
-      <MuiGrid xs={12} item sx={{ ml: theme.spacing(-1) }}>
-        <TextButton
-          label="Back to Projects"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/projects")}
-        />
-      </MuiGrid>
-
       <MuiGrid xs={12} item>
-        <Title defaultValue={data?.name} onTitleSubmit={onTitleSubmit} />
+        <Title defaultValue={data?.name} handleSubmit={onTitleSubmit} />
       </MuiGrid>
 
       <MuiGrid xs={12} container>
@@ -106,22 +95,14 @@ export default function Project() {
       <MuiGrid xs={12} item sx={{ pt: theme.spacing(1) }}>
         <Tabs value={selectedTab} onChange={handleChange}>
           <Tab isLoading={isLoading} label="Overview" value={0} />
-          <Tab isLoading={isLoading} label="Issues" value={1} />
-          <Tab isLoading={isLoading} label="Members" value={2} />
+          <Tab isLoading={isLoading} label="Items" value={1} />
           <Tab isLoading={isLoading} label="Activity" value={3} />
           <Tab isLoading={isLoading} label="Settings" value={4} />
         </Tabs>
       </MuiGrid>
 
       <MuiGrid xs={12} item>
-        <Outlet
-          context={{
-            id,
-            selectedTab,
-            page: data,
-            isLoading,
-          }}
-        />
+        <Outlet context={{ id, selectedTab, page: data, isLoading }} />
       </MuiGrid>
     </MuiGrid>
   );

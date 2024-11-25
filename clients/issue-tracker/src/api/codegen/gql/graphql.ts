@@ -18,6 +18,17 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any; }
 };
 
+export type CreateItemInput = {
+  assigneeIds: Array<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  dueDate?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  listId: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  priority: Scalars['String']['input'];
+  status: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+};
+
 export type CreateListInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -30,6 +41,15 @@ export type CreateWorkspaceInput = {
   userId: Scalars['String']['input'];
 };
 
+export type Item = {
+  __typename?: 'Item';
+  id: Scalars['String']['output'];
+  list: List;
+  name: Scalars['String']['output'];
+  priority: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+};
+
 export type List = {
   __typename?: 'List';
   id: Scalars['String']['output'];
@@ -38,11 +58,18 @@ export type List = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createItem: Scalars['String']['output'];
   createList: Scalars['String']['output'];
   createWorkspace: Scalars['String']['output'];
   registerUser: Scalars['String']['output'];
   signInWithEmailAndPassword: Scalars['Boolean']['output'];
+  updateItem: Scalars['String']['output'];
   verifyVerificationLink: Scalars['String']['output'];
+};
+
+
+export type MutationCreateItemArgs = {
+  input: CreateItemInput;
 };
 
 
@@ -66,8 +93,19 @@ export type MutationSignInWithEmailAndPasswordArgs = {
 };
 
 
+export type MutationUpdateItemArgs = {
+  input: UpdateItemInput;
+};
+
+
 export type MutationVerifyVerificationLinkArgs = {
   input: VerifyVerificationLinkInput;
+};
+
+export type PaginatedItem = {
+  __typename?: 'PaginatedItem';
+  rowCount: Scalars['Float']['output'];
+  rows: Array<Item>;
 };
 
 export type PaginatedList = {
@@ -78,9 +116,16 @@ export type PaginatedList = {
 
 export type Query = {
   __typename?: 'Query';
+  findItem?: Maybe<Item>;
+  findItems: PaginatedItem;
   findLists: PaginatedList;
   getAllWorkspaces: Array<Workspace>;
   getCurrentUser: User;
+};
+
+
+export type QueryFindItemArgs = {
+  id: Scalars['String']['input'];
 };
 
 export type RegisterUserInput = {
@@ -92,6 +137,16 @@ export type RegisterUserInput = {
 export type SignInWithEmailAndPasswordInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type UpdateItemInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  dueDate?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  itemId: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  priority?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -137,12 +192,31 @@ export type SignInWithEmailAndPasswordMutationVariables = Exact<{
 
 export type SignInWithEmailAndPasswordMutation = { __typename?: 'Mutation', signInWithEmailAndPassword: boolean };
 
+export type CreateItemMutationVariables = Exact<{
+  input: CreateItemInput;
+}>;
+
+
+export type CreateItemMutation = { __typename?: 'Mutation', createItem: string };
+
 export type CreateListMutationVariables = Exact<{
   input: CreateListInput;
 }>;
 
 
 export type CreateListMutation = { __typename?: 'Mutation', createList: string };
+
+export type FindItemQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string } } | null };
+
+export type FindItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindItemsQuery = { __typename?: 'Query', findItems: { __typename?: 'PaginatedItem', rowCount: number, rows: Array<{ __typename?: 'Item', id: string, name: string, status: string, priority: string, list: { __typename?: 'List', id: string, name: string } }> } };
 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -153,6 +227,13 @@ export type GetAllWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllWorkspacesQuery = { __typename?: 'Query', getAllWorkspaces: Array<{ __typename?: 'Workspace', description?: string | null, id: string, name: string, ownerUserId: string, status: string }> };
+
+export type UpdateItemMutationVariables = Exact<{
+  input: UpdateItemInput;
+}>;
+
+
+export type UpdateItemMutation = { __typename?: 'Mutation', updateItem: string };
 
 
 export const GetCurrentUserDocument = gql`
@@ -262,6 +343,37 @@ export function useSignInWithEmailAndPasswordMutation(baseOptions?: Apollo.Mutat
 export type SignInWithEmailAndPasswordMutationHookResult = ReturnType<typeof useSignInWithEmailAndPasswordMutation>;
 export type SignInWithEmailAndPasswordMutationResult = Apollo.MutationResult<SignInWithEmailAndPasswordMutation>;
 export type SignInWithEmailAndPasswordMutationOptions = Apollo.BaseMutationOptions<SignInWithEmailAndPasswordMutation, SignInWithEmailAndPasswordMutationVariables>;
+export const CreateItemDocument = gql`
+    mutation CreateItem($input: CreateItemInput!) {
+  createItem(input: $input)
+}
+    `;
+export type CreateItemMutationFn = Apollo.MutationFunction<CreateItemMutation, CreateItemMutationVariables>;
+
+/**
+ * __useCreateItemMutation__
+ *
+ * To run a mutation, you first call `useCreateItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createItemMutation, { data, loading, error }] = useCreateItemMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateItemMutation, CreateItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateItemMutation, CreateItemMutationVariables>(CreateItemDocument, options);
+      }
+export type CreateItemMutationHookResult = ReturnType<typeof useCreateItemMutation>;
+export type CreateItemMutationResult = Apollo.MutationResult<CreateItemMutation>;
+export type CreateItemMutationOptions = Apollo.BaseMutationOptions<CreateItemMutation, CreateItemMutationVariables>;
 export const CreateListDocument = gql`
     mutation CreateList($input: CreateListInput!) {
   createList(input: $input)
@@ -293,6 +405,102 @@ export function useCreateListMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateListMutationHookResult = ReturnType<typeof useCreateListMutation>;
 export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>;
 export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
+export const FindItemDocument = gql`
+    query FindItem($id: String!) {
+  findItem(id: $id) {
+    id
+    list {
+      id
+      name
+    }
+    name
+    priority
+    status
+  }
+}
+    `;
+
+/**
+ * __useFindItemQuery__
+ *
+ * To run a query within a React component, call `useFindItemQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindItemQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindItemQuery(baseOptions: Apollo.QueryHookOptions<FindItemQuery, FindItemQueryVariables> & ({ variables: FindItemQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindItemQuery, FindItemQueryVariables>(FindItemDocument, options);
+      }
+export function useFindItemLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindItemQuery, FindItemQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindItemQuery, FindItemQueryVariables>(FindItemDocument, options);
+        }
+export function useFindItemSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindItemQuery, FindItemQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindItemQuery, FindItemQueryVariables>(FindItemDocument, options);
+        }
+export type FindItemQueryHookResult = ReturnType<typeof useFindItemQuery>;
+export type FindItemLazyQueryHookResult = ReturnType<typeof useFindItemLazyQuery>;
+export type FindItemSuspenseQueryHookResult = ReturnType<typeof useFindItemSuspenseQuery>;
+export type FindItemQueryResult = Apollo.QueryResult<FindItemQuery, FindItemQueryVariables>;
+export const FindItemsDocument = gql`
+    query FindItems {
+  findItems {
+    rowCount
+    rows {
+      id
+      name
+      status
+      priority
+      list {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindItemsQuery__
+ *
+ * To run a query within a React component, call `useFindItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindItemsQuery(baseOptions?: Apollo.QueryHookOptions<FindItemsQuery, FindItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
+      }
+export function useFindItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindItemsQuery, FindItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
+        }
+export function useFindItemsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindItemsQuery, FindItemsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
+        }
+export type FindItemsQueryHookResult = ReturnType<typeof useFindItemsQuery>;
+export type FindItemsLazyQueryHookResult = ReturnType<typeof useFindItemsLazyQuery>;
+export type FindItemsSuspenseQueryHookResult = ReturnType<typeof useFindItemsSuspenseQuery>;
+export type FindItemsQueryResult = Apollo.QueryResult<FindItemsQuery, FindItemsQueryVariables>;
 export const FindListsDocument = gql`
     query FindLists {
   findLists {
@@ -379,3 +587,34 @@ export type GetAllWorkspacesQueryHookResult = ReturnType<typeof useGetAllWorkspa
 export type GetAllWorkspacesLazyQueryHookResult = ReturnType<typeof useGetAllWorkspacesLazyQuery>;
 export type GetAllWorkspacesSuspenseQueryHookResult = ReturnType<typeof useGetAllWorkspacesSuspenseQuery>;
 export type GetAllWorkspacesQueryResult = Apollo.QueryResult<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>;
+export const UpdateItemDocument = gql`
+    mutation UpdateItem($input: UpdateItemInput!) {
+  updateItem(input: $input)
+}
+    `;
+export type UpdateItemMutationFn = Apollo.MutationFunction<UpdateItemMutation, UpdateItemMutationVariables>;
+
+/**
+ * __useUpdateItemMutation__
+ *
+ * To run a mutation, you first call `useUpdateItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateItemMutation, { data, loading, error }] = useUpdateItemMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateItemMutation, UpdateItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateItemMutation, UpdateItemMutationVariables>(UpdateItemDocument, options);
+      }
+export type UpdateItemMutationHookResult = ReturnType<typeof useUpdateItemMutation>;
+export type UpdateItemMutationResult = Apollo.MutationResult<UpdateItemMutation>;
+export type UpdateItemMutationOptions = Apollo.BaseMutationOptions<UpdateItemMutation, UpdateItemMutationVariables>;

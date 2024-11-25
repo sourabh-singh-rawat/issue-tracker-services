@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ajvResolver } from "@hookform/resolvers/ajv";
-import AjvFormats from "ajv-formats";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import MuiGrid from "@mui/material/Grid";
@@ -10,84 +8,81 @@ import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import TextField from "../../../../common/components/forms/TextField";
 import DatePicker from "../../../../common/components/DatePicker";
 import { useGetProjectMembersQuery } from "../../../../api/generated/project.api";
-import schema from "../../../../api/generated/issue-tracker.openapi.json";
 import {
-  useCreateIssueMutation,
   useGetIssuePriorityListQuery,
   useGetIssueStatusListQuery,
 } from "../../../../api/generated/issue.api";
 import FormAutocomplete from "../../../../common/components/FormAutocomplete";
 import IssueStatusSelector from "../../components/IssueStatusSelector";
 import IssuePrioritySelector from "../../components/IssuePrioritySelector";
-import TextButton from "../../../../common/components/buttons/TextButton";
-import { useTheme } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {
+  CreateItemInput,
+  useCreateItemMutation,
+} from "../../../../api/codegen/gql/graphql";
+import { useMessageBar } from "../../../message-bar/hooks";
+import dayjs from "dayjs";
 
-interface IssueFormProps {
+interface ItemFormProps {
   projectId?: string;
 }
 
-function IssueForm({ projectId }: IssueFormProps) {
-  const theme = useTheme();
+function ItemForm({ projectId }: ItemFormProps) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [createIssue] = useCreateIssueMutation();
+  const messageBar = useMessageBar();
+  const [createItem] = useCreateItemMutation({
+    onCompleted(response) {
+      messageBar.showSuccess("Item created successfully");
+
+      setTimeout(
+        () => navigate(`/lists/${projectId}/items/${response.createItem}`),
+        2000,
+      );
+    },
+    onError(error) {
+      messageBar.showError(error.message);
+    },
+  });
   const { data: members } = useGetProjectMembersQuery({ id: id || "" });
   const { data: statusList } = useGetIssueStatusListQuery();
   const { data: priorityList } = useGetIssuePriorityListQuery();
 
-  const defaultValues = useMemo(
-    () => ({
-      projectId: id,
+  const { control, formState, handleSubmit } = useForm<CreateItemInput>({
+    defaultValues: {
+      listId: id!,
       name: "",
-      description: "",
-      dueDate: "",
+      type: "temp",
       status: "To Do",
-      assignees: [],
-      reporter: undefined,
       priority: "Low",
-      resolution: false,
-    }),
-    [],
-  );
-  // const defaultSchemas: any = useMemo(
-  //   () =>
-  //     schema.paths["/api/v1/issues"].post.requestBody.content[
-  //       "application/json"
-  //     ].schema,
-  //   [],
-  // );
-
-  const { control, formState, handleSubmit } = useForm({
-    defaultValues,
+      description: "",
+      dueDate: null,
+      assigneeIds: [],
+    },
     mode: "all",
-    resolver: ajvResolver({}, {
-      formats: { date: AjvFormats.get("date") },
-    }),
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = ({
+  const onSubmit: SubmitHandler<CreateItemInput> = async ({
     name,
     description,
-    dueDate,
     status,
-    projectId,
-    assignees,
+    listId,
+    type,
+    assigneeIds,
     priority,
-    reporter,
-    resolution,
+    dueDate,
   }) => {
-    createIssue({
-      body: {
-        name,
-        description,
-        dueDate: dueDate ? dueDate : undefined,
-        priority,
-        projectId,
-        reporter,
-        assignees,
-        status,
-        resolution,
+    await createItem({
+      variables: {
+        input: {
+          name,
+          description,
+          type,
+          priority,
+          listId,
+          assigneeIds,
+          status,
+          dueDate: dueDate ? dayjs(dueDate).format() : null,
+        },
       },
     });
   };
@@ -99,14 +94,6 @@ function IssueForm({ projectId }: IssueFormProps) {
       disableGutters
     >
       <MuiGrid container spacing={2}>
-        <MuiGrid xs={12} item sx={{ marginLeft: theme.spacing(-0.5) }}>
-          <TextButton
-            label="Back to all issues"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate("/issues")}
-          />
-        </MuiGrid>
-
         <MuiGrid sm={12} xs={12} item>
           <TextField
             name="name"
@@ -149,7 +136,7 @@ function IssueForm({ projectId }: IssueFormProps) {
         {projectId ? null : (
           <MuiGrid sm={6} xs={6} item>
             <FormAutocomplete
-              name="projectId"
+              name="listId"
               title="Project"
               fixedOptions={[]}
               control={control}
@@ -160,7 +147,7 @@ function IssueForm({ projectId }: IssueFormProps) {
 
         <MuiGrid sm={12} xs={12} item>
           <FormAutocomplete
-            name="assignees"
+            name="assigneeIds"
             title="Assignees"
             control={control}
             formState={formState}
@@ -169,19 +156,6 @@ function IssueForm({ projectId }: IssueFormProps) {
               name: displayName,
             }))}
             isMultiple
-          />
-        </MuiGrid>
-
-        <MuiGrid sm={6} xs={6} item>
-          <FormAutocomplete
-            name="reporter"
-            title="Reported By"
-            options={members?.rows.map(({ user: { id, displayName } }) => ({
-              id,
-              name: displayName,
-            }))}
-            control={control}
-            formState={formState}
           />
         </MuiGrid>
 
@@ -202,4 +176,4 @@ function IssueForm({ projectId }: IssueFormProps) {
   );
 }
 
-export default IssueForm;
+export default ItemForm;

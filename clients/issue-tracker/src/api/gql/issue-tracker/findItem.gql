@@ -1,0 +1,12 @@
+query FindItem($id: String!) {
+  findItem(id: $id) {
+    id
+    list {
+      id
+      name
+    }
+    name
+    priority
+    status
+  }
+}
