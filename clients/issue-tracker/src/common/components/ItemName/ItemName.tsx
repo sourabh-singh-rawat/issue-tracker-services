@@ -16,7 +16,7 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
     paddingLeft: theme.spacing(1),
   },
   "& .MuiOutlinedInput-root": {
-    fontSize: theme.typography.h4.fontSize,
+    fontSize: theme.typography.h1.fontSize,
     fontWeight: "bold",
     backgroundColor: "transparent",
     borderRadius: theme.shape.borderRadiusMedium,
@@ -43,7 +43,7 @@ interface ItemTitleProps {
   handleSubmit: (value: string) => void;
 }
 
-export default function ItemTitle({
+export default function ItemName({
   defaultValue = "",
   handleSubmit,
 }: ItemTitleProps) {

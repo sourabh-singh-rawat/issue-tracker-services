@@ -25,7 +25,7 @@ import IssueStatusSelector from "../../../issue-list/components/IssueStatusSelec
 import DateTag from "../../../../common/components/DateTag";
 import ImageCard from "../../../issue-attachments/components/ImageCard";
 import IssueResolutionSelector from "../../components/IssueResolutionSelector";
-import Description2 from "../../../../common/components/Description2";
+import Description2 from "../../../../common/components/ItemDescription";
 import { useGetIssueAttachmentListQuery } from "../../../../api/generated/storage.api";
 
 export default function IssueOverview() {

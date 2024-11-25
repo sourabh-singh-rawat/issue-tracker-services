@@ -19,7 +19,7 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
-import Title2 from "../../../../common/components/ItemTitle";
+import Title2 from "../../../../common/components/ItemName";
 import Chip from "../../../../common/components/Chip";
 
 export default function Issue() {

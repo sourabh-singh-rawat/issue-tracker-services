@@ -43,6 +43,7 @@ export type CreateWorkspaceInput = {
 
 export type Item = {
   __typename?: 'Item';
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   list: List;
   name: Scalars['String']['output'];
@@ -211,7 +212,7 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string } } | null };
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, name: string, description?: string | null, priority: string, status: string, list: { __typename?: 'List', id: string, name: string } } | null };
 
 export type FindItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -414,6 +415,7 @@ export const FindItemDocument = gql`
       name
     }
     name
+    description
     priority
     status
   }

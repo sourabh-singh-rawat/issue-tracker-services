@@ -9,7 +9,7 @@ import { useMessageBar } from "../../../message-bar/hooks";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import { useUpdateProjectMutation } from "../../../../api/generated/project.api";
 import ProjectDetails from "../../components/ProjectDetails";
-import Description2 from "../../../../common/components/Description2";
+import Description2 from "../../../../common/components/ItemDescription";
 
 export default function ProjectOverview() {
   const theme = useTheme();
