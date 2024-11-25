@@ -39,9 +39,16 @@ export default function Item(props: ItemProps) {
           defaultValue={item?.findItem?.name}
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
-        {item?.findItem?.status && <ItemFields status={item.findItem.status} />}
-      </MuiGrid>
+      {item?.findItem && itemId && (
+        <MuiGrid item xs={12}>
+          <ItemFields
+            itemId={itemId}
+            status={item.findItem.status}
+            priority={item.findItem.priority}
+            updateItem={updateItem}
+          />
+        </MuiGrid>
+      )}
       <MuiGrid item xs={12}>
         <ItemDescription
           handleSubmit={async (description) => {

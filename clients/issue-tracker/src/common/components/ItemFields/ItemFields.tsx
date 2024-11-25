@@ -4,14 +4,23 @@ import MuiTypography from "@mui/material/Typography";
 import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
 import { useForm } from "react-hook-form";
 import ItemPrioritySelector from "../../../features/issue/components/ItemPrioritySelector";
+import { UpdateItemMutationOptions } from "../../../api/codegen/gql/graphql";
 
 interface ItemFieldsProps {
+  itemId: string;
   status: string;
+  priority: string;
+  updateItem: (options: UpdateItemMutationOptions) => Promise<any>;
 }
 
-export default function ItemFields({ status }: ItemFieldsProps) {
+export default function ItemFields({
+  itemId,
+  status,
+  priority,
+  updateItem,
+}: ItemFieldsProps) {
   const itemStatusForm = useForm({ defaultValues: { status } });
-  const itemPriorityForm = useForm();
+  const itemPriorityForm = useForm({ defaultValues: { priority } });
 
   return (
     <MuiGrid container rowSpacing={2}>
@@ -25,6 +34,9 @@ export default function ItemFields({ status }: ItemFieldsProps) {
               control={itemStatusForm.control}
               formState={itemStatusForm.formState}
               name="status"
+              onSubmit={async (value) => {
+                updateItem({ variables: { input: { itemId, status: value } } });
+              }}
               options={["BACKLOG", "ON HOLD", "DEVELOPMENT"]}
             />
           </MuiGrid>
@@ -40,6 +52,9 @@ export default function ItemFields({ status }: ItemFieldsProps) {
               control={itemPriorityForm.control}
               formState={itemPriorityForm.formState}
               name="priority"
+              onSubmit={async (value) => {
+                updateItem({ variables: { input: { itemId, status: value } } });
+              }}
               options={["Urgent", "High", "Normal", "Low"]}
             />
           </MuiGrid>
