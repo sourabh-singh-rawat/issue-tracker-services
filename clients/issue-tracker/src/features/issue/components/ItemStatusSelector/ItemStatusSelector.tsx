@@ -17,7 +17,7 @@ import {
 } from "react-hook-form";
 import Select from "../../../../common/components/Select";
 
-interface IssuePrioritySelectorProps<DefaultValues extends FieldValues> {
+interface ItemStatusSelectorProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
   control: Control<DefaultValues>;
   formState: FormState<DefaultValues>;
@@ -27,16 +27,14 @@ interface IssuePrioritySelectorProps<DefaultValues extends FieldValues> {
   rules?: UseControllerProps<DefaultValues>["rules"];
 }
 
-export default function IssuePrioritySelector<
-  DefaultValues extends FieldValues,
->({
+export default function ItemStatusSelector<DefaultValues extends FieldValues>({
   name,
   control,
   rules,
   title,
   options = [],
   helperText,
-}: IssuePrioritySelectorProps<DefaultValues>) {
+}: ItemStatusSelectorProps<DefaultValues>) {
   const isLoading = false;
 
   return (

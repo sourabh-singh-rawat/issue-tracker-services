@@ -13,8 +13,8 @@ import {
   useGetIssueStatusListQuery,
 } from "../../../../api/generated/issue.api";
 import FormAutocomplete from "../../../../common/components/FormAutocomplete";
-import IssueStatusSelector from "../../components/IssueStatusSelector";
-import IssuePrioritySelector from "../../components/IssuePrioritySelector";
+import IssueStatusSelector from "../../components/ItemStatusSelector";
+import IssuePrioritySelector from "../../components/ItemPrioritySelector";
 import {
   CreateItemInput,
   useCreateItemMutation,
