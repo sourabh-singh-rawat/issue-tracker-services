@@ -20,4 +20,10 @@ export class Item {
 
   @Field(() => List)
   list!: List;
+
+  @Field(() => Item, { nullable: true })
+  parentItem?: Item;
+
+  @Field(() => [Item], { nullable: true })
+  subItems?: Item[];
 }

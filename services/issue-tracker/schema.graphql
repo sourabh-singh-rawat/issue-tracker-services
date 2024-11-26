@@ -9,6 +9,7 @@ input CreateItemInput {
   dueDate: DateTimeISO
   listId: String!
   name: String!
+  parentItemId: String
   priority: String!
   status: String!
   type: String!
@@ -35,8 +36,10 @@ type Item {
   id: String!
   list: List!
   name: String!
+  parentItem: Item
   priority: String!
   status: String!
+  subItems: [Item!]
 }
 
 type List {

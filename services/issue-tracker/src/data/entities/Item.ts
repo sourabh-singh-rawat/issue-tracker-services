@@ -70,8 +70,8 @@ export class Item extends AuditEntity {
   assignees!: ItemAssignee;
 
   @TreeChildren()
-  children!: Item[];
+  subItems!: Item[];
 
   @TreeParent()
-  parent!: Item;
+  parentItem!: Item;
 }

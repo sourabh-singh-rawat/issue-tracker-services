@@ -28,7 +28,7 @@ export class PostgresIssueAssigneeRepository
   };
 
   findByIssueId = async (issueId: string) => {
-    return await ItemAssignee.find({ where: { issueId } });
+    return await ItemAssignee.find({ where: { itemId: issueId } });
   };
 
   softDelete = async () => {

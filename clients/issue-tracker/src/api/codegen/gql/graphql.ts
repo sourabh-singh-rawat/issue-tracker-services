@@ -24,6 +24,7 @@ export type CreateItemInput = {
   dueDate?: InputMaybe<Scalars['DateTimeISO']['input']>;
   listId: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  parentItemId?: InputMaybe<Scalars['String']['input']>;
   priority: Scalars['String']['input'];
   status: Scalars['String']['input'];
   type: Scalars['String']['input'];
@@ -46,8 +47,10 @@ export type Item = {
   id: Scalars['String']['output'];
   list: List;
   name: Scalars['String']['output'];
+  parentItem?: Maybe<Item>;
   priority: Scalars['String']['output'];
   status: Scalars['String']['output'];
+  subItems?: Maybe<Array<Item>>;
 };
 
 export type List = {
@@ -214,11 +217,11 @@ export type CreateWorkspaceMutationVariables = Exact<{
 export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: string };
 
 export type FindItemQueryVariables = Exact<{
-  id: Scalars['String']['input'];
+  findItemId: Scalars['String']['input'];
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, name: string, description?: string | null, priority: string, status: string, list: { __typename?: 'List', id: string, name: string } } | null };
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null, subItems?: Array<{ __typename?: 'Item', id: string, name: string }> | null } | null };
 
 export type FindItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -444,15 +447,23 @@ export type CreateWorkspaceMutationHookResult = ReturnType<typeof useCreateWorks
 export type CreateWorkspaceMutationResult = Apollo.MutationResult<CreateWorkspaceMutation>;
 export type CreateWorkspaceMutationOptions = Apollo.BaseMutationOptions<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>;
 export const FindItemDocument = gql`
-    query FindItem($id: String!) {
-  findItem(id: $id) {
+    query FindItem($findItemId: String!) {
+  findItem(id: $findItemId) {
+    description
     id
     list {
       id
       name
     }
+    parentItem {
+      id
+      name
+    }
+    subItems {
+      id
+      name
+    }
     name
-    description
     priority
     status
   }
@@ -471,7 +482,7 @@ export const FindItemDocument = gql`
  * @example
  * const { data, loading, error } = useFindItemQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      findItemId: // value for 'findItemId'
  *   },
  * });
  */

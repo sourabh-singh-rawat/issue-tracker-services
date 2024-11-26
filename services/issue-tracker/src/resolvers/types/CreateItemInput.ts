@@ -19,6 +19,9 @@ export class CreateItemInput {
   listId!: string;
 
   @Field({ nullable: true })
+  parentItemId?: string;
+
+  @Field({ nullable: true })
   dueDate?: Date;
 
   @Field({ nullable: true })

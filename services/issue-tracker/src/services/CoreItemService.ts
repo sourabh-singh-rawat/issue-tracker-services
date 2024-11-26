@@ -1,6 +1,5 @@
 import {
   CreateItemOptions,
-  CreateSubItemOptions,
   FindItemOptions,
   FindItemsOptions,
   ItemService,
@@ -20,6 +19,7 @@ import {
 } from "@issue-tracker/common";
 import { Typeorm } from "@issue-tracker/orm";
 import { NatsPublisher } from "@issue-tracker/event-bus";
+import { dataSource } from "..";
 
 export class CoreItemService implements ItemService {
   constructor(
@@ -39,7 +39,7 @@ export class CoreItemService implements ItemService {
     queryRunner: QueryRunner,
   ) {
     const newAssignee = new ItemAssignee();
-    newAssignee.issueId = id;
+    newAssignee.itemId = id;
     newAssignee.userId = userId;
 
     await this.issueAssigneeRepository.save(newAssignee, { queryRunner });
@@ -51,49 +51,22 @@ export class CoreItemService implements ItemService {
   }
 
   async createItem(options: CreateItemOptions) {
-    const {
-      name,
-      description,
-      status,
-      priority,
-      dueDate,
-      listId,
-      assigneeIds,
-      userId,
-      type,
-      manager,
-    } = options;
+    const { manager, userId, assigneeIds, parentItemId, ...input } = options;
     const ItemRepo = manager.getRepository(Item);
     const ItemAssigneeRepo = manager.getRepository(ItemAssignee);
 
+    const parentItem = await ItemRepo.findOne({ where: { id: parentItemId } });
     const item = await ItemRepo.save({
-      name,
-      description,
-      status,
-      priority,
-      dueDate,
-      listId,
-      type,
+      ...input,
       createdById: userId,
+      parentItem: parentItem ? parentItem : undefined,
     });
 
     for await (const assigneeId of assigneeIds) {
-      await ItemAssigneeRepo.save({ issueId: item.id, userId: assigneeId });
+      await ItemAssigneeRepo.save({ itemId: item.id, userId: assigneeId });
     }
 
     return item.id;
-  }
-
-  async createSubItem(options: CreateSubItemOptions) {
-    const { manager, parentItemId, ...inputs } = options;
-    const ItemRepo = manager.getRepository(Item);
-    const parentItem = await ItemRepo.findOne({ where: { id: parentItemId } });
-
-    if (!parentItem) throw new NotFoundError("Parent Item");
-
-    await ItemRepo.save({ ...inputs, parent: parentItem });
-
-    return "Child item created successfully";
   }
 
   async findItems(options: FindItemsOptions) {
@@ -109,10 +82,14 @@ export class CoreItemService implements ItemService {
   async findItem(options: FindItemOptions) {
     const { userId, itemId } = options;
 
-    return await Item.findOne({
+    const item = await Item.findOneOrFail({
       where: { id: itemId, createdById: userId },
       relations: { list: true },
     });
+
+    return await dataSource.manager
+      .getTreeRepository(Item)
+      .findDescendantsTree(item, { relations: ["list"] });
   }
 
   getIssueStatusList = async () => {
@@ -187,7 +164,7 @@ export class CoreItemService implements ItemService {
     if (assignee) throw new UserAlreadyExists();
 
     const newIssueAssignee = new ItemAssignee();
-    newIssueAssignee.issueId = id;
+    newIssueAssignee.itemId = id;
     newIssueAssignee.userId = userId;
 
     // await this.issueAssigneeRepository.save();
