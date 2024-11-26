@@ -61,20 +61,33 @@ export default function Item(props: ItemProps) {
         />
       </MuiGrid>
       {id && item?.findItem && (
-        <MuiGrid item xs={12}>
-          <MuiTypography variant="h4">Sub Items</MuiTypography>
-          <ItemModal listId={id} parentItemId={itemId} />
+        <>
+          <MuiGrid
+            container
+            sx={{ alignContent: "center", alignItems: "center" }}
+          >
+            <MuiGrid item>
+              <MuiTypography variant="h5" fontWeight="600">
+                Sub Items
+              </MuiTypography>
+            </MuiGrid>
+            <MuiGrid item>
+              <ItemModal listId={id} parentItemId={itemId} />
+            </MuiGrid>
 
-          <MuiGrid container>
-            {item?.findItem?.subItems?.map(({ name }) => {
-              return (
-                <MuiGrid item xs={12}>
-                  {name}
-                </MuiGrid>
-              );
-            })}
+            <MuiGrid item xs={12}>
+              <MuiGrid container>
+                {item?.findItem?.subItems?.map(({ name }) => {
+                  return (
+                    <MuiGrid item xs={12}>
+                      {name}
+                    </MuiGrid>
+                  );
+                })}
+              </MuiGrid>
+            </MuiGrid>
           </MuiGrid>
-        </MuiGrid>
+        </>
       )}
     </MuiGrid>
   );
