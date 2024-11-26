@@ -8,7 +8,7 @@
     "issue-tracker": "pnpm -F @issue-tracker-services/issue-tracker run dev",
     "auth": "pnpm -F auth run dev",
     "mail": "pnpm -F mail run dev",
-    "storage": "pnpm -F storage run dev",
+    "attachment": "pnpm -F attachment run dev",
     "gen": "pnpm -F client run gen:hooks",
     "build": "pnpm -r --filter=!client build"
   },

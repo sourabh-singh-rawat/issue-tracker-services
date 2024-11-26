@@ -8,7 +8,7 @@
         "issue-tracker",
         "issue-tracker (client)",
         "mail",
-        "storage",
+        "attachment",
         "brave (debug)",
       ]
     }
@@ -83,13 +83,13 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "storage",
+      "name": "attachment",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": [
-        "storage"
+        "attachment"
       ],
       "console": "integratedTerminal"
     }

@@ -1,7 +1,7 @@
 {
-  "name": "storage",
+  "name": "attachment",
   "version": "1.0.0",
-  "description": "Create and manage attachments",
+  "description": "Manage attachments",
   "main": "src/index.ts",
   "scripts": {
     "test": "jest --watchAll",
@@ -36,6 +36,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@apollo/server": "^4.11.2",
+    "@as-integrations/fastify": "^2.1.1",
     "@fastify/cookie": "^9.3.1",
     "@fastify/cors": "^8.5.0",
     "@fastify/multipart": "^8.2.0",
@@ -46,15 +48,20 @@
     "@issue-tracker/security": "workspace:^",
     "@issue-tracker/server-core": "workspace:^",
     "awilix": "^8.0.1",
+    "bullmq": "^5.29.1",
     "casbin": "^5.30.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.27.0",
     "firebase-admin": "^11.11.1",
+    "graphql": "^16.9.0",
+    "graphql-scalars": "^1.23.0",
     "http-status-codes": "^2.3.0",
+    "ioredis": "^5.4.1",
     "nats": "^2.26.0",
     "pg": "^8.11.5",
     "pino": "^8.21.0",
     "sharp": "^0.32.6",
+    "type-graphql": "2.0.0-rc.2",
     "typeorm": "^0.3.20",
     "typeorm-adapter": "^1.7.0",
     "uuid": "^9.0.1"

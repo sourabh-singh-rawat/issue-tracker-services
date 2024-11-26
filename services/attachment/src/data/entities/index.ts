@@ -1,1 +1,1 @@
-export * from "./issue-attachment.entity";
+export * from "./Attachment";
