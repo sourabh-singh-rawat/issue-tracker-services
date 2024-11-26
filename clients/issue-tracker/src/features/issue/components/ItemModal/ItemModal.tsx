@@ -4,7 +4,7 @@ import ModalBody from "../../../../common/components/ModalBody";
 import ModalHeader from "../../../../common/components/ModalHeader";
 import ItemForm from "../../pages/ItemForm";
 import MuiIconButton from "@mui/material/IconButton";
-import { PlusOne } from "@mui/icons-material";
+import { GridAddIcon } from "@mui/x-data-grid";
 
 interface ItemModalProps {
   listId: string;
@@ -18,8 +18,8 @@ export default function ItemModal({ listId, parentItemId }: ItemModalProps) {
 
   return (
     <>
-      <MuiIconButton onClick={handleOpen}>
-        <PlusOne />
+      <MuiIconButton size="small" onClick={handleOpen}>
+        <GridAddIcon />
       </MuiIconButton>
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader title="New Item" handleClose={handleClose} subtitle="" />
