@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import IssueModal from "../IssueModal";
+import IssueModal from "../ItemModal";
 
 interface AddIssueButtonProps {
   projectId: string;
@@ -19,7 +19,7 @@ export default function AddIssueButton({ projectId }: AddIssueButtonProps) {
         onClick={handleOpen}
         startIcon={<PestControlIcon />}
       />
-      <IssueModal open={open} handleClose={handleClose} projectId={projectId} />
+      <IssueModal listId={projectId} />
     </>
   );
 }

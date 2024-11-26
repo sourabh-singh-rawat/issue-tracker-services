@@ -1,12 +1,20 @@
-query FindItem($id: String!) {
-  findItem(id: $id) {
+query FindItem($findItemId: String!) {
+  findItem(id: $findItemId) {
+    description
     id
     list {
       id
       name
     }
+    parentItem {
+      id
+      name
+    }
+    subItems {
+      id
+      name
+    }
     name
-    description
     priority
     status
   }

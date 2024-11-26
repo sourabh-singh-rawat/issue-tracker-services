@@ -14,8 +14,8 @@ export class ItemAssignee extends AuditEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @JoinColumn({ name: "issue_id" })
-  issueId!: string;
+  @JoinColumn({ name: "item_id" })
+  itemId!: string;
 
   @ManyToOne(() => Item, ({ assignees }) => assignees)
   issue!: Item;

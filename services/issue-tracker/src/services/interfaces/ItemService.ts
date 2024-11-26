@@ -21,10 +21,7 @@ export interface CreateItemOptions extends ServiceOptions {
   assigneeIds: string[];
   description?: string;
   dueDate?: Date;
-}
-
-export interface CreateSubItemOptions extends CreateItemOptions {
-  parentItemId: string;
+  parentItemId?: string;
 }
 
 export interface FindItemOptions {
@@ -50,7 +47,6 @@ export interface UpdateItemOptions extends ServiceOptions {
 
 export interface ItemService {
   createItem(options: CreateItemOptions): Promise<string>;
-  createSubItem(options: CreateSubItemOptions): Promise<string>;
   findItem(options: FindItemOptions): Promise<Item | null>;
   findItems(options: FindItemsOptions): Promise<PaginatedOutput<Item>>;
   getIssue(issueId: string): Promise<Item>;

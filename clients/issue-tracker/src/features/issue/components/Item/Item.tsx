@@ -5,19 +5,20 @@ import {
   useUpdateItemMutation,
 } from "../../../../api/codegen/gql/graphql";
 import { useMessageBar } from "../../../message-bar/hooks";
+import MuiGrid from "@mui/material/Grid";
+import MuiTypography from "@mui/material/Typography";
 import ItemName from "../../../../common/components/ItemName";
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+import ItemModal from "../ItemModal";
 
 export interface ItemProps {}
 
 export default function Item(props: ItemProps) {
   const messageBar = useMessageBar();
-  const { itemId } = useParams<{ itemId: string }>();
+  const { id, itemId } = useParams<{ id: string; itemId: string }>();
   const { data: item } = useFindItemQuery({
-    variables: { id: itemId as string },
+    variables: { findItemId: itemId as string },
     skip: !itemId,
   });
   const [updateItem] = useUpdateItemMutation({
@@ -59,9 +60,22 @@ export default function Item(props: ItemProps) {
           defaultValue={item?.findItem?.description}
         />
       </MuiGrid>
-      <MuiGrid item xs={12}>
-        <MuiTypography variant="h4">Sub Items</MuiTypography>
-      </MuiGrid>
+      {id && item?.findItem && (
+        <MuiGrid item xs={12}>
+          <MuiTypography variant="h4">Sub Items</MuiTypography>
+          <ItemModal listId={id} parentItemId={itemId} />
+
+          <MuiGrid container>
+            {item?.findItem?.subItems?.map(({ name }) => {
+              return (
+                <MuiGrid item xs={12}>
+                  {name}
+                </MuiGrid>
+              );
+            })}
+          </MuiGrid>
+        </MuiGrid>
+      )}
     </MuiGrid>
   );
 }
