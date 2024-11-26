@@ -42,6 +42,7 @@ export default function ItemFields({
           </MuiGrid>
         </MuiGrid>
       </MuiGrid>
+
       <MuiGrid item xs={12}>
         <MuiGrid container>
           <MuiGrid item xs={3}>
@@ -57,6 +58,17 @@ export default function ItemFields({
               }}
               options={["Urgent", "High", "Normal", "Low"]}
             />
+          </MuiGrid>
+        </MuiGrid>
+      </MuiGrid>
+
+      <MuiGrid item xs={12}>
+        <MuiGrid container>
+          <MuiGrid item xs={3}>
+            <MuiTypography variant="h6">Dates</MuiTypography>
+          </MuiGrid>
+          <MuiGrid item xs={3}>
+            Empty
           </MuiGrid>
         </MuiGrid>
       </MuiGrid>

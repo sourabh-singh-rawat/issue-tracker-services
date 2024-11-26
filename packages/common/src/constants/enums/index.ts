@@ -26,3 +26,4 @@ export * from "./email-verification-token-payload";
 export * from "./email-verification-status";
 export * from "./email-status";
 export * from "./email-type";
+export * from "./Queues";

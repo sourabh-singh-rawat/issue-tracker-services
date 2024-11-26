@@ -51,6 +51,7 @@ export default function Item(props: ItemProps) {
           />
         </MuiGrid>
       )}
+
       <MuiGrid item xs={12}>
         <ItemDescription
           handleSubmit={async (description) => {
@@ -60,6 +61,15 @@ export default function Item(props: ItemProps) {
           defaultValue={item?.findItem?.description}
         />
       </MuiGrid>
+
+      <MuiGrid container>
+        <MuiGrid item xs={12}>
+          <MuiTypography variant="h5" fontWeight="600">
+            Custom Fields
+          </MuiTypography>
+        </MuiGrid>
+      </MuiGrid>
+
       {id && item?.findItem && (
         <>
           <MuiGrid
@@ -89,6 +99,22 @@ export default function Item(props: ItemProps) {
           </MuiGrid>
         </>
       )}
+
+      <MuiGrid container>
+        <MuiGrid item xs={12}>
+          <MuiTypography variant="h5" fontWeight="600">
+            Checklists
+          </MuiTypography>
+        </MuiGrid>
+      </MuiGrid>
+
+      <MuiGrid container>
+        <MuiGrid item xs={12}>
+          <MuiTypography variant="h5" fontWeight="600">
+            Attachments
+          </MuiTypography>
+        </MuiGrid>
+      </MuiGrid>
     </MuiGrid>
   );
 }

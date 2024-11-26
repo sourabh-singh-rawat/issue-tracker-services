@@ -1,11 +1,9 @@
 import { AuditEntity } from "@issue-tracker/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: "issue_attachments" })
-export class IssueAttachmentEntity extends AuditEntity {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "issue_attachments_pkey",
-  })
+@Entity({ name: "attachments" })
+export class Attachment extends AuditEntity {
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
   @Column({ type: "text" })
@@ -18,7 +16,7 @@ export class IssueAttachmentEntity extends AuditEntity {
   contentType!: string;
 
   @Column({ type: "text" })
-  path!: string;
+  thumbnailLink!: string;
 
   @Column({ type: "text" })
   bucket!: string;
@@ -27,5 +25,5 @@ export class IssueAttachmentEntity extends AuditEntity {
   ownerId!: string;
 
   @Column({ name: "issue_id", type: "uuid" })
-  issueId!: string;
+  itemId!: string;
 }

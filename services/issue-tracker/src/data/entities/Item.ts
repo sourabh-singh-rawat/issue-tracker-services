@@ -47,6 +47,13 @@ export class Item extends AuditEntity {
   list!: List;
 
   @Column({
+    name: "start_date",
+    type: "timestamp with time zone",
+    nullable: true,
+  })
+  startDate?: Date;
+
+  @Column({
     name: "due_date",
     type: "timestamp with time zone",
     nullable: true,

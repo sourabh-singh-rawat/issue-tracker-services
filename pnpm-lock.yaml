@@ -49,7 +49,7 @@ importers:
         version: 6.20.1(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/x-date-pickers':
         specifier: ^6.20.0
-        version: 6.20.1(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(date-fns@2.30.0)(dayjs@1.11.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 6.20.1(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(date-fns@2.30.0)(dayjs@1.11.11)(luxon@3.5.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@reduxjs/toolkit':
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)
@@ -278,7 +278,7 @@ importers:
         version: 29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       ts-jest:
         specifier: ^29.1.4
-        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5)
+        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0))(typescript@5.4.5)
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -299,7 +299,7 @@ importers:
         version: 8.21.0
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -312,7 +312,7 @@ importers:
         version: 29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       ts-jest:
         specifier: ^29.1.4
-        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5)
+        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0))(typescript@5.4.5)
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -351,10 +351,10 @@ importers:
         version: 8.21.0
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       typeorm-adapter:
         specifier: ^1.7.0
-        version: 1.7.0(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 1.7.0(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
     devDependencies:
       '@types/jsonwebtoken':
         specifier: ^9.0.6
@@ -396,6 +396,12 @@ importers:
 
   services/attachment:
     dependencies:
+      '@apollo/server':
+        specifier: ^4.11.2
+        version: 4.11.2(graphql@16.9.0)
+      '@as-integrations/fastify':
+        specifier: ^2.1.1
+        version: 2.1.1(@apollo/server@4.11.2(graphql@16.9.0))(fastify@4.27.0)
       '@fastify/cookie':
         specifier: ^9.3.1
         version: 9.3.1
@@ -426,6 +432,9 @@ importers:
       awilix:
         specifier: ^8.0.1
         version: 8.0.1
+      bullmq:
+        specifier: ^5.29.1
+        version: 5.29.1
       casbin:
         specifier: ^5.30.0
         version: 5.30.0
@@ -438,9 +447,18 @@ importers:
       firebase-admin:
         specifier: ^11.11.1
         version: 11.11.1
+      graphql:
+        specifier: ^16.9.0
+        version: 16.9.0
+      graphql-scalars:
+        specifier: ^1.23.0
+        version: 1.23.0(graphql@16.9.0)
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
+      ioredis:
+        specifier: ^5.4.1
+        version: 5.4.1
       nats:
         specifier: ^2.26.0
         version: 2.26.0
@@ -453,12 +471,15 @@ importers:
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
+      type-graphql:
+        specifier: 2.0.0-rc.2
+        version: 2.0.0-rc.2(graphql-scalars@1.23.0(graphql@16.9.0))(graphql@16.9.0)
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       typeorm-adapter:
         specifier: ^1.7.0
-        version: 1.7.0(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 1.7.0(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -489,7 +510,7 @@ importers:
         version: 3.2.5
       ts-jest:
         specifier: ^29.1.4
-        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5)
+        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0))(typescript@5.4.5)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.12.13)(typescript@5.4.5)
@@ -570,7 +591,7 @@ importers:
         version: 2.0.0-rc.2(graphql-scalars@1.23.0(graphql@16.9.0))(graphql@16.9.0)
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       typescript-json-schema:
         specifier: ^0.64.0
         version: 0.64.0
@@ -625,7 +646,7 @@ importers:
         version: 6.3.4
       ts-jest:
         specifier: ^29.1.4
-        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5)
+        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0))(typescript@5.4.5)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.12.13)(typescript@5.4.5)
@@ -694,10 +715,10 @@ importers:
         version: 2.0.0-rc.2(graphql-scalars@1.23.0(graphql@16.9.0))(graphql@16.9.0)
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       typeorm-adapter:
         specifier: ^1.7.0
-        version: 1.7.0(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 1.7.0(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -773,7 +794,7 @@ importers:
         version: 0.2.2
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+        version: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -801,7 +822,7 @@ importers:
         version: 3.2.5
       ts-jest:
         specifier: ^29.1.4
-        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5)
+        version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0))(typescript@5.4.5)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.12.13)(typescript@5.4.5)
@@ -2639,6 +2660,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@ioredis/commands@1.2.0':
+    resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -2754,6 +2778,36 @@ packages:
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
+
+  '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
+    resolution: {integrity: sha512-QZHtlVgbAdy2zAqNA9Gu1UpIuI8Xvsd1v8ic6B2pZmeFnFcMWiPLfWXh7TVw4eGEZ/C9TH281KwhVoeQUKbyjw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.3':
+    resolution: {integrity: sha512-mdzd3AVzYKuUmiWOQ8GNhl64/IoFGol569zNRdkLReh6LRLHOXxU4U8eq0JwaD8iFHdVGqSy4IjFL4reoWCDFw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.3':
+    resolution: {integrity: sha512-YxQL+ax0XqBJDZiKimS2XQaf+2wDGVa1enVRGzEvLLVFeqa5kx2bWbtcSXgsxjQB7nRqqIGFIcLteF/sHeVtQg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@msgpackr-extract/msgpackr-extract-linux-arm@3.0.3':
+    resolution: {integrity: sha512-fg0uy/dG/nZEXfYilKoRe7yALaNmHoYeIoJuJ7KJ+YyU2bvY8vPv27f7UKhGRpY6euFYqEVhxCFZgAUNQBM3nw==}
+    cpu: [arm]
+    os: [linux]
+
+  '@msgpackr-extract/msgpackr-extract-linux-x64@3.0.3':
+    resolution: {integrity: sha512-cvwNfbP07pKUfq1uH+S6KJ7dT9K8WOE4ZiAcsrSes+UY55E/0jLYc+vq+DO7jlmqRb5zAggExKm0H7O/CBaesg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@msgpackr-extract/msgpackr-extract-win32-x64@3.0.3':
+    resolution: {integrity: sha512-x0fWaQtYp4E6sktbsdAqnehxDgEc/VwM7uLsRCYWaiGu0ykYdZPiS8zCWdnjHwyiumousxfBm4SO31eXqwEZhQ==}
+    cpu: [x64]
+    os: [win32]
 
   '@mui/base@5.0.0-beta.40':
     resolution: {integrity: sha512-I/lGHztkCzvwlXpjD2+SNmvNQvB4227xBXhISPjEaJUXGImOQ9f3D2Yj/T3KasSI/h0MLWy74X0J6clhPmsRbQ==}
@@ -4053,6 +4107,9 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
+  bullmq@5.29.1:
+    resolution: {integrity: sha512-TZWiwRlPnpaN+Qwh4D8IQf2cYLpkiDX1LbaaWEabc6y37ojIttWOSynxDewpVHyW233LssSIC4+aLMSvAjtpmg==}
+
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
     engines: {node: '>=10.16.0'}
@@ -4213,6 +4270,10 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
+  cluster-key-slot@1.1.2:
+    resolution: {integrity: sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==}
+    engines: {node: '>=0.10.0'}
+
   co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
@@ -4354,6 +4415,10 @@ packages:
 
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
+  cron-parser@4.9.0:
+    resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
+    engines: {node: '>=12.0.0'}
 
   cross-fetch@3.1.8:
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
@@ -4519,6 +4584,10 @@ packages:
 
   delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
+
+  denque@2.1.0:
+    resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
+    engines: {node: '>=0.10'}
 
   depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
@@ -5409,6 +5478,10 @@ packages:
   inversify@6.0.2:
     resolution: {integrity: sha512-i9m8j/7YIv4mDuYXUAcrpKPSaju/CIly9AHK5jvCBeoiM/2KEsuCQTTP+rzSWWpLYWRukdXFSl6ZTk2/uumbiA==}
 
+  ioredis@5.4.1:
+    resolution: {integrity: sha512-2YZsvl7jopIa1gaePkeMtd9rAcSjOOjPtpcLlOeusyO+XH2SK5ZcT+UCrElPP+WVIInh2TzeI4XW9ENaSLVVHA==}
+    engines: {node: '>=12.22.0'}
+
   ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
@@ -5954,11 +6027,17 @@ packages:
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
 
+  lodash.defaults@4.2.0:
+    resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
+
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
 
   lodash.includes@4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
+
+  lodash.isarguments@3.1.0:
+    resolution: {integrity: sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==}
 
   lodash.isboolean@3.0.3:
     resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
@@ -6041,6 +6120,10 @@ packages:
 
   lunr@2.3.9:
     resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}
+
+  luxon@3.5.0:
+    resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
+    engines: {node: '>=12'}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -6254,6 +6337,13 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
+  msgpackr-extract@3.0.3:
+    resolution: {integrity: sha512-P0efT1C9jIdVRefqjzOQ9Xml57zpOXnIuS+csaB4MdZbTdmGDLo8XhzBG1N7aO11gKDDkJvBLULeFTo46wwreA==}
+    hasBin: true
+
+  msgpackr@1.11.2:
+    resolution: {integrity: sha512-F9UngXRlPyWCDEASDpTf6c9uNhGPTqnTeLVt7bN+bU1eajoR/8V9ys2BRaV5C/e5ihE6sJ9uPIKaYt6bFuO32g==}
+
   mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
 
@@ -6340,6 +6430,10 @@ packages:
   node-forge@1.3.1:
     resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
     engines: {node: '>= 6.13.0'}
+
+  node-gyp-build-optional-packages@5.2.2:
+    resolution: {integrity: sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==}
+    hasBin: true
 
   node-int64@0.4.0:
     resolution: {integrity: sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==}
@@ -7027,6 +7121,14 @@ packages:
     resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
     engines: {node: '>= 12.13.0'}
 
+  redis-errors@1.2.0:
+    resolution: {integrity: sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==}
+    engines: {node: '>=4'}
+
+  redis-parser@3.0.0:
+    resolution: {integrity: sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==}
+    engines: {node: '>=4'}
+
   redoc@2.1.4:
     resolution: {integrity: sha512-wqStZ9oPDTCmp2DMLqecxvxjltX4Bi2xfJiQq3+5Ty1g9Au7TGpJi9PPs42x7p/FxG8t+HlJ6xA7pXpWLZ+UyQ==}
     engines: {node: '>=6.9', npm: '>=3.0.0'}
@@ -7436,6 +7538,9 @@ packages:
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
+
+  standard-as-callback@2.1.0:
+    resolution: {integrity: sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==}
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -9749,7 +9854,7 @@ snapshots:
       '@firebase/app-compat': 0.2.35
       '@firebase/component': 0.6.7
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
 
@@ -9762,7 +9867,7 @@ snapshots:
       '@firebase/installations': 0.6.7(@firebase/app@0.10.5)
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/app-check-compat@0.3.11(@firebase/app-compat@0.2.35)(@firebase/app@0.10.5)':
     dependencies:
@@ -9772,7 +9877,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
 
@@ -9786,7 +9891,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/app-compat@0.2.35':
     dependencies:
@@ -9794,7 +9899,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/app-types@0.9.0': {}
 
@@ -9806,7 +9911,7 @@ snapshots:
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
       idb: 7.1.1
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/auth-compat@0.5.9(@firebase/app-compat@0.2.35)(@firebase/app-types@0.9.2)(@firebase/app@0.10.5)':
     dependencies:
@@ -9815,7 +9920,7 @@ snapshots:
       '@firebase/auth-types': 0.12.2(@firebase/app-types@0.9.2)(@firebase/util@1.9.6)
       '@firebase/component': 0.6.7
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
       undici: 5.28.4
     transitivePeerDependencies:
       - '@firebase/app'
@@ -9837,7 +9942,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
       undici: 5.28.4
 
   '@firebase/component@0.6.4':
@@ -9866,7 +9971,7 @@ snapshots:
       '@firebase/database-types': 1.0.3
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/database-types@0.10.4':
     dependencies:
@@ -9895,7 +10000,7 @@ snapshots:
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
       faye-websocket: 0.11.4
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/firestore-compat@0.3.32(@firebase/app-compat@0.2.35)(@firebase/app-types@0.9.2)(@firebase/app@0.10.5)':
     dependencies:
@@ -9904,7 +10009,7 @@ snapshots:
       '@firebase/firestore': 4.6.3(@firebase/app@0.10.5)
       '@firebase/firestore-types': 3.0.2(@firebase/app-types@0.9.2)(@firebase/util@1.9.6)
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
       - '@firebase/app-types'
@@ -9923,7 +10028,7 @@ snapshots:
       '@firebase/webchannel-wrapper': 1.0.0
       '@grpc/grpc-js': 1.9.15
       '@grpc/proto-loader': 0.7.13
-      tslib: 2.6.2
+      tslib: 2.8.1
       undici: 5.28.4
 
   '@firebase/functions-compat@0.3.11(@firebase/app-compat@0.2.35)(@firebase/app@0.10.5)':
@@ -9933,7 +10038,7 @@ snapshots:
       '@firebase/functions': 0.11.5(@firebase/app@0.10.5)
       '@firebase/functions-types': 0.6.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
 
@@ -9947,7 +10052,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/messaging-interop-types': 0.2.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
       undici: 5.28.4
 
   '@firebase/installations-compat@0.2.7(@firebase/app-compat@0.2.35)(@firebase/app-types@0.9.2)(@firebase/app@0.10.5)':
@@ -9957,7 +10062,7 @@ snapshots:
       '@firebase/installations': 0.6.7(@firebase/app@0.10.5)
       '@firebase/installations-types': 0.5.2(@firebase/app-types@0.9.2)
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
       - '@firebase/app-types'
@@ -9972,7 +10077,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/util': 1.9.6
       idb: 7.1.1
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/logger@0.4.0':
     dependencies:
@@ -9988,7 +10093,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/messaging': 0.12.9(@firebase/app@0.10.5)
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
 
@@ -10002,7 +10107,7 @@ snapshots:
       '@firebase/messaging-interop-types': 0.2.2
       '@firebase/util': 1.9.6
       idb: 7.1.1
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/performance-compat@0.2.7(@firebase/app-compat@0.2.35)(@firebase/app@0.10.5)':
     dependencies:
@@ -10012,7 +10117,7 @@ snapshots:
       '@firebase/performance': 0.6.7(@firebase/app@0.10.5)
       '@firebase/performance-types': 0.2.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
 
@@ -10025,7 +10130,7 @@ snapshots:
       '@firebase/installations': 0.6.7(@firebase/app@0.10.5)
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/remote-config-compat@0.2.7(@firebase/app-compat@0.2.35)(@firebase/app@0.10.5)':
     dependencies:
@@ -10035,7 +10140,7 @@ snapshots:
       '@firebase/remote-config': 0.4.7(@firebase/app@0.10.5)
       '@firebase/remote-config-types': 0.3.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
 
@@ -10048,7 +10153,7 @@ snapshots:
       '@firebase/installations': 0.6.7(@firebase/app@0.10.5)
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/storage-compat@0.3.8(@firebase/app-compat@0.2.35)(@firebase/app-types@0.9.2)(@firebase/app@0.10.5)':
     dependencies:
@@ -10057,7 +10162,7 @@ snapshots:
       '@firebase/storage': 0.12.5(@firebase/app@0.10.5)
       '@firebase/storage-types': 0.8.2(@firebase/app-types@0.9.2)(@firebase/util@1.9.6)
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@firebase/app'
       - '@firebase/app-types'
@@ -10072,7 +10177,7 @@ snapshots:
       '@firebase/app': 0.10.5
       '@firebase/component': 0.6.7
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
       undici: 5.28.4
 
   '@firebase/util@1.9.3':
@@ -10081,7 +10186,7 @@ snapshots:
 
   '@firebase/util@1.9.6':
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/vertexai-preview@0.0.2(@firebase/app-types@0.9.2)(@firebase/app@0.10.5)':
     dependencies:
@@ -10091,7 +10196,7 @@ snapshots:
       '@firebase/component': 0.6.7
       '@firebase/logger': 0.4.2
       '@firebase/util': 1.9.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   '@firebase/webchannel-wrapper@1.0.0': {}
 
@@ -10799,6 +10904,8 @@ snapshots:
   '@img/sharp-win32-x64@0.33.5':
     optional: true
 
+  '@ioredis/commands@1.2.0': {}
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -11025,11 +11132,29 @@ snapshots:
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
-      semver: 7.6.2
+      semver: 7.6.3
       tar: 6.2.1
     transitivePeerDependencies:
       - encoding
       - supports-color
+
+  '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
+    optional: true
+
+  '@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.3':
+    optional: true
+
+  '@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.3':
+    optional: true
+
+  '@msgpackr-extract/msgpackr-extract-linux-arm@3.0.3':
+    optional: true
+
+  '@msgpackr-extract/msgpackr-extract-linux-x64@3.0.3':
+    optional: true
+
+  '@msgpackr-extract/msgpackr-extract-win32-x64@3.0.3':
+    optional: true
 
   '@mui/base@5.0.0-beta.40(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -11140,7 +11265,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mui/x-date-pickers@6.20.1(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(date-fns@2.30.0)(dayjs@1.11.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mui/x-date-pickers@6.20.1(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@5.15.20(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(date-fns@2.30.0)(dayjs@1.11.11)(luxon@3.5.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.24.6
       '@mui/base': 5.0.0-beta.40(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -11158,6 +11283,7 @@ snapshots:
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       date-fns: 2.30.0
       dayjs: 1.11.11
+      luxon: 3.5.0
     transitivePeerDependencies:
       - '@types/react'
 
@@ -12525,6 +12651,18 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
+  bullmq@5.29.1:
+    dependencies:
+      cron-parser: 4.9.0
+      ioredis: 5.4.1
+      msgpackr: 1.11.2
+      node-abort-controller: 3.1.1
+      semver: 7.6.3
+      tslib: 2.8.1
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - supports-color
+
   busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
@@ -12721,6 +12859,8 @@ snapshots:
 
   clsx@2.1.1: {}
 
+  cluster-key-slot@1.1.2: {}
+
   co@4.6.0: {}
 
   collect-v8-coverage@1.0.2: {}
@@ -12850,6 +12990,10 @@ snapshots:
       - ts-node
 
   create-require@1.1.1: {}
+
+  cron-parser@4.9.0:
+    dependencies:
+      luxon: 3.5.0
 
   cross-fetch@3.1.8:
     dependencies:
@@ -13020,6 +13164,8 @@ snapshots:
   delayed-stream@1.0.0: {}
 
   delegates@1.0.0: {}
+
+  denque@2.1.0: {}
 
   depd@2.0.0: {}
 
@@ -14213,6 +14359,20 @@ snapshots:
 
   inversify@6.0.2: {}
 
+  ioredis@5.4.1:
+    dependencies:
+      '@ioredis/commands': 1.2.0
+      cluster-key-slot: 1.1.2
+      debug: 4.3.5(supports-color@5.5.0)
+      denque: 2.1.0
+      lodash.defaults: 4.2.0
+      lodash.isarguments: 3.1.0
+      redis-errors: 1.2.0
+      redis-parser: 3.0.0
+      standard-as-callback: 2.1.0
+    transitivePeerDependencies:
+      - supports-color
+
   ipaddr.js@1.9.1: {}
 
   is-absolute@1.0.0:
@@ -15004,9 +15164,13 @@ snapshots:
 
   lodash.debounce@4.0.8: {}
 
+  lodash.defaults@4.2.0: {}
+
   lodash.get@4.4.2: {}
 
   lodash.includes@4.3.0: {}
+
+  lodash.isarguments@3.1.0: {}
 
   lodash.isboolean@3.0.3: {}
 
@@ -15078,6 +15242,8 @@ snapshots:
       lru-cache: 6.0.0
 
   lunr@2.3.9: {}
+
+  luxon@3.5.0: {}
 
   lz-string@1.5.0: {}
 
@@ -15237,6 +15403,22 @@ snapshots:
 
   ms@2.1.3: {}
 
+  msgpackr-extract@3.0.3:
+    dependencies:
+      node-gyp-build-optional-packages: 5.2.2
+    optionalDependencies:
+      '@msgpackr-extract/msgpackr-extract-darwin-arm64': 3.0.3
+      '@msgpackr-extract/msgpackr-extract-darwin-x64': 3.0.3
+      '@msgpackr-extract/msgpackr-extract-linux-arm': 3.0.3
+      '@msgpackr-extract/msgpackr-extract-linux-arm64': 3.0.3
+      '@msgpackr-extract/msgpackr-extract-linux-x64': 3.0.3
+      '@msgpackr-extract/msgpackr-extract-win32-x64': 3.0.3
+    optional: true
+
+  msgpackr@1.11.2:
+    optionalDependencies:
+      msgpackr-extract: 3.0.3
+
   mute-stream@0.0.8: {}
 
   mz@2.7.0:
@@ -15313,6 +15495,11 @@ snapshots:
       whatwg-url: 5.0.0
 
   node-forge@1.3.1: {}
+
+  node-gyp-build-optional-packages@5.2.2:
+    dependencies:
+      detect-libc: 2.0.3
+    optional: true
 
   node-int64@0.4.0: {}
 
@@ -16104,6 +16291,12 @@ snapshots:
 
   real-require@0.2.0: {}
 
+  redis-errors@1.2.0: {}
+
+  redis-parser@3.0.0:
+    dependencies:
+      redis-errors: 1.2.0
+
   redoc@2.1.4(core-js@3.37.1)(mobx@6.12.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
       '@redocly/openapi-core': 1.14.0
@@ -16624,6 +16817,8 @@ snapshots:
     dependencies:
       escape-string-regexp: 2.0.0
 
+  standard-as-callback@2.1.0: {}
+
   statuses@2.0.1: {}
 
   stickyfill@1.1.1: {}
@@ -16771,7 +16966,7 @@ snapshots:
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.12.1
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
 
@@ -16968,7 +17163,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  ts-jest@29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5):
+  ts-jest@29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(babel-plugin-macros@3.1.0))(typescript@5.4.5):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -17101,11 +17296,11 @@ snapshots:
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
 
-  typeorm-adapter@1.7.0(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)):
+  typeorm-adapter@1.7.0(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)):
     dependencies:
       casbin: 5.30.0
       reflect-metadata: 0.1.14
-      typeorm: 0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
+      typeorm: 0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5))
     transitivePeerDependencies:
       - '@google-cloud/spanner'
       - '@sap/hana-client'
@@ -17126,7 +17321,7 @@ snapshots:
       - ts-node
       - typeorm-aurora-data-api-driver
 
-  typeorm@0.3.20(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)):
+  typeorm@0.3.20(ioredis@5.4.1)(pg@8.11.5)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       app-root-path: 3.1.0
@@ -17144,6 +17339,7 @@ snapshots:
       uuid: 9.0.1
       yargs: 17.7.2
     optionalDependencies:
+      ioredis: 5.4.1
       pg: 8.11.5
       ts-node: 10.9.2(@types/node@20.12.13)(typescript@5.4.5)
     transitivePeerDependencies:
