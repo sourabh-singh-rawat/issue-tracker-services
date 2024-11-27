@@ -3,10 +3,7 @@ import { useParams } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import TextField from "../../../../common/components/forms/TextField";
-import {
-  useCreateWorkspaceInviteMutation,
-  useGetWorkspaceRoleListQuery,
-} from "../../../../api/generated/workspace.api";
+
 import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
 
@@ -15,7 +12,6 @@ import WorkspaceRoleSelector from "../WorkspaceMemberSelector/WorkspaceRoleSelec
 import EmailIcon from "@mui/icons-material/Email";
 import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
-import schema from "../../../../api/generated/issue-tracker.openapi.json";
 
 export default function WorkspaceMemberForm() {
   const { id } = useParams();
@@ -34,9 +30,12 @@ export default function WorkspaceMemberForm() {
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
-    resolver: ajvResolver({}, {
-      formats: { email: AjvFormats.get("email") },
-    }),
+    resolver: ajvResolver(
+      {},
+      {
+        formats: { email: AjvFormats.get("email") },
+      },
+    ),
   });
 
   const onSubmit: SubmitHandler<typeof defaultValues> = async ({

@@ -1,8 +1,5 @@
 import { Item } from "../../data/entities";
-import { ObjectLiteral } from "typeorm";
 import {
-  IssueFormData,
-  IssueListFilters,
   IssuePriority,
   ServiceResponse,
   IssueStatus,

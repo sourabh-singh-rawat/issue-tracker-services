@@ -9,12 +9,11 @@ import Avatar from "../../../../common/components/Avatar";
 import Tooltip from "../../../../common/components/Tooltip";
 import TabPanel from "../../../../common/components/TabPanel";
 import { useSelectedTab } from "../../../../common/hooks";
-import { useGetProjectActivityListQuery } from "../../../../api/generated/workspace.api";
 
 export default function ProjectActivity() {
   const theme = useTheme();
   const { selectedTab, id } = useSelectedTab();
-  const { data: activityList } = useGetProjectActivityListQuery({ id });
+  // const { data: activityList } = useGetProjectActivityListQuery({ id });
 
   return (
     <TabPanel index={3} selectedTab={selectedTab} sx={{ py: theme.spacing(1) }}>

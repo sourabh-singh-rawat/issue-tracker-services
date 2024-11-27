@@ -15,7 +15,7 @@ export class Attachment extends AuditEntity {
   @Column({ name: "content_type", type: "text" })
   contentType!: string;
 
-  @Column({ type: "text" })
+  @Column({ name: "thumbnail_link", type: "text" })
   thumbnailLink!: string;
 
   @Column({ type: "text" })

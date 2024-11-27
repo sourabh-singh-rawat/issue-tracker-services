@@ -18,6 +18,13 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any; }
 };
 
+export type Attachment = {
+  __typename?: 'Attachment';
+  bucket: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  thumbnailLink: Scalars['String']['output'];
+};
+
 export type CreateItemInput = {
   assigneeIds: Array<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -105,6 +112,12 @@ export type MutationVerifyVerificationLinkArgs = {
   input: VerifyVerificationLinkInput;
 };
 
+export type PaginatedAttachment = {
+  __typename?: 'PaginatedAttachment';
+  rowCount: Scalars['Float']['output'];
+  rows: Array<Attachment>;
+};
+
 export type PaginatedItem = {
   __typename?: 'PaginatedItem';
   rowCount: Scalars['Float']['output'];
@@ -119,11 +132,18 @@ export type PaginatedList = {
 
 export type Query = {
   __typename?: 'Query';
+  findAttachments: PaginatedAttachment;
   findItem?: Maybe<Item>;
   findItems: PaginatedItem;
   findLists: PaginatedList;
   getAllWorkspaces: Array<Workspace>;
   getCurrentUser: User;
+  hello: Scalars['String']['output'];
+};
+
+
+export type QueryFindAttachmentsArgs = {
+  itemId: Scalars['String']['input'];
 };
 
 
@@ -175,6 +195,13 @@ export type Workspace = {
   ownerUserId: Scalars['String']['output'];
   status: Scalars['String']['output'];
 };
+
+export type FindAttachmentsQueryVariables = Exact<{
+  itemId: Scalars['String']['input'];
+}>;
+
+
+export type FindAttachmentsQuery = { __typename?: 'Query', findAttachments: { __typename?: 'PaginatedAttachment', rowCount: number, rows: Array<{ __typename?: 'Attachment', id: string, thumbnailLink: string }> } };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -246,6 +273,50 @@ export type UpdateItemMutationVariables = Exact<{
 export type UpdateItemMutation = { __typename?: 'Mutation', updateItem: string };
 
 
+export const FindAttachmentsDocument = gql`
+    query FindAttachments($itemId: String!) {
+  findAttachments(itemId: $itemId) {
+    rowCount
+    rows {
+      id
+      thumbnailLink
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAttachmentsQuery__
+ *
+ * To run a query within a React component, call `useFindAttachmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAttachmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAttachmentsQuery({
+ *   variables: {
+ *      itemId: // value for 'itemId'
+ *   },
+ * });
+ */
+export function useFindAttachmentsQuery(baseOptions: Apollo.QueryHookOptions<FindAttachmentsQuery, FindAttachmentsQueryVariables> & ({ variables: FindAttachmentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAttachmentsQuery, FindAttachmentsQueryVariables>(FindAttachmentsDocument, options);
+      }
+export function useFindAttachmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAttachmentsQuery, FindAttachmentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAttachmentsQuery, FindAttachmentsQueryVariables>(FindAttachmentsDocument, options);
+        }
+export function useFindAttachmentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindAttachmentsQuery, FindAttachmentsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindAttachmentsQuery, FindAttachmentsQueryVariables>(FindAttachmentsDocument, options);
+        }
+export type FindAttachmentsQueryHookResult = ReturnType<typeof useFindAttachmentsQuery>;
+export type FindAttachmentsLazyQueryHookResult = ReturnType<typeof useFindAttachmentsLazyQuery>;
+export type FindAttachmentsSuspenseQueryHookResult = ReturnType<typeof useFindAttachmentsSuspenseQuery>;
+export type FindAttachmentsQueryResult = Apollo.QueryResult<FindAttachmentsQuery, FindAttachmentsQueryVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {

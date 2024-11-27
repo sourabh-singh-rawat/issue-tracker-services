@@ -1,34 +1,33 @@
 /* eslint-disable object-curly-newline */
-import { format, formatISO, parseISO } from 'date-fns';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { format, formatISO, parseISO } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useOutletContext, useParams } from "react-router-dom";
 
-import MuiDivider from '@mui/material/Divider';
-import MuiGrid from '@mui/material/Grid';
-import MuiSkeleton from '@mui/material/Skeleton';
-import MuiTypography from '@mui/material/Typography';
+import MuiDivider from "@mui/material/Divider";
+import MuiGrid from "@mui/material/Grid";
+import MuiSkeleton from "@mui/material/Skeleton";
+import MuiTypography from "@mui/material/Typography";
 
-import DatePicker from '../../../../common/DatePicker';
-import IssueAssigneeSelector from '../../../../common/IssueAssigneeSelector';
-import IssuePrioritySelector from '../../components/IssuePrioritySelector';
-import IssueStatusSelector from '../../components/IssueStatusSelector';
-import PrimaryButton from '../../../../common/PrimaryButton';
-import TabPanel from '../../../../common/TabPanel';
-import TextField from '../../../../common/TextField';
+import DatePicker from "../../../../common/DatePicker";
+import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
+import IssuePrioritySelector from "../../components/IssuePrioritySelector";
+import IssueStatusSelector from "../../components/IssueStatusSelector";
+import PrimaryButton from "../../../../common/PrimaryButton";
+import TabPanel from "../../../../common/TabPanel";
+import TextField from "../../../../common/TextField";
 
-import { setMembers } from '../../../project/project.slice';
-import { setMessageBarOpen } from '../../../message-bar/message-bar.slice';
-import { updateIssue } from '../../issue.slice';
+import { setMembers } from "../../../project/project.slice";
+import { setMessageBarOpen } from "../../../message-bar/message-bar.slice";
+import { updateIssue } from "../../issue.slice";
 
-import { useGetProjectMembersQuery } from '../../../project/project.api';
-import { useUpdateIssueMutation } from '../../issue.api';
+import { useGetProjectMembersQuery } from "../../../project/project.api";
 
 function IssueSettings() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [selectedTab] = useOutletContext();
-  const [updateIssueMutation, { isSuccess, data }] = useUpdateIssueMutation();
+  const [updateIssueMutation, { isSuccess, data }] = useState();
 
   const issue = useSelector((store) => store.issue.info);
   const getProjectMembersQuery = useGetProjectMembersQuery(issue?.projectId);
@@ -135,8 +134,8 @@ function IssueSettings() {
                     title="Created At"
                     value={
                       issue.createdAt
-                        ? format(parseISO(issue.createdAt), 'PPPPpppp')
-                        : 'loading'
+                        ? format(parseISO(issue.createdAt), "PPPPpppp")
+                        : "loading"
                     }
                     disabled
                   />

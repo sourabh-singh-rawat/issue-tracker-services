@@ -8,7 +8,7 @@ import {
 import { Mutex } from "async-mutex";
 
 const mutex = new Mutex();
-const URL = "http://localhost:4003";
+const URL = "http://localhost:5002";
 const baseQuery = fetchBaseQuery({
   baseUrl: URL,
   credentials: "include",

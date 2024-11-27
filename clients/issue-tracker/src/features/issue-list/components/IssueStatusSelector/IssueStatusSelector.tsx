@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { useMessageBar } from "../../../message-bar/hooks";
 import Select from "../../../../common/components/Select";
-import { useUpdateIssueStatusMutation } from "../../../../api/generated/issue.api";
 
 interface IssueStatusSelectorProps {
   id: string;
@@ -18,8 +17,7 @@ export default function IssueStatusSelector({
   isDisabled,
 }: IssueStatusSelectorProps) {
   const { showSuccess, showError } = useMessageBar();
-  const [updateIssueStatus, { isSuccess, isError }] =
-    useUpdateIssueStatusMutation();
+  const [updateIssueStatus, { isSuccess, isError }] = useState();
 
   const handleChange = async (e: SelectChangeEvent<string>) => {
     await updateIssueStatus({

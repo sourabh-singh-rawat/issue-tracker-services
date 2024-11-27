@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ImageList, useTheme } from "@mui/material";
@@ -8,11 +8,7 @@ import MuiTypography from "@mui/material/Typography";
 import TabPanel from "../../../../common/components/TabPanel";
 import IssueAssignees from "../../../../common/components/IssueAssignees";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
-import {
-  useUpdateIssueMutation,
-  useGetIssueStatusListQuery,
-  useGetIssuePriorityListQuery,
-} from "../../../../api/generated/issue.api";
+
 import { useMessageBar } from "../../../message-bar/hooks";
 import Avatar from "../../../../common/components/Avatar";
 
@@ -26,17 +22,15 @@ import DateTag from "../../../../common/components/DateTag";
 import ImageCard from "../../../issue-attachments/components/ImageCard";
 import IssueResolutionSelector from "../../components/IssueResolutionSelector";
 import Description2 from "../../../../common/components/ItemDescription";
-import { useGetIssueAttachmentListQuery } from "../../../../api/generated/storage.api";
 
 export default function IssueOverview() {
   const theme = useTheme();
   const { id, selectedTab, page, isLoading } = useSelectedTab();
   const { showSuccess, showError } = useMessageBar();
 
-  const [updateIssueMutation, { isSuccess, isError }] =
-    useUpdateIssueMutation();
-  const { data: statuses } = useGetIssueStatusListQuery();
-  const { data: priorityList } = useGetIssuePriorityListQuery();
+  const [updateIssueMutation, { isSuccess, isError }] = useState();
+  const { data: statuses } = useState();
+  const { data: priorityList } = useState();
   // const { data: attachments } = useGetIssueAttachmentListQuery({ id });
   const isArchived = Boolean(page?.deletedAt);
 

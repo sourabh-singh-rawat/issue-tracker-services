@@ -7,7 +7,7 @@ import MuiTypography from "@mui/material/Typography";
 
 import ImageCard from "../../components/ImageCard";
 
-import { useTheme } from "@mui/material";
+import { styled, useTheme } from "@mui/material";
 import { useSelectedTab } from "../../../../common/hooks";
 import TabPanel from "../../../../common/components/TabPanel";
 import AppLoader from "../../../../common/components/AppLoader";
@@ -15,18 +15,33 @@ import StyledIconButton from "../../../../common/components/styled/StyledIconBut
 
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { useMessageBar } from "../../../message-bar/hooks";
-import {
-  useCreateIssueAttachmentMutation,
-  useGetIssueAttachmentListQuery,
-} from "../../../../api/generated/storage.api";
+import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
+import { useFindAttachmentsQuery } from "../../../../api/codegen/gql/graphql";
 
-function IssueAttachments() {
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
+interface ItemAttachmentProps {
+  itemId: string;
+}
+
+export default function ItemAttachment({ itemId }: ItemAttachmentProps) {
   const theme = useTheme();
-  const { id, selectedTab } = useSelectedTab();
   const { showSuccess, showError } = useMessageBar();
-  const [createIssueAttachment, { isLoading, isSuccess, isError }] =
-    useCreateIssueAttachmentMutation();
-  const { data: issueAttachmentList } = useGetIssueAttachmentListQuery({ id });
+  const [createAttachment, { isLoading, isSuccess, isError }] =
+    useCreateAttachmentMutation();
+  const { data: attachments, refetch } = useFindAttachmentsQuery({
+    variables: { itemId },
+  });
 
   const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -45,29 +60,37 @@ function IssueAttachments() {
     if (files && files.length) {
       const formData = new FormData();
       formData.append("files", files[0]);
-
-      createIssueAttachment({ id, body: formData });
     }
   };
 
   useEffect(() => {
-    if (isSuccess) showSuccess("Uploaded files successfully");
+    if (isSuccess) {
+      showSuccess("Uploaded files successfully");
+    }
     if (isError) showError("Error uploading files");
   }, [isSuccess, isError]);
 
   return (
-    <TabPanel index={2} selectedTab={selectedTab}>
-      <MuiGrid
-        component="form"
-        encType="multipart/form-data"
-        columnSpacing={1}
-        sx={{ marginTop: theme.spacing(2) }}
-        onChange={(e) => {
-          uploadFiles(e.target.files);
-        }}
-        container
-      >
+    <>
+      <MuiGrid columnSpacing={1} sx={{ marginTop: theme.spacing(2) }} container>
         <MuiGrid item xs={12}>
+          <VisuallyHiddenInput
+            type="file"
+            onChange={async (e) => {
+              const files = e.target.files;
+              const formData = new FormData();
+
+              if (!files) return;
+              const file = files[0];
+
+              if (!file) return;
+              formData.append("files", file);
+
+              await createAttachment({ itemId, body: formData as any });
+              refetch();
+            }}
+            multiple
+          />
           <MuiInput name="file" type="file" sx={{ display: "none" }} />
           <StyledIconButton
             onClick={() =>
@@ -115,12 +138,10 @@ function IssueAttachments() {
         sx={{ width: "100%" }}
         variant="quilted"
       >
-        {issueAttachmentList?.rows.map(({ path }) => (
-          <ImageCard key={id} path={path} />
-        ))}
+        {attachments?.findAttachments.rows.map(({ id, thumbnailLink }) => (
+          <ImageCard key={id} path={thumbnailLink} />
+        )) || []}
       </MuiImageList>
-    </TabPanel>
+    </>
   );
 }
-
-export default IssueAttachments;

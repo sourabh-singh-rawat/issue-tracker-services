@@ -67,11 +67,9 @@ export class CoreUserController implements UserController {
   };
 
   getCurrentUser = async (request: FastifyRequest, reply: FastifyReply) => {
-    const { currentUser } = request;
-    const { email } = currentUser;
+    const { user } = request;
+    const { email } = user;
 
-    const user = await this.userService.getUserInfoByEmail(email);
-
-    return reply.send(user);
+    return reply.send(await this.userService.getUserInfoByEmail(email));
   };
 }

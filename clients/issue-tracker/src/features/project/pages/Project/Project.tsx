@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import {
-  useGetProjectQuery,
-  useUpdateProjectMutation,
-} from "../../../../api/generated/project.api";
+
 dayjs.extend(relativeTime);
 
 import { useTheme } from "@mui/material";
@@ -17,7 +14,6 @@ import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
 import DateTag from "../../../../common/components/DateTag";
-import TextButton from "../../../../common/components/buttons/TextButton";
 
 import { useMessageBar } from "../../../message-bar/hooks";
 import Chip from "../../../../common/components/Chip";
@@ -29,8 +25,8 @@ export default function Project() {
   const navigate = useNavigate();
   const location = useLocation();
   const { showSuccess } = useMessageBar();
-  const { data, isLoading } = useGetProjectQuery({ id });
-  const [updateProject, updateProjectOptions] = useUpdateProjectMutation();
+  const { data, isLoading } = useState();
+  const [updateProject, updateProjectOptions] = useState();
 
   const tabName = location.pathname.split("/")[3] || "overview";
   const mapPathToIndex: Record<string, number> = {

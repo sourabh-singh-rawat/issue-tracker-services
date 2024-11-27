@@ -12,7 +12,7 @@ export class CoreProjectController implements ProjectController {
     request: FastifyRequest<{ Body: ProjectFormData }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const project = request.body;
 
     // const response = await this.projectService.createProject(userId, project);
@@ -24,7 +24,7 @@ export class CoreProjectController implements ProjectController {
     request: FastifyRequest<{ Querystring: Filters }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const filters = request.query;
 
     return reply.send([]);

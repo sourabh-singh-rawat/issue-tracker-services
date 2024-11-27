@@ -7,11 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "gen:issue-tracker-hooks": "npx @rtk-query/codegen-openapi ./src/api/issue-tracker.codegen.ts",
-    "gen:auth-hooks": "npx @rtk-query/codegen-openapi ./src/api/auth.codegen.ts",
-    "gen:storage-hooks": "npx @rtk-query/codegen-openapi ./src/api/storage.codegen.ts",
-    "gen:hooks": "pnpm gen:issue-tracker-hooks && pnpm gen:auth-hooks && pnpm gen:storage-hooks",
-    "gen": "graphql-codegen --config codegen.ts --watch"
+    "gen:rest": "npx @rtk-query/codegen-openapi codegen.rest.ts",
+    "gen": "graphql-codegen --config codegen.gql.ts --watch"
   },
   "repository": {
     "type": "git",

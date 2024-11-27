@@ -9,10 +9,7 @@ import MuiGrid from "@mui/material/Grid";
 
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
-import {
-  useGetIssueQuery,
-  useUpdateIssueMutation,
-} from "../../../../api/generated/issue.api";
+
 import { useMessageBar } from "../../../message-bar/hooks";
 
 import MuiSkeleton from "@mui/material/Skeleton";
@@ -30,8 +27,8 @@ export default function Issue() {
   const { showSuccess, showError } = useMessageBar();
   const [issue, setIssue] = useState({ name: "", updatedAt: "" });
 
-  const { data, ...issueRequest } = useGetIssueQuery({ id });
-  const [updateIssue, updateIssueOptions] = useUpdateIssueMutation();
+  const { data, ...issueRequest } = useState({ id });
+  const [updateIssue, updateIssueOptions] = useState();
 
   const tabName = location.pathname.split("/")[3] || "overview";
   const mapTabToIndex: { [k: string]: number } = {

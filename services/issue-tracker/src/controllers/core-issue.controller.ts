@@ -15,7 +15,7 @@ export class CoreIssueController implements IssueController {
     request: FastifyRequest<{ Body: IssueFormData }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const issue = request.body;
 
     // const response = await this.issueService.createItem(userId, issue);
@@ -27,7 +27,7 @@ export class CoreIssueController implements IssueController {
     request: FastifyRequest<{ Querystring: IssueListFilters }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const filters = request.query;
 
     const response = await this.issueService.findItems({ userId });
@@ -65,7 +65,7 @@ export class CoreIssueController implements IssueController {
     request: FastifyRequest<{ Params: { id: string }; Body: IssueFormData }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const { id } = request.params;
     const issueFormData = request.body;
 
@@ -81,7 +81,7 @@ export class CoreIssueController implements IssueController {
     }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const { id } = request.params;
     const { status } = request.body;
 
@@ -97,7 +97,7 @@ export class CoreIssueController implements IssueController {
     }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const { id } = request.params;
     const { resolution } = request.body;
 

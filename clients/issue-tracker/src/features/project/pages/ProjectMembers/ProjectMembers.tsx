@@ -9,7 +9,7 @@ import AddProjectMemberModal from "../../components/AddProjectMemberModal";
 
 import { useTheme } from "@mui/material";
 import { useSelectedTab } from "../../../../common/hooks";
-import { useGetProjectMembersQuery } from "../../../../api/generated/project.api";
+// import { useGetProjectMembersQuery } from "../../../../api/generated/project.api";
 
 export default function ProjectMembers() {
   const theme = useTheme();

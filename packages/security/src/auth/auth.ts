@@ -9,7 +9,7 @@ import {
 
 declare module "fastify" {
   interface FastifyRequest {
-    currentUser: AccessToken;
+    user: AccessToken;
   }
 }
 
@@ -34,10 +34,7 @@ export class Auth {
     const accessToken = request.cookies.accessToken;
     if (accessToken) {
       try {
-        request.currentUser = JwtToken.verify(
-          accessToken,
-          process.env.JWT_SECRET!,
-        );
+        request.user = JwtToken.verify(accessToken, process.env.JWT_SECRET!);
       } catch (error) {
         // ignore
       }
@@ -51,7 +48,7 @@ export class Auth {
     _reply: FastifyReply,
     done: HookHandlerDoneFunction,
   ) => {
-    if (!request.currentUser) throw new UnauthorizedError();
+    if (!request.user) throw new UnauthorizedError();
 
     return done();
   };
@@ -61,7 +58,7 @@ export class Auth {
     _reply: FastifyReply,
     done: HookHandlerDoneFunction,
   ) => {
-    if (request.currentUser) {
+    if (request.user) {
       throw new ForbiddenError(
         "Registration not allowed for authenticated users.",
       );

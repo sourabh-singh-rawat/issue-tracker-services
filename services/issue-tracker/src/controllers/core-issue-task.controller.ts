@@ -12,7 +12,7 @@ export class CoreIssueTaskController implements IssueTaskController {
   ) => {
     const { id } = request.params;
     const formData = request.body;
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
 
     await this.issueTaskService.createTask(userId, id, formData);
 

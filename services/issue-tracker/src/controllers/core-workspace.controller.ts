@@ -10,7 +10,7 @@ export class CoreWorkspaceController implements WorkspaceController {
     request: FastifyRequest<{ Body: { name: string; description?: string } }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const { name, description } = request.body;
 
     // const workspace = await this.workspaceService.createWorkspace(userId, {
@@ -27,7 +27,7 @@ export class CoreWorkspaceController implements WorkspaceController {
     }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const { email, workspaceRole } = request.body;
 
     await this.workspaceService.createWorkspaceMember(
@@ -45,15 +45,14 @@ export class CoreWorkspaceController implements WorkspaceController {
   ) => {
     const { inviteToken } = request.query;
 
-    const response = await this.workspaceService.confirmWorkspaceInvite(
-      inviteToken,
-    );
+    const response =
+      await this.workspaceService.confirmWorkspaceInvite(inviteToken);
 
     return reply.redirect(response.rows);
   };
 
   getAllWorkspaces = async (request: FastifyRequest, reply: FastifyReply) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
 
     const response = await this.workspaceService.getAllWorkspaces(userId);
     return reply.send(response);
