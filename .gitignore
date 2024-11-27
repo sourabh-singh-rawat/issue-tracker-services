@@ -135,3 +135,5 @@ dist
 # client
 build
 k8s/secrets
+
+*.service-account.json

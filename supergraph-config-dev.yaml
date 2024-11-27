@@ -1,14 +1,14 @@
 federation_version: =2.8.1
 subgraphs:
   attachment:
-    routing_url: http://localhost:5002/graphql
+    routing_url: http://localhost:5002/api/graphql
     schema:
       file: ./services/attachment/schema.graphql
   auth:
-    routing_url: http://localhost:5000/graphql
+    routing_url: http://localhost:5000/api/graphql
     schema:
       file: ./services/auth/schema.graphql
   issue-tracker:
-    routing_url: http://localhost:5001/graphql
+    routing_url: http://localhost:5001/api/graphql
     schema:
       file: ./services/issue-tracker/schema.graphql

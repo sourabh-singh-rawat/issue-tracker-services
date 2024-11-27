@@ -1,7 +1,4 @@
-import {
-  AttachmentService,
-  CreateAttachmentOptions,
-} from "./interfaces/AttachmentService";
+import { AttachmentService, CreateAttachmentOptions } from "./interfaces";
 import { ServiceResponse } from "@issue-tracker/common";
 import { Queue } from "bullmq";
 import { Attachment } from "../data/entities";
@@ -15,11 +12,11 @@ export class CoreAttachmentService implements AttachmentService {
     });
   }
 
-  getAttachmentList = async (id: string) => {
+  async findAttachments(id: string) {
     const [rows, rowCount] = await Attachment.findAndCount({
       where: { itemId: id },
     });
 
-    return new ServiceResponse({ rows, filteredRowCount: rowCount });
-  };
+    return { rows, rowCount };
+  }
 }

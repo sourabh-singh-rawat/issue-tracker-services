@@ -209,7 +209,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
       ],
     });
     instance.route({
-      url: "/graphql",
+      url: "/api/graphql",
       method: ["POST", "GET"],
       handler: fastifyApolloHandler(apollo, { context: createContext }),
     });

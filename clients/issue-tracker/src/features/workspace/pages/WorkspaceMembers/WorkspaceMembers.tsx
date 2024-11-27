@@ -1,13 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetWorkspaceMembersQuery } from "../../../../api/generated/workspace.api";
 import List from "../../../../common/components/List";
 import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
 import MemberModal from "../../components/MemberModal";
 
 export default function WorkspaceMembers() {
   const { id } = useParams();
-  const { data } = useGetWorkspaceMembersQuery({ id: id || "" });
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -25,7 +23,7 @@ export default function WorkspaceMembers() {
   return (
     <>
       <MemberModal />
-      <List rows={data?.rows || []} columns={columns} />
+      {/* <List rows={data?.rows || []} columns={columns} /> */}
     </>
   );
 }

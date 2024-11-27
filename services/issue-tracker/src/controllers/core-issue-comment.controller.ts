@@ -13,7 +13,7 @@ export class CoreIssueCommentController implements IssueCommentController {
     }>,
     reply: FastifyReply,
   ) => {
-    const { userId } = request.currentUser;
+    const { userId } = request.user;
     const { id } = request.params;
     const { description } = request.body;
 

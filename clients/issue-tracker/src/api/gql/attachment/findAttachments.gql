@@ -1,0 +1,9 @@
+query FindAttachments($itemId: String!) {
+  findAttachments(itemId: $itemId) {
+    rowCount
+    rows {
+      id
+      thumbnailLink
+    }
+  }
+}

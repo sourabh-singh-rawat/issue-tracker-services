@@ -55,8 +55,8 @@ export class FastifyServer {
       parseOptions: {
         path: "/",
         httpOnly: false,
-        sameSite: true,
-        secure: true,
+        sameSite: false,
+        secure: false,
       },
     });
   };
@@ -81,12 +81,12 @@ export class FastifyServer {
 
   private setupSwagger = () => {};
 
-  init() {
+  async init() {
     this.setCors(this.security?.cors);
     this.setCookie({ secret: this.security?.cookie?.secret });
     this.setErrorHandler();
     this.setRoutes();
-    this.startListening();
+    await this.startListening();
     this.logger?.info(
       `🚀 Server started on port ${this.configuration.host}:${this.configuration.port}`,
     );

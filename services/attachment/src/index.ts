@@ -6,12 +6,12 @@ import {
   ApolloFastifyContextFunction,
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
-import { MultipartFile } from "@fastify/multipart";
+import multipart, { MultipartFile } from "@fastify/multipart";
 import { Broker, NatsBroker } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { DataSource } from "typeorm";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { IssueAttachmentController } from "./controllers/interfaces/issue-attachment.controller";
+import { writeFileSync } from "fs";
 import { AttachmentService } from "./services/interfaces/AttachmentService";
 import { Worker } from "bullmq";
 import sharp from "sharp";
@@ -25,27 +25,29 @@ import {
 import { CoreAttachmentService } from "./services/CoreAttachmentService";
 import { getAuth } from "firebase-admin/auth";
 import { getStorage } from "firebase-admin/storage";
-import { initializeApp } from "firebase-admin/app";
+import { cert, initializeApp } from "firebase-admin/app";
 import { Queue } from "bullmq";
 import { QUEUES } from "@issue-tracker/common";
 import { Attachment } from "./data/entities";
 import { buildSchema } from "type-graphql";
 import { CoreAttachmentResolver } from "./resolvers";
-import { JwtToken } from "@issue-tracker/security";
+import { Auth, JwtToken } from "@issue-tracker/security";
+import swagger from "@fastify/swagger";
+import { AttachmentController, CoreAttachmentController } from "./controllers";
 
 export interface RegisteredServices {
   logger: AppLogger;
   dataSource: DataSource;
   broker: Broker;
   orm: Typeorm;
-  issueAttachmentController: IssueAttachmentController;
-  issueAttachmentService: AttachmentService;
+  attachmentController: AttachmentController;
+  attachmentService: AttachmentService;
   redisClient: Redis;
   imageProcessingQueue: Queue;
 }
 
 const firebaseApp = initializeApp({
-  // credential: cert("../.env.json"),
+  credential: cert("./firebase.service-account.json"),
   storageBucket: "issue-tracker-66803.appspot.com",
 });
 
@@ -80,9 +82,11 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
       emitSchemaFile: true,
       resolvers: [CoreAttachmentResolver],
     });
-
     const apollo = new ApolloServer({ schema });
     await apollo.start();
+
+    await instance.register(multipart, { limits: { fileSize: 32000000 } });
+
     const server = new FastifyServer({
       fastify: instance,
       configuration: {
@@ -97,16 +101,63 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         cors: { credentials: true, origin: "http://localhost:3000" },
         cookie: { secret: process.env.JWT_SECRET! },
       },
-      // routes: [{ route: issueAttachmentRoutes(container) }],
-    });
+      routes: [
+        {
+          route: (fastify, _options, done) => {
+            fastify.route({
+              url: "/attachments/:itemId",
+              method: "POST",
+              schema: {
+                tags: ["attachment"],
+                summary: "Create a new issue attachment",
+                description: "Create a new issue attachment",
+                body: { type: "string" },
+                consumes: ["multipart/form-data"],
+                operationId: "createAttachment",
+                response: {
+                  201: { type: "string", description: "Created successfully" },
+                  500: { type: "string", description: "Bad request" },
+                },
+              },
+              preHandler: [Auth.setCurrentUser, Auth.requireAuth],
+              handler: async (req, res) => {
+                const controller = container.get("attachmentController");
 
-    server.init();
+                await controller.createAttachment(req, res);
+              },
+            });
+            done();
+          },
+        },
+      ],
+    });
+    await instance.register(swagger, {
+      openapi: {
+        openapi: "3.0.0",
+        info: {
+          title: "Attachment Service",
+          version: "0.0.1",
+          license: {
+            name: "ISC",
+            url: "https://opensource.org/license/isc-license-txt",
+          },
+        },
+        servers: [{ url: "http://localhost:5000" }],
+        tags: [
+          { name: "attachment", description: "Attachment related end-points" },
+        ],
+      },
+    });
     instance.route({
-      url: "/graphql",
+      url: "/api/graphql",
       method: ["POST", "GET"],
       handler: fastifyApolloHandler(apollo, { context: createContext }),
     });
+    await server.init();
+    const openapi = instance.swagger({ yaml: true });
+    writeFileSync("./schema.yaml", openapi);
   } catch (error) {
+    console.log(error);
     process.exit(1);
   }
 };
@@ -138,17 +189,25 @@ const imageProcessingQueue = new Queue(QUEUES.IMAGE_PROCESSING, {
 
 export const startWorker = () => {
   interface ImageProcessingWorkerData {
-    file: MultipartFile;
     itemId: string;
     userId: string;
+    file: Buffer;
+    filename: string;
+    mimetype: string;
   }
 
   const imageProcessingWorker = new Worker<ImageProcessingWorkerData>(
-    "process-and-upload-image",
+    QUEUES.IMAGE_PROCESSING,
     async ({ data }) => {
-      const { itemId, userId, file } = data;
-      const sharpedFile = sharp(await file.toBuffer());
-      const contentType = file.mimetype;
+      const {
+        itemId,
+        userId,
+        file,
+        filename: originalFilename,
+        mimetype,
+      } = data;
+      const sharpedFile = sharp(Buffer.from(file));
+      const contentType = mimetype;
       const sizes = { small: { width: 250 }, large: { width: 1200 } };
       const thumbnail = await sharpedFile.resize(sizes.small.width).toBuffer();
       const image = await sharpedFile.resize(sizes.large.width).toBuffer();
@@ -168,7 +227,7 @@ export const startWorker = () => {
         thumbnailLink: thumbnailPath,
         bucket: "issue-tracker-66803.appspot.com",
         filename,
-        originalFilename: file.filename,
+        originalFilename,
       });
     },
     { connection: redisClient },
@@ -177,33 +236,36 @@ export const startWorker = () => {
   imageProcessingWorker.on("ready", () => {
     logger.info("Image processing worker is ready");
   });
-  imageProcessingWorker.on("completed", (job) => {
+  imageProcessingWorker.on("completed", () => {
     console.log(`Image uploaded successfully`);
   });
-  imageProcessingWorker.on("failed", () => {
+  imageProcessingWorker.on("failed", (error) => {
+    console.log(error);
     console.log("Failed to upload image");
   });
 };
 
-const main = async () => {
-  const orm = new PostgresTypeorm(dataSource, logger);
-  await orm.init();
+const orm = new PostgresTypeorm(dataSource, logger);
+const broker = new NatsBroker({
+  servers: [process.env.NATS_SERVER_URL || "nats"],
+  logger,
+});
 
-  const broker = new NatsBroker({
-    servers: [process.env.NATS_SERVER_URL || "nats"],
-    logger,
-  });
+const awilix = createContainer({ injectionMode: InjectionMode.CLASSIC });
+export const container = new AwilixDi<RegisteredServices>(awilix, logger);
+container.add("logger", asValue(logger));
+container.add("dataSource", asValue(dataSource));
+container.add("redisClient", asValue(redisClient));
+container.add("orm", asValue(orm));
+container.add("eventBus", asValue(broker));
+container.add("imageProcessingQueue", asValue(imageProcessingQueue));
+container.add("attachmentController", asClass(CoreAttachmentController));
+container.add("attachmentService", asClass(CoreAttachmentService));
+
+const main = async () => {
+  await orm.init();
   await broker.init();
 
-  const awilix = createContainer({ injectionMode: InjectionMode.CLASSIC });
-  const container = new AwilixDi<RegisteredServices>(awilix, logger);
-  container.add("logger", asValue(logger));
-  container.add("dataSource", asValue(dataSource));
-  container.add("redisClient", asValue(redisClient));
-  container.add("orm", asValue(orm));
-  container.add("eventBus", asValue(broker));
-  container.add("imageProcessingQueue", asValue(imageProcessingQueue));
-  container.add("issueAttachmentService", asClass(CoreAttachmentService));
   container.init();
 
   await startServer(container);

@@ -1,14 +1,15 @@
-import { MultipartFile } from "@fastify/multipart";
+import { PaginatedOutput } from "@issue-tracker/common";
 import { Attachment } from "../../data/entities";
-import { ServiceResponse } from "@issue-tracker/common";
 
 export interface CreateAttachmentOptions {
   itemId: string;
   userId: string;
-  file: MultipartFile;
+  file: Buffer;
+  filename: string;
+  mimetype: string;
 }
 
 export interface AttachmentService {
   createAttachment(options: CreateAttachmentOptions): Promise<void>;
-  getAttachmentList(id: string): Promise<ServiceResponse<Attachment[]>>;
+  findAttachments(id: string): Promise<PaginatedOutput<Attachment>>;
 }

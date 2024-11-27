@@ -3,6 +3,18 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Attachment {
+  bucket: String!
+  id: String!
+  thumbnailLink: String!
+}
+
+type PaginatedAttachment {
+  rowCount: Float!
+  rows: [Attachment!]!
+}
+
 type Query {
+  findAttachments(itemId: String!): PaginatedAttachment!
   hello: String!
 }

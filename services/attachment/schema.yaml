@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: Attachment Service
+  version: 0.0.1
+  license:
+    name: ISC
+    url: https://opensource.org/license/isc-license-txt
+components:
+  schemas: {}
+paths:
+  /api/graphql:
+    post: &a1
+      responses:
+        "200":
+          description: Default Response
+    get: *a1
+  /api/v1/attachments/{itemId}:
+    post:
+      operationId: createAttachment
+      summary: Create a new issue attachment
+      tags:
+        - attachment
+      description: Create a new issue attachment
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+      parameters:
+        - schema:
+            type: string
+          in: path
+          name: itemId
+          required: true
+      responses:
+        "201":
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Created successfully
+        "500":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Bad request
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: attachment
+    description: Attachment related end-points

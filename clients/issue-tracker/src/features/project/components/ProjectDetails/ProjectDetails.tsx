@@ -9,10 +9,7 @@ import AvatarGroup from "../../../../common/components/AvatarGroup";
 import StyledCell from "../../../../common/components/styled/StyledCell";
 import ProjectStatusSelector from "../../../project-list/components/ProjectStatusSelector";
 import DateTag from "../../../../common/components/DateTag";
-import {
-  useGetProjectMembersQuery,
-  useGetProjectStatusListQuery,
-} from "../../../../api/generated/project.api";
+
 import { useTheme } from "@mui/material/styles";
 
 interface Props {
@@ -22,8 +19,6 @@ interface Props {
 
 export default function ProjectDetails({ id, page }: Props) {
   const theme = useTheme();
-  const { data: statuses } = useGetProjectStatusListQuery();
-  const { data: members } = useGetProjectMembersQuery({ id });
   const tableStyles = {
     padding: theme.spacing(1),
     borderRadius: theme.shape.borderRadiusMedium,
@@ -43,17 +38,14 @@ export default function ProjectDetails({ id, page }: Props) {
                 <ProjectStatusSelector
                   id={id}
                   value={page?.status}
-                  options={statuses?.rows}
+                  options={[]}
                 />
               </StyledCell>
             </MuiTableRow>
             <MuiTableRow>
               <StyledCell>Members</StyledCell>
               <StyledCell>
-                <AvatarGroup
-                  members={members?.rows}
-                  total={members?.rows?.length}
-                />
+                <AvatarGroup members={[]} total={1} />
               </StyledCell>
             </MuiTableRow>
             <MuiTableRow>

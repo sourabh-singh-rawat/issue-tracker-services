@@ -200,7 +200,7 @@ const startServer = async () => {
 
     server.init();
     instance.route({
-      url: "/graphql",
+      url: "/api/graphql",
       method: ["POST", "GET"],
       handler: fastifyApolloHandler(apollo, { context: createContext }),
     });
