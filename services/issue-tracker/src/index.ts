@@ -6,13 +6,7 @@ import {
   Publisher,
   Subjects,
 } from "@issue-tracker/event-bus";
-import {
-  CreateFastifyContextOptions,
-  fastifyTRPCPlugin,
-  FastifyTRPCPluginOptions,
-} from "@trpc/server/adapters/fastify";
 import fastify from "fastify";
-import { IssueController } from "./controllers/interfaces/issue-controller";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
 import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
 import { UserService } from "./services/interfaces/UserService";
@@ -34,7 +28,6 @@ import {
 import { DataSource } from "typeorm";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { CoreIssueController } from "./controllers/core-issue.controller";
 import { CoreIssueCommentController } from "./controllers/core-issue-comment.controller";
 import { CoreIssueTaskController } from "./controllers/core-issue-task.controller";
 import { CoreUserService } from "./services/CoreUserService";
@@ -87,7 +80,6 @@ export interface RegisteredServices {
   dataSource: DataSource;
   orm: Typeorm;
   broker: Broker;
-  issueController: IssueController;
   issueCommentController: IssueCommentController;
   issueTaskController: IssueTaskController;
   projectController: ProjectController;
@@ -253,7 +245,6 @@ const main = async () => {
   container.add("dataSource", asValue(dataSource));
   container.add("orm", asValue(orm));
   container.add("broker", asValue(natsBroker));
-  container.add("issueController", asClass(CoreIssueController));
   container.add("issueCommentController", asClass(CoreIssueCommentController));
   container.add("issueTaskController", asClass(CoreIssueTaskController));
   container.add("projectController", asClass(CoreProjectController));

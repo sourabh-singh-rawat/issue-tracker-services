@@ -11,7 +11,7 @@ import ItemName from "../../../../common/components/ItemName";
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemModal from "../ItemModal";
-import ItemAttachment from "../../../issue-attachments/pages/ItemAttachments";
+import ItemAttachments from "../../../issue-attachments/pages/ItemAttachments";
 
 export interface ItemProps {}
 
@@ -32,7 +32,7 @@ export default function Item(props: ItemProps) {
   });
 
   return (
-    <MuiGrid container rowGap={2}>
+    <MuiGrid container rowGap={4}>
       <MuiGrid item xs={12}>
         <ItemName
           handleSubmit={async (name) => {
@@ -116,7 +116,7 @@ export default function Item(props: ItemProps) {
               Attachments
             </MuiTypography>
 
-            <ItemAttachment itemId={itemId} />
+            <ItemAttachments itemId={itemId} />
           </MuiGrid>
         </MuiGrid>
       )}

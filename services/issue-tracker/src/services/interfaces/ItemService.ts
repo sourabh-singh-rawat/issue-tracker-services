@@ -28,6 +28,7 @@ export interface FindItemOptions {
 
 export interface FindItemsOptions extends PagingOptions {
   userId: string;
+  listId: string;
 }
 
 export interface UpdateItemOptions extends ServiceOptions {

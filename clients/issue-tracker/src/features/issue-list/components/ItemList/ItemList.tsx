@@ -14,11 +14,11 @@ import IssueStatusSelector from "../IssueStatusSelector";
 import IssuePrioritySelector from "../IssuePrioritySelector";
 import { useFindItemsQuery } from "../../../../api/codegen/gql/graphql";
 
-interface IssueListProps {
-  projectId?: string;
+interface ItemListProps {
+  listId: string;
 }
 
-export default function ItemList({ projectId }: IssueListProps) {
+export default function ItemList({ listId }: ItemListProps) {
   const theme = useTheme();
   const urlParams = useParams<{ id: string }>();
   const [paginationModel, setPaginationModel] = useState({
@@ -28,7 +28,9 @@ export default function ItemList({ projectId }: IssueListProps) {
   const onPaginationModelChange = (model: GridPaginationModel) => {
     setPaginationModel(model);
   };
-  const { data: items, loading: isLoading } = useFindItemsQuery();
+  const { data: items, loading: isLoading } = useFindItemsQuery({
+    variables: { listId },
+  });
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -92,6 +94,7 @@ export default function ItemList({ projectId }: IssueListProps) {
       renderCell: ({ value }) => {
         return (
           <AvatarGroup
+            onClick={() => {}}
             max={2}
             members={value?.map(({ id, user }) => ({
               id: user.id,
