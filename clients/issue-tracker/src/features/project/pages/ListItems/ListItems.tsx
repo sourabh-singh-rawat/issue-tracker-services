@@ -25,7 +25,7 @@ export default function ProjectIssues() {
           </MuiGrid>
         </MuiGrid>
         <MuiGrid xs={12} item>
-          <IssueList projectId={id} />
+          <IssueList listId={id} />
         </MuiGrid>
       </MuiGrid>
     </TabPanel>

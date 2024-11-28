@@ -1,5 +1,5 @@
-query FindItems {
-  findItems {
+query FindItems($listId: String!) {
+  findItems(listId: $listId) {
     rowCount
     rows {
       id

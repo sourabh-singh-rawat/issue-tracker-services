@@ -10,6 +10,7 @@ import {
 import { ItemResolver } from "./interfaces";
 import { CreateItemInput, Item, UpdateItemInput } from "./types";
 import { container, dataSource } from "..";
+import { PaginatedOutput } from "@issue-tracker/common";
 
 @ObjectType()
 export class PaginatedItem {
@@ -32,20 +33,20 @@ export class CoreItemResolver implements ItemResolver {
     });
   }
 
-  @Query(() => PaginatedItem)
-  async findItems(@Ctx() ctx: any) {
-    const userId = ctx.user.userId;
-    const service = container.get("itemService");
-
-    return await service.findItems({ userId });
-  }
-
   @Query(() => Item, { nullable: true })
   async findItem(@Ctx() ctx: any, @Arg("id") id: string) {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
     return await service.findItem({ userId, itemId: id });
+  }
+
+  @Query(() => PaginatedItem)
+  async findItems(@Ctx() ctx: any, @Arg("listId") listId: string) {
+    const userId = ctx.user.userId;
+    const service = container.get("itemService");
+
+    return await service.findItems({ userId, listId });
   }
 
   @Mutation(() => String)

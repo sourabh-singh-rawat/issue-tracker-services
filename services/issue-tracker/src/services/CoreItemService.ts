@@ -8,7 +8,7 @@ import {
 import { IssueRepository } from "../data/repositories/interfaces/issue.repository";
 import { ItemAssignee, Item } from "../data/entities";
 import { IssueAssigneeRepository } from "../data/repositories/interfaces/issue-assignee.repository";
-import { QueryRunner } from "typeorm";
+import { IsNull, QueryRunner } from "typeorm";
 import {
   ConflictError,
   IssuePriority,
@@ -70,9 +70,9 @@ export class CoreItemService implements ItemService {
   }
 
   async findItems(options: FindItemsOptions) {
-    const { userId } = options;
+    const { userId, listId } = options;
     const [rows, rowCount] = await Item.findAndCount({
-      where: { createdById: userId },
+      where: { createdById: userId, listId, parentItem: IsNull() },
       relations: { list: true },
     });
 
@@ -158,9 +158,8 @@ export class CoreItemService implements ItemService {
     if (!issue) throw new NotFoundError(`Issue ${id} does not exist`);
 
     // check if the assignee is already assigned the issue
-    const assignee = await this.issueAssigneeRepository.findAssigneeByUserId(
-      userId,
-    );
+    const assignee =
+      await this.issueAssigneeRepository.findAssigneeByUserId(userId);
     if (assignee) throw new UserAlreadyExists();
 
     const newIssueAssignee = new ItemAssignee();

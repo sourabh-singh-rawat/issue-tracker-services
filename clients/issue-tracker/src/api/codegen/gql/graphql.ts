@@ -156,6 +156,11 @@ export type QueryFindItemArgs = {
   id: Scalars['String']['input'];
 };
 
+
+export type QueryFindItemsArgs = {
+  listId: Scalars['String']['input'];
+};
+
 export type RegisterUserInput = {
   displayName: Scalars['String']['input'];
   email: Scalars['String']['input'];
@@ -262,7 +267,9 @@ export type FindItemQueryVariables = Exact<{
 
 export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null, subItems?: Array<{ __typename?: 'Item', id: string, name: string }> | null } | null };
 
-export type FindItemsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindItemsQueryVariables = Exact<{
+  listId: Scalars['String']['input'];
+}>;
 
 
 export type FindItemsQuery = { __typename?: 'Query', findItems: { __typename?: 'PaginatedItem', rowCount: number, rows: Array<{ __typename?: 'Item', id: string, name: string, status: string, priority: string, list: { __typename?: 'List', id: string, name: string } }> } };
@@ -617,8 +624,8 @@ export type FindItemLazyQueryHookResult = ReturnType<typeof useFindItemLazyQuery
 export type FindItemSuspenseQueryHookResult = ReturnType<typeof useFindItemSuspenseQuery>;
 export type FindItemQueryResult = Apollo.QueryResult<FindItemQuery, FindItemQueryVariables>;
 export const FindItemsDocument = gql`
-    query FindItems {
-  findItems {
+    query FindItems($listId: String!) {
+  findItems(listId: $listId) {
     rowCount
     rows {
       id
@@ -646,10 +653,11 @@ export const FindItemsDocument = gql`
  * @example
  * const { data, loading, error } = useFindItemsQuery({
  *   variables: {
+ *      listId: // value for 'listId'
  *   },
  * });
  */
-export function useFindItemsQuery(baseOptions?: Apollo.QueryHookOptions<FindItemsQuery, FindItemsQueryVariables>) {
+export function useFindItemsQuery(baseOptions: Apollo.QueryHookOptions<FindItemsQuery, FindItemsQueryVariables> & ({ variables: FindItemsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
       }
