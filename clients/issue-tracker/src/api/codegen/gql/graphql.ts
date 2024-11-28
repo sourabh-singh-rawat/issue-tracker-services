@@ -48,6 +48,11 @@ export type CreateWorkspaceInput = {
   name: Scalars['String']['input'];
 };
 
+export type FindItemsInput = {
+  listId: Scalars['String']['input'];
+  parentItemId: Scalars['String']['input'];
+};
+
 export type Item = {
   __typename?: 'Item';
   description?: Maybe<Scalars['String']['output']>;
@@ -124,12 +129,6 @@ export type PaginatedAttachment = {
   rows: Array<Attachment>;
 };
 
-export type PaginatedItem = {
-  __typename?: 'PaginatedItem';
-  rowCount: Scalars['Float']['output'];
-  rows: Array<Item>;
-};
-
 export type PaginatedList = {
   __typename?: 'PaginatedList';
   rowCount: Scalars['Float']['output'];
@@ -140,8 +139,10 @@ export type Query = {
   __typename?: 'Query';
   findAttachments: PaginatedAttachment;
   findItem?: Maybe<Item>;
-  findItems: PaginatedItem;
+  findList: List;
+  findListItems?: Maybe<Item>;
   findLists: PaginatedList;
+  findSubItems: Array<Item>;
   getAllWorkspaces: Array<Workspace>;
   getCurrentUser: User;
 };
@@ -157,8 +158,18 @@ export type QueryFindItemArgs = {
 };
 
 
-export type QueryFindItemsArgs = {
+export type QueryFindListArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryFindListItemsArgs = {
   listId: Scalars['String']['input'];
+};
+
+
+export type QueryFindSubItemsArgs = {
+  input: FindItemsInput;
 };
 
 export type RegisterUserInput = {
@@ -265,19 +276,33 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null, subItems?: Array<{ __typename?: 'Item', id: string, name: string }> | null } | null };
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
 
-export type FindItemsQueryVariables = Exact<{
+export type FindListQueryVariables = Exact<{
+  findListId: Scalars['String']['input'];
+}>;
+
+
+export type FindListQuery = { __typename?: 'Query', findList: { __typename?: 'List', id: string, name: string } };
+
+export type FindListItemsQueryVariables = Exact<{
   listId: Scalars['String']['input'];
 }>;
 
 
-export type FindItemsQuery = { __typename?: 'Query', findItems: { __typename?: 'PaginatedItem', rowCount: number, rows: Array<{ __typename?: 'Item', id: string, name: string, status: string, priority: string, list: { __typename?: 'List', id: string, name: string } }> } };
+export type FindListItemsQuery = { __typename?: 'Query', findListItems?: { __typename?: 'Item', description?: string | null, id: string, name: string, status: string, priority: string } | null };
 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FindListsQuery = { __typename?: 'Query', findLists: { __typename?: 'PaginatedList', rowCount: number, rows: Array<{ __typename?: 'List', id: string, name: string }> } };
+
+export type FindSubItemsQueryVariables = Exact<{
+  input: FindItemsInput;
+}>;
+
+
+export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, status: string }> };
 
 export type GetAllWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -570,17 +595,13 @@ export type CreateWorkspaceMutationOptions = Apollo.BaseMutationOptions<CreateWo
 export const FindItemDocument = gql`
     query FindItem($findItemId: String!) {
   findItem(id: $findItemId) {
-    description
     id
+    description
     list {
       id
       name
     }
     parentItem {
-      id
-      name
-    }
-    subItems {
       id
       name
     }
@@ -623,56 +644,91 @@ export type FindItemQueryHookResult = ReturnType<typeof useFindItemQuery>;
 export type FindItemLazyQueryHookResult = ReturnType<typeof useFindItemLazyQuery>;
 export type FindItemSuspenseQueryHookResult = ReturnType<typeof useFindItemSuspenseQuery>;
 export type FindItemQueryResult = Apollo.QueryResult<FindItemQuery, FindItemQueryVariables>;
-export const FindItemsDocument = gql`
-    query FindItems($listId: String!) {
-  findItems(listId: $listId) {
-    rowCount
-    rows {
-      id
-      name
-      status
-      priority
-      list {
-        id
-        name
-      }
-    }
+export const FindListDocument = gql`
+    query FindList($findListId: String!) {
+  findList(id: $findListId) {
+    id
+    name
   }
 }
     `;
 
 /**
- * __useFindItemsQuery__
+ * __useFindListQuery__
  *
- * To run a query within a React component, call `useFindItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindItemsQuery({
+ * const { data, loading, error } = useFindListQuery({
+ *   variables: {
+ *      findListId: // value for 'findListId'
+ *   },
+ * });
+ */
+export function useFindListQuery(baseOptions: Apollo.QueryHookOptions<FindListQuery, FindListQueryVariables> & ({ variables: FindListQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindListQuery, FindListQueryVariables>(FindListDocument, options);
+      }
+export function useFindListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindListQuery, FindListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindListQuery, FindListQueryVariables>(FindListDocument, options);
+        }
+export function useFindListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindListQuery, FindListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindListQuery, FindListQueryVariables>(FindListDocument, options);
+        }
+export type FindListQueryHookResult = ReturnType<typeof useFindListQuery>;
+export type FindListLazyQueryHookResult = ReturnType<typeof useFindListLazyQuery>;
+export type FindListSuspenseQueryHookResult = ReturnType<typeof useFindListSuspenseQuery>;
+export type FindListQueryResult = Apollo.QueryResult<FindListQuery, FindListQueryVariables>;
+export const FindListItemsDocument = gql`
+    query FindListItems($listId: String!) {
+  findListItems(listId: $listId) {
+    description
+    id
+    name
+    status
+    priority
+  }
+}
+    `;
+
+/**
+ * __useFindListItemsQuery__
+ *
+ * To run a query within a React component, call `useFindListItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindListItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindListItemsQuery({
  *   variables: {
  *      listId: // value for 'listId'
  *   },
  * });
  */
-export function useFindItemsQuery(baseOptions: Apollo.QueryHookOptions<FindItemsQuery, FindItemsQueryVariables> & ({ variables: FindItemsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useFindListItemsQuery(baseOptions: Apollo.QueryHookOptions<FindListItemsQuery, FindListItemsQueryVariables> & ({ variables: FindListItemsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
+        return Apollo.useQuery<FindListItemsQuery, FindListItemsQueryVariables>(FindListItemsDocument, options);
       }
-export function useFindItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindItemsQuery, FindItemsQueryVariables>) {
+export function useFindListItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindListItemsQuery, FindListItemsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
+          return Apollo.useLazyQuery<FindListItemsQuery, FindListItemsQueryVariables>(FindListItemsDocument, options);
         }
-export function useFindItemsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindItemsQuery, FindItemsQueryVariables>) {
+export function useFindListItemsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindListItemsQuery, FindListItemsQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FindItemsQuery, FindItemsQueryVariables>(FindItemsDocument, options);
+          return Apollo.useSuspenseQuery<FindListItemsQuery, FindListItemsQueryVariables>(FindListItemsDocument, options);
         }
-export type FindItemsQueryHookResult = ReturnType<typeof useFindItemsQuery>;
-export type FindItemsLazyQueryHookResult = ReturnType<typeof useFindItemsLazyQuery>;
-export type FindItemsSuspenseQueryHookResult = ReturnType<typeof useFindItemsSuspenseQuery>;
-export type FindItemsQueryResult = Apollo.QueryResult<FindItemsQuery, FindItemsQueryVariables>;
+export type FindListItemsQueryHookResult = ReturnType<typeof useFindListItemsQuery>;
+export type FindListItemsLazyQueryHookResult = ReturnType<typeof useFindListItemsLazyQuery>;
+export type FindListItemsSuspenseQueryHookResult = ReturnType<typeof useFindListItemsSuspenseQuery>;
+export type FindListItemsQueryResult = Apollo.QueryResult<FindListItemsQuery, FindListItemsQueryVariables>;
 export const FindListsDocument = gql`
     query FindLists {
   findLists {
@@ -716,6 +772,50 @@ export type FindListsQueryHookResult = ReturnType<typeof useFindListsQuery>;
 export type FindListsLazyQueryHookResult = ReturnType<typeof useFindListsLazyQuery>;
 export type FindListsSuspenseQueryHookResult = ReturnType<typeof useFindListsSuspenseQuery>;
 export type FindListsQueryResult = Apollo.QueryResult<FindListsQuery, FindListsQueryVariables>;
+export const FindSubItemsDocument = gql`
+    query FindSubItems($input: FindItemsInput!) {
+  findSubItems(input: $input) {
+    description
+    id
+    name
+    priority
+    status
+  }
+}
+    `;
+
+/**
+ * __useFindSubItemsQuery__
+ *
+ * To run a query within a React component, call `useFindSubItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindSubItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindSubItemsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindSubItemsQuery(baseOptions: Apollo.QueryHookOptions<FindSubItemsQuery, FindSubItemsQueryVariables> & ({ variables: FindSubItemsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindSubItemsQuery, FindSubItemsQueryVariables>(FindSubItemsDocument, options);
+      }
+export function useFindSubItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindSubItemsQuery, FindSubItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindSubItemsQuery, FindSubItemsQueryVariables>(FindSubItemsDocument, options);
+        }
+export function useFindSubItemsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindSubItemsQuery, FindSubItemsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindSubItemsQuery, FindSubItemsQueryVariables>(FindSubItemsDocument, options);
+        }
+export type FindSubItemsQueryHookResult = ReturnType<typeof useFindSubItemsQuery>;
+export type FindSubItemsLazyQueryHookResult = ReturnType<typeof useFindSubItemsLazyQuery>;
+export type FindSubItemsSuspenseQueryHookResult = ReturnType<typeof useFindSubItemsSuspenseQuery>;
+export type FindSubItemsQueryResult = Apollo.QueryResult<FindSubItemsQuery, FindSubItemsQueryVariables>;
 export const GetAllWorkspacesDocument = gql`
     query GetAllWorkspaces {
   getAllWorkspaces {

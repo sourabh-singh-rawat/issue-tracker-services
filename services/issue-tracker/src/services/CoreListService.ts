@@ -1,5 +1,6 @@
 import {
   CreateListOptions,
+  FindListOptions,
   FindListsOptions,
   ListService,
   UpdateListOptions,
@@ -9,6 +10,7 @@ import { UserNotFoundError } from "@issue-tracker/common";
 import { NatsPublisher } from "@issue-tracker/event-bus";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { List } from "../data/entities";
+import { IsNull } from "typeorm";
 
 export class CoreListService implements ListService {
   constructor(
@@ -34,8 +36,9 @@ export class CoreListService implements ListService {
     return { rows, rowCount };
   }
 
-  async findListById(id: string) {
-    return await List.findOneOrFail({ where: { id } });
+  async findList(options: FindListOptions) {
+    const { id, userId } = options;
+    return await List.findOneOrFail({ where: { id, ownerId: userId } });
   }
 
   async createList(options: CreateListOptions) {
@@ -46,7 +49,7 @@ export class CoreListService implements ListService {
 
     const savedList = await ListRepo.save({
       name,
-      ownerUserId: userId,
+      ownerId: userId,
       description,
       workspaceId: user.defaultWorkspaceId,
     });

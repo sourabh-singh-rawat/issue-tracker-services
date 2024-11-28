@@ -15,7 +15,7 @@ export default function ListForm() {
   const navigate = useNavigate();
   const [createList] = useCreateListMutation({
     onCompleted({ createList }) {
-      navigate(`/projects/${createList}/overview`);
+      navigate(`/lists/${createList}/overview`);
     },
   });
 

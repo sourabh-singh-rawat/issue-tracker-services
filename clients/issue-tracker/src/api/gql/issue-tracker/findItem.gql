@@ -1,16 +1,12 @@
 query FindItem($findItemId: String!) {
   findItem(id: $findItemId) {
-    description
     id
+    description
     list {
       id
       name
     }
     parentItem {
-      id
-      name
-    }
-    subItems {
       id
       name
     }

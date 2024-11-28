@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import {
   useFindItemQuery,
+  useFindSubItemsQuery,
   useUpdateItemMutation,
 } from "../../../../api/codegen/gql/graphql";
 import { useMessageBar } from "../../../message-bar/hooks";
@@ -22,6 +23,12 @@ export default function Item(props: ItemProps) {
     variables: { findItemId: itemId as string },
     skip: !itemId,
   });
+  const { data: subItems } = useFindSubItemsQuery({
+    variables: {
+      input: { listId: id as string, parentItemId: itemId as string },
+    },
+  });
+
   const [updateItem] = useUpdateItemMutation({
     onCompleted(response) {
       messageBar.showSuccess(response.updateItem);
@@ -88,7 +95,7 @@ export default function Item(props: ItemProps) {
 
             <MuiGrid item xs={12}>
               <MuiGrid container>
-                {item?.findItem?.subItems?.map(({ name }) => {
+                {subItems?.findSubItems?.map(({ name }) => {
                   return (
                     <MuiGrid item xs={12}>
                       {name}

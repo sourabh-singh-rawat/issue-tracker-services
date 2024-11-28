@@ -26,9 +26,10 @@ export interface FindItemOptions {
   itemId: string;
 }
 
-export interface FindItemsOptions extends PagingOptions {
+export interface FindSubItemsOptions extends PagingOptions {
   userId: string;
   listId: string;
+  parentItemId: string;
 }
 
 export interface UpdateItemOptions extends ServiceOptions {
@@ -43,10 +44,16 @@ export interface UpdateItemOptions extends ServiceOptions {
   dueDate?: Date;
 }
 
+export interface FindListItemsOptions {
+  listId: string;
+  userId: string;
+}
+
 export interface ItemService {
   createItem(options: CreateItemOptions): Promise<string>;
   findItem(options: FindItemOptions): Promise<Item | null>;
-  findItems(options: FindItemsOptions): Promise<PaginatedOutput<Item>>;
+  findListItems(options: FindListItemsOptions): Promise<Item[]>;
+  findSubItems(options: FindSubItemsOptions): Promise<Item[]>;
   getIssue(issueId: string): Promise<Item>;
   getIssueStatusList(): Promise<ServiceResponse<IssueStatus[]>>;
   getIssuePriorityList(): Promise<ServiceResponse<IssuePriority[]>>;
