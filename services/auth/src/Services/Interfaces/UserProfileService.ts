@@ -1,9 +1,5 @@
 import { UserDetails } from "@issue-tracker/common";
-import { EntityManager } from "typeorm";
-
-export interface ServiceOptions {
-  manager: EntityManager;
-}
+import { ServiceOptions } from "@issue-tracker/orm";
 
 export interface CreateUserProfileOptions extends ServiceOptions {
   userId: string;

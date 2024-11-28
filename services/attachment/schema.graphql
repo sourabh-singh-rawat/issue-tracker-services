@@ -9,6 +9,10 @@ type Attachment {
   thumbnailLink: String!
 }
 
+type Mutation {
+  deleteAttachment(id: String!): String!
+}
+
 type PaginatedAttachment {
   rowCount: Float!
   rows: [Attachment!]!
@@ -16,5 +20,4 @@ type PaginatedAttachment {
 
 type Query {
   findAttachments(itemId: String!): PaginatedAttachment!
-  hello: String!
 }

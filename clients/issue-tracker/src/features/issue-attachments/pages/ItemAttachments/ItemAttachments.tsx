@@ -1,22 +1,20 @@
 import React, { useEffect } from "react";
-
 import MuiGrid from "@mui/material/Grid";
 import MuiInput from "@mui/material/Input";
 import MuiImageList from "@mui/material/ImageList";
 import MuiTypography from "@mui/material/Typography";
-
 import ImageCard from "../../components/ImageCard";
-
-import { styled, useTheme } from "@mui/material";
-import { useSelectedTab } from "../../../../common/hooks";
-import TabPanel from "../../../../common/components/TabPanel";
+import { IconButton, styled, useTheme } from "@mui/material";
 import AppLoader from "../../../../common/components/AppLoader";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
-
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { useMessageBar } from "../../../message-bar/hooks";
 import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
-import { useFindAttachmentsQuery } from "../../../../api/codegen/gql/graphql";
+import {
+  useDeleteAttachmentMutation,
+  useFindAttachmentsQuery,
+} from "../../../../api/codegen/gql/graphql";
+import { GridDeleteIcon } from "@mui/x-data-grid";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -34,13 +32,23 @@ interface ItemAttachmentProps {
   itemId: string;
 }
 
-export default function ItemAttachment({ itemId }: ItemAttachmentProps) {
+export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
   const theme = useTheme();
-  const { showSuccess, showError } = useMessageBar();
-  const [createAttachment, { isLoading, isSuccess, isError }] =
-    useCreateAttachmentMutation();
+  const messageBar = useMessageBar();
+  const { showSuccess } = useMessageBar();
+  const [createAttachment, { isLoading }] = useCreateAttachmentMutation();
   const { data: attachments, refetch } = useFindAttachmentsQuery({
     variables: { itemId },
+    fetchPolicy: "network-only",
+  });
+  const [deleteAttachment] = useDeleteAttachmentMutation({
+    onCompleted(response) {
+      messageBar.showSuccess(response.deleteAttachment);
+      refetch();
+    },
+    onError(error) {
+      messageBar.showError(error.message);
+    },
   });
 
   const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
@@ -56,19 +64,12 @@ export default function ItemAttachment({ itemId }: ItemAttachmentProps) {
     uploadFiles(files);
   };
 
-  const uploadFiles = async (files) => {
+  const uploadFiles = async (files: any) => {
     if (files && files.length) {
       const formData = new FormData();
       formData.append("files", files[0]);
     }
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      showSuccess("Uploaded files successfully");
-    }
-    if (isError) showError("Error uploading files");
-  }, [isSuccess, isError]);
 
   return (
     <>
@@ -87,6 +88,7 @@ export default function ItemAttachment({ itemId }: ItemAttachmentProps) {
               formData.append("files", file);
 
               await createAttachment({ itemId, body: formData as any });
+              showSuccess("Uploaded files successfully");
               refetch();
             }}
             multiple
@@ -139,7 +141,18 @@ export default function ItemAttachment({ itemId }: ItemAttachmentProps) {
         variant="quilted"
       >
         {attachments?.findAttachments.rows.map(({ id, thumbnailLink }) => (
-          <ImageCard key={id} path={thumbnailLink} />
+          <div key={id}>
+            <ImageCard key={id} path={thumbnailLink} />
+            <IconButton
+              onClick={async () => {
+                await deleteAttachment({
+                  variables: { deleteAttachmentId: id },
+                });
+              }}
+            >
+              <GridDeleteIcon />
+            </IconButton>
+          </div>
         )) || []}
       </MuiImageList>
     </>

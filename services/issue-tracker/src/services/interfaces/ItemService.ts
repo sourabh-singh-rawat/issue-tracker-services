@@ -1,3 +1,4 @@
+import { ServiceOptions } from "@issue-tracker/orm";
 import { Item } from "../../data/entities";
 import {
   IssuePriority,
@@ -6,7 +7,6 @@ import {
   PagingOptions,
   PaginatedOutput,
 } from "@issue-tracker/common";
-import { ServiceOptions } from "./WorkspaceService";
 
 export interface CreateItemOptions extends ServiceOptions {
   userId: string;

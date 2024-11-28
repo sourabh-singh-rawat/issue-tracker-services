@@ -1,6 +1,13 @@
-import { Arg, Field, ObjectType, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Field,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { AttachmentResolver } from "./interfaces";
-import { container } from "..";
+import { container, dataSource } from "..";
 import { Attachment } from "./types";
 
 @ObjectType()
@@ -14,15 +21,20 @@ export class PaginatedAttachment {
 
 @Resolver()
 export class CoreAttachmentResolver implements AttachmentResolver {
-  @Query(() => String)
-  hello() {
-    return "Hello world!";
-  }
-
   @Query(() => PaginatedAttachment)
   async findAttachments(@Arg("itemId") itemId: string) {
     const service = container.get("attachmentService");
 
     return await service.findAttachments(itemId);
+  }
+
+  @Mutation(() => String)
+  async deleteAttachment(@Arg("id") id: string) {
+    const service = container.get("attachmentService");
+    await dataSource.transaction(async (manager) => {
+      await service.deleteAttachment({ id, manager });
+    });
+
+    return "Deleted successfully";
   }
 }

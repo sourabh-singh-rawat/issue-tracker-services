@@ -2,12 +2,11 @@ import { v4 } from "uuid";
 import {
   CreateDefaultWorkspaceOptions,
   CreateWorkspaceOptions,
-  ServiceOptions,
   WorkspaceService,
 } from "./interfaces/WorkspaceService";
 import { WorkspaceMember } from "../data/entities/WorkspaceMember";
 import { WorkspaceInvitation } from "../data/entities/WorkspaceInvitation";
-import { Typeorm } from "@issue-tracker/orm";
+import { ServiceOptions, Typeorm } from "@issue-tracker/orm";
 import {
   ServiceResponse,
   UserNotFoundError,
@@ -55,9 +54,8 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     if (user) await UserRepo.save(user);
     const savedWorkspace = await WorkspaceRepo.save(workspace);
-    const savedWorkspaceMember = await WorkspaceMemberRepo.save(
-      workspaceMember,
-    );
+    const savedWorkspaceMember =
+      await WorkspaceMemberRepo.save(workspaceMember);
 
     if (!savedWorkspaceMember.userId) throw new Error("userId is required");
 
@@ -118,18 +116,16 @@ export class CoreWorkspaceService implements WorkspaceService {
     email: string,
     role: WorkspaceMemberRoles,
   ) => {
-    const isReceiverMember = await this.workspaceMemberRepository.existsByEmail(
-      email,
-    );
+    const isReceiverMember =
+      await this.workspaceMemberRepository.existsByEmail(email);
     if (isReceiverMember) throw new UserAlreadyMember();
 
     const sender = await this.userRepository.findById(userId);
     if (!sender) throw new UserNotFoundError();
     const { defaultWorkspaceId } = sender;
 
-    const workspace = await this.workspaceRepository.findById(
-      defaultWorkspaceId,
-    );
+    const workspace =
+      await this.workspaceRepository.findById(defaultWorkspaceId);
     if (!workspace) throw new NotFoundError("Workspace Not Found");
 
     const workspaceMember = new WorkspaceMember();

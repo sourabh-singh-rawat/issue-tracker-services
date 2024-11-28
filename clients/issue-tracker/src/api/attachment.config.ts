@@ -61,7 +61,7 @@ const baseQueryWithReAuth: BaseQueryFn<
 };
 
 export const apiSlice = createApi({
-  reducerPath: "storage-api",
+  reducerPath: "attachment-api",
   baseQuery: baseQueryWithReAuth,
   endpoints: () => ({}),
 });

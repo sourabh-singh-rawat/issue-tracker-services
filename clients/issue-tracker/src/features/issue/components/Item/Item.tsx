@@ -11,7 +11,7 @@ import ItemName from "../../../../common/components/ItemName";
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemModal from "../ItemModal";
-import ItemAttachment from "../../../issue-attachments/pages/IssueAttachments";
+import ItemAttachment from "../../../issue-attachments/pages/ItemAttachments";
 
 export interface ItemProps {}
 

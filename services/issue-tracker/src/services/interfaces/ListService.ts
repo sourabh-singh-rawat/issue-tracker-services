@@ -1,6 +1,6 @@
 import { PaginatedOutput, PagingOptions } from "@issue-tracker/common";
 import { List } from "../../data/entities";
-import { ServiceOptions } from "./WorkspaceService";
+import { ServiceOptions } from "@issue-tracker/orm";
 
 export interface CreateListOptions extends ServiceOptions {
   userId: string;
