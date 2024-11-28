@@ -2,11 +2,7 @@ import { ServiceResponse, WorkspaceMemberRoles } from "@issue-tracker/common";
 import { User } from "../../data/entities";
 import { WorkspaceMember } from "../../data/entities/WorkspaceMember";
 import { Workspace } from "../../data/entities/Workspace";
-import { EntityManager } from "typeorm";
-
-export interface ServiceOptions {
-  manager: EntityManager;
-}
+import { ServiceOptions } from "@issue-tracker/orm";
 
 export interface CreateWorkspaceOptions extends ServiceOptions {
   userId: string;

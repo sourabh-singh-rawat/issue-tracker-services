@@ -71,6 +71,7 @@ export type Mutation = {
   createItem: Scalars['String']['output'];
   createList: Scalars['String']['output'];
   createWorkspace: Scalars['String']['output'];
+  deleteAttachment: Scalars['String']['output'];
   registerUser: Scalars['String']['output'];
   signInWithEmailAndPassword: Scalars['Boolean']['output'];
   updateItem: Scalars['String']['output'];
@@ -90,6 +91,11 @@ export type MutationCreateListArgs = {
 
 export type MutationCreateWorkspaceArgs = {
   input: CreateWorkspaceInput;
+};
+
+
+export type MutationDeleteAttachmentArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -138,7 +144,6 @@ export type Query = {
   findLists: PaginatedList;
   getAllWorkspaces: Array<Workspace>;
   getCurrentUser: User;
-  hello: Scalars['String']['output'];
 };
 
 
@@ -195,6 +200,13 @@ export type Workspace = {
   ownerUserId: Scalars['String']['output'];
   status: Scalars['String']['output'];
 };
+
+export type DeleteAttachmentMutationVariables = Exact<{
+  deleteAttachmentId: Scalars['String']['input'];
+}>;
+
+
+export type DeleteAttachmentMutation = { __typename?: 'Mutation', deleteAttachment: string };
 
 export type FindAttachmentsQueryVariables = Exact<{
   itemId: Scalars['String']['input'];
@@ -273,6 +285,37 @@ export type UpdateItemMutationVariables = Exact<{
 export type UpdateItemMutation = { __typename?: 'Mutation', updateItem: string };
 
 
+export const DeleteAttachmentDocument = gql`
+    mutation DeleteAttachment($deleteAttachmentId: String!) {
+  deleteAttachment(id: $deleteAttachmentId)
+}
+    `;
+export type DeleteAttachmentMutationFn = Apollo.MutationFunction<DeleteAttachmentMutation, DeleteAttachmentMutationVariables>;
+
+/**
+ * __useDeleteAttachmentMutation__
+ *
+ * To run a mutation, you first call `useDeleteAttachmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAttachmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAttachmentMutation, { data, loading, error }] = useDeleteAttachmentMutation({
+ *   variables: {
+ *      deleteAttachmentId: // value for 'deleteAttachmentId'
+ *   },
+ * });
+ */
+export function useDeleteAttachmentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAttachmentMutation, DeleteAttachmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAttachmentMutation, DeleteAttachmentMutationVariables>(DeleteAttachmentDocument, options);
+      }
+export type DeleteAttachmentMutationHookResult = ReturnType<typeof useDeleteAttachmentMutation>;
+export type DeleteAttachmentMutationResult = Apollo.MutationResult<DeleteAttachmentMutation>;
+export type DeleteAttachmentMutationOptions = Apollo.BaseMutationOptions<DeleteAttachmentMutation, DeleteAttachmentMutationVariables>;
 export const FindAttachmentsDocument = gql`
     query FindAttachments($itemId: String!) {
   findAttachments(itemId: $itemId) {

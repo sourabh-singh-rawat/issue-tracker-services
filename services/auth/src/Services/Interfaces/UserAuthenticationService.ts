@@ -1,4 +1,4 @@
-import { ServiceOptions } from "./UserProfileService";
+import { ServiceOptions } from "@issue-tracker/orm";
 
 export interface CreateUserWithEmailAndPasswordOptions extends ServiceOptions {
   email: string;

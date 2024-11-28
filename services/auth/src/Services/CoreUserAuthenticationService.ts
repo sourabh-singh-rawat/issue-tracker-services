@@ -1,8 +1,6 @@
 import {
   EMAIL_VERIFICATION_STATUS,
-  EMAIL_VERIFICATION_TOKEN_STATUS,
   EmailNotVerifiedError,
-  InternalServerError,
   RequiredFieldError,
   UnauthorizedError,
   UserAlreadyExists,
@@ -24,7 +22,6 @@ import {
 import { AccessToken, Hash, JwtToken } from "@issue-tracker/security";
 import { v4 } from "uuid";
 import { NatsPublisher } from "@issue-tracker/event-bus";
-import { EmailVerificationToken } from "../data/entities/email-verification-token.entity";
 
 interface CreateVerificationLinkOptions {
   userId: string;

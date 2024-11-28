@@ -21,7 +21,7 @@ import Issues from "../features/issue-list/pages/Issues";
 import IssueForm from "../features/issue/pages/ItemForm";
 import IssueOverview from "../features/issue/pages/IssueOverview";
 import IssueComments from "../features/issue-comments/pages/IssueComments";
-import IssueAttachments from "../features/issue-attachments/pages/IssueAttachments";
+import IssueAttachments from "../features/issue-attachments/pages/ItemAttachments";
 import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 import Profile from "../features/user/pages/Profile";
 import Workspace from "../features/workspace/pages/Workspace";

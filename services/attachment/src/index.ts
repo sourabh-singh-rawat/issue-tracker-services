@@ -212,11 +212,11 @@ export const startWorker = () => {
       const thumbnail = await sharpedFile.resize(sizes.small.width).toBuffer();
       const image = await sharpedFile.resize(sizes.large.width).toBuffer();
       const filename = v4();
-      const thumbnailPath = `attachments/${itemId}/${filename}-small`;
-      const blobPath = `attachments/${itemId}/${filename}-large`;
+      const thumbnailLink = `attachments/${itemId}/${filename}-small`;
+      const imageLink = `attachments/${itemId}/${filename}-large`;
 
-      await adminStorage.file(thumbnailPath).save(thumbnail, { contentType });
-      await adminStorage.file(blobPath).save(image, { contentType });
+      await adminStorage.file(thumbnailLink).save(thumbnail, { contentType });
+      await adminStorage.file(imageLink).save(image, { contentType });
 
       const AttachmentRepo = dataSource.manager.getRepository(Attachment);
 
@@ -224,7 +224,8 @@ export const startWorker = () => {
         itemId,
         ownerId: userId,
         contentType,
-        thumbnailLink: thumbnailPath,
+        thumbnailLink,
+        imageLink,
         bucket: "issue-tracker-66803.appspot.com",
         filename,
         originalFilename,
