@@ -1,0 +1,9 @@
+query FindListItems($listId: String!) {
+  findListItems(listId: $listId) {
+    description
+    id
+    name
+    status
+    priority
+  }
+}

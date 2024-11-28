@@ -42,7 +42,6 @@ import { PostgresIssueCommentRepository } from "./data/repositories/postgres-iss
 import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
 import { UserEmailVerifiedSubscriber } from "./events/subscribers/user-email-verified.subscriber";
 import { ProjectController } from "./controllers/interfaces/project.controller";
-import { CoreProjectController } from "./controllers/core-project.controller";
 import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
 import { CoreWorkspaceController } from "./controllers/core-workspace.controller";
 import { CoreListService } from "./services/CoreListService";
@@ -82,12 +81,11 @@ export interface RegisteredServices {
   broker: Broker;
   issueCommentController: IssueCommentController;
   issueTaskController: IssueTaskController;
-  projectController: ProjectController;
   workspaceController: WorkspaceController;
   projectActivityController: ProjectActivityController;
   userService: UserService;
   itemService: ItemService;
-  projectService: ListService;
+  listService: ListService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
   issueCommentService: IssueCommentService;
@@ -247,7 +245,6 @@ const main = async () => {
   container.add("broker", asValue(natsBroker));
   container.add("issueCommentController", asClass(CoreIssueCommentController));
   container.add("issueTaskController", asClass(CoreIssueTaskController));
-  container.add("projectController", asClass(CoreProjectController));
   container.add("workspaceController", asClass(CoreWorkspaceController));
   container.add(
     "projectActivityController",
@@ -257,7 +254,7 @@ const main = async () => {
   container.add("itemService", asClass(CoreItemService));
   container.add("issueCommentService", asClass(CoreIssueCommentService));
   container.add("issueTaskService", asClass(CoreIssueTaskService));
-  container.add("projectService", asClass(CoreListService));
+  container.add("listService", asClass(CoreListService));
   container.add("projectActivityService", asClass(CoreProjectActivityService));
   container.add(
     "projectActivityRepository",

@@ -8,9 +8,13 @@ import {
   Resolver,
 } from "type-graphql";
 import { ItemResolver } from "./interfaces";
-import { CreateItemInput, Item, UpdateItemInput } from "./types";
+import {
+  CreateItemInput,
+  FindItemsInput,
+  Item,
+  UpdateItemInput,
+} from "./types";
 import { container, dataSource } from "..";
-import { PaginatedOutput } from "@issue-tracker/common";
 
 @ObjectType()
 export class PaginatedItem {
@@ -41,12 +45,21 @@ export class CoreItemResolver implements ItemResolver {
     return await service.findItem({ userId, itemId: id });
   }
 
-  @Query(() => PaginatedItem)
-  async findItems(@Ctx() ctx: any, @Arg("listId") listId: string) {
+  @Query(() => [Item])
+  async findListItems(@Ctx() ctx: any, @Arg("listId") listId: string) {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
-    return await service.findItems({ userId, listId });
+    return await service.findListItems({ userId, listId });
+  }
+
+  @Query(() => [Item])
+  async findSubItems(@Ctx() ctx: any, @Arg("input") input: FindItemsInput) {
+    const { listId, parentItemId } = input;
+    const userId = ctx.user.userId;
+    const service = container.get("itemService");
+
+    return await service.findSubItems({ userId, listId, parentItemId });
   }
 
   @Mutation(() => String)

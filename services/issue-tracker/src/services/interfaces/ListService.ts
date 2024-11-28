@@ -18,9 +18,14 @@ export interface UpdateListOptions extends ServiceOptions {
   description?: string;
 }
 
+export interface FindListOptions {
+  id: string;
+  userId: string;
+}
+
 export interface ListService {
   createList(options: CreateListOptions): Promise<string>;
+  findList(options: FindListOptions): Promise<List>;
   findLists(options: FindListsOptions): Promise<PaginatedOutput<List>>;
-  findListById(id: string): Promise<List>;
   updateList(options: UpdateListOptions): Promise<void>;
 }

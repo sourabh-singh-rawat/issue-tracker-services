@@ -1,7 +1,8 @@
 import {
   CreateItemOptions,
   FindItemOptions,
-  FindItemsOptions,
+  FindListItemsOptions,
+  FindSubItemsOptions,
   ItemService,
   UpdateItemOptions,
 } from "./interfaces/ItemService";
@@ -69,27 +70,39 @@ export class CoreItemService implements ItemService {
     return item.id;
   }
 
-  async findItems(options: FindItemsOptions) {
-    const { userId, listId } = options;
-    const [rows, rowCount] = await Item.findAndCount({
-      where: { createdById: userId, listId, parentItem: IsNull() },
-      relations: { list: true },
+  async findListItems(options: FindListItemsOptions) {
+    const { listId, userId } = options;
+
+    return await Item.find({
+      where: { listId, createdById: userId, parentItem: IsNull() },
+    });
+  }
+
+  async findSubItems(options: FindSubItemsOptions) {
+    const { userId, listId, parentItemId } = options;
+
+    const ItemRepo = dataSource.getTreeRepository(Item);
+    const parentItem = await Item.findOne({
+      where: { id: parentItemId, listId, createdById: userId },
     });
 
-    return { rows, rowCount };
+    if (!parentItem) throw new Error("Parent not found");
+
+    const tree = await ItemRepo.findDescendantsTree(parentItem, {
+      relations: ["list"],
+      depth: 1,
+    });
+
+    return tree.subItems;
   }
 
   async findItem(options: FindItemOptions) {
     const { userId, itemId } = options;
 
-    const item = await Item.findOneOrFail({
+    return await Item.findOneOrFail({
       where: { id: itemId, createdById: userId },
       relations: { list: true },
     });
-
-    return await dataSource.manager
-      .getTreeRepository(Item)
-      .findDescendantsTree(item, { relations: ["list"] });
   }
 
   getIssueStatusList = async () => {

@@ -31,6 +31,11 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
+input FindItemsInput {
+  listId: String!
+  parentItemId: String!
+}
+
 type Item {
   description: String
   id: String!
@@ -54,11 +59,6 @@ type Mutation {
   updateItem(input: UpdateItemInput!): String!
 }
 
-type PaginatedItem {
-  rowCount: Float!
-  rows: [Item!]!
-}
-
 type PaginatedList {
   rowCount: Float!
   rows: [List!]!
@@ -66,8 +66,10 @@ type PaginatedList {
 
 type Query {
   findItem(id: String!): Item
-  findItems(listId: String!): PaginatedItem!
+  findList(id: String!): List!
+  findListItems(listId: String!): [Item!]!
   findLists: PaginatedList!
+  findSubItems(input: FindItemsInput!): [Item!]!
   getAllWorkspaces: [Workspace!]!
 }
 

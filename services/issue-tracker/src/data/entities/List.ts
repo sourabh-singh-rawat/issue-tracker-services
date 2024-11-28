@@ -27,8 +27,8 @@ export class List extends AuditEntity {
     referencedColumnName: "id",
     foreignKeyConstraintName: "project_owner_fkey",
   })
-  @Column({ name: "owner_user_id", type: "uuid" })
-  ownerUserId!: string;
+  @Column({ name: "ownerId", type: "uuid" })
+  ownerId!: string;
 
   @Column({ name: "workspace_id", type: "uuid" })
   workspaceId!: string;

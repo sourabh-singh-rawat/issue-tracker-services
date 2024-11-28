@@ -12,7 +12,10 @@ import {
 import AvatarGroup from "../../../../common/components/AvatarGroup";
 import IssueStatusSelector from "../IssueStatusSelector";
 import IssuePrioritySelector from "../IssuePrioritySelector";
-import { useFindItemsQuery } from "../../../../api/codegen/gql/graphql";
+import {
+  useFindListItemsQuery,
+  useFindListQuery,
+} from "../../../../api/codegen/gql/graphql";
 
 interface ItemListProps {
   listId: string;
@@ -28,7 +31,7 @@ export default function ItemList({ listId }: ItemListProps) {
   const onPaginationModelChange = (model: GridPaginationModel) => {
     setPaginationModel(model);
   };
-  const { data: items, loading: isLoading } = useFindItemsQuery({
+  const { data: items, loading: isLoading } = useFindListItemsQuery({
     variables: { listId },
   });
 
@@ -182,16 +185,11 @@ export default function ItemList({ listId }: ItemListProps) {
 
   return (
     <List
-      rows={items?.findItems.rows?.map((row) => {
-        if (row.list) {
-          return { ...row, "project.name": row.list.name };
-        }
-        return row;
-      })}
+      rows={items?.findListItems || []}
       columns={columns}
       paginationModel={paginationModel}
       onPaginationModelChange={onPaginationModelChange}
-      rowCount={items?.findItems.rowCount}
+      rowCount={10}
       isLoading={isLoading}
     />
   );
