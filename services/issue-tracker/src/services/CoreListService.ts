@@ -38,7 +38,7 @@ export class CoreListService implements ListService {
 
   async findList(options: FindListOptions) {
     const { id, userId } = options;
-    return await List.findOneOrFail({ where: { id, ownerId: userId } });
+    return await List.findOneOrFail({ where: { id, createdById: userId } });
   }
 
   async createList(options: CreateListOptions) {
@@ -49,7 +49,7 @@ export class CoreListService implements ListService {
 
     const savedList = await ListRepo.save({
       name,
-      ownerId: userId,
+      createdById: userId,
       description,
       workspaceId: user.defaultWorkspaceId,
     });

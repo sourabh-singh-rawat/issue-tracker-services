@@ -12,7 +12,7 @@ export class Workspace {
   description?: string;
 
   @Field()
-  ownerUserId!: string;
+  createdById!: string;
 
   @Field()
   status!: string;

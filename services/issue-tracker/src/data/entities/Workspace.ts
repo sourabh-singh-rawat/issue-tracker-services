@@ -3,11 +3,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
+import { Space } from "./Space";
+import { List } from "./List";
 
 @Entity({ name: "workspaces" })
 export class Workspace extends AuditEntity {
@@ -20,10 +23,12 @@ export class Workspace extends AuditEntity {
   @Column({ type: "text", nullable: true })
   description?: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "owner_user_id", referencedColumnName: "id" })
-  @Column({ name: "owner_user_id", type: "uuid", nullable: false })
-  ownerUserId!: string;
+  @Column({ name: "created_by_id", type: "uuid", nullable: false })
+  createdById!: string;
+
+  @ManyToOne(() => User, (u) => u.workspaces)
+  @JoinColumn({ name: "created_by_id" })
+  createdBy!: User;
 
   @Column({
     name: "status",
@@ -37,4 +42,10 @@ export class Workspace extends AuditEntity {
     ],
   })
   status!: WorkspaceStatus;
+
+  @OneToMany(() => Space, (u) => u.workspace)
+  spaces!: Space;
+
+  @OneToMany(() => List, (u) => u.workspace)
+  lists!: List;
 }

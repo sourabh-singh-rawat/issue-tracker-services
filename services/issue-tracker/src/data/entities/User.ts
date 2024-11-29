@@ -5,6 +5,8 @@ import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
 } from "@issue-tracker/common";
+import { Workspace } from "./Workspace";
+import { Space } from "./Space";
 
 @Entity({ name: "users" })
 export class User extends AuditEntity {
@@ -37,6 +39,9 @@ export class User extends AuditEntity {
   @Column({ name: "photo_url", type: "text", nullable: true })
   photoUrl?: string;
 
-  @OneToMany(() => WorkspaceMember, ({ user }) => user)
-  memberWorkspaces?: WorkspaceMember[];
+  @OneToMany(() => Workspace, (w) => w.createdBy)
+  workspaces!: Workspace[];
+
+  @OneToMany(() => Space, (w) => w.createdBy)
+  spaces!: Space[];
 }

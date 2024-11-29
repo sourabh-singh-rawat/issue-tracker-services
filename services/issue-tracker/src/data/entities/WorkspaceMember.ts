@@ -23,10 +23,6 @@ export class WorkspaceMember extends AuditEntity {
   @Column({ name: "user_id", type: "uuid", nullable: true })
   userId?: string;
 
-  @ManyToOne(() => User, (x) => x.memberWorkspaces, { nullable: true })
-  @JoinColumn({ name: "user_id" })
-  user!: User;
-
   @ManyToOne(() => Workspace)
   @Column({ name: "workspace_id", type: "uuid" })
   @JoinColumn({ name: "workspace_id" })
