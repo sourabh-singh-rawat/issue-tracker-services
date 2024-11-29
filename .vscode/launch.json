@@ -3,6 +3,8 @@
   "compounds": [
     {
       "name": "dev (linux)",
+      "stopAll": true,
+      "preLaunchTask": "supergraph",
       "configurations": [
         "auth",
         "issue-tracker",
@@ -10,6 +12,7 @@
         "mail",
         "attachment",
         "brave (debug)",
+        "codegen: supergraph"
       ]
     }
   ],
@@ -23,7 +26,7 @@
       "runtimeArgs": [
         "client"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
     },
     {
       "name": "brave (debug - scoop)",
@@ -91,7 +94,18 @@
       "runtimeArgs": [
         "attachment"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+    },
+    {
+      "name": "codegen: supergraph",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "gen"
+      ],
+      "console": "integratedTerminal",
     }
   ]
 }

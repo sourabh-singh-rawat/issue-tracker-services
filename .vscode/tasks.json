@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "presentation": {
+    "echo": true,
+    "reveal": "always",
+    "focus": false,
+    "panel": "shared",
+    "showReuseMessage": true,
+    "clear": false
+  },
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "supergraph",
+      "command": "rover dev --supergraph-config supergraph-config-dev.yaml --router-config router-config-dev.yaml",
+      "problemMatcher": [],
+      "isBackground": true,
+    },
+  ]
+}
