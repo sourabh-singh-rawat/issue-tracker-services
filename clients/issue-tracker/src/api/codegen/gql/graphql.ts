@@ -140,7 +140,7 @@ export type Query = {
   findAttachments: PaginatedAttachment;
   findItem?: Maybe<Item>;
   findList: List;
-  findListItems?: Maybe<Item>;
+  findListItems: Array<Item>;
   findLists: PaginatedList;
   findSubItems: Array<Item>;
   getAllWorkspaces: Array<Workspace>;
@@ -290,7 +290,7 @@ export type FindListItemsQueryVariables = Exact<{
 }>;
 
 
-export type FindListItemsQuery = { __typename?: 'Query', findListItems?: { __typename?: 'Item', description?: string | null, id: string, name: string, status: string, priority: string } | null };
+export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, status: string, priority: string }> };
 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
