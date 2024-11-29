@@ -33,20 +33,6 @@ export class List extends AuditEntity {
   @Column({ name: "workspace_id", type: "uuid" })
   workspaceId!: string;
 
-  @Column({
-    name: "start_date",
-    type: "timestamp with time zone",
-    nullable: true,
-  })
-  startDate?: Date;
-
-  @Column({
-    name: "end_date",
-    type: "timestamp with time zone",
-    nullable: true,
-  })
-  endDate?: Date;
-
   @OneToMany(() => Item, (x) => x.list)
   items!: Item[];
 }
