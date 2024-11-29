@@ -1,3 +1,4 @@
+export * from "./CustomFieldType";
 export * from "./issue-activity";
 export * from "./issue-permissions";
 export * from "./issue-priority";

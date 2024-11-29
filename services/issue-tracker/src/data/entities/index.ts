@@ -1,3 +1,4 @@
+export * from "./CustomField";
 export * from "./ItemAssignee";
 export * from "./issue-attachment.entity";
 export * from "./issue-comment.entity";
@@ -5,6 +6,7 @@ export * from "./CheckListItem";
 export * from "./Item";
 export * from "./User";
 export * from "./List";
+export * from "./ListCustomField";
 export * from "./WorkspaceMember";
 export * from "./WorkspaceInvitation";
 export * from "./workspace-member-permission.entity";
