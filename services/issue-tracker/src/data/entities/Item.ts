@@ -15,7 +15,7 @@ import { ItemAssignee } from "./ItemAssignee";
 import { AuditEntity } from "@issue-tracker/orm";
 
 @Tree("closure-table", {
-  closureTableName: "item",
+  closureTableName: "items",
   ancestorColumnName: (column) => "ancestor_" + column.propertyName,
   descendantColumnName: (column) => "descendant_" + column.propertyName,
 })
@@ -64,6 +64,7 @@ export class Item extends AuditEntity {
   createdById!: string;
 
   @ManyToOne(() => User)
+  @JoinColumn({ name: "created_by_id" })
   createdBy!: User;
 
   @Column({ name: "updated_by_id", type: "uuid", nullable: true })
