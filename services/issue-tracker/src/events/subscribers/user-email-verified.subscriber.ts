@@ -61,7 +61,7 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
       });
 
       const newWorkspace = new Workspace();
-      newWorkspace.ownerUserId = savedUser.id;
+      newWorkspace.createdById = savedUser.id;
       newWorkspace.name = WORKSPACE_NAME.DEFAULT;
       newWorkspace.status = WORKSPACE_STATUS.DEFAULT;
 

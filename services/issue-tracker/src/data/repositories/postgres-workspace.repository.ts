@@ -26,11 +26,11 @@ export class PostgresWorkspaceRepository implements WorkspaceRepository {
   };
 
   findByUserId = async (userId: string) => {
-    return await Workspace.find({ where: { ownerUserId: userId } });
+    return await Workspace.find({ where: { createdById: userId } });
   };
 
   find = async (userId: string) => {
-    return await Workspace.find({ where: { ownerUserId: userId } });
+    return await Workspace.find({ where: { createdById: userId } });
   };
 
   softDelete(): Promise<void> {

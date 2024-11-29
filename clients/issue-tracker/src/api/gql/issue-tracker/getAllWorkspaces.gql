@@ -3,7 +3,7 @@ query GetAllWorkspaces {
     description
     id
     name
-    ownerUserId
+    createdById
     status
   }
 }

@@ -42,10 +42,6 @@ export class Item extends AuditEntity {
   @Column({ name: "list_id", type: "uuid" })
   listId!: string;
 
-  @ManyToOne(() => List, (x) => x.items)
-  @JoinColumn({ name: "list_id" })
-  list!: List;
-
   @Column({
     name: "start_date",
     type: "timestamp with time zone",
@@ -82,4 +78,8 @@ export class Item extends AuditEntity {
 
   @TreeParent()
   parentItem!: Item;
+
+  @ManyToOne(() => List, (x) => x.items)
+  @JoinColumn({ name: "list_id" })
+  list!: List;
 }

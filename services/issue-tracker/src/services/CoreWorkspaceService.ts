@@ -62,7 +62,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     await this.publisher.send("workspace.created", {
       id: savedWorkspace.id,
       name: savedWorkspace.name,
-      ownerId: savedWorkspace.ownerUserId,
+      createdById: savedWorkspace.createdById,
       member: {
         userId: savedWorkspaceMember.userId,
         workspaceId: savedWorkspaceMember.workspaceId,
@@ -79,7 +79,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     const workspace = new Workspace();
     workspace.id = defaultWorkspaceId;
     workspace.name = "Default Workspace";
-    workspace.ownerUserId = id;
+    workspace.createdById = id;
 
     const workspaceMember = new WorkspaceMember();
     workspaceMember.userId = id;
@@ -96,7 +96,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     workspace.id = id;
     workspace.name = name;
     workspace.description = description;
-    workspace.ownerUserId = userId;
+    workspace.createdById = userId;
 
     const workspaceMember = new WorkspaceMember();
     workspaceMember.userId = userId;

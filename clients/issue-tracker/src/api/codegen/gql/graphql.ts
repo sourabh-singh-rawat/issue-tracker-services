@@ -210,10 +210,10 @@ export type VerifyVerificationLinkInput = {
 
 export type Workspace = {
   __typename?: 'Workspace';
+  createdById: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  ownerUserId: Scalars['String']['output'];
   status: Scalars['String']['output'];
 };
 
@@ -307,7 +307,7 @@ export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __
 export type GetAllWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllWorkspacesQuery = { __typename?: 'Query', getAllWorkspaces: Array<{ __typename?: 'Workspace', description?: string | null, id: string, name: string, ownerUserId: string, status: string }> };
+export type GetAllWorkspacesQuery = { __typename?: 'Query', getAllWorkspaces: Array<{ __typename?: 'Workspace', description?: string | null, id: string, name: string, createdById: string, status: string }> };
 
 export type UpdateItemMutationVariables = Exact<{
   input: UpdateItemInput;
@@ -822,7 +822,7 @@ export const GetAllWorkspacesDocument = gql`
     description
     id
     name
-    ownerUserId
+    createdById
     status
   }
 }

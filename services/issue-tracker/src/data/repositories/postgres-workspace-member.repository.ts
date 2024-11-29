@@ -36,7 +36,6 @@ export class PostgresWorkspaceMemberRepository
   find = async (workspaceId: string) => {
     const members = await WorkspaceMember.find({
       where: { workspaceId },
-      relations: { user: true },
     });
 
     return members;

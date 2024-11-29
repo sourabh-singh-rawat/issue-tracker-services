@@ -84,9 +84,9 @@ input UpdateItemInput {
 }
 
 type Workspace {
+  createdById: String!
   description: String
   id: String!
   name: String!
-  ownerUserId: String!
   status: String!
 }
