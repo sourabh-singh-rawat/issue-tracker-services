@@ -140,7 +140,7 @@ export class CoreUserAuthenticationService
       userId,
     });
 
-    const verificationLink = `http://localhost:4000/${userId}/confirm?confirmationEmail=${verificationToken}`;
+    const verificationLink = `${process.env.CLIENT_SERVER}/${process.env.EMAIL_VERIFICATION_PAGE_PATH}?token=${verificationToken}`;
 
     return verificationLink;
   }

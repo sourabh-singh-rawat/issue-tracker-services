@@ -15,19 +15,12 @@ import ProjectMembers from "../features/project/pages/ProjectMembers";
 import ProjectActivity from "../features/project/pages/ProjectActivity";
 import ProjectSettings from "../features/project/pages/ProjectSettings";
 import ProjectIssues from "../features/project/pages/ListItems";
-
-import Issue from "../features/issue/pages/Issue";
-import Issues from "../features/issue-list/pages/Issues";
-import IssueForm from "../features/issue/pages/ItemForm";
-import IssueOverview from "../features/issue/pages/IssueOverview";
-import IssueComments from "../features/issue-comments/pages/IssueComments";
-import IssueAttachments from "../features/issue-attachments/pages/ItemAttachments";
-import IssueTasks from "../features/issue-tasks/pages/IssueTasks";
 import Profile from "../features/user/pages/Profile";
 import Workspace from "../features/workspace/pages/Workspace";
 import WorkspaceSettings from "../features/workspace/pages/WorkspaceSettings";
 import WorkspaceMembers from "../features/workspace/pages/WorkspaceMembers";
 import Item from "../features/issue/components/Item/Item";
+import { EmailVerification } from "../features/auth/pages/EmailVerification";
 
 function NoComponent() {
   return <h1>404</h1>;
@@ -39,6 +32,7 @@ export default function App() {
       <Route element={<AppLayout />}>
         <Route element={<Login />} path="login" />
         <Route element={<SignUp />} path="signup" />
+        <Route element={<EmailVerification />} path="email-verification" />
         <Route element={<PrivateRoutes />}>
           <Route element={<Dashboard />} index />
           <Route element={<Profile />} path="me" />
@@ -54,11 +48,6 @@ export default function App() {
           </Route>
 
           <Route element={<Item />} path="lists/:id/items/:itemId" />
-
-          <Route element={<Issues />} path="items">
-            <Route element={<IssueForm />} path="new" />
-          </Route>
-
           <Route path="workspaces">
             <Route path=":id" element={<Workspace />}>
               <Route path="settings" element={<WorkspaceSettings />} />
