@@ -250,6 +250,13 @@ export type SignInWithEmailAndPasswordMutationVariables = Exact<{
 
 export type SignInWithEmailAndPasswordMutation = { __typename?: 'Mutation', signInWithEmailAndPassword: boolean };
 
+export type VerifyVerificationLinkMutationVariables = Exact<{
+  input: VerifyVerificationLinkInput;
+}>;
+
+
+export type VerifyVerificationLinkMutation = { __typename?: 'Mutation', verifyVerificationLink: string };
+
 export type CreateItemMutationVariables = Exact<{
   input: CreateItemInput;
 }>;
@@ -499,6 +506,37 @@ export function useSignInWithEmailAndPasswordMutation(baseOptions?: Apollo.Mutat
 export type SignInWithEmailAndPasswordMutationHookResult = ReturnType<typeof useSignInWithEmailAndPasswordMutation>;
 export type SignInWithEmailAndPasswordMutationResult = Apollo.MutationResult<SignInWithEmailAndPasswordMutation>;
 export type SignInWithEmailAndPasswordMutationOptions = Apollo.BaseMutationOptions<SignInWithEmailAndPasswordMutation, SignInWithEmailAndPasswordMutationVariables>;
+export const VerifyVerificationLinkDocument = gql`
+    mutation VerifyVerificationLink($input: VerifyVerificationLinkInput!) {
+  verifyVerificationLink(input: $input)
+}
+    `;
+export type VerifyVerificationLinkMutationFn = Apollo.MutationFunction<VerifyVerificationLinkMutation, VerifyVerificationLinkMutationVariables>;
+
+/**
+ * __useVerifyVerificationLinkMutation__
+ *
+ * To run a mutation, you first call `useVerifyVerificationLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyVerificationLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyVerificationLinkMutation, { data, loading, error }] = useVerifyVerificationLinkMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useVerifyVerificationLinkMutation(baseOptions?: Apollo.MutationHookOptions<VerifyVerificationLinkMutation, VerifyVerificationLinkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyVerificationLinkMutation, VerifyVerificationLinkMutationVariables>(VerifyVerificationLinkDocument, options);
+      }
+export type VerifyVerificationLinkMutationHookResult = ReturnType<typeof useVerifyVerificationLinkMutation>;
+export type VerifyVerificationLinkMutationResult = Apollo.MutationResult<VerifyVerificationLinkMutation>;
+export type VerifyVerificationLinkMutationOptions = Apollo.BaseMutationOptions<VerifyVerificationLinkMutation, VerifyVerificationLinkMutationVariables>;
 export const CreateItemDocument = gql`
     mutation CreateItem($input: CreateItemInput!) {
   createItem(input: $input)
