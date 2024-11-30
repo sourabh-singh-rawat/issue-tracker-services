@@ -20,7 +20,7 @@ import { User } from "../data/entities";
 import { UserService } from "./Interfaces/user.service";
 import { UserProfile } from "../data/entities/UserProfile";
 import { EmailVerificationTokenRepository } from "../data/repositories/interfaces/email-verification.repository";
-import { EmailVerificationToken } from "../data/entities/email-verification-token.entity";
+import { VerificationLink } from "../data/entities/VerificationLink";
 import { v4 } from "uuid";
 
 export class CoreUserService implements UserService {
@@ -94,10 +94,9 @@ export class CoreUserService implements UserService {
           process.env.JWT_SECRET!,
         );
 
-      const newEmailVerificationToken = new EmailVerificationToken();
+      const newEmailVerificationToken = new VerificationLink();
       newEmailVerificationToken.id = tokenId;
       newEmailVerificationToken.token = emailVerificationToken;
-      newEmailVerificationToken.expiresAt = new Date(exp * 1000);
       newEmailVerificationToken.userId = userId;
 
       await this.emailVerificationTokenRepository.save(

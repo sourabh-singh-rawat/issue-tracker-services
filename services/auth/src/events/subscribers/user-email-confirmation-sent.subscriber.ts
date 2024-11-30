@@ -9,7 +9,7 @@ import {
 import { EMAIL_VERIFICATION_STATUS } from "@issue-tracker/common";
 import { JsMsg } from "nats";
 import { UserService } from "../../Services/Interfaces/user.service";
-import { EmailVerificationToken } from "../../data/entities/email-verification-token.entity";
+import { VerificationLink } from "../../data/entities/VerificationLink";
 
 export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailConfirmationSentPayload> {
   readonly stream = Streams.USER;

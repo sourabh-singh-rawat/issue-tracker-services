@@ -1,12 +1,13 @@
 import {
   EMAIL_VERIFICATION_STATUS,
+  EMAIL_VERIFICATION_TOKEN_STATUS,
   EmailNotVerifiedError,
   RequiredFieldError,
   UnauthorizedError,
   UserAlreadyExists,
   UserNotFoundError,
 } from "@issue-tracker/common";
-import { User } from "../data/entities";
+import { User, VerificationLink } from "../data/entities";
 import {
   CreateUserWithEmailAndPasswordOptions,
   GeneratePasswordResetLinkOptions,
@@ -29,6 +30,7 @@ interface CreateVerificationLinkOptions {
 
 interface CreateVerificationTokenOptions {
   userId: string;
+  tokenId: string;
   expiresIn: number;
 }
 
@@ -110,13 +112,12 @@ export class CoreUserAuthenticationService
   }
 
   private createVerificationToken(options: CreateVerificationTokenOptions) {
-    const { userId, expiresIn } = options;
+    const { userId, tokenId, expiresIn } = options;
     if (!userId) throw new RequiredFieldError("userId");
     if (!expiresIn) throw new RequiredFieldError("expiresIn");
 
     const iat = Math.floor(Date.now() / 1000);
     const exp = iat + expiresIn;
-    const tokenId = v4();
     const verificationToken = JwtToken.create(
       {
         sub: "@issue-tracker/auth",
@@ -135,14 +136,23 @@ export class CoreUserAuthenticationService
 
   private createVerificationLink(options: CreateVerificationLinkOptions) {
     const { userId } = options;
+    const tokenId = v4();
+    const expiresIn = 24 * 60 * 60;
     const verificationToken = this.createVerificationToken({
-      expiresIn: 24 * 60 * 60,
+      expiresIn,
       userId,
+      tokenId,
     });
 
     const verificationLink = `${process.env.CLIENT_SERVER}/${process.env.EMAIL_VERIFICATION_PAGE_PATH}?token=${verificationToken}`;
 
-    return verificationLink;
+    return {
+      link: verificationLink,
+      token: {
+        tokenId,
+        value: verificationToken,
+      },
+    };
   }
 
   private async verifyUserPassword(options: VerifyUserPassword) {
@@ -222,8 +232,18 @@ export class CoreUserAuthenticationService
 
   async sendVerificationLinkToEmail(options: SendEmailVerificationLinkOptions) {
     const { userId, displayName, email, manager } = options;
-    const verificationLink = this.createVerificationLink({ userId });
-    if (!verificationLink) throw new RequiredFieldError("verificationLink");
+    const VerificationLinkRepo = manager.getRepository(VerificationLink);
+    const { link, token } = this.createVerificationLink({ userId });
+
+    if (!link || !token) {
+      throw new RequiredFieldError("Failed to generated verification link");
+    }
+
+    await VerificationLinkRepo.save({
+      userId,
+      token: token.value,
+      tokenId: token.tokenId,
+    });
 
     const html = `
       <body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6;">
@@ -233,7 +253,7 @@ export class CoreUserAuthenticationService
                   <h4 style="font-size: 1.2em; color: #333333;">Hey ${displayName},</h4>
                   <p style="font-size: 1em; color: #555555;">Thank you for joining! To activate your account and start exploring, please click the verification link below:</p>
                   <p>
-                      <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; color: #ffffff; background-color: #8700f8; text-decoration: none; border-radius: 5px; font-size: 1em;">Activate My Account</a>
+                      <a href="${link}" style="display: inline-block; padding: 10px 20px; color: #ffffff; background-color: #8700f8; text-decoration: none; border-radius: 5px; font-size: 1em;">Activate My Account</a>
                   </p>
                   <p style="font-size: 0.9em; color: #888888;">Best Regards,<br>Issue tracker dev</p>
               </td>
@@ -253,9 +273,18 @@ export class CoreUserAuthenticationService
   async verifyVerificationLink(options: VerifyEmailVerificationLinkOptions) {
     const { manager, token } = options;
     const UserRepo = manager.getRepository(User);
+    const VerificationLinkRepo = manager.getRepository(VerificationLink);
 
     const verifiedToken = JwtToken.verify<any>(token, process.env.JWT_SECRET!);
-    const { userId } = verifiedToken;
+    const { userId, tokenId } = verifiedToken;
+
+    const savedToken = await VerificationLinkRepo.findOneOrFail({
+      where: { tokenId },
+    });
+
+    if (savedToken.status !== EMAIL_VERIFICATION_TOKEN_STATUS.VALID) {
+      throw new Error("Invalid Token");
+    }
 
     const user = await UserRepo.findOneOrFail({
       where: { id: userId },
@@ -264,6 +293,10 @@ export class CoreUserAuthenticationService
     await UserRepo.update(
       { id: userId },
       { emailVerificationStatus: EMAIL_VERIFICATION_STATUS.VERIFIED },
+    );
+    await VerificationLinkRepo.update(
+      { tokenId },
+      { status: EMAIL_VERIFICATION_TOKEN_STATUS.USED },
     );
     await this.publisher.send("user.email-verified", {
       displayName: user.profile.displayName,
