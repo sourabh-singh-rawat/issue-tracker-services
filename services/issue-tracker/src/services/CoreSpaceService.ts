@@ -1,5 +1,9 @@
 import { Space } from "../data/entities";
-import { CreateSpaceOptions, SpaceService } from "./interfaces";
+import {
+  CreateSpaceOptions,
+  GetSpacesOptions,
+  SpaceService,
+} from "./interfaces";
 
 export class CoreSpaceService implements SpaceService {
   async createSpace(options: CreateSpaceOptions) {
@@ -14,5 +18,11 @@ export class CoreSpaceService implements SpaceService {
     });
 
     return savedSpace.id;
+  }
+
+  async findSpaces(options: GetSpacesOptions) {
+    const { userId, workspaceId } = options;
+
+    return await Space.find({ where: { workspaceId, createdById: userId } });
   }
 }
