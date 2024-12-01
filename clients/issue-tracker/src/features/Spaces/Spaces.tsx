@@ -1,22 +1,41 @@
 import React from "react";
-import MuiList from "@mui/material/List";
-import MuiListItem from "@mui/material/ListItem";
-import MuiListItemText from "@mui/material/ListItemText";
-import MuiListItemIcon from "@mui/material/ListItemIcon";
 
 import { SpacesModal } from "./SpacesModal";
+import { useFindSpacesQuery } from "../../api/codegen/gql/graphql";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 
-interface SpacesProps {}
+interface SpacesProps {
+  workspaceId: string;
+}
 
-export function Spaces(props: SpacesProps) {
+export function Spaces({ workspaceId }: SpacesProps) {
+  const { data: spaces } = useFindSpacesQuery({
+    variables: { input: { workspaceId } },
+  });
+
   return (
-    <MuiList>
-      <MuiListItem>
-        <MuiListItemText>Spaces</MuiListItemText>
-        <MuiListItemIcon>
+    <List>
+      <ListItem>
+        <ListItemText>Spaces</ListItemText>
+        <ListItemIcon>
           <SpacesModal />
-        </MuiListItemIcon>
-      </MuiListItem>
-    </MuiList>
+        </ListItemIcon>
+      </ListItem>
+      {spaces?.findSpaces.map(({ name }) => {
+        return (
+          <ListItem>
+            <ListItemText>
+              <Typography variant="body2">{name}</Typography>
+            </ListItemText>
+          </ListItem>
+        );
+      })}
+    </List>
   );
 }

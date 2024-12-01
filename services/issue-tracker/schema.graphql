@@ -42,6 +42,10 @@ input FindItemsInput {
   parentItemId: String!
 }
 
+input FindSpacesOptions {
+  workspaceId: String!
+}
+
 type Item {
   description: String
   id: String!
@@ -76,8 +80,14 @@ type Query {
   findList(id: String!): List!
   findListItems(listId: String!): [Item!]!
   findLists: PaginatedList!
+  findSpaces(input: FindSpacesOptions!): [Space!]!
   findSubItems(input: FindItemsInput!): [Item!]!
   findWorkspaces: [Workspace!]!
+}
+
+type Space {
+  id: String!
+  name: String!
 }
 
 input UpdateItemInput {

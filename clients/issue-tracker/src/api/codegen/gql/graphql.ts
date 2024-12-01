@@ -59,6 +59,10 @@ export type FindItemsInput = {
   parentItemId: Scalars['String']['input'];
 };
 
+export type FindSpacesOptions = {
+  workspaceId: Scalars['String']['input'];
+};
+
 export type Item = {
   __typename?: 'Item';
   description?: Maybe<Scalars['String']['output']>;
@@ -154,6 +158,7 @@ export type Query = {
   findList: List;
   findListItems: Array<Item>;
   findLists: PaginatedList;
+  findSpaces: Array<Space>;
   findSubItems: Array<Item>;
   findWorkspaces: Array<Workspace>;
   getCurrentUser: User;
@@ -180,6 +185,11 @@ export type QueryFindListItemsArgs = {
 };
 
 
+export type QueryFindSpacesArgs = {
+  input: FindSpacesOptions;
+};
+
+
 export type QueryFindSubItemsArgs = {
   input: FindItemsInput;
 };
@@ -193,6 +203,12 @@ export type RegisterUserInput = {
 export type SignInWithEmailAndPasswordInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type Space = {
+  __typename?: 'Space';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type UpdateItemInput = {
@@ -322,6 +338,13 @@ export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FindListsQuery = { __typename?: 'Query', findLists: { __typename?: 'PaginatedList', rowCount: number, rows: Array<{ __typename?: 'List', id: string, name: string }> } };
+
+export type FindSpacesQueryVariables = Exact<{
+  input: FindSpacesOptions;
+}>;
+
+
+export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string }> };
 
 export type FindSubItemsQueryVariables = Exact<{
   input: FindItemsInput;
@@ -860,6 +883,47 @@ export type FindListsQueryHookResult = ReturnType<typeof useFindListsQuery>;
 export type FindListsLazyQueryHookResult = ReturnType<typeof useFindListsLazyQuery>;
 export type FindListsSuspenseQueryHookResult = ReturnType<typeof useFindListsSuspenseQuery>;
 export type FindListsQueryResult = Apollo.QueryResult<FindListsQuery, FindListsQueryVariables>;
+export const FindSpacesDocument = gql`
+    query FindSpaces($input: FindSpacesOptions!) {
+  findSpaces(input: $input) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindSpacesQuery__
+ *
+ * To run a query within a React component, call `useFindSpacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindSpacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindSpacesQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindSpacesQuery(baseOptions: Apollo.QueryHookOptions<FindSpacesQuery, FindSpacesQueryVariables> & ({ variables: FindSpacesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindSpacesQuery, FindSpacesQueryVariables>(FindSpacesDocument, options);
+      }
+export function useFindSpacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindSpacesQuery, FindSpacesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindSpacesQuery, FindSpacesQueryVariables>(FindSpacesDocument, options);
+        }
+export function useFindSpacesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindSpacesQuery, FindSpacesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindSpacesQuery, FindSpacesQueryVariables>(FindSpacesDocument, options);
+        }
+export type FindSpacesQueryHookResult = ReturnType<typeof useFindSpacesQuery>;
+export type FindSpacesLazyQueryHookResult = ReturnType<typeof useFindSpacesLazyQuery>;
+export type FindSpacesSuspenseQueryHookResult = ReturnType<typeof useFindSpacesSuspenseQuery>;
+export type FindSpacesQueryResult = Apollo.QueryResult<FindSpacesQuery, FindSpacesQueryVariables>;
 export const FindSubItemsDocument = gql`
     query FindSubItems($input: FindItemsInput!) {
   findSubItems(input: $input) {

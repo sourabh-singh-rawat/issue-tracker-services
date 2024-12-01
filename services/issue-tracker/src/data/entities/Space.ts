@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -11,7 +12,7 @@ import { Workspace } from "./Workspace";
 import { List } from "./List";
 
 @Entity({ name: "spaces" })
-export class Space {
+export class Space extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

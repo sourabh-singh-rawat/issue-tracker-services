@@ -1,4 +1,5 @@
 import { ServiceOptions } from "@issue-tracker/orm";
+import { Space } from "../../data/entities";
 
 export interface CreateSpaceOptions extends ServiceOptions {
   userId: string;
@@ -7,6 +8,12 @@ export interface CreateSpaceOptions extends ServiceOptions {
   description?: string;
 }
 
+export interface GetSpacesOptions {
+  userId: string;
+  workspaceId: string;
+}
+
 export interface SpaceService {
   createSpace(options: CreateSpaceOptions): Promise<string>;
+  findSpaces(options: GetSpacesOptions): Promise<Space[]>;
 }

@@ -17,6 +17,7 @@ import WorkspaceSwitcher from "../../../../features/workspace/components/Workspa
 import { useNavigate } from "react-router-dom";
 import { MenuItem } from "../../../enums/menu-item";
 import { Spaces } from "../../../../features/Spaces";
+import { useAppSelector } from "../../../hooks";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
@@ -62,6 +63,7 @@ export default function Sidebar() {
       color: theme.palette.primary.main,
     },
   };
+  const workspaceId = useAppSelector((s) => s.workspace.defaultWorkspace.id);
   const items: MenuItem[] = [
     {
       icon: <MuiArticleOutlinedIcon />,
@@ -82,22 +84,27 @@ export default function Sidebar() {
         <WorkspaceSwitcher />
       </MuiList>
       <MuiDivider />
-      <MuiList subheader=<Spaces /> disablePadding>
-        {items.map(({ icon, text, to }) => {
-          return (
-            <MuiListItem
-              onClick={() => {
-                if (to) navigate(to);
-              }}
-            >
-              <MuiListItemButton sx={sx}>
-                <MuiListItemIcon>{icon}</MuiListItemIcon>
-                <MuiListItemText primary={text} />
-              </MuiListItemButton>
-            </MuiListItem>
-          );
-        })}
-      </MuiList>
+      {workspaceId && (
+        <MuiList
+          subheader={<Spaces workspaceId={workspaceId} />}
+          disablePadding
+        >
+          {items.map(({ icon, text, to }) => {
+            return (
+              <MuiListItem
+                onClick={() => {
+                  if (to) navigate(to);
+                }}
+              >
+                <MuiListItemButton sx={sx}>
+                  <MuiListItemIcon>{icon}</MuiListItemIcon>
+                  <MuiListItemText primary={text} />
+                </MuiListItemButton>
+              </MuiListItem>
+            );
+          })}
+        </MuiList>
+      )}
       <MuiDivider />
     </Drawer>
   );
