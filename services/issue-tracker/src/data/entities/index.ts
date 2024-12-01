@@ -3,6 +3,7 @@ export * from "./ItemAssignee";
 export * from "./issue-attachment.entity";
 export * from "./issue-comment.entity";
 export * from "./CheckListItem";
+export * from "./Space";
 export * from "./Item";
 export * from "./User";
 export * from "./List";

@@ -20,6 +20,12 @@ input CreateListInput {
   name: String!
 }
 
+input CreateSpaceInput {
+  description: String
+  name: String!
+  workspaceId: String!
+}
+
 input CreateWorkspaceInput {
   description: String
   id: String
@@ -55,6 +61,7 @@ type List {
 type Mutation {
   createItem(input: CreateItemInput!): String!
   createList(input: CreateListInput!): String!
+  createSpace(input: CreateSpaceInput!): String!
   createWorkspace(input: CreateWorkspaceInput!): String!
   updateItem(input: UpdateItemInput!): String!
 }
@@ -70,7 +77,7 @@ type Query {
   findListItems(listId: String!): [Item!]!
   findLists: PaginatedList!
   findSubItems(input: FindItemsInput!): [Item!]!
-  getAllWorkspaces: [Workspace!]!
+  findWorkspaces: [Workspace!]!
 }
 
 input UpdateItemInput {

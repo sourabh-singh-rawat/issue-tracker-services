@@ -42,6 +42,12 @@ export type CreateListInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreateSpaceInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  workspaceId: Scalars['String']['input'];
+};
+
 export type CreateWorkspaceInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -75,6 +81,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createItem: Scalars['String']['output'];
   createList: Scalars['String']['output'];
+  createSpace: Scalars['String']['output'];
   createWorkspace: Scalars['String']['output'];
   deleteAttachment: Scalars['String']['output'];
   registerUser: Scalars['String']['output'];
@@ -91,6 +98,11 @@ export type MutationCreateItemArgs = {
 
 export type MutationCreateListArgs = {
   input: CreateListInput;
+};
+
+
+export type MutationCreateSpaceArgs = {
+  input: CreateSpaceInput;
 };
 
 
@@ -143,7 +155,7 @@ export type Query = {
   findListItems: Array<Item>;
   findLists: PaginatedList;
   findSubItems: Array<Item>;
-  getAllWorkspaces: Array<Workspace>;
+  findWorkspaces: Array<Workspace>;
   getCurrentUser: User;
 };
 
@@ -271,6 +283,13 @@ export type CreateListMutationVariables = Exact<{
 
 export type CreateListMutation = { __typename?: 'Mutation', createList: string };
 
+export type CreateSpaceMutationVariables = Exact<{
+  input: CreateSpaceInput;
+}>;
+
+
+export type CreateSpaceMutation = { __typename?: 'Mutation', createSpace: string };
+
 export type CreateWorkspaceMutationVariables = Exact<{
   input: CreateWorkspaceInput;
 }>;
@@ -311,10 +330,10 @@ export type FindSubItemsQueryVariables = Exact<{
 
 export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, status: string }> };
 
-export type GetAllWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllWorkspacesQuery = { __typename?: 'Query', getAllWorkspaces: Array<{ __typename?: 'Workspace', description?: string | null, id: string, name: string, createdById: string, status: string }> };
+export type FindWorkspacesQuery = { __typename?: 'Query', findWorkspaces: Array<{ __typename?: 'Workspace', description?: string | null, id: string, name: string, createdById: string, status: string }> };
 
 export type UpdateItemMutationVariables = Exact<{
   input: UpdateItemInput;
@@ -599,6 +618,37 @@ export function useCreateListMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateListMutationHookResult = ReturnType<typeof useCreateListMutation>;
 export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>;
 export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
+export const CreateSpaceDocument = gql`
+    mutation CreateSpace($input: CreateSpaceInput!) {
+  createSpace(input: $input)
+}
+    `;
+export type CreateSpaceMutationFn = Apollo.MutationFunction<CreateSpaceMutation, CreateSpaceMutationVariables>;
+
+/**
+ * __useCreateSpaceMutation__
+ *
+ * To run a mutation, you first call `useCreateSpaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSpaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSpaceMutation, { data, loading, error }] = useCreateSpaceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateSpaceMutation(baseOptions?: Apollo.MutationHookOptions<CreateSpaceMutation, CreateSpaceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSpaceMutation, CreateSpaceMutationVariables>(CreateSpaceDocument, options);
+      }
+export type CreateSpaceMutationHookResult = ReturnType<typeof useCreateSpaceMutation>;
+export type CreateSpaceMutationResult = Apollo.MutationResult<CreateSpaceMutation>;
+export type CreateSpaceMutationOptions = Apollo.BaseMutationOptions<CreateSpaceMutation, CreateSpaceMutationVariables>;
 export const CreateWorkspaceDocument = gql`
     mutation CreateWorkspace($input: CreateWorkspaceInput!) {
   createWorkspace(input: $input)
@@ -854,9 +904,9 @@ export type FindSubItemsQueryHookResult = ReturnType<typeof useFindSubItemsQuery
 export type FindSubItemsLazyQueryHookResult = ReturnType<typeof useFindSubItemsLazyQuery>;
 export type FindSubItemsSuspenseQueryHookResult = ReturnType<typeof useFindSubItemsSuspenseQuery>;
 export type FindSubItemsQueryResult = Apollo.QueryResult<FindSubItemsQuery, FindSubItemsQueryVariables>;
-export const GetAllWorkspacesDocument = gql`
-    query GetAllWorkspaces {
-  getAllWorkspaces {
+export const FindWorkspacesDocument = gql`
+    query FindWorkspaces {
+  findWorkspaces {
     description
     id
     name
@@ -867,36 +917,36 @@ export const GetAllWorkspacesDocument = gql`
     `;
 
 /**
- * __useGetAllWorkspacesQuery__
+ * __useFindWorkspacesQuery__
  *
- * To run a query within a React component, call `useGetAllWorkspacesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllWorkspacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindWorkspacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindWorkspacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllWorkspacesQuery({
+ * const { data, loading, error } = useFindWorkspacesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetAllWorkspacesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>) {
+export function useFindWorkspacesQuery(baseOptions?: Apollo.QueryHookOptions<FindWorkspacesQuery, FindWorkspacesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>(GetAllWorkspacesDocument, options);
+        return Apollo.useQuery<FindWorkspacesQuery, FindWorkspacesQueryVariables>(FindWorkspacesDocument, options);
       }
-export function useGetAllWorkspacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>) {
+export function useFindWorkspacesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindWorkspacesQuery, FindWorkspacesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>(GetAllWorkspacesDocument, options);
+          return Apollo.useLazyQuery<FindWorkspacesQuery, FindWorkspacesQueryVariables>(FindWorkspacesDocument, options);
         }
-export function useGetAllWorkspacesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>) {
+export function useFindWorkspacesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindWorkspacesQuery, FindWorkspacesQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>(GetAllWorkspacesDocument, options);
+          return Apollo.useSuspenseQuery<FindWorkspacesQuery, FindWorkspacesQueryVariables>(FindWorkspacesDocument, options);
         }
-export type GetAllWorkspacesQueryHookResult = ReturnType<typeof useGetAllWorkspacesQuery>;
-export type GetAllWorkspacesLazyQueryHookResult = ReturnType<typeof useGetAllWorkspacesLazyQuery>;
-export type GetAllWorkspacesSuspenseQueryHookResult = ReturnType<typeof useGetAllWorkspacesSuspenseQuery>;
-export type GetAllWorkspacesQueryResult = Apollo.QueryResult<GetAllWorkspacesQuery, GetAllWorkspacesQueryVariables>;
+export type FindWorkspacesQueryHookResult = ReturnType<typeof useFindWorkspacesQuery>;
+export type FindWorkspacesLazyQueryHookResult = ReturnType<typeof useFindWorkspacesLazyQuery>;
+export type FindWorkspacesSuspenseQueryHookResult = ReturnType<typeof useFindWorkspacesSuspenseQuery>;
+export type FindWorkspacesQueryResult = Apollo.QueryResult<FindWorkspacesQuery, FindWorkspacesQueryVariables>;
 export const UpdateItemDocument = gql`
     mutation UpdateItem($input: UpdateItemInput!) {
   updateItem(input: $input)

@@ -10,6 +10,7 @@ import projectSlice from "../../features/project/project.slice";
 import taskListSlice from "../../features/task-list/task-list.slice";
 import workspaceSlice from "../../features/workspace/workspace.slice";
 import { attachmentApi } from "../../api/codegen/rest/attachment.api";
+import logger from "redux-logger";
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +26,7 @@ export const store = configureStore({
     taskList: taskListSlice,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(attachmentApi.middleware),
+    getDefaultMiddleware().concat(logger).concat(attachmentApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,5 +1,6 @@
 export * from "./CreateItemInput";
 export * from "./CreateListInput";
+export * from "./CreateSpaceInput";
 export * from "./CreateWorkspaceInput";
 export * from "./FindItemsInput";
 export * from "./Item";

@@ -11,14 +11,12 @@ import MuiListItemText from "@mui/material/ListItemText";
 import MuiListItemIcon from "@mui/material/ListItemIcon";
 import MuiListItemButton from "@mui/material/ListItemButton";
 
-import MuiPestControlOutlinedIcon from "@mui/icons-material/PestControlOutlined";
 import MuiArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
-import MuiAssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
-import MuiKeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 import { useNavigate } from "react-router-dom";
 import { MenuItem } from "../../../enums/menu-item";
+import { Spaces } from "../../../../features/Spaces";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(28);
@@ -64,17 +62,11 @@ export default function Sidebar() {
       color: theme.palette.primary.main,
     },
   };
-  const list: MenuItem[] = [
+  const items: MenuItem[] = [
     {
       icon: <MuiArticleOutlinedIcon />,
       to: "/lists",
       text: "Lists",
-      isVisible: open,
-    },
-    {
-      icon: <MuiAssignmentTurnedInOutlinedIcon />,
-      to: "/tasks",
-      text: "Tasks",
       isVisible: open,
     },
   ];
@@ -90,8 +82,8 @@ export default function Sidebar() {
         <WorkspaceSwitcher />
       </MuiList>
       <MuiDivider />
-      <MuiList disablePadding>
-        {list.map(({ icon, text, to }) => {
+      <MuiList subheader=<Spaces /> disablePadding>
+        {items.map(({ icon, text, to }) => {
           return (
             <MuiListItem
               onClick={() => {
@@ -107,16 +99,6 @@ export default function Sidebar() {
         })}
       </MuiList>
       <MuiDivider />
-      <MuiList>
-        <MuiListItem>
-          <MuiListItemButton>
-            <MuiListItemIcon>
-              <MuiKeyboardDoubleArrowRightIcon />
-            </MuiListItemIcon>
-            <MuiListItemText primary="Close" />
-          </MuiListItemButton>
-        </MuiListItem>
-      </MuiList>
     </Drawer>
   );
 }

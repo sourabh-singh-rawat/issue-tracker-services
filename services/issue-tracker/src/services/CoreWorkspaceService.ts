@@ -54,8 +54,9 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     if (user) await UserRepo.save(user);
     const savedWorkspace = await WorkspaceRepo.save(workspace);
-    const savedWorkspaceMember =
-      await WorkspaceMemberRepo.save(workspaceMember);
+    const savedWorkspaceMember = await WorkspaceMemberRepo.save(
+      workspaceMember,
+    );
 
     if (!savedWorkspaceMember.userId) throw new Error("userId is required");
 
@@ -116,16 +117,18 @@ export class CoreWorkspaceService implements WorkspaceService {
     email: string,
     role: WorkspaceMemberRoles,
   ) => {
-    const isReceiverMember =
-      await this.workspaceMemberRepository.existsByEmail(email);
+    const isReceiverMember = await this.workspaceMemberRepository.existsByEmail(
+      email,
+    );
     if (isReceiverMember) throw new UserAlreadyMember();
 
     const sender = await this.userRepository.findById(userId);
     if (!sender) throw new UserNotFoundError();
     const { defaultWorkspaceId } = sender;
 
-    const workspace =
-      await this.workspaceRepository.findById(defaultWorkspaceId);
+    const workspace = await this.workspaceRepository.findById(
+      defaultWorkspaceId,
+    );
     if (!workspace) throw new NotFoundError("Workspace Not Found");
 
     const workspaceMember = new WorkspaceMember();
@@ -190,17 +193,17 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     if (!userExists) {
       return new ServiceResponse({
-        rows: `http://localhost:3000/signup?inviteToken=${token}`,
+        rows: `${process.env.CLIENT_SERVER}/signup?inviteToken=${token}`,
       });
     }
 
     return new ServiceResponse({
-      rows: `htt://localhost:3000/login?inviteToken=${token}`,
+      rows: `${process.env.CLIENT_SERVER}/login?inviteToken=${token}`,
     });
   };
 
-  async getAllWorkspaces(userId: string) {
-    return await this.workspaceRepository.find(userId);
+  async findWorkspaces(userId: string) {
+    return await Workspace.find({ where: { createdById: userId } });
   }
 
   getWorkspace = async (id: string) => {
