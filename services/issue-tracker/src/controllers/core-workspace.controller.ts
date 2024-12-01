@@ -54,7 +54,7 @@ export class CoreWorkspaceController implements WorkspaceController {
   getAllWorkspaces = async (request: FastifyRequest, reply: FastifyReply) => {
     const { userId } = request.user;
 
-    const response = await this.workspaceService.getAllWorkspaces(userId);
+    const response = await this.workspaceService.findWorkspaces(userId);
     return reply.send(response);
   };
 

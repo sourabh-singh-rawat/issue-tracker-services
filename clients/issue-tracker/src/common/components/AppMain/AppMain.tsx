@@ -16,21 +16,21 @@ import {
   setWorkspaces,
 } from "../../../features/workspace/workspace.slice";
 import { WORKSPACE_STATUS } from "@issue-tracker/common";
-import { useGetAllWorkspacesQuery } from "../../../api/codegen/gql/graphql";
+import { useFindWorkspacesQuery } from "../../../api/codegen/gql/graphql";
 
 export default function AppMain() {
   const theme = useTheme();
   const isLargeScreen = useLargeScreen();
   const dispatch = useAppDispatch();
-  const { data: workspaces } = useGetAllWorkspacesQuery();
+  const { data: workspaces } = useFindWorkspacesQuery();
   const { id } = useAppSelector(
     ({ workspace }) =>
-      workspace?.defaultWorkspace || { id: "something", name: "Something2" },
+      workspace?.defaultWorkspace || { id: "", name: "" },
   );
 
   useEffect(() => {
     if (workspaces) {
-      const defaultWorkspace = workspaces.getAllWorkspaces?.find(
+      const defaultWorkspace = workspaces.findWorkspaces?.find(
         ({ status }) => status === WORKSPACE_STATUS.DEFAULT,
       );
       dispatch(setDefaultWorkspace(defaultWorkspace));

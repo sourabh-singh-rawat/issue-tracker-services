@@ -12,18 +12,15 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useTheme } from "@mui/material";
 import { useAppSelector } from "../../../../common/hooks";
-import { GetWorkspaceApiResponse } from "../../../../api/generated/workspace.api";
+import { Workspace } from "../../../../api/codegen/gql/graphql";
 
 export default function WorkspaceSwitcher() {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { workspaces, defaultWorkspace } = useAppSelector((s) => s.workspace);
-  // const { name } = defaultWorkspace;
-  const name = "temp"
-  const [selectedOption, setSelectedOption] = useState<
-    GetWorkspaceApiResponse["rows"]
-  >({ id: "", name: "" });
+  const { name } = defaultWorkspace;
+  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace>();
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -32,7 +29,7 @@ export default function WorkspaceSwitcher() {
   const handleClose = () => setAnchorEl(null);
 
   useEffect(() => {
-    if (defaultWorkspace) setSelectedOption(defaultWorkspace);
+    if (defaultWorkspace) setSelectedWorkspace(defaultWorkspace);
   }, [defaultWorkspace]);
 
   return (
@@ -57,12 +54,12 @@ export default function WorkspaceSwitcher() {
           </ListItemIcon>
         </ListItemButton>
       </ListItem>
-      {selectedOption && (
+      {selectedWorkspace && (
         <WorkspaceMenu
           anchorEl={anchorEl}
           options={workspaces}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
+          selectedOption={selectedWorkspace}
+          setSelectedOption={setSelectedWorkspace}
           handleClose={handleClose}
         />
       )}

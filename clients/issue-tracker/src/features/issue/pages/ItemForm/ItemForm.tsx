@@ -44,7 +44,7 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
     defaultValues: {
       listId,
       name: "",
-      type: "temp",
+      type: "issue",
       status: "To Do",
       priority: "Low",
       description: "",

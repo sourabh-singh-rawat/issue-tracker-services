@@ -1,8 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Workspace } from "../../api/codegen/gql/graphql";
 
-const initialState = {
+const initialState: { workspaces: Workspace[]; defaultWorkspace: Workspace } = {
   workspaces: [],
-  defaultWorkspace: { id: "", name: "", createdAt: "", description: "" },
+  defaultWorkspace: {
+    id: "",
+    name: "",
+    description: "",
+    status: "",
+    createdById: "",
+  },
 };
 
 const workspaceSlice = createSlice({

@@ -19,13 +19,12 @@ export class CoreWorkspaceResolver implements WorkspaceResolver {
   }
 
   @Query(() => [Workspace])
-  async getAllWorkspaces(@Ctx() ctx: any) {
+  async findWorkspaces(@Ctx() ctx: any) {
     const service = container.get("workspaceService");
-    const { user } = ctx;
-    const { userId } = user;
+    const userId = ctx.user.userId;
 
     return await dataSource.transaction(async () => {
-      return await service.getAllWorkspaces(userId);
+      return await service.findWorkspaces(userId);
     });
   }
 }

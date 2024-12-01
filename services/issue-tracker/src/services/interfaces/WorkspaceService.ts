@@ -29,7 +29,7 @@ export interface WorkspaceService {
     role: WorkspaceMemberRoles,
   ): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
-  getAllWorkspaces(userId: string): Promise<Workspace[]>;
+  findWorkspaces(userId: string): Promise<Workspace[]>;
   getWorkspace(id: string): Promise<ServiceResponse<Workspace>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceMemberRoles[]>>;
   getWorkspaceMembers(

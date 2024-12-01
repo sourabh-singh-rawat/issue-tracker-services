@@ -1,5 +1,5 @@
-query GetAllWorkspaces {
-  getAllWorkspaces {
+query FindWorkspaces {
+  findWorkspaces {
     description
     id
     name

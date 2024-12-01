@@ -23,7 +23,7 @@ export class Workspace extends AuditEntity {
   @Column({ type: "text", nullable: true })
   description?: string;
 
-  @Column({ name: "created_by_id", type: "uuid", nullable: false })
+  @Column({ name: "created_by_id", type: "uuid" })
   createdById!: string;
 
   @ManyToOne(() => User, (u) => u.workspaces)

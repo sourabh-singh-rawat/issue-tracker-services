@@ -30,8 +30,6 @@ import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { CoreIssueCommentController } from "./controllers/core-issue-comment.controller";
 import { CoreIssueTaskController } from "./controllers/core-issue-task.controller";
-import { CoreUserService } from "./services/CoreUserService";
-import { CoreItemService } from "./services/CoreItemService";
 import { CoreIssueCommentService } from "./services/core-issue-comment.service";
 import { CoreIssueTaskService } from "./services/core-issue-task.service";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
@@ -41,7 +39,6 @@ import { PostgresIssueAssigneeRepository } from "./data/repositories/postgres-is
 import { PostgresIssueCommentRepository } from "./data/repositories/postgres-issue-comment.repository";
 import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
 import { UserEmailVerifiedSubscriber } from "./events/subscribers/user-email-verified.subscriber";
-import { ProjectController } from "./controllers/interfaces/project.controller";
 import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
 import { CoreWorkspaceController } from "./controllers/core-workspace.controller";
 import { CoreListService } from "./services/CoreListService";
@@ -64,15 +61,20 @@ import { initTRPC } from "@trpc/server";
 import { z } from "zod";
 import { UnauthorizedError } from "@issue-tracker/common";
 import { buildSchema } from "type-graphql";
-import { CoreWorkspaceResolver } from "./resolvers/CoreWorkspaceResolver";
 import { ApolloServer } from "@apollo/server";
 import {
   ApolloFastifyContextFunction,
   fastifyApolloDrainPlugin,
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
-import { CoreListResolver } from "./resolvers/CoreListResolver";
-import { CoreItemResolver } from "./resolvers/CoreItemResolver";
+import { SpaceService } from "./services/interfaces";
+import {
+  CoreWorkspaceResolver,
+  CoreItemResolver,
+  CoreListResolver,
+  CoreSpaceResolver,
+} from "./resolvers";
+import { CoreItemService, CoreSpaceService, CoreUserService } from "./services";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -88,6 +90,7 @@ export interface RegisteredServices {
   listService: ListService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
+  spaceService: SpaceService;
   issueCommentService: IssueCommentService;
   issueTaskService: IssueTaskService;
   workspaceRepository: WorkspaceRepository;
@@ -158,7 +161,7 @@ export const issueTrackerRouter = router({
       const { userId } = user;
 
       const service = container.get("workspaceService");
-      return await service.getAllWorkspaces(userId);
+      return await service.findWorkspaces(userId);
     }),
 });
 
@@ -169,7 +172,12 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     const instance = fastify();
     const schema = await buildSchema({
       emitSchemaFile: true,
-      resolvers: [CoreItemResolver, CoreListResolver, CoreWorkspaceResolver],
+      resolvers: [
+        CoreWorkspaceResolver,
+        CoreSpaceResolver,
+        CoreListResolver,
+        CoreItemResolver,
+      ],
     });
     const apollo = new ApolloServer({
       schema,
@@ -252,6 +260,7 @@ const main = async () => {
   );
   container.add("userService", asClass(CoreUserService));
   container.add("itemService", asClass(CoreItemService));
+  container.add("spaceService", asClass(CoreSpaceService));
   container.add("issueCommentService", asClass(CoreIssueCommentService));
   container.add("issueTaskService", asClass(CoreIssueTaskService));
   container.add("listService", asClass(CoreListService));
