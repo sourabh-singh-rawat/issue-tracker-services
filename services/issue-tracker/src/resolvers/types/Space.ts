@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
+import { List } from "./List";
 
 @ObjectType()
 export class Space {
@@ -7,4 +8,7 @@ export class Space {
 
   @Field()
   name!: string;
+
+  @Field(() => [List])
+  lists!: List[];
 }

@@ -23,6 +23,9 @@ export class CoreSpaceService implements SpaceService {
   async findSpaces(options: GetSpacesOptions) {
     const { userId, workspaceId } = options;
 
-    return await Space.find({ where: { workspaceId, createdById: userId } });
+    return await Space.find({
+      where: { workspaceId, createdById: userId },
+      relations: { lists: true },
+    });
   }
 }

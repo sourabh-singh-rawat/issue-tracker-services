@@ -16,8 +16,8 @@ input CreateItemInput {
 }
 
 input CreateListInput {
-  description: String
   name: String!
+  spaceId: String!
 }
 
 input CreateSpaceInput {
@@ -87,6 +87,7 @@ type Query {
 
 type Space {
   id: String!
+  lists: [List!]!
   name: String!
 }
 

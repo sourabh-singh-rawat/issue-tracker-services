@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import MuiGrid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Grid2";
 import MuiContainer from "@mui/material/Container";
 import MuiTypography from "@mui/material/Typography";
 import TextField from "../../../../common/components/forms/TextField";
@@ -10,17 +10,29 @@ import {
   CreateListInput,
   useCreateListMutation,
 } from "../../../../api/codegen/gql/graphql";
+import { useMessageBar } from "../../../message-bar/hooks";
 
-export default function ListForm() {
+interface ListFormProps {
+  spaceId: string;
+}
+
+export default function ListForm({ spaceId }: ListFormProps) {
   const navigate = useNavigate();
+  const messageBar = useMessageBar();
   const [createList] = useCreateListMutation({
     onCompleted({ createList }) {
-      navigate(`/lists/${createList}/overview`);
+      messageBar.showSuccess("Created list successfully");
+      setTimeout(() => {
+        navigate(`/lists/${createList}/overview`);
+      }, 5000);
+    },
+    onError(error) {
+      messageBar.showError(error.message);
     },
   });
 
   const defaultValues: CreateListInput = useMemo(
-    () => ({ name: "", description: "" }),
+    () => ({ name: "", spaceId }),
     [],
   );
   const { control, formState, handleSubmit } = useForm({
@@ -28,11 +40,8 @@ export default function ListForm() {
     mode: "all",
   });
 
-  const onSubmit: SubmitHandler<CreateListInput> = async ({
-    name,
-    description,
-  }) => {
-    await createList({ variables: { input: { name, description } } });
+  const onSubmit: SubmitHandler<CreateListInput> = async ({ name }) => {
+    await createList({ variables: { input: { name, spaceId } } });
   };
 
   return (
@@ -41,37 +50,20 @@ export default function ListForm() {
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <MuiGrid spacing={2} container>
-        <MuiGrid item xs={12}>
-          <MuiTypography variant="h4" fontWeight="bold">
-            New List
-          </MuiTypography>
-          <MuiTypography variant="body1">
-            List are container for storing items
-          </MuiTypography>
-        </MuiGrid>
-
-        <MuiGrid item xs={12}>
+      <Grid2 spacing={2} container>
+        <Grid2 size={12}>
           <TextField
             name="name"
             title="Name"
             control={control}
             formState={formState}
+            placeholder="e.g. Marketing, Engineering, HR"
           />
-        </MuiGrid>
-        <MuiGrid item xs={12}>
-          <TextField
-            name="description"
-            title="Description"
-            control={control}
-            formState={formState}
-            rows={4}
-          />
-        </MuiGrid>
-        <MuiGrid item xs={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <PrimaryButton type="submit" label="Create" />
-        </MuiGrid>
-      </MuiGrid>
+        </Grid2>
+      </Grid2>
     </MuiContainer>
   );
 }

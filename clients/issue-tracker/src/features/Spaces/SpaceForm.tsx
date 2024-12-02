@@ -5,7 +5,7 @@ import {
   useCreateSpaceMutation,
 } from "../../api/codegen/gql/graphql";
 import { useMessageBar } from "../message-bar/hooks";
-import { Container, Grid2 } from "@mui/material";
+import { Container, Grid2, Typography } from "@mui/material";
 import TextField from "../../common/components/forms/TextField";
 import PrimaryButton from "../../common/components/buttons/PrimaryButton";
 

@@ -5,7 +5,7 @@ import { useLargeScreen } from "../../../hooks/useLargeScreen";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiToolbar from "@mui/material/Toolbar";
 import MuiDivider from "@mui/material/Divider";
-import MuiList from "@mui/material/List";
+import List from "@mui/material/List";
 import MuiListItem from "@mui/material/ListItem";
 import MuiListItemText from "@mui/material/ListItemText";
 import MuiListItemIcon from "@mui/material/ListItemIcon";
@@ -20,7 +20,7 @@ import { Spaces } from "../../../../features/Spaces";
 import { useAppSelector } from "../../../hooks";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
-  const openDrawerWidth = theme.spacing(28);
+  const openDrawerWidth = theme.spacing(32);
   const closedDrawerWidth = theme.spacing(8);
 
   return {
@@ -80,30 +80,12 @@ export default function Sidebar() {
   return (
     <Drawer open={open} variant="permanent">
       <MuiToolbar variant="dense" disableGutters />
-      <MuiList disablePadding>
+      <List disablePadding>
         <WorkspaceSwitcher />
-      </MuiList>
+      </List>
       <MuiDivider />
       {workspaceId && (
-        <MuiList
-          subheader={<Spaces workspaceId={workspaceId} />}
-          disablePadding
-        >
-          {items.map(({ icon, text, to }) => {
-            return (
-              <MuiListItem
-                onClick={() => {
-                  if (to) navigate(to);
-                }}
-              >
-                <MuiListItemButton sx={sx}>
-                  <MuiListItemIcon>{icon}</MuiListItemIcon>
-                  <MuiListItemText primary={text} />
-                </MuiListItemButton>
-              </MuiListItem>
-            );
-          })}
-        </MuiList>
+        <List subheader={<Spaces workspaceId={workspaceId} />} disablePadding />
       )}
       <MuiDivider />
     </Drawer>

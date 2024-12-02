@@ -4,8 +4,8 @@ import { ServiceOptions } from "@issue-tracker/orm";
 
 export interface CreateListOptions extends ServiceOptions {
   userId: string;
+  spaceId: string;
   name: string;
-  description?: string;
 }
 
 export interface FindListsOptions extends PagingOptions {
@@ -15,7 +15,6 @@ export interface FindListsOptions extends PagingOptions {
 export interface UpdateListOptions extends ServiceOptions {
   id: string;
   name?: string;
-  description?: string;
 }
 
 export interface FindListOptions {
