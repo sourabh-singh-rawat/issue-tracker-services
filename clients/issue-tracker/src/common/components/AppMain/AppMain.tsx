@@ -42,9 +42,8 @@ export default function AppMain() {
       <MenuSidebar />
       <MuiContainer
         sx={{
-          padding: theme.spacing(2),
           width: `calc(100% - ${
-            isLargeScreen ? theme.spacing(28) : theme.spacing(9)
+            isLargeScreen ? theme.spacing(32) : theme.spacing(9)
           })`,
           overflowX: "auto",
         }}

@@ -1,5 +1,5 @@
 import React from "react";
-import MuiGrid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Grid2";
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
 
@@ -12,7 +12,7 @@ export default function Container({ title, children }: Props) {
   const theme = useTheme();
 
   return (
-    <MuiGrid
+    <Grid2
       container
       sx={{
         border: `1px solid ${theme.palette.divider}`,
@@ -21,12 +21,12 @@ export default function Container({ title, children }: Props) {
         borderRadius: theme.shape.borderRadiusMedium,
       }}
     >
-      <MuiGrid item xs={12}>
+      <Grid2 size={12}>
         <MuiTypography>{title}</MuiTypography>
-      </MuiGrid>
-      <MuiGrid item xs={12}>
+      </Grid2>
+      <Grid2 size={12}>
         {children}
-      </MuiGrid>
-    </MuiGrid>
+      </Grid2>
+    </Grid2>
   );
 }

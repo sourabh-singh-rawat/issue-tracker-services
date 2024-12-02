@@ -9,6 +9,7 @@ export default function Tabs(props) {
     <MuiTabs
       {...props}
       sx={{
+        px: theme.spacing(2),
         borderBottom: `1px solid ${theme.palette.divider}`,
         ".MuiButtonBase-root": {
           padding: 0,
