@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import MuiBox from "@mui/material/Box";
 
-import { setMembers } from "../../../project/project.slice";
+import { setMembers } from "../../../Lists/project.slice";
 import { updateIssue } from "../../issue.slice";
 
 interface IssueAssigneeProps {

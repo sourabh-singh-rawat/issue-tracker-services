@@ -2,33 +2,33 @@ import React, { useState } from "react";
 
 import WorkspaceModal from "../CreateWorkspaceModal";
 
-import Menu from "@mui/material/Menu";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemButton from "@mui/material/ListItemButton";
-import Divider from "@mui/material/Divider";
-
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 
-import StyledList from "../../../../common/components/styled/StyledList";
 import { useNavigate } from "react-router-dom";
 import { MenuItem } from "../../../../common/enums/menu-item";
 import WorkspaceListItem from "../WorkspaceListItem";
-import { GetWorkspaceApiResponse } from "../../../../api/generated/workspace.api";
+import { Workspace } from "../../../../api/codegen/gql/graphql";
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+} from "@mui/material";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
-  selectedOption: GetWorkspaceApiResponse["rows"];
+  selectedOption: Workspace;
   setSelectedOption: React.Dispatch<
-    React.SetStateAction<GetWorkspaceApiResponse["rows"]>
+    React.SetStateAction<Workspace | undefined>
   >;
-  options?: GetWorkspaceApiResponse["rows"][];
+  options?: Workspace[];
 }
 
 export default function WorkspaceMenu({
@@ -70,13 +70,15 @@ export default function WorkspaceMenu({
   return (
     <>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <List>
+        <List disablePadding>
           {menuItems.map(({ text, to, icon }) => (
             <ListItem
               onClick={() => {
                 if (to) navigate(to);
                 handleClose();
               }}
+              disableGutters
+              disablePadding
             >
               <ListItemButton>
                 <ListItemIcon>{icon}</ListItemIcon>
@@ -86,9 +88,9 @@ export default function WorkspaceMenu({
           ))}
         </List>
         <Divider />
-        <List>
+        <List disablePadding>
           {workspaceActions.map(({ text, icon, onClick }) => (
-            <ListItem onClick={onClick}>
+            <ListItem onClick={onClick} disablePadding>
               <ListItemButton>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
@@ -97,7 +99,7 @@ export default function WorkspaceMenu({
           ))}
         </List>
         {options.length > 0 && (
-          <StyledList disablePadding>
+          <List disablePadding>
             {options.map((option) => (
               <WorkspaceListItem
                 key={option?.id}
@@ -108,7 +110,7 @@ export default function WorkspaceMenu({
                 handleClose={handleClose}
               />
             ))}
-          </StyledList>
+          </List>
         )}
       </Menu>
       <WorkspaceModal open={open} handleClose={() => setOpen(false)} />

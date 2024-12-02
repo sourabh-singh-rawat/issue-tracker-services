@@ -7,14 +7,12 @@ import PrivateRoutes from "../common/components/PrivateRoutes";
 import Login from "../features/auth/pages/Login";
 import SignUp from "../features/auth/pages/Signup";
 
-import Lists from "../features/project/pages/Lists";
-import ProjectOverview from "../features/project/pages/ProjectOverview";
-import ListForm from "../features/project/components/ListForm";
-import Project from "../features/project/pages/Project";
-import ProjectMembers from "../features/project/pages/ProjectMembers";
-import ProjectActivity from "../features/project/pages/ProjectActivity";
-import ProjectSettings from "../features/project/pages/ProjectSettings";
-import ProjectIssues from "../features/project/pages/ListItems";
+import Lists from "../features/Lists/pages/Lists";
+import ProjectOverview from "../features/Lists/pages/ProjectOverview";
+import { List } from "../features/Lists/pages/List";
+import ProjectMembers from "../features/Lists/pages/ProjectMembers";
+import ProjectActivity from "../features/Lists/pages/ProjectActivity";
+import { ListItems } from "../features/Lists/pages/ListItems";
 import Profile from "../features/user/pages/Profile";
 import Workspace from "../features/workspace/pages/Workspace";
 import WorkspaceSettings from "../features/workspace/pages/WorkspaceSettings";
@@ -37,13 +35,11 @@ export default function App() {
           <Route element={<Dashboard />} index />
           <Route element={<Profile />} path="me" />
           <Route element={<Lists />} path="lists">
-            <Route element={<ListForm />} path="new" />
-            <Route element={<Project />} path=":id">
+            <Route element={<List />} path=":id">
               <Route element={<ProjectOverview />} path="overview" />
-              <Route element={<ProjectIssues />} path="items" />
+              <Route element={<ListItems />} path="items" />
               <Route element={<ProjectMembers />} path="members" />
               <Route element={<ProjectActivity />} path="activity" />
-              <Route element={<ProjectSettings />} path="settings" />
             </Route>
           </Route>
 

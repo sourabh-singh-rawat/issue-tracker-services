@@ -15,7 +15,6 @@ import {
   setDefaultWorkspace,
   setWorkspaces,
 } from "../../../features/workspace/workspace.slice";
-import { WORKSPACE_STATUS } from "@issue-tracker/common";
 import { useFindWorkspacesQuery } from "../../../api/codegen/gql/graphql";
 
 export default function AppMain() {
@@ -24,14 +23,13 @@ export default function AppMain() {
   const dispatch = useAppDispatch();
   const { data: workspaces } = useFindWorkspacesQuery();
   const { id } = useAppSelector(
-    ({ workspace }) =>
-      workspace?.defaultWorkspace || { id: "", name: "" },
+    ({ workspace }) => workspace?.defaultWorkspace || { id: "", name: "" },
   );
 
   useEffect(() => {
     if (workspaces) {
       const defaultWorkspace = workspaces.findWorkspaces?.find(
-        ({ status }) => status === WORKSPACE_STATUS.DEFAULT,
+        ({ status }) => status === "Default",
       );
       dispatch(setDefaultWorkspace(defaultWorkspace));
       dispatch(setWorkspaces(workspaces));
