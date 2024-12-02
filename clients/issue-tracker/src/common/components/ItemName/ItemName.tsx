@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MuiGrid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Grid2";
 import { alpha, styled, useTheme } from "@mui/material/styles";
 import MuiTextField from "@mui/material/TextField";
 import DoneIcon from "@mui/icons-material/Done";
@@ -16,7 +16,7 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
     paddingLeft: theme.spacing(1),
   },
   "& .MuiOutlinedInput-root": {
-    fontSize: theme.typography.h1.fontSize,
+    fontSize: theme.typography.h4.fontSize,
     fontWeight: "bold",
     backgroundColor: "transparent",
     borderRadius: theme.shape.borderRadiusMedium,
@@ -38,15 +38,12 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   },
 }));
 
-interface ItemTitleProps {
+interface TitleProps {
   defaultValue?: string;
   handleSubmit: (value: string) => void;
 }
 
-export default function ItemName({
-  defaultValue = "",
-  handleSubmit,
-}: ItemTitleProps) {
+export default function Name({ defaultValue = "", handleSubmit }: TitleProps) {
   const theme = useTheme();
   const [value, setValue] = useState(defaultValue);
   const [previousValue, setPreviousValue] = useState("");
@@ -74,22 +71,22 @@ export default function ItemName({
   }, [defaultValue]);
 
   return (
-    <MuiGrid columnSpacing={1} sx={{ marginLeft: theme.spacing(-2) }} container>
-      <MuiGrid flexGrow={1} item>
+    <Grid2 container sx={{ mt: theme.spacing(1), ml: theme.spacing(-2) }}>
+      <Grid2 flexGrow={1}>
         <TitleTextField
           name="name"
           value={value}
-          fullWidth
           onClick={handleClick}
           onChange={handleChange}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
           type="text"
+          fullWidth
         />
-      </MuiGrid>
+      </Grid2>
 
-      <MuiGrid item sx={{ display: isFocused ? "flex" : "none" }}>
+      <Grid2 sx={{ display: isFocused ? "flex" : "none" }}>
         <MuiIconButton
           onClick={() => {
             if (value !== previousValue) handleSubmit(value);
@@ -98,12 +95,12 @@ export default function ItemName({
         >
           <DoneIcon />
         </MuiIconButton>
-      </MuiGrid>
-      <MuiGrid item sx={{ display: isFocused ? "flex" : "none" }}>
+      </Grid2>
+      <Grid2 sx={{ display: isFocused ? "flex" : "none" }}>
         <MuiIconButton onClick={handleCancel}>
           <CloseIcon />
         </MuiIconButton>
-      </MuiGrid>
-    </MuiGrid>
+      </Grid2>
+    </Grid2>
   );
 }
