@@ -47,7 +47,7 @@ import { CoreUserProfileService } from "./Services";
 import { buildSchema } from "type-graphql";
 import { CoreUserAuthenticationResolver } from "./resolvers";
 import { ApolloServer } from "@apollo/server";
-import fastifyApollo, {
+import {
   ApolloFastifyContextFunction,
   fastifyApolloDrainPlugin,
   fastifyApolloHandler,
@@ -141,11 +141,7 @@ const authRouter = router({
 
 export const dataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT!),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  url: process.env.AUTH_POSTGRES_CLUSTER_URL,
   entities: ["src/data/entities/*.ts"],
   synchronize: true,
 });
@@ -188,7 +184,7 @@ const startServer = async () => {
       fastify: instance,
       configuration: {
         host: "0.0.0.0",
-        port: 5000,
+        port: parseInt(process.env.AUTH_SERVICE_PORT!),
         environment: "development",
         version: 1,
       },
@@ -214,7 +210,7 @@ const main = async () => {
   orm.init();
 
   const broker = new NatsBroker({
-    servers: [process.env.NATS_SERVER_URL || "nats"],
+    servers: [process.env.NATS_CLUSTER_URL || "nats"],
     streams: ["user"],
     logger,
   });
