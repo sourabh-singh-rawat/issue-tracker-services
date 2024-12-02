@@ -2,12 +2,15 @@ import React, { useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
 
 import TextField from "../../../../common/components/forms/TextField";
 import ModalFooter from "../../../../common/components/ModalFooter";
-import { useCreateWorkspaceMutation } from "../../../../api/codegen/gql/graphql";
+import {
+  CreateWorkspaceInput,
+  useCreateWorkspaceMutation,
+} from "../../../../api/codegen/gql/graphql";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
@@ -15,17 +18,13 @@ interface WorkspaceFormProps {
 
 export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   const [createWorkspace] = useCreateWorkspaceMutation();
-  const defaultValues = useMemo(
-    () => ({ name: "Workspace Name", description: "" }),
-    [],
-  );
 
-  const { control, formState, handleSubmit } = useForm({
-    defaultValues,
+  const { control, formState, handleSubmit } = useForm<CreateWorkspaceInput>({
+    defaultValues: { name: "", description: "" },
     mode: "all",
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
+  const onSubmit: SubmitHandler<CreateWorkspaceInput> = async ({
     name,
     description,
   }) => {
@@ -39,8 +38,8 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <Grid rowSpacing={3} container>
-        <Grid item xs={12}>
+      <Grid2 rowSpacing={3} container>
+        <Grid2 size={12}>
           <TextField
             name="name"
             title="Name"
@@ -49,11 +48,8 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             formState={formState}
             autoFocus
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <TextField
             name="description"
             title="Description"
@@ -62,8 +58,8 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             formState={formState}
             rows={4}
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <ModalFooter handleClose={handleClose} />
     </Container>
   );

@@ -6,7 +6,6 @@ import issueSlice from "../../features/issue/issue.slice";
 import messageBarSlice from "../../features/message-bar/message-bar.slice";
 import profileSlice from "../../features/profile/profile.slice";
 import projectListSlice from "../../features/project-list/project-list.slice";
-import projectSlice from "../../features/project/project.slice";
 import taskListSlice from "../../features/task-list/task-list.slice";
 import workspaceSlice from "../../features/workspace/workspace.slice";
 import { attachmentApi } from "../../api/codegen/rest/attachment.api";
@@ -20,7 +19,6 @@ export const store = configureStore({
     issue: issueSlice,
     issueList: issueListSlice,
     profile: profileSlice,
-    project: projectSlice,
     projectList: projectListSlice,
     messageBar: messageBarSlice,
     taskList: taskListSlice,

@@ -6,7 +6,7 @@ import { useGridApiContext } from "@mui/x-data-grid";
 import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 
 import { useUpdateIssueMutation } from "../../../issue/issue.api";
-import { useGetProjectMembersQuery } from "../../../project/project.api";
+import { useGetProjectMembersQuery } from "../../../Lists/project.api";
 
 import { updateIssue } from "../../../issue/issue.slice";
 import { setMessageBarOpen } from "../../../message-bar/message-bar.slice";

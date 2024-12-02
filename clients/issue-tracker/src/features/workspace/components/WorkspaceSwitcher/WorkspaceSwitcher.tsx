@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
+import {
+  Avatar,
+  IconButton,
+  List,
+  ListItemText,
+  ListItemIcon,
+  ListItemButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
 
 import WorkspaceMenu from "../WorkspaceMenu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useTheme } from "@mui/material";
 import { useAppSelector } from "../../../../common/hooks";
 import { Workspace } from "../../../../api/codegen/gql/graphql";
 
@@ -33,27 +35,26 @@ export default function WorkspaceSwitcher() {
   }, [defaultWorkspace]);
 
   return (
-    <List>
-      <ListItem>
-        <ListItemButton onClick={handleClick}>
-          <ListItemIcon>
-            <Avatar
-              alt={"Default"}
-              sx={{
-                height: 24,
-                width: 24,
-                bgcolor: theme.palette.primary.main,
-              }}
-            >
-              <Typography>{name && name[0]}</Typography>
-            </Avatar>
-          </ListItemIcon>
-          <ListItemText primary={name} />
-          <ListItemIcon>
-            {anchorEl ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
+    <List disablePadding>
+      <ListItemButton onClick={handleClick} disableRipple>
+        <ListItemIcon>
+          <Avatar
+            alt={name && name[0]}
+            sx={{
+              height: theme.spacing(3.5),
+              width: theme.spacing(3.5),
+              bgcolor: theme.palette.primary.main,
+            }}
+            variant="rounded"
+          >
+            <Typography variant="h6">{name && name[0]}</Typography>
+          </Avatar>
+        </ListItemIcon>
+        <ListItemText primary={name} />
+        <IconButton disableRipple>
+          {anchorEl ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </ListItemButton>
       {selectedWorkspace && (
         <WorkspaceMenu
           anchorEl={anchorEl}

@@ -158,33 +158,13 @@ export const theme = createTheme({
       },
     },
     MuiListItemButton: {
-      defaultProps: {
-        disableRipple: true,
-        sx: {
-          paddingTop: 0.5,
-          paddingBottom: 0.5,
-        },
-      },
+      defaultProps: { disableRipple: true },
     },
     MuiListItemIcon: {
       defaultProps: {
         sx: {
           color: "inherit",
-          minWidth: 32,
         },
-      },
-    },
-    MuiListItemText: {
-      defaultProps: {
-        primaryTypographyProps: {
-          fontSize: typography.body2?.fontSize,
-          fontWeight: 500,
-        },
-      },
-    },
-    MuiIconButton: {
-      defaultProps: {
-        sx: { borderRadius: shape.borderRadiusMedium },
       },
     },
     MuiAlert: {
