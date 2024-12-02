@@ -223,10 +223,7 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
 
 export const dataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  url: process.env.ISSUE_TRACKER_POSTGRES_CLUSTER_URL,
   entities: ["src/data/entities/*.ts"],
   synchronize: true,
 });
@@ -234,6 +231,7 @@ export const dataSource = new DataSource({
 const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
+
 export const container = new AwilixDi<RegisteredServices>(awilix, logger);
 
 const main = async () => {
@@ -241,7 +239,7 @@ const main = async () => {
   await orm.init();
 
   const natsBroker = new NatsBroker({
-    servers: [process.env.NATS_SERVER_URL || "nats"],
+    servers: [process.env.NATS_CLUSTER_URL!],
     streams: ["issue", "workspace", "project", "user"],
     logger,
   });

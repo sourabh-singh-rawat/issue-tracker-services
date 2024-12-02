@@ -6,7 +6,7 @@ import {
   ApolloFastifyContextFunction,
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
-import multipart, { MultipartFile } from "@fastify/multipart";
+import multipart from "@fastify/multipart";
 import { Broker, NatsBroker } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { DataSource } from "typeorm";
@@ -166,11 +166,7 @@ const startSubscriptions = () => {};
 
 export const dataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT!),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  url: process.env.ATTACHMENT_POSTGRES_CLUSTER_URL,
   entities: ["src/data/entities/*.ts"],
   synchronize: true,
 });
@@ -248,7 +244,7 @@ export const startWorker = () => {
 
 const orm = new PostgresTypeorm(dataSource, logger);
 const broker = new NatsBroker({
-  servers: [process.env.NATS_SERVER_URL || "nats"],
+  servers: [process.env.NATS_CLUSTER_URL || "nats"],
   logger,
 });
 

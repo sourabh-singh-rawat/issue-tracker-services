@@ -36,7 +36,6 @@ export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
       <ListItemButton onClick={handleClick} disableRipple>
         <ListItemIcon>{open ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
         <ListItemText primary={name} />
-
         <IconButton
           onClick={(e) => {
             e.stopPropagation();
@@ -50,7 +49,7 @@ export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
         {lists.map(({ id, name }) => {
           return (
             <ListItemButton
-              sx={{ ml: 4 }}
+              sx={{ pl: 4 }}
               component="div"
               onClick={() => navigate(`/lists/${id}/items`)}
             >
