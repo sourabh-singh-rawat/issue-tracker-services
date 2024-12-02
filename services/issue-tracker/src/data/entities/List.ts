@@ -20,9 +20,6 @@ export class List extends AuditEntity {
   @Column({ type: "text" })
   name!: string;
 
-  @Column({ type: "text" })
-  description?: string;
-
   @Column({ name: "created_by_id", type: "uuid" })
   createdById!: string;
 

@@ -38,8 +38,8 @@ export type CreateItemInput = {
 };
 
 export type CreateListInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+  spaceId: Scalars['String']['input'];
 };
 
 export type CreateSpaceInput = {
@@ -208,6 +208,7 @@ export type SignInWithEmailAndPasswordInput = {
 export type Space = {
   __typename?: 'Space';
   id: Scalars['String']['output'];
+  lists: Array<List>;
   name: Scalars['String']['output'];
 };
 
@@ -344,7 +345,7 @@ export type FindSpacesQueryVariables = Exact<{
 }>;
 
 
-export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string }> };
+export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string, lists: Array<{ __typename?: 'List', id: string, name: string }> }> };
 
 export type FindSubItemsQueryVariables = Exact<{
   input: FindItemsInput;
@@ -888,6 +889,10 @@ export const FindSpacesDocument = gql`
   findSpaces(input: $input) {
     id
     name
+    lists {
+      id
+      name
+    }
   }
 }
     `;

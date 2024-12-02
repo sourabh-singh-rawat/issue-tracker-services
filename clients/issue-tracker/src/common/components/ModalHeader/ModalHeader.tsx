@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useTheme } from "@mui/material";
+import { Grid2, useTheme } from "@mui/material";
 import MuiBox from "@mui/material/Box";
 import MuiListItem from "@mui/material/ListItem";
 import MuiTypography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ import Close from "@mui/icons-material/Close";
 export interface Props {
   title: string;
   subtitle: string;
-  handleClose: () => void;
+  handleClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export default function ModalHeader({ title, subtitle, handleClose }: Props) {
@@ -19,23 +19,31 @@ export default function ModalHeader({ title, subtitle, handleClose }: Props) {
 
   return (
     <MuiBox sx={{ mb: 2 }}>
-      <MuiListItem
-        secondaryAction={
-          <MuiIconButton
-            onClick={handleClose}
-            sx={{ "&:hover": { backgroundColor: theme.palette.action.hover } }}
+      <Grid2 container rowSpacing={1}>
+        <Grid2 size={12}>
+          <MuiListItem
+            secondaryAction={
+              <MuiIconButton
+                onClick={handleClose}
+                sx={{
+                  "&:hover": { backgroundColor: theme.palette.action.hover },
+                }}
+              >
+                <Close />
+              </MuiIconButton>
+            }
+            disableGutters
+            disablePadding
           >
-            <Close />
-          </MuiIconButton>
-        }
-        disableGutters
-        disablePadding
-      >
-        <MuiTypography variant="h4" fontWeight="bold">
-          {title}
-        </MuiTypography>
-      </MuiListItem>
-      <MuiTypography variant="body1">{subtitle}</MuiTypography>
+            <MuiTypography variant="h4" fontWeight="bold">
+              {title}
+            </MuiTypography>
+          </MuiListItem>
+        </Grid2>
+        <Grid2>
+          <MuiTypography variant="body1">{subtitle}</MuiTypography>
+        </Grid2>
+      </Grid2>
     </MuiBox>
   );
 }

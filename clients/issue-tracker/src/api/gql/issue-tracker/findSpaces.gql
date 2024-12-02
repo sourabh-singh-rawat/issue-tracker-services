@@ -2,5 +2,9 @@ query FindSpaces($input: FindSpacesOptions!) {
   findSpaces(input: $input) {
     id
     name
+    lists {
+      id
+      name
+    }
   }
 }

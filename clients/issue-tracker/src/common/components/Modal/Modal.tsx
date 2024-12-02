@@ -6,7 +6,7 @@ import MuiModal from "@mui/material/Modal";
 
 interface ModalProps {
   open: boolean;
-  handleClose: () => void;
+  handleClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   children: React.ReactNode;
 }
 

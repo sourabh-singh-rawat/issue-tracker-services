@@ -6,6 +6,6 @@ export class CreateListInput {
   @Field()
   name!: string;
 
-  @Field({ nullable: true })
-  description?: string;
+  @Field()
+  spaceId!: string;
 }
