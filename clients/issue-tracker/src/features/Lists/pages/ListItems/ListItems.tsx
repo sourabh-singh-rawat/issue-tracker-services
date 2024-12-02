@@ -15,8 +15,8 @@ export function ListItems() {
     <TabPanel index={1} selectedTab={selectedTab}>
       <Grid2
         container
-        sx={{ px: theme.spacing(2), py: theme.spacing(2) }}
         rowSpacing={2}
+        sx={{ px: theme.spacing(4), py: theme.spacing(2) }}
       >
         <Grid2 size={12}>
           <Grid2 container>
