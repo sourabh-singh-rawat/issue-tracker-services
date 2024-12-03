@@ -126,15 +126,23 @@ export class CoreItemService implements ItemService {
   };
 
   async updateItem(options: UpdateItemOptions) {
-    const { itemId, name, manager, description, priority, dueDate, userId } =
-      options;
+    const {
+      itemId,
+      name,
+      manager,
+      description,
+      status,
+      priority,
+      dueDate,
+      userId,
+    } = options;
     const ItemRepo = manager.getRepository(Item);
 
     await this.isArchived(itemId);
 
     await ItemRepo.update(
       { id: itemId, createdById: userId },
-      { name, description, priority, dueDate },
+      { name, description, status, priority, dueDate },
     );
   }
 

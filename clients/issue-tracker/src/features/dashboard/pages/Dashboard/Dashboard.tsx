@@ -1,14 +1,12 @@
+import { Box, Grid2 } from "@mui/material";
 import React from "react";
 
-import MuiBox from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
+import { Outlet } from "react-router-dom";
 
 export default function Dashboard() {
   return (
-    <MuiBox sx={{ marginLeft: 3, marginRight: 3 }}>
-      <MuiGrid spacing={3} container>
-        <MuiGrid item></MuiGrid>
-      </MuiGrid>
-    </MuiBox>
+    <Grid2 size={12}>
+      <Outlet />
+    </Grid2>
   );
 }

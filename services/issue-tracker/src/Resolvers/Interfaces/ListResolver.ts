@@ -1,5 +1,5 @@
 import { PaginatedOutput } from "@issue-tracker/common";
-import { CreateListInput, List } from "../types";
+import { CreateListInput, List } from "../Types";
 
 export interface ListResolver {
   createList(ctx: any, input: CreateListInput): Promise<string>;

@@ -7,8 +7,8 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { ListResolver } from "./interfaces";
-import { CreateListInput, Item, List } from "./types";
+import { ListResolver } from "./Interfaces";
+import { CreateListInput, Item, List } from "./Types";
 import { container, dataSource } from "..";
 
 @ObjectType()

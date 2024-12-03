@@ -46,6 +46,10 @@ input FindSpacesOptions {
   workspaceId: String!
 }
 
+input FindStatusesOptions {
+  spaceId: String!
+}
+
 type Item {
   description: String
   id: String!
@@ -81,6 +85,7 @@ type Query {
   findListItems(listId: String!): [Item!]!
   findLists: PaginatedList!
   findSpaces(input: FindSpacesOptions!): [Space!]!
+  findStatuses(input: FindStatusesOptions!): [Status!]!
   findSubItems(input: FindItemsInput!): [Item!]!
   findWorkspaces: [Workspace!]!
 }
@@ -88,6 +93,11 @@ type Query {
 type Space {
   id: String!
   lists: [List!]!
+  name: String!
+}
+
+type Status {
+  id: String!
   name: String!
 }
 

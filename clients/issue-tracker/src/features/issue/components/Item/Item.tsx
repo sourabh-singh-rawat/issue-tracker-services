@@ -1,5 +1,5 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext } from "react";
+import { useOutletContext, useParams } from "react-router-dom";
 import {
   useFindItemQuery,
   useFindSubItemsQuery,
@@ -20,17 +20,16 @@ export interface ItemProps {}
 export default function Item(props: ItemProps) {
   const messageBar = useMessageBar();
   const theme = useTheme();
-  const { id, itemId } = useParams<{ id: string; itemId: string }>();
+  const { listId, itemId } = useParams<{ listId: string; itemId: string }>();
   const { data: item } = useFindItemQuery({
     variables: { findItemId: itemId as string },
     skip: !itemId,
   });
   const { data: subItems } = useFindSubItemsQuery({
     variables: {
-      input: { listId: id as string, parentItemId: itemId as string },
+      input: { listId: listId as string, parentItemId: itemId as string },
     },
   });
-
   const [updateItem] = useUpdateItemMutation({
     onCompleted(response) {
       messageBar.showSuccess(response.updateItem);
@@ -78,7 +77,7 @@ export default function Item(props: ItemProps) {
         </MuiTypography>
       </Grid2>
 
-      {id && item?.findItem && (
+      {listId && item?.findItem && (
         <>
           <Grid2>
             <MuiTypography variant="h5" fontWeight="600">
@@ -86,7 +85,7 @@ export default function Item(props: ItemProps) {
             </MuiTypography>
           </Grid2>
           <Grid2>
-            <ItemModal listId={id} parentItemId={itemId} />
+            <ItemModal listId={listId} parentItemId={itemId} />
           </Grid2>
 
           <Grid2 size={12}>

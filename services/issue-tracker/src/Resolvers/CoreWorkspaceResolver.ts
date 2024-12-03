@@ -1,6 +1,6 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { WorkspaceResolver } from "./interfaces";
-import { CreateWorkspaceInput, Workspace } from "./types";
+import { WorkspaceResolver } from "./Interfaces";
+import { CreateWorkspaceInput, Workspace } from "./Types";
 import { container, dataSource } from "..";
 
 @Resolver()

@@ -9,3 +9,5 @@ export * from "./List";
 export * from "./Space";
 export * from "./UpdateItemInput";
 export * from "./Workspace";
+export * from "./Status";
+export * from "./FindStatusesOptions";

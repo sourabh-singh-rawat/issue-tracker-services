@@ -51,7 +51,7 @@ export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
             <ListItemButton
               sx={{ pl: 4 }}
               component="div"
-              onClick={() => navigate(`/lists/${id}/items`)}
+              onClick={() => navigate(`${spaceId}/l/${id}/items`)}
             >
               <ListItemIcon>
                 <ListIcon />

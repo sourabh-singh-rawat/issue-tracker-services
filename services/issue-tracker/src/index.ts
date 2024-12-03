@@ -55,9 +55,6 @@ import { ProjectActivityService } from "./services/interfaces/project-activity.s
 import { PostgresProjectActivityRepository } from "./data/repositories/postgres-project-activity.repository";
 import { ProjectActivityRepository } from "./data/repositories/interfaces/project-activity.repository";
 import { JwtToken } from "@issue-tracker/security";
-import { initTRPC } from "@trpc/server";
-import { z } from "zod";
-import { UnauthorizedError } from "@issue-tracker/common";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "@apollo/server";
 import {
@@ -70,7 +67,8 @@ import {
   CoreItemResolver,
   CoreListResolver,
   CoreSpaceResolver,
-} from "./resolvers";
+  CoreStatusResolver,
+} from "./Resolvers";
 import {
   CoreItemService,
   CoreSpaceService,
@@ -132,48 +130,6 @@ const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   return { req, rep };
 };
 
-const t = initTRPC.context<{ user: any; res: any }>().create();
-export const router = t.router;
-export const publicProcedure = t.procedure;
-
-export const issueTrackerRouter = router({
-  createWorkspace: publicProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        description: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ input, ctx }) => {
-      const service = container.get("workspaceService");
-      const { user } = ctx;
-
-      return await dataSource.transaction(async (manager) => {
-        return await service.createWorkspace({
-          ...input,
-          userId: user.userId,
-          manager,
-        });
-      });
-    }),
-  getAllWorkspaces: publicProcedure
-    .input(
-      z.object({
-        page: z.number().optional(),
-      }),
-    )
-    .query(async ({ ctx }) => {
-      if (!ctx.user) throw new UnauthorizedError();
-      const { user } = ctx;
-      const { userId } = user;
-
-      const service = container.get("workspaceService");
-      return await service.findWorkspaces(userId);
-    }),
-});
-
-export type IssueTrackerRouter = typeof issueTrackerRouter;
-
 const startServer = async (container: AwilixDi<RegisteredServices>) => {
   try {
     const instance = fastify();
@@ -184,6 +140,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         CoreSpaceResolver,
         CoreListResolver,
         CoreItemResolver,
+        CoreStatusResolver,
       ],
     });
     const apollo = new ApolloServer({

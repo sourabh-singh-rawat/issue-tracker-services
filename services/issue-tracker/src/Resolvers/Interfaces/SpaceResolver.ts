@@ -1,4 +1,4 @@
-import { CreateSpaceInput, FindSpacesOptions, Space } from "../types";
+import { CreateSpaceInput, FindSpacesOptions, Space } from "../Types";
 
 export interface SpaceResolver {
   createSpace(ctx: any, input: CreateSpaceInput): Promise<string>;
