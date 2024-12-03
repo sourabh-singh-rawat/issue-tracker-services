@@ -9,8 +9,6 @@ import {
 import fastify from "fastify";
 import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
 import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
-import { UserService } from "./services/interfaces/UserService";
-import { ItemService } from "./services/interfaces/ItemService";
 import { IssueCommentService } from "./services/interfaces/issue-comment.service";
 import { IssueTaskService } from "./services/interfaces/issue-task.service";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
@@ -67,14 +65,22 @@ import {
   fastifyApolloDrainPlugin,
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
-import { SpaceService } from "./services/interfaces";
 import {
   CoreWorkspaceResolver,
   CoreItemResolver,
   CoreListResolver,
   CoreSpaceResolver,
 } from "./resolvers";
-import { CoreItemService, CoreSpaceService, CoreUserService } from "./services";
+import {
+  CoreItemService,
+  CoreSpaceService,
+  CoreStatusService,
+  CoreUserService,
+  ItemService,
+  SpaceService,
+  StatusService,
+  UserService,
+} from "./services";
 
 export interface RegisteredServices {
   logger: AppLogger;
@@ -88,6 +94,7 @@ export interface RegisteredServices {
   userService: UserService;
   itemService: ItemService;
   listService: ListService;
+  statusService: StatusService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
   spaceService: SpaceService;
@@ -258,6 +265,7 @@ const main = async () => {
   );
   container.add("userService", asClass(CoreUserService));
   container.add("itemService", asClass(CoreItemService));
+  container.add("statusService", asClass(CoreStatusService));
   container.add("spaceService", asClass(CoreSpaceService));
   container.add("issueCommentService", asClass(CoreIssueCommentService));
   container.add("issueTaskService", asClass(CoreIssueTaskService));
