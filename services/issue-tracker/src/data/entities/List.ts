@@ -6,7 +6,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
 import { AuditEntity } from "@issue-tracker/orm";
 import { Item } from "./Item";
 import { Workspace } from "./Workspace";

@@ -10,6 +10,7 @@ import {
 import { User } from "./User";
 import { Workspace } from "./Workspace";
 import { List } from "./List";
+import { StatusGroup } from "./StatusGroup";
 
 @Entity({ name: "spaces" })
 export class Space extends BaseEntity {
@@ -38,4 +39,7 @@ export class Space extends BaseEntity {
 
   @OneToMany(() => List, (x) => x.space)
   lists!: List[];
+
+  @OneToMany(() => StatusGroup, (x) => x.space)
+  statuses!: StatusGroup[];
 }

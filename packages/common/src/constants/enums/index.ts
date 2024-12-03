@@ -4,6 +4,7 @@ export * from "./issue-permissions";
 export * from "./issue-priority";
 export * from "./issue-roles";
 export * from "./environment";
+export * from "./StatusType";
 export * from "./issue-status";
 export * from "./log-levels";
 export * from "./project-activity";

@@ -10,20 +10,17 @@ import { Grid2, useTheme } from "@mui/material";
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
 
-import { useMessageBar } from "../../../message-bar/hooks";
-
 export function List() {
   const theme = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { showSuccess } = useMessageBar();
   const [isLoading] = useState(false);
 
-  const tabName = location.pathname.split("/")[3] || "overview";
-  const mapPathToIndex: Record<string, number> = { overview: 0, items: 1 };
+  const tabName = location.pathname.split("/")[3] || "board";
+  const mapPathToIndex: Record<string, number> = { board: 0, items: 1 };
   const mapIndexToTab: Record<number, string> = {
-    0: `/lists/${id}/overview`,
+    0: `/lists/${id}/board`,
     1: `/lists/${id}/items`,
   };
 

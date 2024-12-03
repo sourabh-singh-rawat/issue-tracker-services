@@ -36,7 +36,7 @@ export default function App() {
           <Route element={<Profile />} path="me" />
           <Route element={<Lists />} path="lists">
             <Route element={<List />} path=":id">
-              <Route element={<ProjectOverview />} path="overview" />
+              <Route element={<ProjectOverview />} path="board" />
               <Route element={<ListItems />} path="items" />
               <Route element={<ProjectMembers />} path="members" />
               <Route element={<ProjectActivity />} path="activity" />
