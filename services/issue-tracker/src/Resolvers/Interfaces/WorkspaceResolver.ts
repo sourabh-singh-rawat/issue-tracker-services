@@ -1,5 +1,5 @@
-import { CreateWorkspaceInput } from "../types";
-import { Workspace } from "../types";
+import { CreateWorkspaceInput } from "../Types";
+import { Workspace } from "../Types";
 
 export interface WorkspaceResolver {
   createWorkspace(ctx: any, input: CreateWorkspaceInput): Promise<string>;

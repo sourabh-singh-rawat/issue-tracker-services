@@ -8,7 +8,7 @@ export interface CreateStatusGroupOptions extends ServiceOptions {
 }
 
 export interface FindStatusesOptions {
-  groupId: string;
+  spaceId: string;
 }
 
 export interface StatusService {

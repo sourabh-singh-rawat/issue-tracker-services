@@ -20,8 +20,8 @@ export class CoreStatusService implements StatusService {
   }
 
   async findStatuses(options: FindStatusesOptions) {
-    const { groupId } = options;
+    const { spaceId } = options;
 
-    return await Status.find({ where: { groupId } });
+    return await Status.find({ where: { group: { spaceId } } });
   }
 }

@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { useTheme } from "@mui/material";
-
-import MuiBox from "@mui/material/Box";
-import MuiGrid from "@mui/material/Grid";
-import MuiToolbar from "@mui/material/Toolbar";
-import MuiContainer from "@mui/material/Container";
+import { Box, Container, Grid2, Toolbar, useTheme } from "@mui/material";
 
 import Navbar from "../navigation/Navbar";
 import MenuSidebar from "../navigation/Sidebar";
@@ -31,16 +26,19 @@ export default function AppMain() {
       const defaultWorkspace = workspaces.findWorkspaces?.find(
         ({ status }) => status === "Default",
       );
-      dispatch(setDefaultWorkspace(defaultWorkspace));
-      dispatch(setWorkspaces(workspaces));
+
+      if (defaultWorkspace) {
+        dispatch(setDefaultWorkspace(defaultWorkspace));
+        dispatch(setWorkspaces(workspaces));
+      }
     }
   }, [workspaces]);
 
   return (
-    <MuiBox display="flex" height="100vh">
+    <Box display="flex" height="100vh">
       <Navbar />
       <MenuSidebar />
-      <MuiContainer
+      <Container
         sx={{
           width: `calc(100% - ${
             isLargeScreen ? theme.spacing(32) : theme.spacing(9)
@@ -49,9 +47,9 @@ export default function AppMain() {
         }}
         disableGutters
       >
-        <MuiToolbar variant="dense" disableGutters />
-        <MuiGrid container>{id && <Outlet />}</MuiGrid>
-      </MuiContainer>
-    </MuiBox>
+        <Toolbar variant="dense" disableGutters />
+        <Grid2 container>{id && <Outlet />}</Grid2>
+      </Container>
+    </Box>
   );
 }

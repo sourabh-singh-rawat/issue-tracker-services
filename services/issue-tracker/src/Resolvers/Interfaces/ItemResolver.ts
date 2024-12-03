@@ -4,7 +4,7 @@ import {
   FindItemsInput,
   Item,
   UpdateItemInput,
-} from "../types";
+} from "../Types";
 
 export interface ItemResolver {
   createItem(ctx: any, input: CreateItemInput): Promise<string>;

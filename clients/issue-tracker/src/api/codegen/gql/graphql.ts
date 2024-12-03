@@ -63,6 +63,10 @@ export type FindSpacesOptions = {
   workspaceId: Scalars['String']['input'];
 };
 
+export type FindStatusesOptions = {
+  spaceId: Scalars['String']['input'];
+};
+
 export type Item = {
   __typename?: 'Item';
   description?: Maybe<Scalars['String']['output']>;
@@ -159,6 +163,7 @@ export type Query = {
   findListItems: Array<Item>;
   findLists: PaginatedList;
   findSpaces: Array<Space>;
+  findStatuses: Array<Status>;
   findSubItems: Array<Item>;
   findWorkspaces: Array<Workspace>;
   getCurrentUser: User;
@@ -190,6 +195,11 @@ export type QueryFindSpacesArgs = {
 };
 
 
+export type QueryFindStatusesArgs = {
+  input: FindStatusesOptions;
+};
+
+
 export type QueryFindSubItemsArgs = {
   input: FindItemsInput;
 };
@@ -209,6 +219,12 @@ export type Space = {
   __typename?: 'Space';
   id: Scalars['String']['output'];
   lists: Array<List>;
+  name: Scalars['String']['output'];
+};
+
+export type Status = {
+  __typename?: 'Status';
+  id: Scalars['String']['output'];
   name: Scalars['String']['output'];
 };
 
@@ -346,6 +362,13 @@ export type FindSpacesQueryVariables = Exact<{
 
 
 export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string, lists: Array<{ __typename?: 'List', id: string, name: string }> }> };
+
+export type FindStatusesQueryVariables = Exact<{
+  input: FindStatusesOptions;
+}>;
+
+
+export type FindStatusesQuery = { __typename?: 'Query', findStatuses: Array<{ __typename?: 'Status', id: string, name: string }> };
 
 export type FindSubItemsQueryVariables = Exact<{
   input: FindItemsInput;
@@ -929,6 +952,47 @@ export type FindSpacesQueryHookResult = ReturnType<typeof useFindSpacesQuery>;
 export type FindSpacesLazyQueryHookResult = ReturnType<typeof useFindSpacesLazyQuery>;
 export type FindSpacesSuspenseQueryHookResult = ReturnType<typeof useFindSpacesSuspenseQuery>;
 export type FindSpacesQueryResult = Apollo.QueryResult<FindSpacesQuery, FindSpacesQueryVariables>;
+export const FindStatusesDocument = gql`
+    query FindStatuses($input: FindStatusesOptions!) {
+  findStatuses(input: $input) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindStatusesQuery__
+ *
+ * To run a query within a React component, call `useFindStatusesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindStatusesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindStatusesQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindStatusesQuery(baseOptions: Apollo.QueryHookOptions<FindStatusesQuery, FindStatusesQueryVariables> & ({ variables: FindStatusesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindStatusesQuery, FindStatusesQueryVariables>(FindStatusesDocument, options);
+      }
+export function useFindStatusesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindStatusesQuery, FindStatusesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindStatusesQuery, FindStatusesQueryVariables>(FindStatusesDocument, options);
+        }
+export function useFindStatusesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindStatusesQuery, FindStatusesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindStatusesQuery, FindStatusesQueryVariables>(FindStatusesDocument, options);
+        }
+export type FindStatusesQueryHookResult = ReturnType<typeof useFindStatusesQuery>;
+export type FindStatusesLazyQueryHookResult = ReturnType<typeof useFindStatusesLazyQuery>;
+export type FindStatusesSuspenseQueryHookResult = ReturnType<typeof useFindStatusesSuspenseQuery>;
+export type FindStatusesQueryResult = Apollo.QueryResult<FindStatusesQuery, FindStatusesQueryVariables>;
 export const FindSubItemsDocument = gql`
     query FindSubItems($input: FindItemsInput!) {
   findSubItems(input: $input) {

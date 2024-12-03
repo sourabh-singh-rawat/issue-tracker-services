@@ -64,14 +64,6 @@ export default function Sidebar() {
     },
   };
   const workspaceId = useAppSelector((s) => s.workspace.defaultWorkspace.id);
-  const items: MenuItem[] = [
-    {
-      icon: <MuiArticleOutlinedIcon />,
-      to: "/lists",
-      text: "Lists",
-      isVisible: open,
-    },
-  ];
 
   useEffect(() => {
     setOpen(isLargeScreen);

@@ -7,13 +7,13 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { ItemResolver } from "./interfaces";
+import { ItemResolver } from "./Interfaces";
 import {
   CreateItemInput,
   FindItemsInput,
   Item,
   UpdateItemInput,
-} from "./types";
+} from "./Types";
 import { container, dataSource } from "..";
 
 @ObjectType()

@@ -1,10 +1,10 @@
-import React from "react";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
-import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
+import React, { useContext } from "react";
+import { Grid2, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
 import ItemPrioritySelector from "../../../features/issue/components/ItemPrioritySelector";
 import { UpdateItemMutationOptions } from "../../../api/codegen/gql/graphql";
+import { SpaceContext } from "../../Contexts";
 
 interface ItemFieldsProps {
   itemId: string;
@@ -21,15 +21,16 @@ export default function ItemFields({
 }: ItemFieldsProps) {
   const itemStatusForm = useForm({ defaultValues: { status } });
   const itemPriorityForm = useForm({ defaultValues: { priority } });
+  const context = useContext(SpaceContext);
 
   return (
-    <MuiGrid container rowSpacing={2}>
-      <MuiGrid item xs={12}>
-        <MuiGrid container xs={12}>
-          <MuiGrid item xs={3}>
-            <MuiTypography variant="h6">Status</MuiTypography>
-          </MuiGrid>
-          <MuiGrid item xs={3}>
+    <Grid2 container rowSpacing={2}>
+      <Grid2 size={12}>
+        <Grid2 container>
+          <Grid2 size={3}>
+            <Typography variant="h6">Status</Typography>
+          </Grid2>
+          <Grid2 size={3}>
             <ItemStatusSelector
               control={itemStatusForm.control}
               formState={itemStatusForm.formState}
@@ -37,18 +38,18 @@ export default function ItemFields({
               onSubmit={async (value) => {
                 updateItem({ variables: { input: { itemId, status: value } } });
               }}
-              options={["BACKLOG", "ON HOLD", "DEVELOPMENT"]}
+              options={context?.statuses.map(({ name }) => name)}
             />
-          </MuiGrid>
-        </MuiGrid>
-      </MuiGrid>
+          </Grid2>
+        </Grid2>
+      </Grid2>
 
-      <MuiGrid item xs={12}>
-        <MuiGrid container>
-          <MuiGrid item xs={3}>
-            <MuiTypography variant="h6">Priority</MuiTypography>
-          </MuiGrid>
-          <MuiGrid item xs={3}>
+      <Grid2 size={12}>
+        <Grid2 container>
+          <Grid2 size={3}>
+            <Typography variant="h6">Priority</Typography>
+          </Grid2>
+          <Grid2 size={3}>
             <ItemPrioritySelector
               control={itemPriorityForm.control}
               formState={itemPriorityForm.formState}
@@ -58,20 +59,18 @@ export default function ItemFields({
               }}
               options={["Urgent", "High", "Normal", "Low"]}
             />
-          </MuiGrid>
-        </MuiGrid>
-      </MuiGrid>
+          </Grid2>
+        </Grid2>
+      </Grid2>
 
-      <MuiGrid item xs={12}>
-        <MuiGrid container>
-          <MuiGrid item xs={3}>
-            <MuiTypography variant="h6">Dates</MuiTypography>
-          </MuiGrid>
-          <MuiGrid item xs={3}>
-            Empty
-          </MuiGrid>
-        </MuiGrid>
-      </MuiGrid>
-    </MuiGrid>
+      <Grid2 size={12}>
+        <Grid2 container>
+          <Grid2 size={3}>
+            <Typography variant="h6">Dates</Typography>
+          </Grid2>
+          <Grid2 size={3}>Empty</Grid2>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }

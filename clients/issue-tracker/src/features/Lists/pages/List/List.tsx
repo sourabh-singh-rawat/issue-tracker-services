@@ -9,19 +9,26 @@ import { Grid2, useTheme } from "@mui/material";
 
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
+import { OutletContext } from "../../../../common/Interfaces";
+import { useFindStatusesQuery } from "../../../../api/codegen/gql/graphql";
+import { SpaceContext } from "../../../../common";
 
 export function List() {
   const theme = useTheme();
-  const { id } = useParams();
+  const { spaceId, listId, itemId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoading] = useState(false);
+  const { data } = useFindStatusesQuery({
+    variables: { input: { spaceId: spaceId as string } },
+    skip: !spaceId,
+  });
 
-  const tabName = location.pathname.split("/")[3] || "board";
+  console.log(location.pathname);
+  const tabName = location.pathname.split("/")[4] || "board";
   const mapPathToIndex: Record<string, number> = { board: 0, items: 1 };
   const mapIndexToTab: Record<number, string> = {
-    0: `/lists/${id}/board`,
-    1: `/lists/${id}/items`,
+    0: `board`,
+    1: `items`,
   };
 
   const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tabName]);
@@ -31,20 +38,33 @@ export function List() {
     setSelectedTab(newValue);
   };
 
-  useEffect(() => setSelectedTab(mapPathToIndex[tabName]), [tabName, id]);
+  const context: OutletContext = {
+    spaceId,
+    listId,
+    itemId,
+    selectedTab,
+    status: data?.findStatuses || [],
+  };
+
+  useEffect(() => {
+    setSelectedTab(mapPathToIndex[tabName]);
+  }, [tabName, listId]);
 
   return (
-    <Grid2 container>
-      <Grid2 size={12} sx={{ pt: theme.spacing(1) }}>
-        <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab isLoading={isLoading} label="Board" value={0} />
-          <Tab isLoading={isLoading} label="List" value={1} />
-        </Tabs>
+    <SpaceContext.Provider value={{ statuses: data?.findStatuses || [] }}>
+      <Grid2 container>
+        {!itemId && (
+          <Grid2 size={12} sx={{ pt: theme.spacing(1) }}>
+            <Tabs value={selectedTab} onChange={handleChange}>
+              <Tab isLoading={false} label="Board" value={0} />
+              <Tab isLoading={false} label="List" value={1} />
+            </Tabs>
+          </Grid2>
+        )}
+        <Grid2 size={12}>
+          <Outlet context={context} />
+        </Grid2>
       </Grid2>
-
-      <Grid2 size={12}>
-        <Outlet context={{ id, selectedTab, page: {}, isLoading }} />
-      </Grid2>
-    </Grid2>
+    </SpaceContext.Provider>
   );
 }

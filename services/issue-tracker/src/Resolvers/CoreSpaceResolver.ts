@@ -1,6 +1,6 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { SpaceResolver } from "./interfaces";
-import { CreateSpaceInput, FindSpacesOptions, Space } from "./types";
+import { SpaceResolver } from "./Interfaces";
+import { CreateSpaceInput, FindSpacesOptions, Space } from "./Types";
 import { container, dataSource } from "..";
 
 @Resolver()

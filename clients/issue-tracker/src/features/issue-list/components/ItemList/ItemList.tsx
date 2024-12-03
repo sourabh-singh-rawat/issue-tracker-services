@@ -12,10 +12,7 @@ import {
 import AvatarGroup from "../../../../common/components/AvatarGroup";
 import IssueStatusSelector from "../IssueStatusSelector";
 import IssuePrioritySelector from "../IssuePrioritySelector";
-import {
-  useFindListItemsQuery,
-  useFindListQuery,
-} from "../../../../api/codegen/gql/graphql";
+import { useFindListItemsQuery } from "../../../../api/codegen/gql/graphql";
 
 interface ItemListProps {
   listId: string;
@@ -23,7 +20,7 @@ interface ItemListProps {
 
 export default function ItemList({ listId }: ItemListProps) {
   const theme = useTheme();
-  const urlParams = useParams<{ id: string }>();
+  const { workspaceId } = useParams<{ workspaceId: string }>();
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -43,11 +40,8 @@ export default function ItemList({ listId }: ItemListProps) {
       minWidth: 350,
       renderCell: (params) => (
         <Link
-          style={{
-            overflow: "hidden",
-            textDecoration: "none",
-          }}
-          to={`/lists/${urlParams.id}/items/${params.row.id}`}
+          style={{ overflow: "hidden", textDecoration: "none" }}
+          to={params.row.id}
         >
           <MuiTypography
             sx={{
