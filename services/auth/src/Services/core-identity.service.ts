@@ -17,7 +17,6 @@ import {
 } from "@issue-tracker/common";
 import { BaseToken, JwtToken } from "@issue-tracker/security";
 import { UserRepository } from "../data/repositories/interfaces/user.repository";
-import { UserService } from "./Interfaces/user.service";
 
 export class CoreIdentityService implements IdentityService {
   constructor(
@@ -25,7 +24,6 @@ export class CoreIdentityService implements IdentityService {
     private readonly userRepository: UserRepository,
     private readonly accessTokenRepository: AccessTokenRepository,
     private readonly refreshTokenRepository: RefreshTokenRepository,
-    private readonly userService: UserService,
   ) {}
 
   private isUserExistsByEmail = async (email: string) => {
@@ -137,7 +135,7 @@ export class CoreIdentityService implements IdentityService {
     if (!user) throw new UserNotFoundError();
     if (!user.emailVerificationStatus) throw new EmailNotVerifiedError();
 
-    await this.userService.verifyPassword({ email, password });
+    // await this.userService.verifyPassword({ email, password });
 
     const { access, refresh } = this.generateTokens({
       userId: user.id,

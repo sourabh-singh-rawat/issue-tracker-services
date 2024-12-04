@@ -8,18 +8,13 @@ import {
 } from "@issue-tracker/event-bus";
 import { EMAIL_VERIFICATION_STATUS } from "@issue-tracker/common";
 import { JsMsg } from "nats";
-import { UserService } from "../../Services/Interfaces/user.service";
-import { VerificationLink } from "../../data/entities/VerificationLink";
 
 export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailConfirmationSentPayload> {
   readonly stream = Streams.USER;
   readonly consumer = CONSUMERS.USER_EMAIL_CONFIRMATION_SENT_AUTH;
   readonly subject = SUBJECTS.USER_CONFIRMATION_EMAIL_SENT;
 
-  constructor(
-    private readonly broker: Broker,
-    private readonly userService: UserService,
-  ) {
+  constructor(private readonly broker: Broker) {
     super(broker.client);
   }
 
