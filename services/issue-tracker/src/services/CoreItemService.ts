@@ -142,7 +142,7 @@ export class CoreItemService implements ItemService {
 
     await ItemRepo.update(
       { id: itemId, createdById: userId },
-      { name, description, status, priority, dueDate },
+      { name, description, statusId: status, priority, dueDate },
     );
   }
 
@@ -154,7 +154,7 @@ export class CoreItemService implements ItemService {
     await this.isArchived(id);
 
     const updatedIssue = new Item();
-    updatedIssue.status = status;
+    updatedIssue.statusId = status;
     await this.issueRepository.update(id, updatedIssue);
   };
 

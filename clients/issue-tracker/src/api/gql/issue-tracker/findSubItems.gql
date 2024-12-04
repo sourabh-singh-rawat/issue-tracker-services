@@ -4,6 +4,6 @@ query FindSubItems($input: FindItemsInput!) {
     id
     name
     priority
-    status
+    statusId
   }
 }

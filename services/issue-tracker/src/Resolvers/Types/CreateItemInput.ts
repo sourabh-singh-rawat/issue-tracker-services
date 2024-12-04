@@ -10,7 +10,7 @@ export class CreateItemInput {
   type!: string;
 
   @Field()
-  status!: IssueStatus;
+  statusId!: string;
 
   @Field()
   priority!: IssuePriority;

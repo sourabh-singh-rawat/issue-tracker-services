@@ -13,7 +13,7 @@ export class Item {
   description?: string;
 
   @Field()
-  status!: string;
+  statusId!: string;
 
   @Field()
   priority!: string;

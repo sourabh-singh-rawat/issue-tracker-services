@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -16,6 +16,7 @@ import {
 } from "../../../../api/codegen/gql/graphql";
 import { useMessageBar } from "../../../message-bar/hooks";
 import dayjs from "dayjs";
+import { SpaceContext } from "../../../../common";
 
 interface ItemFormProps {
   listId: string;
@@ -28,12 +29,6 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
   const [createItem] = useCreateItemMutation({
     onCompleted(response) {
       messageBar.showSuccess("Item created successfully");
-
-      if (parentItemId) return;
-      setTimeout(
-        () => navigate(`/lists/${listId}/items/${response.createItem}`),
-        2000,
-      );
     },
     onError(error) {
       messageBar.showError(error.message);
@@ -45,7 +40,7 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
       listId,
       name: "",
       type: "issue",
-      status: "To Do",
+      statusId: "",
       priority: "Low",
       description: "",
       dueDate: null,
@@ -57,7 +52,7 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
   const onSubmit: SubmitHandler<CreateItemInput> = async ({
     name,
     description,
-    status,
+    statusId,
     listId,
     type,
     assigneeIds,
@@ -75,7 +70,7 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
           type,
           priority,
           assigneeIds,
-          status,
+          statusId,
           dueDate: dueDate ? dayjs(dueDate).format() : null,
         },
       },
@@ -110,11 +105,10 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
 
         <MuiGrid sm={6} xs={6} item>
           <IssueStatusSelector
-            name="status"
+            name="statusId"
             title="Status"
             control={control}
             formState={formState}
-            options={["BACKLOG"]}
           />
         </MuiGrid>
 

@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { StatusGroup } from "./StatusGroup";
+import { Item } from "./Item";
 
 @Entity({ name: "statuses" })
 export class Status extends BaseEntity {
@@ -37,4 +38,7 @@ export class Status extends BaseEntity {
   @ManyToOne(() => StatusGroup, (x) => x.statuses)
   @JoinColumn({ name: "group_id" })
   group!: StatusGroup;
+
+  @ManyToOne(() => Item, (x) => x.status)
+  items!: Item[];
 }

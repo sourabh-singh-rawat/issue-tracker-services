@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useContext } from "react";
 
-import MuiGrid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Grid2";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
@@ -16,6 +16,7 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import Select from "../../../../common/components/Select";
+import { SpaceContext } from "../../../../common";
 
 interface ItemStatusSelectorProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -23,7 +24,6 @@ interface ItemStatusSelectorProps<DefaultValues extends FieldValues> {
   formState: FormState<DefaultValues>;
   onSubmit?: (value: string) => void;
   title?: string;
-  options?: string[];
   helperText?: string;
   rules?: UseControllerProps<DefaultValues>["rules"];
 }
@@ -34,17 +34,18 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
   rules,
   onSubmit,
   title,
-  options = [],
   helperText,
 }: ItemStatusSelectorProps<DefaultValues>) {
   const isLoading = false;
+  const context = useContext(SpaceContext);
+  console.log(context);
 
   return (
-    <MuiGrid container>
+    <Grid2 container>
       {title && (
-        <MuiGrid item xs={12} paddingBottom={1}>
+        <Grid2 size={12} paddingBottom={1}>
           <Label id={title} title={title} isLoading={isLoading} />
-        </MuiGrid>
+        </Grid2>
       )}
       <MuiFormControl fullWidth>
         {isLoading ? (
@@ -59,7 +60,7 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
                 <Select
                   name={field.name}
                   value={field.value}
-                  options={options}
+                  options={context.statuses || []}
                   onChange={(e) => {
                     if (!e.target.value) return;
                     if (onSubmit) onSubmit(e.target.value as string);
@@ -82,6 +83,6 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
           </MuiFormHelperText>
         )
       )}
-    </MuiGrid>
+    </Grid2>
   );
 }

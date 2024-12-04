@@ -1,6 +1,7 @@
 import React from "react";
 import { alpha, styled, useTheme } from "@mui/material";
 
+import BaseOption from "@mui/base/Option";
 import MuiTypography from "@mui/material/Typography";
 import MuiSelect, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,7 +29,7 @@ export interface SelectProps<Value = unknown> {
   value: string;
   onChange: (e: SelectChangeEvent<Value>) => void;
   variant?: "small" | "medium";
-  options?: string[];
+  options?: { id: string; name: string }[];
   isDisabled?: boolean;
 }
 
@@ -76,8 +77,8 @@ export default function Select({
       }}
       disabled={isDisabled}
     >
-      {options.map((name) => (
-        <MenuItem key={name} value={name} disableRipple>
+      {options.map(({ id, name }) => (
+        <MenuItem key={id} value={id} disableRipple>
           <MuiTypography variant="body2">{name}</MuiTypography>
         </MenuItem>
       ))}

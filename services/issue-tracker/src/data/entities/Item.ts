@@ -13,6 +13,7 @@ import { User } from "./User";
 import { List } from "./List";
 import { ItemAssignee } from "./ItemAssignee";
 import { AuditEntity } from "@issue-tracker/orm";
+import { Status } from "./Status";
 
 @Tree("closure-table", {
   closureTableName: "items",
@@ -33,8 +34,12 @@ export class Item extends AuditEntity {
   @Column({ type: "text" })
   type!: string;
 
-  @Column({ type: "text" })
-  status!: string;
+  @Column({ name: "status_id", type: "uuid" })
+  statusId!: string;
+
+  @ManyToOne(() => Status, (x) => x.items)
+  @JoinColumn({ name: "status_id" })
+  status!: Status;
 
   @Column({ type: "text" })
   priority!: string;

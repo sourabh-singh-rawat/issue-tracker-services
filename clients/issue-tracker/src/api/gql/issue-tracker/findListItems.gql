@@ -3,7 +3,7 @@ query FindListItems($listId: String!) {
     description
     id
     name
-    status
+    statusId
     priority
   }
 }
