@@ -4,24 +4,22 @@ import { useForm } from "react-hook-form";
 import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
 import ItemPrioritySelector from "../../../features/issue/components/ItemPrioritySelector";
 import { UpdateItemMutationOptions } from "../../../api/codegen/gql/graphql";
-import { SpaceContext } from "../../Contexts";
 
 interface ItemFieldsProps {
   itemId: string;
-  status: string;
+  statusId: string;
   priority: string;
   updateItem: (options: UpdateItemMutationOptions) => Promise<any>;
 }
 
 export default function ItemFields({
   itemId,
-  status,
+  statusId,
   priority,
   updateItem,
 }: ItemFieldsProps) {
-  const itemStatusForm = useForm({ defaultValues: { status } });
+  const itemStatusForm = useForm({ defaultValues: { statusId } });
   const itemPriorityForm = useForm({ defaultValues: { priority } });
-  const context = useContext(SpaceContext);
 
   return (
     <Grid2 container rowSpacing={2}>
@@ -34,11 +32,10 @@ export default function ItemFields({
             <ItemStatusSelector
               control={itemStatusForm.control}
               formState={itemStatusForm.formState}
-              name="status"
+              name="statusId"
               onSubmit={async (value) => {
                 updateItem({ variables: { input: { itemId, status: value } } });
               }}
-              options={context?.statuses.map(({ name }) => name)}
             />
           </Grid2>
         </Grid2>
