@@ -54,7 +54,6 @@
     "@issue-tracker/orm": "workspace:^",
     "@issue-tracker/security": "workspace:^",
     "@issue-tracker/server-core": "workspace:^",
-    "@trpc/server": "11.0.0-rc.642",
     "awilix": "^8.0.1",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",

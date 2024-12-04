@@ -67,7 +67,7 @@ importers:
         version: 11.0.0-rc.643(@tanstack/react-query@5.61.0(react@18.3.1))(@trpc/client@11.0.0-rc.642(@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(typescript@5.4.5))(@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
       '@trpc/server':
         specifier: 11.0.0-rc.642
-        version: 11.0.0-rc.642(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
+        version: 11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
       ajv:
         specifier: ^8.17.1
         version: 8.17.1
@@ -553,9 +553,6 @@ importers:
       '@issue-tracker/server-core':
         specifier: workspace:^
         version: link:../../packages/server-core
-      '@trpc/server':
-        specifier: 11.0.0-rc.642
-        version: 11.0.0-rc.642(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
       awilix:
         specifier: ^8.0.1
         version: 8.0.1
@@ -11705,26 +11702,26 @@ snapshots:
 
   '@trpc/client@11.0.0-rc.642(@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(typescript@5.4.5)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.642(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
+      '@trpc/server': 11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
       typescript: 5.4.5
 
   '@trpc/react-query@11.0.0-rc.643(@tanstack/react-query@5.61.0(react@18.3.1))(@trpc/client@11.0.0-rc.642(@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(typescript@5.4.5))(@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)':
     dependencies:
       '@tanstack/react-query': 5.61.0(react@18.3.1)
       '@trpc/client': 11.0.0-rc.642(@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5))(typescript@5.4.5)
-      '@trpc/server': 11.0.0-rc.642(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
+      '@trpc/server': 11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       typescript: 5.4.5
 
-  '@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)':
+  '@trpc/server@11.0.0-rc.642(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.4.5)':
     dependencies:
       typescript: 5.4.5
     optionalDependencies:
       '@types/aws-lambda': 8.10.145
       express: 4.21.1
       fastify: 4.27.0
-      next: 15.0.3(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 15.0.3(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ws: 8.17.0
     transitivePeerDependencies:
       - '@babel/core'
@@ -15555,7 +15552,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@15.0.3(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@15.0.3(@babel/core@7.24.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 15.0.3
       '@swc/counter': 0.1.3
@@ -15565,7 +15562,7 @@ snapshots:
       postcss: 8.4.31
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      styled-jsx: 5.1.6(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react@18.3.1)
+      styled-jsx: 5.1.6(@babel/core@7.24.6)(react@18.3.1)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.0.3
       '@next/swc-darwin-x64': 15.0.3
@@ -17060,13 +17057,12 @@ snapshots:
       stylis: 4.3.2
       tslib: 2.6.2
 
-  styled-jsx@5.1.6(@babel/core@7.24.6)(babel-plugin-macros@3.1.0)(react@18.3.1):
+  styled-jsx@5.1.6(@babel/core@7.24.6)(react@18.3.1):
     dependencies:
       client-only: 0.0.1
       react: 18.3.1
     optionalDependencies:
       '@babel/core': 7.24.6
-      babel-plugin-macros: 3.1.0
     optional: true
 
   stylis@4.2.0: {}

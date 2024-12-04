@@ -6,32 +6,23 @@ import {
   FastifyServer,
   logger,
 } from "@issue-tracker/server-core";
-import { initTRPC } from "@trpc/server";
-import { z } from "zod";
 import fastify from "fastify";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { IdentityController } from "./controllers/interfaces/identity.controller";
 import { IdentityService } from "./Services/Interfaces/identity.service";
 import { AccessTokenRepository } from "./data/repositories/interfaces/access-token-repository";
 import { RefreshTokenRepository } from "./data/repositories/interfaces/refresh-token-repository";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { CoreIdentityController } from "./controllers/core-identity.controller";
 import { CoreIdentityService } from "./Services/core-identity.service";
 import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
 import { PostgresAccessTokenRepository } from "./data/repositories/postgres-access-token.repository";
 import { PostgresRefreshTokenRepository } from "./data/repositories/postgres-refresh-token.repository";
 import { DataSource } from "typeorm";
-import { UserController } from "./controllers/interfaces/user.controller";
-import { CoreUserController } from "./controllers/core-user.controller";
-import { UserService } from "./Services/Interfaces/user.service";
 import { UserRepository } from "./data/repositories/interfaces/user.repository";
-import { CoreUserService } from "./Services/core-user.service";
 import { UserProfileRepository } from "./data/repositories/interfaces/user-profile.repository";
 import { PostgresUserProfileRepository } from "./data/repositories/postgres-user-profile.repository";
 import { UserEmailConfirmationSentSubscriber } from "./events/subscribers/user-email-confirmation-sent.subscriber";
 import { VerificationLink } from "./data/entities/VerificationLink";
 import { PostgresEmailVerificationTokenRepository } from "./data/repositories/postgres-email-verification-token.repository";
-import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 import {
   NatsBroker,
   NatsPublisher,
@@ -58,10 +49,7 @@ export interface RegisteredServices {
   orm: Typeorm;
   logger: AppLogger;
   publisher: Publisher<Subjects>;
-  identityController: IdentityController;
-  userController: UserController;
   identityService: IdentityService;
-  userService: UserService;
   userRepository: UserRepository;
   userProfileRepository: UserProfileRepository;
   accessTokenRepository: AccessTokenRepository;
@@ -72,10 +60,6 @@ export interface RegisteredServices {
   userProfileService: UserProfileService;
 }
 
-const t = initTRPC.context<{ user: any; res: any }>().create();
-export const router = t.router;
-export const publicProcedure = t.procedure;
-
 const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userEmailConfirmationSentSubscriber").fetchMessages();
 };
@@ -84,60 +68,6 @@ const awilix = createContainer<RegisteredServices>({
   injectionMode: InjectionMode.CLASSIC,
 });
 export const container = new AwilixDi<RegisteredServices>(awilix, logger);
-const authRouter = router({
-  registerUser: publicProcedure
-    .input(
-      z.object({
-        displayName: z.string(),
-        email: z.string(),
-        password: z.string(),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      const service = container.get("userAuthenticationService");
-
-      await dataSource.transaction(async (manager) => {
-        await service.createUserWithEmailAndPassword({ ...input, manager });
-      });
-    }),
-  getCurrentUser: publicProcedure.query(async ({ ctx }) => {
-    const service = container.get("userProfileService");
-    const { user } = ctx;
-
-    return await service.getUserProfileWithEmail(user.email);
-  }),
-  verifyVerificationLink: publicProcedure
-    .input(z.object({ confirmationEmail: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const { confirmationEmail } = input;
-      const { user } = ctx;
-      const service = container.get("userAuthenticationService");
-
-      await dataSource.transaction(async (manager) => {
-        await service.verifyVerificationLink({
-          manager,
-          token: confirmationEmail,
-        });
-      });
-    }),
-  signInWithEmailAndPassword: publicProcedure
-    .input(z.object({ email: z.string().email(), password: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      const { res } = ctx;
-      await dataSource.transaction(async (manager) => {
-        const service = container.get("userAuthenticationService");
-
-        const output = await service.signInWithEmailAndPassword({
-          ...input,
-          manager,
-        });
-        const { accessToken, refreshToken } = output;
-
-        res.setCookie("accessToken", accessToken);
-        res.setCookie("refreshToken", refreshToken);
-      });
-    }),
-});
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -194,7 +124,7 @@ const startServer = async () => {
       },
     });
 
-    server.init();
+    await server.init();
     instance.route({
       url: "/api/graphql",
       method: ["POST", "GET"],
@@ -220,9 +150,6 @@ const main = async () => {
   container.add("logger", asValue(logger));
   container.add("broker", asValue(broker));
   container.add("publisher", asClass(NatsPublisher));
-  container.add("userController", asClass(CoreUserController));
-  container.add("identityController", asClass(CoreIdentityController));
-  container.add("userService", asClass(CoreUserService));
   container.add("identityService", asClass(CoreIdentityService));
   container.add("userRepository", asClass(PostgresUserRepository));
   container.add(
@@ -258,5 +185,3 @@ const main = async () => {
 };
 
 main();
-
-export type AuthRouter = typeof authRouter;
