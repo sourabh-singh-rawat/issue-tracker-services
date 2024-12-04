@@ -33,7 +33,7 @@ export type CreateItemInput = {
   name: Scalars['String']['input'];
   parentItemId?: InputMaybe<Scalars['String']['input']>;
   priority: Scalars['String']['input'];
-  status: Scalars['String']['input'];
+  statusId: Scalars['String']['input'];
   type: Scalars['String']['input'];
 };
 
@@ -75,7 +75,7 @@ export type Item = {
   name: Scalars['String']['output'];
   parentItem?: Maybe<Item>;
   priority: Scalars['String']['output'];
-  status: Scalars['String']['output'];
+  statusId: Scalars['String']['output'];
   subItems?: Maybe<Array<Item>>;
 };
 
@@ -335,7 +335,7 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, priority: string, status: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, priority: string, statusId: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
 
 export type FindListQueryVariables = Exact<{
   findListId: Scalars['String']['input'];
@@ -349,7 +349,7 @@ export type FindListItemsQueryVariables = Exact<{
 }>;
 
 
-export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, status: string, priority: string }> };
+export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, statusId: string, priority: string }> };
 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -375,7 +375,7 @@ export type FindSubItemsQueryVariables = Exact<{
 }>;
 
 
-export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, status: string }> };
+export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, statusId: string }> };
 
 export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -742,7 +742,7 @@ export const FindItemDocument = gql`
     }
     name
     priority
-    status
+    statusId
   }
 }
     `;
@@ -826,7 +826,7 @@ export const FindListItemsDocument = gql`
     description
     id
     name
-    status
+    statusId
     priority
   }
 }
@@ -1000,7 +1000,7 @@ export const FindSubItemsDocument = gql`
     id
     name
     priority
-    status
+    statusId
   }
 }
     `;

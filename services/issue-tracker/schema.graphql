@@ -11,7 +11,7 @@ input CreateItemInput {
   name: String!
   parentItemId: String
   priority: String!
-  status: String!
+  statusId: String!
   type: String!
 }
 
@@ -57,7 +57,7 @@ type Item {
   name: String!
   parentItem: Item
   priority: String!
-  status: String!
+  statusId: String!
   subItems: [Item!]
 }
 

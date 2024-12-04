@@ -12,6 +12,6 @@ query FindItem($findItemId: String!) {
     }
     name
     priority
-    status
+    statusId
   }
 }

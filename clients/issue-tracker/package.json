@@ -69,6 +69,7 @@
     "@graphql-codegen/cli": "^5.0.3",
     "@hookform/resolvers": "^3.9.0",
     "@issue-tracker/common": "workspace:*",
+    "@mui/base": "5.0.0-beta.63",
     "@mui/icons-material": "6.1.9",
     "@mui/material": "6.1.9",
     "@mui/system": "6.1.9",

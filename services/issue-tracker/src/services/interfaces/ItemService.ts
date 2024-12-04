@@ -13,7 +13,7 @@ export interface CreateItemOptions extends ServiceOptions {
   listId: string;
   type: string;
   name: string;
-  status: IssueStatus;
+  statusId: string;
   priority: IssuePriority;
   assigneeIds: string[];
   description?: string;
