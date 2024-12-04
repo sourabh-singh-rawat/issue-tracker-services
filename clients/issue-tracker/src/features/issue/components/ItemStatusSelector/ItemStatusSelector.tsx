@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 
 import Grid2 from "@mui/material/Grid2";
@@ -38,7 +37,6 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
 }: ItemStatusSelectorProps<DefaultValues>) {
   const isLoading = false;
   const context = useContext(SpaceContext);
-  console.log(context);
 
   return (
     <Grid2 container>
@@ -56,6 +54,7 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>({
             control={control}
             rules={rules}
             render={({ field }) => {
+              console.log(field);
               return (
                 <Select
                   name={field.name}
