@@ -1,3 +1,5 @@
+import { ITEM_PRIORITY, ItemPriority } from "@issue-tracker/common";
+import { AuditEntity } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -9,11 +11,10 @@ import {
   TreeChildren,
   TreeParent,
 } from "typeorm";
-import { User } from "./User";
-import { List } from "./List";
 import { ItemAssignee } from "./ItemAssignee";
-import { AuditEntity } from "@issue-tracker/orm";
+import { List } from "./List";
 import { Status } from "./Status";
+import { User } from "./User";
 
 @Tree("closure-table", {
   closureTableName: "items",
@@ -41,8 +42,16 @@ export class Item extends AuditEntity {
   @JoinColumn({ name: "status_id" })
   status!: Status;
 
-  @Column({ type: "text" })
-  priority!: string;
+  @Column({
+    type: "enum",
+    enum: [
+      ITEM_PRIORITY.URGENT,
+      ITEM_PRIORITY.HIGH,
+      ITEM_PRIORITY.NORMAL,
+      ITEM_PRIORITY.LOW,
+    ],
+  })
+  priority!: ItemPriority;
 
   @Column({ name: "list_id", type: "uuid" })
   listId!: string;
@@ -82,6 +91,7 @@ export class Item extends AuditEntity {
   subItems!: Item[];
 
   @TreeParent()
+  @JoinColumn({ name: "parent_item_id" })
   parentItem!: Item;
 
   @ManyToOne(() => List, (x) => x.items)

@@ -1,24 +1,26 @@
-import "dotenv/config";
-import { AppLogger, AwilixDi, logger } from "@issue-tracker/server-core";
-import nodemailer from "nodemailer";
-import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { DataSource } from "typeorm";
+import { config } from "dotenv";
+config({ path: "../../.env" });
+
 import { Mailer, NodeMailer } from "@issue-tracker/comm";
-import { UserRepository } from "./data/repositories/interfaces/user.repository";
+import { Broker, NatsBroker, NatsPublisher } from "@issue-tracker/event-bus";
+import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
+import { AppLogger, AwilixDi, logger } from "@issue-tracker/server-core";
+import { InjectionMode, asClass, asValue, createContainer } from "awilix";
+import nodemailer from "nodemailer";
+import { DataSource } from "typeorm";
 import { EmailRepository } from "./data/repositories/interfaces/email.repository";
-import { UserRegisteredSubscriber } from "./events/subscribers/user-registered.subscriber";
-import { ProjectMemberInvitedSubscriber } from "./events/subscribers/project-member-invited.subscriber";
-import { WorkspaceMemberInvitedSubscriber } from "./events/subscribers/workspace-member-invited.subscriber";
-import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
+import { UserRepository } from "./data/repositories/interfaces/user.repository";
 import { PostgresEmailRepository } from "./data/repositories/postgres-email.repository";
-import { UserEmailService } from "./services/interfaces/user-email.service";
+import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
+import { ProjectMemberInvitedSubscriber } from "./events/subscribers/project-member-invited.subscriber";
+import { UserRegisteredSubscriber } from "./events/subscribers/user-registered.subscriber";
+import { WorkspaceMemberInvitedSubscriber } from "./events/subscribers/workspace-member-invited.subscriber";
+import { CoreProjectEmailService } from "./services/core-project-email.service";
 import { CoreUserEmailService } from "./services/core-user-email.service";
 import { CoreWorkspaceEmailService } from "./services/core-workspace-email.service";
-import { WorkspaceEmailService } from "./services/interfaces/workspace-email.service";
 import { ProjectEmailService } from "./services/interfaces/project-email.service";
-import { CoreProjectEmailService } from "./services/core-project-email.service";
-import { Broker, NatsBroker, NatsPublisher } from "@issue-tracker/event-bus";
+import { UserEmailService } from "./services/interfaces/user-email.service";
+import { WorkspaceEmailService } from "./services/interfaces/workspace-email.service";
 
 export interface RegisteredServices {
   logger: AppLogger;

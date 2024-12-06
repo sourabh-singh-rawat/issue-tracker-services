@@ -1,60 +1,42 @@
-import "dotenv/config";
-import fastify from "fastify";
-import Redis from "ioredis";
+import { config } from "dotenv";
+config({ path: "../../.env" });
+
 import { ApolloServer } from "@apollo/server";
 import {
   ApolloFastifyContextFunction,
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
 import multipart from "@fastify/multipart";
-import { Broker, NatsBroker } from "@issue-tracker/event-bus";
-import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { DataSource } from "typeorm";
-import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { writeFileSync } from "fs";
-import { AttachmentService } from "./services/interfaces/AttachmentService";
-import { Worker } from "bullmq";
-import sharp from "sharp";
-import { v4 } from "uuid";
+import swagger from "@fastify/swagger";
+import { QUEUE } from "@issue-tracker/common";
+import { Auth, JwtToken } from "@issue-tracker/security";
 import {
-  AppLogger,
+  AppContext,
   AwilixDi,
   FastifyServer,
   logger,
 } from "@issue-tracker/server-core";
-import { CoreAttachmentService } from "./services/CoreAttachmentService";
-import { getAuth } from "firebase-admin/auth";
-import { getStorage } from "firebase-admin/storage";
-import { cert, initializeApp } from "firebase-admin/app";
-import { Queue } from "bullmq";
-import { QUEUES } from "@issue-tracker/common";
-import { Attachment } from "./data/entities";
+import { Worker } from "bullmq";
+import fastify from "fastify";
+import { writeFileSync } from "fs";
+import sharp from "sharp";
 import { buildSchema } from "type-graphql";
-import { CoreAttachmentResolver } from "./resolvers";
-import { Auth, JwtToken } from "@issue-tracker/security";
-import swagger from "@fastify/swagger";
-import { AttachmentController, CoreAttachmentController } from "./controllers";
+import { v4 } from "uuid";
+import { CoreAttachmentResolver } from "./api";
+import {
+  RegisteredServices,
+  adminStorage,
+  broker,
+  container,
+  dataSource,
+  redisClient,
+} from "./config";
+import { Attachment } from "./data";
 
-export interface RegisteredServices {
-  logger: AppLogger;
-  dataSource: DataSource;
-  broker: Broker;
-  orm: Typeorm;
-  attachmentController: AttachmentController;
-  attachmentService: AttachmentService;
-  redisClient: Redis;
-  imageProcessingQueue: Queue;
-}
-
-const firebaseApp = initializeApp({
-  credential: cert("./firebase.service-account.json"),
-  storageBucket: "issue-tracker-66803.appspot.com",
-});
-
-export const adminAuth = getAuth(firebaseApp);
-export const adminStorage = getStorage(firebaseApp).bucket();
-
-const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
+const createContext: ApolloFastifyContextFunction<AppContext> = async (
+  req,
+  rep,
+) => {
   const { accessToken } = req.cookies;
 
   let token: any;
@@ -164,25 +146,6 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
 
 const startSubscriptions = () => {};
 
-export const dataSource = new DataSource({
-  type: "postgres",
-  url: process.env.ATTACHMENT_POSTGRES_CLUSTER_URL,
-  entities: ["src/data/entities/*.ts"],
-  synchronize: true,
-});
-
-export const redisClient = new Redis({
-  host: process.env.ATTACHMENT_REDIS_HOST,
-  port: process.env.ATTACHMENT_REDIS_PORT
-    ? parseInt(process.env.ATTACHMENT_REDIS_PORT)
-    : 6379,
-  maxRetriesPerRequest: null,
-});
-
-const imageProcessingQueue = new Queue(QUEUES.IMAGE_PROCESSING, {
-  connection: redisClient,
-});
-
 export const startWorker = () => {
   interface ImageProcessingWorkerData {
     itemId: string;
@@ -193,7 +156,7 @@ export const startWorker = () => {
   }
 
   const imageProcessingWorker = new Worker<ImageProcessingWorkerData>(
-    QUEUES.IMAGE_PROCESSING,
+    QUEUE.IMAGE_PROCESSING,
     async ({ data }) => {
       const {
         itemId,
@@ -242,25 +205,8 @@ export const startWorker = () => {
   });
 };
 
-const orm = new PostgresTypeorm(dataSource, logger);
-const broker = new NatsBroker({
-  servers: [process.env.NATS_CLUSTER_URL || "nats"],
-  logger,
-});
-
-const awilix = createContainer({ injectionMode: InjectionMode.CLASSIC });
-export const container = new AwilixDi<RegisteredServices>(awilix, logger);
-container.add("logger", asValue(logger));
-container.add("dataSource", asValue(dataSource));
-container.add("redisClient", asValue(redisClient));
-container.add("orm", asValue(orm));
-container.add("eventBus", asValue(broker));
-container.add("imageProcessingQueue", asValue(imageProcessingQueue));
-container.add("attachmentController", asClass(CoreAttachmentController));
-container.add("attachmentService", asClass(CoreAttachmentService));
-
 const main = async () => {
-  await orm.init();
+  await dataSource.initialize();
   await broker.init();
 
   container.init();
