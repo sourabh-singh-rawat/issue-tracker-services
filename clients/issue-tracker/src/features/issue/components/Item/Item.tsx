@@ -1,19 +1,19 @@
-import React, { useContext } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useTheme } from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import MuiTypography from "@mui/material/Typography";
+import React from "react";
+import { useParams } from "react-router-dom";
 import {
   useFindItemQuery,
   useFindSubItemsQuery,
   useUpdateItemMutation,
-} from "../../../../api/codegen/gql/graphql";
-import { useMessageBar } from "../../../message-bar/hooks";
-import Grid2 from "@mui/material/Grid2";
-import MuiTypography from "@mui/material/Typography";
-import ItemName from "../../../../common/components/ItemName";
+} from "../../../../api";
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
-import ItemModal from "../ItemModal";
+import ItemName from "../../../../common/components/ItemName";
 import ItemAttachments from "../../../issue-attachments/pages/ItemAttachments";
-import { useTheme } from "@mui/material";
+import { useMessageBar } from "../../../message-bar/hooks";
+import ItemModal from "../ItemModal";
 
 export interface ItemProps {}
 
