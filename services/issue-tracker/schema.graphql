@@ -107,7 +107,7 @@ input UpdateItemInput {
   itemId: String!
   name: String
   priority: String
-  status: String
+  statusId: String
   type: String
 }
 

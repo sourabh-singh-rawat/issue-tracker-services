@@ -234,7 +234,7 @@ export type UpdateItemInput = {
   itemId: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   priority?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
+  statusId?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 

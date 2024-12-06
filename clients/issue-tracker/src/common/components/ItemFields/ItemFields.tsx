@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
 import { Grid2, Typography } from "@mui/material";
+import React from "react";
 import { useForm } from "react-hook-form";
-import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
-import ItemPrioritySelector from "../../../features/issue/components/ItemPrioritySelector";
 import { UpdateItemMutationOptions } from "../../../api/codegen/gql/graphql";
+import ItemPrioritySelector from "../../../features/issue/components/ItemPrioritySelector";
+import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
 
 interface ItemFieldsProps {
   itemId: string;
@@ -34,7 +34,9 @@ export default function ItemFields({
               formState={itemStatusForm.formState}
               name="statusId"
               onSubmit={async (value) => {
-                updateItem({ variables: { input: { itemId, status: value } } });
+                updateItem({
+                  variables: { input: { itemId, statusId: value } },
+                });
               }}
             />
           </Grid2>
@@ -52,7 +54,9 @@ export default function ItemFields({
               formState={itemPriorityForm.formState}
               name="priority"
               onSubmit={async (value) => {
-                updateItem({ variables: { input: { itemId, status: value } } });
+                updateItem({
+                  variables: { input: { itemId, priority: value } },
+                });
               }}
               options={["Urgent", "High", "Normal", "Low"]}
             />

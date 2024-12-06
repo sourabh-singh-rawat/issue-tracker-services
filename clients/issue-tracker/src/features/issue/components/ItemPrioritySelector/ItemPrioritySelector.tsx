@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import MuiGrid from "@mui/material/Grid";
-import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTypography from "@mui/material/Typography";
-import MuiFormControl from "@mui/material/FormControl";
-import MuiFormHelperText from "@mui/material/FormHelperText";
-import Label from "../../../../common/components/forms/Label";
+import {
+  FormControl,
+  FormHelperText,
+  Grid2,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import {
   Control,
   Controller,
@@ -16,6 +17,7 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import Select from "../../../../common/components/Select";
+import Label from "../../../../common/components/forms/Label";
 
 interface ItemPrioritySelectorProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -42,15 +44,15 @@ export default function ItemPrioritySelector<
   const isLoading = false;
 
   return (
-    <MuiGrid container>
+    <Grid2 container>
       {title && (
-        <MuiGrid item xs={12} paddingBottom={1}>
+        <Grid2 size={12} paddingBottom={1}>
           <Label id={title} title={title} isLoading={isLoading} />
-        </MuiGrid>
+        </Grid2>
       )}
-      <MuiFormControl fullWidth>
+      <FormControl fullWidth>
         {isLoading ? (
-          <MuiSkeleton />
+          <Skeleton />
         ) : (
           <Controller
             name={name}
@@ -61,7 +63,10 @@ export default function ItemPrioritySelector<
                 <Select
                   name={field.name}
                   value={field.value}
-                  options={options}
+                  options={options.map((option) => ({
+                    id: option,
+                    name: option,
+                  }))}
                   onChange={(e) => {
                     if (!e.target.value) return;
 
@@ -73,18 +78,18 @@ export default function ItemPrioritySelector<
             }}
           />
         )}
-      </MuiFormControl>
+      </FormControl>
       {isLoading ? (
-        <MuiSkeleton width="200px" />
+        <Skeleton width="200px" />
       ) : (
         helperText && (
-          <MuiFormHelperText>
-            <MuiTypography component="span" sx={{ fontSize: "13px" }}>
+          <FormHelperText>
+            <Typography component="span" sx={{ fontSize: "13px" }}>
               {helperText}
-            </MuiTypography>
-          </MuiFormHelperText>
+            </Typography>
+          </FormHelperText>
         )
       )}
-    </MuiGrid>
+    </Grid2>
   );
 }

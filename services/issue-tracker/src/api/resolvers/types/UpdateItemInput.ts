@@ -1,4 +1,4 @@
-import { IssueStatus, ItemPriority } from "@issue-tracker/common";
+import { ItemPriority } from "@issue-tracker/common";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
@@ -13,7 +13,7 @@ export class UpdateItemInput {
   type?: string;
 
   @Field({ nullable: true })
-  status?: IssueStatus;
+  statusId?: string;
 
   @Field({ nullable: true })
   priority?: ItemPriority;
