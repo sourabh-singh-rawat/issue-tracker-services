@@ -1,4 +1,9 @@
 import {
+  EMAIL_VERIFICATION_STATUS,
+  EmailVerificationStatus,
+} from "@issue-tracker/common";
+import { AuditEntity } from "@issue-tracker/orm";
+import {
   Column,
   Entity,
   OneToMany,
@@ -6,11 +11,6 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { UserProfile } from "./UserProfile";
-import { AuditEntity } from "@issue-tracker/orm";
-import {
-  EMAIL_VERIFICATION_STATUS,
-  EmailVerificationStatus,
-} from "@issue-tracker/common";
 import { VerificationLink } from "./VerificationLink";
 
 @Entity({ name: "users" })

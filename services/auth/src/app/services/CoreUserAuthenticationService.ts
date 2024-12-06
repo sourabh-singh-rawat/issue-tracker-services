@@ -7,7 +7,10 @@ import {
   UserAlreadyExists,
   UserNotFoundError,
 } from "@issue-tracker/common";
-import { User, VerificationLink } from "../data/entities";
+import { NatsPublisher } from "@issue-tracker/event-bus";
+import { AccessToken, Hash, JwtToken } from "@issue-tracker/security";
+import { v4 } from "uuid";
+import { User, VerificationLink } from "../../data/entities";
 import {
   CreateUserWithEmailAndPasswordOptions,
   GeneratePasswordResetLinkOptions,
@@ -19,10 +22,7 @@ import {
   UserProfileService,
   VerifyEmailVerificationLinkOptions,
   VerifyPasswordResetLinkOptions,
-} from "./Interfaces";
-import { AccessToken, Hash, JwtToken } from "@issue-tracker/security";
-import { v4 } from "uuid";
-import { NatsPublisher } from "@issue-tracker/event-bus";
+} from "./interfaces";
 
 interface CreateVerificationLinkOptions {
   userId: string;

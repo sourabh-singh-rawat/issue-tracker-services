@@ -1,5 +1,8 @@
+import {
+  mockManager,
+  UserProfileMock,
+} from "../../../data/__mocks__/Repository";
 import { CoreUserProfileService } from "../CoreUserProfileService";
-import { mockManager, UserProfileMock } from "../../data/__mocks__/Repository";
 
 describe("CoreUserProfileService", () => {
   const service = new CoreUserProfileService();

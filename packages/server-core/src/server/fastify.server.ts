@@ -1,8 +1,19 @@
-import { Environment, ErrorHandlerUtil } from "@issue-tracker/common";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import cors, { FastifyCorsOptions } from "@fastify/cors";
-import { FastifyInstance, FastifyPluginCallback } from "fastify";
+import { Environment, ErrorHandlerUtil } from "@issue-tracker/common";
+import {
+  FastifyInstance,
+  FastifyPluginCallback,
+  FastifyReply,
+  FastifyRequest,
+} from "fastify";
 import { AppLogger } from "../logger";
+
+export interface AppContext {
+  req: FastifyRequest;
+  rep: FastifyReply;
+  user?: { email: string; userId: string };
+}
 
 interface ServerConfigurationOptions {
   port: number;

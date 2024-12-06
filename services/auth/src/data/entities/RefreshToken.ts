@@ -1,3 +1,4 @@
+import { AuditEntity } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -6,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
-import { AuditEntity } from "@issue-tracker/orm";
 
 @Entity("refresh_tokens")
 export class RefreshToken extends AuditEntity {

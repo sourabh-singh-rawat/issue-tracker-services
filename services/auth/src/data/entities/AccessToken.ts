@@ -1,3 +1,4 @@
+import { AuditEntity } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -5,7 +6,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AuditEntity } from "@issue-tracker/orm";
 import { User } from "./User";
 
 @Entity("access_tokens")
