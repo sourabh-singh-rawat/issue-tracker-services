@@ -1,11 +1,11 @@
 import { ProjectMember } from "../dtos";
-import { IssuePriority, IssueStatus } from "../enums";
+import { IssueStatus, ItemPriority } from "../enums";
 
 export interface IssueFormData {
   name: string;
   projectId: string;
   status: IssueStatus;
-  priority: IssuePriority;
+  priority: ItemPriority;
   reporter: ProjectMember;
   assignees: ProjectMember[];
   resolution: boolean;

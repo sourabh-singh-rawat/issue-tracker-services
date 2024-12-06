@@ -1,5 +1,5 @@
 import { ProjectMember } from ".";
-import { IssuePriority } from "../enums";
+import { ItemPriority } from "../enums";
 import { IssueStatus } from "../enums/issue-status";
 
 interface IssueProps {
@@ -7,7 +7,7 @@ interface IssueProps {
   name: string;
   ownerId: string;
   status: IssueStatus | string;
-  priority: IssuePriority | string;
+  priority: ItemPriority | string;
   projectId: string;
   resolution: boolean;
   createdAt: string | Date;
@@ -23,7 +23,7 @@ export class Issue {
   name: string;
   ownerId: string;
   status: IssueStatus | string;
-  priority: IssuePriority | string;
+  priority: ItemPriority | string;
   projectId: string;
   resolution: boolean;
   createdAt: string | Date;

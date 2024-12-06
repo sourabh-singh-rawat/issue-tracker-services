@@ -1,61 +1,6 @@
-import "dotenv/config";
-import {
-  Broker,
-  NatsBroker,
-  NatsPublisher,
-  Publisher,
-  Subjects,
-} from "@issue-tracker/event-bus";
-import fastify from "fastify";
-import { IssueCommentController } from "./controllers/interfaces/issue-comment.controller";
-import { IssueTaskController } from "./controllers/interfaces/issue-task.controller";
-import { IssueCommentService } from "./services/interfaces/issue-comment.service";
-import { IssueTaskService } from "./services/interfaces/issue-task.service";
-import { UserRepository } from "./data/repositories/interfaces/user.repository";
-import { IssueRepository } from "./data/repositories/interfaces/issue.repository";
-import { ProjectRepository } from "./data/repositories/interfaces/project.repository";
-import { IssueAssigneeRepository } from "./data/repositories/interfaces/issue-assignee.repository";
-import { IssueCommentRepository } from "./data/repositories/interfaces/issue-comment.repository";
-import { IssueTaskRepository } from "./data/repositories/interfaces/issue-task.repository";
-import {
-  AppLogger,
-  AwilixDi,
-  FastifyServer,
-  logger,
-} from "@issue-tracker/server-core";
-import { DataSource } from "typeorm";
-import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { InjectionMode, asClass, asValue, createContainer } from "awilix";
-import { CoreIssueCommentController } from "./controllers/core-issue-comment.controller";
-import { CoreIssueTaskController } from "./controllers/core-issue-task.controller";
-import { CoreIssueCommentService } from "./services/core-issue-comment.service";
-import { CoreIssueTaskService } from "./services/core-issue-task.service";
-import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
-import { PostgresIssueRepository } from "./data/repositories/postgres-issue.repository";
-import { PostgresProjectRepository } from "./data/repositories/postgres-project.repository";
-import { PostgresIssueAssigneeRepository } from "./data/repositories/postgres-issue-assignee.repository";
-import { PostgresIssueCommentRepository } from "./data/repositories/postgres-issue-comment.repository";
-import { PostgresIssueTaskRepository } from "./data/repositories/postgres-issue-task.repository";
-import { UserEmailVerifiedSubscriber } from "./events/subscribers/user-email-verified.subscriber";
-import { WorkspaceController } from "./controllers/interfaces/workspace.controller";
-import { CoreWorkspaceController } from "./controllers/core-workspace.controller";
-import { CoreListService } from "./services/CoreListService";
-import { ListService } from "./services/interfaces/ListService";
-import { WorkspaceService } from "./services/interfaces/WorkspaceService";
-import { CoreWorkspaceService } from "./services/CoreWorkspaceService";
-import { WorkspaceRepository } from "./data/repositories/interfaces/workspace.repository";
-import { PostgresWorkspaceRepository } from "./data/repositories/postgres-workspace.repository";
-import { WorkspaceMemberRepository } from "./data/repositories/interfaces/workspace-member.repository";
-import { PostgresWorkspaceMemberRepository } from "./data/repositories/postgres-workspace-member.repository";
-import { PostgresWorkspaceInviteTokenRepository } from "./data/repositories/postgres-workspace-invite-token.repository";
-import { ProjectActivityController } from "./controllers/interfaces/project-activity.controller";
-import { CoreProjectActivityController } from "./controllers/core-project-activity.controller";
-import { CoreProjectActivityService } from "./services/core-project-activity.service";
-import { ProjectActivityService } from "./services/interfaces/project-activity.service";
-import { PostgresProjectActivityRepository } from "./data/repositories/postgres-project-activity.repository";
-import { ProjectActivityRepository } from "./data/repositories/interfaces/project-activity.repository";
-import { JwtToken } from "@issue-tracker/security";
-import { buildSchema } from "type-graphql";
+import { config } from "dotenv";
+config({ path: "../../.env" });
+
 import { ApolloServer } from "@apollo/server";
 import {
   ApolloFastifyContextFunction,
@@ -63,32 +8,52 @@ import {
   fastifyApolloHandler,
 } from "@as-integrations/fastify";
 import {
-  CoreWorkspaceResolver,
+  Broker,
+  NatsBroker,
+  NatsPublisher,
+  Publisher,
+  Subjects,
+} from "@issue-tracker/event-bus";
+import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
+import { JwtToken } from "@issue-tracker/security";
+import {
+  AppLogger,
+  AwilixDi,
+  FastifyServer,
+  logger,
+} from "@issue-tracker/server-core";
+import { InjectionMode, asClass, asValue, createContainer } from "awilix";
+import fastify from "fastify";
+import { buildSchema } from "type-graphql";
+import { DataSource } from "typeorm";
+import {
   CoreItemResolver,
   CoreListResolver,
   CoreSpaceResolver,
   CoreStatusResolver,
-} from "./Resolvers";
+  CoreWorkspaceResolver,
+} from "./api/resolvers";
 import {
   CoreItemService,
+  CoreListService,
   CoreSpaceService,
   CoreStatusService,
   CoreUserService,
+  CoreWorkspaceService,
   ItemService,
+  ListService,
   SpaceService,
   StatusService,
   UserService,
-} from "./services";
-
+  WorkspaceService,
+} from "./app";
+import { ProjectActivityService } from "./app/services/interfaces/project-activity.service";
+import { UserEmailVerifiedSubscriber } from "./subscribers";
 export interface RegisteredServices {
   logger: AppLogger;
   dataSource: DataSource;
   orm: Typeorm;
   broker: Broker;
-  issueCommentController: IssueCommentController;
-  issueTaskController: IssueTaskController;
-  workspaceController: WorkspaceController;
-  projectActivityController: ProjectActivityController;
   userService: UserService;
   itemService: ItemService;
   listService: ListService;
@@ -96,17 +61,6 @@ export interface RegisteredServices {
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
   spaceService: SpaceService;
-  issueCommentService: IssueCommentService;
-  issueTaskService: IssueTaskService;
-  workspaceRepository: WorkspaceRepository;
-  workspaceMemberRepository: WorkspaceMemberRepository;
-  userRepository: UserRepository;
-  issueRepository: IssueRepository;
-  projectRepository: ProjectRepository;
-  projectActivityRepository: ProjectActivityRepository;
-  issueAssigneeRepository: IssueAssigneeRepository;
-  issueCommentRepository: IssueCommentRepository;
-  issueTaskRepository: IssueTaskRepository;
   userEmailVerifiedSubscriber: UserEmailVerifiedSubscriber;
   publisher: Publisher<Subjects>;
 }
@@ -213,47 +167,12 @@ const main = async () => {
   container.add("dataSource", asValue(dataSource));
   container.add("orm", asValue(orm));
   container.add("broker", asValue(natsBroker));
-  container.add("issueCommentController", asClass(CoreIssueCommentController));
-  container.add("issueTaskController", asClass(CoreIssueTaskController));
-  container.add("workspaceController", asClass(CoreWorkspaceController));
-  container.add(
-    "projectActivityController",
-    asClass(CoreProjectActivityController),
-  );
   container.add("userService", asClass(CoreUserService));
   container.add("itemService", asClass(CoreItemService));
   container.add("statusService", asClass(CoreStatusService));
   container.add("spaceService", asClass(CoreSpaceService));
-  container.add("issueCommentService", asClass(CoreIssueCommentService));
-  container.add("issueTaskService", asClass(CoreIssueTaskService));
   container.add("listService", asClass(CoreListService));
-  container.add("projectActivityService", asClass(CoreProjectActivityService));
-  container.add(
-    "projectActivityRepository",
-    asClass(PostgresProjectActivityRepository),
-  );
   container.add("workspaceService", asClass(CoreWorkspaceService));
-  container.add("workspaceRepository", asClass(PostgresWorkspaceRepository));
-  container.add(
-    "workspaceMemberRepository",
-    asClass(PostgresWorkspaceMemberRepository),
-  );
-  container.add(
-    "workspaceInviteTokenRepository",
-    asClass(PostgresWorkspaceInviteTokenRepository),
-  );
-  container.add("userRepository", asClass(PostgresUserRepository));
-  container.add("issueRepository", asClass(PostgresIssueRepository));
-  container.add("projectRepository", asClass(PostgresProjectRepository));
-  container.add(
-    "issueAssigneeRepository",
-    asClass(PostgresIssueAssigneeRepository),
-  );
-  container.add(
-    "issueCommentRepository",
-    asClass(PostgresIssueCommentRepository),
-  );
-  container.add("issueTaskRepository", asClass(PostgresIssueTaskRepository));
   container.add(
     "userEmailVerifiedSubscriber",
     asClass(UserEmailVerifiedSubscriber),
