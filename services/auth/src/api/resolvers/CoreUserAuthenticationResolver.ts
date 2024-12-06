@@ -1,6 +1,7 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { container } from "../../config";
+import { dataSource } from "../../data";
 import { UserAuthenticationResolver } from "./interfaces";
-import { container, dataSource } from "..";
 import {
   RegisterUserInput,
   SignInWithEmailAndPasswordInput,

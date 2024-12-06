@@ -2,9 +2,8 @@ import {
   UserNotFoundError,
   UserProfileNotFoundError,
 } from "@issue-tracker/common";
-import { dataSource } from "..";
-import { User, UserProfile } from "../data/entities";
-import { CreateUserProfileOptions, UserProfileService } from "./Interfaces";
+import { User, UserProfile } from "../../data/entities";
+import { CreateUserProfileOptions, UserProfileService } from "./interfaces";
 
 export class CoreUserProfileService implements UserProfileService {
   async createUserProfile(options: CreateUserProfileOptions) {
@@ -15,13 +14,10 @@ export class CoreUserProfileService implements UserProfileService {
   }
 
   async getUserProfileWithEmail(email: string) {
-    const UserRepo = dataSource.getRepository(User);
-    const UserProfileRepo = dataSource.getRepository(UserProfile);
-
-    const user = await UserRepo.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email } });
     if (!user) throw new UserNotFoundError();
 
-    const profile = await UserProfileRepo.findOne({
+    const profile = await UserProfile.findOne({
       where: { userId: user.id },
     });
     if (!profile) throw new UserProfileNotFoundError();

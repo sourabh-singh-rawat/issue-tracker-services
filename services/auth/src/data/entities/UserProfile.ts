@@ -1,11 +1,11 @@
-import {
-  OneToOne,
-  Column,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-  Entity,
-} from "typeorm";
 import { AuditEntity } from "@issue-tracker/orm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { User } from "./User";
 
 @Entity("user_profiles")

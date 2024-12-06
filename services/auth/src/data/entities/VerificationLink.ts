@@ -1,3 +1,7 @@
+import {
+  EMAIL_VERIFICATION_TOKEN_STATUS,
+  EmailVerificationTokenStatus,
+} from "@issue-tracker/common";
 import { AuditEntity } from "@issue-tracker/orm";
 import {
   Column,
@@ -7,10 +11,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import {
-  EMAIL_VERIFICATION_TOKEN_STATUS,
-  EmailVerificationTokenStatus,
-} from "@issue-tracker/common";
 import { User } from "./User";
 
 @Entity({ name: "verification_links" })

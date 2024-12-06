@@ -6,7 +6,6 @@ import {
   Subscriber,
   UserEmailConfirmationSentPayload,
 } from "@issue-tracker/event-bus";
-import { EMAIL_VERIFICATION_STATUS } from "@issue-tracker/common";
 import { JsMsg } from "nats";
 
 export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailConfirmationSentPayload> {
