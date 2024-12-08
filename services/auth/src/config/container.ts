@@ -1,7 +1,7 @@
 import { NatsPublisher, Publisher, Subjects } from "@issue-tracker/event-bus";
-import { Typeorm } from "@issue-tracker/orm";
 import { AppLogger, AwilixDi, logger } from "@issue-tracker/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
+import { DataSource } from "typeorm";
 import {
   CoreUserAuthenticationService,
   CoreUserProfileService,
@@ -13,7 +13,7 @@ import { dataSource } from "../data";
 import { broker } from "./broker";
 
 export interface RegisteredServices {
-  orm: Typeorm;
+  dataSource: DataSource;
   logger: AppLogger;
   publisher: Publisher<Subjects>;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;

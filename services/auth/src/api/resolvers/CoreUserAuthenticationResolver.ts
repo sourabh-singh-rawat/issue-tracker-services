@@ -37,6 +37,7 @@ export class CoreUserAuthenticationResolver
     @Arg("input") input: SignInWithEmailAndPasswordInput,
   ) {
     const service = container.get("userAuthenticationService");
+    const dataSource = container.get("dataSource");
 
     const { accessToken, refreshToken } = await dataSource.transaction(
       async (manager) => {
