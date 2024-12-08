@@ -1,7 +1,7 @@
+import "reflect-metadata";
+
 import { config } from "dotenv";
 config({ path: "../../.env" });
-
-import "reflect-metadata";
 
 import { ApolloServer } from "@apollo/server";
 import {
