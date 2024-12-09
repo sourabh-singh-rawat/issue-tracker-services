@@ -5,14 +5,14 @@ import MuiGrid from "@mui/material/Grid";
 
 import TabPanel from "../../../../common/components/TabPanel";
 
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import ProjectDetails from "../../components/ProjectDetails";
 import Description2 from "../../../../common/components/ItemDescription";
 
 export default function ProjectOverview() {
   const theme = useTheme();
-  const { showSuccess, showError } = useMessageBar();
+  const { showSuccess, showError } = useSnackbar();
   const { id, selectedTab, page, isLoading } = useSelectedTab();
   const [updateProject, { isSuccess, isError }] = useState();
 

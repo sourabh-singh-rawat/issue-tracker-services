@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Select from "../../../../common/components/Select";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import { SelectChangeEvent } from "@mui/material";
 import { useUpdateIssueResolutionMutation } from "../../../../api/generated/issue.api";
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function IssueResolutionSelector({ id, value }: Props) {
-  const { showSuccess, showError } = useMessageBar();
+  const { showSuccess, showError } = useSnackbar();
   const [updateIssueResolution, { isSuccess, isError }] =
     useUpdateIssueResolutionMutation();
 

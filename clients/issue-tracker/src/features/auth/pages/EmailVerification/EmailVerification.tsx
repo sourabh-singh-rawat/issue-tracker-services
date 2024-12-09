@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
 import MuiGrid from "@mui/material/Grid";
-import { useVerifyVerificationLinkMutation } from "../../../../api/codegen/gql/graphql";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useVerifyVerificationLinkMutation } from "../../../../api/codegen/gql/graphql";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 export function EmailVerification() {
   const [pageMessage, setPageMessage] = useState(
@@ -10,7 +10,7 @@ export function EmailVerification() {
   );
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const messageBar = useMessageBar();
+  const messageBar = useSnackbar();
   const [verifyVerificationLink] = useVerifyVerificationLinkMutation({
     onError(error) {
       messageBar.showError(error.message);

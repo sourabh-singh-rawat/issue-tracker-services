@@ -9,7 +9,7 @@ import TabPanel from "../../../../common/components/TabPanel";
 import IssueAssignees from "../../../../common/components/IssueAssignees";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import Avatar from "../../../../common/components/Avatar";
 
 import MuiTable from "@mui/material/Table";
@@ -26,7 +26,7 @@ import Description2 from "../../../../common/components/ItemDescription";
 export default function IssueOverview() {
   const theme = useTheme();
   const { id, selectedTab, page, isLoading } = useSelectedTab();
-  const { showSuccess, showError } = useMessageBar();
+  const { showSuccess, showError } = useSnackbar();
 
   const [updateIssueMutation, { isSuccess, isError }] = useState();
   const { data: statuses } = useState();

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import DoneIcon from "@mui/icons-material/Done";
 
 import AppLoader from "../../../../common/components/AppLoader";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 import { useTheme } from "@mui/material";
 
@@ -33,7 +33,7 @@ export default function WorkspaceListItem({
   if (!option) return "Render Error";
 
   const { id, name } = option;
-  const { showSuccess, showError } = useMessageBar();
+  const { showSuccess, showError } = useSnackbar();
   // const [setDefaultWorkspace, { isLoading, isSuccess, isError }] =
   //   useSetDefaultWorkspaceMutation();
   const isLoading = false;

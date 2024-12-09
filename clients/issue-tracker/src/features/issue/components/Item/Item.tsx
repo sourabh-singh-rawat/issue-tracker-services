@@ -12,13 +12,13 @@ import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
 import ItemAttachments from "../../../issue-attachments/pages/ItemAttachments";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import ItemModal from "../ItemModal";
 
 export interface ItemProps {}
 
 export default function Item(props: ItemProps) {
-  const messageBar = useMessageBar();
+  const messageBar = useSnackbar();
   const theme = useTheme();
   const { listId, itemId } = useParams<{ listId: string; itemId: string }>();
   const { data: item } = useFindItemQuery({

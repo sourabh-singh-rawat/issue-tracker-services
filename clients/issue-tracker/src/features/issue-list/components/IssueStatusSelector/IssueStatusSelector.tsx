@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
-import { useMessageBar } from "../../../message-bar/hooks";
+import React, { useEffect, useState } from "react";
 import Select from "../../../../common/components/Select";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 interface IssueStatusSelectorProps {
   id: string;
@@ -10,13 +10,10 @@ interface IssueStatusSelectorProps {
   isDisabled?: boolean;
 }
 
-export default function IssueStatusSelector({
-  id,
-  value,
-  options = [],
-  isDisabled,
-}: IssueStatusSelectorProps) {
-  const { showSuccess, showError } = useMessageBar();
+export default function IssueStatusSelector(
+  { id, value, options = [], isDisabled }: IssueStatusSelectorProps,
+) {
+  const { showSuccess, showError } = useSnackbar();
   const [updateIssueStatus, { isSuccess, isError }] = useState();
 
   const handleChange = async (e: SelectChangeEvent<string>) => {

@@ -1,16 +1,15 @@
-import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Grid2 from "@mui/material/Grid2";
 import MuiContainer from "@mui/material/Container";
-import MuiTypography from "@mui/material/Typography";
-import TextField from "../../../../common/components/forms/TextField";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
+import Grid2 from "@mui/material/Grid2";
+import React, { useMemo } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import {
   CreateListInput,
   useCreateListMutation,
 } from "../../../../api/codegen/gql/graphql";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
+import TextField from "../../../../common/components/forms/TextField";
 
 interface ListFormProps {
   spaceId: string;
@@ -18,7 +17,7 @@ interface ListFormProps {
 
 export default function ListForm({ spaceId }: ListFormProps) {
   const navigate = useNavigate();
-  const messageBar = useMessageBar();
+  const messageBar = useSnackbar();
   const [createList] = useCreateListMutation({
     onCompleted({ createList }) {
       messageBar.showSuccess("Created list successfully");
