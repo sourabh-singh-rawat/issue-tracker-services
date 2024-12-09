@@ -8,7 +8,6 @@ import {
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
-import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -24,7 +23,7 @@ if (!element) throw new Error("Cannot find root element in DOM");
 
 const root = createRoot(element);
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000",
+  uri: import.meta.env.VITE_SUPERGRAPH_URL,
   credentials: "include",
 });
 const client = new ApolloClient({
