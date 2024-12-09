@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
-import { useMessageBar } from "../../../message-bar/hooks";
+import React, { useEffect, useState } from "react";
 import Select from "../../../../common/components/Select";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 interface Props {
   id?: string;
@@ -9,12 +9,10 @@ interface Props {
   options?: string[];
 }
 
-export default function ProjectStatusSelector({
-  id,
-  value,
-  options = [],
-}: Props) {
-  const { showSuccess, showError } = useMessageBar();
+export default function ProjectStatusSelector(
+  { id, value, options = [] }: Props,
+) {
+  const { showSuccess, showError } = useSnackbar();
   const [updateProject, { isSuccess, isError }] = useState([]);
 
   const handleChange = async (e: SelectChangeEvent<string>) => {

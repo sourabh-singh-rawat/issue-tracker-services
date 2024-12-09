@@ -9,7 +9,7 @@ import {
 } from "../../../../api/generated/project.api";
 import { useSelectedTab } from "../../../../common/hooks";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import EmailIcon from "@mui/icons-material/Email";
 import AppLoader from "../../../../common/components/AppLoader";
 
@@ -27,7 +27,7 @@ export default function RoleSelector({
   workspaceId,
 }: RoleSelectorProps) {
   const { id } = useSelectedTab();
-  const { showError, showSuccess } = useMessageBar();
+  const { showError, showSuccess } = useSnackbar();
   const [role, setRole] = useState(defaultRole ? defaultRole : "member");
   const { data: projectRoleList } = useGetProjectRoleListQuery({ id });
   const [createProjectInvite, { isSuccess, isLoading, isError, error }] =

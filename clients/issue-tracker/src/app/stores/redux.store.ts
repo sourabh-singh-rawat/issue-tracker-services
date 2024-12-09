@@ -1,15 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import logger from "redux-logger";
+import { attachmentApi } from "../../api/codegen/rest/attachment.api";
 import authSlice from "../../features/auth/auth.slice";
 import issueListSlice from "../../features/issue-list/issue-list.slice";
 import issueSlice from "../../features/issue/issue.slice";
-import messageBarSlice from "../../features/message-bar/message-bar.slice";
 import profileSlice from "../../features/profile/profile.slice";
 import projectListSlice from "../../features/project-list/project-list.slice";
 import taskListSlice from "../../features/task-list/task-list.slice";
 import workspaceSlice from "../../features/workspace/workspace.slice";
-import { attachmentApi } from "../../api/codegen/rest/attachment.api";
-import logger from "redux-logger";
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +19,6 @@ export const store = configureStore({
     issueList: issueListSlice,
     profile: profileSlice,
     projectList: projectListSlice,
-    messageBar: messageBarSlice,
     taskList: taskListSlice,
   },
   middleware: (getDefaultMiddleware) =>

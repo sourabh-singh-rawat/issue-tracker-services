@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useGridApiContext } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useGridApiContext } from "@mui/x-data-grid";
 
 import IssueAssigneeSelector from "../../../../common/IssueAssigneeSelector";
 
 import { useUpdateIssueMutation } from "../../../issue/issue.api";
 import { useGetProjectMembersQuery } from "../../../Lists/project.api";
 
+import { setMessageBarOpen } from "../../../../common/components/Snackbar/message-bar.slice";
 import { updateIssue } from "../../../issue/issue.slice";
-import { setMessageBarOpen } from "../../../message-bar/message-bar.slice";
 
 // eslint-disable-next-line object-curly-newline
 function SelectAssigneeEditCell({ id, value, field, ...rest }) {

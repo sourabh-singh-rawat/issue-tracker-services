@@ -8,7 +8,7 @@ import Avatar from "../../../../common/components/Avatar";
 import MenuItem from "../../../../common/components/MenuItem";
 
 import StyledMenu from "../../../../common/components/styled/StyledMenu";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
 import StyledList from "../../../../common/components/styled/StyledList";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import { logout } from "../../auth.slice";
 export default function AccountSwitcher() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const { showSuccess } = useMessageBar();
+  const { showSuccess } = useSnackbar();
   const [revokeTokens, { isSuccess }] = useState();
   const dispatch = useAppDispatch();
 

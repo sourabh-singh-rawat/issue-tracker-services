@@ -8,7 +8,7 @@ import { IconButton, styled, useTheme } from "@mui/material";
 import AppLoader from "../../../../common/components/AppLoader";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
 import {
   useDeleteAttachmentMutation,
@@ -34,8 +34,8 @@ interface ItemAttachmentProps {
 
 export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
   const theme = useTheme();
-  const messageBar = useMessageBar();
-  const { showSuccess } = useMessageBar();
+  const messageBar = useSnackbar();
+  const { showSuccess } = useSnackbar();
   const [createAttachment, { isLoading }] = useCreateAttachmentMutation();
   const { data: attachments, refetch } = useFindAttachmentsQuery({
     variables: { itemId },

@@ -1,33 +1,41 @@
 import React, { useMemo } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { ajvResolver } from "@hookform/resolvers/ajv";
-import AjvFormats from "ajv-formats";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import MuiContainer from "@mui/material/Container";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
-import TextField from "../../../../common/components/forms/TextField";
+import { useNavigate } from "react-router-dom";
+import { useSignInWithEmailAndPasswordMutation } from "../../../../api/codegen/gql/graphql";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import PasswordField from "../../../../common/components/forms/PasswordField";
-import { authService } from "../../../../app/trpc";
-import { useAppDispatch } from "../../../../common/hooks";
-import { useSignInWithEmailAndPasswordMutation } from "../../../../api/codegen/gql/graphql";
+import TextField from "../../../../common/components/forms/TextField";
 
 export default function LoginForm() {
+  const messageBar = useSnackbar();
   const defaultValues = useMemo(() => ({ email: "", password: "" }), []);
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation();
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation({
+    onError(error) {
+      messageBar.showError(error.message);
+    },
+    onCompleted() {
+      messageBar.showSuccess("Success. You are being redirected");
+      setTimeout(() => {
+        navigate("/");
+      }, 2500);
+    },
+  });
 
   const { control, formState, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
-    email,
-    password,
-  }) => {
+  const onSubmit: SubmitHandler<typeof defaultValues> = async (
+    { email, password },
+  ) => {
     await signInWithEmailAndPassword({
       variables: { input: { email, password } },
     });

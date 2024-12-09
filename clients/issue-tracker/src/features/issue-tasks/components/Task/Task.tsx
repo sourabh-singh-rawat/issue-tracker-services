@@ -9,7 +9,7 @@ import TextField from "../../../../common/components/styled/StyledTextField";
 
 import { useTheme } from "@mui/material";
 import { useUpdateIssueTaskMutation } from "../../../../api/generated/issue.api";
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 
@@ -24,15 +24,12 @@ interface TaskProps {
   completed: boolean;
 }
 
-export default function Task({
-  taskId,
-  dueDate,
-  description,
-  completed,
-}: TaskProps) {
+export default function Task(
+  { taskId, dueDate, description, completed }: TaskProps,
+) {
   const theme = useTheme();
   const { id } = useParams();
-  const { showSuccess } = useMessageBar();
+  const { showSuccess } = useSnackbar();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [task, setTask] = useState({ taskId, dueDate, description, completed });

@@ -1,22 +1,20 @@
-import React, { useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import { SubmitHandler, useForm } from "react-hook-form";
-import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import TextField from "../../../../common/components/forms/TextField";
-import DatePicker from "../../../../common/components/DatePicker";
-import FormAutocomplete from "../../../../common/components/FormAutocomplete";
-import IssueStatusSelector from "../../components/ItemStatusSelector";
-import IssuePrioritySelector from "../../components/ItemPrioritySelector";
+import MuiGrid from "@mui/material/Grid";
+import dayjs from "dayjs";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   CreateItemInput,
   useCreateItemMutation,
 } from "../../../../api/codegen/gql/graphql";
-import { useMessageBar } from "../../../message-bar/hooks";
-import dayjs from "dayjs";
-import { SpaceContext } from "../../../../common";
+import DatePicker from "../../../../common/components/DatePicker";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
+import TextField from "../../../../common/components/forms/TextField";
+import IssuePrioritySelector from "../../components/ItemPrioritySelector";
+import IssueStatusSelector from "../../components/ItemStatusSelector";
 
 interface ItemFormProps {
   listId: string;
@@ -25,7 +23,7 @@ interface ItemFormProps {
 
 function ItemForm({ listId, parentItemId }: ItemFormProps) {
   const navigate = useNavigate();
-  const messageBar = useMessageBar();
+  const messageBar = useSnackbar();
   const [createItem] = useCreateItemMutation({
     onCompleted(response) {
       messageBar.showSuccess("Item created successfully");
@@ -49,16 +47,18 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
     mode: "all",
   });
 
-  const onSubmit: SubmitHandler<CreateItemInput> = async ({
-    name,
-    description,
-    statusId,
-    listId,
-    type,
-    assigneeIds,
-    priority,
-    dueDate,
-  }) => {
+  const onSubmit: SubmitHandler<CreateItemInput> = async (
+    {
+      name,
+      description,
+      statusId,
+      listId,
+      type,
+      assigneeIds,
+      priority,
+      dueDate,
+    },
+  ) => {
     console.log(parentItemId);
     await createItem({
       variables: {

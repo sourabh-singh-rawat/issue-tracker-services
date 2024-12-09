@@ -1,8 +1,8 @@
-import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import AvatarGroup from "../AvatarGroup";
-import { useMessageBar } from "../../../features/message-bar/hooks";
+import React, { useState } from "react";
 import AddIssueAssigneeModal from "../../../features/issue/components/AddIssueAssigneeModal";
+import AvatarGroup from "../AvatarGroup";
+import { useSnackbar } from "../Snackbar/hooks";
 
 interface Props {
   projectId: string;
@@ -10,14 +10,12 @@ interface Props {
   options?: string[];
 }
 
-export default function IssueAssignees({
-  projectId,
-  value,
-  options = [],
-}: Props) {
+export default function IssueAssignees(
+  { projectId, value, options = [] }: Props,
+) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const { showSuccess, showError } = useMessageBar();
+  const { showSuccess, showError } = useSnackbar();
   const handleChange = async () => {};
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

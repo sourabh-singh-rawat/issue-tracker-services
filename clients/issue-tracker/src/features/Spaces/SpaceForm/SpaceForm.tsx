@@ -1,21 +1,21 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { Container, Grid2, Typography } from "@mui/material";
-import { useMessageBar } from "../../message-bar/hooks";
+import { Container, Grid2 } from "@mui/material";
 import {
   CreateSpaceInput,
   useCreateSpaceMutation,
 } from "../../../api/codegen/gql/graphql";
-import TextField from "../../../common/components/forms/TextField";
+import { useSnackbar } from "../../../common/components/Snackbar/hooks";
 import PrimaryButton from "../../../common/components/buttons/PrimaryButton";
+import TextField from "../../../common/components/forms/TextField";
 
 interface SpaceFormProps {
   workspaceId: string;
 }
 
 export function SpaceForm({ workspaceId }: SpaceFormProps) {
-  const messageBar = useMessageBar();
+  const messageBar = useSnackbar();
   const [createSpace] = useCreateSpaceMutation({
     onCompleted() {
       messageBar.showSuccess("Space created successfully");
@@ -26,10 +26,9 @@ export function SpaceForm({ workspaceId }: SpaceFormProps) {
   });
   const { control, formState, handleSubmit } = useForm<CreateSpaceInput>();
 
-  const onSubmit: SubmitHandler<CreateSpaceInput> = async ({
-    name,
-    description,
-  }) => {
+  const onSubmit: SubmitHandler<CreateSpaceInput> = async (
+    { name, description },
+  ) => {
     await createSpace({
       variables: { input: { name, description, workspaceId } },
     });

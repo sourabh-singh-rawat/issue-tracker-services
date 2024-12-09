@@ -10,7 +10,7 @@ import MuiGrid from "@mui/material/Grid";
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
 
-import { useMessageBar } from "../../../message-bar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
@@ -24,7 +24,7 @@ export default function Issue() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { showSuccess, showError } = useMessageBar();
+  const { showSuccess, showError } = useSnackbar();
   const [issue, setIssue] = useState({ name: "", updatedAt: "" });
 
   const { data, ...issueRequest } = useState({ id });
