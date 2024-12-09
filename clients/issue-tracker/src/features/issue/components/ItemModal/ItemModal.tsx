@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { PestControl } from "@mui/icons-material";
+import { useState } from "react";
 import Modal from "../../../../common/components/Modal";
 import ModalBody from "../../../../common/components/ModalBody";
 import ModalHeader from "../../../../common/components/ModalHeader";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import ItemForm from "../../pages/ItemForm";
-import MuiIconButton from "@mui/material/IconButton";
-import { GridAddIcon } from "@mui/x-data-grid";
 
 interface ItemModalProps {
   listId: string;
@@ -18,9 +18,11 @@ export default function ItemModal({ listId, parentItemId }: ItemModalProps) {
 
   return (
     <>
-      <MuiIconButton size="small" onClick={handleOpen}>
-        <GridAddIcon />
-      </MuiIconButton>
+      <PrimaryButton
+        label="Add"
+        onClick={handleOpen}
+        startIcon={<PestControl />}
+      />
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader title="New Item" handleClose={handleClose} subtitle="" />
         <ModalBody>

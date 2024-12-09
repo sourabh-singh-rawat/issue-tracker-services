@@ -71,6 +71,7 @@ type Mutation {
   createList(input: CreateListInput!): String!
   createSpace(input: CreateSpaceInput!): String!
   createWorkspace(input: CreateWorkspaceInput!): String!
+  deleteItem: String!
   updateItem(input: UpdateItemInput!): String!
 }
 

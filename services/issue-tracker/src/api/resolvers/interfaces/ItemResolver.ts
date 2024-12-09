@@ -10,5 +10,6 @@ export interface ItemResolver {
   findItem(ctx: any, id: string): Promise<Item | null>;
   findListItems(ctx: any, listId: string): Promise<Item[]>;
   findSubItems(ctx: any, options: FindItemsInput): Promise<Item[]>;
-  updateItem(ctx: any, update: UpdateItemInput): Promise<string>;
+  updateItem(ctx: any, options: UpdateItemInput): Promise<string>;
+  deleteItem(ctx: any, id: string): Promise<string>;
 }

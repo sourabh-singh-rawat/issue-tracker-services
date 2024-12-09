@@ -1,6 +1,5 @@
-import React from "react";
-import MuiTabs from "@mui/material/Tabs";
 import { useTheme } from "@mui/material";
+import MuiTabs from "@mui/material/Tabs";
 
 export default function Tabs(props) {
   const theme = useTheme();
@@ -10,7 +9,6 @@ export default function Tabs(props) {
       {...props}
       sx={{
         px: theme.spacing(4),
-        borderBottom: `1px solid ${theme.palette.divider}`,
         ".MuiButtonBase-root": {
           padding: 0,
           minWidth: "auto",

@@ -12,7 +12,7 @@ import { AppLogger } from "../logger";
 export interface AppContext {
   req: FastifyRequest;
   rep: FastifyReply;
-  user?: { email: string; userId: string };
+  user: { email: string; userId: string };
 }
 
 interface ServerConfigurationOptions {
