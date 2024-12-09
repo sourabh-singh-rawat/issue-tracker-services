@@ -1,8 +1,7 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Grid2 } from "@mui/material";
 import MuiContainer from "@mui/material/Container";
-import MuiGrid from "@mui/material/Grid";
 import dayjs from "dayjs";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -10,7 +9,7 @@ import {
   useCreateItemMutation,
 } from "../../../../api/codegen/gql/graphql";
 import DatePicker from "../../../../common/components/DatePicker";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+import { useSnackbar } from "../../../../common/components/Snackbar";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import TextField from "../../../../common/components/forms/TextField";
 import IssuePrioritySelector from "../../components/ItemPrioritySelector";
@@ -83,17 +82,17 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       disableGutters
     >
-      <MuiGrid container spacing={2}>
-        <MuiGrid sm={12} xs={12} item>
+      <Grid2 container spacing={2}>
+        <Grid2 size={12}>
           <TextField
             name="name"
             title="Name"
             control={control}
             formState={formState}
           />
-        </MuiGrid>
+        </Grid2>
 
-        <MuiGrid sm={12} xs={12} item>
+        <Grid2 size={12}>
           <TextField
             name="description"
             title="Description"
@@ -101,18 +100,18 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
             formState={formState}
             rows={4}
           />
-        </MuiGrid>
+        </Grid2>
 
-        <MuiGrid sm={6} xs={6} item>
+        <Grid2 size={6}>
           <IssueStatusSelector
             name="statusId"
             title="Status"
             control={control}
             formState={formState}
           />
-        </MuiGrid>
+        </Grid2>
 
-        <MuiGrid sm={6} xs={6} item>
+        <Grid2 size={6}>
           <IssuePrioritySelector
             name="priority"
             title="Priority"
@@ -120,9 +119,9 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
             formState={formState}
             options={["Low"]}
           />
-        </MuiGrid>
+        </Grid2>
 
-        {/* <MuiGrid sm={12} xs={12} item>
+        {/* <Grid2 size={12} >
           <FormAutocomplete
             name="assigneeIds"
             title="Assignees"
@@ -134,21 +133,21 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
             }))}
             isMultiple
           />
-        </MuiGrid> */}
+        </Grid2> */}
 
-        <MuiGrid sm={6} xs={12} item>
+        <Grid2 size={6}>
           <DatePicker
             name="dueDate"
             title="Due Date"
             control={control}
             formState={formState}
           />
-        </MuiGrid>
-        <MuiGrid sm={6} xs={12} item></MuiGrid>
-        <MuiGrid xs={12} item>
+        </Grid2>
+        <Grid2 size={6}></Grid2>
+        <Grid2 size={6}>
           <PrimaryButton label="Create Issue" type="submit" />
-        </MuiGrid>
-      </MuiGrid>
+        </Grid2>
+      </Grid2>
     </MuiContainer>
   );
 }
