@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
 import {
   GridCallbackDetails,
   GridColDef,
@@ -6,7 +6,7 @@ import {
   GridValidRowModel,
   DataGrid as MuiDataGrid,
 } from "@mui/x-data-grid";
-import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 
 const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => {
   const palette = theme.palette;
@@ -46,15 +46,17 @@ interface Props {
   hideFooter?: boolean;
 }
 
-export default function List({
-  rows = [],
-  rowCount = 0,
-  columns = [],
-  isLoading,
-  hideFooter = false,
-  paginationModel,
-  onPaginationModelChange,
-}: Props) {
+export default function List(
+  {
+    rows = [],
+    rowCount = 0,
+    columns = [],
+    isLoading,
+    hideFooter = false,
+    paginationModel,
+    onPaginationModelChange,
+  }: Props,
+) {
   const [rowCountState, setRowCountState] = useState(rowCount);
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import { dataSource } from "../..";
 import { Item, ItemAssignee } from "../../data";
 import {
   CreateItemOptions,
+  DeleteItemOptions,
   FindItemOptions,
   FindListItemsOptions,
   FindSubItemsOptions,
@@ -158,4 +159,12 @@ export class CoreItemService implements ItemService {
 
     // await this.issueAssigneeRepository.save();
   };
+
+  async deleteItem(options: DeleteItemOptions) {
+    const { id, manager } = options;
+
+    const ItemRepo = manager.getRepository(Item);
+
+    await ItemRepo.delete({ id });
+  }
 }

@@ -1,3 +1,4 @@
+import { AppContext } from "@issue-tracker/server-core";
 import {
   Arg,
   Ctx,
@@ -28,7 +29,10 @@ export class PaginatedItem {
 @Resolver()
 export class CoreItemResolver implements ItemResolver {
   @Mutation(() => String)
-  async createItem(@Ctx() ctx: any, @Arg("input") input: CreateItemInput) {
+  async createItem(
+    @Ctx() ctx: AppContext,
+    @Arg("input") input: CreateItemInput,
+  ) {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
@@ -38,7 +42,7 @@ export class CoreItemResolver implements ItemResolver {
   }
 
   @Query(() => Item, { nullable: true })
-  async findItem(@Ctx() ctx: any, @Arg("id") id: string) {
+  async findItem(@Ctx() ctx: AppContext, @Arg("id") id: string) {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
@@ -46,7 +50,7 @@ export class CoreItemResolver implements ItemResolver {
   }
 
   @Query(() => [Item])
-  async findListItems(@Ctx() ctx: any, @Arg("listId") listId: string) {
+  async findListItems(@Ctx() ctx: AppContext, @Arg("listId") listId: string) {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
@@ -54,7 +58,10 @@ export class CoreItemResolver implements ItemResolver {
   }
 
   @Query(() => [Item])
-  async findSubItems(@Ctx() ctx: any, @Arg("input") input: FindItemsInput) {
+  async findSubItems(
+    @Ctx() ctx: AppContext,
+    @Arg("input") input: FindItemsInput,
+  ) {
     const { listId, parentItemId } = input;
     const userId = ctx.user.userId;
     const service = container.get("itemService");
@@ -63,7 +70,10 @@ export class CoreItemResolver implements ItemResolver {
   }
 
   @Mutation(() => String)
-  async updateItem(@Ctx() ctx: any, @Arg("input") input: UpdateItemInput) {
+  async updateItem(
+    @Ctx() ctx: AppContext,
+    @Arg("input") input: UpdateItemInput,
+  ) {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
     const { itemId } = input;
@@ -73,5 +83,17 @@ export class CoreItemResolver implements ItemResolver {
     });
 
     return "Updated successfully";
+  }
+
+  @Mutation(() => String)
+  async deleteItem(@Ctx() ctx: AppContext, id: string) {
+    const userId = ctx.user.userId;
+    const service = container.get("itemService");
+
+    await dataSource.transaction(async (manager) => {
+      return await service.deleteItem({ id, manager });
+    });
+
+    return "Deleted successfully";
   }
 }

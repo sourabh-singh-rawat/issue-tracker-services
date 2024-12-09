@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useTheme } from "@mui/material";
-import daysjs from "dayjs";
 import MuiTypography from "@mui/material/Typography";
-import List from "../../../../common/components/List";
 import {
   GridColDef,
-  GridValidRowModel,
   GridPaginationModel,
+  GridValidRowModel,
 } from "@mui/x-data-grid";
-import AvatarGroup from "../../../../common/components/AvatarGroup";
-import IssueStatusSelector from "../IssueStatusSelector";
-import IssuePrioritySelector from "../IssuePrioritySelector";
+import daysjs from "dayjs";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useFindListItemsQuery } from "../../../../api/codegen/gql/graphql";
+import List from "../../../../common/components/List";
+import IssuePrioritySelector from "../IssuePrioritySelector";
+import IssueStatusSelector from "../IssueStatusSelector";
 
 interface ItemListProps {
   listId: string;
@@ -69,7 +68,7 @@ export default function ItemList({ listId }: ItemListProps) {
         <IssueStatusSelector
           id={id as string}
           value={value}
-          options={row?.statusList}
+          options={row.statusList}
         />
       ),
     },
@@ -81,52 +80,8 @@ export default function ItemList({ listId }: ItemListProps) {
         <IssuePrioritySelector
           id={id as string}
           value={value}
-          options={row?.priorityList}
+          options={row.priorityList}
         />
-      ),
-    },
-    {
-      field: "assignees",
-      headerName: "Assignee",
-      renderCell: ({ value }) => {
-        return (
-          <AvatarGroup
-            onClick={() => {}}
-            max={2}
-            members={value?.map(({ id, user }) => ({
-              id: user.id,
-              name: user.displayName,
-            }))}
-            total={value?.length}
-          />
-        );
-      },
-    },
-    {
-      field: "reporter",
-      headerName: "Reporter",
-      width: 200,
-      renderCell: ({ value }) => (
-        <Link
-          style={{
-            display: "flex",
-            alignItems: "center",
-            textDecoration: "none",
-          }}
-          // to={`/profile/${value.id}`}
-        >
-          {/* <Avatar label={value.displayName} /> */}
-          <MuiTypography
-            sx={{
-              pl: theme.spacing(1),
-              color: theme.palette.text.primary,
-              "&:hover": { color: theme.palette.primary.main },
-            }}
-            variant="body2"
-          >
-            {/* {value.displayName} */}
-          </MuiTypography>
-        </Link>
       ),
     },
     {
@@ -142,49 +97,18 @@ export default function ItemList({ listId }: ItemListProps) {
           "-"
         ),
     },
-    {
-      field: "createdAt",
-      headerName: "Created At",
-      width: 125,
-      renderCell: ({ value }) =>
-        value ? (
-          <MuiTypography variant="body2" noWrap>
-            {daysjs().to(daysjs(value))}
-          </MuiTypography>
-        ) : (
-          "-"
-        ),
-    },
-    {
-      field: "project.name",
-      headerName: "Project",
-      width: 125,
-      renderCell: ({ value }) => (
-        <MuiTypography variant="body2" noWrap>
-          {value}
-        </MuiTypography>
-      ),
-    },
-    {
-      field: "id",
-      headerName: "Issue Id",
-      minWidth: 125,
-      renderCell: ({ value }) => (
-        <MuiTypography variant="body2" noWrap>
-          {value}
-        </MuiTypography>
-      ),
-    },
   ];
 
   return (
-    <List
-      rows={items?.findListItems || []}
-      columns={columns}
-      paginationModel={paginationModel}
-      onPaginationModelChange={onPaginationModelChange}
-      rowCount={10}
-      isLoading={isLoading}
-    />
+    items && (
+      <List
+        rows={items.findListItems}
+        columns={columns}
+        paginationModel={paginationModel}
+        onPaginationModelChange={onPaginationModelChange}
+        rowCount={10}
+        isLoading={isLoading}
+      />
+    )
   );
 }

@@ -48,6 +48,10 @@ export interface FindListItemsOptions {
   userId: string;
 }
 
+export interface DeleteItemOptions extends ServiceOptions {
+  id: string;
+}
+
 export interface ItemService {
   createItem(options: CreateItemOptions): Promise<string>;
   findItem(options: FindItemOptions): Promise<Item | null>;
@@ -67,4 +71,5 @@ export interface ItemService {
     id: string,
     resolution: boolean,
   ): Promise<void>;
+  deleteItem(options: DeleteItemOptions): Promise<void>;
 }

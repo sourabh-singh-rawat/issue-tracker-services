@@ -1,29 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams, Outlet } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 dayjs.extend(relativeTime);
 
 import { Grid2, useTheme } from "@mui/material";
 
+import {
+  FindStatusesQuery,
+  useFindStatusesQuery,
+} from "../../../../api/codegen/gql/graphql";
+import { SpaceContext } from "../../../../common";
+import { OutletContext } from "../../../../common/Interfaces";
 import Tab from "../../../../common/components/Tab";
 import Tabs from "../../../../common/components/Tabs";
-import { OutletContext } from "../../../../common/Interfaces";
-import { useFindStatusesQuery } from "../../../../api/codegen/gql/graphql";
-import { SpaceContext } from "../../../../common";
+import { AddItemButton } from "../../../issue/components/AddItemButton";
 
 export function List() {
   const theme = useTheme();
   const { spaceId, listId, itemId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [statuses, setStatuses] = useState<FindStatusesQuery["findStatuses"]>(
+    [],
+  );
   const { data } = useFindStatusesQuery({
     variables: { input: { spaceId: spaceId as string } },
     skip: !spaceId,
+    onCompleted(response) {
+      setStatuses(response.findStatuses);
+    },
   });
 
-  console.log(location.pathname);
   const tabName = location.pathname.split("/")[4] || "board";
   const mapPathToIndex: Record<string, number> = { board: 0, items: 1 };
   const mapIndexToTab: Record<number, string> = {
@@ -43,7 +52,7 @@ export function List() {
     listId,
     itemId,
     selectedTab,
-    status: data?.findStatuses || [],
+    status: statuses,
   };
 
   useEffect(() => {
@@ -51,14 +60,29 @@ export function List() {
   }, [tabName, listId]);
 
   return (
-    <SpaceContext.Provider value={{ statuses: data?.findStatuses || [] }}>
+    <SpaceContext.Provider value={{ statuses }}>
       <Grid2 container>
         {!itemId && (
-          <Grid2 size={12} sx={{ pt: theme.spacing(1) }}>
-            <Tabs value={selectedTab} onChange={handleChange}>
-              <Tab isLoading={false} label="Board" value={0} />
-              <Tab isLoading={false} label="List" value={1} />
-            </Tabs>
+          <Grid2
+            size={12}
+            sx={{
+              pt: theme.spacing(1),
+              borderBottom: `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            <Grid2 container>
+              <Grid2>
+                <Tabs value={selectedTab} onChange={handleChange}>
+                  <Tab isLoading={false} label="Board" value={0} />
+                  <Tab isLoading={false} label="List" value={1} />
+                </Tabs>
+              </Grid2>
+              {listId && (
+                <Grid2 sx={{ alignContent: "center" }}>
+                  <AddItemButton listId={listId} />
+                </Grid2>
+              )}
+            </Grid2>
           </Grid2>
         )}
         <Grid2 size={12}>
