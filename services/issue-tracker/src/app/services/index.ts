@@ -6,6 +6,5 @@ export * from "./CoreUserService";
 export * from "./CoreWorkspaceService";
 export * from "./core-issue-activity.service";
 export * from "./core-issue-comment.service";
-export * from "./core-issue-task.service";
 export * from "./core-project-activity.service";
 export * from "./interfaces";
