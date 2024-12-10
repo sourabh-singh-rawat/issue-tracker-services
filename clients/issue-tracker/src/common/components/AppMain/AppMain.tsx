@@ -1,29 +1,29 @@
-import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
 import { Box, Container, Grid2, Toolbar, useTheme } from "@mui/material";
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 
-import Navbar from "../navigation/Navbar";
-import MenuSidebar from "../navigation/Sidebar";
-import { useLargeScreen } from "../../hooks/useLargeScreen";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useFindWorkspacesQuery } from "../../../api/codegen/gql/graphql";
 import {
   setDefaultWorkspace,
   setWorkspaces,
 } from "../../../features/workspace/workspace.slice";
-import { useFindWorkspacesQuery } from "../../../api/codegen/gql/graphql";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useLargeScreen } from "../../hooks/useLargeScreen";
+import { Navbar } from "../navigation/Navbar";
+import { Sidebar } from "../navigation/Sidebar";
 
-export default function AppMain() {
+export function AppMain() {
   const theme = useTheme();
   const isLargeScreen = useLargeScreen();
   const dispatch = useAppDispatch();
   const { data: workspaces } = useFindWorkspacesQuery();
   const { id } = useAppSelector(
-    ({ workspace }) => workspace?.defaultWorkspace || { id: "", name: "" },
+    ({ workspace }) => workspace.defaultWorkspace || { id: "", name: "" },
   );
 
   useEffect(() => {
     if (workspaces) {
-      const defaultWorkspace = workspaces.findWorkspaces?.find(
+      const defaultWorkspace = workspaces.findWorkspaces.find(
         ({ status }) => status === "Default",
       );
 
@@ -37,7 +37,7 @@ export default function AppMain() {
   return (
     <Box display="flex" height="100vh">
       <Navbar />
-      <MenuSidebar />
+      <Sidebar />
       <Container
         sx={{
           width: `calc(100% - ${

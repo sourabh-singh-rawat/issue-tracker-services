@@ -1,20 +1,19 @@
-import React from "react";
-import MuiGrid from "@mui/material/Grid";
-import MuiInput from "@mui/material/Input";
-import MuiImageList from "@mui/material/ImageList";
-import MuiTypography from "@mui/material/Typography";
-import ImageCard from "../../components/ImageCard";
-import { IconButton, styled, useTheme } from "@mui/material";
-import AppLoader from "../../../../common/components/AppLoader";
-import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
+import { Grid2, IconButton, styled, useTheme } from "@mui/material";
+import MuiImageList from "@mui/material/ImageList";
+import MuiInput from "@mui/material/Input";
+import MuiTypography from "@mui/material/Typography";
+import { GridDeleteIcon } from "@mui/x-data-grid";
+import React from "react";
 import {
   useDeleteAttachmentMutation,
   useFindAttachmentsQuery,
 } from "../../../../api/codegen/gql/graphql";
-import { GridDeleteIcon } from "@mui/x-data-grid";
+import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
+import { AppLoader } from "../../../../common/components/AppLoader";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
+import ImageCard from "../../components/ImageCard";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -73,8 +72,8 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
 
   return (
     <>
-      <MuiGrid columnSpacing={1} sx={{ marginTop: theme.spacing(2) }} container>
-        <MuiGrid item xs={12}>
+      <Grid2 columnSpacing={1} sx={{ marginTop: theme.spacing(2) }} container>
+        <Grid2 size={12}>
           <VisuallyHiddenInput
             type="file"
             onChange={async (e) => {
@@ -95,9 +94,13 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
           />
           <MuiInput name="file" type="file" sx={{ display: "none" }} />
           <StyledIconButton
-            onClick={() =>
-              document.querySelector("input[type='file']")?.click()
-            }
+            onClick={() => {
+              const element = document.querySelector("input[type='file']");
+
+              if (!element) return;
+
+              element.click();
+            }}
             sx={{
               width: "100%",
               border: `1px dashed ${theme.palette.divider}`,
@@ -109,11 +112,11 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
             onDrop={handleDrop}
             disableRipple
           >
-            <MuiGrid container>
-              <MuiGrid item xs={12}>
+            <Grid2 container>
+              <Grid2 size={12}>
                 {isLoading ? <AppLoader /> : <GetAppIcon />}
-              </MuiGrid>
-              <MuiGrid item xs={12}>
+              </Grid2>
+              <Grid2 size={12}>
                 <MuiTypography
                   variant="body2"
                   sx={{ color: theme.palette.primary.main }}
@@ -121,39 +124,41 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
                   Click to upload photo
                 </MuiTypography>
                 <MuiTypography variant="body2">or drag and drop</MuiTypography>
-              </MuiGrid>
-              <MuiGrid item xs={12}>
+              </Grid2>
+              <Grid2 size={12}>
                 <MuiTypography
                   variant="body2"
                   sx={{ color: theme.palette.grey[700] }}
                 >
                   *Maximum file size 5MB
                 </MuiTypography>
-              </MuiGrid>
-            </MuiGrid>
+              </Grid2>
+            </Grid2>
           </StyledIconButton>
-        </MuiGrid>
-      </MuiGrid>
+        </Grid2>
+      </Grid2>
       <MuiImageList
         cols={6}
         rowHeight={124}
         sx={{ width: "100%" }}
         variant="quilted"
       >
-        {attachments?.findAttachments.rows.map(({ id, thumbnailLink }) => (
-          <div key={id}>
-            <ImageCard key={id} path={thumbnailLink} />
-            <IconButton
-              onClick={async () => {
-                await deleteAttachment({
-                  variables: { deleteAttachmentId: id },
-                });
-              }}
-            >
-              <GridDeleteIcon />
-            </IconButton>
-          </div>
-        )) || []}
+        {(attachments &&
+          attachments.findAttachments.rows.map(({ id, thumbnailLink }) => (
+            <div key={id}>
+              <ImageCard key={id} path={thumbnailLink} />
+              <IconButton
+                onClick={async () => {
+                  await deleteAttachment({
+                    variables: { deleteAttachmentId: id },
+                  });
+                }}
+              >
+                <GridDeleteIcon />
+              </IconButton>
+            </div>
+          ))) ||
+          []}
       </MuiImageList>
     </>
   );

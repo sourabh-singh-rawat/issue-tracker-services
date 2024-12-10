@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 import { useLargeScreen } from "../../../hooks/useLargeScreen";
 
-import MuiDrawer from "@mui/material/Drawer";
-import MuiToolbar from "@mui/material/Toolbar";
 import MuiDivider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import MuiListItem from "@mui/material/ListItem";
-import MuiListItemText from "@mui/material/ListItemText";
-import MuiListItemIcon from "@mui/material/ListItemIcon";
-import MuiListItemButton from "@mui/material/ListItemButton";
+import MuiToolbar from "@mui/material/Toolbar";
 
-import MuiArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
-
+import { Spaces } from "../../../../features/spaces";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
-import { useNavigate } from "react-router-dom";
-import { MenuItem } from "../../../enums/menu-item";
-import { Spaces } from "../../../../features/Spaces";
 import { useAppSelector } from "../../../hooks";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
@@ -52,17 +44,9 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   };
 });
 
-export default function Sidebar() {
-  const theme = useTheme();
-  const navigate = useNavigate();
+export function Sidebar() {
   const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
-  const sx = {
-    ":hover": {
-      backgroundColor: "transparent",
-      color: theme.palette.primary.main,
-    },
-  };
   const workspaceId = useAppSelector((s) => s.workspace.defaultWorkspace.id);
 
   useEffect(() => {

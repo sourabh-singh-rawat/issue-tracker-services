@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 
+import MuiFormControl from "@mui/material/FormControl";
+import MuiFormHelperText from "@mui/material/FormHelperText";
 import Grid2 from "@mui/material/Grid2";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
-import MuiFormControl from "@mui/material/FormControl";
-import MuiFormHelperText from "@mui/material/FormHelperText";
-import Label from "../../../../common/components/forms/Label";
 import {
   Control,
   Controller,
@@ -15,7 +14,8 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import Select from "../../../../common/components/Select";
-import { SpaceContext } from "../../../../common";
+import Label from "../../../../common/components/forms/Label";
+import { SpaceContext } from "../../../../common/contexts";
 
 interface ItemStatusSelectorProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;
@@ -27,14 +27,16 @@ interface ItemStatusSelectorProps<DefaultValues extends FieldValues> {
   rules?: UseControllerProps<DefaultValues>["rules"];
 }
 
-export default function ItemStatusSelector<DefaultValues extends FieldValues>({
-  name,
-  control,
-  rules,
-  onSubmit,
-  title,
-  helperText,
-}: ItemStatusSelectorProps<DefaultValues>) {
+export default function ItemStatusSelector<DefaultValues extends FieldValues>(
+  {
+    name,
+    control,
+    rules,
+    onSubmit,
+    title,
+    helperText,
+  }: ItemStatusSelectorProps<DefaultValues>,
+) {
   const isLoading = false;
   const context = useContext(SpaceContext);
 

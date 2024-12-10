@@ -4,4 +4,3 @@ export * from "./ListItems";
 export * from "./Lists";
 export * from "./ProjectActivity";
 export * from "./ProjectMembers";
-export * from "./ProjectOverview";

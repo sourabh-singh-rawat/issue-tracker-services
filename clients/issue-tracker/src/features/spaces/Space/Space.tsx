@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Add,
   ExpandLess,
@@ -11,11 +10,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  useTheme,
 } from "@mui/material";
-import { CreateListModal } from "../../Lists/pages/CreateListModal/CreateListModal";
-import { List as ListOutput } from "../../../api/codegen/gql/graphql";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { List as ListOutput } from "../../../api/codegen/gql/graphql";
+import { CreateListModal } from "../../Lists/pages/CreateListModal/CreateListModal";
 
 interface SpaceProps {
   spaceId: string;
@@ -25,7 +24,6 @@ interface SpaceProps {
 }
 
 export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
-  const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,6 +47,7 @@ export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
         {lists.map(({ id, name }) => {
           return (
             <ListItemButton
+              key={id}
               sx={{ pl: 4 }}
               component="div"
               onClick={() => navigate(`${spaceId}/l/${id}/items`)}

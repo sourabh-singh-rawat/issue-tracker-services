@@ -17,6 +17,7 @@ import { theme } from "./app/themes/mui.theme";
 
 import App from "./app/App";
 import { SnackbarContent } from "./common/components/Snackbar";
+import { AuthProvider } from "./common/contexts/Auth";
 
 const element = document.getElementById("root");
 if (!element) throw new Error("Cannot find root element in DOM");
@@ -43,7 +44,9 @@ root.render(
         <Provider store={store}>
           <BrowserRouter>
             <CssBaseline />
-            <App />
+            <AuthProvider>
+              <App />
+            </AuthProvider>
           </BrowserRouter>
         </Provider>
       </SnackbarProvider>

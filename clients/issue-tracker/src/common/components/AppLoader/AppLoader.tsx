@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "@mui/material";
 import MuiBox from "@mui/material/Box";
 import MuiCircularProgress from "@mui/material/CircularProgress";
@@ -15,10 +14,7 @@ interface AppLoaderProps {
     | "warning";
 }
 
-export default function AppLoader({
-  size = 4,
-  color = "primary",
-}: AppLoaderProps) {
+export function AppLoader({ size = 4, color = "primary" }: AppLoaderProps) {
   const theme = useTheme();
 
   return (

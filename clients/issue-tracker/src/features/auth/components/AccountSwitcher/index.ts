@@ -1,1 +1,1 @@
-export { default } from "./AccountSwitcher";
+export * from "./AccountSwitcher";

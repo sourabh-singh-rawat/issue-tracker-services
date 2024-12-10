@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import MuiContainer from "@mui/material/Container";
@@ -6,16 +6,16 @@ import MuiGrid from "@mui/material/Grid";
 import LoginForm from "../../components/LoginForm";
 
 import { useTheme } from "@mui/material";
-import { useAppSelector } from "../../../../common/hooks";
+import { useAuth } from "../../../../common/contexts/Auth";
 
 export default function Login() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const currentUser = useAppSelector(({ auth }) => auth.currentUser);
+  const { auth } = useAuth();
 
   useEffect(() => {
-    if (currentUser) navigate("/");
-  }, [currentUser]);
+    if (auth.user) navigate("/");
+  }, [auth.user]);
 
   return (
     <MuiContainer maxWidth="md">
