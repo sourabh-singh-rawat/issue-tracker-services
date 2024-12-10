@@ -1,3 +1,4 @@
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -5,12 +6,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
 import { Item } from "./Item";
-import { AuditEntity } from "@issue-tracker/orm";
+import { User } from "./User";
 
 @Entity({ name: "item_assignees" })
-export class ItemAssignee extends AuditEntity {
+export class ItemAssignee extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

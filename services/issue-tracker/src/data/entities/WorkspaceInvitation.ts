@@ -1,17 +1,17 @@
 import {
+  EMAIL_VERIFICATION_TOKEN_STATUS,
+  EmailVerificationTokenStatus,
+} from "@issue-tracker/common";
+import { Audit } from "@issue-tracker/orm";
+import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AuditEntity } from "@issue-tracker/orm";
-import {
-  EMAIL_VERIFICATION_TOKEN_STATUS,
-  EmailVerificationTokenStatus,
-} from "@issue-tracker/common";
 
 @Entity({ name: "workspace_invitations" })
-export class WorkspaceInvitation extends AuditEntity {
+export class WorkspaceInvitation extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

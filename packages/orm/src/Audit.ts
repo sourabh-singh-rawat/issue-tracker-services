@@ -6,7 +6,7 @@ import {
   VersionColumn,
 } from "typeorm";
 
-export abstract class AuditEntity extends BaseEntity {
+export abstract class Audit extends BaseEntity {
   @CreateDateColumn({
     name: "created_at",
     type: "timestamp with time zone",

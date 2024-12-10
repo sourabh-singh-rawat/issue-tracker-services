@@ -1,3 +1,5 @@
+import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -6,14 +8,12 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
-import { AuditEntity } from "@issue-tracker/orm";
-import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
-import { Space } from "./Space";
 import { List } from "./List";
+import { Space } from "./Space";
+import { User } from "./User";
 
 @Entity({ name: "workspaces" })
-export class Workspace extends AuditEntity {
+export class Workspace extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

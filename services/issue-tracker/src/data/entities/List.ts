@@ -1,3 +1,4 @@
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -6,13 +7,13 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AuditEntity } from "@issue-tracker/orm";
 import { Item } from "./Item";
-import { Workspace } from "./Workspace";
 import { Space } from "./Space";
+import { View } from "./View";
+import { Workspace } from "./Workspace";
 
 @Entity({ name: "lists" })
-export class List extends AuditEntity {
+export class List extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -38,4 +39,7 @@ export class List extends AuditEntity {
   @ManyToOne(() => Space, (x) => x.lists)
   @JoinColumn({ name: "space_id" })
   space!: Space;
+
+  @OneToMany(() => View, (x) => x.list)
+  views!: View[];
 }

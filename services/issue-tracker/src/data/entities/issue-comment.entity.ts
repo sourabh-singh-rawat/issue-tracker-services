@@ -1,8 +1,8 @@
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "issue_comments" })
-export class IssueCommentEntity extends AuditEntity {
+export class IssueCommentEntity extends Audit {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "issue_comments_pkey",
   })

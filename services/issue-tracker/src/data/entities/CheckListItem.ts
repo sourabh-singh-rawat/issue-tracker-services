@@ -1,8 +1,8 @@
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "check_list_items" })
-export class CheckListItem extends AuditEntity {
+export class CheckListItem extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
