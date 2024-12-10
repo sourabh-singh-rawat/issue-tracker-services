@@ -1,7 +1,6 @@
-import React from "react";
 import Modal from "../../../../common/components/Modal";
-import ModalHeader from "../../../../common/components/ModalHeader";
 import ModalBody from "../../../../common/components/ModalBody";
+import ModalHeader from "../../../../common/components/ModalHeader";
 
 import MuiList from "@mui/material/List";
 
@@ -12,10 +11,9 @@ interface AddProjectMemberModalProps {
   handleClose: () => void;
 }
 
-export default function AddProjectMemberModal({
-  open,
-  handleClose,
-}: AddProjectMemberModalProps) {
+export default function AddProjectMemberModal(
+  { open, handleClose }: AddProjectMemberModalProps,
+) {
   const { id } = useSelectedTab();
 
   // const { data: workspaceMemberList } = useGetWorkspaceMemberListQuery({

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { CreateSpaceModal } from "../CreateSpaceModal";
-import { useFindSpacesQuery } from "../../../api/codegen/gql/graphql";
 import { ListItem, ListItemText } from "@mui/material";
+import { useFindSpacesQuery } from "../../../api/codegen/gql/graphql";
+import { CreateSpaceModal } from "../CreateSpaceModal";
 import { Space } from "../Space/Space";
 
 interface SpacesProps {
@@ -22,14 +22,16 @@ export function Spaces({ workspaceId }: SpacesProps) {
       >
         <ListItemText>Spaces</ListItemText>
       </ListItem>
-      {spaces?.findSpaces.map(({ id, name, lists }) => (
-        <Space
-          spaceId={id}
-          workspaceId={workspaceId}
-          lists={lists}
-          name={name}
-        />
-      ))}
+      {spaces &&
+        spaces.findSpaces.map(({ id, name, lists }) => (
+          <Space
+            key={id}
+            spaceId={id}
+            workspaceId={workspaceId}
+            lists={lists}
+            name={name}
+          />
+        ))}
     </>
   );
 }

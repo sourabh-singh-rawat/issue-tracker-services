@@ -1,72 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
-
-import MuiDivider from "@mui/material/Divider";
 import MuiLockTwoToneIcon from "@mui/icons-material/LockTwoTone";
-
-import Avatar from "../../../../common/components/Avatar";
-import MenuItem from "../../../../common/components/MenuItem";
-
-import StyledMenu from "../../../../common/components/styled/StyledMenu";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import StyledIconButton from "../../../../common/components/styled/StyledIconButton/StyledIconButton";
-import StyledList from "../../../../common/components/styled/StyledList";
+import {
+  Avatar,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+} from "@mui/material";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../auth.slice";
 
-export default function AccountSwitcher() {
+import MenuItem from "../../../../common/components/MenuItem";
+import StyledList from "../../../../common/components/styled/StyledList";
+import { useAuth } from "../../../../common/contexts/Auth";
+
+export function AccountSwitcher() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const { showSuccess } = useSnackbar();
-  const [revokeTokens, { isSuccess }] = useState();
-  const dispatch = useAppDispatch();
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
-
-  const currentUser = useAppSelector((store) => store.auth.currentUser);
-
-  useEffect(() => {
-    if (isSuccess) showSuccess("Logged out");
-  }, [isSuccess]);
+  const { auth } = useAuth();
 
   return (
-    <>
-      <StyledIconButton onClick={handleClick} disableRipple>
-        <Avatar variant="circular" label={currentUser?.displayName} />
-      </StyledIconButton>
-      <StyledMenu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <StyledList disablePadding>
-          <MenuItem
-            avatarIcon={<Avatar label={currentUser?.displayName} />}
-            label={currentUser?.displayName}
-            onClick={() => {
-              navigate("/me");
-              handleClose();
-            }}
-          />
-        </StyledList>
-        <MuiDivider />
-        <StyledList disablePadding>
-          <MenuItem
-            avatarIcon={<MuiLockTwoToneIcon />}
-            label="Logout"
-            onClick={async () => {
-              await revokeTokens();
-              dispatch(apiSlice.util.resetApiState());
-              dispatch(logout());
-              handleClose();
-            }}
-          />
-        </StyledList>
-      </StyledMenu>
-    </>
+    auth.user && (
+      <>
+        <IconButton size="small" onClick={handleClick} disableRipple>
+          <Avatar variant="circular">
+            {auth.user.displayName ? auth.user.displayName[0] : null}
+          </Avatar>
+        </IconButton>
+
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <List>
+            <ListItem
+              onClick={() => {
+                navigate("/me");
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <Avatar>
+                  {auth.user.displayName ? auth.user.displayName[0] : null}
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText>{auth.user.displayName}</ListItemText>
+            </ListItem>
+          </List>
+          <Divider />
+          <StyledList disablePadding>
+            <MenuItem
+              avatarIcon={<MuiLockTwoToneIcon />}
+              label="Logout"
+              onClick={async () => {
+                handleClose();
+              }}
+            />
+          </StyledList>
+        </Menu>
+      </>
+    )
   );
 }

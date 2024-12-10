@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import logger from "redux-logger";
 import { attachmentApi } from "../../api/codegen/rest/attachment.api";
-import authSlice from "../../features/auth/auth.slice";
 import issueListSlice from "../../features/issue-list/issue-list.slice";
 import issueSlice from "../../features/issue/issue.slice";
 import profileSlice from "../../features/profile/profile.slice";
@@ -13,7 +12,6 @@ import workspaceSlice from "../../features/workspace/workspace.slice";
 export const store = configureStore({
   reducer: {
     [attachmentApi.reducerPath]: attachmentApi.reducer,
-    auth: authSlice,
     workspace: workspaceSlice,
     issue: issueSlice,
     issueList: issueListSlice,

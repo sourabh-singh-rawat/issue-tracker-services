@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
+import { setCurrentWorkspace } from "../../../features/auth/auth.slice";
 import { useAppDispatch } from "../../hooks";
-import {
-  setCurrentUser,
-  setCurrentWorkspace,
-} from "../../../features/auth/auth.slice";
 
 import MuiBox from "@mui/material/Box";
-import AppLoader from "../AppLoader";
 import { useGetCurrentUserQuery } from "../../../api/codegen/gql/graphql";
+import { useAuth } from "../../contexts/Auth";
+import { AppLoader } from "../AppLoader";
 
-export default function AppLayout() {
+export function AppLayout() {
+  const { setAuth } = useAuth();
   const dispatch = useAppDispatch();
   const { loading: isLoading, data: user } = useGetCurrentUserQuery();
 
   useEffect(() => {
     (async () => {
-      try {
-        if (!user) throw new Error("Temp: User not found");
-        dispatch(setCurrentUser(user));
-        dispatch(
-          setCurrentWorkspace({
-            // id: user.defaultWorkspaceId,
-            // name: user.defaultWorkspaceName,
-          }),
-        );
-      } catch (err) {
-        dispatch(setCurrentUser(null));
-      }
+      if (user) setAuth({ user: user.getCurrentUser });
+      dispatch(setCurrentWorkspace({}));
     })();
   }, [isLoading]);
 

@@ -22,8 +22,8 @@ const authSlice = createSlice({
 
       return {
         ...state,
-        currentUser: action.payload,
-        isLoading: false,
+        currentUser: action.payload.user,
+        isLoading: action.payload.isLoading,
       };
     },
     setCurrentWorkspace: (state, action) => {

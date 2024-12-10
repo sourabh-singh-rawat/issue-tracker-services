@@ -1,26 +1,22 @@
-import React from "react";
+import { Box, Grid2, styled, Toolbar, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useTheme } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
-import MuiGrid from "@mui/material/Grid";
-import MuiAppBar from "@mui/material/AppBar";
-import MuiToolbar from "@mui/material/Toolbar";
 import MuiBugReportIcon from "@mui/icons-material/BugReport";
+import MuiAppBar from "@mui/material/AppBar";
 
-import AccountSwitcher from "../../../../features/auth/components/AccountSwitcher";
+import { AccountSwitcher } from "../../../../features/auth/components/AccountSwitcher";
 import Notifications from "../../../../features/notifications/components/Notification/Notifications";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
 }));
 
-export default function Navbar() {
+export function Navbar() {
   const theme = useTheme();
 
   return (
     <AppBar position="fixed" sx={{ boxShadow: theme.shadows[0] }}>
-      <MuiToolbar
+      <Toolbar
         sx={{
           px: theme.spacing(2.5),
           borderBottom: `1px solid ${theme.palette.divider}`,
@@ -29,29 +25,20 @@ export default function Navbar() {
         variant="dense"
         disableGutters
       >
-        <MuiGrid
-          alignItems="center"
-          sx={{ display: "flex" }}
-          spacing={1}
-          container
-        >
-          <MuiGrid item>
-            <Link to="/">
-              <MuiBugReportIcon sx={{ color: theme.palette.primary.main }} />
-            </Link>
-          </MuiGrid>
-
-          <MuiGrid item flexGrow={1}></MuiGrid>
-
-          <MuiGrid item>
-            <Notifications />
-          </MuiGrid>
-
-          <MuiGrid item>
-            <AccountSwitcher />
-          </MuiGrid>
-        </MuiGrid>
-      </MuiToolbar>
+        <Box sx={{ width: "100%" }}>
+          <Grid2 container sx={{ alignItems: "center" }}>
+            <Grid2 size="grow">
+              <Link to="/">
+                <MuiBugReportIcon sx={{ color: theme.palette.primary.main }} />
+              </Link>
+            </Grid2>
+            <Grid2>
+              <Notifications />
+              <AccountSwitcher />
+            </Grid2>
+          </Grid2>
+        </Box>
+      </Toolbar>
     </AppBar>
   );
 }
