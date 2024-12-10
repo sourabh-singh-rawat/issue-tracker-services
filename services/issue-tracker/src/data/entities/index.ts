@@ -10,6 +10,7 @@ export * from "./Space";
 export * from "./Status";
 export * from "./StatusGroup";
 export * from "./User";
+export * from "./View";
 export * from "./Workspace";
 export * from "./WorkspaceInvitation";
 export * from "./WorkspaceMember";

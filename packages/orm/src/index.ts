@@ -1,3 +1,3 @@
-export * from "./postgres-typeorm";
+export * from "./Audit";
 export * from "./interfaces";
-export * from "./audit";
+export * from "./postgres-typeorm";

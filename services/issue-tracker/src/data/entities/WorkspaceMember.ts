@@ -1,4 +1,11 @@
 import {
+  WORKSPACE_MEMBER_ROLES,
+  WORKSPACE_MEMBER_STATUS,
+  WorkspaceMemberRoles,
+  WorkspaceMemberStatus,
+} from "@issue-tracker/common";
+import { Audit } from "@issue-tracker/orm";
+import {
   Column,
   Entity,
   JoinColumn,
@@ -6,17 +13,9 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Workspace } from "./Workspace";
-import { User } from "./User";
-import { AuditEntity } from "@issue-tracker/orm";
-import {
-  WORKSPACE_MEMBER_ROLES,
-  WORKSPACE_MEMBER_STATUS,
-  WorkspaceMemberRoles,
-  WorkspaceMemberStatus,
-} from "@issue-tracker/common";
 
 @Entity({ name: "workspace_members" })
-export class WorkspaceMember extends AuditEntity {
+export class WorkspaceMember extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

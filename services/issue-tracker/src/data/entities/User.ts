@@ -1,15 +1,14 @@
-import { AuditEntity } from "@issue-tracker/orm";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { WorkspaceMember } from "./WorkspaceMember";
 import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
 } from "@issue-tracker/common";
-import { Workspace } from "./Workspace";
+import { Audit } from "@issue-tracker/orm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Space } from "./Space";
+import { Workspace } from "./Workspace";
 
 @Entity({ name: "users" })
-export class User extends AuditEntity {
+export class User extends Audit {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "users_pkey",
   })

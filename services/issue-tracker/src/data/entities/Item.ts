@@ -1,5 +1,5 @@
 import { ITEM_PRIORITY, ItemPriority } from "@issue-tracker/common";
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -22,7 +22,7 @@ import { User } from "./User";
   descendantColumnName: (column) => "descendant_" + column.propertyName,
 })
 @Entity({ name: "items" })
-export class Item extends AuditEntity {
+export class Item extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

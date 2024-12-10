@@ -1,16 +1,14 @@
+import { ProjectActivity } from "@issue-tracker/common";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
-import { ProjectActivity } from "@issue-tracker/common";
-import { AuditEntity } from "@issue-tracker/orm";
 
 @Entity({ name: "list_item_activities" })
-export class ListItemActivity extends AuditEntity {
+export class ListItemActivity extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
