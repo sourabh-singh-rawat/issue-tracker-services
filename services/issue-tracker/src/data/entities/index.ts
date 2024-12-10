@@ -1,5 +1,5 @@
 export * from "./CheckListItem";
-export * from "./CustomField";
+export * from "./Field";
 export * from "./Item";
 export * from "./ItemAssignee";
 export * from "./List";
