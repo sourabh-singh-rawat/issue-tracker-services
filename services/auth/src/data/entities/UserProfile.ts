@@ -1,4 +1,4 @@
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -9,7 +9,7 @@ import {
 import { User } from "./User";
 
 @Entity("user_profiles")
-export class UserProfile extends AuditEntity {
+export class UserProfile extends Audit {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "user_profiles_pkey",
   })

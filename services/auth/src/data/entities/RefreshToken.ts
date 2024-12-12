@@ -1,4 +1,4 @@
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -9,7 +9,7 @@ import {
 import { User } from "./User";
 
 @Entity("refresh_tokens")
-export class RefreshToken extends AuditEntity {
+export class RefreshToken extends Audit {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "refresh_tokens_pkey",
   })

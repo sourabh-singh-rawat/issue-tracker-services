@@ -1,12 +1,12 @@
-import { AuditEntity } from "@issue-tracker/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
 } from "@issue-tracker/common";
+import { Audit } from "@issue-tracker/orm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "users" })
-export class UserEntity extends AuditEntity {
+export class User extends Audit {
   @PrimaryGeneratedColumn("uuid", { primaryKeyConstraintName: "users_pkey" })
   id!: string;
 

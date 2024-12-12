@@ -2,41 +2,70 @@ import { config } from "dotenv";
 config({ path: "../../.env" });
 
 import { ApolloServer } from "@apollo/server";
-import {
-  ApolloFastifyContextFunction,
-  fastifyApolloHandler,
-} from "@as-integrations/fastify";
+import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
 import multipart from "@fastify/multipart";
 import swagger from "@fastify/swagger";
 import { QUEUE } from "@issue-tracker/common";
+import { Broker } from "@issue-tracker/event-bus";
+import { Typeorm } from "@issue-tracker/orm";
 import { Auth, JwtToken } from "@issue-tracker/security";
 import {
-  AppContext,
   AwilixDi,
-  FastifyServer,
-  logger,
+  CoreHttpServer,
+  CoreLogger,
+  Logger,
 } from "@issue-tracker/server-core";
-import { Worker } from "bullmq";
-import fastify from "fastify";
+import { InjectionMode, asClass, asValue, createContainer } from "awilix";
+import { Queue, Worker } from "bullmq";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import { writeFileSync } from "fs";
+import Redis from "ioredis";
+import pino from "pino";
 import sharp from "sharp";
 import { buildSchema } from "type-graphql";
+import { DataSource } from "typeorm";
 import { v4 } from "uuid";
-import { CoreAttachmentResolver } from "./api";
 import {
-  RegisteredServices,
+  AttachmentController,
+  CoreAttachmentController,
+  CoreAttachmentResolver,
+} from "./api";
+import { AttachmentService, CoreAttachmentService } from "./app";
+import {
   adminStorage,
   broker,
-  container,
   dataSource,
+  imageProcessingQueue,
   redisClient,
 } from "./config";
 import { Attachment } from "./data";
 
-const createContext: ApolloFastifyContextFunction<AppContext> = async (
-  req,
-  rep,
-) => {
+export const logger = new CoreLogger(
+  pino({ transport: { target: "pino-pretty" } }),
+);
+
+export interface RegisteredServices {
+  logger: Logger;
+  dataSource: DataSource;
+  broker: Broker;
+  orm: Typeorm;
+  attachmentController: AttachmentController;
+  attachmentService: AttachmentService;
+  redisClient: Redis;
+  imageProcessingQueue: Queue;
+}
+
+const awilix = createContainer({ injectionMode: InjectionMode.CLASSIC });
+export const container = new AwilixDi<RegisteredServices>(awilix, logger);
+container.add("logger", asValue(logger));
+container.add("dataSource", asValue(dataSource));
+container.add("redisClient", asValue(redisClient));
+container.add("eventBus", asValue(broker));
+container.add("imageProcessingQueue", asValue(imageProcessingQueue));
+container.add("attachmentController", asClass(CoreAttachmentController));
+container.add("attachmentService", asClass(CoreAttachmentService));
+
+const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
   let token: any;
@@ -65,13 +94,12 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
       resolvers: [CoreAttachmentResolver],
     });
     const apollo = new ApolloServer({ schema });
-    await apollo.start();
 
     await instance.register(multipart, { limits: { fileSize: 32000000 } });
 
-    const server = new FastifyServer({
-      fastify: instance,
-      configuration: {
+    const server = new CoreHttpServer({
+      server: instance,
+      config: {
         host: "0.0.0.0",
         port: process.env.ATTACHMENT_SERVICE_PORT
           ? parseInt(process.env.ATTACHMENT_SERVICE_PORT)
@@ -79,36 +107,30 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         environment: "development",
         version: 1,
       },
-      security: {
-        cors: { credentials: true, origin: "http://localhost:3000" },
-        cookie: { secret: process.env.JWT_SECRET! },
-      },
+      cors: { credentials: true, origin: "http://localhost:3000" },
+      graphql: { apollo, createContext, path: "/graphql" },
+      cookie: { secret: process.env.JWT_SECRET! },
       routes: [
         {
-          route: (fastify, _options, done) => {
-            fastify.route({
-              url: "/attachments/:itemId",
-              method: "POST",
-              schema: {
-                tags: ["attachment"],
-                summary: "Create a new issue attachment",
-                description: "Create a new issue attachment",
-                body: { type: "string" },
-                consumes: ["multipart/form-data"],
-                operationId: "createAttachment",
-                response: {
-                  201: { type: "string", description: "Created successfully" },
-                  500: { type: "string", description: "Bad request" },
-                },
-              },
-              preHandler: [Auth.setCurrentUser, Auth.requireAuth],
-              handler: async (req, res) => {
-                const controller = container.get("attachmentController");
+          url: "/attachments/:itemId",
+          method: "POST",
+          schema: {
+            tags: ["attachment"],
+            summary: "Create a new issue attachment",
+            description: "Create a new issue attachment",
+            body: { type: "string" },
+            consumes: ["multipart/form-data"],
+            operationId: "createAttachment",
+            response: {
+              201: { type: "string", description: "Created successfully" },
+              500: { type: "string", description: "Bad request" },
+            },
+          },
+          preHandler: [Auth.setCurrentUser, Auth.requireAuth],
+          handler: async (req: FastifyRequest, res: FastifyReply) => {
+            const controller = container.get("attachmentController");
 
-                await controller.createAttachment(req, res);
-              },
-            });
-            done();
+            await controller.createAttachment(req, res);
           },
         },
       ],
@@ -130,12 +152,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
         ],
       },
     });
-    instance.route({
-      url: "/api/graphql",
-      method: ["POST", "GET"],
-      handler: fastifyApolloHandler(apollo, { context: createContext }),
-    });
-    await server.init();
+    await server.start();
     const openapi = instance.swagger({ yaml: true });
     writeFileSync("./schema.yaml", openapi);
   } catch (error) {

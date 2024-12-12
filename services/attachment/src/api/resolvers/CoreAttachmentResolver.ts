@@ -6,7 +6,8 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { container, dataSource } from "../../config";
+import { container } from "../..";
+import { dataSource } from "../../config";
 import { AttachmentResolver } from "./interfaces";
 import { Attachment } from "./types";
 

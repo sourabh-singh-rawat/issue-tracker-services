@@ -377,6 +377,12 @@ importers:
 
   packages/server-core:
     dependencies:
+      '@apollo/server':
+        specifier: ^4.11.2
+        version: 4.11.2(graphql@16.9.0)
+      '@as-integrations/fastify':
+        specifier: ^2.1.1
+        version: 2.1.1(@apollo/server@4.11.2(graphql@16.9.0))(fastify@4.27.0)
       '@fastify/cookie':
         specifier: ^9.3.1
         version: 9.3.1
@@ -716,6 +722,9 @@ importers:
       nats:
         specifier: ^2.26.0
         version: 2.26.0
+      pino:
+        specifier: ^8.21.0
+        version: 8.21.0
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2

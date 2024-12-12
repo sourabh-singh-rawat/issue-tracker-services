@@ -1,4 +1,4 @@
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -9,7 +9,7 @@ import {
 import { User } from "./User";
 
 @Entity("access_tokens")
-export class AccessToken extends AuditEntity {
+export class AccessToken extends Audit {
   @PrimaryGeneratedColumn("uuid", {
     primaryKeyConstraintName: "access_tokens_pkey",
   })

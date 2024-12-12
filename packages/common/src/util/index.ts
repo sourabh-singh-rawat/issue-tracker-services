@@ -1,2 +1,2 @@
-export * from "./error-handler.util";
+export * from "./ErrorHandlerUtil";
 export * from "./flatten";

@@ -1,6 +1,6 @@
+import { NatsConnection, connect } from "nats";
 import { BrokerOptions } from "./interfaces";
 import { Broker } from "./interfaces/broker";
-import { NatsConnection, connect } from "nats";
 
 export class NatsBroker implements Broker {
   public client?: NatsConnection;
@@ -28,7 +28,7 @@ export class NatsBroker implements Broker {
     this.createStreams(this.options.streams);
 
     this.options.logger?.info(
-      `✅ Server connected to ${client.info?.server_name}`,
+      `✅ [Nats Jetstream] connected at ${client.info?.host}:${client.info?.port}`,
     );
   }
 }

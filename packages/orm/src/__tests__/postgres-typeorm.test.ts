@@ -1,7 +1,8 @@
-import { PinoAppLogger } from "@issue-tracker/server-core";
-import { PostgresTypeorm } from "../postgres-typeorm";
+import { CoreLogger } from "@issue-tracker/server-core";
+import pino from "pino";
 import { DataSource } from "typeorm";
 import { Typeorm } from "../interfaces";
+import { PostgresTypeorm } from "../postgres-typeorm";
 
 jest.mock("typeorm", () => {
   const actualTypeorm = jest.requireActual("typeorm");
@@ -23,7 +24,9 @@ jest.mock("typeorm", () => {
 
 describe("Postgres Typeorm", () => {
   const mockDataSource = new DataSource({ type: "postgres" });
-  const logger = new PinoAppLogger({ level: "info", timestamp: true });
+  const logger = new CoreLogger(
+    pino({ transport: { target: "pino-pretty", options: { colorize: true } } }),
+  );
   let orm: Typeorm;
 
   beforeAll(async () => {

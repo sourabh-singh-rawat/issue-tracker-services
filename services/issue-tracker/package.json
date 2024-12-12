@@ -37,6 +37,7 @@
     "http-status-codes": "^2.3.0",
     "inversify": "^6.0.2",
     "nats": "^2.26.0",
+    "pino": "^8.21.0",
     "reflect-metadata": "^0.2.2",
     "type-graphql": "2.0.0-rc.2",
     "typeorm": "^0.3.20",

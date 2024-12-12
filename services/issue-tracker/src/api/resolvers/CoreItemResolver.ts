@@ -8,7 +8,7 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { container, dataSource } from "../..";
+import { container, postgres } from "../..";
 import { ItemResolver } from "./interfaces";
 import {
   CreateItemInput,
@@ -36,7 +36,7 @@ export class CoreItemResolver implements ItemResolver {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
-    return await dataSource.transaction(async (manager) => {
+    return await postgres.transaction(async (manager) => {
       return await service.createItem({ manager, userId, ...input });
     });
   }
@@ -78,7 +78,7 @@ export class CoreItemResolver implements ItemResolver {
     const service = container.get("itemService");
     const { itemId } = input;
 
-    await dataSource.transaction(async (manager) => {
+    await postgres.transaction(async (manager) => {
       return await service.updateItem({ ...input, userId, itemId, manager });
     });
 
@@ -90,7 +90,7 @@ export class CoreItemResolver implements ItemResolver {
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
-    await dataSource.transaction(async (manager) => {
+    await postgres.transaction(async (manager) => {
       return await service.deleteItem({ id, manager });
     });
 

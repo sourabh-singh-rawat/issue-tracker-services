@@ -4,14 +4,11 @@ config({ path: "../../.env" });
 import { Mailer, NodeMailer } from "@issue-tracker/comm";
 import { Broker, NatsBroker, NatsPublisher } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { AppLogger, AwilixDi, logger } from "@issue-tracker/server-core";
+import { AwilixDi, CoreLogger, Logger } from "@issue-tracker/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import nodemailer from "nodemailer";
+import pino from "pino";
 import { DataSource } from "typeorm";
-import { EmailRepository } from "./data/repositories/interfaces/email.repository";
-import { UserRepository } from "./data/repositories/interfaces/user.repository";
-import { PostgresEmailRepository } from "./data/repositories/postgres-email.repository";
-import { PostgresUserRepository } from "./data/repositories/postgres-user.repository";
 import { ProjectMemberInvitedSubscriber } from "./events/subscribers/project-member-invited.subscriber";
 import { UserRegisteredSubscriber } from "./events/subscribers/user-registered.subscriber";
 import { WorkspaceMemberInvitedSubscriber } from "./events/subscribers/workspace-member-invited.subscriber";
@@ -23,7 +20,7 @@ import { UserEmailService } from "./services/interfaces/user-email.service";
 import { WorkspaceEmailService } from "./services/interfaces/workspace-email.service";
 
 export interface RegisteredServices {
-  logger: AppLogger;
+  logger: Logger;
   orm: Typeorm;
   broker: Broker;
   publisher: NatsPublisher;
@@ -32,12 +29,12 @@ export interface RegisteredServices {
   userEmailService: UserEmailService;
   projectEmailService: ProjectEmailService;
   workspaceEmailService: WorkspaceEmailService;
-  userRepository: UserRepository;
-  emailRepository: EmailRepository;
   userRegisteredSubscriber: UserRegisteredSubscriber;
   projectMemberCreatedSubscriber: ProjectMemberInvitedSubscriber;
   workspaceMemberInvitedSubscriber: WorkspaceMemberInvitedSubscriber;
 }
+
+const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
 
 const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userRegisteredSubscriber").fetchMessages();
@@ -86,8 +83,6 @@ const main = async () => {
   add("userEmailService", asClass(CoreUserEmailService));
   add("projectEmailService", asClass(CoreProjectEmailService));
   add("workspaceEmailService", asClass(CoreWorkspaceEmailService));
-  add("userRepository", asClass(PostgresUserRepository));
-  add("emailRepository", asClass(PostgresEmailRepository));
   add("userRegisteredSubscriber", asClass(UserRegisteredSubscriber));
   add(
     "projectMemberCreatedSubscriber",

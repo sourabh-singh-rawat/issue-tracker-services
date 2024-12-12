@@ -5,8 +5,8 @@ import { ApolloServer } from "@apollo/server";
 import {
   ApolloFastifyContextFunction,
   fastifyApolloDrainPlugin,
-  fastifyApolloHandler,
 } from "@as-integrations/fastify";
+import { Environment } from "@issue-tracker/common";
 import {
   Broker,
   NatsBroker,
@@ -17,14 +17,15 @@ import {
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
 import { JwtToken } from "@issue-tracker/security";
 import {
-  AppLogger,
   AwilixDi,
-  FastifyServer,
-  logger,
+  CoreHttpServer,
+  CoreLogger,
+  Logger,
 } from "@issue-tracker/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import fastify from "fastify";
 import GraphQLJSON from "graphql-type-json";
+import pino from "pino";
 import { buildSchema } from "type-graphql";
 import { DataSource } from "typeorm";
 import {
@@ -53,8 +54,9 @@ import {
 } from "./app";
 import { ProjectActivityService } from "./app/services/interfaces/project-activity.service";
 import { UserEmailVerifiedSubscriber } from "./subscribers";
+
 export interface RegisteredServices {
-  logger: AppLogger;
+  logger: Logger;
   dataSource: DataSource;
   orm: Typeorm;
   broker: Broker;
@@ -69,6 +71,8 @@ export interface RegisteredServices {
   userEmailVerifiedSubscriber: UserEmailVerifiedSubscriber;
   publisher: Publisher<Subjects>;
 }
+
+const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
 
 const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
@@ -89,70 +93,7 @@ const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   return { req, rep };
 };
 
-const startServer = async () => {
-  try {
-    const instance = fastify();
-    const schema = await buildSchema({
-      emitSchemaFile: true,
-      scalarsMap: [
-        {
-          type: Object,
-          scalar: GraphQLJSON,
-        },
-      ],
-      resolvers: [
-        CoreWorkspaceResolver,
-        CoreSpaceResolver,
-        CoreListResolver,
-        CoreItemResolver,
-        CoreStatusResolver,
-        CoreFieldResolver,
-      ],
-    });
-    const apollo = new ApolloServer({
-      schema,
-      plugins: [fastifyApolloDrainPlugin(instance)],
-    });
-    await apollo.start();
-
-    const server = new FastifyServer({
-      fastify: instance,
-      configuration: {
-        host: "0.0.0.0",
-        port: 5001,
-        environment: "development",
-        version: 1,
-      },
-      security: {
-        cors: { credentials: true, origin: "http://localhost:3000" },
-        cookie: { secret: process.env.JWT_SECRET! },
-      },
-      routes: [
-        // { route: issueRoutes(container) },
-        // { route: issueCommentRoutes(container) },
-        // { route: issueTaskRoutes(container) },
-        // { route: projectRoutes(container) },
-        // { route: projectActivityRoutes(container) },
-        // { route: workspaceRoutes(container) },
-      ],
-    });
-    instance.route({
-      url: "/api/graphql",
-      method: ["POST", "GET"],
-      handler: fastifyApolloHandler(apollo, { context: createContext }),
-    });
-    server.init();
-  } catch (error) {
-    console.log(error);
-    process.exit(1);
-  }
-};
-
-const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
-  container.get("userEmailVerifiedSubscriber").fetchMessages();
-};
-
-export const dataSource = new DataSource({
+export const postgres = new DataSource({
   type: "postgres",
   url: process.env.ISSUE_TRACKER_POSTGRES_CLUSTER_URL,
   entities: ["src/data/entities/*.ts"],
@@ -166,7 +107,7 @@ const awilix = createContainer<RegisteredServices>({
 export const container = new AwilixDi<RegisteredServices>(awilix, logger);
 
 const main = async () => {
-  const orm = new PostgresTypeorm(dataSource, logger);
+  const orm = new PostgresTypeorm(postgres, logger);
   await orm.init();
 
   const natsBroker = new NatsBroker({
@@ -177,7 +118,7 @@ const main = async () => {
   await natsBroker.init();
 
   container.add("logger", asValue(logger));
-  container.add("dataSource", asValue(dataSource));
+  container.add("dataSource", asValue(postgres));
   container.add("orm", asValue(orm));
   container.add("broker", asValue(natsBroker));
   container.add("userService", asClass(CoreUserService));
@@ -192,11 +133,40 @@ const main = async () => {
     asClass(UserEmailVerifiedSubscriber),
   );
   container.add("publisher", asClass(NatsPublisher));
-
   container.init();
 
-  await startServer();
-  startSubscriptions(container);
+  const instance = fastify();
+  const schema = await buildSchema({
+    emitSchemaFile: true,
+    scalarsMap: [{ type: Object, scalar: GraphQLJSON }],
+    resolvers: [
+      CoreWorkspaceResolver,
+      CoreSpaceResolver,
+      CoreListResolver,
+      CoreItemResolver,
+      CoreStatusResolver,
+      CoreFieldResolver,
+    ],
+  });
+  const plugins = [fastifyApolloDrainPlugin(instance)];
+  const apollo = new ApolloServer({ schema, plugins });
+
+  const httpServer = new CoreHttpServer({
+    server: instance,
+    config: {
+      host: "0.0.0.0",
+      port: parseInt(process.env.ISSUE_TRACKER_SERVICE_PORT!),
+      environment: process.env.NODE_ENV as Environment,
+      version: 1,
+    },
+    cors: { credentials: true, origin: process.env.ISSUE_TRACKER_CLIENT_URL },
+    cookie: { secret: process.env.JWT_SECRET! },
+    graphql: { apollo, path: "/graphql", createContext },
+    logger,
+  });
+  await httpServer.start();
+
+  container.get("userEmailVerifiedSubscriber").fetchMessages();
 };
 
 main();
