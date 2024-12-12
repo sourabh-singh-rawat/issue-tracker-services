@@ -1,5 +1,5 @@
 import { SelectChangeEvent } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "../../../../common/components/Select";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 

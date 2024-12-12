@@ -1,3 +1,4 @@
+export * from "./CoreFieldService";
 export * from "./CoreItemService";
 export * from "./CoreListService";
 export * from "./CoreSpaceService";

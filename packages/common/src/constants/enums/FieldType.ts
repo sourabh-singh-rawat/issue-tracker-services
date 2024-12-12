@@ -1,4 +1,6 @@
 export const FIELD_TYPE = {
+  _STATUS: "_Status",
+  _PRIORITY: "_Priority",
   CHECKBOX: "Checkbox",
   DATE: "Date",
   EMAIL: "Email",

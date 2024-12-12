@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTimeISO: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type Attachment = {
@@ -29,11 +30,10 @@ export type CreateItemInput = {
   assigneeIds: Array<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   dueDate?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  fields?: InputMaybe<Scalars['JSON']['input']>;
   listId: Scalars['String']['input'];
   name: Scalars['String']['input'];
   parentItemId?: InputMaybe<Scalars['String']['input']>;
-  priority: Scalars['String']['input'];
-  statusId: Scalars['String']['input'];
   type: Scalars['String']['input'];
 };
 
@@ -54,6 +54,18 @@ export type CreateWorkspaceInput = {
   name: Scalars['String']['input'];
 };
 
+export type FieldOutput = {
+  __typename?: 'FieldOutput';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export type FindFieldsOptions = {
+  listId: Scalars['String']['input'];
+};
+
 export type FindItemsInput = {
   listId: Scalars['String']['input'];
   parentItemId: Scalars['String']['input'];
@@ -64,7 +76,7 @@ export type FindSpacesOptions = {
 };
 
 export type FindStatusesOptions = {
-  spaceId: Scalars['String']['input'];
+  listId: Scalars['String']['input'];
 };
 
 export type Item = {
@@ -74,8 +86,6 @@ export type Item = {
   list: List;
   name: Scalars['String']['output'];
   parentItem?: Maybe<Item>;
-  priority: Scalars['String']['output'];
-  statusId: Scalars['String']['output'];
   subItems?: Maybe<Array<Item>>;
 };
 
@@ -92,6 +102,7 @@ export type Mutation = {
   createSpace: Scalars['String']['output'];
   createWorkspace: Scalars['String']['output'];
   deleteAttachment: Scalars['String']['output'];
+  deleteItem: Scalars['String']['output'];
   registerUser: Scalars['String']['output'];
   signInWithEmailAndPassword: Scalars['Boolean']['output'];
   updateItem: Scalars['String']['output'];
@@ -158,6 +169,7 @@ export type PaginatedList = {
 export type Query = {
   __typename?: 'Query';
   findAttachments: PaginatedAttachment;
+  findFields: Array<FieldOutput>;
   findItem?: Maybe<Item>;
   findList: List;
   findListItems: Array<Item>;
@@ -172,6 +184,11 @@ export type Query = {
 
 export type QueryFindAttachmentsArgs = {
   itemId: Scalars['String']['input'];
+};
+
+
+export type QueryFindFieldsArgs = {
+  options: FindFieldsOptions;
 };
 
 
@@ -330,12 +347,19 @@ export type CreateWorkspaceMutationVariables = Exact<{
 
 export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: string };
 
+export type FindFieldsQueryVariables = Exact<{
+  options: FindFieldsOptions;
+}>;
+
+
+export type FindFieldsQuery = { __typename?: 'Query', findFields: Array<{ __typename?: 'FieldOutput', id: string, name: string, type: string, value?: string | null }> };
+
 export type FindItemQueryVariables = Exact<{
   findItemId: Scalars['String']['input'];
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, priority: string, statusId: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
 
 export type FindListQueryVariables = Exact<{
   findListId: Scalars['String']['input'];
@@ -349,7 +373,7 @@ export type FindListItemsQueryVariables = Exact<{
 }>;
 
 
-export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, statusId: string, priority: string }> };
+export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string }> };
 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -375,7 +399,7 @@ export type FindSubItemsQueryVariables = Exact<{
 }>;
 
 
-export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, priority: string, statusId: string }> };
+export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string }> };
 
 export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -727,6 +751,49 @@ export function useCreateWorkspaceMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateWorkspaceMutationHookResult = ReturnType<typeof useCreateWorkspaceMutation>;
 export type CreateWorkspaceMutationResult = Apollo.MutationResult<CreateWorkspaceMutation>;
 export type CreateWorkspaceMutationOptions = Apollo.BaseMutationOptions<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>;
+export const FindFieldsDocument = gql`
+    query FindFields($options: FindFieldsOptions!) {
+  findFields(options: $options) {
+    id
+    name
+    type
+    value
+  }
+}
+    `;
+
+/**
+ * __useFindFieldsQuery__
+ *
+ * To run a query within a React component, call `useFindFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindFieldsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useFindFieldsQuery(baseOptions: Apollo.QueryHookOptions<FindFieldsQuery, FindFieldsQueryVariables> & ({ variables: FindFieldsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindFieldsQuery, FindFieldsQueryVariables>(FindFieldsDocument, options);
+      }
+export function useFindFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindFieldsQuery, FindFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindFieldsQuery, FindFieldsQueryVariables>(FindFieldsDocument, options);
+        }
+export function useFindFieldsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindFieldsQuery, FindFieldsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindFieldsQuery, FindFieldsQueryVariables>(FindFieldsDocument, options);
+        }
+export type FindFieldsQueryHookResult = ReturnType<typeof useFindFieldsQuery>;
+export type FindFieldsLazyQueryHookResult = ReturnType<typeof useFindFieldsLazyQuery>;
+export type FindFieldsSuspenseQueryHookResult = ReturnType<typeof useFindFieldsSuspenseQuery>;
+export type FindFieldsQueryResult = Apollo.QueryResult<FindFieldsQuery, FindFieldsQueryVariables>;
 export const FindItemDocument = gql`
     query FindItem($findItemId: String!) {
   findItem(id: $findItemId) {
@@ -741,8 +808,6 @@ export const FindItemDocument = gql`
       name
     }
     name
-    priority
-    statusId
   }
 }
     `;
@@ -826,8 +891,6 @@ export const FindListItemsDocument = gql`
     description
     id
     name
-    statusId
-    priority
   }
 }
     `;
@@ -999,8 +1062,6 @@ export const FindSubItemsDocument = gql`
     description
     id
     name
-    priority
-    statusId
   }
 }
     `;

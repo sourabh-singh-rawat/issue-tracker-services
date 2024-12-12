@@ -1,6 +1,7 @@
 import { UserNotFoundError } from "@issue-tracker/common";
 import { NatsPublisher } from "@issue-tracker/event-bus";
 import { List, User } from "../../data";
+import { FieldService } from "./interfaces";
 import {
   CreateListOptions,
   FindListOptions,
@@ -14,6 +15,7 @@ export class CoreListService implements ListService {
   constructor(
     private readonly publisher: NatsPublisher,
     private readonly userService: UserService,
+    private readonly fieldService: FieldService,
   ) {}
 
   private async getUserById(userId: string) {
@@ -32,10 +34,14 @@ export class CoreListService implements ListService {
       workspaceId: user.defaultWorkspaceId,
       spaceId,
     });
+    const { id: listId } = savedList;
+
+    await this.fieldService.createStatusField({ manager, listId });
+    await this.fieldService.createPriorityField({ manager, listId });
 
     await this.publisher.send("project.created", savedList);
 
-    return savedList.id;
+    return listId;
   }
 
   async findLists(options: FindListsOptions) {

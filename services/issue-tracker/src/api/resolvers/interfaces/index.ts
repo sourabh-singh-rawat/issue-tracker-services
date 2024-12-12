@@ -1,3 +1,4 @@
+export * from "./FieldResolver";
 export * from "./ItemResolver";
 export * from "./ListResolver";
 export * from "./SpaceResolver";

@@ -15,6 +15,8 @@ export class Field extends BaseEntity {
   @Column({
     type: "enum",
     enum: [
+      FIELD_TYPE._STATUS,
+      FIELD_TYPE._PRIORITY,
       FIELD_TYPE.CHECKBOX,
       FIELD_TYPE.DATE,
       FIELD_TYPE.EMAIL,
@@ -29,4 +31,13 @@ export class Field extends BaseEntity {
     ],
   })
   type!: FieldType;
+
+  @Column({ name: "list_id", type: "uuid", nullable: true })
+  listId?: string;
+
+  @Column({ name: "is_system_field", type: "boolean", default: false })
+  isSystemField!: string;
+
+  @Column({ name: "value", type: "text", nullable: true })
+  value?: string | string[] | null;
 }

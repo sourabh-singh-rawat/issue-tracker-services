@@ -1,12 +1,13 @@
-import { useNavigate } from "react-router-dom";
-
 import { Grid2 } from "@mui/material";
 import MuiContainer from "@mui/material/Container";
 import dayjs from "dayjs";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   CreateItemInput,
+  FieldOutput,
   useCreateItemMutation,
+  useFindFieldsQuery,
 } from "../../../../api/codegen/gql/graphql";
 import DatePicker from "../../../../common/components/DatePicker";
 import { useSnackbar } from "../../../../common/components/Snackbar";
@@ -21,7 +22,7 @@ interface ItemFormProps {
 }
 
 function ItemForm({ listId, parentItemId }: ItemFormProps) {
-  const navigate = useNavigate();
+  const [itemFields, setItemFields] = useState<FieldOutput[]>([]);
   const messageBar = useSnackbar();
   const [createItem] = useCreateItemMutation({
     onCompleted(response) {
@@ -31,14 +32,19 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
       messageBar.showError(error.message);
     },
   });
+  useFindFieldsQuery({
+    variables: { options: { listId } },
+    onCompleted(response) {
+      setItemFields(response.findFields);
+    },
+  });
 
-  const { control, formState, handleSubmit } = useForm<CreateItemInput>({
+  const { control, formState, handleSubmit } = useForm<
+    Record<string, string | string[]>
+  >({
     defaultValues: {
       listId,
       name: "",
-      type: "issue",
-      statusId: "",
-      priority: "Low",
       description: "",
       dueDate: null,
       assigneeIds: [],
@@ -50,15 +56,14 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
     {
       name,
       description,
-      statusId,
       listId,
       type,
       assigneeIds,
-      priority,
       dueDate,
+      parentItemId,
+      ...fields
     },
   ) => {
-    console.log(parentItemId);
     await createItem({
       variables: {
         input: {
@@ -66,11 +71,10 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
           listId,
           name,
           description,
-          type,
-          priority,
+          type: "issue",
           assigneeIds,
-          statusId,
           dueDate: dueDate ? dayjs(dueDate).format() : null,
+          fields,
         },
       },
     });
@@ -102,24 +106,35 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
           />
         </Grid2>
 
-        <Grid2 size={6}>
-          <IssueStatusSelector
-            name="statusId"
-            title="Status"
-            control={control}
-            formState={formState}
-          />
-        </Grid2>
+        {itemFields.map(({ id, name, type }) => {
+          switch (type) {
+            case "_Status":
+              return (
+                <Grid2 size={6} key={id}>
+                  <IssueStatusSelector
+                    name={id}
+                    title={name}
+                    control={control}
+                    formState={formState}
+                  />
+                </Grid2>
+              );
 
-        <Grid2 size={6}>
-          <IssuePrioritySelector
-            name="priority"
-            title="Priority"
-            control={control}
-            formState={formState}
-            options={["Low"]}
-          />
-        </Grid2>
+            case "_Priority":
+              return (
+                <Grid2 size={6} key={id}>
+                  <IssuePrioritySelector
+                    name={id}
+                    title={name}
+                    control={control}
+                    formState={formState}
+                    options={["Low"]}
+                  />
+                </Grid2>
+              );
+          }
+          return "Invalid Type";
+        })}
 
         {/* <Grid2 size={12} >
           <FormAutocomplete

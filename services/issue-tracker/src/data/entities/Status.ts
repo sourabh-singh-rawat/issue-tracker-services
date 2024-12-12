@@ -7,11 +7,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { StatusGroup } from "./StatusGroup";
-import { Item } from "./Item";
+import { StatusOptionGroup } from "./StatusGroup";
 
-@Entity({ name: "statuses" })
-export class Status extends BaseEntity {
+@Entity({ name: "status_options" })
+export class StatusOption extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -35,10 +34,7 @@ export class Status extends BaseEntity {
   @Column({ name: "group_id", type: "uuid" })
   groupId!: string;
 
-  @ManyToOne(() => StatusGroup, (x) => x.statuses)
+  @ManyToOne(() => StatusOptionGroup, (x) => x.statuses)
   @JoinColumn({ name: "group_id" })
-  group!: StatusGroup;
-
-  @ManyToOne(() => Item, (x) => x.status)
-  items!: Item[];
+  group!: StatusOptionGroup;
 }

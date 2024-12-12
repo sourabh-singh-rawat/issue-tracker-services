@@ -3,26 +3,22 @@ import {
   ITEM_PRIORITY,
   ServiceResponse,
 } from "@issue-tracker/common";
-import { NatsPublisher } from "@issue-tracker/event-bus";
-import { Typeorm } from "@issue-tracker/orm";
 import { IsNull } from "typeorm";
 import { dataSource } from "../..";
 import { Item, ItemAssignee } from "../../data";
 import {
   CreateItemOptions,
   DeleteItemOptions,
+  FieldService,
   FindItemOptions,
   FindListItemsOptions,
   FindSubItemsOptions,
   ItemService,
   UpdateItemOptions,
-} from "./interfaces/ItemService";
+} from "./interfaces";
 
 export class CoreItemService implements ItemService {
-  constructor(
-    private orm: Typeorm,
-    private readonly publisher: NatsPublisher,
-  ) {}
+  constructor(private readonly fieldService: FieldService) {}
 
   private getStatuses = () => Object.values(IssueStatus);
 
@@ -34,10 +30,9 @@ export class CoreItemService implements ItemService {
     newAssignee.userId = userId;
   }
 
-  private async isArchived(id: string) {}
-
   async createItem(options: CreateItemOptions) {
-    const { manager, userId, assigneeIds, parentItemId, ...input } = options;
+    const { manager, userId, assigneeIds, parentItemId, fields, ...input } =
+      options;
     const ItemRepo = manager.getRepository(Item);
     const ItemAssigneeRepo = manager.getRepository(ItemAssignee);
 
@@ -51,6 +46,17 @@ export class CoreItemService implements ItemService {
       createdById: userId,
       parentItem: parentItem ? parentItem : undefined,
     });
+
+    if (fields) {
+      for await (const field of Object.keys(fields)) {
+        // find fields and check if it is status field
+        this.fieldService.createFieldValue({
+          manager,
+          id: field,
+          value: fields[field],
+        });
+      }
+    }
 
     for await (const assigneeId of assigneeIds) {
       await ItemAssigneeRepo.save({ itemId: item.id, userId: assigneeId });
@@ -111,48 +117,16 @@ export class CoreItemService implements ItemService {
   }
 
   async updateItem(options: UpdateItemOptions) {
-    const {
-      itemId,
-      name,
-      manager,
-      description,
-      statusId: status,
-      priority,
-      dueDate,
-      userId,
-    } = options;
+    const { itemId, name, manager, description, dueDate, userId } = options;
     const ItemRepo = manager.getRepository(Item);
-
-    await this.isArchived(itemId);
 
     await ItemRepo.update(
       { id: itemId, createdById: userId },
-      { name, description, statusId: status, priority, dueDate },
+      { name, description, dueDate },
     );
   }
 
-  updateIssueStatus = async (
-    userId: string,
-    id: string,
-    status: IssueStatus,
-  ) => {
-    await this.isArchived(id);
-
-    const updatedIssue = new Item();
-    updatedIssue.statusId = status;
-  };
-
-  updateIssueResolution = async (
-    userId: string,
-    id: string,
-    resolution: boolean,
-  ) => {
-    const updatedIssue = new Item();
-  };
-
   updateIssueAssignee = async (id: string, userId: string) => {
-    await this.isArchived(id);
-
     const newIssueAssignee = new ItemAssignee();
     newIssueAssignee.itemId = id;
     newIssueAssignee.userId = userId;

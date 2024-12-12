@@ -1,3 +1,4 @@
+export * from "./CoreFieldResolver";
 export * from "./CoreItemResolver";
 export * from "./CoreListResolver";
 export * from "./CoreSpaceResolver";

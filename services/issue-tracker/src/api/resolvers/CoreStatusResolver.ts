@@ -10,9 +10,9 @@ export class CoreStatusResolver implements StatusResolver {
     @Ctx() ctx: any,
     @Arg("input") input: FindStatusesOptions,
   ) {
-    const { spaceId } = input;
+    const { listId } = input;
     const service = container.get("statusService");
 
-    return await service.findStatuses({ spaceId });
+    return await service.findStatuses({ listId });
   }
 }
