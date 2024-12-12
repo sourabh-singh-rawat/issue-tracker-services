@@ -1,11 +1,9 @@
-import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
-import { WorkspaceEmailService } from "./interfaces/workspace-email.service";
-import { UserRepository } from "../data/repositories/interfaces/user.repository";
-import { EMAIL_TYPE, UserNotFoundError } from "@issue-tracker/common";
-import { Typeorm } from "@issue-tracker/orm";
 import { EmailMessage, NodeMailer } from "@issue-tracker/comm";
-import { EmailEntity } from "../data/entities";
-import { EmailRepository } from "../data/repositories/interfaces/email.repository";
+import { EMAIL_TYPE, UserNotFoundError } from "@issue-tracker/common";
+import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
+import { Typeorm } from "@issue-tracker/orm";
+import { Email, User } from "../data/entities";
+import { WorkspaceEmailService } from "./interfaces/workspace-email.service";
 
 export class CoreWorkspaceEmailService implements WorkspaceEmailService {
   private readonly senderEmail = "no-reply@issue-tracker.com";
@@ -13,8 +11,6 @@ export class CoreWorkspaceEmailService implements WorkspaceEmailService {
 
   constructor(
     private readonly orm: Typeorm,
-    private readonly emailRepository: EmailRepository,
-    private readonly userRepository: UserRepository,
     private readonly mailer: NodeMailer,
   ) {}
 
@@ -27,7 +23,7 @@ export class CoreWorkspaceEmailService implements WorkspaceEmailService {
       workspaceName,
     } = payload;
 
-    const exists = await this.userRepository.existsById(userId);
+    const exists = await User.exists({ where: { id: userId } });
     if (!exists) throw new UserNotFoundError();
 
     const queryRunner = this.orm.createQueryRunner();
@@ -44,11 +40,11 @@ export class CoreWorkspaceEmailService implements WorkspaceEmailService {
         `,
       };
 
-      const newEmail = new EmailEntity();
+      const newEmail = new Email();
       newEmail.type = EMAIL_TYPE.WORKSPACE_INVITATION;
       newEmail.email = receiverEmail;
 
-      await this.emailRepository.save(newEmail, { queryRunner });
+      await Email.save(newEmail);
       await this.mailer.send(this.senderEmail, receiverEmail, message);
     });
   };

@@ -1,5 +1,5 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { container, dataSource } from "../..";
+import { container, postgres } from "../..";
 import { WorkspaceResolver } from "./interfaces";
 import { CreateWorkspaceInput, Workspace } from "./types";
 
@@ -13,7 +13,7 @@ export class CoreWorkspaceResolver implements WorkspaceResolver {
     const service = container.get("workspaceService");
     const userId = ctx.user.userId;
 
-    return await dataSource.transaction(async (manager) => {
+    return await postgres.transaction(async (manager) => {
       return await service.createWorkspace({ ...input, userId, manager });
     });
   }
@@ -23,7 +23,7 @@ export class CoreWorkspaceResolver implements WorkspaceResolver {
     const service = container.get("workspaceService");
     const userId = ctx.user.userId;
 
-    return await dataSource.transaction(async () => {
+    return await postgres.transaction(async () => {
       return await service.findWorkspaces(userId);
     });
   }

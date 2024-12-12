@@ -2,7 +2,7 @@ import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
 } from "@issue-tracker/common";
-import { AuditEntity } from "@issue-tracker/orm";
+import { Audit } from "@issue-tracker/orm";
 import {
   Column,
   Entity,
@@ -14,7 +14,7 @@ import { UserProfile } from "./UserProfile";
 import { VerificationLink } from "./VerificationLink";
 
 @Entity({ name: "users" })
-export class User extends AuditEntity {
+export class User extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

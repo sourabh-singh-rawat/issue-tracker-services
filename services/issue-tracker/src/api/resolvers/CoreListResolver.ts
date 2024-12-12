@@ -7,7 +7,7 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { container, dataSource } from "../..";
+import { container, postgres } from "../..";
 import { ListResolver } from "./interfaces";
 import { CreateListInput, List } from "./types";
 
@@ -27,7 +27,7 @@ export class CoreListResolver implements ListResolver {
     const service = container.get("listService");
     const userId = ctx.user.userId;
 
-    return await dataSource.transaction(async (manager) => {
+    return await postgres.transaction(async (manager) => {
       return await service.createList({ manager, userId, ...input });
     });
   }

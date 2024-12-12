@@ -1,13 +1,13 @@
 import { AwilixContainer, Resolver } from "awilix";
-import { Di } from "./interfaces/di.interface";
-import { AppLogger } from "../logger";
+import { Logger } from "./interfaces";
+import { Di } from "./interfaces/Container";
 
 export class AwilixDi<Services> implements Di<Services> {
   private readonly logger;
   private readonly di;
   private readonly services: { name: string; value: Resolver<unknown> }[] = [];
 
-  constructor(di: AwilixContainer, logger: AppLogger) {
+  constructor(di: AwilixContainer, logger: Logger) {
     this.di = di;
     this.logger = logger;
   }

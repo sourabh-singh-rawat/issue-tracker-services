@@ -1,6 +1,6 @@
+import { StatusCodes } from "http-status-codes";
 import { Errors } from "../errors";
 import { ResponseError } from "./response-errors";
-import { StatusCodes } from "http-status-codes";
 
 export class NotFoundError extends ResponseError {
   errorCode: string;
@@ -10,6 +10,6 @@ export class NotFoundError extends ResponseError {
     super(message, StatusCodes.NOT_FOUND);
 
     this.errorCode = Errors.ERR_NOT_FOUND;
-    this.errorMessage = message;
+    this.errorMessage = message + " not found";
   }
 }

@@ -4,7 +4,7 @@ import {
   ServiceResponse,
 } from "@issue-tracker/common";
 import { IsNull } from "typeorm";
-import { dataSource } from "../..";
+import { postgres } from "../..";
 import { Item, ItemAssignee } from "../../data";
 import {
   CreateItemOptions,
@@ -76,7 +76,7 @@ export class CoreItemService implements ItemService {
   async findSubItems(options: FindSubItemsOptions) {
     const { userId, listId, parentItemId } = options;
 
-    const ItemRepo = dataSource.getTreeRepository(Item);
+    const ItemRepo = postgres.getTreeRepository(Item);
     const parentItem = await Item.findOne({
       where: { id: parentItemId, listId, createdById: userId },
     });

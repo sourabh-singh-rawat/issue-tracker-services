@@ -7,7 +7,6 @@ import { ApolloServer } from "@apollo/server";
 import {
   ApolloFastifyContextFunction,
   fastifyApolloDrainPlugin,
-  fastifyApolloHandler,
 } from "@as-integrations/fastify";
 import {
   NatsBroker,
@@ -17,14 +16,14 @@ import {
 } from "@issue-tracker/event-bus";
 import { JwtToken } from "@issue-tracker/security";
 import {
-  AppContext,
-  AppLogger,
   AwilixDi,
-  FastifyServer,
-  logger,
+  CoreHttpServer,
+  CoreLogger,
+  Logger,
 } from "@issue-tracker/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import fastify from "fastify";
+import pino from "pino";
 import { buildSchema } from "type-graphql";
 import { DataSource } from "typeorm";
 import { CoreUserAuthenticationResolver } from "./api";
@@ -40,10 +39,9 @@ const startSubscriptions = (container: AwilixDi<RegisteredServices>) => {
   container.get("userEmailConfirmationSentSubscriber").fetchMessages();
 };
 
-const createContext: ApolloFastifyContextFunction<AppContext> = async (
-  req,
-  rep,
-) => {
+const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
+
+const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
   let token: any;
@@ -63,44 +61,6 @@ const createContext: ApolloFastifyContextFunction<AppContext> = async (
   return { req, rep };
 };
 
-const startServer = async () => {
-  try {
-    const schema = await buildSchema({
-      emitSchemaFile: true,
-      resolvers: [CoreUserAuthenticationResolver],
-    });
-    const instance = fastify();
-    const apollo = new ApolloServer<any>({
-      schema,
-      plugins: [fastifyApolloDrainPlugin(instance)],
-    });
-    await apollo.start();
-
-    const server = new FastifyServer({
-      fastify: instance,
-      configuration: {
-        host: "0.0.0.0",
-        port: parseInt(process.env.AUTH_SERVICE_PORT!),
-        environment: "development",
-        version: 1,
-      },
-      security: {
-        cors: { credentials: true, origin: "http://localhost:3000" },
-        cookie: { secret: process.env.JWT_SECRET! },
-      },
-    });
-    instance.route({
-      url: "/api/graphql",
-      method: ["POST", "GET"],
-      handler: fastifyApolloHandler(apollo, { context: createContext }),
-    });
-
-    await server.init();
-  } catch (error) {
-    process.exit(1);
-  }
-};
-
 export const broker = new NatsBroker({
   servers: [process.env.NATS_CLUSTER_URL || "nats"],
   streams: ["user"],
@@ -109,7 +69,7 @@ export const broker = new NatsBroker({
 
 export interface RegisteredServices {
   dataSource: DataSource;
-  logger: AppLogger;
+  logger: Logger;
   publisher: Publisher<Subjects>;
   userEmailConfirmationSentSubscriber: UserEmailConfirmationSentSubscriber;
   userAuthenticationService: UserAuthenticationService;
@@ -146,7 +106,31 @@ const main = async () => {
   await broker.init();
   container.init();
 
-  await startServer();
+  const schema = await buildSchema({
+    emitSchemaFile: true,
+    resolvers: [CoreUserAuthenticationResolver],
+  });
+  const instance = fastify();
+  const apollo = new ApolloServer<any>({
+    schema,
+    plugins: [fastifyApolloDrainPlugin(instance)],
+  });
+
+  const server = new CoreHttpServer({
+    server: instance,
+    config: {
+      host: "0.0.0.0",
+      port: parseInt(process.env.AUTH_SERVICE_PORT!),
+      environment: "development",
+      version: 1,
+    },
+    cors: { credentials: true, origin: process.env.ISSUE_TRACKER_CLIENT_URL },
+    cookie: { secret: process.env.JWT_SECRET! },
+    graphql: { apollo, path: "/graphql", createContext },
+    logger,
+  });
+
+  await server.start();
   startSubscriptions(container);
 };
 

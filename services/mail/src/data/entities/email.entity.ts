@@ -4,10 +4,11 @@ import {
   EmailStatus,
   EmailType,
 } from "@issue-tracker/common";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Audit } from "@issue-tracker/orm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "emails" })
-export class EmailEntity extends BaseEntity {
+export class Email extends Audit {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

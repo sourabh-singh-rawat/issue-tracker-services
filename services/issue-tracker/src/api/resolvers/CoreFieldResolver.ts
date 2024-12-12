@@ -1,6 +1,6 @@
 import { AppContext } from "@issue-tracker/server-core";
 import { Arg, Ctx, Query, Resolver } from "type-graphql";
-import { container, dataSource } from "../..";
+import { container, postgres } from "../..";
 import { FieldResolver } from "./interfaces";
 import { FieldOutput, FindFieldsOptions } from "./types";
 
@@ -14,7 +14,7 @@ export class CoreFieldResolver implements FieldResolver {
     const { listId } = options;
     const service = container.get("fieldService");
 
-    return await dataSource.transaction(async (manager) => {
+    return await postgres.transaction(async (manager) => {
       return await service.findFields({ manager, listId });
     });
   }

@@ -1,21 +1,18 @@
-import { ProjectMemberPayload } from "@issue-tracker/event-bus";
-import { ProjectEmailService } from "./interfaces/project-email.service";
-import { UserRepository } from "../data/repositories/interfaces/user.repository";
 import { EmailMessage, NodeMailer } from "@issue-tracker/comm";
 import { UserNotFoundError } from "@issue-tracker/common";
+import { ProjectMemberPayload } from "@issue-tracker/event-bus";
+import { User } from "../data/entities";
+import { ProjectEmailService } from "./interfaces/project-email.service";
 
 export class CoreProjectEmailService implements ProjectEmailService {
   private readonly senderEmail = "no-reply@issue-tracker.com";
 
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly mailer: NodeMailer,
-  ) {}
+  constructor(private readonly mailer: NodeMailer) {}
 
   sendProjectInvitationEmail = async (payload: ProjectMemberPayload) => {
     const { projectId, role, createdBy } = payload;
 
-    const sender = await this.userRepository.findById(createdBy);
+    const sender = await User.findOne({ where: { id: createdBy } });
     if (!sender) throw new UserNotFoundError();
 
     const message: EmailMessage = {

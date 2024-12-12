@@ -8,13 +8,7 @@ info:
 components:
   schemas: {}
 paths:
-  /api/graphql:
-    post: &a1
-      responses:
-        "200":
-          description: Default Response
-    get: *a1
-  /api/v1/attachments/{itemId}:
+  /attachments/{itemId}:
     post:
       operationId: createAttachment
       summary: Create a new issue attachment
@@ -47,6 +41,12 @@ paths:
               schema:
                 type: string
                 description: Bad request
+  /api/graphql:
+    post: &a1
+      responses:
+        "200":
+          description: Default Response
+    get: *a1
 servers:
   - url: http://localhost:5000
 tags:

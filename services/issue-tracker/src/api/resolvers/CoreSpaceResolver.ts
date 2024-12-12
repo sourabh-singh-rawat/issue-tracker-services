@@ -1,5 +1,5 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { container, dataSource } from "../..";
+import { container, postgres } from "../..";
 import { SpaceResolver } from "./interfaces";
 import { CreateSpaceInput, FindSpacesOptions, Space } from "./types";
 
@@ -10,7 +10,7 @@ export class CoreSpaceResolver implements SpaceResolver {
     const service = container.get("spaceService");
     const userId = ctx.user.userId;
 
-    return await dataSource.transaction(async (manager) => {
+    return await postgres.transaction(async (manager) => {
       return await service.createSpace({ manager, ...input, userId });
     });
   }
@@ -20,7 +20,7 @@ export class CoreSpaceResolver implements SpaceResolver {
     const service = container.get("spaceService");
     const userId = ctx.user.userId;
 
-    return await dataSource.transaction(async (manager) => {
+    return await postgres.transaction(async (manager) => {
       return await service.findSpaces({ userId, ...input });
     });
   }

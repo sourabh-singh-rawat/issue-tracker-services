@@ -1,27 +1,19 @@
-import { Typeorm } from "./interfaces";
+import { ConnectionRefusedError } from "@issue-tracker/common";
+import { Logger } from "@issue-tracker/server-core";
 import { DataSource, ObjectLiteral, QueryRunner } from "typeorm";
 import { SelectQueryBuilder } from "typeorm/browser";
-import {
-  ConnectionRefusedError,
-  MissingDataSource,
-} from "@issue-tracker/common";
-import { AppLogger } from "@issue-tracker/server-core";
+import { Typeorm } from "./interfaces";
 
 export class PostgresTypeorm implements Typeorm {
   constructor(
     private readonly dataSource: DataSource,
-    private readonly logger: AppLogger,
-  ) {
-    if (!dataSource) throw new MissingDataSource();
-
-    this.logger = logger;
-    this.dataSource = dataSource;
-  }
+    private readonly logger: Logger,
+  ) {}
 
   async init() {
     try {
       await this.dataSource.initialize();
-      this.logger.info("Server connected to postgres cluster");
+      this.logger.info(`🐘 [PostgreSQL] cluster connected`);
     } catch (error) {
       throw new ConnectionRefusedError(error!.toString());
     }
