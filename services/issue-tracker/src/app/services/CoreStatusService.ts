@@ -1,17 +1,17 @@
-import { Status, StatusGroup } from "../../data";
+import { StatusOption, StatusOptionGroup } from "../../data";
 import {
-  CreateStatusGroupOptions,
+  CreateOptionsOptions,
   FindStatusesOptions,
   StatusService,
 } from "./interfaces";
 
 export class CoreStatusService implements StatusService {
-  async createStatusGroup(options: CreateStatusGroupOptions) {
-    const { manager, statuses, spaceId } = options;
-    const StatusGroupRepo = manager.getRepository(StatusGroup);
-    const StatusRepo = manager.getRepository(Status);
+  async createOptions(options: CreateOptionsOptions) {
+    const { manager, statuses, listId } = options;
+    const StatusGroupRepo = manager.getRepository(StatusOptionGroup);
+    const StatusRepo = manager.getRepository(StatusOption);
 
-    const { id: groupId } = await StatusGroupRepo.save({ spaceId });
+    const { id: groupId } = await StatusGroupRepo.save({ listId });
     for await (const status of statuses) {
       const { name, orderIndex, type } = status;
 
@@ -20,8 +20,8 @@ export class CoreStatusService implements StatusService {
   }
 
   async findStatuses(options: FindStatusesOptions) {
-    const { spaceId } = options;
+    const { listId } = options;
 
-    return await Status.find({ where: { group: { spaceId } } });
+    return await StatusOption.find({ where: { group: { listId } } });
   }
 }

@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class FindStatusesOptions {
+export class FindFieldsOptions {
   @Field()
   listId!: string;
 }

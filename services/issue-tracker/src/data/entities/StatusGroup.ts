@@ -7,21 +7,21 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Space } from "./Space";
-import { Status } from "./Status";
+import { List } from "./List";
+import { StatusOption } from "./Status";
 
-@Entity({ name: "status_groups" })
-export class StatusGroup extends BaseEntity {
+@Entity({ name: "status_option_groups" })
+export class StatusOptionGroup extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ name: "space_id", type: "uuid" })
-  spaceId!: string;
+  @Column({ name: "list_id", type: "uuid" })
+  listId!: string;
 
-  @ManyToOne(() => Space, (x) => x.statuses)
-  @JoinColumn({ name: "space_id" })
-  space!: Space;
+  @ManyToOne(() => List, (x) => x.statuses)
+  @JoinColumn({ name: "list_id" })
+  list!: List;
 
-  @OneToMany(() => Status, (x) => x.group)
-  statuses!: Status;
+  @OneToMany(() => StatusOption, (x) => x.group)
+  statuses!: StatusOption;
 }

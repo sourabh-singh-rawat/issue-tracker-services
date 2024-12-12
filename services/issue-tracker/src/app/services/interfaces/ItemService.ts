@@ -12,12 +12,11 @@ export interface CreateItemOptions extends ServiceOptions {
   listId: string;
   type: string;
   name: string;
-  statusId: string;
-  priority: ItemPriority;
   assigneeIds: string[];
   description?: string;
   dueDate?: Date;
   parentItemId?: string;
+  fields?: Record<string, string | null | string[]>;
 }
 
 export interface FindItemOptions {
@@ -36,8 +35,6 @@ export interface UpdateItemOptions extends ServiceOptions {
   itemId: string;
   type?: string;
   name?: string;
-  statusId?: string;
-  priority?: ItemPriority;
   assigneeIds?: string[];
   description?: string;
   dueDate?: Date;
@@ -61,15 +58,5 @@ export interface ItemService {
   getIssueStatusList(): Promise<ServiceResponse<IssueStatus[]>>;
   getIssuePriorityList(): Promise<ServiceResponse<ItemPriority[]>>;
   updateItem(options: UpdateItemOptions): Promise<void>;
-  updateIssueStatus(
-    userId: string,
-    id: string,
-    status: IssueStatus,
-  ): Promise<void>;
-  updateIssueResolution(
-    userId: string,
-    id: string,
-    resolution: boolean,
-  ): Promise<void>;
   deleteItem(options: DeleteItemOptions): Promise<void>;
 }

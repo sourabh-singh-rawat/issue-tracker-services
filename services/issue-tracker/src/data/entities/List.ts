@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { Item } from "./Item";
 import { Space } from "./Space";
+import { StatusOptionGroup } from "./StatusGroup";
 import { View } from "./View";
 import { Workspace } from "./Workspace";
 
@@ -42,4 +43,7 @@ export class List extends Audit {
 
   @OneToMany(() => View, (x) => x.list)
   views!: View[];
+
+  @OneToMany(() => StatusOptionGroup, (x) => x.list)
+  statuses!: StatusOptionGroup[];
 }

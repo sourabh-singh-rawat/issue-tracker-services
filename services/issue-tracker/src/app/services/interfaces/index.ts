@@ -1,3 +1,4 @@
+export * from "./FieldService";
 export * from "./ItemService";
 export * from "./ListService";
 export * from "./SpaceService";

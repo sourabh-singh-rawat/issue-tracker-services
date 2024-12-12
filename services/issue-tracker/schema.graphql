@@ -7,11 +7,10 @@ input CreateItemInput {
   assigneeIds: [String!]!
   description: String
   dueDate: DateTimeISO
+  fields: JSON
   listId: String!
   name: String!
   parentItemId: String
-  priority: String!
-  statusId: String!
   type: String!
 }
 
@@ -37,6 +36,17 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
+type FieldOutput {
+  id: String!
+  name: String!
+  type: String!
+  value: String
+}
+
+input FindFieldsOptions {
+  listId: String!
+}
+
 input FindItemsInput {
   listId: String!
   parentItemId: String!
@@ -47,7 +57,7 @@ input FindSpacesOptions {
 }
 
 input FindStatusesOptions {
-  spaceId: String!
+  listId: String!
 }
 
 type Item {
@@ -56,10 +66,13 @@ type Item {
   list: List!
   name: String!
   parentItem: Item
-  priority: String!
-  statusId: String!
   subItems: [Item!]
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type List {
   id: String!
@@ -81,6 +94,7 @@ type PaginatedList {
 }
 
 type Query {
+  findFields(options: FindFieldsOptions!): [FieldOutput!]!
   findItem(id: String!): Item
   findList(id: String!): List!
   findListItems(listId: String!): [Item!]!

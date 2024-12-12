@@ -3,7 +3,5 @@ query FindSubItems($input: FindItemsInput!) {
     description
     id
     name
-    priority
-    statusId
   }
 }

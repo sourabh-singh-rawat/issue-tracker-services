@@ -56,7 +56,6 @@ export default function ItemStatusSelector<DefaultValues extends FieldValues>(
             control={control}
             rules={rules}
             render={({ field }) => {
-              console.log(field);
               return (
                 <Select
                   name={field.name}

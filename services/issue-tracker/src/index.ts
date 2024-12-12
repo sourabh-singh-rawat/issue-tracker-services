@@ -24,9 +24,11 @@ import {
 } from "@issue-tracker/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import fastify from "fastify";
+import GraphQLJSON from "graphql-type-json";
 import { buildSchema } from "type-graphql";
 import { DataSource } from "typeorm";
 import {
+  CoreFieldResolver,
   CoreItemResolver,
   CoreListResolver,
   CoreSpaceResolver,
@@ -34,12 +36,14 @@ import {
   CoreWorkspaceResolver,
 } from "./api/resolvers";
 import {
+  CoreFieldService,
   CoreItemService,
   CoreListService,
   CoreSpaceService,
   CoreStatusService,
   CoreUserService,
   CoreWorkspaceService,
+  FieldService,
   ItemService,
   ListService,
   SpaceService,
@@ -57,6 +61,7 @@ export interface RegisteredServices {
   userService: UserService;
   itemService: ItemService;
   listService: ListService;
+  fieldService: FieldService;
   statusService: StatusService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
@@ -84,17 +89,24 @@ const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   return { req, rep };
 };
 
-const startServer = async (container: AwilixDi<RegisteredServices>) => {
+const startServer = async () => {
   try {
     const instance = fastify();
     const schema = await buildSchema({
       emitSchemaFile: true,
+      scalarsMap: [
+        {
+          type: Object,
+          scalar: GraphQLJSON,
+        },
+      ],
       resolvers: [
         CoreWorkspaceResolver,
         CoreSpaceResolver,
         CoreListResolver,
         CoreItemResolver,
         CoreStatusResolver,
+        CoreFieldResolver,
       ],
     });
     const apollo = new ApolloServer({
@@ -131,6 +143,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
     });
     server.init();
   } catch (error) {
+    console.log(error);
     process.exit(1);
   }
 };
@@ -170,6 +183,7 @@ const main = async () => {
   container.add("userService", asClass(CoreUserService));
   container.add("itemService", asClass(CoreItemService));
   container.add("statusService", asClass(CoreStatusService));
+  container.add("fieldService", asClass(CoreFieldService));
   container.add("spaceService", asClass(CoreSpaceService));
   container.add("listService", asClass(CoreListService));
   container.add("workspaceService", asClass(CoreWorkspaceService));
@@ -181,7 +195,7 @@ const main = async () => {
 
   container.init();
 
-  await startServer(container);
+  await startServer();
   startSubscriptions(container);
 };
 

@@ -11,6 +11,7 @@ export * from "./Status";
 export * from "./StatusGroup";
 export * from "./User";
 export * from "./View";
+export * from "./ViewField";
 export * from "./Workspace";
 export * from "./WorkspaceInvitation";
 export * from "./WorkspaceMember";

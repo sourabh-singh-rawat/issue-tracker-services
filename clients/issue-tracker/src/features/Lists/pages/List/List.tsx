@@ -25,9 +25,9 @@ export function List() {
   const [statuses, setStatuses] = useState<FindStatusesQuery["findStatuses"]>(
     [],
   );
-  const { data } = useFindStatusesQuery({
-    variables: { input: { spaceId: spaceId as string } },
-    skip: !spaceId,
+  useFindStatusesQuery({
+    variables: { input: { listId: listId as string } },
+    skip: !listId,
     onCompleted(response) {
       setStatuses(response.findStatuses);
     },

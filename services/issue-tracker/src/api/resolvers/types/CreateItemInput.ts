@@ -1,5 +1,13 @@
-import { ItemPriority } from "@issue-tracker/common";
+import { GraphQLObjectType } from "graphql";
+import GraphQLJSON from "graphql-type-json";
 import { Field, InputType } from "type-graphql";
+
+const JSON = new GraphQLObjectType({
+  name: "GraphQLJSON",
+  fields: {
+    myValue: { type: GraphQLJSON },
+  },
+});
 
 @InputType()
 export class CreateItemInput {
@@ -8,12 +16,6 @@ export class CreateItemInput {
 
   @Field()
   type!: string;
-
-  @Field()
-  statusId!: string;
-
-  @Field()
-  priority!: ItemPriority;
 
   @Field()
   listId!: string;
@@ -29,4 +31,7 @@ export class CreateItemInput {
 
   @Field(() => [String])
   assigneeIds!: string[];
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  fields!: Record<string, string | null | string[]>;
 }

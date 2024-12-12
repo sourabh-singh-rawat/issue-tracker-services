@@ -12,12 +12,6 @@ export class Item {
   @Field({ nullable: true })
   description?: string;
 
-  @Field()
-  statusId!: string;
-
-  @Field()
-  priority!: string;
-
   @Field(() => List)
   list!: List;
 
