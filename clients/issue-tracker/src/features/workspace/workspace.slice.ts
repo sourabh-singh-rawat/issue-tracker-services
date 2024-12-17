@@ -1,29 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Workspace } from "../../api/codegen/gql/graphql";
 
-const initialState: { workspaces: Workspace[]; defaultWorkspace: Workspace } = {
+interface WorkspaceSlice {
+  current: Workspace | null;
+  workspaces: Workspace[];
+}
+
+const initialState: WorkspaceSlice = {
+  current: null,
   workspaces: [],
-  defaultWorkspace: {
-    id: "",
-    name: "",
-    description: "",
-    status: "",
-    createdById: "",
-  },
 };
 
 const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
   reducers: {
-    setWorkspaces: (state, action) => {
-      return { ...state, workspaces: action.payload || [] };
-    },
-    setDefaultWorkspace: (state, action) => {
-      return { ...state, defaultWorkspace: action.payload };
+    configureWorkspaceSlice: (state, action: PayloadAction<Workspace[]>) => {
+      const workspaces = action.payload || [];
+
+      return {
+        ...state,
+        current: workspaces.find((w) => w.status === "Default") || null,
+        workspaces,
+      };
     },
   },
 });
 
-export const { setWorkspaces, setDefaultWorkspace } = workspaceSlice.actions;
+export const { configureWorkspaceSlice } = workspaceSlice.actions;
 export default workspaceSlice.reducer;

@@ -26,15 +26,6 @@ const authSlice = createSlice({
         isLoading: action.payload.isLoading,
       };
     },
-    setCurrentWorkspace: (state, action) => {
-      const { id, name } = action.payload;
-
-      return {
-        ...state,
-        currentWorkspace: { id, name },
-        isLoading: false,
-      };
-    },
     logout: (state) => {
       return {
         ...state,
@@ -44,6 +35,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, setCurrentWorkspace, logout } =
-  authSlice.actions;
+export const { setCurrentUser, logout } = authSlice.actions;
 export default authSlice.reducer;

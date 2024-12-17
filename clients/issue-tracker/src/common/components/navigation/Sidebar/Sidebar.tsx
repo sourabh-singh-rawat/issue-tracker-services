@@ -7,9 +7,8 @@ import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import MuiToolbar from "@mui/material/Toolbar";
 
-import { Spaces } from "../../../../features/spaces";
+import { SpaceList } from "../../../../features/spaces";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
-import { useAppSelector } from "../../../hooks";
 
 const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   const openDrawerWidth = theme.spacing(32);
@@ -47,7 +46,6 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
 export function Sidebar() {
   const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
-  const workspaceId = useAppSelector((s) => s.workspace.defaultWorkspace.id);
 
   useEffect(() => {
     setOpen(isLargeScreen);
@@ -60,9 +58,7 @@ export function Sidebar() {
         <WorkspaceSwitcher />
       </List>
       <MuiDivider />
-      {workspaceId && (
-        <List subheader={<Spaces workspaceId={workspaceId} />} disablePadding />
-      )}
+      <SpaceList />
       <MuiDivider />
     </Drawer>
   );

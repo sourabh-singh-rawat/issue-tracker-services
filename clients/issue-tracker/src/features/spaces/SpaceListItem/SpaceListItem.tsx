@@ -23,7 +23,12 @@ interface SpaceProps {
   name: string;
 }
 
-export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
+export const SpaceListItem = ({
+  name,
+  spaceId,
+  workspaceId,
+  lists,
+}: SpaceProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,4 +73,4 @@ export function Space({ name, spaceId, workspaceId, lists }: SpaceProps) {
       />
     </>
   );
-}
+};
