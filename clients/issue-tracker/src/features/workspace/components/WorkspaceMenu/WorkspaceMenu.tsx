@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import WorkspaceModal from "../CreateWorkspaceModal";
 
@@ -24,20 +24,14 @@ interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
   selectedOption: Workspace;
-  setSelectedOption: React.Dispatch<
-    React.SetStateAction<Workspace | undefined>
-  >;
   options?: Workspace[];
 }
 
-export default function WorkspaceMenu(
-  {
-    anchorEl,
-    handleClose,
-    selectedOption,
-    setSelectedOption,
-  }: WorkspaceMenuProps,
-) {
+export default function WorkspaceMenu({
+  anchorEl,
+  handleClose,
+  selectedOption,
+}: WorkspaceMenuProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const workspaceId = selectedOption.id;
