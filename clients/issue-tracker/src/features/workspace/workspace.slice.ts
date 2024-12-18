@@ -4,11 +4,13 @@ import { Workspace } from "../../api/codegen/gql/graphql";
 interface WorkspaceSlice {
   current: Workspace | null;
   workspaces: Workspace[];
+  isLoading: boolean;
 }
 
 const initialState: WorkspaceSlice = {
   current: null,
   workspaces: [],
+  isLoading: true,
 };
 
 const workspaceSlice = createSlice({
@@ -16,7 +18,7 @@ const workspaceSlice = createSlice({
   initialState,
   reducers: {
     setCurrentWorkspace(state, action: PayloadAction<Workspace>) {
-      return { ...state, current: action.payload };
+      return { ...state, current: action.payload, isLoading: false };
     },
     setWorkspaces(state, action: PayloadAction<Workspace[]>) {
       const workspaces = action.payload || [];

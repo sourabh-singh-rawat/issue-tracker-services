@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemText, Skeleton } from "@mui/material";
 import { useAppSelector } from "../../../common";
 import { CreateSpaceModal } from "../CreateSpaceModal";
 import { SpaceListItem } from "../SpaceListItem/SpaceListItem";
@@ -11,7 +11,8 @@ interface SpaceMenuProps {
 
 export const SpaceList = ({ workspaceId }: SpaceMenuProps) => {
   const [open, setOpen] = useState(false);
-  const spaces = useAppSelector((x) => x.space.spaces);
+  const space = useAppSelector((x) => x.space);
+  const spaces = space.spaces;
 
   return (
     <List
@@ -22,8 +23,13 @@ export const SpaceList = ({ workspaceId }: SpaceMenuProps) => {
           >
             <ListItemText>Spaces</ListItemText>
           </ListItem>
-          {spaces &&
-            workspaceId &&
+          {space.isLoading ? (
+            <ListItem>
+              <ListItemText>
+                <Skeleton />
+              </ListItemText>
+            </ListItem>
+          ) : (
             spaces.map(({ id, name, lists }) => (
               <SpaceListItem
                 key={id}
@@ -32,7 +38,8 @@ export const SpaceList = ({ workspaceId }: SpaceMenuProps) => {
                 lists={lists}
                 name={name}
               />
-            ))}
+            ))
+          )}
         </>
       }
       disablePadding

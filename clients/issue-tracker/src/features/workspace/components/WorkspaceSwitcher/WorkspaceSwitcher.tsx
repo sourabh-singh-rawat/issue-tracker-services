@@ -5,6 +5,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Skeleton,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -19,7 +20,7 @@ export default function WorkspaceSwitcher() {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { workspaces, current: main } = useAppSelector((s) => s.workspace);
+  const { workspaces, current, isLoading } = useAppSelector((s) => s.workspace);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -29,32 +30,40 @@ export default function WorkspaceSwitcher() {
 
   return (
     <List disablePadding>
-      {main && (
-        <ListItemButton onClick={handleClick} disableRipple>
-          <ListItemIcon>
-            <Avatar
-              alt={main.name[0]}
-              sx={{
-                height: theme.spacing(3.5),
-                width: theme.spacing(3.5),
-                bgcolor: theme.palette.primary.main,
-              }}
-              variant="rounded"
-            >
-              <Typography variant="h6">{main.name[0]}</Typography>
-            </Avatar>
-          </ListItemIcon>
-          <ListItemText primary={main.name} />
-          <IconButton disableRipple>
-            {anchorEl ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+      {isLoading ? (
+        <ListItemButton>
+          <ListItemText>
+            <Skeleton />
+          </ListItemText>
         </ListItemButton>
+      ) : (
+        current && (
+          <ListItemButton onClick={handleClick} disableRipple>
+            <ListItemIcon>
+              <Avatar
+                alt={current.name[0]}
+                sx={{
+                  height: theme.spacing(3.5),
+                  width: theme.spacing(3.5),
+                  bgcolor: theme.palette.primary.main,
+                }}
+                variant="rounded"
+              >
+                <Typography variant="h6">{current.name[0]}</Typography>
+              </Avatar>
+            </ListItemIcon>
+            <ListItemText primary={current.name} />
+            <IconButton disableRipple>
+              {anchorEl ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </ListItemButton>
+        )
       )}
-      {main && (
+      {current && (
         <WorkspaceMenu
           anchorEl={anchorEl}
           options={workspaces}
-          selectedOption={main}
+          selectedOption={current}
           handleClose={handleClose}
         />
       )}
