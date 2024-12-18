@@ -3,10 +3,12 @@ import { Space } from "../../api";
 
 interface SpaceSlice {
   spaces: Space[];
+  isLoading: boolean;
 }
 
 const initialState: SpaceSlice = {
   spaces: [],
+  isLoading: true,
 };
 
 const spaceSlice = createSlice({
@@ -17,6 +19,7 @@ const spaceSlice = createSlice({
       return {
         ...state,
         spaces: action.payload,
+        isLoading: false,
       };
     },
   },
