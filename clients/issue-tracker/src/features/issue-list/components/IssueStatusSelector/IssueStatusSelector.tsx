@@ -10,10 +10,13 @@ interface IssueStatusSelectorProps {
   isDisabled?: boolean;
 }
 
-export default function IssueStatusSelector(
-  { id, value, options = [], isDisabled }: IssueStatusSelectorProps,
-) {
-  const { showSuccess, showError } = useSnackbar();
+export default function IssueStatusSelector({
+  id,
+  value,
+  options = [],
+  isDisabled,
+}: IssueStatusSelectorProps) {
+  const { success: showSuccess, error: showError } = useSnackbar();
   const [updateIssueStatus, { isSuccess, isError }] = useState();
 
   const handleChange = async (e: SelectChangeEvent<string>) => {

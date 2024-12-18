@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 dayjs.extend(relativeTime);
 
 import { Link, useTheme } from "@mui/material";
@@ -12,19 +12,19 @@ import Tabs from "../../../../common/components/Tabs";
 
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
+import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
-import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 
-import Title2 from "../../../../common/components/ItemName";
 import Chip from "../../../../common/components/Chip";
+import Title2 from "../../../../common/components/ItemName";
 
 export default function Issue() {
   const theme = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { showSuccess, showError } = useSnackbar();
+  const { success: showSuccess, error: showError } = useSnackbar();
   const [issue, setIssue] = useState({ name: "", updatedAt: "" });
 
   const { data, ...issueRequest } = useState({ id });

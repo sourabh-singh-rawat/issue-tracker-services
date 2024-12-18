@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-import { ImageList, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
-import TabPanel from "../../../../common/components/TabPanel";
 import IssueAssignees from "../../../../common/components/IssueAssignees";
+import TabPanel from "../../../../common/components/TabPanel";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import Avatar from "../../../../common/components/Avatar";
+import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
 import MuiTable from "@mui/material/Table";
-import MuiTableRow from "@mui/material/TableRow";
 import MuiTableBody from "@mui/material/TableBody";
+import MuiTableRow from "@mui/material/TableRow";
+import DateTag from "../../../../common/components/DateTag";
+import Description2 from "../../../../common/components/ItemDescription";
 import StyledCell from "../../../../common/components/styled/StyledCell";
 import IssuePrioritySelector from "../../../issue-list/components/IssuePrioritySelector";
 import IssueStatusSelector from "../../../issue-list/components/IssueStatusSelector";
-import DateTag from "../../../../common/components/DateTag";
-import ImageCard from "../../../issue-attachments/components/ImageCard";
 import IssueResolutionSelector from "../../components/IssueResolutionSelector";
-import Description2 from "../../../../common/components/ItemDescription";
 
 export default function IssueOverview() {
   const theme = useTheme();
   const { id, selectedTab, page, isLoading } = useSelectedTab();
-  const { showSuccess, showError } = useSnackbar();
+  const { success: showSuccess, error: showError } = useSnackbar();
 
   const [updateIssueMutation, { isSuccess, isError }] = useState();
   const { data: statuses } = useState();

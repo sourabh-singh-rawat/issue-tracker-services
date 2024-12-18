@@ -34,7 +34,7 @@ interface ItemAttachmentProps {
 export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
   const theme = useTheme();
   const messageBar = useSnackbar();
-  const { showSuccess } = useSnackbar();
+  const { success: showSuccess } = useSnackbar();
   const [createAttachment, { isLoading }] = useCreateAttachmentMutation();
   const { data: attachments, refetch } = useFindAttachmentsQuery({
     variables: { itemId },
@@ -42,11 +42,11 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
   });
   const [deleteAttachment] = useDeleteAttachmentMutation({
     onCompleted(response) {
-      messageBar.showSuccess(response.deleteAttachment);
+      messageBar.success(response.deleteAttachment);
       refetch();
     },
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
     },
   });
 

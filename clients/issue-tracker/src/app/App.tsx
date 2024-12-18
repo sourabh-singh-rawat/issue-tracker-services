@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
-import { AppLayout } from "../common/components/AppLayout";
-import PrivateRoutes from "../common/components/PrivateRoutes";
+import { Main } from "../common/components/Main";
+import { PrivateRoutes } from "../common/components/PrivateRoutes";
 import Login from "../features/auth/pages/Login";
 import SignUp from "../features/auth/pages/Signup";
 import SpaceBoard from "../features/dashboard/pages/Dashboard";
@@ -21,7 +21,7 @@ function NoComponent() {
 export default function App() {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
+      <Route element={<Main />}>
         <Route element={<Login />} path="login" />
         <Route element={<SignUp />} path="signup" />
         <Route element={<EmailVerification />} path="email-verification" />

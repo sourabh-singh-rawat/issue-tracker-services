@@ -34,6 +34,8 @@ export function Navbar() {
             </Grid2>
             <Grid2>
               <Notifications />
+            </Grid2>
+            <Grid2>
               <AccountSwitcher />
             </Grid2>
           </Grid2>

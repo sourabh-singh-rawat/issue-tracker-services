@@ -1,6 +1,6 @@
 import MuiContainer from "@mui/material/Container";
 import Grid2 from "@mui/material/Grid2";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
@@ -20,13 +20,13 @@ export default function ListForm({ spaceId }: ListFormProps) {
   const messageBar = useSnackbar();
   const [createList] = useCreateListMutation({
     onCompleted({ createList }) {
-      messageBar.showSuccess("Created list successfully");
+      messageBar.success("Created list successfully");
       setTimeout(() => {
         navigate(`/lists/${createList}/overview`);
       }, 5000);
     },
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
     },
   });
 

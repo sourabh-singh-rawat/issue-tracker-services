@@ -1,5 +1,5 @@
 import MuiGrid from "@mui/material/Grid";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useVerifyVerificationLinkMutation } from "../../../../api/codegen/gql/graphql";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
@@ -13,12 +13,12 @@ export function EmailVerification() {
   const messageBar = useSnackbar();
   const [verifyVerificationLink] = useVerifyVerificationLinkMutation({
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
       setPageMessage("Unable to verify your email");
     },
     onCompleted(response) {
       const message = response.verifyVerificationLink;
-      messageBar.showSuccess(message);
+      messageBar.success(message);
       setPageMessage(`${message}. You will be redirected shortly`);
 
       setTimeout(() => {

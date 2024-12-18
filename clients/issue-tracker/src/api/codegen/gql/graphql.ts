@@ -169,6 +169,7 @@ export type PaginatedList = {
 export type Query = {
   __typename?: 'Query';
   findAttachments: PaginatedAttachment;
+  findDefaultWorkspace: Workspace;
   findFields: Array<FieldOutput>;
   findItem?: Maybe<Item>;
   findList: List;
@@ -346,6 +347,11 @@ export type CreateWorkspaceMutationVariables = Exact<{
 
 
 export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: string };
+
+export type FindDefaultWorkspaceQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindDefaultWorkspaceQuery = { __typename?: 'Query', findDefaultWorkspace: { __typename?: 'Workspace', createdById: string, description?: string | null, id: string, name: string, status: string } };
 
 export type FindFieldsQueryVariables = Exact<{
   options: FindFieldsOptions;
@@ -751,6 +757,49 @@ export function useCreateWorkspaceMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateWorkspaceMutationHookResult = ReturnType<typeof useCreateWorkspaceMutation>;
 export type CreateWorkspaceMutationResult = Apollo.MutationResult<CreateWorkspaceMutation>;
 export type CreateWorkspaceMutationOptions = Apollo.BaseMutationOptions<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>;
+export const FindDefaultWorkspaceDocument = gql`
+    query FindDefaultWorkspace {
+  findDefaultWorkspace {
+    createdById
+    description
+    id
+    name
+    status
+  }
+}
+    `;
+
+/**
+ * __useFindDefaultWorkspaceQuery__
+ *
+ * To run a query within a React component, call `useFindDefaultWorkspaceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindDefaultWorkspaceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindDefaultWorkspaceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindDefaultWorkspaceQuery(baseOptions?: Apollo.QueryHookOptions<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>(FindDefaultWorkspaceDocument, options);
+      }
+export function useFindDefaultWorkspaceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>(FindDefaultWorkspaceDocument, options);
+        }
+export function useFindDefaultWorkspaceSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>(FindDefaultWorkspaceDocument, options);
+        }
+export type FindDefaultWorkspaceQueryHookResult = ReturnType<typeof useFindDefaultWorkspaceQuery>;
+export type FindDefaultWorkspaceLazyQueryHookResult = ReturnType<typeof useFindDefaultWorkspaceLazyQuery>;
+export type FindDefaultWorkspaceSuspenseQueryHookResult = ReturnType<typeof useFindDefaultWorkspaceSuspenseQuery>;
+export type FindDefaultWorkspaceQueryResult = Apollo.QueryResult<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>;
 export const FindFieldsDocument = gql`
     query FindFields($options: FindFieldsOptions!) {
   findFields(options: $options) {

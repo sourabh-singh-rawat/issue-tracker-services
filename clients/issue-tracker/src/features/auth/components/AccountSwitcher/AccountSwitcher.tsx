@@ -1,6 +1,5 @@
 import MuiLockTwoToneIcon from "@mui/icons-material/LockTwoTone";
 import {
-  Avatar,
   Divider,
   IconButton,
   List,
@@ -12,29 +11,27 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useAppSelector } from "../../../../common";
+import Avatar from "../../../../common/components/Avatar";
 import MenuItem from "../../../../common/components/MenuItem";
 import StyledList from "../../../../common/components/styled/StyledList";
-import { useAuth } from "../../../../common/contexts/Auth";
 
 export function AccountSwitcher() {
   const navigate = useNavigate();
+  const { current, isLoading } = useAppSelector((x) => x.auth);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
-  const { auth } = useAuth();
 
   return (
-    auth.user && (
-      <>
-        <IconButton size="small" onClick={handleClick} disableRipple>
-          <Avatar variant="circular">
-            {auth.user.displayName ? auth.user.displayName[0] : null}
-          </Avatar>
-        </IconButton>
-
+    <>
+      <IconButton size="small" onClick={handleClick} disableRipple>
+        <Avatar label={current?.displayName} isLoading={isLoading} />
+      </IconButton>
+      {current && (
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -49,11 +46,9 @@ export function AccountSwitcher() {
               }}
             >
               <ListItemIcon>
-                <Avatar>
-                  {auth.user.displayName ? auth.user.displayName[0] : null}
-                </Avatar>
+                <Avatar label={current.displayName} />
               </ListItemIcon>
-              <ListItemText>{auth.user.displayName}</ListItemText>
+              <ListItemText>{current.displayName}</ListItemText>
             </ListItem>
           </List>
           <Divider />
@@ -67,7 +62,7 @@ export function AccountSwitcher() {
             />
           </StyledList>
         </Menu>
-      </>
-    )
+      )}
+    </>
   );
 }

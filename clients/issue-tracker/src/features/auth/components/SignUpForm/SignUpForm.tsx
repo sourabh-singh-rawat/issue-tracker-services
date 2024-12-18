@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 
@@ -22,10 +22,10 @@ export default function SignUpForm() {
   const messageBar = useSnackbar();
   const [registerUser] = useRegisterUserMutation({
     onCompleted(response) {
-      messageBar.showSuccess(response.registerUser);
+      messageBar.success(response.registerUser);
     },
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
     },
   });
 
@@ -39,9 +39,11 @@ export default function SignUpForm() {
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<RegisterUserInput> = async (
-    { email, password, displayName },
-  ) => {
+  const onSubmit: SubmitHandler<RegisterUserInput> = async ({
+    email,
+    password,
+    displayName,
+  }) => {
     if (inviteToken) {
       // return signup({
       //   body: { email, password, displayName },
