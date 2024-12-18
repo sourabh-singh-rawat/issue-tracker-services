@@ -6,6 +6,7 @@ import {
   UserNotFoundError,
   WORKSPACE_MEMBER_ROLES,
   WORKSPACE_MEMBER_STATUS,
+  WORKSPACE_STATUS,
   WorkspaceMemberRoles,
   WorkspaceNotFound,
 } from "@issue-tracker/common";
@@ -193,6 +194,12 @@ export class CoreWorkspaceService implements WorkspaceService {
 
   async findWorkspaces(userId: string) {
     return await Workspace.find({ where: { createdById: userId } });
+  }
+
+  async findDefaultWorkspace(userId: string) {
+    return await Workspace.findOneOrFail({
+      where: { createdById: userId, status: WORKSPACE_STATUS.DEFAULT },
+    });
   }
 
   getWorkspace = async (id: string) => {

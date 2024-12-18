@@ -1,19 +1,17 @@
 import { useState } from "react";
 
 import { List, ListItem, ListItemText } from "@mui/material";
-import { useFindSpacesQuery } from "../../../api/codegen/gql/graphql";
 import { useAppSelector } from "../../../common";
 import { CreateSpaceModal } from "../CreateSpaceModal";
 import { SpaceListItem } from "../SpaceListItem/SpaceListItem";
 
-interface SpaceMenuProps {}
+interface SpaceMenuProps {
+  workspaceId: string;
+}
 
-export const SpaceList = ({}: SpaceMenuProps) => {
+export const SpaceList = ({ workspaceId }: SpaceMenuProps) => {
   const [open, setOpen] = useState(false);
-  const currentWorkspace = useAppSelector((x) => x.workspace.current);
-  const { data: spaces } = useFindSpacesQuery({
-    variables: { input: { workspaceId: "1" } },
-  });
+  const spaces = useAppSelector((x) => x.space.spaces);
 
   return (
     <List
@@ -25,12 +23,12 @@ export const SpaceList = ({}: SpaceMenuProps) => {
             <ListItemText>Spaces</ListItemText>
           </ListItem>
           {spaces &&
-            currentWorkspace &&
-            spaces.findSpaces.map(({ id, name, lists }) => (
+            workspaceId &&
+            spaces.map(({ id, name, lists }) => (
               <SpaceListItem
                 key={id}
                 spaceId={id}
-                workspaceId={currentWorkspace.id}
+                workspaceId={workspaceId}
                 lists={lists}
                 name={name}
               />

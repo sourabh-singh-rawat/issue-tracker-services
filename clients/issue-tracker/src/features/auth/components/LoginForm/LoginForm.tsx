@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import MuiContainer from "@mui/material/Container";
@@ -18,10 +18,10 @@ export default function LoginForm() {
 
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation({
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
     },
     onCompleted() {
-      messageBar.showSuccess("Success. You are being redirected");
+      messageBar.success("Success. You are being redirected");
       setTimeout(() => {
         navigate("/");
       }, 2500);
@@ -33,9 +33,10 @@ export default function LoginForm() {
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = async (
-    { email, password },
-  ) => {
+  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
+    email,
+    password,
+  }) => {
     await signInWithEmailAndPassword({
       variables: { input: { email, password } },
     });

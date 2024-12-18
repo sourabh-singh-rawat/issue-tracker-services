@@ -1,24 +1,24 @@
-import { useParams } from "react-router-dom";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 import { useTheme } from "@mui/material";
-import { useAppSelector } from "../../../../common/hooks";
 import { useCreateIssueCommentMutation } from "../../../../api/generated/issue.api";
+import { useAppSelector } from "../../../../common/hooks";
 
-import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
+import MuiGrid from "@mui/material/Grid";
 import Avatar from "../../../../common/components/Avatar";
 import TextField from "../../../../common/components/forms/TextField";
 
 import MuiInputAdornment from "@mui/material/InputAdornment";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import CancelButton from "../../../../common/components/CancelButton";
+import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 
 export default function CommentForm() {
   const theme = useTheme();
   const { id } = useParams();
-  const currentUser = useAppSelector(({ auth }) => auth.currentUser);
+  const currentUser = useAppSelector(({ auth }) => auth.current);
   const defaultValues = useMemo(() => ({ description: "" }), []);
   const { control, formState, handleSubmit, reset } = useForm({
     defaultValues,

@@ -15,17 +15,16 @@ const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
   reducers: {
-    configureWorkspaceSlice: (state, action: PayloadAction<Workspace[]>) => {
+    setCurrentWorkspace(state, action: PayloadAction<Workspace>) {
+      return { ...state, current: action.payload };
+    },
+    setWorkspaces(state, action: PayloadAction<Workspace[]>) {
       const workspaces = action.payload || [];
 
-      return {
-        ...state,
-        current: workspaces.find((w) => w.status === "Default") || null,
-        workspaces,
-      };
+      return { ...state, workspaces };
     },
   },
 });
 
-export const { configureWorkspaceSlice } = workspaceSlice.actions;
+export const { setWorkspaces, setCurrentWorkspace } = workspaceSlice.actions;
 export default workspaceSlice.reducer;

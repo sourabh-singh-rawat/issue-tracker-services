@@ -7,16 +7,16 @@ const options: SharedProps = {
 
 export const useSnackbar = () => {
   return {
-    showInfo: (message: string) => {
+    info: (message: string) => {
       enqueueSnackbar(message, { variant: "info", ...options });
     },
-    showSuccess: (message: string) => {
+    success: (message: string) => {
       enqueueSnackbar(message, { variant: "success", ...options });
     },
-    showWarning: (message: string) => {
+    warning: (message: string) => {
       enqueueSnackbar(message, { variant: "warning", ...options });
     },
-    showError: (message: string) => {
+    error: (message: string) => {
       enqueueSnackbar(message, { variant: "error", ...options });
     },
   };

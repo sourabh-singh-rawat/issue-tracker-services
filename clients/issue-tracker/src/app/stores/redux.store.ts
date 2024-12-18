@@ -1,18 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
-import logger from "redux-logger";
 
 import { attachmentApi } from "../../api/codegen/rest/attachment.api";
-import profileSlice from "../../features/profile/profile.slice";
-import workspaceSlice from "../../features/workspace/workspace.slice";
+import auth from "../../features/auth/auth.slice";
+import space from "../../features/spaces/space.slice";
+import workspace from "../../features/workspace/workspace.slice";
 
 export const store = configureStore({
   reducer: {
     [attachmentApi.reducerPath]: attachmentApi.reducer,
-    workspace: workspaceSlice,
-    user: profileSlice,
+    workspace,
+    auth,
+    space,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(attachmentApi.middleware).concat(logger),
+    getDefaultMiddleware().concat(attachmentApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

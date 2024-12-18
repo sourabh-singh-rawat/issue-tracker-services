@@ -1,16 +1,17 @@
-import React from "react";
+import { useTheme } from "@mui/material";
 import MuiAvatar from "@mui/material/Avatar";
 import MuiTypography from "@mui/material/Typography";
-import { useTheme } from "@mui/material";
+import { AppLoader } from "../AppLoader";
 
 interface AvatarProps {
   width?: string | number;
   height?: string | number;
   variant?: "circular" | "rounded" | "square";
-  label?: string;
+  label?: string | null;
   photoUrl?: string;
   color?: string;
   fontSize?: string;
+  isLoading?: boolean;
 }
 
 export default function Avatar({
@@ -20,10 +21,13 @@ export default function Avatar({
   width = 22,
   height = 22,
   fontSize,
+  isLoading = false,
 }: AvatarProps) {
   const theme = useTheme();
 
-  return (
+  return isLoading ? (
+    <AppLoader size={3} />
+  ) : (
     <MuiAvatar
       src={photoUrl}
       variant={variant}

@@ -28,6 +28,7 @@ export interface WorkspaceService {
   ): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
   findWorkspaces(userId: string): Promise<Workspace[]>;
+  findDefaultWorkspace(userId: string): Promise<Workspace>;
   getWorkspace(id: string): Promise<ServiceResponse<Workspace>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceMemberRoles[]>>;
   updateWorkspace(

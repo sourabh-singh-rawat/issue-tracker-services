@@ -26,10 +26,10 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
   const messageBar = useSnackbar();
   const [createItem] = useCreateItemMutation({
     onCompleted(response) {
-      messageBar.showSuccess("Item created successfully");
+      messageBar.success("Item created successfully");
     },
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
     },
   });
   useFindFieldsQuery({
@@ -52,18 +52,16 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
     mode: "all",
   });
 
-  const onSubmit: SubmitHandler<CreateItemInput> = async (
-    {
-      name,
-      description,
-      listId,
-      type,
-      assigneeIds,
-      dueDate,
-      parentItemId,
-      ...fields
-    },
-  ) => {
+  const onSubmit: SubmitHandler<CreateItemInput> = async ({
+    name,
+    description,
+    listId,
+    type,
+    assigneeIds,
+    dueDate,
+    parentItemId,
+    ...fields
+  }) => {
     await createItem({
       variables: {
         input: {

@@ -94,6 +94,7 @@ type PaginatedList {
 }
 
 type Query {
+  findDefaultWorkspace: Workspace!
   findFields(options: FindFieldsOptions!): [FieldOutput!]!
   findItem(id: String!): Item
   findList(id: String!): List!

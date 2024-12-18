@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import { SelectChangeEvent } from "@mui/material";
+import { useEffect } from "react";
+import { useUpdateIssueResolutionMutation } from "../../../../api/generated/issue.api";
 import Select from "../../../../common/components/Select";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import { SelectChangeEvent } from "@mui/material";
-import { useUpdateIssueResolutionMutation } from "../../../../api/generated/issue.api";
 
 interface Props {
   id: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function IssueResolutionSelector({ id, value }: Props) {
-  const { showSuccess, showError } = useSnackbar();
+  const { success: showSuccess, error: showError } = useSnackbar();
   const [updateIssueResolution, { isSuccess, isError }] =
     useUpdateIssueResolutionMutation();
 

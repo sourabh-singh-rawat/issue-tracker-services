@@ -1,4 +1,3 @@
-import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { Container, Grid2 } from "@mui/material";
@@ -18,17 +17,18 @@ export function SpaceForm({ workspaceId }: SpaceFormProps) {
   const messageBar = useSnackbar();
   const [createSpace] = useCreateSpaceMutation({
     onCompleted() {
-      messageBar.showSuccess("Space created successfully");
+      messageBar.success("Space created successfully");
     },
     onError() {
-      messageBar.showError("Failed to create space");
+      messageBar.error("Failed to create space");
     },
   });
   const { control, formState, handleSubmit } = useForm<CreateSpaceInput>();
 
-  const onSubmit: SubmitHandler<CreateSpaceInput> = async (
-    { name, description },
-  ) => {
+  const onSubmit: SubmitHandler<CreateSpaceInput> = async ({
+    name,
+    description,
+  }) => {
     await createSpace({
       variables: { input: { name, description, workspaceId } },
     });

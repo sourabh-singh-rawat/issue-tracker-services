@@ -1,7 +1,6 @@
 import { useTheme } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import MuiTypography from "@mui/material/Typography";
-import React from "react";
 import { useParams } from "react-router-dom";
 import {
   useFindItemQuery,
@@ -11,8 +10,8 @@ import {
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
-import ItemAttachments from "../../../issue-attachments/pages/ItemAttachments";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+import ItemAttachments from "../../../issue-attachments/pages/ItemAttachments";
 import ItemModal from "../ItemModal";
 
 export interface ItemProps {}
@@ -32,10 +31,10 @@ export default function Item(props: ItemProps) {
   });
   const [updateItem] = useUpdateItemMutation({
     onCompleted(response) {
-      messageBar.showSuccess(response.updateItem);
+      messageBar.success(response.updateItem);
     },
     onError(error) {
-      messageBar.showError(error.message);
+      messageBar.error(error.message);
     },
   });
 

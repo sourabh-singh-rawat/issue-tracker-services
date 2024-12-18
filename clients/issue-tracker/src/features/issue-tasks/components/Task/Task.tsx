@@ -24,12 +24,15 @@ interface TaskProps {
   completed: boolean;
 }
 
-export default function Task(
-  { taskId, dueDate, description, completed }: TaskProps,
-) {
+export default function Task({
+  taskId,
+  dueDate,
+  description,
+  completed,
+}: TaskProps) {
   const theme = useTheme();
   const { id } = useParams();
-  const { showSuccess } = useSnackbar();
+  const { success: showSuccess } = useSnackbar();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [task, setTask] = useState({ taskId, dueDate, description, completed });
