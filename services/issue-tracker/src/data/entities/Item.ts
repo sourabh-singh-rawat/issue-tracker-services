@@ -1,3 +1,4 @@
+import { ItemPriority } from "@issue-tracker/common";
 import { Audit } from "@issue-tracker/orm";
 import {
   Column,
@@ -10,6 +11,7 @@ import {
   TreeChildren,
   TreeParent,
 } from "typeorm";
+import { FieldValue } from "./FieldValue";
 import { ItemAssignee } from "./ItemAssignee";
 import { List } from "./List";
 import { User } from "./User";
@@ -32,6 +34,12 @@ export class Item extends Audit {
 
   @Column({ type: "text" })
   type!: string;
+
+  @Column({ name: "status_id", type: "uuid" })
+  statusId!: string;
+
+  @Column({ name: "priority", type: "text" })
+  priority!: ItemPriority;
 
   @Column({ name: "list_id", type: "uuid" })
   listId!: string;
@@ -77,4 +85,7 @@ export class Item extends Audit {
   @ManyToOne(() => List, (x) => x.items)
   @JoinColumn({ name: "list_id" })
   list!: List;
+
+  @OneToMany(() => FieldValue, (x) => x.item)
+  fieldValues!: FieldValue[];
 }

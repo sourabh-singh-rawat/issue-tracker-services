@@ -8,8 +8,8 @@ import { postgres } from "../..";
 import { Item, ItemAssignee } from "../../data";
 import {
   CreateItemOptions,
+  CustomFieldService,
   DeleteItemOptions,
-  FieldService,
   FindItemOptions,
   FindListItemsOptions,
   FindSubItemsOptions,
@@ -18,7 +18,7 @@ import {
 } from "./interfaces";
 
 export class CoreItemService implements ItemService {
-  constructor(private readonly fieldService: FieldService) {}
+  constructor(private readonly fieldService: CustomFieldService) {}
 
   private getStatuses = () => Object.values(IssueStatus);
 

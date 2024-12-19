@@ -1,9 +1,9 @@
 import { AppContext } from "@issue-tracker/server-core";
-import { FieldOutput, FindFieldsOptions } from "../types";
+import { FindFieldsOptions, ListCustomField } from "../types";
 
 export interface FieldResolver {
-  findFields(
+  findCustomFields(
     ctx: AppContext,
     options: FindFieldsOptions,
-  ): Promise<FieldOutput[]>;
+  ): Promise<ListCustomField[]>;
 }
