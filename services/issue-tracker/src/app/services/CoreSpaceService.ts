@@ -1,13 +1,13 @@
 import { Space } from "../../data";
 import {
   CreateSpaceOptions,
-  FieldService,
+  CustomFieldService,
   GetSpacesOptions,
   SpaceService,
 } from "./interfaces";
 
 export class CoreSpaceService implements SpaceService {
-  constructor(private readonly fieldService: FieldService) {}
+  constructor(private readonly fieldService: CustomFieldService) {}
 
   async createSpace(options: CreateSpaceOptions) {
     const { manager, name, description, userId, workspaceId } = options;

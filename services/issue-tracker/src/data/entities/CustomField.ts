@@ -1,8 +1,15 @@
 import { FIELD_TYPE, FieldType } from "@issue-tracker/common";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+} from "typeorm";
 
-@Entity({ name: "fields" })
-export class Field extends BaseEntity {
+@Entity({ name: "custom_fields" })
+@Unique(["name"])
+export class CustomField extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
@@ -31,13 +38,4 @@ export class Field extends BaseEntity {
     ],
   })
   type!: FieldType;
-
-  @Column({ name: "list_id", type: "uuid", nullable: true })
-  listId?: string;
-
-  @Column({ name: "is_system_field", type: "boolean", default: false })
-  isSystemField!: string;
-
-  @Column({ name: "value", type: "text", nullable: true })
-  value?: string | string[] | null;
 }

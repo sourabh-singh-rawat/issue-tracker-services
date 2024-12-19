@@ -37,14 +37,14 @@ import {
   CoreWorkspaceResolver,
 } from "./api/resolvers";
 import {
-  CoreFieldService,
+  CoreCustomFieldService,
   CoreItemService,
   CoreListService,
   CoreSpaceService,
   CoreStatusService,
   CoreUserService,
   CoreWorkspaceService,
-  FieldService,
+  CustomFieldService,
   ItemService,
   ListService,
   SpaceService,
@@ -63,7 +63,7 @@ export interface RegisteredServices {
   userService: UserService;
   itemService: ItemService;
   listService: ListService;
-  fieldService: FieldService;
+  fieldService: CustomFieldService;
   statusService: StatusService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
@@ -124,7 +124,7 @@ const main = async () => {
   container.add("userService", asClass(CoreUserService));
   container.add("itemService", asClass(CoreItemService));
   container.add("statusService", asClass(CoreStatusService));
-  container.add("fieldService", asClass(CoreFieldService));
+  container.add("fieldService", asClass(CoreCustomFieldService));
   container.add("spaceService", asClass(CoreSpaceService));
   container.add("listService", asClass(CoreListService));
   container.add("workspaceService", asClass(CoreWorkspaceService));

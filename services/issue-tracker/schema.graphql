@@ -36,13 +36,6 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-type FieldOutput {
-  id: String!
-  name: String!
-  type: String!
-  value: String
-}
-
 input FindFieldsOptions {
   listId: String!
 }
@@ -79,6 +72,12 @@ type List {
   name: String!
 }
 
+type ListCustomField {
+  customFieldId: String!
+  id: String!
+  listId: String!
+}
+
 type Mutation {
   createItem(input: CreateItemInput!): String!
   createList(input: CreateListInput!): String!
@@ -94,8 +93,8 @@ type PaginatedList {
 }
 
 type Query {
+  findCustomFields(options: FindFieldsOptions!): [ListCustomField!]!
   findDefaultWorkspace: Workspace!
-  findFields(options: FindFieldsOptions!): [FieldOutput!]!
   findItem(id: String!): Item
   findList(id: String!): List!
   findListItems(listId: String!): [Item!]!

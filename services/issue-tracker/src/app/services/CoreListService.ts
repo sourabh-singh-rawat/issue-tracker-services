@@ -1,7 +1,7 @@
 import { UserNotFoundError } from "@issue-tracker/common";
 import { NatsPublisher } from "@issue-tracker/event-bus";
 import { List, User } from "../../data";
-import { FieldService } from "./interfaces";
+import { StatusService } from "./interfaces";
 import {
   CreateListOptions,
   FindListOptions,
@@ -15,7 +15,7 @@ export class CoreListService implements ListService {
   constructor(
     private readonly publisher: NatsPublisher,
     private readonly userService: UserService,
-    private readonly fieldService: FieldService,
+    private readonly statusService: StatusService,
   ) {}
 
   private async getUserById(userId: string) {
@@ -36,9 +36,21 @@ export class CoreListService implements ListService {
     });
     const { id: listId } = savedList;
 
-    await this.fieldService.createStatusField({ manager, listId });
-    await this.fieldService.createPriorityField({ manager, listId });
-
+    await this.statusService.createOptions({
+      manager,
+      listId,
+      statuses: [
+        { name: "Lead", type: "Active", orderIndex: 0 },
+        { name: "Qualified Lead", type: "Active", orderIndex: 1 },
+        { name: "Opportunity", type: "Active", orderIndex: 2 },
+        { name: "Customer", type: "Active", orderIndex: 3 },
+        { name: "Returning Customer", type: "Active", orderIndex: 4 },
+        { name: "Inactive", type: "Active", orderIndex: 5 },
+        { name: "Hot Lead", type: "Active", orderIndex: 6 },
+        { name: "Cold Lead", type: "Active", orderIndex: 7 },
+        { name: "Prospect", type: "Active", orderIndex: 8 },
+      ],
+    });
     await this.publisher.send("project.created", savedList);
 
     return listId;

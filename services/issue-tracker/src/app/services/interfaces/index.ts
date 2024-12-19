@@ -1,4 +1,4 @@
-export * from "./FieldService";
+export * from "./CustomFieldService";
 export * from "./ItemService";
 export * from "./ListService";
 export * from "./SpaceService";

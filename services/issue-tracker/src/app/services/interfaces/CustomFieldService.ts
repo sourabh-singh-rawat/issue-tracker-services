@@ -1,5 +1,5 @@
 import { ServiceOptions } from "@issue-tracker/orm";
-import { Field } from "../../../data";
+import { ListCustomField } from "../../../data";
 
 export interface CreateStatusFieldOptions extends ServiceOptions {
   listId: string;
@@ -19,15 +19,15 @@ export interface UpdateStatusFieldOptions extends ServiceOptions {
   value: string;
 }
 
-export interface FindFieldsOptions extends ServiceOptions {
+export interface FindCustomFieldsOptions extends ServiceOptions {
   listId: string;
 }
 
-export interface FieldService {
-  createStatusField(options: CreateStatusFieldOptions): Promise<string>;
-  createPriorityField(options: CreatePriorityFieldOptions): Promise<string>;
+export interface CustomFieldService {
   createLookupField(): Promise<void>;
   createFieldValue(options: CreateFieldValueOptions): Promise<void>;
   updateStatusField(options: UpdateStatusFieldOptions): Promise<void>;
-  findFields(options: FindFieldsOptions): Promise<Field[]>;
+  findCustomFields(
+    options: FindCustomFieldsOptions,
+  ): Promise<ListCustomField[]>;
 }
