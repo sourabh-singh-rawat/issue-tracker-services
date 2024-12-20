@@ -1,6 +1,6 @@
 import { GraphQLObjectType } from "graphql";
 import GraphQLJSON from "graphql-type-json";
-import { Field, InputType } from "type-graphql";
+import { Field, ID, InputType } from "type-graphql";
 
 const JSON = new GraphQLObjectType({
   name: "GraphQLJSON",
@@ -22,6 +22,12 @@ export class CreateItemInput {
 
   @Field({ nullable: true })
   parentItemId?: string;
+
+  @Field(() => ID)
+  statusId!: string;
+
+  @Field()
+  priority!: string;
 
   @Field({ nullable: true })
   dueDate?: Date;

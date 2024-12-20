@@ -1,4 +1,4 @@
-export * from "./FieldResolver";
+export * from "./CustomFieldResolver";
 export * from "./ItemResolver";
 export * from "./ListResolver";
 export * from "./SpaceResolver";

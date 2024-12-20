@@ -34,6 +34,8 @@ export type CreateItemInput = {
   listId: Scalars['String']['input'];
   name: Scalars['String']['input'];
   parentItemId?: InputMaybe<Scalars['String']['input']>;
+  priority: Scalars['String']['input'];
+  statusId: Scalars['ID']['input'];
   type: Scalars['String']['input'];
 };
 
@@ -54,15 +56,7 @@ export type CreateWorkspaceInput = {
   name: Scalars['String']['input'];
 };
 
-export type FieldOutput = {
-  __typename?: 'FieldOutput';
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-  value?: Maybe<Scalars['String']['output']>;
-};
-
-export type FindFieldsOptions = {
+export type FindCustomFieldsOptions = {
   listId: Scalars['String']['input'];
 };
 
@@ -86,6 +80,8 @@ export type Item = {
   list: List;
   name: Scalars['String']['output'];
   parentItem?: Maybe<Item>;
+  priority: Scalars['String']['output'];
+  statusId: Scalars['String']['output'];
   subItems?: Maybe<Array<Item>>;
 };
 
@@ -93,6 +89,13 @@ export type List = {
   __typename?: 'List';
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+export type ListCustomField = {
+  __typename?: 'ListCustomField';
+  customFieldId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  listId: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -169,8 +172,8 @@ export type PaginatedList = {
 export type Query = {
   __typename?: 'Query';
   findAttachments: PaginatedAttachment;
+  findCustomFields: Array<ListCustomField>;
   findDefaultWorkspace: Workspace;
-  findFields: Array<FieldOutput>;
   findItem?: Maybe<Item>;
   findList: List;
   findListItems: Array<Item>;
@@ -188,8 +191,8 @@ export type QueryFindAttachmentsArgs = {
 };
 
 
-export type QueryFindFieldsArgs = {
-  options: FindFieldsOptions;
+export type QueryFindCustomFieldsArgs = {
+  options: FindCustomFieldsOptions;
 };
 
 
@@ -348,24 +351,24 @@ export type CreateWorkspaceMutationVariables = Exact<{
 
 export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: string };
 
+export type FindCustomFieldsQueryVariables = Exact<{
+  options: FindCustomFieldsOptions;
+}>;
+
+
+export type FindCustomFieldsQuery = { __typename?: 'Query', findCustomFields: Array<{ __typename?: 'ListCustomField', customFieldId: string, id: string, listId: string }> };
+
 export type FindDefaultWorkspaceQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FindDefaultWorkspaceQuery = { __typename?: 'Query', findDefaultWorkspace: { __typename?: 'Workspace', createdById: string, description?: string | null, id: string, name: string, status: string } };
-
-export type FindFieldsQueryVariables = Exact<{
-  options: FindFieldsOptions;
-}>;
-
-
-export type FindFieldsQuery = { __typename?: 'Query', findFields: Array<{ __typename?: 'FieldOutput', id: string, name: string, type: string, value?: string | null }> };
 
 export type FindItemQueryVariables = Exact<{
   findItemId: Scalars['String']['input'];
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
+export type FindItemQuery = { __typename?: 'Query', findItem?: { __typename?: 'Item', id: string, description?: string | null, name: string, statusId: string, priority: string, list: { __typename?: 'List', id: string, name: string }, parentItem?: { __typename?: 'Item', id: string, name: string } | null } | null };
 
 export type FindListQueryVariables = Exact<{
   findListId: Scalars['String']['input'];
@@ -757,6 +760,48 @@ export function useCreateWorkspaceMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateWorkspaceMutationHookResult = ReturnType<typeof useCreateWorkspaceMutation>;
 export type CreateWorkspaceMutationResult = Apollo.MutationResult<CreateWorkspaceMutation>;
 export type CreateWorkspaceMutationOptions = Apollo.BaseMutationOptions<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>;
+export const FindCustomFieldsDocument = gql`
+    query FindCustomFields($options: FindCustomFieldsOptions!) {
+  findCustomFields(options: $options) {
+    customFieldId
+    id
+    listId
+  }
+}
+    `;
+
+/**
+ * __useFindCustomFieldsQuery__
+ *
+ * To run a query within a React component, call `useFindCustomFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindCustomFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindCustomFieldsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useFindCustomFieldsQuery(baseOptions: Apollo.QueryHookOptions<FindCustomFieldsQuery, FindCustomFieldsQueryVariables> & ({ variables: FindCustomFieldsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>(FindCustomFieldsDocument, options);
+      }
+export function useFindCustomFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>(FindCustomFieldsDocument, options);
+        }
+export function useFindCustomFieldsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>(FindCustomFieldsDocument, options);
+        }
+export type FindCustomFieldsQueryHookResult = ReturnType<typeof useFindCustomFieldsQuery>;
+export type FindCustomFieldsLazyQueryHookResult = ReturnType<typeof useFindCustomFieldsLazyQuery>;
+export type FindCustomFieldsSuspenseQueryHookResult = ReturnType<typeof useFindCustomFieldsSuspenseQuery>;
+export type FindCustomFieldsQueryResult = Apollo.QueryResult<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>;
 export const FindDefaultWorkspaceDocument = gql`
     query FindDefaultWorkspace {
   findDefaultWorkspace {
@@ -800,49 +845,6 @@ export type FindDefaultWorkspaceQueryHookResult = ReturnType<typeof useFindDefau
 export type FindDefaultWorkspaceLazyQueryHookResult = ReturnType<typeof useFindDefaultWorkspaceLazyQuery>;
 export type FindDefaultWorkspaceSuspenseQueryHookResult = ReturnType<typeof useFindDefaultWorkspaceSuspenseQuery>;
 export type FindDefaultWorkspaceQueryResult = Apollo.QueryResult<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>;
-export const FindFieldsDocument = gql`
-    query FindFields($options: FindFieldsOptions!) {
-  findFields(options: $options) {
-    id
-    name
-    type
-    value
-  }
-}
-    `;
-
-/**
- * __useFindFieldsQuery__
- *
- * To run a query within a React component, call `useFindFieldsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindFieldsQuery({
- *   variables: {
- *      options: // value for 'options'
- *   },
- * });
- */
-export function useFindFieldsQuery(baseOptions: Apollo.QueryHookOptions<FindFieldsQuery, FindFieldsQueryVariables> & ({ variables: FindFieldsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindFieldsQuery, FindFieldsQueryVariables>(FindFieldsDocument, options);
-      }
-export function useFindFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindFieldsQuery, FindFieldsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindFieldsQuery, FindFieldsQueryVariables>(FindFieldsDocument, options);
-        }
-export function useFindFieldsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindFieldsQuery, FindFieldsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FindFieldsQuery, FindFieldsQueryVariables>(FindFieldsDocument, options);
-        }
-export type FindFieldsQueryHookResult = ReturnType<typeof useFindFieldsQuery>;
-export type FindFieldsLazyQueryHookResult = ReturnType<typeof useFindFieldsLazyQuery>;
-export type FindFieldsSuspenseQueryHookResult = ReturnType<typeof useFindFieldsSuspenseQuery>;
-export type FindFieldsQueryResult = Apollo.QueryResult<FindFieldsQuery, FindFieldsQueryVariables>;
 export const FindItemDocument = gql`
     query FindItem($findItemId: String!) {
   findItem(id: $findItemId) {
@@ -857,6 +859,8 @@ export const FindItemDocument = gql`
       name
     }
     name
+    statusId
+    priority
   }
 }
     `;

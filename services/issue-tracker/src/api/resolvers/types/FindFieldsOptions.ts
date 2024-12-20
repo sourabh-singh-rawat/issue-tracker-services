@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class FindFieldsOptions {
+export class FindCustomFieldsOptions {
   @Field()
   listId!: string;
 }
