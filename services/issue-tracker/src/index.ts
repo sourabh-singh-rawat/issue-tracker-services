@@ -29,7 +29,7 @@ import pino from "pino";
 import { buildSchema } from "type-graphql";
 import { DataSource } from "typeorm";
 import {
-  CoreFieldResolver,
+  CoreCustomFieldResolver,
   CoreItemResolver,
   CoreListResolver,
   CoreSpaceResolver,
@@ -145,7 +145,7 @@ const main = async () => {
       CoreListResolver,
       CoreItemResolver,
       CoreStatusResolver,
-      CoreFieldResolver,
+      CoreCustomFieldResolver,
     ],
   });
   const plugins = [fastifyApolloDrainPlugin(instance)];

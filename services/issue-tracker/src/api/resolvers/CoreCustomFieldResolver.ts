@@ -1,15 +1,15 @@
 import { AppContext } from "@issue-tracker/server-core";
 import { Arg, Ctx, Query, Resolver } from "type-graphql";
 import { container, postgres } from "../..";
-import { FieldResolver } from "./interfaces";
-import { FindFieldsOptions, ListCustomField } from "./types";
+import { CustomFieldResolver } from "./interfaces";
+import { FindCustomFieldsOptions, ListCustomField } from "./types";
 
 @Resolver()
-export class CoreFieldResolver implements FieldResolver {
+export class CoreCustomFieldResolver implements CustomFieldResolver {
   @Query(() => [ListCustomField])
   async findCustomFields(
     @Ctx() ctx: AppContext,
-    @Arg("options") options: FindFieldsOptions,
+    @Arg("options") options: FindCustomFieldsOptions,
   ) {
     const { listId } = options;
     const service = container.get("fieldService");

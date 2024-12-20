@@ -1,8 +1,0 @@
-query FindFields($options: FindFieldsOptions!) {
-  findFields(options: $options) {
-    id
-    name
-    type
-    value
-  }
-}
