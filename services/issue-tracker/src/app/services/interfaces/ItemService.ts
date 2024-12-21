@@ -15,6 +15,8 @@ export interface CreateItemOptions extends ServiceOptions {
   assigneeIds: string[];
   description?: string;
   dueDate?: Date;
+  statusId?: string;
+  priority?: ItemPriority;
   parentItemId?: string;
   fields?: Record<string, string | null | string[]>;
 }
