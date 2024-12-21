@@ -35,6 +35,8 @@ export interface UpdateItemOptions extends ServiceOptions {
   itemId: string;
   type?: string;
   name?: string;
+  statusId?: string;
+  priority?: ItemPriority;
   assigneeIds?: string[];
   description?: string;
   dueDate?: Date;
