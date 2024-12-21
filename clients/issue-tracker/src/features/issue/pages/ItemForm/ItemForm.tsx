@@ -23,7 +23,7 @@ interface ItemFormProps {
 
 function ItemForm({ listId, parentItemId }: ItemFormProps) {
   const messageBar = useSnackbar();
-  const [itemFields, setItemFields] = useState<ListCustomField[]>([]);
+  const [customFields, setCustomFields] = useState<ListCustomField[]>([]);
   const [createItem] = useCreateItemMutation({
     onCompleted() {
       messageBar.success("Item created successfully");
@@ -35,13 +35,14 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
   useFindCustomFieldsQuery({
     variables: { options: { listId } },
     onCompleted(response) {
-      setItemFields(response.findCustomFields);
+      setCustomFields(response.findCustomFields);
     },
   });
 
   const { control, formState, handleSubmit } = useForm<CreateItemInput>({
     defaultValues: {
       listId,
+      parentItemId,
       name: "",
       description: "",
       statusId: "",
@@ -56,12 +57,12 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
     name,
     description,
     listId,
+    parentItemId,
     type,
     assigneeIds,
     priority,
     statusId,
     dueDate,
-    parentItemId,
     ...fields
   }) => {
     await createItem({

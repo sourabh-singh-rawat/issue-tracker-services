@@ -1,12 +1,12 @@
 import { useTheme } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import MuiTypography from "@mui/material/Typography";
-import { useParams } from "react-router-dom";
 import {
   useFindItemQuery,
   useFindSubItemsQuery,
   useUpdateItemMutation,
 } from "../../../../api";
+import { useAppParams } from "../../../../common";
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
@@ -17,9 +17,9 @@ import ItemModal from "../ItemModal";
 export interface ItemProps {}
 
 export default function Item(props: ItemProps) {
-  const messageBar = useSnackbar();
   const theme = useTheme();
-  const { listId, itemId } = useParams<{ listId: string; itemId: string }>();
+  const messageBar = useSnackbar();
+  const { listId, itemId } = useAppParams();
   const { data: item } = useFindItemQuery({
     variables: { findItemId: itemId as string },
     skip: !itemId,
@@ -84,7 +84,7 @@ export default function Item(props: ItemProps) {
             </MuiTypography>
           </Grid2>
           <Grid2>
-            <ItemModal listId={listId} parentItemId={itemId} />
+            <ItemModal />
           </Grid2>
 
           <Grid2 size={12}>
