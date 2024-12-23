@@ -1,15 +1,18 @@
 import { ServiceOptions } from "@issue-tracker/orm";
 
-export interface CreateInitialViews extends ServiceOptions {
+export interface CreateDefaultViewOptions extends ServiceOptions {
   listId: string;
 }
 
 export interface CreateViewOptions extends ServiceOptions {
   name: string;
   listId: string;
+  isDefaultView?: boolean;
+  systemFields?: string[];
+  customFields?: string[];
 }
 
 export interface ViewService {
-  createIntialViews(options: CreateInitialViews): Promise<void>;
+  createDefaultView(options: CreateDefaultViewOptions): Promise<void>;
   createView(options: CreateViewOptions): Promise<void>;
 }

@@ -1,7 +1,7 @@
 import { UserNotFoundError } from "@issue-tracker/common";
 import { NatsPublisher } from "@issue-tracker/event-bus";
 import { List, User } from "../../data";
-import { StatusService } from "./interfaces";
+import { StatusService, ViewService } from "./interfaces";
 import {
   CreateListOptions,
   FindListOptions,
@@ -16,6 +16,7 @@ export class CoreListService implements ListService {
     private readonly publisher: NatsPublisher,
     private readonly userService: UserService,
     private readonly statusService: StatusService,
+    private readonly viewService: ViewService,
   ) {}
 
   private async getUserById(userId: string) {
@@ -52,6 +53,7 @@ export class CoreListService implements ListService {
       ],
     });
     await this.publisher.send("project.created", savedList);
+    await this.viewService.createDefaultView({ listId, manager });
 
     return listId;
   }
