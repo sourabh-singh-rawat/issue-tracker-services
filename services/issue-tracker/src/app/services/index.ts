@@ -4,6 +4,7 @@ export * from "./CoreListService";
 export * from "./CoreSpaceService";
 export * from "./CoreStatusService";
 export * from "./CoreUserService";
+export * from "./CoreViewService";
 export * from "./CoreWorkspaceService";
 export * from "./core-issue-activity.service";
 export * from "./core-issue-comment.service";

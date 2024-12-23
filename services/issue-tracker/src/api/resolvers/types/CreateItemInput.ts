@@ -1,3 +1,4 @@
+import { ItemPriority } from "@issue-tracker/common";
 import { GraphQLObjectType } from "graphql";
 import GraphQLJSON from "graphql-type-json";
 import { Field, ID, InputType } from "type-graphql";
@@ -27,7 +28,7 @@ export class CreateItemInput {
   statusId!: string;
 
   @Field()
-  priority!: string;
+  priority!: ItemPriority;
 
   @Field({ nullable: true })
   dueDate?: Date;

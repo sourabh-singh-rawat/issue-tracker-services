@@ -43,6 +43,7 @@ import {
   CoreSpaceService,
   CoreStatusService,
   CoreUserService,
+  CoreViewService,
   CoreWorkspaceService,
   CustomFieldService,
   ItemService,
@@ -50,6 +51,7 @@ import {
   SpaceService,
   StatusService,
   UserService,
+  ViewService,
   WorkspaceService,
 } from "./app";
 import { ProjectActivityService } from "./app/services/interfaces/project-activity.service";
@@ -65,6 +67,7 @@ export interface RegisteredServices {
   listService: ListService;
   fieldService: CustomFieldService;
   statusService: StatusService;
+  viewService: ViewService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
   spaceService: SpaceService;
@@ -127,6 +130,7 @@ const main = async () => {
   container.add("fieldService", asClass(CoreCustomFieldService));
   container.add("spaceService", asClass(CoreSpaceService));
   container.add("listService", asClass(CoreListService));
+  container.add("viewService", asClass(CoreViewService));
   container.add("workspaceService", asClass(CoreWorkspaceService));
   container.add(
     "userEmailVerifiedSubscriber",

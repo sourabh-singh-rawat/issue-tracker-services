@@ -4,9 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { List } from "./List";
+import { ViewCustomField } from "./ViewCustomField";
+import { ViewSystemField } from "./ViewSystemField";
 
 @Entity({ name: "views" })
 export class View extends Audit {
@@ -31,4 +34,10 @@ export class View extends Audit {
 
   @Column({ name: "is_default_view", type: "boolean", default: false })
   isDefaultView?: boolean;
+
+  @OneToMany(() => ViewCustomField, (x) => x.view)
+  viewCustomFields!: ViewCustomField[];
+
+  @OneToMany(() => ViewSystemField, (x) => x.view)
+  viewSystemFields!: ViewSystemField[];
 }
