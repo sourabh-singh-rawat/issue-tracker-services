@@ -1,6 +1,6 @@
 import { Grid2, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import TabPanel from "../../../../common/components/TabPanel";
+import { CustomTabPanel } from "../../../../common/components/CustomTabPanel";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import IssueList from "../../../issue-list/components/ItemList";
 
@@ -9,7 +9,7 @@ export function ListItems() {
   const { listId, itemId, selectedTab } = useSelectedTab();
 
   return (
-    <TabPanel index={1} selectedTab={selectedTab}>
+    <CustomTabPanel id={"1"} selectedTabId={selectedTab}>
       {!itemId && listId ? (
         <Grid2
           container
@@ -23,6 +23,6 @@ export function ListItems() {
       ) : (
         <Outlet />
       )}
-    </TabPanel>
+    </CustomTabPanel>
   );
 }

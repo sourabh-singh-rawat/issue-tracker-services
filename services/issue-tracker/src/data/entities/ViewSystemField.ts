@@ -27,4 +27,7 @@ export class ViewSystemField extends BaseEntity {
     enum: [FIELD_TYPE._STATUS, FIELD_TYPE._PRIORITY],
   })
   name!: string;
+
+  @Column({ name: "is_hidden", type: "boolean", default: false })
+  isHidden!: boolean;
 }

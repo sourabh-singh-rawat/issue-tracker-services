@@ -7,8 +7,8 @@ dayjs.extend(relativeTime);
 import { Link, useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 
-import Tab from "../../../../common/components/Tab";
-import Tabs from "../../../../common/components/Tabs";
+import Tab from "../../../../common/components/CustomTab";
+import Tabs from "../../../../common/components/CustomTabs";
 
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 
@@ -118,14 +118,10 @@ export default function Issue() {
 
       <MuiGrid xs={12} item sx={{ pt: theme.spacing(1) }}>
         <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab isLoading={issueRequest.isLoading} label="Overview" value={0} />
-          <Tab isLoading={issueRequest.isLoading} label="Tasks" value={1} />
-          <Tab
-            isLoading={issueRequest.isLoading}
-            label="Attachments"
-            value={2}
-          />
-          <Tab isLoading={issueRequest.isLoading} label="Comments" value={3} />
+          <Tab isLoading={issueRequest.isLoading} label="Overview" id={0} />
+          <Tab isLoading={issueRequest.isLoading} label="Tasks" id={1} />
+          <Tab isLoading={issueRequest.isLoading} label="Attachments" id={2} />
+          <Tab isLoading={issueRequest.isLoading} label="Comments" id={3} />
         </Tabs>
       </MuiGrid>
       <MuiGrid xs={12} item>

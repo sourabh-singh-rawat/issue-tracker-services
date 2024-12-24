@@ -1,11 +1,9 @@
-import React from "react";
-
 import { useTheme } from "@mui/material";
+import TabPanel from "../../../../common/components/CustomTabPanel";
 import TaskList from "../../components/TaskList";
-import TabPanel from "../../../../common/components/TabPanel";
 
-import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 import { useGetIssueTaskListQuery } from "../../../../api/generated/issue.api";
+import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 
 export default function IssueTasks() {
   const theme = useTheme();

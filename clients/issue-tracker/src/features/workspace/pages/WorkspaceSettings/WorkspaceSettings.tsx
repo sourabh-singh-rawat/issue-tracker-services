@@ -1,14 +1,13 @@
-import React, { useMemo } from "react";
-import TabPanel from "../../../../common/components/TabPanel";
+import TabPanel from "../../../../common/components/CustomTabPanel";
 
+import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useTheme } from "@mui/material";
 import WorkspaceName from "../../components/WorkspaceName";
 
-import { useForm } from "react-hook-form";
-import AjvFormats from "ajv-formats";
 import { ajvResolver } from "@hookform/resolvers/ajv";
+import AjvFormats from "ajv-formats";
+import { useForm } from "react-hook-form";
 
 import WorkspaceDescription from "../../components/WorkspaceDescription";
 

@@ -1,0 +1,7 @@
+query FindViews($listId: String!) {
+  findViews(listId: $listId) {
+    id
+    name
+    type
+  }
+}

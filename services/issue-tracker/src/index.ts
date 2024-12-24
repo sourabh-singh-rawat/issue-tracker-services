@@ -34,6 +34,7 @@ import {
   CoreListResolver,
   CoreSpaceResolver,
   CoreStatusResolver,
+  CoreViewResolver,
   CoreWorkspaceResolver,
 } from "./api/resolvers";
 import {
@@ -150,6 +151,7 @@ const main = async () => {
       CoreItemResolver,
       CoreStatusResolver,
       CoreCustomFieldResolver,
+      CoreViewResolver,
     ],
   });
   const plugins = [fastifyApolloDrainPlugin(instance)];

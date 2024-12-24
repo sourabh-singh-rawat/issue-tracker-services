@@ -4,6 +4,7 @@ export * from "./FieldType";
 export * from "./ItemPriority";
 export * from "./Queue";
 export * from "./StatusType";
+export * from "./ViewType";
 export * from "./confirmation-email-status";
 export * from "./email-status";
 export * from "./email-type";

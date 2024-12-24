@@ -1,12 +1,21 @@
 import { useTheme } from "@mui/material";
 import MuiTabs from "@mui/material/Tabs";
 
-export default function Tabs(props) {
+interface TabsProps {
+  value: number;
+  handleChange: (e: unknown, newValue: number) => void;
+  children: React.ReactNode;
+}
+
+export const CustomTabs = ({ value, handleChange, children }: TabsProps) => {
   const theme = useTheme();
 
   return (
     <MuiTabs
-      {...props}
+      value={value}
+      onChange={handleChange}
+      children={children}
+      component="div"
       sx={{
         px: theme.spacing(4),
         ".MuiButtonBase-root": {
@@ -21,4 +30,4 @@ export default function Tabs(props) {
       }}
     />
   );
-}
+};

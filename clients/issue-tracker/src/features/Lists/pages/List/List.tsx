@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 
 dayjs.extend(relativeTime);
 
@@ -10,18 +10,18 @@ import { Grid2, useTheme } from "@mui/material";
 import {
   FindStatusesQuery,
   useFindStatusesQuery,
+  useFindViewsQuery,
 } from "../../../../api/codegen/gql/graphql";
-import { SpaceContext } from "../../../../common";
+import { SpaceContext, useAppParams } from "../../../../common";
 import { OutletContext } from "../../../../common/Interfaces";
-import Tab from "../../../../common/components/Tab";
-import Tabs from "../../../../common/components/Tabs";
+import { CustomTab } from "../../../../common/components/CustomTab";
+import { CustomTabs } from "../../../../common/components/CustomTabs";
 import { AddItemButton } from "../../../issue/components/AddItemButton";
 
 export function List() {
   const theme = useTheme();
-  const { spaceId, listId, itemId } = useParams();
-  const navigate = useNavigate();
   const location = useLocation();
+  const { listId, itemId } = useAppParams();
   const [statuses, setStatuses] = useState<FindStatusesQuery["findStatuses"]>(
     [],
   );
@@ -32,32 +32,29 @@ export function List() {
       setStatuses(response.findStatuses);
     },
   });
+  const { data: views } = useFindViewsQuery({
+    variables: { listId },
+    onCompleted(response) {
+      console.log(response.findViews);
+    },
+    skip: !listId,
+  });
 
   const tabName = location.pathname.split("/")[4] || "board";
-  const mapPathToIndex: Record<string, number> = { board: 0, items: 1 };
-  const mapIndexToTab: Record<number, string> = {
-    0: `board`,
-    1: `items`,
-  };
 
-  const [selectedTab, setSelectedTab] = useState(mapPathToIndex[tabName]);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const handleChange = (e: unknown, newValue: number) => {
-    navigate(`${mapIndexToTab[newValue]}`);
+    // navigate(`${mapIndexToTab[newValue]}`);
     setSelectedTab(newValue);
   };
 
   const context: OutletContext = {
-    spaceId,
     listId,
     itemId,
-    selectedTab,
+    selectedTab: 1,
     status: statuses,
   };
-
-  useEffect(() => {
-    setSelectedTab(mapPathToIndex[tabName]);
-  }, [tabName, listId]);
 
   return (
     <SpaceContext.Provider value={{ statuses }}>
@@ -72,10 +69,11 @@ export function List() {
           >
             <Grid2 container>
               <Grid2>
-                <Tabs value={selectedTab} onChange={handleChange}>
-                  <Tab isLoading={false} label="Board" value={0} />
-                  <Tab isLoading={false} label="List" value={1} />
-                </Tabs>
+                <CustomTabs value={selectedTab} handleChange={handleChange}>
+                  {views?.findViews.map(({ id, name }, index) => {
+                    return <CustomTab key={id} index={index} label={name} />;
+                  })}
+                </CustomTabs>
               </Grid2>
               {listId && (
                 <Grid2 sx={{ alignContent: "center" }}>

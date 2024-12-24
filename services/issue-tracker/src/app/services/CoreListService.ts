@@ -53,7 +53,13 @@ export class CoreListService implements ListService {
       ],
     });
     await this.publisher.send("project.created", savedList);
-    await this.viewService.createDefaultView({ listId, manager });
+    const selectedViewId = await this.viewService.createDefaultViews({
+      listId,
+      manager,
+      userId,
+    });
+
+    await ListRepo.update({ id: listId }, { selectedViewId });
 
     return listId;
   }

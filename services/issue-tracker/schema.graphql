@@ -106,6 +106,7 @@ type Query {
   findSpaces(input: FindSpacesOptions!): [Space!]!
   findStatuses(input: FindStatusesOptions!): [Status!]!
   findSubItems(input: FindItemsInput!): [Item!]!
+  findViews(listId: String!): [View!]!
   findWorkspaces: [Workspace!]!
 }
 
@@ -128,6 +129,12 @@ input UpdateItemInput {
   priority: String
   statusId: String
   type: String
+}
+
+type View {
+  id: String!
+  name: String!
+  type: String!
 }
 
 type Workspace {
