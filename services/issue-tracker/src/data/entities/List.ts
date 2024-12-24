@@ -41,6 +41,9 @@ export class List extends Audit {
   @JoinColumn({ name: "space_id" })
   space!: Space;
 
+  @Column({ name: "selected_view_id", type: "uuid", nullable: true })
+  selectedViewId?: string;
+
   @OneToMany(() => View, (x) => x.list)
   views!: View[];
 

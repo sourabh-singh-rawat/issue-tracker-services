@@ -181,6 +181,7 @@ export type Query = {
   findSpaces: Array<Space>;
   findStatuses: Array<Status>;
   findSubItems: Array<Item>;
+  findViews: Array<View>;
   findWorkspaces: Array<Workspace>;
   getCurrentUser: User;
 };
@@ -223,6 +224,11 @@ export type QueryFindStatusesArgs = {
 
 export type QueryFindSubItemsArgs = {
   input: FindItemsInput;
+};
+
+
+export type QueryFindViewsArgs = {
+  listId: Scalars['String']['input'];
 };
 
 export type RegisterUserInput = {
@@ -272,6 +278,12 @@ export type User = {
 
 export type VerifyVerificationLinkInput = {
   token: Scalars['String']['input'];
+};
+
+export type View = {
+  __typename?: 'View';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Workspace = {
@@ -409,6 +421,13 @@ export type FindSubItemsQueryVariables = Exact<{
 
 
 export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string }> };
+
+export type FindViewsQueryVariables = Exact<{
+  listId: Scalars['String']['input'];
+}>;
+
+
+export type FindViewsQuery = { __typename?: 'Query', findViews: Array<{ __typename?: 'View', id: string, name: string }> };
 
 export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1151,6 +1170,47 @@ export type FindSubItemsQueryHookResult = ReturnType<typeof useFindSubItemsQuery
 export type FindSubItemsLazyQueryHookResult = ReturnType<typeof useFindSubItemsLazyQuery>;
 export type FindSubItemsSuspenseQueryHookResult = ReturnType<typeof useFindSubItemsSuspenseQuery>;
 export type FindSubItemsQueryResult = Apollo.QueryResult<FindSubItemsQuery, FindSubItemsQueryVariables>;
+export const FindViewsDocument = gql`
+    query FindViews($listId: String!) {
+  findViews(listId: $listId) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindViewsQuery__
+ *
+ * To run a query within a React component, call `useFindViewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindViewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindViewsQuery({
+ *   variables: {
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useFindViewsQuery(baseOptions: Apollo.QueryHookOptions<FindViewsQuery, FindViewsQueryVariables> & ({ variables: FindViewsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindViewsQuery, FindViewsQueryVariables>(FindViewsDocument, options);
+      }
+export function useFindViewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindViewsQuery, FindViewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindViewsQuery, FindViewsQueryVariables>(FindViewsDocument, options);
+        }
+export function useFindViewsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindViewsQuery, FindViewsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindViewsQuery, FindViewsQueryVariables>(FindViewsDocument, options);
+        }
+export type FindViewsQueryHookResult = ReturnType<typeof useFindViewsQuery>;
+export type FindViewsLazyQueryHookResult = ReturnType<typeof useFindViewsLazyQuery>;
+export type FindViewsSuspenseQueryHookResult = ReturnType<typeof useFindViewsSuspenseQuery>;
+export type FindViewsQueryResult = Apollo.QueryResult<FindViewsQuery, FindViewsQueryVariables>;
 export const FindWorkspacesDocument = gql`
     query FindWorkspaces {
   findWorkspaces {

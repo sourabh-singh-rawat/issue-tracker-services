@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import Tab from "../../../../common/components/Tab";
-import Tabs from "../../../../common/components/Tabs";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import Tab from "../../../../common/components/CustomTab";
+import Tabs from "../../../../common/components/CustomTabs";
 import PageHeader from "../../../../common/components/PageHeader";
 
 export default function Workspace() {
@@ -39,8 +39,8 @@ export default function Workspace() {
       </Grid>
       <Grid xs={12} item sx={{ pt: theme.spacing(1) }}>
         <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab isLoading={false} label="Settings" value={0} />
-          <Tab isLoading={false} label="Members" value={1} />
+          <Tab isLoading={false} label="Settings" id={0} />
+          <Tab isLoading={false} label="Members" id={1} />
         </Tabs>
       </Grid>
 

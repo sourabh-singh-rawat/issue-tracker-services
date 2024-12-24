@@ -7,8 +7,6 @@ import SignUp from "../features/auth/pages/Signup";
 import SpaceBoard from "../features/dashboard/pages/Dashboard";
 
 import { List } from "../features/Lists/pages/List";
-import ProjectActivity from "../features/Lists/pages/ProjectActivity";
-import ProjectMembers from "../features/Lists/pages/ProjectMembers";
 import { EmailVerification } from "../features/auth/pages/EmailVerification";
 import Item from "../features/issue/components/Item/Item";
 import Profile from "../features/user/pages/Profile";
@@ -34,8 +32,6 @@ export default function App() {
                 <Route element={<ListView />} path="items">
                   <Route element={<Item />} path=":itemId" />
                 </Route>
-                <Route element={<ProjectMembers />} path="members" />
-                <Route element={<ProjectActivity />} path="activity" />
               </Route>
             </Route>
           </Route>

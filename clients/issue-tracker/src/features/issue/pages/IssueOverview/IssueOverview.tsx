@@ -4,8 +4,8 @@ import { useTheme } from "@mui/material";
 import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 
+import TabPanel from "../../../../common/components/CustomTabPanel";
 import IssueAssignees from "../../../../common/components/IssueAssignees";
-import TabPanel from "../../../../common/components/TabPanel";
 import { useSelectedTab } from "../../../../common/hooks/useSelectedTab";
 
 import Avatar from "../../../../common/components/Avatar";

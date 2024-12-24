@@ -13,4 +13,5 @@ export * from "./ListCustomField";
 export * from "./Space";
 export * from "./Status";
 export * from "./UpdateItemInput";
+export * from "./View";
 export * from "./Workspace";
