@@ -7,4 +7,7 @@ export class List {
 
   @Field()
   name!: string;
+
+  @Field({ nullable: true })
+  selectedViewId?: string;
 }

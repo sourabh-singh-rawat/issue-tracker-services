@@ -74,6 +74,7 @@ scalar JSON
 type List {
   id: String!
   name: String!
+  selectedViewId: String
 }
 
 type ListCustomField {
