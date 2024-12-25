@@ -5,6 +5,7 @@ query FindSpaces($input: FindSpacesOptions!) {
     lists {
       id
       name
+      selectedViewId
     }
   }
 }

@@ -89,6 +89,7 @@ export type List = {
   __typename?: 'List';
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
+  selectedViewId?: Maybe<Scalars['String']['output']>;
 };
 
 export type ListCustomField = {
@@ -284,6 +285,7 @@ export type View = {
   __typename?: 'View';
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type Workspace = {
@@ -406,7 +408,7 @@ export type FindSpacesQueryVariables = Exact<{
 }>;
 
 
-export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string, lists: Array<{ __typename?: 'List', id: string, name: string }> }> };
+export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string, lists: Array<{ __typename?: 'List', id: string, name: string, selectedViewId?: string | null }> }> };
 
 export type FindStatusesQueryVariables = Exact<{
   input: FindStatusesOptions;
@@ -427,7 +429,7 @@ export type FindViewsQueryVariables = Exact<{
 }>;
 
 
-export type FindViewsQuery = { __typename?: 'Query', findViews: Array<{ __typename?: 'View', id: string, name: string }> };
+export type FindViewsQuery = { __typename?: 'Query', findViews: Array<{ __typename?: 'View', id: string, name: string, type: string }> };
 
 export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1050,6 +1052,7 @@ export const FindSpacesDocument = gql`
     lists {
       id
       name
+      selectedViewId
     }
   }
 }
@@ -1175,6 +1178,7 @@ export const FindViewsDocument = gql`
   findViews(listId: $listId) {
     id
     name
+    type
   }
 }
     `;
