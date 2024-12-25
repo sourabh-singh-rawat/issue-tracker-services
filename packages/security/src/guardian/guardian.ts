@@ -1,14 +1,14 @@
+import { MissingEnforcerError } from "@issue-tracker/common/src/constants";
+import { Logger } from "@issue-tracker/server-core";
+import { Enforcer, newEnforcer } from "casbin";
 import { DataSource } from "typeorm";
 import TypeORMAdapter from "typeorm-adapter";
-import { Enforcer, newEnforcer } from "casbin";
 import { TypeORMAdapterConfig } from "typeorm-adapter/lib/adapter";
-import { MissingEnforcerError } from "@issue-tracker/common/src/constants";
-import { AppLogger } from "@issue-tracker/server-core";
 
 export abstract class Guardian<A extends string> {
   protected casbinEnforcer?: Enforcer;
 
-  constructor(private readonly logger: AppLogger) {}
+  constructor(private readonly logger: Logger) {}
 
   /**
    * Saves the policy to database
