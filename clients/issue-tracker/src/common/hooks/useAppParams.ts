@@ -1,7 +1,11 @@
 import { useParams } from "react-router-dom";
 
 export const useAppParams = () => {
-  const { itemId, listId } = useParams<{ listId: string; itemId: string }>();
+  const { viewId, itemId, listId } = useParams<{
+    viewId: string;
+    listId: string;
+    itemId: string;
+  }>();
 
-  return { itemId, listId };
+  return { viewId, itemId, listId };
 };

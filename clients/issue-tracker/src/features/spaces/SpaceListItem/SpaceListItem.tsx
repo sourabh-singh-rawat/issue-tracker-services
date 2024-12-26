@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { List as ListOutput } from "../../../api/codegen/gql/graphql";
+import { useAppDispatch } from "../../../common";
 import { CreateListModal } from "../../Lists/pages/CreateListModal/CreateListModal";
 
 interface SpaceProps {
@@ -30,6 +31,7 @@ export const SpaceListItem = ({
   lists,
 }: SpaceProps) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleClick = () => setOpen(!open);
@@ -49,13 +51,19 @@ export const SpaceListItem = ({
         </IconButton>
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        {lists.map(({ id, name }) => {
+        {lists.map(({ id, name, selectedViewId }) => {
           return (
             <ListItemButton
               key={id}
               sx={{ pl: 4 }}
               component="div"
-              onClick={() => navigate(`${spaceId}/l/${id}/items`)}
+              onClick={() => {
+                localStorage.setItem(
+                  "currentList",
+                  JSON.stringify({ id, name, selectedViewId }),
+                );
+                navigate(`${workspaceId}/v/l/${selectedViewId}`);
+              }}
             >
               <ListItemIcon>
                 <ListIcon />

@@ -17,13 +17,13 @@ export const CustomTabs = ({ value, handleChange, children }: TabsProps) => {
       children={children}
       component="div"
       sx={{
-        px: theme.spacing(4),
+        px: theme.spacing(1),
         ".MuiButtonBase-root": {
           padding: 0,
           minWidth: "auto",
           opacity: 1,
           marginRight: theme.spacing(4),
-          fontSize: theme.typography.body2,
+          fontSize: theme.typography.h6,
           fontWeight: theme.typography.fontWeightMedium,
           color: theme.palette.text.secondary,
         },

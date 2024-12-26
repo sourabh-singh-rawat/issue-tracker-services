@@ -1,4 +1,3 @@
-import { PestControl } from "@mui/icons-material";
 import { useState } from "react";
 import { useAppParams } from "../../../../common";
 import Modal from "../../../../common/components/Modal";
@@ -16,15 +15,14 @@ export default function ItemModal() {
 
   return (
     <>
-      <PrimaryButton
-        label="Add"
-        onClick={handleOpen}
-        startIcon={<PestControl />}
-      />
+      <PrimaryButton label="Add Item" onClick={handleOpen} />
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader title="New Item" handleClose={handleClose} subtitle="" />
         <ModalBody>
-          {listId && <ItemForm listId={listId} parentItemId={itemId} />}
+          <ItemForm
+            listId={"5a6d09b7-a51b-4467-84e0-e706dce06835"}
+            parentItemId={itemId}
+          />
         </ModalBody>
       </Modal>
     </>
