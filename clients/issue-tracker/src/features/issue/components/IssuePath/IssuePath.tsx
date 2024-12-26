@@ -1,6 +1,5 @@
-import React from "react";
-import Breadcrumbs from "../../../../common/components/Breadcrumbs";
 import { useNavigate } from "react-router-dom";
+import Breadcrumbs from "../../../views/components/CustomBreadcrumbs";
 
 interface IssuePathProps {
   projectName: string;

@@ -28,7 +28,13 @@ export const PrivateRoutes = () => {
         disableGutters
       >
         <Toolbar variant="dense" disableGutters />
-        <Grid2 container>{workspaceId && <Outlet />}</Grid2>
+        {workspaceId && (
+          <Grid2 container>
+            <Grid2 size={12}>
+              <Outlet />
+            </Grid2>
+          </Grid2>
+        )}
       </Container>
     </Box>
   ) : (

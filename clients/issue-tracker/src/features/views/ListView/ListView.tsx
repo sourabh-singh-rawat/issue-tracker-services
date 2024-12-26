@@ -1,5 +1,9 @@
-import { ListItems } from "../../Lists";
+import { useOutletContext } from "react-router-dom";
+import { useAppParams } from "../../../common";
 
 export const ListView = () => {
-  return <ListItems />;
+  const { viewId } = useAppParams();
+  const { items, statuses } = useOutletContext();
+
+  return items?.map(({ name }) => name);
 };
