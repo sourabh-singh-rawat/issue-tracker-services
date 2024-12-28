@@ -1,5 +1,4 @@
-import { useTheme } from "@mui/material";
-import MuiTabs from "@mui/material/Tabs";
+import { Tabs, useTheme } from "@mui/material";
 
 interface TabsProps {
   value: number;
@@ -11,7 +10,7 @@ export const CustomTabs = ({ value, handleChange, children }: TabsProps) => {
   const theme = useTheme();
 
   return (
-    <MuiTabs
+    <Tabs
       value={value}
       onChange={handleChange}
       children={children}

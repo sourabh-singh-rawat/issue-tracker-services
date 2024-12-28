@@ -1,12 +1,13 @@
 import { SpaceDashboardOutlined } from "@mui/icons-material";
-import { Box, Grid2, IconButton, useTheme } from "@mui/material";
+import { Box, Grid2, IconButton } from "@mui/material";
 import { CustomBreadcrumbs } from "../components/CustomBreadcrumbs";
 
-interface ViewLocationProps {}
+interface LocationProps {
+  spaceName: string;
+  listName: string;
+}
 
-export const ViewLocation = (props: ViewLocationProps) => {
-  const theme = useTheme();
-
+export const ListLocation = ({ spaceName, listName }: LocationProps) => {
   return (
     <Box>
       <Grid2 container>
@@ -19,8 +20,8 @@ export const ViewLocation = (props: ViewLocationProps) => {
           <CustomBreadcrumbs
             isLoading={false}
             items={[
-              { text: "My Space", onClick() {} },
-              { text: "Me", onClick() {} },
+              { text: spaceName, onClick() {} },
+              { text: listName, onClick() {} },
             ]}
           />
         </Grid2>

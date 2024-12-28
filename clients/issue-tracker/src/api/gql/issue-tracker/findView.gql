@@ -1,0 +1,16 @@
+query FindView($viewId: String!) {
+  findView(viewId: $viewId) {
+    id
+    list {
+      id
+      name
+      selectedViewId
+      space {
+        id
+        name
+      }
+    }
+    name
+    type
+  }
+}

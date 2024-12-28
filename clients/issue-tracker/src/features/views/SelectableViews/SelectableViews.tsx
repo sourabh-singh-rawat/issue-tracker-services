@@ -1,6 +1,8 @@
 import { Grid2 } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { View } from "../../../api";
+import { useViewParams } from "../../../common";
 import { CustomTab } from "../../../common/components/CustomTab";
 import { CustomTabs } from "../../../common/components/CustomTabs";
 import { AddItemButton } from "../../issue/components/AddItemButton";
@@ -10,10 +12,22 @@ interface ViewProps {
   views: View[];
 }
 
-export const ViewTabs = ({ listId, views }: ViewProps) => {
+export const SelectableViews = ({ listId, views }: ViewProps) => {
+  const navigate = useNavigate();
+  const { viewId } = useViewParams();
   const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedView, setSelectedView] = useState<View | null>(null);
 
   const handleChange = (e: unknown, newValue: number) => {
+    console.log(selectedView);
+    switch (selectedView?.type) {
+      case "Board":
+        navigate(`b/${viewId}`);
+        break;
+      case "List":
+        navigate(`l/${viewId}`);
+        break;
+    }
     setSelectedTab(newValue);
   };
 
@@ -21,9 +35,18 @@ export const ViewTabs = ({ listId, views }: ViewProps) => {
     <Grid2 container sx={{ alignItems: "center" }}>
       <Grid2>
         <CustomTabs handleChange={handleChange} value={selectedTab}>
-          {views.map(({ id, name }, index) => (
-            <CustomTab key={id} index={index} label={name} />
-          ))}
+          {views.map((view, index) => {
+            const { id, name } = view;
+
+            return (
+              <CustomTab
+                key={id}
+                index={index}
+                label={name}
+                onClick={() => setSelectedView(view)}
+              />
+            );
+          })}
         </CustomTabs>
       </Grid2>
       <Grid2 flexGrow={1}></Grid2>

@@ -76,7 +76,7 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
         <Grid2 size={12}>
           <VisuallyHiddenInput
             type="file"
-            onChange={async (e) => {
+            onClick={async (e) => {
               const files = e.target.files;
               const formData = new FormData();
 

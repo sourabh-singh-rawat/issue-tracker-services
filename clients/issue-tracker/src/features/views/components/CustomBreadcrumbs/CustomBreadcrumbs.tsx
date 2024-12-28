@@ -19,8 +19,8 @@ export const CustomBreadcrumbs = ({
 
   return (
     <Breadcrumbs separator={"/"}>
-      {items.map(({ text, onClick }) => (
-        <span key={text}>
+      {items.map(({ text, onClick }, index) => (
+        <span key={index}>
           {isLoading ? (
             <Skeleton height="20px" variant="text" width="75px" />
           ) : (

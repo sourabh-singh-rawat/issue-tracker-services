@@ -72,6 +72,7 @@ export class CoreListService implements ListService {
       where: { workspaceId },
       skip: page,
       take: pageSize,
+      relations: { space: true },
     });
 
     return { rows, rowCount };

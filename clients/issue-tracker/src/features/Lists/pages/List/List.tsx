@@ -12,7 +12,7 @@ import {
   useFindStatusesQuery,
   useFindViewsQuery,
 } from "../../../../api/codegen/gql/graphql";
-import { SpaceContext, useAppParams } from "../../../../common";
+import { SpaceContext, useViewParams } from "../../../../common";
 import { OutletContext } from "../../../../common/Interfaces";
 import { CustomTab } from "../../../../common/components/CustomTab";
 import { CustomTabs } from "../../../../common/components/CustomTabs";
@@ -21,7 +21,7 @@ import { AddItemButton } from "../../../issue/components/AddItemButton";
 export function List() {
   const theme = useTheme();
   const location = useLocation();
-  const { listId, itemId } = useAppParams();
+  const { listId, itemId } = useViewParams();
   const [statuses, setStatuses] = useState<FindStatusesQuery["findStatuses"]>(
     [],
   );

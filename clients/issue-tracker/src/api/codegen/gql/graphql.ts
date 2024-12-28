@@ -90,6 +90,7 @@ export type List = {
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   selectedViewId?: Maybe<Scalars['String']['output']>;
+  space: Space;
 };
 
 export type ListCustomField = {
@@ -182,6 +183,7 @@ export type Query = {
   findSpaces: Array<Space>;
   findStatuses: Array<Status>;
   findSubItems: Array<Item>;
+  findView: View;
   findViews: Array<View>;
   findWorkspaces: Array<Workspace>;
   getCurrentUser: User;
@@ -225,6 +227,11 @@ export type QueryFindStatusesArgs = {
 
 export type QueryFindSubItemsArgs = {
   input: FindItemsInput;
+};
+
+
+export type QueryFindViewArgs = {
+  viewId: Scalars['String']['input'];
 };
 
 
@@ -284,6 +291,7 @@ export type VerifyVerificationLinkInput = {
 export type View = {
   __typename?: 'View';
   id: Scalars['String']['output'];
+  list: List;
   name: Scalars['String']['output'];
   type: Scalars['String']['output'];
 };
@@ -401,14 +409,14 @@ export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindListsQuery = { __typename?: 'Query', findLists: { __typename?: 'PaginatedList', rowCount: number, rows: Array<{ __typename?: 'List', id: string, name: string }> } };
+export type FindListsQuery = { __typename?: 'Query', findLists: { __typename?: 'PaginatedList', rowCount: number, rows: Array<{ __typename?: 'List', id: string, name: string, space: { __typename?: 'Space', id: string, name: string } }> } };
 
 export type FindSpacesQueryVariables = Exact<{
   input: FindSpacesOptions;
 }>;
 
 
-export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string, lists: Array<{ __typename?: 'List', id: string, name: string, selectedViewId?: string | null }> }> };
+export type FindSpacesQuery = { __typename?: 'Query', findSpaces: Array<{ __typename?: 'Space', id: string, name: string, lists: Array<{ __typename?: 'List', id: string, name: string, selectedViewId?: string | null, space: { __typename?: 'Space', name: string } }> }> };
 
 export type FindStatusesQueryVariables = Exact<{
   input: FindStatusesOptions;
@@ -423,6 +431,13 @@ export type FindSubItemsQueryVariables = Exact<{
 
 
 export type FindSubItemsQuery = { __typename?: 'Query', findSubItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string }> };
+
+export type FindViewQueryVariables = Exact<{
+  viewId: Scalars['String']['input'];
+}>;
+
+
+export type FindViewQuery = { __typename?: 'Query', findView: { __typename?: 'View', id: string, name: string, type: string, list: { __typename?: 'List', id: string, name: string, selectedViewId?: string | null, space: { __typename?: 'Space', id: string, name: string } } } };
 
 export type FindViewsQueryVariables = Exact<{
   listId: Scalars['String']['input'];
@@ -1007,6 +1022,10 @@ export const FindListsDocument = gql`
     rows {
       id
       name
+      space {
+        id
+        name
+      }
     }
     rowCount
   }
@@ -1053,6 +1072,9 @@ export const FindSpacesDocument = gql`
       id
       name
       selectedViewId
+      space {
+        name
+      }
     }
   }
 }
@@ -1173,6 +1195,57 @@ export type FindSubItemsQueryHookResult = ReturnType<typeof useFindSubItemsQuery
 export type FindSubItemsLazyQueryHookResult = ReturnType<typeof useFindSubItemsLazyQuery>;
 export type FindSubItemsSuspenseQueryHookResult = ReturnType<typeof useFindSubItemsSuspenseQuery>;
 export type FindSubItemsQueryResult = Apollo.QueryResult<FindSubItemsQuery, FindSubItemsQueryVariables>;
+export const FindViewDocument = gql`
+    query FindView($viewId: String!) {
+  findView(viewId: $viewId) {
+    id
+    list {
+      id
+      name
+      selectedViewId
+      space {
+        id
+        name
+      }
+    }
+    name
+    type
+  }
+}
+    `;
+
+/**
+ * __useFindViewQuery__
+ *
+ * To run a query within a React component, call `useFindViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindViewQuery({
+ *   variables: {
+ *      viewId: // value for 'viewId'
+ *   },
+ * });
+ */
+export function useFindViewQuery(baseOptions: Apollo.QueryHookOptions<FindViewQuery, FindViewQueryVariables> & ({ variables: FindViewQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindViewQuery, FindViewQueryVariables>(FindViewDocument, options);
+      }
+export function useFindViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindViewQuery, FindViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindViewQuery, FindViewQueryVariables>(FindViewDocument, options);
+        }
+export function useFindViewSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindViewQuery, FindViewQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindViewQuery, FindViewQueryVariables>(FindViewDocument, options);
+        }
+export type FindViewQueryHookResult = ReturnType<typeof useFindViewQuery>;
+export type FindViewLazyQueryHookResult = ReturnType<typeof useFindViewLazyQuery>;
+export type FindViewSuspenseQueryHookResult = ReturnType<typeof useFindViewSuspenseQuery>;
+export type FindViewQueryResult = Apollo.QueryResult<FindViewQuery, FindViewQueryVariables>;
 export const FindViewsDocument = gql`
     query FindViews($listId: String!) {
   findViews(listId: $listId) {

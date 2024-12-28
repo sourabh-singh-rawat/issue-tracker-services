@@ -6,7 +6,7 @@ import {
   useFindSubItemsQuery,
   useUpdateItemMutation,
 } from "../../../../api";
-import { useAppParams } from "../../../../common";
+import { useViewParams } from "../../../../common";
 import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
@@ -19,7 +19,7 @@ export interface ItemProps {}
 export default function Item(props: ItemProps) {
   const theme = useTheme();
   const messageBar = useSnackbar();
-  const { listId, itemId } = useAppParams();
+  const { listId, itemId } = useViewParams();
   const { data: item } = useFindItemQuery({
     variables: { findItemId: itemId as string },
     skip: !itemId,

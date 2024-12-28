@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
+import { List } from "./List";
 
 @ObjectType()
 export class View {
@@ -10,4 +11,7 @@ export class View {
 
   @Field()
   type!: string;
+
+  @Field()
+  list!: List;
 }

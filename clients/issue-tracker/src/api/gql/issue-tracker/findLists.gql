@@ -3,6 +3,10 @@ query FindLists {
     rows {
       id
       name
+      space {
+        id
+        name
+      }
     }
     rowCount
   }
