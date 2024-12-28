@@ -28,7 +28,7 @@ export class CoreSpaceService implements SpaceService {
 
     return await Space.find({
       where: { workspaceId, createdById: userId },
-      relations: { lists: true },
+      relations: { lists: { space: true } },
     });
   }
 }

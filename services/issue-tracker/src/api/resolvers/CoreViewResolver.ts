@@ -17,4 +17,11 @@ export class CoreViewResolver implements ViewResolver {
       return await service.findViews({ manager, listId, userId });
     });
   }
+
+  @Query(() => View)
+  async findView(@Ctx() ctx: AppContext, @Arg("viewId") viewId: string) {
+    const service = container.get("viewService");
+
+    return await service.findView(viewId);
+  }
 }

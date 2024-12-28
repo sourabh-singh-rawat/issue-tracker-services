@@ -75,6 +75,7 @@ type List {
   id: String!
   name: String!
   selectedViewId: String
+  space: Space!
 }
 
 type ListCustomField {
@@ -107,6 +108,7 @@ type Query {
   findSpaces(input: FindSpacesOptions!): [Space!]!
   findStatuses(input: FindStatusesOptions!): [Status!]!
   findSubItems(input: FindItemsInput!): [Item!]!
+  findView(viewId: String!): View!
   findViews(listId: String!): [View!]!
   findWorkspaces: [Workspace!]!
 }
@@ -134,6 +136,7 @@ input UpdateItemInput {
 
 type View {
   id: String!
+  list: List!
   name: String!
   type: String!
 }

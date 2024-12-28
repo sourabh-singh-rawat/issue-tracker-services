@@ -29,4 +29,5 @@ export interface ViewService {
   createDefaultViews(options: CreateDefaultViewOptions): Promise<string>;
   createView(options: CreateViewOptions): Promise<string>;
   findViews(options: GetViewsOptions): Promise<View[]>;
+  findView(viewId: string): Promise<View>;
 }

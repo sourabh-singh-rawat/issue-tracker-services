@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
+import { Space } from "./Space";
 
 @ObjectType()
 export class List {
@@ -10,4 +11,7 @@ export class List {
 
   @Field({ nullable: true })
   selectedViewId?: string;
+
+  @Field()
+  space!: Space;
 }

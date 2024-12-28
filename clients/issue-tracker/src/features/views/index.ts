@@ -1,4 +1,4 @@
 export * from "./BoardView";
+export * from "./ListPage";
 export * from "./ListView";
-export * from "./View";
-export * from "./ViewTabs";
+export * from "./SelectableViews";

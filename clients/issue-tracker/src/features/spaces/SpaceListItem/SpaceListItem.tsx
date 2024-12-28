@@ -51,7 +51,7 @@ export const SpaceListItem = ({
         </IconButton>
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        {lists.map(({ id, name, selectedViewId }) => {
+        {lists.map(({ id, name, selectedViewId, space }) => {
           return (
             <ListItemButton
               key={id}
@@ -60,9 +60,9 @@ export const SpaceListItem = ({
               onClick={() => {
                 localStorage.setItem(
                   "currentList",
-                  JSON.stringify({ id, name, selectedViewId }),
+                  JSON.stringify({ id, name, selectedViewId, space }),
                 );
-                navigate(`${workspaceId}/v/l/${selectedViewId}`);
+                navigate(`${workspaceId}/li/l/${selectedViewId}`);
               }}
             >
               <ListItemIcon>
