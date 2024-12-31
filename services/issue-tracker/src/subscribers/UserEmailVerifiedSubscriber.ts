@@ -1,4 +1,9 @@
 import {
+  UserAlreadyExists,
+  WORKSPACE_NAME,
+  WORKSPACE_STATUS,
+} from "@issue-tracker/common";
+import {
   Broker,
   CONSUMERS,
   SUBJECTS,
@@ -6,8 +11,9 @@ import {
   Subscriber,
   UserEmailVerifiedPayload,
 } from "@issue-tracker/event-bus";
-import { Typeorm } from "@issue-tracker/orm";
 import { JsMsg } from "nats";
+import { DataSource } from "typeorm";
+import { User, Workspace } from "../data";
 
 export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPayload> {
   readonly stream = Streams.USER;
@@ -16,50 +22,38 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
 
   constructor(
     private readonly broker: Broker,
-    private readonly orm: Typeorm,
+    private readonly dataSource: DataSource,
   ) {
     super(broker.client);
   }
 
-  onMessage = async (message: JsMsg, payload: UserEmailVerifiedPayload) => {
-    const {
-      userId,
-      email,
-      emailVerificationStatus,
-      displayName,
-      photoUrl,
-      inviteToken,
-    } = payload;
+  async onMessage(message: JsMsg, payload: UserEmailVerifiedPayload) {
+    const { userId, email, emailVerificationStatus, displayName } = payload;
 
-    const queryRunner = this.orm.createQueryRunner();
-    await this.orm.transaction(queryRunner, async () => {
+    await this.dataSource.transaction(async (manager) => {
+      const UserRepo = manager.getRepository(User);
+      const WorkspaceRepo = manager.getRepository(Workspace);
+
+      const isAlreadyUser = await UserRepo.findOne({ where: { id: userId } });
+      if (isAlreadyUser) throw new UserAlreadyExists();
+
+      const newUser = await UserRepo.save({
+        id: userId,
+        email,
+        emailVerificationStatus,
+        displayName,
+      });
+      const newWorkspace = await WorkspaceRepo.save({
+        name: WORKSPACE_NAME.DEFAULT,
+        status: WORKSPACE_STATUS.DEFAULT,
+        createdById: userId,
+      });
+
+      newUser.defaultWorkspaceId = newWorkspace.id;
+      await UserRepo.save(newUser);
+
       /**
        * 
-      const newUser = new User();
-      newUser.id = userId;
-      newUser.email = email;
-      newUser.emailVerificationStatus = emailVerificationStatus;
-      newUser.displayName = displayName;
-      newUser.photoUrl = photoUrl;
-      const savedUser = await this.userRepository.save(newUser, {
-        queryRunner,
-      });
-
-      const newWorkspace = new Workspace();
-      newWorkspace.createdById = savedUser.id;
-      newWorkspace.name = WORKSPACE_NAME.DEFAULT;
-      newWorkspace.status = WORKSPACE_STATUS.DEFAULT;
-
-      const savedWorkspace = await this.workspaceRepository.save(newWorkspace, {
-        queryRunner,
-      });
-
-      newUser.defaultWorkspaceId = savedWorkspace.id;
-
-      await this.userRepository.updateUser(savedUser.id, newUser, {
-        queryRunner,
-      });
-
       if (inviteToken) {
         const token: WorkspaceInvitePayload = JwtToken.verify(
           inviteToken,
@@ -95,5 +89,5 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedPay
     });
 
     message.ack();
-  };
+  }
 }
