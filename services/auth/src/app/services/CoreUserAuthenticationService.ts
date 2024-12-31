@@ -144,14 +144,11 @@ export class CoreUserAuthenticationService
       tokenId,
     });
 
-    const verificationLink = `${process.env.CLIENT_SERVER}/${process.env.EMAIL_VERIFICATION_PAGE_PATH}?token=${verificationToken}`;
+    const verificationLink = `${process.env.ISSUE_TRACKER_CLIENT_URL}/${process.env.EMAIL_VERIFICATION_PAGE_PATH}?token=${verificationToken}`;
 
     return {
       link: verificationLink,
-      token: {
-        tokenId,
-        value: verificationToken,
-      },
+      token: { tokenId, value: verificationToken },
     };
   }
 
