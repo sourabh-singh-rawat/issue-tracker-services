@@ -6,7 +6,7 @@ import {
   NatsConnection,
   ReplayPolicy,
 } from "nats";
-import { Streams, Consumers } from "./enums";
+import { Consumers, Streams } from "./enums";
 
 export abstract class Subscriber<T> {
   private readonly jetstream;
