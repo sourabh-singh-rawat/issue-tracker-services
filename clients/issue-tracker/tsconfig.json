@@ -5,6 +5,7 @@
     "lib": [
       "ESNext",
       "DOM",
+      "WebWorker"
     ],
     "module": "ES2022",
     "moduleResolution": "bundler",

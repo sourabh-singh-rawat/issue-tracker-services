@@ -22,7 +22,7 @@ export function EmailVerification() {
       setPageMessage(`${message}. You will be redirected shortly`);
 
       setTimeout(() => {
-        navigate("/signin");
+        navigate(`/${import.meta.env.VITE_EMAIL_VERIFICATION_REDIRECT_PATH}`);
       }, 5000);
     },
   });
