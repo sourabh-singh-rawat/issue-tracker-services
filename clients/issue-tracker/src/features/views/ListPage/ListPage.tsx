@@ -9,8 +9,8 @@ import {
   useFindViewsQuery,
 } from "../../../api";
 import { SpaceContext, useViewParams } from "../../../common";
-import { ListLocation } from "../ListLocation";
 import { SelectableViews } from "../SelectableViews";
+import { ViewLocation } from "../ViewLocation";
 
 export const ListPage = () => {
   const theme = useTheme();
@@ -55,7 +55,7 @@ export const ListPage = () => {
                 borderBottom: `1px solid ${theme.palette.action.hover}`,
               }}
             >
-              <ListLocation
+              <ViewLocation
                 spaceName={list?.space.name}
                 listName={list?.name}
               />

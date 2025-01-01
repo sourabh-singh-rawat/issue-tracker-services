@@ -6,8 +6,12 @@ import ModalHeader from "../../../../common/components/ModalHeader";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import ItemForm from "../../pages/ItemForm";
 
-export default function ItemModal() {
-  const { listId, itemId } = useViewParams();
+interface ItemModalProps {
+  listId: string;
+}
+
+export default function ItemModal({ listId }: ItemModalProps) {
+  const { itemId } = useViewParams();
 
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -19,10 +23,7 @@ export default function ItemModal() {
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader title="New Item" handleClose={handleClose} subtitle="" />
         <ModalBody>
-          <ItemForm
-            listId={"5a6d09b7-a51b-4467-84e0-e706dce06835"}
-            parentItemId={itemId}
-          />
+          <ItemForm listId={listId} parentItemId={itemId} />
         </ModalBody>
       </Modal>
     </>

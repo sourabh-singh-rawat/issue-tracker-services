@@ -1,27 +1,55 @@
-import { Grid2 } from "@mui/material";
-import { useOutletContext } from "react-router-dom";
-import { useFindListItemsQuery } from "../../../api";
+import { Grid2, useTheme } from "@mui/material";
+import { useState } from "react";
+import { View, useFindViewQuery } from "../../../api";
+import { useViewParams } from "../../../common";
+import { SelectableViews } from "../SelectableViews";
+import { ViewLocation } from "../ViewLocation";
 
 export const ListView = () => {
-  const { listId } = useOutletContext();
+  const { viewId } = useViewParams();
+  const [view, setView] = useState<View | null>();
+  const theme = useTheme();
 
-  const { data } = useFindListItemsQuery({
-    variables: { listId },
-    skip: !listId,
+  useFindViewQuery({
+    variables: { viewId },
     onCompleted(response) {
-      console.log(response.findListItems);
+      setView(response.findView);
     },
   });
+  // const { data } = useFindListItemsQuery({
+  //   variables: { listId },
+  //   skip: !listId,
+  //   onCompleted(response) {
+  //     console.log(response.findListItems);
+  //   },
+  // });
 
   return (
     <Grid2 container rowSpacing={2}>
-      {data?.findListItems.map(({ name }, index) => {
+      {view && (
+        <>
+          <Grid2
+            size={12}
+            sx={{
+              px: theme.spacing(2),
+              py: theme.spacing(1),
+              borderBottom: `1px solid ${theme.palette.action.hover}`,
+            }}
+          >
+            <ViewLocation list={view.list} />
+          </Grid2>
+          <Grid2 size={12}>
+            <SelectableViews listId={view.list.id} />
+          </Grid2>
+        </>
+      )}
+      {/* {data?.findListItems.map(({ name }, index) => {
         return (
           <Grid2 key={index} size={12}>
             {name}
           </Grid2>
         );
-      })}
+      })} */}
     </Grid2>
   );
 };

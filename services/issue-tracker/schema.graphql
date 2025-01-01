@@ -115,7 +115,7 @@ type Query {
 
 type Space {
   id: String!
-  lists: [List!]!
+  lists: [List!]
   name: String!
 }
 

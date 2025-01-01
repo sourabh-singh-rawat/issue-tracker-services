@@ -84,7 +84,7 @@ export default function Item(props: ItemProps) {
             </MuiTypography>
           </Grid2>
           <Grid2>
-            <ItemModal />
+            <ItemModal listId={listId} />
           </Grid2>
 
           <Grid2 size={12}>
