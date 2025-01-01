@@ -66,7 +66,7 @@ export class CoreViewService implements ViewService {
   async findView(viewId: string) {
     return await View.findOneOrFail({
       where: { id: viewId },
-      relations: { list: { space: true } },
+      relations: { list: { space: { lists: true } } },
     });
   }
 }

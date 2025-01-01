@@ -9,6 +9,6 @@ export class Space {
   @Field()
   name!: string;
 
-  @Field(() => [List])
-  lists!: List[];
+  @Field(() => [List], { nullable: true })
+  lists?: List[];
 }

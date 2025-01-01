@@ -3,5 +3,14 @@ query FindViews($listId: String!) {
     id
     name
     type
+    list {
+      id
+      name
+      selectedViewId
+      space {
+        id
+        name
+      }
+    }
   }
 }

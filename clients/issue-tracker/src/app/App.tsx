@@ -8,7 +8,7 @@ import SignUp from "../features/auth/pages/Signup";
 import { Home } from "../features/home/pages/Home";
 import Item from "../features/issue/components/Item/Item";
 import { Profile } from "../features/user/pages/Profile";
-import { BoardView, ListPage, ListView } from "../features/views";
+import { BoardView, ListView } from "../features/views";
 
 function NoComponent() {
   return <h1>404</h1>;
@@ -25,10 +25,8 @@ export default function App() {
           <Route path="me" element={<Profile />} />
           <Route path="i/:itemId" element={<Item />} />
           <Route path=":workspaceId/home" element={<Home />} />
-          <Route path=":workspaceId/li" element={<ListPage />}>
-            <Route path="l/:viewId" element={<ListView />} />
-            <Route path="b/:viewId" element={<BoardView />} />
-          </Route>
+          <Route path=":workspaceId/v/l/:viewId" element={<ListView />} />
+          <Route path=":workspaceId/v/b/:viewId" element={<BoardView />} />
         </Route>
       </Route>
       <Route path="*" element={<NoComponent />} />
