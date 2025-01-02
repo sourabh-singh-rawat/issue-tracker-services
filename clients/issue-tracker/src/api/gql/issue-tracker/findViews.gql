@@ -3,6 +3,7 @@ query FindViews($listId: String!) {
     id
     name
     type
+    order
     list {
       id
       name

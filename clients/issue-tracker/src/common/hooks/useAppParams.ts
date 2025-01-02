@@ -1,11 +1,14 @@
 import { useParams } from "react-router-dom";
 
 export const useViewParams = () => {
-  const { viewId } = useParams<{ viewId: string }>();
+  const { viewId, workspaceId } = useParams<{
+    viewId: string;
+    workspaceId: string;
+  }>();
 
-  if (!viewId) {
-    throw new Error("View ID is required");
+  if (!viewId || !workspaceId) {
+    throw new Error("View ID and workspaceId is required");
   }
 
-  return { viewId };
+  return { viewId, workspaceId };
 };

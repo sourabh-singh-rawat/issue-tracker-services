@@ -9,8 +9,8 @@ import {
   useFindViewsQuery,
 } from "../../../api";
 import { SpaceContext, useViewParams } from "../../../common";
-import { SelectableViews } from "../SelectableViews";
 import { ViewLocation } from "../ViewLocation";
+import { ViewSwitcher } from "../ViewSwitcher";
 
 export const ListPage = () => {
   const theme = useTheme();
@@ -68,7 +68,7 @@ export const ListPage = () => {
                   px: theme.spacing(2),
                 }}
               >
-                <SelectableViews listId={listId} views={views.findViews} />
+                <ViewSwitcher listId={listId} views={views.findViews} />
               </Grid2>
             )}
             <Grid2

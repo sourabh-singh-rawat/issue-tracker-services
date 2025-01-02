@@ -35,6 +35,9 @@ export class View extends Audit {
   })
   type!: ViewType;
 
+  @Column({ name: "order", type: "int2" })
+  order!: number;
+
   @Column({ name: "is_favorite", type: "boolean", default: false })
   isFavorite?: boolean;
 

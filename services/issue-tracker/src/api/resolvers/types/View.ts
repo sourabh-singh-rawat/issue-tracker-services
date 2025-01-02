@@ -14,4 +14,7 @@ export class View {
 
   @Field()
   list!: List;
+
+  @Field()
+  order!: number;
 }

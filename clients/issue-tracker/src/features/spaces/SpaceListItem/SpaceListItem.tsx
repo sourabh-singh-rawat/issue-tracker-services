@@ -62,7 +62,7 @@ export const SpaceListItem = ({
                   "currentList",
                   JSON.stringify({ id, name, selectedViewId, space }),
                 );
-                navigate(`${workspaceId}/li/l/${selectedViewId}`);
+                navigate(`${workspaceId}/v/l/${selectedViewId}`);
               }}
             >
               <ListItemIcon>

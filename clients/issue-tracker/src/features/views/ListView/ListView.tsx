@@ -2,13 +2,13 @@ import { Grid2, useTheme } from "@mui/material";
 import { useState } from "react";
 import { View, useFindViewQuery } from "../../../api";
 import { useViewParams } from "../../../common";
-import { SelectableViews } from "../SelectableViews";
 import { ViewLocation } from "../ViewLocation";
+import { ViewSwitcher } from "../ViewSwitcher";
 
 export const ListView = () => {
+  const theme = useTheme();
   const { viewId } = useViewParams();
   const [view, setView] = useState<View | null>();
-  const theme = useTheme();
 
   useFindViewQuery({
     variables: { viewId },
@@ -25,7 +25,7 @@ export const ListView = () => {
   // });
 
   return (
-    <Grid2 container rowSpacing={2}>
+    <Grid2 container>
       {view && (
         <>
           <Grid2
@@ -38,8 +38,14 @@ export const ListView = () => {
           >
             <ViewLocation list={view.list} />
           </Grid2>
-          <Grid2 size={12}>
-            <SelectableViews listId={view.list.id} />
+          <Grid2
+            size={12}
+            sx={{
+              px: theme.spacing(2),
+              borderBottom: `1px solid ${theme.palette.action.hover}`,
+            }}
+          >
+            <ViewSwitcher listId={view.list.id} />
           </Grid2>
         </>
       )}

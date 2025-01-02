@@ -15,6 +15,7 @@ export interface CreateViewOptions extends ServiceOptions {
   isDefaultView?: boolean;
   systemFields?: string[];
   customFields?: string[];
+  order: number;
 }
 
 export interface GetViewsOptions extends ServiceOptions {

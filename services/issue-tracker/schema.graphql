@@ -138,6 +138,7 @@ type View {
   id: String!
   list: List!
   name: String!
+  order: Float!
   type: String!
 }
 
