@@ -1,7 +1,7 @@
 import { Grid2 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFindViewsQuery, View } from "../../../api";
+import { useFindViewsQuery } from "../../../api";
 import { useViewParams } from "../../../common";
 import { CustomTab } from "../../../common/components/CustomTab";
 import { CustomTabs } from "../../../common/components/CustomTabs";
@@ -11,23 +11,14 @@ interface ViewProps {
   listId: string;
 }
 
-export const SelectableViews = ({ listId }: ViewProps) => {
+export const ViewSwitcher = ({ listId }: ViewProps) => {
   const navigate = useNavigate();
-  const { viewId } = useViewParams();
+  const { viewId, workspaceId } = useViewParams();
   const [selectedTab, setSelectedTab] = useState(0);
-  const [selectedView, setSelectedView] = useState<View | null>(null);
   const { data } = useFindViewsQuery({ variables: { listId } });
 
   const handleChange = (e: unknown, newValue: number) => {
-    console.log(selectedView);
-    switch (selectedView?.type) {
-      case "Board":
-        navigate(`b/${viewId}`);
-        break;
-      case "List":
-        navigate(`l/${viewId}`);
-        break;
-    }
+    navigate(`/${workspaceId}/v/l/${viewId}`);
     setSelectedTab(newValue);
   };
 
@@ -35,17 +26,10 @@ export const SelectableViews = ({ listId }: ViewProps) => {
     <Grid2 container sx={{ alignItems: "center" }}>
       <Grid2>
         <CustomTabs handleChange={handleChange} value={selectedTab}>
-          {data?.findViews.map((view, index) => {
-            const { id, name } = view;
+          {data?.findViews.map((view) => {
+            const { id, name, order } = view;
 
-            return (
-              <CustomTab
-                key={id}
-                index={index}
-                label={name}
-                onClick={() => setSelectedView(view)}
-              />
-            );
+            return <CustomTab key={id} index={order} label={name} />;
           })}
         </CustomTabs>
       </Grid2>

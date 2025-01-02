@@ -19,6 +19,7 @@ export class CoreViewService implements ViewService {
       type: VIEW_TYPE.LIST,
       isDefaultView: true,
       systemFields: [FIELD_TYPE._STATUS, FIELD_TYPE._PRIORITY],
+      order: 0,
     });
     await this.createView({
       manager,
@@ -28,14 +29,23 @@ export class CoreViewService implements ViewService {
       type: VIEW_TYPE.BOARD,
       isDefaultView: true,
       systemFields: [FIELD_TYPE._STATUS, FIELD_TYPE._PRIORITY],
+      order: 1,
     });
 
     return listViewId;
   }
 
   async createView(options: CreateViewOptions) {
-    const { manager, listId, userId, name, type, isDefaultView, systemFields } =
-      options;
+    const {
+      manager,
+      listId,
+      userId,
+      name,
+      type,
+      isDefaultView,
+      systemFields,
+      order,
+    } = options;
     const ViewRepo = manager.getRepository(View);
     const ViewSystemFieldRepo = manager.getRepository(ViewSystemField);
 
@@ -45,6 +55,7 @@ export class CoreViewService implements ViewService {
       listId,
       isDefaultView,
       createdById: userId,
+      order,
     });
 
     if (systemFields) {
@@ -60,7 +71,10 @@ export class CoreViewService implements ViewService {
     const { manager, listId, userId } = options;
     const ViewRepo = manager.getRepository(View);
 
-    return await ViewRepo.find({ where: { listId, createdById: userId } });
+    return await ViewRepo.find({
+      where: { listId, createdById: userId },
+      relations: { list: { space: true } },
+    });
   }
 
   async findView(viewId: string) {

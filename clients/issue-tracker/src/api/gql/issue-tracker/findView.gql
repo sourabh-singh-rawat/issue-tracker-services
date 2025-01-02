@@ -1,6 +1,9 @@
 query FindView($viewId: String!) {
   findView(viewId: $viewId) {
     id
+    name
+    type
+    order
     list {
       id
       name
@@ -10,7 +13,5 @@ query FindView($viewId: String!) {
         name
       }
     }
-    name
-    type
   }
 }

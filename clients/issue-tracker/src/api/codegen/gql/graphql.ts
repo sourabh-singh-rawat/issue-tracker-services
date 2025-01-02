@@ -293,6 +293,7 @@ export type View = {
   id: Scalars['String']['output'];
   list: List;
   name: Scalars['String']['output'];
+  order: Scalars['Float']['output'];
   type: Scalars['String']['output'];
 };
 
@@ -437,14 +438,14 @@ export type FindViewQueryVariables = Exact<{
 }>;
 
 
-export type FindViewQuery = { __typename?: 'Query', findView: { __typename?: 'View', id: string, name: string, type: string, list: { __typename?: 'List', id: string, name: string, selectedViewId?: string | null, space: { __typename?: 'Space', id: string, name: string } } } };
+export type FindViewQuery = { __typename?: 'Query', findView: { __typename?: 'View', id: string, name: string, type: string, order: number, list: { __typename?: 'List', id: string, name: string, selectedViewId?: string | null, space: { __typename?: 'Space', id: string, name: string } } } };
 
 export type FindViewsQueryVariables = Exact<{
   listId: Scalars['String']['input'];
 }>;
 
 
-export type FindViewsQuery = { __typename?: 'Query', findViews: Array<{ __typename?: 'View', id: string, name: string, type: string, list: { __typename?: 'List', id: string, name: string, selectedViewId?: string | null, space: { __typename?: 'Space', id: string, name: string } } }> };
+export type FindViewsQuery = { __typename?: 'Query', findViews: Array<{ __typename?: 'View', id: string, name: string, type: string, order: number, list: { __typename?: 'List', id: string, name: string, selectedViewId?: string | null, space: { __typename?: 'Space', id: string, name: string } } }> };
 
 export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1199,6 +1200,9 @@ export const FindViewDocument = gql`
     query FindView($viewId: String!) {
   findView(viewId: $viewId) {
     id
+    name
+    type
+    order
     list {
       id
       name
@@ -1208,8 +1212,6 @@ export const FindViewDocument = gql`
         name
       }
     }
-    name
-    type
   }
 }
     `;
@@ -1252,6 +1254,7 @@ export const FindViewsDocument = gql`
     id
     name
     type
+    order
     list {
       id
       name

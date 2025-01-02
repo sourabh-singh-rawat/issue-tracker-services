@@ -6,8 +6,6 @@ import { View } from "./types";
 
 @Resolver()
 export class CoreViewResolver implements ViewResolver {
-  constructor() {}
-
   @Query(() => [View])
   async findViews(@Ctx() ctx: AppContext, @Arg("listId") listId: string) {
     const userId = ctx.user.userId;
