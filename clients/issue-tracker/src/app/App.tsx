@@ -2,9 +2,8 @@ import { Route, Routes } from "react-router-dom";
 
 import { Main } from "../common/components/Main";
 import { PrivateRoutes } from "../common/components/PrivateRoutes";
-import { SignUpPage } from "../features/auth";
+import { LoginPage, SignUpPage } from "../features/auth";
 import { EmailVerification } from "../features/auth/pages/EmailVerification";
-import Login from "../features/auth/pages/Login";
 import { Home } from "../features/home/pages/Home";
 import Item from "../features/item/components/Item/Item";
 import { BoardView, ListView } from "../features/view";
@@ -17,7 +16,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Main />}>
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignUpPage />} />
         <Route path="email-verification" element={<EmailVerification />} />
         <Route path="/" element={<PrivateRoutes />}>

@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
 import MuiContainer from "@mui/material/Container";
-import LoginForm from "../../components/LoginForm";
+import { LoginForm } from "../../components/LoginForm";
 
 import { Grid2, useTheme } from "@mui/material";
 import { useAppSelector } from "../../../../common";
 
-export default function Login() {
+export const LoginPage = () => {
   const theme = useTheme();
   const x = useAppSelector((x) => x.auth);
 
@@ -23,4 +23,4 @@ export default function Login() {
       </Grid2>
     </MuiContainer>
   );
-}
+};

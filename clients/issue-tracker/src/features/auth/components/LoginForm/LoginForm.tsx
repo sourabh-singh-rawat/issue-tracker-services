@@ -10,16 +10,16 @@ import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import { PasswordField, TextField } from "../../../../common/components/forms";
 
-export default function LoginForm() {
-  const messageBar = useSnackbar();
+export const LoginForm = () => {
   const navigate = useNavigate();
+  const snackbar = useSnackbar();
 
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation({
     onError(error) {
-      messageBar.error(error.message);
+      snackbar.error(error.message);
     },
     onCompleted() {
-      messageBar.success("Success. You are being redirected");
+      snackbar.success("Success. You are being redirected");
       setTimeout(() => {
         navigate("/");
       }, 2500);
@@ -46,11 +46,21 @@ export default function LoginForm() {
         </Grid2>
 
         <Grid2 size={12}>
-          <TextField name="email" title="Email" form={form} />
+          <TextField
+            name="email"
+            title="Email"
+            placeholder="Email"
+            form={form}
+          />
         </Grid2>
 
         <Grid2 size={12}>
-          <PasswordField name="password" title="Password" form={form} />
+          <PasswordField
+            name="password"
+            title="Password"
+            placeholder="Password"
+            form={form}
+          />
         </Grid2>
 
         <Grid2 size={12}>
@@ -59,4 +69,4 @@ export default function LoginForm() {
       </Grid2>
     </Container>
   );
-}
+};
