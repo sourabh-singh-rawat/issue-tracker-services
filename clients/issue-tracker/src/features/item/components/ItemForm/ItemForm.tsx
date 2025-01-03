@@ -13,15 +13,15 @@ import DatePicker from "../../../../common/components/DatePicker";
 import { useSnackbar } from "../../../../common/components/Snackbar";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import { TextField } from "../../../../common/components/forms";
-import IssuePrioritySelector from "../../components/ItemPrioritySelector";
-import IssueStatusSelector from "../../components/ItemStatusSelector";
+import { ItemPrioritySelector } from "../ItemPrioritySelector";
+import { ItemStatusSelector } from "../ItemStatusSelector";
 
 interface ItemFormProps {
   listId: string;
   parentItemId?: string;
 }
 
-function ItemForm({ listId, parentItemId }: ItemFormProps) {
+export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
   const messageBar = useSnackbar();
   const [customFields, setCustomFields] = useState<ListCustomField[]>([]);
   const [createItem] = useCreateItemMutation({
@@ -104,11 +104,11 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
         </Grid2>
 
         <Grid2 size={6}>
-          <IssueStatusSelector name="statusId" title="Status" form={form} />
+          <ItemStatusSelector name="statusId" title="Status" form={form} />
         </Grid2>
 
         <Grid2 size={6}>
-          <IssuePrioritySelector
+          <ItemPrioritySelector
             name="priority"
             title="Priority"
             options={["Urgent", "High", "Medium", "Low"]}
@@ -140,6 +140,4 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
       </Grid2>
     </MuiContainer>
   );
-}
-
-export default ItemForm;
+};

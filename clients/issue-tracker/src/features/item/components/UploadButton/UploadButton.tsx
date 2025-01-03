@@ -1,10 +1,13 @@
-/* eslint-disable react/prop-types */
-import React from "react";
-
 import MuiCircularProgress from "@mui/material/CircularProgress";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 
-export default function UploadButton({ label, onClick, open }) {
+interface UploadButtonProps {
+  label: string | React.ReactElement;
+  onClick: (e: unknown) => void;
+  open: boolean;
+}
+
+export const UploadButton = ({ label, onClick, open }: UploadButtonProps) => {
   return (
     <PrimaryButton
       label={label}
@@ -14,4 +17,4 @@ export default function UploadButton({ label, onClick, open }) {
       onClick={onClick}
     />
   );
-}
+};

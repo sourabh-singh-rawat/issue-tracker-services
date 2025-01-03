@@ -20,7 +20,7 @@ interface ButtonProps {
   type?: MuiButtonProps["type"];
   sx?: SxProps<Theme> | undefined;
   color?: string;
-  label?: string;
+  label?: string | React.ReactElement;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   variant?: "text" | "outlined" | "contained";

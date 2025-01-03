@@ -4,13 +4,13 @@ import Modal from "../../../../common/components/Modal";
 import ModalBody from "../../../../common/components/ModalBody";
 import ModalHeader from "../../../../common/components/ModalHeader";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import ItemForm from "../../pages/ItemForm";
+import { ItemForm } from "../ItemForm";
 
 interface ItemModalProps {
   listId: string;
 }
 
-export default function ItemModal({ listId }: ItemModalProps) {
+export const ItemModal = ({ listId }: ItemModalProps) => {
   const { itemId } = useViewParams();
 
   const [open, setOpen] = useState(false);
@@ -28,4 +28,4 @@ export default function ItemModal({ listId }: ItemModalProps) {
       </Modal>
     </>
   );
-}
+};

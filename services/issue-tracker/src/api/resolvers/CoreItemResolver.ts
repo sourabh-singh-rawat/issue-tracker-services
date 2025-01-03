@@ -62,11 +62,11 @@ export class CoreItemResolver implements ItemResolver {
     @Ctx() ctx: AppContext,
     @Arg("input") input: FindItemsInput,
   ) {
-    const { listId, parentItemId } = input;
+    const { parentItemId } = input;
     const userId = ctx.user.userId;
     const service = container.get("itemService");
 
-    return await service.findSubItems({ userId, listId, parentItemId });
+    return await service.findSubItems({ userId, parentItemId });
   }
 
   @Mutation(() => String)

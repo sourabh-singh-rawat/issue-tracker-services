@@ -1,8 +1,10 @@
 import { Grid2, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { UpdateItemMutationOptions } from "../../../api/codegen/gql/graphql";
-import ItemPrioritySelector from "../../../features/item/components/ItemPrioritySelector";
-import ItemStatusSelector from "../../../features/item/components/ItemStatusSelector";
+import {
+  ItemPrioritySelector,
+  ItemStatusSelector,
+} from "../../../features/item/components";
 
 interface ItemFieldsProps {
   itemId: string;
@@ -17,8 +19,8 @@ export default function ItemFields({
   priority,
   updateItem,
 }: ItemFieldsProps) {
-  const itemStatusForm = useForm({ defaultValues: { statusId } });
-  const itemPriorityForm = useForm({ defaultValues: { priority } });
+  const statusForm = useForm({ defaultValues: { statusId } });
+  const priorityForm = useForm({ defaultValues: { priority } });
 
   return (
     <Grid2 container rowSpacing={2}>
@@ -29,8 +31,7 @@ export default function ItemFields({
           </Grid2>
           <Grid2 size={3}>
             <ItemStatusSelector
-              control={itemStatusForm.control}
-              formState={itemStatusForm.formState}
+              form={statusForm}
               name="statusId"
               onSubmit={async (value) => {
                 updateItem({
@@ -49,8 +50,7 @@ export default function ItemFields({
           </Grid2>
           <Grid2 size={3}>
             <ItemPrioritySelector
-              control={itemPriorityForm.control}
-              formState={itemPriorityForm.formState}
+              form={priorityForm}
               name="priority"
               onSubmit={async (value) => {
                 updateItem({

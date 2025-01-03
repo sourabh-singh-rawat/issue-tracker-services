@@ -13,7 +13,7 @@ import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attach
 import { AppLoader } from "../../../../common/components/AppLoader";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
-import ImageCard from "../ImageCard";
+import { ImageCard } from "../ImageCard";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -31,7 +31,7 @@ interface ItemAttachmentProps {
   itemId: string;
 }
 
-export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
+export const ItemAttachments = ({ itemId }: ItemAttachmentProps) => {
   const theme = useTheme();
   const messageBar = useSnackbar();
   const { success: showSuccess } = useSnackbar();
@@ -162,4 +162,4 @@ export default function ItemAttachments({ itemId }: ItemAttachmentProps) {
       </MuiImageList>
     </>
   );
-}
+};

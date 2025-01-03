@@ -7,7 +7,7 @@ interface ImageCardProps {
   path: string;
 }
 
-export default function ImageCard({ path }: ImageCardProps) {
+export const ImageCard = ({ path }: ImageCardProps) => {
   const theme = useTheme();
   const [src, setSrc] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -43,4 +43,4 @@ export default function ImageCard({ path }: ImageCardProps) {
       )}
     </ImageListItem>
   );
-}
+};

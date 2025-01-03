@@ -74,11 +74,11 @@ export class CoreItemService implements ItemService {
   }
 
   async findSubItems(options: FindSubItemsOptions) {
-    const { userId, listId, parentItemId } = options;
+    const { userId, parentItemId } = options;
 
     const ItemRepo = postgres.getTreeRepository(Item);
     const parentItem = await Item.findOne({
-      where: { id: parentItemId, listId, createdById: userId },
+      where: { id: parentItemId, createdById: userId },
     });
 
     if (!parentItem) throw new Error("Parent not found");
