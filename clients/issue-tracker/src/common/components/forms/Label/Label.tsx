@@ -1,8 +1,9 @@
 import { FormLabel, Skeleton, Typography, useTheme } from "@mui/material";
+import React from "react";
 
 interface Props {
   id: string;
-  title: string;
+  title: React.ReactElement | string;
   color?: string;
   isLoading?: boolean;
 }

@@ -1,47 +1,58 @@
-import MuiVisibility from "@mui/icons-material/Visibility";
-import MuiVisibilityOff from "@mui/icons-material/VisibilityOff";
-import MuiIconButton from "@mui/material/IconButton";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { Grid2, IconButton, useTheme } from "@mui/material";
 import { useState } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
+import { Link } from "../../base";
 import { TextField } from "../TextField";
 
 interface PasswordFieldProps<T extends FieldValues> {
   name: Path<T>;
-  title: string;
+  label: React.ReactElement | string;
   form: UseFormReturn<T>;
-  placeholder?: string;
+  showForgotPasswordLink?: boolean;
 }
 
 /**
  * The Password Field
- * @param params.name - Name of the field
- * @param params.title - Title/Label of the field
- * @param params.form - Form to use
- * @param params.placeholder - Optional Placeholder for the field
+ * @param props.name - Name of the field
+ * @param props.title - Title/Label of the field
+ * @param props.form - Form to use
+ * @param props.placeholder - Optional Placeholder for the field
+ * @param props.showForgotPasswordLink - Show forgot password link or not
  * @returns
  */
 export const PasswordField = <T extends FieldValues>({
   name,
-  title,
+  label,
   form,
-  placeholder,
+  showForgotPasswordLink,
 }: PasswordFieldProps<T>) => {
+  const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
-  const toggle = () => setIsVisible(!isVisible);
+  const handleVisibility = () => setIsVisible(!isVisible);
 
   return (
-    <TextField
-      name={name}
-      title={title}
-      form={form}
-      type={isVisible ? "text" : "password"}
-      placeholder={placeholder}
-      helperText="Minimum 8 characters with uppercase, lowercase, one digit, no whitespace and atleast one special character (@#$%^&+=!)"
-      endAdornment={
-        <MuiIconButton onClick={toggle}>
-          {isVisible ? <MuiVisibilityOff /> : <MuiVisibility />}
-        </MuiIconButton>
-      }
-    />
+    <Grid2 container>
+      <Grid2 size={12}>
+        <TextField
+          form={form}
+          name={name}
+          label={label}
+          type={isVisible ? "text" : "password"}
+          placeholder="Password"
+          endAdornment={
+            <IconButton size="small" onClick={handleVisibility} disableRipple>
+              {isVisible ? <VisibilityOffOutlined /> : <VisibilityOutlined />}
+            </IconButton>
+          }
+        />
+      </Grid2>
+      <Grid2 size={1} flexGrow={1}></Grid2>
+      {showForgotPasswordLink && (
+        <Grid2>
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </Grid2>
+      )}
+    </Grid2>
   );
 };

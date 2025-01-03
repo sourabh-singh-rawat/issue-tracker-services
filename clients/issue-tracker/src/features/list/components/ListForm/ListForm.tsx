@@ -53,7 +53,7 @@ export default function ListForm({ spaceId }: ListFormProps) {
         <Grid2 size={12}>
           <TextField
             name="name"
-            title="Name"
+            label="Name"
             form={form}
             placeholder="e.g. Marketing, Engineering, HR"
           />

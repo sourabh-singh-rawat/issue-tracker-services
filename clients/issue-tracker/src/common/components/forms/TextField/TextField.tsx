@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Grid2, SxProps, useTheme } from "@mui/material";
+import {
+  Grid2,
+  TextField as MuiTextField,
+  SxProps,
+  alpha,
+  styled,
+  useTheme,
+} from "@mui/material";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import {
@@ -10,14 +17,47 @@ import {
   UseControllerProps,
   UseFormReturn,
 } from "react-hook-form";
-import StyledTextField from "../../styled/StyledTextField";
 import { Label } from "../Label";
+
+const StyledTextField = styled(MuiTextField)(({ theme }) => ({
+  "& .MuiInputBase-root": {
+    width: "100%",
+    fontSize: theme.typography.body1.fontSize,
+    position: "relative",
+    borderColor: theme.palette.divider,
+    borderRadius: theme.shape.borderRadiusMedium,
+    backgroundColor: theme.palette.background.default,
+    transition: theme.transitions.create([
+      "border-color",
+      "background-color",
+      "box-shadow",
+    ]),
+    "&.Mui-focused": {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+      borderColor: theme.palette.primary.main,
+      fieldset: { borderWidth: "2px" },
+      "&.Mui-error": {
+        boxShadow: `${alpha(theme.palette.error.main, 0.25)} 0 0 0 0.2rem`,
+        "& fieldset": { borderWidth: "2px" },
+      },
+    },
+    "&.Mui-error": {
+      borderColor: theme.palette.error.main,
+      "& fieldset": { borderWidth: "2px" },
+    },
+  },
+  ".MuiFormHelperText-root": {
+    fontSize: theme.typography.body1.fontSize,
+    marginLeft: 0,
+    marginTop: theme.spacing(1),
+  },
+}));
 
 interface TextFieldProps<T extends FieldValues> {
   name: Path<T>;
   form: UseFormReturn<T>;
   defaultSchemas?: any;
-  title?: string;
+  label?: React.ReactElement | string;
   type?: React.HTMLInputTypeAttribute;
   rules?: UseControllerProps<T>["rules"];
   placeholder?: string;
@@ -25,8 +65,8 @@ interface TextFieldProps<T extends FieldValues> {
   rows?: number;
   isLoading?: boolean;
   isDisabled?: boolean;
-  startAdornment?: React.JSX.Element;
-  endAdornment?: React.JSX.Element;
+  startAdornment?: React.ReactElement;
+  endAdornment?: React.ReactElement;
   onClick?: () => void;
   sx?: SxProps;
   autoFocus?: boolean;
@@ -34,7 +74,7 @@ interface TextFieldProps<T extends FieldValues> {
 
 export const TextField = <T extends FieldValues>({
   name,
-  title,
+  label,
   placeholder,
   rules,
   form,
@@ -55,11 +95,11 @@ export const TextField = <T extends FieldValues>({
 
   return (
     <Grid2 container>
-      {title && (
+      {label && (
         <Grid2 size={12} paddingBottom={1}>
           <Label
             id={name}
-            title={title}
+            title={label}
             isLoading={isLoading}
             color={isError ? theme.palette.error.main : ""}
           />
@@ -97,7 +137,7 @@ export const TextField = <T extends FieldValues>({
                     onClick={onClick}
                     disabled={isDisabled}
                     multiline={isMultiline}
-                    InputProps={{ startAdornment, endAdornment }}
+                    slotProps={{ input: { startAdornment, endAdornment } }}
                     fullWidth
                     autoFocus={autoFocus}
                   />

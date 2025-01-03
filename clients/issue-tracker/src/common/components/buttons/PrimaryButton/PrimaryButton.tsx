@@ -1,7 +1,7 @@
+import { CircularProgress } from "@mui/material";
+import { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import React from "react";
 import Button from "../Button";
-import { ButtonProps as MuiButtonProps } from "@mui/material/Button";
-import { CircularProgress } from "@mui/material";
 
 interface PrimaryButtonProps {
   label: string;
