@@ -40,7 +40,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
         <Grid2 size={12}>
           <TextField
             name="name"
-            title="Name"
+            label="Name"
             placeholder="Name"
             form={form}
             autoFocus
@@ -49,7 +49,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
         <Grid2 size={12}>
           <TextField
             name="description"
-            title="Description"
+            label="Description"
             placeholder="Description"
             rows={4}
             form={form}

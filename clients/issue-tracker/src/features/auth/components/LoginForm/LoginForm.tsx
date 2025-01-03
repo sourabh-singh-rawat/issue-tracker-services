@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { Container, Grid2, Typography } from "@mui/material";
+import { Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   SignInWithEmailAndPasswordInput,
@@ -38,35 +38,28 @@ export const LoginForm = () => {
   };
 
   return (
-    <Container component="form" onSubmit={form.handleSubmit(onSubmit)}>
-      <Grid2 container rowSpacing={2} marginTop={4}>
-        <Grid2 size={12}>
-          <Typography variant="h1">Welcome back</Typography>
-          <Typography variant="subtitle1">Sign in to your account</Typography>
-        </Grid2>
-
-        <Grid2 size={12}>
-          <TextField
-            name="email"
-            title="Email"
-            placeholder="Email"
-            form={form}
-          />
-        </Grid2>
-
-        <Grid2 size={12}>
-          <PasswordField
-            name="password"
-            title="Password"
-            placeholder="Password"
-            form={form}
-          />
-        </Grid2>
-
-        <Grid2 size={12}>
-          <PrimaryButton type="submit" label="Login" />
-        </Grid2>
+    <Grid2
+      container
+      rowSpacing={2}
+      component="form"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
+      <Grid2 size={12}>
+        <TextField name="email" label="Email" placeholder="Email" form={form} />
       </Grid2>
-    </Container>
+
+      <Grid2 size={12}>
+        <PasswordField
+          name="password"
+          label="Password"
+          form={form}
+          showForgotPasswordLink
+        />
+      </Grid2>
+
+      <Grid2 size={12}>
+        <PrimaryButton type="submit" label="Continue" />
+      </Grid2>
+    </Grid2>
   );
 };

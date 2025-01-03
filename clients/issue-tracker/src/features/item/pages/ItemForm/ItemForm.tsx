@@ -91,13 +91,13 @@ function ItemForm({ listId, parentItemId }: ItemFormProps) {
     >
       <Grid2 container spacing={2}>
         <Grid2 size={12}>
-          <TextField name="name" title="Name" form={form} />
+          <TextField name="name" label="Name" form={form} />
         </Grid2>
 
         <Grid2 size={12}>
           <TextField
             name="description"
-            title="Description"
+            label="Description"
             form={form}
             rows={4}
           />

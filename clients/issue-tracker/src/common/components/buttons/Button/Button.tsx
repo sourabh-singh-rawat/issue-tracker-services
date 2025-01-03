@@ -1,10 +1,14 @@
-import React from "react";
-import { alpha, useTheme, styled, SxProps, Theme } from "@mui/material";
+import { SxProps, Theme, alpha, styled, useTheme } from "@mui/material";
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
+import React from "react";
 
 const StyledButton = styled(MuiButton)(({ theme }) => {
   return {
-    borderRadius: theme.shape.borderRadiusLarge,
+    textTransform: "none",
+    borderRadius: theme.shape.borderRadiusMedium,
+    "&:hover": {
+      boxShadow: "none",
+    },
     "&:focus": {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,
@@ -39,17 +43,11 @@ export default function Button({
   return (
     <StyledButton
       type={type}
-      size="small"
+      size="medium"
       variant={variant}
       startIcon={startIcon}
       endIcon={endIcon}
       onClick={onClick}
-      sx={{
-        textTransform: "none",
-        borderRadius: theme.shape.borderRadiusMedium,
-        boxShadow: "none",
-        ...sx,
-      }}
       disabled={isDisabled}
       disableRipple
     >

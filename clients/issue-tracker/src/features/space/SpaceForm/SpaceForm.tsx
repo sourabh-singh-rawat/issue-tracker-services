@@ -44,7 +44,7 @@ export function SpaceForm({ workspaceId }: SpaceFormProps) {
         <Grid2 size={12}>
           <TextField
             name="name"
-            title="Name"
+            label="Name"
             placeholder="Name"
             form={form}
             autoFocus
@@ -54,7 +54,7 @@ export function SpaceForm({ workspaceId }: SpaceFormProps) {
         <Grid2 size={12}>
           <TextField
             name="description"
-            title="Description"
+            label="Description"
             placeholder="Description"
             form={form}
             autoFocus

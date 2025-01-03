@@ -47,21 +47,21 @@ export const SignUpForm = () => {
           <TextField
             name="displayName"
             placeholder="Display Name"
-            title="Display Name"
+            label="Display Name"
             form={form}
           />
         </Grid2>
         <Grid2 size={12}>
           <TextField
             name="email"
-            title="Email"
+            label="Email"
             placeholder="Email"
             form={form}
             type="email"
           />
         </Grid2>
         <Grid2 size={12}>
-          <PasswordField name="password" title="Password" form={form} />
+          <PasswordField name="password" label="Password" form={form} />
         </Grid2>
         <Grid2 size={12}>
           <PrimaryButton type="submit" label="Continue" />
