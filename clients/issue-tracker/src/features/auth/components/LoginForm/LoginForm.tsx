@@ -1,19 +1,17 @@
-import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import MuiContainer from "@mui/material/Container";
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+import { Container, Grid2, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSignInWithEmailAndPasswordMutation } from "../../../../api/codegen/gql/graphql";
+import {
+  SignInWithEmailAndPasswordInput,
+  useSignInWithEmailAndPasswordMutation,
+} from "../../../../api/codegen/gql/graphql";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import PasswordField from "../../../../common/components/forms/PasswordField";
-import TextField from "../../../../common/components/forms/TextField";
+import { PasswordField, TextField } from "../../../../common/components/forms";
 
 export default function LoginForm() {
   const messageBar = useSnackbar();
-  const defaultValues = useMemo(() => ({ email: "", password: "" }), []);
   const navigate = useNavigate();
 
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation({
@@ -28,52 +26,37 @@ export default function LoginForm() {
     },
   });
 
-  const { control, formState, handleSubmit } = useForm({
-    defaultValues,
+  const form = useForm({
+    defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
-    email,
-    password,
-  }) => {
-    await signInWithEmailAndPassword({
-      variables: { input: { email, password } },
-    });
+  const onSubmit: SubmitHandler<SignInWithEmailAndPasswordInput> = async (
+    input,
+  ) => {
+    await signInWithEmailAndPassword({ variables: { input } });
   };
 
   return (
-    <MuiContainer component="form" onSubmit={handleSubmit(onSubmit)}>
-      <MuiGrid container rowSpacing={2} marginTop={4}>
-        <MuiGrid item xs={12}>
-          <MuiTypography variant="h1">Welcome back</MuiTypography>
-          <MuiTypography variant="subtitle1">
-            Sign in to your account
-          </MuiTypography>
-        </MuiGrid>
+    <Container component="form" onSubmit={form.handleSubmit(onSubmit)}>
+      <Grid2 container rowSpacing={2} marginTop={4}>
+        <Grid2 size={12}>
+          <Typography variant="h1">Welcome back</Typography>
+          <Typography variant="subtitle1">Sign in to your account</Typography>
+        </Grid2>
 
-        <MuiGrid item xs={12}>
-          <TextField
-            name="email"
-            title="Email"
-            control={control}
-            formState={formState}
-          />
-        </MuiGrid>
+        <Grid2 size={12}>
+          <TextField name="email" title="Email" form={form} />
+        </Grid2>
 
-        <MuiGrid item xs={12}>
-          <PasswordField
-            name="password"
-            title="Password"
-            control={control}
-            formState={formState}
-          />
-        </MuiGrid>
+        <Grid2 size={12}>
+          <PasswordField name="password" title="Password" form={form} />
+        </Grid2>
 
-        <MuiGrid item xs={12}>
+        <Grid2 size={12}>
           <PrimaryButton type="submit" label="Login" />
-        </MuiGrid>
-      </MuiGrid>
-    </MuiContainer>
+        </Grid2>
+      </Grid2>
+    </Container>
   );
 }

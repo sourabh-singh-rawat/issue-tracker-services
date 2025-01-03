@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import AddIssueAssigneeModal from "../../../features/issue/components/AddIssueAssigneeModal";
+import AddIssueAssigneeModal from "../../../features/item/components/AddIssueAssigneeModal";
 import AvatarGroup from "../AvatarGroup";
 import { useSnackbar } from "../Snackbar/hooks";
 

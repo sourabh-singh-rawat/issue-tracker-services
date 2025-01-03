@@ -7,7 +7,7 @@ import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import MuiToolbar from "@mui/material/Toolbar";
 
-import { SpaceList } from "../../../../features/spaces";
+import { SpaceList } from "../../../../features/space";
 import WorkspaceSwitcher from "../../../../features/workspace/components/WorkspaceSwitcher";
 import { useAppSelector } from "../../../hooks";
 

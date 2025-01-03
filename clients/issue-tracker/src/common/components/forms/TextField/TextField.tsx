@@ -1,28 +1,25 @@
 import React from "react";
 
-import MuiGrid from "@mui/material/Grid";
-import MuiTypography from "@mui/material/Typography";
+import { Grid2, SxProps, useTheme } from "@mui/material";
 import MuiSkeleton from "@mui/material/Skeleton";
-import Label from "../Label";
+import MuiTypography from "@mui/material/Typography";
 import {
-  Control,
   Controller,
   FieldValues,
-  FormState,
   Path,
   UseControllerProps,
+  UseFormReturn,
 } from "react-hook-form";
 import StyledTextField from "../../styled/StyledTextField";
-import { SxProps, useTheme } from "@mui/material";
+import { Label } from "../Label";
 
-interface TextFieldProps<DefaultValues extends FieldValues> {
-  name: Path<DefaultValues>;
-  control: Control<DefaultValues>;
-  formState: FormState<DefaultValues>;
+interface TextFieldProps<T extends FieldValues> {
+  name: Path<T>;
+  form: UseFormReturn<T>;
   defaultSchemas?: any;
   title?: string;
   type?: React.HTMLInputTypeAttribute;
-  rules?: UseControllerProps<DefaultValues>["rules"];
+  rules?: UseControllerProps<T>["rules"];
   placeholder?: string;
   helperText?: string;
   rows?: number;
@@ -35,13 +32,12 @@ interface TextFieldProps<DefaultValues extends FieldValues> {
   autoFocus?: boolean;
 }
 
-export default function TextField<DefaultValues extends FieldValues>({
-  control,
+export const TextField = <T extends FieldValues>({
   name,
   title,
-  formState,
   placeholder,
   rules,
+  form,
   type = "text",
   rows = 0,
   isLoading,
@@ -52,24 +48,24 @@ export default function TextField<DefaultValues extends FieldValues>({
   sx,
   defaultSchemas,
   autoFocus = false,
-}: TextFieldProps<DefaultValues>) {
+}: TextFieldProps<T>) => {
   const isMultiline = rows > 0;
   const theme = useTheme();
-  const isError = Boolean(formState.errors[name]);
+  const isError = Boolean(form.formState.errors[name]);
 
   return (
-    <MuiGrid container>
+    <Grid2 container>
       {title && (
-        <MuiGrid item xs={12} paddingBottom={1}>
+        <Grid2 size={12} paddingBottom={1}>
           <Label
             id={name}
             title={title}
             isLoading={isLoading}
             color={isError ? theme.palette.error.main : ""}
           />
-        </MuiGrid>
+        </Grid2>
       )}
-      <MuiGrid item xs={12}>
+      <Grid2 size={12}>
         {isLoading ? (
           <>
             <MuiSkeleton />
@@ -80,11 +76,11 @@ export default function TextField<DefaultValues extends FieldValues>({
         ) : (
           <Controller
             name={name}
-            control={control}
+            control={form.control}
             rules={rules}
             render={({ field }) => (
-              <MuiGrid container rowSpacing={1}>
-                <MuiGrid item xs={12}>
+              <Grid2 container rowSpacing={1}>
+                <Grid2 size={12}>
                   <StyledTextField
                     type={type}
                     id={field.name}
@@ -93,7 +89,7 @@ export default function TextField<DefaultValues extends FieldValues>({
                     onBlur={field.onBlur}
                     onChange={field.onChange}
                     placeholder={placeholder}
-                    helperText={formState.errors[name]?.message as string}
+                    helperText={form.formState.errors[name]?.message as string}
                     sx={sx}
                     size="small"
                     rows={rows}
@@ -105,17 +101,17 @@ export default function TextField<DefaultValues extends FieldValues>({
                     fullWidth
                     autoFocus={autoFocus}
                   />
-                </MuiGrid>
-                <MuiGrid item xs={12} color={theme.palette.text.secondary}>
+                </Grid2>
+                <Grid2 size={12} color={theme.palette.text.secondary}>
                   <MuiTypography variant="body1">
                     {defaultSchemas?.properties[name].description}
                   </MuiTypography>
-                </MuiGrid>
-              </MuiGrid>
+                </Grid2>
+              </Grid2>
             )}
           />
         )}
-      </MuiGrid>
-    </MuiGrid>
+      </Grid2>
+    </Grid2>
   );
-}
+};

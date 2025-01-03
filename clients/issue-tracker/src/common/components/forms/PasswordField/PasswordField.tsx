@@ -1,23 +1,21 @@
-import React, { useState } from "react";
-import { Control, FieldValues, FormState, Path } from "react-hook-form";
-import MuiIconButton from "@mui/material/IconButton";
-import MuiVisibilityOff from "@mui/icons-material/VisibilityOff";
 import MuiVisibility from "@mui/icons-material/Visibility";
-import TextField from "../TextField";
+import MuiVisibilityOff from "@mui/icons-material/VisibilityOff";
+import MuiIconButton from "@mui/material/IconButton";
+import { useState } from "react";
+import { FieldValues, Path, UseFormReturn } from "react-hook-form";
+import { TextField } from "../TextField";
 
-interface PasswordFieldProps<DefaultValues extends FieldValues> {
-  name: Path<DefaultValues>;
+interface PasswordFieldProps<T extends FieldValues> {
+  name: Path<T>;
   title: string;
-  control: Control<DefaultValues>;
-  formState: FormState<DefaultValues>;
+  form: UseFormReturn<T>;
 }
 
-export default function PasswordField<DefaultValues extends FieldValues>({
+export const PasswordField = <T extends FieldValues>({
   name,
   title,
-  control,
-  formState,
-}: PasswordFieldProps<DefaultValues>) {
+  form,
+}: PasswordFieldProps<T>) => {
   const [isVisible, setIsVisible] = useState(false);
   const toggle = () => setIsVisible(!isVisible);
 
@@ -25,8 +23,7 @@ export default function PasswordField<DefaultValues extends FieldValues>({
     <TextField
       name={name}
       title={title}
-      control={control}
-      formState={formState}
+      form={form}
       type={isVisible ? "text" : "password"}
       helperText="Minimum 8 characters with uppercase, lowercase, one digit, no whitespace and atleast one special character (@#$%^&+=!)"
       endAdornment={
@@ -36,4 +33,4 @@ export default function PasswordField<DefaultValues extends FieldValues>({
       }
     />
   );
-}
+};

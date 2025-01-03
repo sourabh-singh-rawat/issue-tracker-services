@@ -8,7 +8,7 @@ import {
   useGetCurrentUserQuery,
 } from "../../../api/codegen/gql/graphql";
 import { setCurrentUser } from "../../../features/auth/auth.slice";
-import { setSpaces } from "../../../features/spaces/space.slice";
+import { setSpaces } from "../../../features/space/space.slice";
 import {
   setCurrentWorkspace,
   setWorkspaces,
