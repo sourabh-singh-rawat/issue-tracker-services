@@ -5,7 +5,6 @@ import MuiBugReportIcon from "@mui/icons-material/BugReport";
 import MuiAppBar from "@mui/material/AppBar";
 
 import { AccountSwitcher } from "../../../../features/auth/components/AccountSwitcher";
-import Notifications from "../../../../features/notifications/components/Notification/Notifications";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
@@ -31,9 +30,6 @@ export function Navbar() {
               <Link to="/">
                 <MuiBugReportIcon sx={{ color: theme.palette.primary.main }} />
               </Link>
-            </Grid2>
-            <Grid2>
-              <Notifications />
             </Grid2>
             <Grid2>
               <AccountSwitcher />

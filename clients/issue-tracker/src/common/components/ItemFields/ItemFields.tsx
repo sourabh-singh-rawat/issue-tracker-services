@@ -1,9 +1,8 @@
 import { Grid2, Typography } from "@mui/material";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { UpdateItemMutationOptions } from "../../../api/codegen/gql/graphql";
-import ItemPrioritySelector from "../../../features/issue/components/ItemPrioritySelector";
-import ItemStatusSelector from "../../../features/issue/components/ItemStatusSelector";
+import ItemPrioritySelector from "../../../features/item/components/ItemPrioritySelector";
+import ItemStatusSelector from "../../../features/item/components/ItemStatusSelector";
 
 interface ItemFieldsProps {
   itemId: string;

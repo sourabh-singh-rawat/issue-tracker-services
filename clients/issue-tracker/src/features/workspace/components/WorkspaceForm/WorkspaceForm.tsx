@@ -1,16 +1,14 @@
-import React, { useMemo } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import Container from "@mui/material/Container";
 import Grid2 from "@mui/material/Grid2";
-import Divider from "@mui/material/Divider";
 
-import TextField from "../../../../common/components/forms/TextField";
-import ModalFooter from "../../../../common/components/ModalFooter";
 import {
   CreateWorkspaceInput,
   useCreateWorkspaceMutation,
 } from "../../../../api/codegen/gql/graphql";
+import ModalFooter from "../../../../common/components/ModalFooter";
+import { TextField } from "../../../../common/components/forms";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
@@ -19,7 +17,7 @@ interface WorkspaceFormProps {
 export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   const [createWorkspace] = useCreateWorkspaceMutation();
 
-  const { control, formState, handleSubmit } = useForm<CreateWorkspaceInput>({
+  const form = useForm<CreateWorkspaceInput>({
     defaultValues: { name: "", description: "" },
     mode: "all",
   });
@@ -35,7 +33,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   return (
     <Container
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit)}
       disableGutters
     >
       <Grid2 rowSpacing={3} container>
@@ -44,8 +42,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             name="name"
             title="Name"
             placeholder="Name"
-            control={control}
-            formState={formState}
+            form={form}
             autoFocus
           />
         </Grid2>
@@ -54,9 +51,8 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
             name="description"
             title="Description"
             placeholder="Description"
-            control={control}
-            formState={formState}
             rows={4}
+            form={form}
           />
         </Grid2>
       </Grid2>

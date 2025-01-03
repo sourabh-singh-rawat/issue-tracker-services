@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { attachmentApi } from "../../api/codegen/rest/attachment.api";
 import auth from "../../features/auth/auth.slice";
-import space from "../../features/spaces/space.slice";
+import space from "../../features/space/space.slice";
 import workspace from "../../features/workspace/workspace.slice";
 
 export const store = configureStore({
