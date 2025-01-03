@@ -22,7 +22,7 @@ export default function WorkspaceSwitcher() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { workspaces, current, isLoading } = useAppSelector((s) => s.workspace);
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (e: React.FormEvent<HTMLDivElement>) => {
     setAnchorEl(e.currentTarget);
   };
 
