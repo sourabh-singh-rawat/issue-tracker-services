@@ -1,1 +1,1 @@
-export { default } from "./ItemStatusSelector";
+export * from "./ItemStatusSelector";

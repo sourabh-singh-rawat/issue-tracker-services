@@ -11,30 +11,30 @@ import ItemDescription from "../../../../common/components/ItemDescription";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import ItemAttachments from "../ItemAttachments";
-import ItemModal from "../ItemModal";
+import { ItemAttachments } from "../ItemAttachments";
+import { ItemModal } from "../ItemModal";
 
 export interface ItemProps {}
 
 export default function Item(props: ItemProps) {
   const theme = useTheme();
-  const messageBar = useSnackbar();
-  const { listId, itemId } = useViewParams();
+  const snackbar = useSnackbar();
+  const { itemId } = useViewParams();
   const { data: item } = useFindItemQuery({
     variables: { findItemId: itemId as string },
     skip: !itemId,
   });
   const { data: subItems } = useFindSubItemsQuery({
     variables: {
-      input: { listId: listId as string, parentItemId: itemId as string },
+      input: { parentItemId: itemId as string },
     },
   });
   const [updateItem] = useUpdateItemMutation({
     onCompleted(response) {
-      messageBar.success(response.updateItem);
+      snackbar.success(response.updateItem);
     },
     onError(error) {
-      messageBar.error(error.message);
+      snackbar.error(error.message);
     },
   });
 
@@ -76,7 +76,7 @@ export default function Item(props: ItemProps) {
         </MuiTypography>
       </Grid2>
 
-      {listId && item?.findItem && (
+      {item?.findItem?.list.id && item?.findItem && (
         <>
           <Grid2>
             <MuiTypography variant="h5" fontWeight="600">
@@ -84,7 +84,7 @@ export default function Item(props: ItemProps) {
             </MuiTypography>
           </Grid2>
           <Grid2>
-            <ItemModal listId={listId} />
+            <ItemModal listId={item?.findItem.list.id} />
           </Grid2>
 
           <Grid2 size={12}>

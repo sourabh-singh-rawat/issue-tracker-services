@@ -25,14 +25,14 @@ interface ItemStatusSelectorProps<T extends FieldValues> {
   rules?: UseControllerProps<T>["rules"];
 }
 
-export default function ItemStatusSelector<T extends FieldValues>({
+export const ItemStatusSelector = <T extends FieldValues>({
   name,
   form,
   rules,
   onSubmit,
   title,
   helperText,
-}: ItemStatusSelectorProps<T>) {
+}: ItemStatusSelectorProps<T>) => {
   const isLoading = false;
   const context = useContext(SpaceContext);
 
@@ -81,4 +81,4 @@ export default function ItemStatusSelector<T extends FieldValues>({
       )}
     </Grid2>
   );
-}
+};

@@ -28,7 +28,6 @@ export interface FindItemOptions {
 
 export interface FindSubItemsOptions extends PagingOptions {
   userId: string;
-  listId: string;
   parentItemId: string;
 }
 

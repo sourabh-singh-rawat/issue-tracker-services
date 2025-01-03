@@ -61,7 +61,6 @@ export type FindCustomFieldsOptions = {
 };
 
 export type FindItemsInput = {
-  listId: Scalars['String']['input'];
   parentItemId: Scalars['String']['input'];
 };
 

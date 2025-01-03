@@ -1,9 +1,9 @@
-import IssueModal from "../ItemModal";
+import { ItemModal } from "../ItemModal";
 
 interface AddItemButtonProps {
   listId: string;
 }
 
-export function AddItemButton({ listId }: AddItemButtonProps) {
-  return <IssueModal />;
-}
+export const AddItemButton = ({ listId }: AddItemButtonProps) => {
+  return <ItemModal listId={listId} />;
+};

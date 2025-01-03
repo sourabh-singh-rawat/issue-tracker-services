@@ -27,7 +27,7 @@ interface ItemPrioritySelectorProps<T extends FieldValues> {
   rules?: UseControllerProps<T>["rules"];
 }
 
-export default function ItemPrioritySelector<T extends FieldValues>({
+export const ItemPrioritySelector = <T extends FieldValues>({
   name,
   form,
   rules,
@@ -35,7 +35,7 @@ export default function ItemPrioritySelector<T extends FieldValues>({
   title,
   options = [],
   helperText,
-}: ItemPrioritySelectorProps<T>) {
+}: ItemPrioritySelectorProps<T>) => {
   const isLoading = false;
 
   return (
@@ -87,4 +87,4 @@ export default function ItemPrioritySelector<T extends FieldValues>({
       )}
     </Grid2>
   );
-}
+};

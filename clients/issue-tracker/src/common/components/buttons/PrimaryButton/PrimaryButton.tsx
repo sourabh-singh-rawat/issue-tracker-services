@@ -4,7 +4,7 @@ import React from "react";
 import Button from "../Button";
 
 interface PrimaryButtonProps {
-  label: string;
+  label: string | React.ReactElement;
   type?: MuiButtonProps["type"];
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;

@@ -43,7 +43,6 @@ input FindCustomFieldsOptions {
 }
 
 input FindItemsInput {
-  listId: String!
   parentItemId: String!
 }
 
