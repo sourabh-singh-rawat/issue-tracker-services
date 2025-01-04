@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useViewParams } from "../../../../common";
 import Modal from "../../../../common/components/Modal";
 import ModalBody from "../../../../common/components/ModalBody";
 import ModalHeader from "../../../../common/components/ModalHeader";
@@ -11,8 +10,6 @@ interface ItemModalProps {
 }
 
 export const ItemModal = ({ listId }: ItemModalProps) => {
-  const { itemId } = useViewParams();
-
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
@@ -23,7 +20,7 @@ export const ItemModal = ({ listId }: ItemModalProps) => {
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader title="New Item" handleClose={handleClose} subtitle="" />
         <ModalBody>
-          <ItemForm listId={listId} parentItemId={itemId} />
+          <ItemForm listId={listId} />
         </ModalBody>
       </Modal>
     </>
