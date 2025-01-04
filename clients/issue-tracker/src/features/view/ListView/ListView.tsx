@@ -1,4 +1,4 @@
-import { Grid2, useTheme } from "@mui/material";
+import { Card, Grid2, useTheme } from "@mui/material";
 import { useState } from "react";
 import {
   Status,
@@ -8,6 +8,7 @@ import {
   useFindViewQuery,
 } from "../../../api";
 import { SpaceContext, useViewParams } from "../../../common";
+import { Link } from "../../../common/components/base";
 import { ViewLocation } from "../ViewLocation";
 import { ViewSwitcher } from "../ViewSwitcher";
 
@@ -65,11 +66,20 @@ export const ListView = () => {
               <ViewSwitcher listId={view.list.id} />
             </Grid2>
             <Grid2 size={12} sx={{ p: theme.spacing(2) }}>
-              {data?.findListItems.map(({ name }, index) => {
+              {data?.findListItems.map(({ id, name, priority }, index) => {
                 return (
-                  <Grid2 key={index} size={12}>
-                    {name}
-                  </Grid2>
+                  <Card
+                    key={id}
+                    variant="outlined"
+                    sx={{
+                      p: theme.spacing(1),
+                      border: "none",
+                      borderBottom: `1px solid ${theme.palette.action.focus}`,
+                      borderRadius: theme.shape.borderRadiusNone,
+                    }}
+                  >
+                    <Link to={`/i/${id}`}>{name}</Link> {priority}
+                  </Card>
                 );
               })}
             </Grid2>

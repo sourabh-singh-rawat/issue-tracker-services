@@ -404,7 +404,7 @@ export type FindListItemsQueryVariables = Exact<{
 }>;
 
 
-export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string }> };
+export type FindListItemsQuery = { __typename?: 'Query', findListItems: Array<{ __typename?: 'Item', description?: string | null, id: string, name: string, statusId: string, priority: string }> };
 
 export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -980,6 +980,8 @@ export const FindListItemsDocument = gql`
     description
     id
     name
+    statusId
+    priority
   }
 }
     `;
