@@ -39,7 +39,7 @@ export const Profile = () => {
               <Grid2 container spacing={1}>
                 <Grid2>
                   <Stack spacing={1} direction="row">
-                    <UploadButton label="Upload Image" onClick={() => {}} />
+                    <UploadButton label="Upload Image" onChange={() => {}} />
                     <Button label="Remove" size="small" variant="outlined" />
                   </Stack>
                 </Grid2>
