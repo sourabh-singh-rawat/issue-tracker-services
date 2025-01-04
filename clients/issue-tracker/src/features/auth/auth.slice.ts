@@ -3,7 +3,7 @@ import { User } from "../../api";
 
 interface AuthSlice {
   current: null | User;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const initialState: AuthSlice = { current: null, isLoading: true };

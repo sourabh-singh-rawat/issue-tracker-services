@@ -36,9 +36,6 @@ export const ListView = () => {
   const { data } = useFindListItemsQuery({
     variables: { listId: view?.list.id as string },
     skip: !view?.list.id,
-    onCompleted(response) {
-      console.log(response.findListItems);
-    },
   });
 
   return (

@@ -18,7 +18,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
   const [createWorkspace] = useCreateWorkspaceMutation();
 
   const form = useForm<CreateWorkspaceInput>({
-    defaultValues: { name: "", description: "" },
+    defaultValues: { displayName: "", description: "" },
     mode: "all",
   });
 

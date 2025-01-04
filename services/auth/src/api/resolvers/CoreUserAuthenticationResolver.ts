@@ -1,3 +1,4 @@
+import { AppContext } from "@issue-tracker/server-core";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { container, dataSource } from "../..";
 import { UserAuthenticationResolver } from "./interfaces";
@@ -24,7 +25,7 @@ export class CoreUserAuthenticationResolver
   }
 
   @Query(() => User)
-  async getCurrentUser(@Ctx() ctx: any) {
+  async getCurrentUser(@Ctx() ctx: AppContext) {
     const service = container.get("userProfileService");
 
     return await service.getUserProfileWithEmail(ctx.user.email);
@@ -32,7 +33,7 @@ export class CoreUserAuthenticationResolver
 
   @Mutation(() => Boolean)
   async signInWithEmailAndPassword(
-    @Ctx() ctx: any,
+    @Ctx() ctx: AppContext,
     @Arg("input") input: SignInWithEmailAndPasswordInput,
   ) {
     const service = container.get("userAuthenticationService");
@@ -65,5 +66,13 @@ export class CoreUserAuthenticationResolver
     });
 
     return "Thanks, Your email is verified successfully";
+  }
+
+  @Mutation(() => String)
+  async logout(@Ctx() ctx: AppContext) {
+    ctx.rep.clearCookie("accessToken");
+    ctx.rep.clearCookie("refreshToken");
+
+    return "Logged out successfully";
   }
 }

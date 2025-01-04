@@ -1,3 +1,4 @@
+import { AppContext } from "@issue-tracker/server-core";
 import {
   SignInWithEmailAndPasswordInput,
   VerifyVerificationLinkInput,
@@ -7,10 +8,11 @@ import { User } from "../types/User";
 
 export interface UserAuthenticationResolver {
   registerUser(input: RegisterUserInput): Promise<string>;
-  getCurrentUser(ctx: any): Promise<User>;
+  getCurrentUser(ctx: AppContext): Promise<User>;
   signInWithEmailAndPassword(
-    ctx: any,
+    ctx: AppContext,
     input: SignInWithEmailAndPasswordInput,
   ): Promise<boolean>;
   verifyVerificationLink(input: VerifyVerificationLinkInput): Promise<string>;
+  logout(ctx: AppContext): Promise<string>;
 }

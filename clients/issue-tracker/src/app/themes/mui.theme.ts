@@ -38,7 +38,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-let mode: "dark" | "light" = "light";
+let mode: "dark" | "light" = "dark";
 if (!mode) mode = "light";
 
 const shape: ThemeOptions["shape"] = {
