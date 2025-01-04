@@ -1,30 +1,43 @@
-import MuiLockTwoToneIcon from "@mui/icons-material/LockTwoTone";
 import {
   Divider,
   IconButton,
-  List,
-  ListItem,
   ListItemIcon,
-  ListItemText,
   Menu,
+  MenuItem,
+  Stack,
+  Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAppSelector } from "../../../../common";
+import { Logout } from "@mui/icons-material";
+import { useLogoutMutation } from "../../../../api";
+import { useAppDispatch, useAppSelector } from "../../../../common";
 import Avatar from "../../../../common/components/Avatar";
-import MenuItem from "../../../../common/components/MenuItem";
-import StyledList from "../../../../common/components/styled/StyledList";
+import { setCurrentUser } from "../../auth.slice";
 
-export function AccountSwitcher() {
+export const AccountSwitcher = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { current, isLoading } = useAppSelector((x) => x.auth);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+  const [logout] = useLogoutMutation({
+    onCompleted() {
+      dispatch(setCurrentUser({ current: null }));
+      navigate("/login");
+    },
+  });
+
+  const handleClick = (e: React.FormEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <>
@@ -36,33 +49,39 @@ export function AccountSwitcher() {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
-          <List>
-            <ListItem
-              onClick={() => {
-                navigate("/me");
-                handleClose();
-              }}
-            >
-              <ListItemIcon>
-                <Avatar label={current.displayName} />
-              </ListItemIcon>
-              <ListItemText>{current.displayName}</ListItemText>
-            </ListItem>
-          </List>
+          <MenuItem
+            onClick={() => {
+              navigate("/me");
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Avatar label={current.displayName} />
+            </ListItemIcon>
+            <Stack>
+              <Typography
+                sx={{ color: theme.palette.text.primary, fontWeight: "bold" }}
+              >
+                {current.displayName}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: theme.palette.text.secondary }}
+              >
+                {current.email}
+              </Typography>
+            </Stack>
+          </MenuItem>
           <Divider />
-          <StyledList disablePadding>
-            <MenuItem
-              avatarIcon={<MuiLockTwoToneIcon />}
-              label="Logout"
-              onClick={async () => {
-                handleClose();
-              }}
-            />
-          </StyledList>
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
         </Menu>
       )}
     </>
   );
-}
+};

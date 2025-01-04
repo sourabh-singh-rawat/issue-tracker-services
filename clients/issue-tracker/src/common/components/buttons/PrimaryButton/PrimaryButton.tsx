@@ -5,6 +5,7 @@ import Button from "../Button";
 
 interface PrimaryButtonProps {
   label: string | React.ReactElement;
+  size?: "small" | "medium" | "large";
   type?: MuiButtonProps["type"];
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -15,6 +16,7 @@ interface PrimaryButtonProps {
 
 export default function PrimaryButton({
   label,
+  size,
   type = "button",
   startIcon,
   endIcon,
@@ -27,6 +29,7 @@ export default function PrimaryButton({
       label={label}
       onClick={onClick}
       type={type}
+      size={size}
       startIcon={loading ? <CircularProgress size={12} /> : startIcon}
       endIcon={endIcon}
       isDisabled={isDisabled}

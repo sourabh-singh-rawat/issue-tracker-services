@@ -1,4 +1,4 @@
-import { SxProps, Theme, alpha, styled, useTheme } from "@mui/material";
+import { alpha, styled, useTheme } from "@mui/material";
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import React from "react";
 
@@ -17,8 +17,8 @@ const StyledButton = styled(MuiButton)(({ theme }) => {
 });
 
 interface ButtonProps {
+  size?: "small" | "medium" | "large";
   type?: MuiButtonProps["type"];
-  sx?: SxProps<Theme> | undefined;
   color?: string;
   label?: string | React.ReactElement;
   startIcon?: React.ReactNode;
@@ -30,8 +30,8 @@ interface ButtonProps {
 
 export default function Button({
   type = "button",
-  sx,
   label,
+  size = "medium",
   startIcon,
   endIcon,
   variant = "contained",
@@ -43,7 +43,7 @@ export default function Button({
   return (
     <StyledButton
       type={type}
-      size="medium"
+      size={size}
       variant={variant}
       startIcon={startIcon}
       endIcon={endIcon}

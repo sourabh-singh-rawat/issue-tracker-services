@@ -6,6 +6,7 @@ import { LoginPage, SignUpPage } from "../features/auth";
 import { EmailVerification } from "../features/auth/pages/EmailVerification";
 import { Home } from "../features/home/pages/Home";
 import Item from "../features/item/components/Item/Item";
+import { Profile } from "../features/profile";
 import { BoardView, ListView } from "../features/view";
 
 function NoComponent() {
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="signup" element={<SignUpPage />} />
         <Route path="email-verification" element={<EmailVerification />} />
         <Route path="/" element={<PrivateRoutes />}>
+          <Route path="me" element={<Profile />} />
           <Route path="i/:itemId" element={<Item />} />
           <Route path=":workspaceId/home" element={<Home />} />
           <Route path=":workspaceId/v/l/:viewId" element={<ListView />} />
