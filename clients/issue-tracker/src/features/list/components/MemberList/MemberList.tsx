@@ -1,15 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import _ from "lodash";
 
 import { useTheme } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
 
-import List from "../../../../common/components/List";
-import dayjs from "dayjs";
-import Avatar from "../../../../common/components/Avatar";
 import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 import { GetProjectMembersApiResponse } from "../../../../api/generated/project.api";
+import Avatar from "../../../../common/components/Avatar";
+import List from "../../../../common/components/DataGrid";
 
 export interface MemberListProps {
   members: GetProjectMembersApiResponse;

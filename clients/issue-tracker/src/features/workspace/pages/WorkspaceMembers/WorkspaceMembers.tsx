@@ -1,7 +1,5 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import List from "../../../../common/components/List";
 import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
+import { useParams } from "react-router-dom";
 import MemberModal from "../../components/MemberModal";
 
 export default function WorkspaceMembers() {
