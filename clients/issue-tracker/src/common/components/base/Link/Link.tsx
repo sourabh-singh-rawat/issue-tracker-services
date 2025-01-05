@@ -19,6 +19,13 @@ export const Link = ({ to, children }: LinkProps) => {
       to={to}
       component={RouterLink}
       onClick={(e) => e.stopPropagation()}
+      underline="none"
+      sx={{
+        color: theme.palette.text.primary,
+        ":hover": {
+          color: theme.palette.primary.main,
+        },
+      }}
     >
       {children}
     </LinkComponent>

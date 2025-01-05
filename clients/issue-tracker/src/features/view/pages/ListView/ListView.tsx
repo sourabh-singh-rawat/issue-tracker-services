@@ -101,7 +101,7 @@ export const ListView = () => {
               size={12}
               sx={{
                 px: theme.spacing(2),
-                py: theme.spacing(1),
+                py: theme.spacing(0.75),
                 borderBottom: `1px solid ${theme.palette.action.hover}`,
               }}
             >

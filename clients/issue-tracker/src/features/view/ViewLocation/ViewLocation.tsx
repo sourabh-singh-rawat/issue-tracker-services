@@ -13,7 +13,7 @@ export const ViewLocation = ({ list }: LocationProps) => {
       <Grid2 container>
         <Grid2>
           <IconButton>
-            <SpaceDashboardOutlined />
+            <SpaceDashboardOutlined fontSize="small" />
           </IconButton>
         </Grid2>
         <Grid2 sx={{ alignContent: "center" }}>

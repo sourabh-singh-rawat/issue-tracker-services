@@ -77,7 +77,7 @@ export const theme = createTheme({
     ...(mode === "light"
       ? {
           primary: {
-            main: "#274beb",
+            main: "#9147ff",
           },
           secondary: {
             main: "#f7f7f8",
@@ -109,7 +109,7 @@ export const theme = createTheme({
           background: { default: "#ffffff", paper: "#f9fafb" },
         }
       : {
-          primary: { main: "#274beb" },
+          primary: { main: "#9147ff" },
           text: { primary: "#adbac7", secondary: "#9898a2" },
           background: { default: "#18181b", paper: "#1f1f23" },
           divider: "#444c56",
