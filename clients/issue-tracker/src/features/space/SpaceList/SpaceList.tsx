@@ -20,11 +20,12 @@ export const SpaceList = ({ workspaceId }: SpaceMenuProps) => {
         <>
           <ListItem
             secondaryAction={<CreateSpaceModal open={open} setOpen={setOpen} />}
+            dense
           >
             <ListItemText>Spaces</ListItemText>
           </ListItem>
           {space.isLoading ? (
-            <ListItem>
+            <ListItem dense>
               <ListItemText>
                 <Skeleton />
               </ListItemText>

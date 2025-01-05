@@ -1,1 +1,1 @@
-export { default } from "./WorkspaceMenu";
+export * from "./WorkspaceMenu";

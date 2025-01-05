@@ -1,24 +1,21 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import WorkspaceModal from "../CreateWorkspaceModal";
 
-import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
+import { AddOutlined } from "@mui/icons-material";
 import {
   Divider,
-  List,
-  ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   Menu,
+  MenuItem,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Workspace } from "../../../../api/codegen/gql/graphql";
-import { MenuItem } from "../../../../common/enums/menu-item";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
@@ -27,74 +24,72 @@ interface WorkspaceMenuProps {
   options?: Workspace[];
 }
 
-export default function WorkspaceMenu({
+interface MenuItemAlt {
+  icon: React.ReactElement;
+  text: string;
+  to?: string;
+  onClick?: () => void;
+}
+
+export const WorkspaceMenu = ({
   anchorEl,
   handleClose,
   selectedOption,
-}: WorkspaceMenuProps) {
+}: WorkspaceMenuProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const workspaceId = selectedOption.id;
 
-  const menuItems: MenuItem[] = [
+  const menuItems: MenuItemAlt[] = [
     {
-      icon: <SettingsOutlinedIcon />,
+      icon: <SettingsOutlinedIcon fontSize="small" />,
       text: "Settings",
       to: `/workspaces/${workspaceId}/settings`,
     },
     {
-      icon: <PeopleAltOutlinedIcon />,
+      icon: <PeopleAltOutlinedIcon fontSize="small" />,
       text: "Members",
       to: `/workspaces/${workspaceId}/members`,
     },
   ];
 
-  const workspaceActions: MenuItem[] = [
+  const workspaceActions: MenuItemAlt[] = [
     {
-      icon: <AddBoxOutlinedIcon />,
-      text: "Create workspace",
+      icon: <AddOutlined fontSize="small" />,
+      text: "New Workspace",
       onClick: () => {
         setOpen(true);
         handleClose();
       },
     },
-    { icon: <LoopOutlinedIcon />, text: "Switch workspace" },
+    { icon: <LoopOutlinedIcon fontSize="small" />, text: "Switch workspace" },
   ];
 
   return (
     <>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <List disablePadding>
-          {menuItems.map(({ text, to, icon }) => (
-            <ListItem
-              key={to}
-              onClick={() => {
-                if (to) navigate(to);
-                handleClose();
-              }}
-              disableGutters
-              disablePadding
-            >
-              <ListItemButton>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {menuItems.map(({ text, to, icon }) => (
+          <MenuItem
+            key={to}
+            onClick={() => {
+              if (to) navigate(to);
+              handleClose();
+            }}
+            dense
+          >
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText primary={text} />
+          </MenuItem>
+        ))}
         <Divider />
-        <List disablePadding>
-          {workspaceActions.map(({ text, icon, onClick }) => (
-            <ListItem key={text} onClick={onClick} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {workspaceActions.map(({ text, icon, onClick }) => (
+          <MenuItem key={text} onClick={onClick}>
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText primary={text} />
+          </MenuItem>
+        ))}
       </Menu>
       <WorkspaceModal open={open} handleClose={() => setOpen(false)} />
     </>
   );
-}
+};

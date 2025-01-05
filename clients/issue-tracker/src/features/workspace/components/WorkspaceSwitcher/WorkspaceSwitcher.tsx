@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useAppSelector } from "../../../../common/hooks";
-import WorkspaceMenu from "../WorkspaceMenu";
+import { WorkspaceMenu } from "../WorkspaceMenu";
 
 export default function WorkspaceSwitcher() {
   const theme = useTheme();
@@ -29,16 +29,16 @@ export default function WorkspaceSwitcher() {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <List disablePadding>
+    <List disablePadding dense>
       {isLoading ? (
-        <ListItemButton>
+        <ListItemButton dense>
           <ListItemText>
             <Skeleton />
           </ListItemText>
         </ListItemButton>
       ) : (
         current && (
-          <ListItemButton onClick={handleClick} disableRipple>
+          <ListItemButton onClick={handleClick} disableRipple dense>
             <ListItemIcon>
               <Avatar
                 alt={current.name[0]}
