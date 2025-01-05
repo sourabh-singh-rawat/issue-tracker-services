@@ -1,27 +1,20 @@
-import MuiTab from "@mui/material/Tab";
+import { Tab } from "@mui/material";
 import React from "react";
 
 interface CustomTabProps {
   index: number;
   label: string;
   onChange?: React.FormEventHandler<HTMLDivElement>;
-  onClick?: React.FormEventHandler<HTMLDivElement>;
 }
 
-export const CustomTab = ({
-  label,
-  index,
-  onChange,
-  onClick,
-}: CustomTabProps) => {
+export const CustomTab = ({ label, index, ...props }: CustomTabProps) => {
   return (
-    <MuiTab
+    <Tab
       value={index}
       label={label}
-      onChange={onChange}
-      onClick={onClick}
       sx={{ textTransform: "none" }}
       disableRipple
+      {...props}
     />
   );
 };

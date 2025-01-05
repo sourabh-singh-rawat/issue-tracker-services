@@ -43,7 +43,6 @@ export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
     defaultValues: {
       listId,
       parentItemId,
-      displayName: "",
       description: "",
       statusId: "",
       priority: "",

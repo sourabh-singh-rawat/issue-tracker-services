@@ -29,7 +29,7 @@ export const CustomBreadcrumbs = ({
               underline="hover"
               onClick={onClick}
             >
-              <Typography sx={{ fontWeight: 500 }} variant="h6">
+              <Typography sx={{ fontWeight: 500 }} variant="body1">
                 {text}
               </Typography>
             </Link>
