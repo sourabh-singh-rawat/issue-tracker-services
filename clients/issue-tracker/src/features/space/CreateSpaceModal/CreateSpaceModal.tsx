@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 import React from "react";
 import Modal from "../../../common/components/Modal";
 import ModalBody from "../../../common/components/ModalBody";
@@ -13,6 +13,7 @@ interface CreateSpaceModalProps {
 }
 
 export function CreateSpaceModal({ open, setOpen }: CreateSpaceModalProps) {
+  const theme = useTheme();
   const defaultWorkspace = useAppSelector((s) => s.workspace.current);
 
   const handleOpen = () => setOpen(true);
@@ -20,8 +21,19 @@ export function CreateSpaceModal({ open, setOpen }: CreateSpaceModalProps) {
 
   return (
     <>
-      <IconButton size="small" onClick={handleOpen}>
-        <Add />
+      <IconButton
+        size="small"
+        sx={{
+          bgcolor: theme.palette.primary.main,
+          borderRadius: theme.shape.borderRadiusMedium,
+          ":hover": {
+            bgcolor: theme.palette.primary.dark,
+          },
+        }}
+        onClick={handleOpen}
+        disableRipple
+      >
+        <Add fontSize="small" />
       </IconButton>
 
       {open && defaultWorkspace && (

@@ -10,11 +10,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { List as ListOutput } from "../../../api/codegen/gql/graphql";
-import { useAppDispatch } from "../../../common";
 import { CreateListModal } from "../../list/pages/CreateListModal/CreateListModal";
 
 interface SpaceProps {
@@ -30,15 +30,15 @@ export const SpaceListItem = ({
   workspaceId,
   lists,
 }: SpaceProps) => {
+  const theme = useTheme();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleClick = () => setOpen(!open);
 
   return (
     <>
-      <ListItemButton onClick={handleClick} disableRipple>
+      <ListItemButton onClick={handleClick} disableRipple dense>
         <ListItemIcon>{open ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
         <ListItemText primary={name} />
         <IconButton
@@ -46,6 +46,14 @@ export const SpaceListItem = ({
             e.stopPropagation();
             setIsModalOpen(true);
           }}
+          size="small"
+          sx={{
+            borderRadius: theme.shape.borderRadiusLarge,
+            ":hover": {
+              bgcolor: theme.palette.action.hover,
+            },
+          }}
+          disableRipple
         >
           <Add fontSize="small" />
         </IconButton>
@@ -64,6 +72,7 @@ export const SpaceListItem = ({
                 );
                 navigate(`${workspaceId}/v/l/${selectedViewId}`);
               }}
+              dense
             >
               <ListItemIcon>
                 <ListIcon />

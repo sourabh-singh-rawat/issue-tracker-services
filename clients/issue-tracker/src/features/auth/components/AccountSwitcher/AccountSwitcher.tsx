@@ -55,6 +55,7 @@ export const AccountSwitcher = () => {
               navigate("/me");
               handleClose();
             }}
+            dense
           >
             <ListItemIcon>
               <Avatar label={current.displayName} />
@@ -74,7 +75,7 @@ export const AccountSwitcher = () => {
             </Stack>
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleLogout}>
+          <MenuItem onClick={handleLogout} dense>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
