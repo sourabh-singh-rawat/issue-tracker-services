@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   GridColDef,
@@ -8,10 +9,7 @@ import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateComm
 
 const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => {
   const palette = theme.palette;
-  const bgPalette = palette.background;
   const borderColor = theme.palette.divider;
-  const border = `1px solid ${borderColor}`;
-  const borderRadiusMedium = theme.shape.borderRadiusMedium;
 
   return {
     border: "none",
@@ -27,12 +25,14 @@ interface DataGridProps {
   isLoading?: boolean;
   hideFooter?: boolean;
   initialState?: GridInitialStateCommunity;
+  showBorder?: boolean;
 }
 
 /**
  * A Table component
  * @param props.rows
  * @param props.columns
+ * @param props.showBorder Show or hide the border
  * @returns
  */
 export const DataGrid = ({
@@ -41,7 +41,10 @@ export const DataGrid = ({
   isLoading,
   hideFooter = false,
   initialState,
+  showBorder = false,
 }: DataGridProps) => {
+  const theme = useTheme();
+
   return (
     <StyledDataGrid
       columns={columns}
@@ -56,6 +59,9 @@ export const DataGrid = ({
       autoHeight
       hideFooter={hideFooter}
       initialState={initialState}
+      sx={{
+        border: showBorder ? `1px solid ${theme.palette.divider}` : "none",
+      }}
     />
   );
 };
