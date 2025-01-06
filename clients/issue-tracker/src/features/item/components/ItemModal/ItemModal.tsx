@@ -16,7 +16,7 @@ export const ItemModal = ({ listId }: ItemModalProps) => {
 
   return (
     <>
-      <PrimaryButton label="Add Item" onClick={handleOpen} />
+      <PrimaryButton label="Add Item" onClick={handleOpen} size="small" />
       <Modal open={open} handleClose={handleClose}>
         <ModalHeader title="New Item" handleClose={handleClose} subtitle="" />
         <ModalBody>

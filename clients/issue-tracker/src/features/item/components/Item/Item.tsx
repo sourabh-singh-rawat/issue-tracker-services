@@ -1,4 +1,4 @@
-import { useTheme } from "@mui/material";
+import { Stack, useTheme } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import MuiTypography from "@mui/material/Typography";
 import {
@@ -12,6 +12,7 @@ import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import { ItemAttachments } from "../ItemAttachments";
+import { ItemList } from "../ItemList";
 import { ItemModal } from "../ItemModal";
 
 export interface ItemProps {}
@@ -71,41 +72,34 @@ export default function Item(props: ItemProps) {
       </Grid2>
 
       <Grid2 size={12}>
-        <MuiTypography variant="h5" fontWeight="600">
+        <MuiTypography variant="body1" fontWeight="600">
           Custom Fields
         </MuiTypography>
       </Grid2>
 
       {item?.findItem?.list.id && item?.findItem && (
-        <>
-          <Grid2>
-            <MuiTypography variant="h5" fontWeight="600">
-              Sub Items
-            </MuiTypography>
-          </Grid2>
-          <Grid2>
-            <ItemModal listId={item?.findItem.list.id} />
-          </Grid2>
-
-          <Grid2 size={12}>
-            <Grid2 container>
-              {subItems?.findSubItems?.map(({ name }) => {
-                return <Grid2 size={12}>{name}</Grid2>;
-              })}
-            </Grid2>
-          </Grid2>
-        </>
+        <Grid2 size={12}>
+          <Stack spacing={1}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <MuiTypography variant="body1" fontWeight="600">
+                Sub Items
+              </MuiTypography>
+              <ItemModal listId={item?.findItem.list.id} />
+            </Stack>
+            <ItemList itemId={item.findItem.id} style={{ showBorder: true }} />
+          </Stack>
+        </Grid2>
       )}
 
       <Grid2 size={12}>
-        <MuiTypography variant="h5" fontWeight="600">
+        <MuiTypography variant="body1" fontWeight="600">
           Checklists
         </MuiTypography>
       </Grid2>
 
       {itemId && (
         <Grid2 size={12}>
-          <MuiTypography variant="h5" fontWeight="600">
+          <MuiTypography variant="body1" fontWeight="600">
             Attachments
           </MuiTypography>
 
