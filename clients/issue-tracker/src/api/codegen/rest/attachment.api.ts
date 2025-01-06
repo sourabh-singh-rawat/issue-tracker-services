@@ -11,7 +11,7 @@ const injectedRtkApi = api
         CreateAttachmentApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v1/attachments/${queryArg.itemId}`,
+          url: `/attachments/${queryArg.itemId}`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -25,6 +25,6 @@ export type CreateAttachmentApiResponse =
   /** status 201 Created successfully */ string;
 export type CreateAttachmentApiArg = {
   itemId: string;
-  body: Blob;
+  body: string;
 };
 export const { useCreateAttachmentMutation } = injectedRtkApi;
