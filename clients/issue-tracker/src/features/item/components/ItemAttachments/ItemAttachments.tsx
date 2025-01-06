@@ -1,10 +1,16 @@
-import GetAppIcon from "@mui/icons-material/GetApp";
-import { Grid2, IconButton, styled, useTheme } from "@mui/material";
+import { GetApp } from "@mui/icons-material";
+import {
+  Grid2,
+  IconButton,
+  Input,
+  styled,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import MuiImageList from "@mui/material/ImageList";
-import MuiInput from "@mui/material/Input";
-import MuiTypography from "@mui/material/Typography";
+import { Stack } from "@mui/system";
 import { GridDeleteIcon } from "@mui/x-data-grid";
-import React from "react";
+import { useRef } from "react";
 import {
   useDeleteAttachmentMutation,
   useFindAttachmentsQuery,
@@ -12,10 +18,9 @@ import {
 import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
 import { AppLoader } from "../../../../common/components/AppLoader";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import StyledIconButton from "../../../../common/components/styled/StyledIconButton";
 import { ImageCard } from "../ImageCard";
 
-const VisuallyHiddenInput = styled("input")({
+const VisuallyHiddenInput = styled(Input)({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
   height: 1,
@@ -31,10 +36,14 @@ interface ItemAttachmentProps {
   itemId: string;
 }
 
+/**
+ * Used to upload attachments
+ * @param props.itemId Id of item that this attachment belongs to
+ */
 export const ItemAttachments = ({ itemId }: ItemAttachmentProps) => {
   const theme = useTheme();
-  const messageBar = useSnackbar();
-  const { success: showSuccess } = useSnackbar();
+  const snackbar = useSnackbar();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [createAttachment, { isLoading }] = useCreateAttachmentMutation();
   const { data: attachments, refetch } = useFindAttachmentsQuery({
     variables: { itemId },
@@ -42,100 +51,59 @@ export const ItemAttachments = ({ itemId }: ItemAttachmentProps) => {
   });
   const [deleteAttachment] = useDeleteAttachmentMutation({
     onCompleted(response) {
-      messageBar.success(response.deleteAttachment);
+      snackbar.success(response.deleteAttachment);
       refetch();
     },
     onError(error) {
-      messageBar.error(error.message);
+      snackbar.error(error.message);
     },
   });
-
-  const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { files } = e.dataTransfer;
-
-    uploadFiles(files);
-  };
-
-  const uploadFiles = async (files: any) => {
-    if (files && files.length) {
-      const formData = new FormData();
-      formData.append("files", files[0]);
-    }
-  };
 
   return (
     <>
       <Grid2 columnSpacing={1} sx={{ marginTop: theme.spacing(2) }} container>
-        <Grid2 size={12}>
+        <IconButton
+          component="label"
+          tabIndex={-1}
+          sx={{
+            width: "100%",
+            border: `1px dashed ${theme.palette.divider}`,
+            borderRadius: theme.shape.borderRadiusSmall,
+          }}
+          disableRipple
+        >
+          <Stack spacing={1} sx={{ alignItems: "center" }}>
+            {isLoading ? <AppLoader /> : <GetApp />}
+            <Typography
+              variant="body2"
+              sx={{ color: theme.palette.primary.main }}
+            >
+              Click to upload attachment
+            </Typography>
+            <Typography variant="body2" sx={{ color: theme.palette.grey[700] }}>
+              *Maximum file size 5MB
+            </Typography>
+          </Stack>
           <VisuallyHiddenInput
             type="file"
-            onClick={async (e) => {
-              const files = e.target.files;
-              const formData = new FormData();
+            inputRef={inputRef}
+            onChange={async () => {
+              if (!inputRef.current) return;
 
+              const files = inputRef.current.files;
               if (!files) return;
+
+              const formData = new FormData();
               const file = files[0];
 
               if (!file) return;
               formData.append("files", file);
 
               await createAttachment({ itemId, body: formData as any });
-              showSuccess("Uploaded files successfully");
               refetch();
             }}
-            multiple
           />
-          <MuiInput name="file" type="file" sx={{ display: "none" }} />
-          <StyledIconButton
-            onClick={() => {
-              const element = document.querySelector("input[type='file']");
-
-              if (!element) return;
-
-              element.click();
-            }}
-            sx={{
-              width: "100%",
-              border: `1px dashed ${theme.palette.divider}`,
-              borderWidth: "1.5px",
-              borderStyle: "dashed",
-              borderRadius: theme.shape.borderRadiusMedium,
-            }}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            disableRipple
-          >
-            <Grid2 container>
-              <Grid2 size={12}>
-                {isLoading ? <AppLoader /> : <GetAppIcon />}
-              </Grid2>
-              <Grid2 size={12}>
-                <MuiTypography
-                  variant="body2"
-                  sx={{ color: theme.palette.primary.main }}
-                >
-                  Click to upload photo
-                </MuiTypography>
-                <MuiTypography variant="body2">or drag and drop</MuiTypography>
-              </Grid2>
-              <Grid2 size={12}>
-                <MuiTypography
-                  variant="body2"
-                  sx={{ color: theme.palette.grey[700] }}
-                >
-                  *Maximum file size 5MB
-                </MuiTypography>
-              </Grid2>
-            </Grid2>
-          </StyledIconButton>
-        </Grid2>
+        </IconButton>
       </Grid2>
       <MuiImageList
         cols={6}

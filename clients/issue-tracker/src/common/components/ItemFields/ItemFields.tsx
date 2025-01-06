@@ -27,7 +27,7 @@ export default function ItemFields({
       <Grid2 size={12}>
         <Grid2 container>
           <Grid2 size={3}>
-            <Typography variant="h6">Status</Typography>
+            <Typography variant="body1">Status</Typography>
           </Grid2>
           <Grid2 size={3}>
             <ItemStatusSelector
@@ -46,7 +46,7 @@ export default function ItemFields({
       <Grid2 size={12}>
         <Grid2 container>
           <Grid2 size={3}>
-            <Typography variant="h6">Priority</Typography>
+            <Typography variant="body1">Priority</Typography>
           </Grid2>
           <Grid2 size={3}>
             <ItemPrioritySelector
@@ -66,7 +66,7 @@ export default function ItemFields({
       <Grid2 size={12}>
         <Grid2 container>
           <Grid2 size={3}>
-            <Typography variant="h6">Dates</Typography>
+            <Typography variant="body1">Dates</Typography>
           </Grid2>
           <Grid2 size={3}>Empty</Grid2>
         </Grid2>

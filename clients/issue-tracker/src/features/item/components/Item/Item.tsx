@@ -1,13 +1,9 @@
 import { Stack, useTheme } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import MuiTypography from "@mui/material/Typography";
-import {
-  useFindItemQuery,
-  useFindSubItemsQuery,
-  useUpdateItemMutation,
-} from "../../../../api";
+import { useFindItemQuery, useUpdateItemMutation } from "../../../../api";
 import { useItemParams } from "../../../../common";
-import ItemDescription from "../../../../common/components/ItemDescription";
+import { ItemDescription } from "../../../../common/components";
 import ItemFields from "../../../../common/components/ItemFields";
 import ItemName from "../../../../common/components/ItemName";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
@@ -24,11 +20,6 @@ export default function Item(props: ItemProps) {
   const { data: item } = useFindItemQuery({
     variables: { findItemId: itemId },
     skip: !itemId,
-  });
-  const { data: subItems } = useFindSubItemsQuery({
-    variables: {
-      input: { parentItemId: itemId },
-    },
   });
   const [updateItem] = useUpdateItemMutation({
     onCompleted(response) {
@@ -63,11 +54,8 @@ export default function Item(props: ItemProps) {
 
       <Grid2 size={12}>
         <ItemDescription
-          handleSubmit={async (description) => {
-            if (!itemId) return;
-            await updateItem({ variables: { input: { itemId, description } } });
-          }}
-          defaultValue={item?.findItem?.description}
+          itemId={itemId}
+          initialValue={item?.findItem?.description}
         />
       </Grid2>
 

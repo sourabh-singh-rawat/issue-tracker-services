@@ -90,51 +90,37 @@ export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
     >
       <Grid2 container spacing={2}>
         <Grid2 size={12}>
-          <TextField name="name" label="Name" form={form} />
+          <TextField form={form} name="name" label="Name" placeholder="Name" />
         </Grid2>
 
         <Grid2 size={12}>
           <TextField
+            form={form}
             name="description"
             label="Description"
-            form={form}
+            placeholder="Description"
             rows={4}
           />
         </Grid2>
 
         <Grid2 size={6}>
-          <ItemStatusSelector name="statusId" title="Status" form={form} />
+          <ItemStatusSelector form={form} name="statusId" title="Status" />
         </Grid2>
 
         <Grid2 size={6}>
           <ItemPrioritySelector
+            form={form}
             name="priority"
             title="Priority"
             options={["Urgent", "High", "Medium", "Low"]}
-            form={form}
           />
         </Grid2>
-
-        {/* <Grid2 size={12} >
-          <FormAutocomplete
-            name="assigneeIds"
-            title="Assignees"
-            control={control}
-            formState={formState}
-            options={members?.rows.map(({ user: { id, displayName } }) => ({
-              id,
-              name: displayName,
-            }))}
-            isMultiple
-          />
-        </Grid2> */}
-
         <Grid2 size={6}>
           <DatePicker name="dueDate" title="Due Date" form={form} />
         </Grid2>
         <Grid2 size={6}></Grid2>
         <Grid2 size={6}>
-          <PrimaryButton label="Create Issue" type="submit" />
+          <PrimaryButton label="Create Item" type="submit" />
         </Grid2>
       </Grid2>
     </MuiContainer>

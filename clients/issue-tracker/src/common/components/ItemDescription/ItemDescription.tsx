@@ -1,125 +1,112 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { useTheme } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import MuiGrid from "@mui/material/Grid";
-import MuiSkeleton from "@mui/material/Skeleton";
-import MuiTypography from "@mui/material/Typography";
-import DoneIcon from "@mui/icons-material/Done";
-import MuiIconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import { Grid2, IconButton, Typography, useTheme } from "@mui/material";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { UpdateItemInput, useUpdateItemMutation } from "../../../api";
+import { TextField } from "../forms";
+import { useSnackbar } from "../Snackbar";
 
-interface Props {
-  handleSubmit: (value: string) => void;
-  defaultValue?: string | null;
-  isDisabled?: boolean;
-  isLoading?: boolean;
+interface ItemDescriptionProps {
+  itemId: string;
+  initialValue?: string | null;
 }
-export default function ItemDescription({
-  defaultValue = "",
-  handleSubmit: handleSubmit,
-  isDisabled,
-  isLoading,
-}: Props) {
-  const theme = useTheme();
-  const [value, setValue] = useState(defaultValue);
-  const [isFocused, setIsFocused] = useState(false);
-  const [previousValue, setPreviousValue] = useState(defaultValue);
 
-  const handleChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (e) => {
-    const textValue = e.target.value;
-    setValue(textValue);
-  };
+/**
+ * Update the item description
+ * @param props.itemId id of the item whose description is to be updated
+ * @param props.initialValue value of the item description
+ * @returns
+ */
+export const ItemDescription = ({
+  itemId,
+  initialValue = "",
+}: ItemDescriptionProps) => {
+  const theme = useTheme();
+  const snackbar = useSnackbar();
+  const form = useForm();
+  const [defaultValue, setSetDefaultValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const [updateItem, { loading: isLoading }] = useUpdateItemMutation({
+    onCompleted() {
+      snackbar.success("Description updated successfully");
+    },
+  });
 
   const handleClick = () => {
-    setPreviousValue(value);
     setIsFocused(true);
   };
 
   const handleCancel = () => {
+    if (isLoading) return;
+
     setIsFocused(false);
-    setValue(previousValue);
+    form.setValue("description", defaultValue);
+  };
+
+  const onSubmit: SubmitHandler<Pick<UpdateItemInput, "description">> = async ({
+    description,
+  }) => {
+    if (isLoading) return;
+
+    await updateItem({ variables: { input: { itemId, description } } });
+    if (description) {
+      setSetDefaultValue(description);
+    }
+    setIsFocused(false);
   };
 
   useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
+    if (initialValue) {
+      form.setValue("description", initialValue);
+      setSetDefaultValue(initialValue);
+    }
+  }, [initialValue]);
 
   return (
-    <MuiGrid rowSpacing={1} container>
-      <MuiGrid xs={12} item>
-        {isFocused && !isDisabled ? (
-          <TextField
-            size="small"
-            value={value}
-            onChange={handleChange}
-            inputProps={{
-              style: { fontSize: theme.typography.h6.fontSize },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: theme.shape.borderRadiusMedium,
-              },
-              borderRadius: theme.shape.borderRadiusLarge,
-            }}
-            disabled={isDisabled}
-            autoFocus
-            fullWidth
-            multiline
-          />
+    <Grid2
+      rowSpacing={1}
+      container
+      component="form"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
+      <Grid2 size={12}>
+        {isFocused ? (
+          <TextField form={form} name="description" rows={4} autoFocus />
         ) : (
-          <>
-            {isLoading ? (
-              <>
-                <MuiSkeleton variant="text" />
-                <MuiSkeleton variant="text" />
-                <MuiSkeleton variant="text" />
-                <MuiSkeleton variant="text" width="20%" />
-              </>
-            ) : (
-              <MuiTypography
-                sx={{
-                  fontSize: theme.typography.h6.fontSize,
-                  padding: theme.spacing(1),
-                  marginLeft: theme.spacing(-1),
-                  borderRadius: theme.shape.borderRadiusMedium,
-                  color: theme.palette.text.secondary,
-                  "&:hover": { backgroundColor: theme.palette.action.hover },
-                }}
-                variant="body2"
-                onClick={handleClick}
-              >
-                {value ? value : "Add a description"}
-              </MuiTypography>
-            )}
-          </>
+          <Typography
+            sx={{
+              padding: theme.spacing(1),
+              borderRadius: theme.shape.borderRadiusSmall,
+              border: `1px solid ${theme.palette.divider}`,
+              color: theme.palette.text.secondary,
+              "&:hover": { backgroundColor: theme.palette.action.hover },
+            }}
+            variant="body1"
+            onClick={handleClick}
+          >
+            {form.watch("description") || "Add a description"}
+          </Typography>
         )}
-      </MuiGrid>
-      {isFocused && !isDisabled && (
-        <MuiGrid sm={12} item>
-          <MuiGrid spacing={1} container>
-            <MuiGrid item flexGrow={1}></MuiGrid>
-            <MuiGrid item>
-              <MuiIconButton
-                size="small"
-                onClick={() => {
-                  if (value && value !== previousValue) handleSubmit(value);
-                  setIsFocused(false);
-                }}
-              >
+      </Grid2>
+      {isFocused && (
+        <Grid2 size={{ sm: 12 }}>
+          <Grid2 spacing={1} container>
+            <Grid2 flexGrow={1}></Grid2>
+            <Grid2>
+              <IconButton size="small" type="submit" disableRipple>
                 <DoneIcon />
-              </MuiIconButton>
-            </MuiGrid>
-            <MuiGrid item>
-              <MuiIconButton size="small" onClick={handleCancel}>
+              </IconButton>
+            </Grid2>
+            <Grid2>
+              <IconButton size="small" onClick={handleCancel} disableRipple>
                 <CloseIcon />
-              </MuiIconButton>
-            </MuiGrid>
-          </MuiGrid>
-        </MuiGrid>
+              </IconButton>
+            </Grid2>
+          </Grid2>
+        </Grid2>
       )}
-    </MuiGrid>
+    </Grid2>
   );
-}
+};

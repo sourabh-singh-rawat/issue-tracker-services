@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "target": "ES2024",
+    "target": "ESNext",
     "lib": [
       "ESNext",
       "DOM",
       "WebWorker"
     ],
-    "module": "ES2022",
-    "moduleResolution": "bundler",
+    "module": "ES2015",
+    "moduleResolution": "node",
     "types": [
       "vite/client"
     ],
