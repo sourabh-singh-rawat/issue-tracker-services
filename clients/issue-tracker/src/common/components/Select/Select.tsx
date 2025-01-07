@@ -1,11 +1,9 @@
-import React from "react";
 import { alpha, styled, useTheme } from "@mui/material";
 
-import BaseOption from "@mui/base/Option";
-import MuiTypography from "@mui/material/Typography";
-import MuiSelect, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MenuItem from "@mui/material/MenuItem";
+import MuiSelect, { SelectChangeEvent } from "@mui/material/Select";
+import MuiTypography from "@mui/material/Typography";
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
   width: "100%",
@@ -50,17 +48,9 @@ export default function Select({
         boxShadow: theme.shadows[1],
         borderRadius: theme.shape.borderRadiusMedium,
         backgroundColor: theme.palette.background.default,
-        // border: `1px solid ${theme.palette.divider}`,
       },
     },
   };
-
-  // const getBgColor = (value: string) => {
-  //   if (value === "not started") return theme.palette.error.main;
-  //   if (value === "in progress") return theme.palette.primary.main;
-
-  //   return theme.palette.primary.main;
-  // };
 
   return (
     <StyledSelect

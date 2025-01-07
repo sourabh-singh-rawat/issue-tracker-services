@@ -66,7 +66,7 @@ export const ItemDescription = ({
   }, [initialValue]);
 
   return (
-    <ClickAwayListener onClickAway={() => setIsFocused(false)}>
+    <ClickAwayListener onClickAway={handleCancel}>
       <Grid2
         rowSpacing={1}
         container
