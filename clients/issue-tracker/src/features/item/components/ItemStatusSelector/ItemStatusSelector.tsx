@@ -1,5 +1,3 @@
-import { useContext } from "react";
-
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
 import Grid2 from "@mui/material/Grid2";
@@ -12,11 +10,12 @@ import {
   UseControllerProps,
   UseFormReturn,
 } from "react-hook-form";
+import { useFindStatusesQuery } from "../../../../api";
 import Select from "../../../../common/components/Select";
 import { Label } from "../../../../common/components/forms";
-import { SpaceContext } from "../../../../common/contexts";
 
 interface ItemStatusSelectorProps<T extends FieldValues> {
+  listId: string;
   name: Path<T>;
   form: UseFormReturn<T>;
   onSubmit?: (value: string) => void;
@@ -25,7 +24,13 @@ interface ItemStatusSelectorProps<T extends FieldValues> {
   rules?: UseControllerProps<T>["rules"];
 }
 
+/**
+ * Reusable item status selector component. Can be used in item forms and to update item status
+ * @param props.listId The list id to fetch available statuses
+ * @returns
+ */
 export const ItemStatusSelector = <T extends FieldValues>({
+  listId,
   name,
   form,
   rules,
@@ -34,7 +39,10 @@ export const ItemStatusSelector = <T extends FieldValues>({
   helperText,
 }: ItemStatusSelectorProps<T>) => {
   const isLoading = false;
-  const context = useContext(SpaceContext);
+  const { data: statuses } = useFindStatusesQuery({
+    variables: { input: { listId } },
+    skip: !listId,
+  });
 
   return (
     <Grid2 container>
@@ -56,7 +64,7 @@ export const ItemStatusSelector = <T extends FieldValues>({
                 <Select
                   name={field.name}
                   value={field.value}
-                  options={context.statuses || []}
+                  options={statuses?.findStatuses || []}
                   onChange={(e) => {
                     if (!e.target.value) return;
                     if (onSubmit) onSubmit(e.target.value as string);

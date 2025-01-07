@@ -8,6 +8,7 @@ import {
 
 interface ItemFieldsProps {
   itemId: string;
+  listId: string;
   statusId: string;
   priority: string;
   updateItem: (options: UpdateItemMutationOptions) => Promise<any>;
@@ -15,6 +16,7 @@ interface ItemFieldsProps {
 
 export default function ItemFields({
   itemId,
+  listId,
   statusId,
   priority,
   updateItem,
@@ -32,6 +34,7 @@ export default function ItemFields({
           <Grid2 size={3}>
             <ItemStatusSelector
               form={statusForm}
+              listId={listId}
               name="statusId"
               onSubmit={async (value) => {
                 updateItem({

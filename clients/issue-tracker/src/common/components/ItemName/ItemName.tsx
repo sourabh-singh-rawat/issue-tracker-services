@@ -50,7 +50,7 @@ interface ItemNameProps {
 
 /**
  * Update the item name
- * @param props.itemId
+ * @param props.itemId The id of the item to update
  * @returns
  */
 export const ItemName = ({ itemId, initialValue = "" }: ItemNameProps) => {
@@ -96,7 +96,7 @@ export const ItemName = ({ itemId, initialValue = "" }: ItemNameProps) => {
   }, [initialValue]);
 
   return (
-    <ClickAwayListener onClickAway={() => setIsFocused(false)}>
+    <ClickAwayListener onClickAway={handleCancel}>
       <Grid2
         container
         sx={{ mt: theme.spacing(1), ml: theme.spacing(-2) }}

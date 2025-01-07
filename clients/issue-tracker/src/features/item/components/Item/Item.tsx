@@ -38,6 +38,7 @@ export default function Item(props: ItemProps) {
         <Grid2 size={12}>
           <ItemFields
             itemId={itemId}
+            listId={item.findItem.list.id}
             statusId={item.findItem.statusId}
             priority={item.findItem.priority}
             updateItem={updateItem}

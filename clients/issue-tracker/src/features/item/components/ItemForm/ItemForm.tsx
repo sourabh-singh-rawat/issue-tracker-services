@@ -51,7 +51,6 @@ export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
     },
     mode: "all",
   });
-
   const onSubmit: SubmitHandler<CreateItemInput> = async ({
     name,
     description,
@@ -104,7 +103,12 @@ export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
         </Grid2>
 
         <Grid2 size={6}>
-          <ItemStatusSelector form={form} name="statusId" title="Status" />
+          <ItemStatusSelector
+            form={form}
+            name="statusId"
+            title="Status"
+            listId={listId}
+          />
         </Grid2>
 
         <Grid2 size={6}>
