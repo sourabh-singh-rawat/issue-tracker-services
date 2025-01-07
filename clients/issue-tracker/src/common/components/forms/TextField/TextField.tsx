@@ -19,14 +19,14 @@ import {
 } from "react-hook-form";
 import { Label } from "../Label";
 
-const StyledTextField = styled(MuiTextField)(({ theme }) => ({
+const StyledTextField = styled(MuiTextField)(({ theme, sx }) => ({
   "& .MuiInputBase-root": {
     width: "100%",
-    fontSize: theme.typography.body1.fontSize,
     position: "relative",
     borderColor: theme.palette.divider,
     borderRadius: theme.shape.borderRadiusMedium,
     backgroundColor: theme.palette.background.default,
+    fontSize: "inherit",
     transition: theme.transitions.create([
       "border-color",
       "background-color",
@@ -96,7 +96,7 @@ export const TextField = <T extends FieldValues>({
   return (
     <Grid2 container>
       {label && (
-        <Grid2 size={12} paddingBottom={1}>
+        <Grid2 size={12} sx={{ pb: theme.spacing(1) }}>
           <Label
             id={name}
             title={label}
