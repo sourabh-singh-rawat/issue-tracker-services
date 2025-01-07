@@ -3,9 +3,8 @@ import Grid2 from "@mui/material/Grid2";
 import MuiTypography from "@mui/material/Typography";
 import { useFindItemQuery, useUpdateItemMutation } from "../../../../api";
 import { useItemParams } from "../../../../common";
-import { ItemDescription } from "../../../../common/components";
+import { ItemDescription, ItemName } from "../../../../common/components";
 import ItemFields from "../../../../common/components/ItemFields";
-import ItemName from "../../../../common/components/ItemName";
 import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
 import { ItemAttachments } from "../ItemAttachments";
 import { ItemList } from "../ItemList";
@@ -33,13 +32,7 @@ export default function Item(props: ItemProps) {
   return (
     <Grid2 container rowGap={4} sx={{ px: theme.spacing(4) }}>
       <Grid2 size={12}>
-        <ItemName
-          handleSubmit={async (name) => {
-            if (!itemId) return;
-            await updateItem({ variables: { input: { itemId, name } } });
-          }}
-          defaultValue={item?.findItem?.name}
-        />
+        <ItemName itemId={itemId} initialValue={item?.findItem?.name} />
       </Grid2>
       {item?.findItem && itemId && (
         <Grid2 size={12}>

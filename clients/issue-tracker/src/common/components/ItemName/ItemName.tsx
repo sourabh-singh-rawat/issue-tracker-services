@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { ClickAwayListener } from "@mui/base";
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import { IconButton, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import { alpha, styled, useTheme } from "@mui/material/styles";
 import MuiTextField from "@mui/material/TextField";
-import DoneIcon from "@mui/icons-material/Done";
-import MuiIconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { UpdateItemInput, useUpdateItemMutation } from "../../../api";
+import { TextField } from "../forms";
+import { useSnackbar } from "../Snackbar";
 
 const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -38,69 +43,125 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   },
 }));
 
-interface TitleProps {
-  defaultValue?: string;
-  handleSubmit: (value: string) => void;
+interface ItemNameProps {
+  itemId: string;
+  initialValue?: string;
 }
 
-export default function Name({ defaultValue = "", handleSubmit }: TitleProps) {
+/**
+ * Update the item name
+ * @param props.itemId
+ * @returns
+ */
+export const ItemName = ({ itemId, initialValue = "" }: ItemNameProps) => {
   const theme = useTheme();
-  const [value, setValue] = useState(defaultValue);
-  const [previousValue, setPreviousValue] = useState("");
+  const snackbar = useSnackbar();
+  const form = useForm();
+  const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-
-  const handleChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (e) => {
-    const textValue = e.target.value;
-    setValue(textValue);
-  };
+  const [updateItem, { loading: isLoading }] = useUpdateItemMutation({
+    onCompleted() {
+      snackbar.success("Name updated successfully");
+    },
+  });
 
   const handleClick = () => {
-    setPreviousValue(value);
     setIsFocused(true);
   };
 
   const handleCancel = () => {
+    if (isLoading) return;
+
     setIsFocused(false);
-    setValue(defaultValue);
+    form.setValue("name", defaultValue);
+  };
+
+  const onSubmit: SubmitHandler<Pick<UpdateItemInput, "name">> = async ({
+    name,
+  }) => {
+    if (isLoading) return;
+
+    await updateItem({ variables: { input: { itemId, name } } });
+
+    if (name) setDefaultValue(name);
+
+    setIsFocused(false);
   };
 
   useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
+    if (initialValue) {
+      form.setValue("name", initialValue);
+      setDefaultValue(initialValue);
+    }
+  }, [initialValue]);
 
   return (
-    <Grid2 container sx={{ mt: theme.spacing(1), ml: theme.spacing(-2) }}>
-      <Grid2 flexGrow={1}>
-        <TitleTextField
-          name="name"
-          value={value}
-          onClick={handleClick}
-          onChange={handleChange}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          type="text"
-          fullWidth
-        />
-      </Grid2>
+    <ClickAwayListener onClickAway={() => setIsFocused(false)}>
+      <Grid2
+        container
+        sx={{ mt: theme.spacing(1), ml: theme.spacing(-2) }}
+        component="form"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <Grid2 flexGrow={1}>
+          {isFocused ? (
+            <TextField
+              form={form}
+              name="name"
+              sx={{
+                fontSize: theme.typography.h4,
+                ".MuiInputBase-input": {
+                  fontWeight: theme.typography.fontWeightBold,
+                  px: theme.spacing(2),
+                  py: theme.spacing(0.25),
+                },
+              }}
+              autoFocus
+            />
+          ) : (
+            <Typography
+              sx={{
+                px: theme.spacing(2),
+                py: theme.spacing(0.5),
+                fontWeight: "bold",
+                borderRadius: theme.shape.borderRadiusSmall,
+                color: theme.palette.text.secondary,
+                "&:hover": { backgroundColor: theme.palette.action.hover },
+              }}
+              variant="h4"
+              onClick={handleClick}
+            >
+              {form.watch("name") || "Untitled"}
+            </Typography>
+          )}
+        </Grid2>
 
-      <Grid2 sx={{ display: isFocused ? "flex" : "none" }}>
-        <MuiIconButton
-          onClick={() => {
-            if (value !== previousValue) handleSubmit(value);
-            setIsFocused(false);
-          }}
-        >
-          <DoneIcon />
-        </MuiIconButton>
+        {isFocused && (
+          <Grid2 size={12}>
+            <Grid2 spacing={1} container>
+              <Grid2 flexGrow={1}></Grid2>
+              <Grid2>
+                <IconButton
+                  size="small"
+                  type="submit"
+                  sx={{ borderRadius: theme.shape.borderRadiusMedium }}
+                >
+                  <DoneIcon />
+                </IconButton>
+              </Grid2>
+              <Grid2>
+                <IconButton
+                  size="small"
+                  onClick={handleCancel}
+                  sx={{ borderRadius: theme.shape.borderRadiusMedium }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Grid2>
+            </Grid2>
+          </Grid2>
+        )}
       </Grid2>
-      <Grid2 sx={{ display: isFocused ? "flex" : "none" }}>
-        <MuiIconButton onClick={handleCancel}>
-          <CloseIcon />
-        </MuiIconButton>
-      </Grid2>
-    </Grid2>
+    </ClickAwayListener>
   );
-}
+};
