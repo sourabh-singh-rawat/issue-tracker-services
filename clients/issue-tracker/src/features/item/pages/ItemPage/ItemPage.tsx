@@ -9,9 +9,7 @@ import { ItemList } from "../../components/ItemList";
 import { ItemModal } from "../../components/ItemModal";
 import { ItemName } from "../../components/ItemName";
 
-export interface ItemProps {}
-
-export default function Item(props: ItemProps) {
+export const ItemPage = () => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { itemId } = useItemParams();
@@ -89,4 +87,4 @@ export default function Item(props: ItemProps) {
       )}
     </Grid2>
   );
-}
+};

@@ -1,13 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 
+import { PrivateRoutes } from "../common";
 import { Main } from "../common/components/Main";
-import { PrivateRoutes } from "../common/components/PrivateRoutes";
-import { LoginPage, SignUpPage } from "../features/auth";
+import {
+  BoardView,
+  HomePage,
+  ListView,
+  LoginPage,
+  ProfilePage,
+  SignUpPage,
+} from "../features";
 import { EmailVerification } from "../features/auth/pages/EmailVerification";
-import { Home } from "../features/home/pages/Home";
-import Item from "../features/item/components/Item/Item";
-import { Profile } from "../features/profile";
-import { BoardView, ListView } from "../features/view";
+import { ItemPage } from "../features/item";
 
 function NoComponent() {
   return <h1>404</h1>;
@@ -21,9 +25,9 @@ export default function App() {
         <Route path="signup" element={<SignUpPage />} />
         <Route path="email-verification" element={<EmailVerification />} />
         <Route path="/" element={<PrivateRoutes />}>
-          <Route path="me" element={<Profile />} />
-          <Route path="i/:itemId" element={<Item />} />
-          <Route path=":workspaceId/home" element={<Home />} />
+          <Route path="me" element={<ProfilePage />} />
+          <Route path="i/:itemId" element={<ItemPage />} />
+          <Route path=":workspaceId/home" element={<HomePage />} />
           <Route path=":workspaceId/v/l/:viewId" element={<ListView />} />
           <Route path=":workspaceId/v/b/:viewId" element={<BoardView />} />
         </Route>

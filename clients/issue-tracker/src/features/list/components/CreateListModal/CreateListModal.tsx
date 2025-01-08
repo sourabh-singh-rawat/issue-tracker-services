@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import ListForm from "../../components/ListForm";
+import React from "react";
 import Modal from "../../../../common/components/Modal";
 import ModalBody from "../../../../common/components/ModalBody";
-import { IconButton } from "@mui/material";
-import { Add } from "@mui/icons-material";
 import ModalHeader from "../../../../common/components/ModalHeader";
+import { ListForm } from "../../components";
 
 interface CreateListModalProps {
   workspaceId: string;
@@ -13,11 +11,11 @@ interface CreateListModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function CreateListModal({
+export const CreateListModal = ({
   spaceId,
   open,
   setOpen,
-}: CreateListModalProps) {
+}: CreateListModalProps) => {
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setOpen(true);
@@ -39,4 +37,4 @@ export function CreateListModal({
       </ModalBody>
     </Modal>
   );
-}
+};

@@ -15,7 +15,7 @@ interface ListFormProps {
   spaceId: string;
 }
 
-export default function ListForm({ spaceId }: ListFormProps) {
+export const ListForm = ({ spaceId }: ListFormProps) => {
   const navigate = useNavigate();
   const messageBar = useSnackbar();
   const [createList] = useCreateListMutation({
@@ -64,4 +64,4 @@ export default function ListForm({ spaceId }: ListFormProps) {
       </Grid2>
     </MuiContainer>
   );
-}
+};
