@@ -1,13 +1,14 @@
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import { useFindItemQuery, useUpdateItemMutation } from "../../../../api";
-import { useItemParams } from "../../../../common";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import { ItemAttachments } from "../../components/ItemAttachments";
-import { ItemDescription } from "../../components/ItemDescription";
-import ItemFields from "../../components/ItemFields";
-import { ItemList } from "../../components/ItemList";
-import { ItemModal } from "../../components/ItemModal";
-import { ItemName } from "../../components/ItemName";
+import { useItemParams, useSnackbar } from "../../../../common";
+import {
+  ItemAttachments,
+  ItemDescription,
+  ItemFields,
+  ItemList,
+  ItemModal,
+  ItemName,
+} from "../../components";
 
 export const ItemPage = () => {
   const theme = useTheme();
