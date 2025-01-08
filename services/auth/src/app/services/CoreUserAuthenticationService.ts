@@ -156,7 +156,11 @@ export class CoreUserAuthenticationService
     const { password, user } = options;
     const { passwordHash, passwordSalt } = user;
 
-    const isHashValid = await Hash.verify(passwordHash, passwordSalt, password);
+    const isHashValid = await Hash.verify({
+      hash: passwordHash,
+      plain: password,
+      salt: passwordSalt,
+    });
     if (!isHashValid) throw new UnauthorizedError();
   }
 
