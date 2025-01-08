@@ -20,7 +20,7 @@
     "node": ">=20.13.1"
   },
   "devDependencies": {
-    "@redocly/cli": "^1.14.0",
+    "@redocly/cli": "^1.27.1",
     "prettier-plugin-organize-imports": "^4.1.0"
   }
 }
