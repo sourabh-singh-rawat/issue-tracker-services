@@ -6,7 +6,7 @@ import Button from "../../../../common/components/buttons/Button";
 import { TextField } from "../../../../common/components/forms";
 import { UploadButton } from "../../../item/components/UploadButton";
 
-export const Profile = () => {
+export const ProfilePage = () => {
   const theme = useTheme();
   const { current } = useAppSelector((x) => x.auth);
   const form = useForm({ defaultValues: { displayName: "", email: "" } });

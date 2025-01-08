@@ -5,9 +5,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { Grid2, IconButton, Typography, useTheme } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { UpdateItemInput, useUpdateItemMutation } from "../../../api";
-import { TextField } from "../forms";
-import { useSnackbar } from "../Snackbar";
+import { UpdateItemInput, useUpdateItemMutation } from "../../../../api";
+import { TextField, useSnackbar } from "../../../../common/components";
 
 interface ItemDescriptionProps {
   itemId: string;

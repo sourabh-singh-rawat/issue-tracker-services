@@ -2,7 +2,7 @@ import { Grid2, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../../../../common";
 
-export const Home = () => {
+export const HomePage = () => {
   const current = useAppSelector((x) => x.auth.current);
 
   return (

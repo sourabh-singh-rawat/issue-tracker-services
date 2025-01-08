@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { List as ListOutput } from "../../../api/codegen/gql/graphql";
-import { CreateListModal } from "../../list/pages/CreateListModal/CreateListModal";
+import { CreateListModal } from "../../list";
 
 interface SpaceProps {
   spaceId: string;
