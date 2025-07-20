@@ -1,14 +1,14 @@
 import { FormLabel, Skeleton, Typography, useTheme } from "@mui/material";
 import React from "react";
 
-interface Props {
+interface LabelProps {
   id: string;
   title: React.ReactElement | string;
   color?: string;
   isLoading?: boolean;
 }
 
-export const Label = ({ id, title, isLoading, color }: Props) => {
+export const Label = ({ id, title, isLoading, color }: LabelProps) => {
   const theme = useTheme();
 
   return (

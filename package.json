@@ -10,7 +10,8 @@
     "mail": "pnpm -F mail run dev",
     "attachment": "pnpm -F attachment run dev",
     "gen": "pnpm -F client run gen",
-    "build": "pnpm -r --filter=!client build"
+    "build": "pnpm -r --filter=!client build",
+    "gql:compose": "rover supergraph compose --elv2-license accept --config supergraph-config-dev.yaml > services/gateway/supergraph.graphql"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +21,10 @@
     "node": ">=20.13.1"
   },
   "devDependencies": {
+    "@apollo/rover": "^0.34.1",
     "@redocly/cli": "^1.27.1",
-    "prettier-plugin-organize-imports": "^4.1.0"
+    "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-sort-imports": "^1.8.8"
   }
 }

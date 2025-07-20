@@ -1,15 +1,14 @@
-import React from "react";
 import {
   Control,
   FormState,
   SubmitHandler,
   UseFormHandleSubmit,
 } from "react-hook-form";
-import TextField from "../../../../common/components/forms/TextField";
-import { UpdateWorkspaceApiArg } from "../../../../api/generated/workspace.api";
 import Button from "../../../../common/components/buttons/Button";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { TextField } from "../../../../common";
+import Grid from "@mui/material/Grid";
+import React from "react";
 
 interface Props {
   handleSubmit: UseFormHandleSubmit<UpdateWorkspaceApiArg["body"]>;
@@ -37,7 +36,7 @@ export default function WorkspaceName({
         </Grid>
         <Grid item xs={7} component="form" onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            title="Name"
+            label="Name"
             name="name"
             placeholder="workspace name"
             control={control}
