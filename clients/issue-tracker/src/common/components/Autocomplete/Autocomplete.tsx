@@ -1,13 +1,11 @@
-import React from "react";
-import MuiChip from "@mui/material/Chip";
-import MuiAutocomplete from "@mui/material/Autocomplete";
-import _ from "lodash";
-import StyledTextField from "../styled/StyledTextField";
-
-import MuiGrid from "@mui/material/Grid";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import Label from "../forms/Label";
 import { useTheme } from "@mui/material";
+import MuiAutocomplete from "@mui/material/Autocomplete";
+import MuiChip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import _ from "lodash";
+import { Label } from "../forms";
+import StyledTextField from "../styled/StyledTextField";
 
 interface AutocompleteProps {
   title: string;
@@ -37,9 +35,9 @@ export default function Autocomplete({
   return (
     <>
       {title && (
-        <MuiGrid item xs={12} paddingBottom={1}>
+        <Grid item xs={12} paddingBottom={1}>
           <Label id={title} title={title} />
-        </MuiGrid>
+        </Grid>
       )}
       <MuiAutocomplete
         value={value}

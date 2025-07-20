@@ -6,7 +6,7 @@
   "main": "src/index.tsx",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
     "gen:rest": "npx @rtk-query/codegen-openapi codegen.rest.ts",
     "gen": "graphql-codegen --config codegen.gql.ts --watch"
   },
@@ -53,7 +53,7 @@
     "redux-logger": "^3.0.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "vite": "^5.4.2"
+    "vite": "npm:rolldown-vite@latest"
   },
   "dependencies": {
     "@apollo/client": "^3.11.10",

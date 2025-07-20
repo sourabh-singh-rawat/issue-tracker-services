@@ -1,10 +1,9 @@
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import PageHeader from "../../../../common/components/PageHeader";
+import { CustomTab, CustomTabs } from "../../../../common";
+import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import Tab from "../../../../common/components/CustomTab";
-import Tabs from "../../../../common/components/CustomTabs";
-import PageHeader from "../../../../common/components/PageHeader";
 
 export default function Workspace() {
   const theme = useTheme();
@@ -20,7 +19,7 @@ export default function Workspace() {
     0: `/workspaces/${id}/settings`,
     1: `/workspaces/${id}/members`,
   };
-  const selectedTabIndex = mapPathToIndex[tabName];
+  const selectedTabIndex = mapPathToIndex[tabName] ?? 0;
   const [selectedTab, setSelectedTab] = useState(selectedTabIndex);
 
   const handleChange = (e: unknown, newValue: number) => {
@@ -38,10 +37,10 @@ export default function Workspace() {
         <PageHeader title="Workspace Settings" showButton={false} />
       </Grid>
       <Grid xs={12} item sx={{ pt: theme.spacing(1) }}>
-        <Tabs value={selectedTab} onChange={handleChange}>
-          <Tab isLoading={false} label="Settings" id={0} />
-          <Tab isLoading={false} label="Members" id={1} />
-        </Tabs>
+        <CustomTabs value={selectedTab} handleChange={handleChange}>
+          <CustomTab label="Settings" index={0} />
+          <CustomTab label="Members" index={1} />
+        </CustomTabs>
       </Grid>
 
       <Grid xs={12}>
