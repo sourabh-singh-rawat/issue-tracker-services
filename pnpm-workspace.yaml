@@ -3,3 +3,13 @@ packages:
   - packages/**
   - services/**
   - shared-ui/**
+allowBuilds:
+  '@apollo/protobufjs': true
+  '@apollo/rover': true
+  '@parcel/watcher': true
+  argon2: true
+  core-js: true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
+  sharp: true
