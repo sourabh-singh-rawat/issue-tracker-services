@@ -2,15 +2,43 @@
   "version": "0.2.0",
   "compounds": [
     {
-      "name": "dev (linux)",
+      "name": "dev",
       "stopAll": true,
-      "preLaunchTask": "supergraph",
+      "preLaunchTask": "dev:prepare",
       "configurations": [
         "auth",
         "issue-tracker",
-        "issue-tracker (client)",
-        "mail",
         "attachment",
+        "mail",
+        "gateway",
+        "issue-tracker (client)",
+        "codegen: supergraph"
+      ]
+    },
+    {
+      "name": "dev (apps only)",
+      "stopAll": true,
+      "configurations": [
+        "auth",
+        "issue-tracker",
+        "attachment",
+        "mail",
+        "gateway",
+        "issue-tracker (client)",
+        "codegen: supergraph"
+      ]
+    },
+    {
+      "name": "dev (linux + browser)",
+      "stopAll": true,
+      "preLaunchTask": "dev:prepare",
+      "configurations": [
+        "auth",
+        "issue-tracker",
+        "attachment",
+        "mail",
+        "gateway",
+        "issue-tracker (client)",
         "brave (debug)",
         "codegen: supergraph"
       ]
@@ -23,10 +51,8 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "client"
-      ],
-      "console": "integratedTerminal",
+      "runtimeArgs": ["client"],
+      "console": "integratedTerminal"
     },
     {
       "name": "brave (debug - scoop)",
@@ -36,9 +62,7 @@
       "userDataDir": true,
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
+      "runtimeArgs": ["--remote-debugging-port=9222"]
     },
     {
       "name": "brave (debug)",
@@ -48,64 +72,61 @@
       "userDataDir": true,
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
+      "runtimeArgs": ["--remote-debugging-port=9222"]
     },
     {
       "name": "auth",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "auth"
-      ],
+      "runtimeArgs": ["auth"],
       "console": "integratedTerminal"
     },
     {
       "name": "mail",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "mail"
-      ],
+      "runtimeArgs": ["mail"],
       "console": "integratedTerminal"
     },
     {
       "name": "issue-tracker",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "issue-tracker"
-      ],
+      "runtimeArgs": ["issue-tracker"],
       "console": "integratedTerminal"
     },
     {
       "name": "attachment",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "attachment"
-      ],
-      "console": "integratedTerminal",
+      "runtimeArgs": ["attachment"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "gateway",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["gateway"],
+      "console": "integratedTerminal"
     },
     {
       "name": "codegen: supergraph",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "gen"
-      ],
-      "console": "integratedTerminal",
+      "runtimeArgs": ["gen"],
+      "console": "integratedTerminal"
     }
   ]
 }

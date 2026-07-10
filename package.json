@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "A mono repo for web application that track issues in your projects",
   "scripts": {
-    "dev": "node scripts/dev.mjs",
     "dev:infra": "docker compose up -d",
     "dev:infra:down": "docker compose down",
     "dev:apps": "nx run-many -t dev --projects=client,auth,attachment,mail,issue-tracker,gateway --parallel=10",

@@ -15,7 +15,7 @@ import {
   Subjects,
 } from "@issue-tracker/event-bus";
 import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { JwtToken } from "@issue-tracker/security";
+import { JwtToken, hasUserIdentity } from "@issue-tracker/security";
 import {
   AwilixDi,
   CoreHttpServer,
@@ -81,17 +81,22 @@ const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
 const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
-  let token: any;
   if (accessToken) {
     try {
-      token = JwtToken.verify(accessToken, process.env.JWT_SECRET!);
+      const token = await JwtToken.verify(
+        accessToken,
+        process.env.JWT_SECRET!,
+      );
+      if (hasUserIdentity(token)) {
+        return {
+          req,
+          rep,
+          user: { email: token.email, userId: token.userId },
+        };
+      }
     } catch (error) {
       console.log(error);
     }
-  }
-
-  if (token) {
-    return { req, rep, user: { email: token.email, userId: token.userId } };
   }
 
   return { req, rep };

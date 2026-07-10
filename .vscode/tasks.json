@@ -10,11 +10,65 @@
   },
   "tasks": [
     {
+      "label": "dev:infra",
+      "type": "shell",
+      "command": "pnpm dev:infra",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "dev:infra:down",
+      "type": "shell",
+      "command": "pnpm dev:infra:down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "gql:compose",
+      "type": "shell",
+      "command": "pnpm gql:compose",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "dev:prepare",
+      "dependsOrder": "sequence",
+      "dependsOn": ["dev:infra", "gql:compose"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "dev:apps",
+      "type": "shell",
+      "command": "pnpm dev:apps",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
       "type": "shell",
       "label": "supergraph",
       "command": "rover dev --supergraph-config supergraph-config-dev.yaml --router-config router-config-dev.yaml",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": [],
-      "isBackground": true,
-    },
+      "isBackground": true
+    }
   ]
 }
