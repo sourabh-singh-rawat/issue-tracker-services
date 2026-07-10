@@ -1,5 +1,5 @@
 {
-  "name": "@issue-tracker-services/issue-tracker",
+  "name": "issue-tracker",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,6 +8,13 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc"
+  },
+  "nx": {
+    "targets": {
+      "dev": {
+        "continuous": true
+      }
+    }
   },
   "keywords": [],
   "author": "",

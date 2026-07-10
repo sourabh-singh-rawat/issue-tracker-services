@@ -1,13 +1,20 @@
 {
   "name": "mail",
   "version": "1.0.0",
-  "description": "Email management",
+  "description": "Mail",
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest --watchAll --verbose",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc"
+  },
+  "nx": {
+    "targets": {
+      "dev": {
+        "continuous": true
+      }
+    }
   },
   "repository": {
     "type": "git",
