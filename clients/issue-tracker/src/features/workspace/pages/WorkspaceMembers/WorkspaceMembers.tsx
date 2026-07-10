@@ -1,9 +1,9 @@
 import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import MemberModal from "../../components/MemberModal";
 
 export default function WorkspaceMembers() {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false }) as { id?: string };
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {

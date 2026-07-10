@@ -1,0 +1,43 @@
+mutation CreateItem($input: CreateItemInput!) {
+  createItem(input: $input)
+}
+
+mutation UpdateItem($input: UpdateItemInput!) {
+  updateItem(input: $input)
+}
+
+query FindItem($findItemId: String!) {
+  findItem(id: $findItemId) {
+    id
+    description
+    list {
+      id
+      name
+    }
+    parentItem {
+      id
+      name
+    }
+    name
+    statusId
+    priority
+  }
+}
+
+query FindListItems($listId: String!) {
+  findListItems(listId: $listId) {
+    description
+    id
+    name
+    statusId
+    priority
+  }
+}
+
+query FindSubItems($input: FindItemsInput!) {
+  findSubItems(input: $input) {
+    description
+    id
+    name
+  }
+}

@@ -3,22 +3,19 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Container from "@mui/material/Container";
 import Grid2 from "@mui/material/Grid2";
 
-import {
-  CreateWorkspaceInput,
-  useCreateWorkspaceMutation,
-} from "../../../../api/codegen/gql/graphql";
-import ModalFooter from "../../../../common/components/ModalFooter";
-import { TextField } from "../../../../common/components/forms";
+import type { CreateWorkspaceInput } from "@generated/gql/graphql";
+import { useCreateWorkspaceMutation } from "@generated/gql";
+import { ModalFooter, TextField } from "@common";
 
 interface WorkspaceFormProps {
   handleClose: () => void;
 }
 
 export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
-  const [createWorkspace] = useCreateWorkspaceMutation();
+  const { mutateAsync: createWorkspace } = useCreateWorkspaceMutation();
 
   const form = useForm<CreateWorkspaceInput>({
-    defaultValues: { displayName: "", description: "" },
+    defaultValues: { name: "", description: "" },
     mode: "all",
   });
 
@@ -26,7 +23,7 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
     name,
     description,
   }) => {
-    await createWorkspace({ variables: { input: { name, description } } });
+    await createWorkspace({ input: { name, description } });
     handleClose();
   };
 

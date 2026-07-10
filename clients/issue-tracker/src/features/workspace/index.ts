@@ -1,2 +1,3 @@
 export * from "./components";
-export * from "./workspace.slice";
+export * from "./store";
+

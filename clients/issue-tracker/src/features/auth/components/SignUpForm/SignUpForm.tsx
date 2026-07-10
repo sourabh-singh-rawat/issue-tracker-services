@@ -1,26 +1,20 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+import {
+  PasswordField,
+  PrimaryButton,
+  TextField,
+  useSnackbar,
+} from "@common";
 
 import { Container, Grid2, Typography } from "@mui/material";
 
-import {
-  RegisterUserInput,
-  useRegisterUserMutation,
-} from "../../../../api/codegen/gql/graphql";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { PasswordField, TextField } from "../../../../common/components/forms";
+import type { RegisterUserInput } from "@generated/gql/graphql";
+import { useRegisterUserMutation } from "@generated/gql";
 
 export const SignUpForm = () => {
   const snackbar = useSnackbar();
-  const [registerUser] = useRegisterUserMutation({
-    onCompleted(response) {
-      snackbar.success(response.registerUser);
-    },
-    onError(error) {
-      snackbar.error(error.message);
-    },
-  });
+  const { mutateAsync: registerUser } = useRegisterUserMutation();
 
   const form = useForm({
     defaultValues: { displayName: "", email: "", password: "" },
@@ -32,9 +26,16 @@ export const SignUpForm = () => {
     password,
     displayName,
   }) => {
-    await registerUser({
-      variables: { input: { email, password, displayName } },
-    });
+    try {
+      const response = await registerUser({
+        input: { email, password, displayName },
+      });
+      snackbar.success(response.registerUser);
+    } catch (error) {
+      snackbar.error(
+        error instanceof Error ? error.message : "Registration failed",
+      );
+    }
   };
 
   return (

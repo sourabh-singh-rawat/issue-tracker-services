@@ -1,9 +1,9 @@
 import { Grid2, Typography } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import { useAppSelector } from "../../../../common";
+import { Outlet } from "@tanstack/react-router";
+import { useAuthStore } from "@features/auth";
 
 export const HomePage = () => {
-  const current = useAppSelector((x) => x.auth.current);
+  const current = useAuthStore((s) => s.current);
 
   return (
     <Grid2 container>

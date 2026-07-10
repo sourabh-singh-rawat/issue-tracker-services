@@ -1,23 +1,42 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
+import dotenv from "dotenv";
+import path from "path";
+
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "http://localhost:4000/graphql",
-  documents: "src/api/**/*.gql",
+  schema: process.env.VITE_SUPERGRAPH_URL || "../../services/gateway/supergraph.graphql",
+  documents: ["src/api/graphql/operations/**/*.gql"],
+  ignoreNoDocuments: true,
   generates: {
-    "src/api/codegen/gql/graphql.ts": {
-      plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-react-apollo",
-      ],
+    "src/__generated__/gql/graphql.ts": {
+      plugins: ["typescript"],
+      config: {
+        scalars: {
+          DateTimeISO: "string",
+          JSON: "Record<string, unknown>",
+        },
+      },
     },
-  },
-  config: {
-    withHOC: false,
-    withComponent: false,
-    withHooks: true,
+    "src/__generated__/gql/hooks.ts": {
+      plugins: ["typescript-operations", "typescript-react-query"],
+      config: {
+        importSchemaTypesFrom: "./src/__generated__/gql/graphql",
+        exposeDocument: true,
+        exposeQueryKeys: true,
+        exposeMutationKeys: true,
+        addInfiniteQuery: false,
+        reactQueryVersion: 5,
+        fetcher: {
+          func: "../../api/graphql/client#customFetcher",
+          isReactHook: false,
+        },
+      },
+    },
   },
 };
 
 export default config;
+

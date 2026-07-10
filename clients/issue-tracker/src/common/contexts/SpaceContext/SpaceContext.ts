@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Status } from "../../../api";
+import type { Status } from "@generated/gql/graphql";
 
 const initialValue: { statuses: Status[] } = {
   statuses: [],

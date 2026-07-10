@@ -1,20 +1,26 @@
 import { Box, Container, Grid2, Toolbar, useTheme } from "@mui/material";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAppSelector, useLargeScreen } from "../../hooks";
+import { Navigate } from "@tanstack/react-router";
+import { useAuthStore } from "@features/auth";
+import { useWorkspaceStore } from "@features/workspace";
+import { useLargeScreen } from "../../hooks";
 import { AppLoader } from "../AppLoader";
 import { Navbar } from "../navigation/Navbar";
 import { Sidebar } from "../navigation/Sidebar";
 
-export const PrivateRoutes = () => {
-  const location = useLocation();
-  const user = useAppSelector((x) => x.auth);
+interface PrivateRoutesProps {
+  children?: React.ReactNode;
+}
+
+export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
+  const current = useAuthStore((s) => s.current);
+  const isLoading = useAuthStore((s) => s.isLoading);
   const theme = useTheme();
   const isLargeScreen = useLargeScreen();
-  const workspaceId = useAppSelector((x) => x.workspace.current?.id);
+  const workspaceId = useWorkspaceStore((s) => s.current?.id);
 
-  if (!user) return <AppLoader />;
+  if (isLoading) return <AppLoader />;
 
-  return user ? (
+  return current ? (
     <Box display="flex" height="100vh">
       <Navbar />
       <Sidebar />
@@ -30,14 +36,12 @@ export const PrivateRoutes = () => {
         <Toolbar variant="dense" disableGutters />
         {workspaceId && (
           <Grid2 container>
-            <Grid2 size={12}>
-              <Outlet />
-            </Grid2>
+            <Grid2 size={12}>{children}</Grid2>
           </Grid2>
         )}
       </Container>
     </Box>
   ) : (
-    <Navigate state={{ from: location }} to="/login" replace />
+    <Navigate to="/login" replace />
   );
 };

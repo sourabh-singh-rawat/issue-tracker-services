@@ -1,0 +1,23 @@
+mutation CreateWorkspace($input: CreateWorkspaceInput!) {
+  createWorkspace(input: $input)
+}
+
+query FindDefaultWorkspace {
+  findDefaultWorkspace {
+    createdById
+    description
+    id
+    name
+    status
+  }
+}
+
+query FindWorkspaces {
+  findWorkspaces {
+    description
+    id
+    name
+    createdById
+    status
+  }
+}

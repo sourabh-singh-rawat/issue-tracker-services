@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "./useAppSelector";
+import { useNavigate } from "@tanstack/react-router";
+import { useSpaceStore } from "../../features/space/store";
 
 export const useAppStore = () => {
   const navigate = useNavigate();
-  const currentList = useAppSelector((x) => x.space.currentList);
+  const currentList = useSpaceStore((s) => s.currentList);
 
   if (!currentList) {
-    navigate("/");
+    navigate({ to: "/" });
   }
 
   return { currentList };

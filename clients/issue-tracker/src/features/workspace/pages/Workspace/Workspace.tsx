@@ -1,16 +1,26 @@
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import PageHeader from "../../../../common/components/PageHeader";
-import { CustomTab, CustomTabs } from "../../../../common";
-import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import {
+  Outlet,
+  useNavigate,
+  useParams,
+  useRouterState,
+} from "@tanstack/react-router";
+import { createContext, useEffect, useState } from "react";
+import { CustomTab, CustomTabs } from "../../../../common";
+import PageHeader from "../../../../common/components/PageHeader";
+
+export const WorkspaceTabContext = createContext<{ selectedTab: number }>({
+  selectedTab: 0,
+});
 
 export default function Workspace() {
   const theme = useTheme();
-  const { id } = useParams();
+  const params = useParams({ strict: false }) as { id?: string };
+  const id = params.id;
   const navigate = useNavigate();
-  const location = useLocation();
-  const tabName = location.pathname.split("/")[3] || "settings";
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const tabName = pathname.split("/")[3] || "settings";
   const mapPathToIndex: Record<string, number> = {
     settings: 0,
     members: 1,
@@ -23,7 +33,8 @@ export default function Workspace() {
   const [selectedTab, setSelectedTab] = useState(selectedTabIndex);
 
   const handleChange = (e: unknown, newValue: number) => {
-    navigate(`${mapIndexToTab[newValue]}`);
+    const path = mapIndexToTab[newValue];
+    if (path) navigate({ to: path as "/me" });
     setSelectedTab(newValue);
   };
 
@@ -44,7 +55,9 @@ export default function Workspace() {
       </Grid>
 
       <Grid xs={12}>
-        <Outlet context={{ selectedTab }} />
+        <WorkspaceTabContext.Provider value={{ selectedTab }}>
+          <Outlet />
+        </WorkspaceTabContext.Provider>
       </Grid>
     </Grid>
   );

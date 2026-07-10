@@ -1,5 +1,7 @@
 import { Link as LinkComponent, useTheme } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { createLink } from "@tanstack/react-router";
+
+const CreatedLinkComponent = createLink(LinkComponent);
 
 interface LinkProps {
   to: string;
@@ -7,7 +9,7 @@ interface LinkProps {
 }
 
 /**
- * Custom Link component that uses router dom's Link to navigate to different routes
+ * Custom Link component that uses the router Link to navigate to different routes
  * @param props.to - The url to navigate to
  * @param props.children - The children element of link
  */
@@ -15,9 +17,8 @@ export const Link = ({ to, children }: LinkProps) => {
   const theme = useTheme();
 
   return (
-    <LinkComponent
-      to={to}
-      component={RouterLink}
+    <CreatedLinkComponent
+      to={to as "/"}
       onClick={(e) => e.stopPropagation()}
       underline="none"
       sx={{
@@ -28,6 +29,6 @@ export const Link = ({ to, children }: LinkProps) => {
       }}
     >
       {children}
-    </LinkComponent>
+    </CreatedLinkComponent>
   );
 };

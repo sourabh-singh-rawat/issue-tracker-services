@@ -5,7 +5,7 @@ import {
 } from "@mui/icons-material";
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { UpdateItemMutationOptions } from "../../../../api";
+import type { UpdateItemInput } from "@generated/gql/graphql";
 import { ItemPrioritySelector } from "../ItemPrioritySelector";
 import { ItemStatusSelector } from "../ItemStatusSelector";
 
@@ -14,7 +14,7 @@ interface ItemFieldsProps {
   listId: string;
   statusId: string;
   priority: string;
-  updateItem: (options: UpdateItemMutationOptions) => Promise<any>;
+  updateItem: (input: UpdateItemInput) => Promise<unknown>;
 }
 
 export const ItemFields = ({
@@ -38,7 +38,7 @@ export const ItemFields = ({
           listId={listId}
           name="statusId"
           onSubmit={async (value) => {
-            updateItem({ variables: { input: { itemId, statusId: value } } });
+            await updateItem({ itemId, statusId: value });
           }}
         />
       ),
@@ -51,7 +51,7 @@ export const ItemFields = ({
           form={priorityForm}
           name="priority"
           onSubmit={async (value) => {
-            updateItem({ variables: { input: { itemId, priority: value } } });
+            await updateItem({ itemId, priority: value });
           }}
           options={["Urgent", "High", "Normal", "Low"]}
         />

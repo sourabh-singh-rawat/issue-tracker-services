@@ -2,7 +2,8 @@ import TabPanel from "../../../../common/components/CustomTabPanel";
 
 import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
+import { useContext } from "react";
 import WorkspaceName from "../../components/WorkspaceName";
 
 import { ajvResolver } from "@hookform/resolvers/ajv";
@@ -10,11 +11,12 @@ import AjvFormats from "ajv-formats";
 import { useForm } from "react-hook-form";
 
 import WorkspaceDescription from "../../components/WorkspaceDescription";
+import { WorkspaceTabContext } from "../Workspace/Workspace";
 
 export default function WorkspaceSettings() {
   const theme = useTheme();
-  const { id } = useParams();
-  const { selectedTab } = useOutletContext<{ selectedTab: number }>();
+  const { id } = useParams({ strict: false }) as { id?: string };
+  const { selectedTab } = useContext(WorkspaceTabContext);
   // const [getWorkspace] = useLazyGetWorkspaceQuery();
   // const defaultValues: UpdateWorkspaceApiArg["body"] = async () => {
   // if (!id) return { name: "", description: "" };
