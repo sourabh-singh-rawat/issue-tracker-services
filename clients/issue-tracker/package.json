@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "React client for issue tracker",
   "private": "true",
   "main": "src/index.tsx",
@@ -8,7 +8,19 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "gen:rest": "npx @rtk-query/codegen-openapi codegen.rest.ts",
-    "gen": "graphql-codegen --config codegen.gql.ts --watch"
+    "gen": "graphql-codegen --config codegen.gql.ts --watch",
+    "gen:once": "graphql-codegen --config codegen.gql.ts"
+  },
+  "nx": {
+    "targets": {
+      "dev": {
+        "continuous": true
+      },
+      "gen": {
+        "continuous": true,
+        "cache": false
+      }
+    }
   },
   "repository": {
     "type": "git",

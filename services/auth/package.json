@@ -1,13 +1,21 @@
 {
   "name": "auth",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Authentication and authorization functionalities",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest --watchAll --logHeapUsage",
+    "test": "jest --passWithNoTests --forceExit --logHeapUsage",
+    "test:watch": "jest --watchAll --logHeapUsage",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc"
+  },
+  "nx": {
+    "targets": {
+      "dev": {
+        "continuous": true
+      }
+    }
   },
   "repository": {
     "type": "git",

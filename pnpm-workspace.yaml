@@ -11,5 +11,6 @@ allowBuilds:
   core-js: true
   esbuild: true
   msgpackr-extract: true
+  nx: true
   protobufjs: true
   sharp: true
