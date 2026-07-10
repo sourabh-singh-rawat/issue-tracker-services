@@ -8,7 +8,19 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "gen:rest": "npx @rtk-query/codegen-openapi codegen.rest.ts",
-    "gen": "graphql-codegen --config codegen.gql.ts --watch"
+    "gen": "graphql-codegen --config codegen.gql.ts --watch",
+    "gen:once": "graphql-codegen --config codegen.gql.ts"
+  },
+  "nx": {
+    "targets": {
+      "dev": {
+        "continuous": true
+      },
+      "gen": {
+        "continuous": true,
+        "cache": false
+      }
+    }
   },
   "repository": {
     "type": "git",

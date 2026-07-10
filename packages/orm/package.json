@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest --watchAll"
+    "test": "jest --passWithNoTests --forceExit",
+    "test:watch": "jest --watchAll"
   },
   "keywords": [],
   "author": "",

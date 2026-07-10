@@ -4,7 +4,8 @@
   "description": "Authentication and authorization functionalities",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest --watchAll --logHeapUsage",
+    "test": "jest --passWithNoTests --forceExit --logHeapUsage",
+    "test:watch": "jest --watchAll --logHeapUsage",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc"
