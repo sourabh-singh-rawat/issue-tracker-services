@@ -14,8 +14,8 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { Workspace } from "../../../../api/codegen/gql/graphql";
+import { useNavigate } from "@tanstack/react-router";
+import type { Workspace } from "@generated/gql/graphql";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
@@ -72,7 +72,7 @@ export const WorkspaceMenu = ({
           <MenuItem
             key={to}
             onClick={() => {
-              if (to) navigate(to);
+              if (to) navigate({ to: to as "/me" });
               handleClose();
             }}
             dense

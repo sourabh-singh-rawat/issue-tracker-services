@@ -5,8 +5,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { Grid2, IconButton, Typography, useTheme } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { UpdateItemInput, useUpdateItemMutation } from "../../../../api";
-import { TextField, useSnackbar } from "../../../../common/components";
+import type { UpdateItemInput } from "@generated/gql/graphql";
+import { useUpdateItemMutation } from "@generated/gql";
+import { TextField, useSnackbar } from "@common";
 
 interface ItemDescriptionProps {
   itemId: string;
@@ -15,9 +16,6 @@ interface ItemDescriptionProps {
 
 /**
  * Update the item description
- * @param props.itemId id of the item whose description is to be updated
- * @param props.initialValue value of the item description
- * @returns
  */
 export const ItemDescription = ({
   itemId,
@@ -28,11 +26,8 @@ export const ItemDescription = ({
   const form = useForm();
   const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [updateItem, { loading: isLoading }] = useUpdateItemMutation({
-    onCompleted() {
-      snackbar.success("Description updated successfully");
-    },
-  });
+  const { mutateAsync: updateItem, isPending: isLoading } =
+    useUpdateItemMutation();
 
   const handleClick = () => {
     setIsFocused(true);
@@ -50,7 +45,8 @@ export const ItemDescription = ({
   }) => {
     if (isLoading) return;
 
-    await updateItem({ variables: { input: { itemId, description } } });
+    await updateItem({ input: { itemId, description } });
+    snackbar.success("Description updated successfully");
     if (description) {
       setDefaultValue(description);
     }

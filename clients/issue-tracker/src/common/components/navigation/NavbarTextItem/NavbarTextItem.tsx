@@ -1,8 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material";
-import MuiTypography from "@mui/material/Typography";
 import MuiLink from "@mui/material/Link";
+import MuiTypography from "@mui/material/Typography";
+import { Link } from "@tanstack/react-router";
 
 export interface NavbarTextItemProps {
   to: string;
@@ -20,7 +19,10 @@ export default function NavbarTextItem({ to, label }: NavbarTextItemProps) {
         "&:hover": { color: theme.palette.primary.main },
       }}
     >
-      <Link to={to} style={{ textDecoration: "none", color: "inherit" }}>
+      <Link
+        to={to as "/"}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
         <MuiTypography fontWeight="500">{label}</MuiTypography>
       </Link>
     </MuiLink>

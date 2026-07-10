@@ -1,6 +1,0 @@
-query FindList($findListId: String!) {
-  findList(id: $findListId) {
-    id
-    name
-  }
-}

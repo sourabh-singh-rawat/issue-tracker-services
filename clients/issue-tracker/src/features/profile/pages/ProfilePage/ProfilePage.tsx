@@ -1,14 +1,14 @@
 import { Avatar, Grid2, Stack, Typography, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useAppSelector } from "../../../../common";
 import Button from "../../../../common/components/buttons/Button";
 import { TextField } from "../../../../common/components/forms";
+import { useAuthStore } from "@features/auth";
 import { UploadButton } from "../../../item/components/UploadButton";
 
 export const ProfilePage = () => {
   const theme = useTheme();
-  const { current } = useAppSelector((x) => x.auth);
+  const current = useAuthStore((s) => s.current);
   const form = useForm({ defaultValues: { displayName: "", email: "" } });
 
   useEffect(() => {

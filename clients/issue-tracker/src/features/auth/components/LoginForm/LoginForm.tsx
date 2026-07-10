@@ -1,30 +1,21 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { Grid2 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
+import type { SignInWithEmailAndPasswordInput } from "@generated/gql/graphql";
+import { useSignInWithEmailAndPasswordMutation } from "@generated/gql";
 import {
-  SignInWithEmailAndPasswordInput,
-  useSignInWithEmailAndPasswordMutation,
-} from "../../../../api/codegen/gql/graphql";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { PasswordField, TextField } from "../../../../common/components/forms";
+  PasswordField,
+  PrimaryButton,
+  TextField,
+  useSnackbar,
+} from "@common";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
   const snackbar = useSnackbar();
-
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPasswordMutation({
-    onError(error) {
-      snackbar.error(error.message);
-    },
-    onCompleted() {
-      snackbar.success("Success. You are being redirected");
-      setTimeout(() => {
-        navigate("/");
-      }, 2500);
-    },
-  });
+  const { mutateAsync: signInWithEmailAndPassword, isPending: loading } =
+    useSignInWithEmailAndPasswordMutation();
 
   const form = useForm({
     defaultValues: { email: "", password: "" },
@@ -34,7 +25,17 @@ export const LoginForm = () => {
   const onSubmit: SubmitHandler<SignInWithEmailAndPasswordInput> = async (
     input,
   ) => {
-    await signInWithEmailAndPassword({ variables: { input } });
+    try {
+      await signInWithEmailAndPassword({ input });
+      snackbar.success("Success. You are being redirected");
+      setTimeout(() => {
+        navigate({ to: "/" });
+      }, 2500);
+    } catch (error) {
+      snackbar.error(
+        error instanceof Error ? error.message : "Sign in failed",
+      );
+    }
   };
 
   return (
@@ -58,7 +59,12 @@ export const LoginForm = () => {
       </Grid2>
 
       <Grid2 size={12}>
-        <PrimaryButton type="submit" label="Continue" />
+        <PrimaryButton
+          type="submit"
+          label="Continue"
+          loading={loading}
+          isDisabled={loading}
+        />
       </Grid2>
     </Grid2>
   );

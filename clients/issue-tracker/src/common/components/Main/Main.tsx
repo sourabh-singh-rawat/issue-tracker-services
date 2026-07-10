@@ -1,66 +1,89 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 
 import MuiBox from "@mui/material/Box";
 import {
   useFindDefaultWorkspaceQuery,
-  useFindSpacesLazyQuery,
-  useFindWorkspacesLazyQuery,
+  useFindSpacesQuery,
+  useFindWorkspacesQuery,
   useGetCurrentUserQuery,
-} from "../../../api/codegen/gql/graphql";
-import { setCurrentUser } from "../../../features/auth/auth.slice";
-import { setSpaces } from "../../../features/space/space.slice";
-import {
-  setCurrentWorkspace,
-  setWorkspaces,
-} from "../../../features/workspace/workspace.slice";
-import { useAppDispatch } from "../../hooks";
+} from "@generated/gql";
+import { useAuthStore } from "@features/auth";
+import { useWorkspaceStore } from "@features/workspace";
+import { useSpaceStore } from "@features/space/store";
 import { AppLoader } from "../AppLoader";
 
-export function Main() {
-  const dispatch = useAppDispatch();
+interface MainProps {
+  children?: React.ReactNode;
+}
+
+export function Main({ children }: MainProps) {
   const navigate = useNavigate();
-  const location = useLocation();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
+  const setSpaces = useSpaceStore((s) => s.setSpaces);
+  const setCurrentWorkspace = useWorkspaceStore((s) => s.setCurrentWorkspace);
+  const setWorkspaces = useWorkspaceStore((s) => s.setWorkspaces);
 
-  const [findSpaces] = useFindSpacesLazyQuery({
-    onCompleted(response) {
-      dispatch(setSpaces(response.findSpaces));
-    },
+  const userQuery = useGetCurrentUserQuery(undefined, {
+    select: (data) => data.getCurrentUser ?? null,
   });
-  useFindDefaultWorkspaceQuery({
-    async onCompleted(response) {
-      const workspace = response.findDefaultWorkspace;
-      const workspaceId = workspace.id;
+  const workspacesQuery = useFindWorkspacesQuery(undefined, {
+    select: (data) => data.findWorkspaces,
+    enabled: userQuery.isSuccess,
+  });
+  const defaultWsQuery = useFindDefaultWorkspaceQuery(undefined, {
+    select: (data) => data.findDefaultWorkspace,
+    enabled: userQuery.isSuccess,
+  });
+  const spacesQuery = useFindSpacesQuery(
+    { input: { workspaceId: defaultWsQuery.data?.id! } },
+    {
+      select: (data) => data.findSpaces,
+      enabled: Boolean(defaultWsQuery.data?.id),
+    },
+  );
 
-      dispatch(setCurrentWorkspace(workspace));
+  useEffect(() => {
+    if (userQuery.data) {
+      setCurrentUser({ current: userQuery.data, isLoading: false });
+    }
+  }, [userQuery.data, setCurrentUser]);
 
-      await findSpaces({
-        variables: { input: { workspaceId } },
-      });
-    },
-  });
-  const [findWorkspaces] = useFindWorkspacesLazyQuery({
-    onCompleted(response) {
-      dispatch(setWorkspaces(response.findWorkspaces));
-    },
-  });
-  const { loading } = useGetCurrentUserQuery({
-    async onCompleted(response) {
-      dispatch(
-        setCurrentUser({ current: response.getCurrentUser, isLoading: false }),
-      );
-      await findWorkspaces();
-    },
-    onError() {
-      const url = location.pathname;
-      if (["/login", "/signup"].includes(url)) return;
+  useEffect(() => {
+    if (workspacesQuery.data) {
+      setWorkspaces(workspacesQuery.data);
+    }
+  }, [workspacesQuery.data, setWorkspaces]);
 
-      navigate("/login", { replace: true });
-    },
-  });
+  useEffect(() => {
+    if (defaultWsQuery.data) {
+      setCurrentWorkspace(defaultWsQuery.data);
+    }
+  }, [defaultWsQuery.data, setCurrentWorkspace]);
+
+  useEffect(() => {
+    if (spacesQuery.data) {
+      setSpaces(spacesQuery.data);
+    }
+  }, [spacesQuery.data, setSpaces]);
+
+  useEffect(() => {
+    if (!userQuery.isError) return;
+    if (["/login", "/signup"].includes(pathname)) return;
+    navigate({ to: "/login", replace: true });
+  }, [userQuery.isError, pathname, navigate]);
+
+  const loading =
+    userQuery.isPending ||
+    (userQuery.isSuccess &&
+      (defaultWsQuery.isPending ||
+        workspacesQuery.isPending ||
+        (Boolean(defaultWsQuery.data?.id) && spacesQuery.isPending)));
 
   return (
     <MuiBox width="100vw" height="100vh">
-      {loading ? <AppLoader /> : <Outlet />}
+      {loading ? <AppLoader /> : children}
     </MuiBox>
   );
 }

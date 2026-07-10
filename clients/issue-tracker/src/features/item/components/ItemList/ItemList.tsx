@@ -9,13 +9,11 @@ import {
   GridRenderCellParams,
   GridValidRowModel,
 } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
 import {
-  useFindListItemsLazyQuery,
-  useFindSubItemsLazyQuery,
-} from "../../../../api";
-import { DataGrid } from "../../../../common";
-import { Link } from "../../../../common/components/base";
+  useFindListItemsQuery,
+  useFindSubItemsQuery,
+} from "@generated/gql";
+import { DataGrid, Link } from "@common";
 
 interface ItemListProps {
   itemId?: string;
@@ -32,23 +30,26 @@ interface ItemListStyles {
 
 /**
  * Shows items in a list or sub items in an item
- * @param props.itemId If provided, this will fetch sub items inside item
- * @param props.listId If provided, this will fetch only immediate list items
- * @param props.filters If provided, this will filter items using some criteria
- * @param props.style Style properties
  */
 export const ItemList = ({ itemId, listId, style }: ItemListProps) => {
-  const [rows, setRows] = useState<GridValidRowModel[]>([]);
-  const [findListItems] = useFindListItemsLazyQuery({
-    onCompleted(response) {
-      setRows(response.findListItems);
+  const listItems = useFindListItemsQuery(
+    { listId: listId! },
+    {
+      select: (data) => data.findListItems,
+      enabled: Boolean(listId) && !itemId,
     },
-  });
-  const [findSubItems] = useFindSubItemsLazyQuery({
-    onCompleted(response) {
-      setRows(response.findSubItems);
+  );
+  const subItems = useFindSubItemsQuery(
+    { input: { parentItemId: itemId! } },
+    {
+      select: (data) => data.findSubItems,
+      enabled: Boolean(itemId),
     },
-  });
+  );
+  const rows: GridValidRowModel[] = itemId
+    ? (subItems.data ?? [])
+    : (listItems.data ?? []);
+
   const columns: GridColDef<GridValidRowModel>[] = [
     {
       field: "name",
@@ -87,14 +88,6 @@ export const ItemList = ({ itemId, listId, style }: ItemListProps) => {
       },
     },
   ];
-
-  useEffect(() => {
-    if (itemId) {
-      findSubItems({ variables: { input: { parentItemId: itemId } } });
-    } else if (listId) {
-      findListItems({ variables: { listId } });
-    }
-  }, [itemId, listId]);
 
   return (
     <DataGrid

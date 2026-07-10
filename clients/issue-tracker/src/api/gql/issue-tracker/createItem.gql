@@ -1,3 +1,0 @@
-mutation CreateItem($input: CreateItemInput!) {
-  createItem(input: $input)
-}

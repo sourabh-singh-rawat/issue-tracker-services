@@ -1,6 +1,10 @@
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
-import { useFindItemQuery, useUpdateItemMutation } from "../../../../api";
-import { useItemParams, useSnackbar } from "../../../../common";
+import {
+  useFindItemQuery,
+  useUpdateItemMutation,
+} from "@generated/gql";
+import type { UpdateItemInput } from "@generated/gql/graphql";
+import { useItemParams, useSnackbar } from "@common";
 import {
   ItemAttachments,
   ItemDescription,
@@ -14,41 +18,47 @@ export const ItemPage = () => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { itemId } = useItemParams();
-  const { data: item } = useFindItemQuery({
-    variables: { findItemId: itemId },
-    skip: !itemId,
-  });
-  const [updateItem] = useUpdateItemMutation({
-    onCompleted(response) {
+  const { data: item } = useFindItemQuery(
+    { findItemId: itemId! },
+    {
+      select: (data) => data.findItem ?? null,
+      enabled: Boolean(itemId),
+    },
+  );
+  const { mutateAsync: updateItemMutation } = useUpdateItemMutation();
+
+  const updateItem = async (input: UpdateItemInput) => {
+    try {
+      const response = await updateItemMutation({ input });
       snackbar.success(response.updateItem);
-    },
-    onError(error) {
-      snackbar.error(error.message);
-    },
-  });
+      return response;
+    } catch (error) {
+      snackbar.error(
+        error instanceof Error ? error.message : "Failed to update item",
+      );
+      throw error;
+    }
+  };
 
   return (
     <Grid2 container rowGap={4} sx={{ px: theme.spacing(4) }}>
       <Grid2 size={12}>
-        <ItemName itemId={itemId} initialValue={item?.findItem?.name} />
+        <ItemName itemId={itemId} initialValue={item?.name} />
       </Grid2>
-      {item?.findItem && itemId && (
+      {item && itemId && (
         <Grid2 size={12}>
           <ItemFields
             itemId={itemId}
-            listId={item.findItem.list.id}
-            statusId={item.findItem.statusId}
-            priority={item.findItem.priority}
+            listId={item.list.id}
+            statusId={item.statusId}
+            priority={item.priority}
             updateItem={updateItem}
           />
         </Grid2>
       )}
 
       <Grid2 size={12}>
-        <ItemDescription
-          itemId={itemId}
-          initialValue={item?.findItem?.description}
-        />
+        <ItemDescription itemId={itemId} initialValue={item?.description} />
       </Grid2>
 
       <Grid2 size={12}>
@@ -57,16 +67,16 @@ export const ItemPage = () => {
         </Typography>
       </Grid2>
 
-      {item?.findItem?.list.id && item?.findItem && (
+      {item?.list.id && item && (
         <Grid2 size={12}>
           <Stack spacing={1}>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="body1" fontWeight="600">
                 Sub Items
               </Typography>
-              <ItemModal listId={item?.findItem.list.id} />
+              <ItemModal listId={item.list.id} />
             </Stack>
-            <ItemList itemId={item.findItem.id} style={{ showBorder: true }} />
+            <ItemList itemId={item.id} style={{ showBorder: true }} />
           </Stack>
         </Grid2>
       )}

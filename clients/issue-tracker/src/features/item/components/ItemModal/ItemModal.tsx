@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import Modal from "../../../../common/components/Modal";
 import ModalBody from "../../../../common/components/ModalBody";
 import ModalHeader from "../../../../common/components/ModalHeader";
@@ -14,7 +14,7 @@ export const ItemModal = ({ listId }: ItemModalProps) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
-  const { itemId } = useParams();
+  const { itemId } = useParams({ strict: false });
 
   return (
     <>
