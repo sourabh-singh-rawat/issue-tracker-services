@@ -1,6 +1,6 @@
 {
   "name": "issue-tracker",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "A mono repo for web application that track issues in your projects",
   "scripts": {
     "dev": "node scripts/dev.mjs",

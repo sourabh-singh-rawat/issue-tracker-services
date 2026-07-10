@@ -1,6 +1,6 @@
 {
   "name": "auth",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Authentication and authorization functionalities",
   "main": "./src/index.ts",
   "scripts": {
