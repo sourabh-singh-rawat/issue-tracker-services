@@ -74,7 +74,7 @@ export class CoreHttpServer implements HttpServer {
       handler: fastifyApolloHandler(apollo, { context: createContext }),
     });
 
-    logger?.info(`🚀 [GraphQL] server is configured at ${host}:${port}${url}`);
+    // logger?.info(`🚀 [GraphQL] server is configured at ${host}:${port}${url}`);
   }
 
   async start() {

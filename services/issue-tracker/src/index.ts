@@ -161,7 +161,7 @@ const main = async () => {
     server: instance,
     config: {
       host: "0.0.0.0",
-      port: parseInt(process.env.ISSUE_TRACKER_SERVICE_PORT!),
+      port: Number.parseInt(process.env.ISSUE_TRACKER_SERVICE_PORT!),
       environment: process.env.NODE_ENV as Environment,
       version: 1,
     },
