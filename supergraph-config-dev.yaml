@@ -1,14 +1,15 @@
 federation_version: =2.8.1
 subgraphs:
   attachment:
-    routing_url: http://localhost:5002/api/graphql
+    # Use 127.0.0.1 (not localhost) so Node does not prefer IPv6 ::1 on Windows
+    routing_url: http://127.0.0.1:4003/graphql
     schema:
       file: ./services/attachment/schema.graphql
   auth:
-    routing_url: http://localhost:5000/api/graphql
+    routing_url: http://127.0.0.1:4001/graphql
     schema:
       file: ./services/auth/schema.graphql
   issue-tracker:
-    routing_url: http://localhost:5001/api/graphql
+    routing_url: http://127.0.0.1:4002/graphql
     schema:
       file: ./services/issue-tracker/schema.graphql

@@ -8,7 +8,12 @@ import {
   UserNotFoundError,
 } from "@issue-tracker/common";
 import { NatsPublisher } from "@issue-tracker/event-bus";
-import { AccessToken, Hash, JwtToken } from "@issue-tracker/security";
+import {
+  AccessToken,
+  Hash,
+  JwtToken,
+  hasVerificationClaims,
+} from "@issue-tracker/security";
 import { v4 } from "uuid";
 import { User, VerificationLink } from "../../data/entities";
 import {
@@ -62,7 +67,7 @@ export class CoreUserAuthenticationService
     private readonly userProfileService: UserProfileService,
   ) {}
 
-  private createUserAccessToken(options: CreateUserAccessTokenOptions) {
+  private async createUserAccessToken(options: CreateUserAccessTokenOptions) {
     const { user, iat, exp } = options;
     const { createdAt, email, emailVerificationStatus, id, profile } = user;
     const { displayName } = profile;
@@ -87,7 +92,7 @@ export class CoreUserAuthenticationService
     return JwtToken.create(payload, secret);
   }
 
-  private createUserRefreshToken(options: CreateUserRefreshTokenOptions) {
+  private async createUserRefreshToken(options: CreateUserRefreshTokenOptions) {
     const { user, exp } = options;
     const { createdAt, email, emailVerificationStatus, id, profile } = user;
     const { displayName } = profile;
@@ -111,14 +116,16 @@ export class CoreUserAuthenticationService
     return JwtToken.create(payload, secret);
   }
 
-  private createVerificationToken(options: CreateVerificationTokenOptions) {
+  private async createVerificationToken(
+    options: CreateVerificationTokenOptions,
+  ) {
     const { userId, tokenId, expiresIn } = options;
     if (!userId) throw new RequiredFieldError("userId");
     if (!expiresIn) throw new RequiredFieldError("expiresIn");
 
     const iat = Math.floor(Date.now() / 1000);
     const exp = iat + expiresIn;
-    const verificationToken = JwtToken.create(
+    const verificationToken = await JwtToken.create(
       {
         sub: "@issue-tracker/auth",
         iss: "@issue-tracker/auth",
@@ -134,11 +141,13 @@ export class CoreUserAuthenticationService
     return verificationToken;
   }
 
-  private createVerificationLink(options: CreateVerificationLinkOptions) {
+  private async createVerificationLink(
+    options: CreateVerificationLinkOptions,
+  ) {
     const { userId } = options;
     const tokenId = v4();
     const expiresIn = 24 * 60 * 60;
-    const verificationToken = this.createVerificationToken({
+    const verificationToken = await this.createVerificationToken({
       expiresIn,
       userId,
       tokenId,
@@ -210,8 +219,8 @@ export class CoreUserAuthenticationService
     const iat = Math.floor(Date.now() / 1000);
     const exp = iat + 60 * 60 * 10000000;
     return {
-      accessToken: this.createUserAccessToken({ user, iat, exp }),
-      refreshToken: this.createUserRefreshToken({
+      accessToken: await this.createUserAccessToken({ user, iat, exp }),
+      refreshToken: await this.createUserRefreshToken({
         user,
         iat,
         exp: exp + 60 * 60 * 24 * 7,
@@ -234,7 +243,7 @@ export class CoreUserAuthenticationService
   async sendVerificationLinkToEmail(options: SendEmailVerificationLinkOptions) {
     const { userId, displayName, email, manager } = options;
     const VerificationLinkRepo = manager.getRepository(VerificationLink);
-    const { link, token } = this.createVerificationLink({ userId });
+    const { link, token } = await this.createVerificationLink({ userId });
 
     if (!link || !token) {
       throw new RequiredFieldError("Failed to generated verification link");
@@ -276,7 +285,13 @@ export class CoreUserAuthenticationService
     const UserRepo = manager.getRepository(User);
     const VerificationLinkRepo = manager.getRepository(VerificationLink);
 
-    const verifiedToken = JwtToken.verify<any>(token, process.env.JWT_SECRET!);
+    const verifiedToken = await JwtToken.verify(
+      token,
+      process.env.JWT_SECRET!,
+    );
+    if (!hasVerificationClaims(verifiedToken)) {
+      throw new Error("Invalid Token");
+    }
     const { userId, tokenId } = verifiedToken;
 
     const savedToken = await VerificationLinkRepo.findOneOrFail({

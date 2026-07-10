@@ -16,7 +16,7 @@ type Mutation {
 }
 
 type Query {
-  getCurrentUser: User!
+  getCurrentUser: User
 }
 
 input RegisterUserInput {

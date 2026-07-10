@@ -8,7 +8,7 @@ import swagger from "@fastify/swagger";
 import { QUEUE } from "@issue-tracker/common";
 import { Broker } from "@issue-tracker/event-bus";
 import { Typeorm } from "@issue-tracker/orm";
-import { Auth, JwtToken } from "@issue-tracker/security";
+import { Auth, JwtToken, hasUserIdentity } from "@issue-tracker/security";
 import {
   AwilixDi,
   CoreHttpServer,
@@ -68,19 +68,22 @@ container.add("attachmentService", asClass(CoreAttachmentService));
 const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
-  let token: any;
   if (accessToken) {
     try {
-      token = JwtToken.verify(accessToken, process.env.JWT_SECRET!);
+      const token = await JwtToken.verify(
+        accessToken,
+        process.env.JWT_SECRET!,
+      );
+      if (hasUserIdentity(token)) {
+        return {
+          req,
+          rep,
+          user: { email: token.email, userId: token.userId },
+        };
+      }
     } catch (error) {
       console.log(error);
     }
-  }
-
-  token;
-
-  if (token) {
-    return { req, rep, user: { email: token.email, userId: token.userId } };
   }
 
   return { req, rep };
@@ -146,7 +149,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
             url: "https://opensource.org/license/isc-license-txt",
           },
         },
-        servers: [{ url: "http://localhost:5000" }],
+        servers: [{ url: "http://localhost:4003" }],
         tags: [
           { name: "attachment", description: "Attachment related end-points" },
         ],

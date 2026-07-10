@@ -41,14 +41,14 @@ paths:
               schema:
                 type: string
                 description: Bad request
-  /api/graphql:
+  /graphql:
     post: &a1
       responses:
         "200":
           description: Default Response
     get: *a1
 servers:
-  - url: http://localhost:5000
+  - url: http://localhost:4003
 tags:
   - name: attachment
     description: Attachment related end-points
