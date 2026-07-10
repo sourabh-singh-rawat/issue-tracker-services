@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import TextField from "../../../../common/components/forms/TextField";
@@ -14,7 +14,7 @@ import { ajvResolver } from "@hookform/resolvers/ajv";
 import AjvFormats from "ajv-formats";
 
 export default function WorkspaceMemberForm() {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false }) as { id?: string };
   const { data: roleList } = useGetWorkspaceRoleListQuery();
   const [createWorkspaceInvite, { isLoading }] =
     useCreateWorkspaceInviteMutation();

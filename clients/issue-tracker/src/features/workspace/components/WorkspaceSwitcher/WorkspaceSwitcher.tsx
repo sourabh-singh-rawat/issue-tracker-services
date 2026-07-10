@@ -13,14 +13,16 @@ import React, { useState } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useAppSelector } from "../../../../common/hooks";
+import { useWorkspaceStore } from "../../store";
 import { WorkspaceMenu } from "../WorkspaceMenu";
 
 export default function WorkspaceSwitcher() {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { workspaces, current, isLoading } = useAppSelector((s) => s.workspace);
+  const workspaces = useWorkspaceStore((s) => s.workspaces);
+  const current = useWorkspaceStore((s) => s.current);
+  const isLoading = useWorkspaceStore((s) => s.isLoading);
 
   const handleClick = (e: React.FormEvent<HTMLDivElement>) => {
     setAnchorEl(e.currentTarget);

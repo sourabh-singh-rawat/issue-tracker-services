@@ -1,18 +1,13 @@
 import { Grid2 } from "@mui/material";
 import MuiContainer from "@mui/material/Container";
 import dayjs from "dayjs";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import type { CreateItemInput } from "@generated/gql/graphql";
 import {
-  CreateItemInput,
-  ListCustomField,
   useCreateItemMutation,
   useFindCustomFieldsQuery,
-} from "../../../../api/codegen/gql/graphql";
-import DatePicker from "../../../../common/components/DatePicker";
-import { useSnackbar } from "../../../../common/components/Snackbar";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { TextField } from "../../../../common/components/forms";
+} from "@generated/gql";
+import { DatePicker, PrimaryButton, TextField, useSnackbar } from "@common";
 import { ItemPrioritySelector } from "../ItemPrioritySelector";
 import { ItemStatusSelector } from "../ItemStatusSelector";
 
@@ -23,21 +18,11 @@ interface ItemFormProps {
 
 export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
   const messageBar = useSnackbar();
-  const [customFields, setCustomFields] = useState<ListCustomField[]>([]);
-  const [createItem] = useCreateItemMutation({
-    onCompleted() {
-      messageBar.success("Item created successfully");
-    },
-    onError(error) {
-      messageBar.error(error.message);
-    },
-  });
-  useFindCustomFieldsQuery({
-    variables: { options: { listId } },
-    onCompleted(response) {
-      setCustomFields(response.findCustomFields);
-    },
-  });
+  const { mutateAsync: createItem } = useCreateItemMutation();
+  useFindCustomFieldsQuery(
+    { options: { listId } },
+    { enabled: Boolean(listId) },
+  );
 
   const form = useForm<CreateItemInput>({
     defaultValues: {
@@ -54,20 +39,19 @@ export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
   const onSubmit: SubmitHandler<CreateItemInput> = async ({
     name,
     description,
-    listId,
-    parentItemId,
-    type,
+    listId: formListId,
+    parentItemId: formParentItemId,
     assigneeIds,
     priority,
     statusId,
     dueDate,
     ...fields
   }) => {
-    await createItem({
-      variables: {
+    try {
+      await createItem({
         input: {
-          parentItemId,
-          listId,
+          parentItemId: formParentItemId,
+          listId: formListId,
           name,
           description,
           type: "issue",
@@ -77,8 +61,13 @@ export const ItemForm = ({ listId, parentItemId }: ItemFormProps) => {
           dueDate: dueDate ? dayjs(dueDate).format() : null,
           fields,
         },
-      },
-    });
+      });
+      messageBar.success("Item created successfully");
+    } catch (error) {
+      messageBar.error(
+        error instanceof Error ? error.message : "Failed to create item",
+      );
+    }
   };
 
   return (

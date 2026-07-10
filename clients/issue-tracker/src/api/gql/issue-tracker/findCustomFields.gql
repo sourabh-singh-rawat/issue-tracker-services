@@ -1,7 +1,0 @@
-query FindCustomFields($options: FindCustomFieldsOptions!) {
-  findCustomFields(options: $options) {
-    customFieldId
-    id
-    listId
-  }
-}

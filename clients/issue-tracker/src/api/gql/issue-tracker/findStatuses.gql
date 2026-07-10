@@ -1,6 +1,0 @@
-query FindStatuses($input: FindStatusesOptions!) {
-  findStatuses(input: $input) {
-    id
-    name
-  }
-}

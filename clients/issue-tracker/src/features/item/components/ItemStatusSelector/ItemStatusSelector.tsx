@@ -10,9 +10,8 @@ import {
   UseControllerProps,
   UseFormReturn,
 } from "react-hook-form";
-import { useFindStatusesQuery } from "../../../../api";
-import Select from "../../../../common/components/Select";
-import { Label } from "../../../../common/components/forms";
+import { useFindStatusesQuery } from "@generated/gql";
+import { Label, Select } from "@common";
 
 interface ItemStatusSelectorProps<T extends FieldValues> {
   listId: string;
@@ -25,9 +24,7 @@ interface ItemStatusSelectorProps<T extends FieldValues> {
 }
 
 /**
- * Reusable item status selector component. Can be used in item forms and to update item status
- * @param props.listId The list id to fetch available statuses
- * @returns
+ * Reusable item status selector component.
  */
 export const ItemStatusSelector = <T extends FieldValues>({
   listId,
@@ -39,10 +36,13 @@ export const ItemStatusSelector = <T extends FieldValues>({
   helperText,
 }: ItemStatusSelectorProps<T>) => {
   const isLoading = false;
-  const { data: statuses } = useFindStatusesQuery({
-    variables: { input: { listId } },
-    skip: !listId,
-  });
+  const { data: statuses } = useFindStatusesQuery(
+    { input: { listId } },
+    {
+      select: (data) => data.findStatuses,
+      enabled: Boolean(listId),
+    },
+  );
 
   return (
     <Grid2 container>
@@ -64,7 +64,7 @@ export const ItemStatusSelector = <T extends FieldValues>({
                 <Select
                   name={field.name}
                   value={field.value}
-                  options={statuses?.findStatuses || []}
+                  options={statuses || []}
                   onChange={(e) => {
                     if (!e.target.value) return;
                     if (onSubmit) onSubmit(e.target.value as string);

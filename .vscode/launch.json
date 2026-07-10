@@ -29,6 +29,21 @@
       ]
     },
     {
+      "name": "dev + browser",
+      "stopAll": true,
+      "preLaunchTask": "dev:prepare",
+      "configurations": [
+        "auth",
+        "issue-tracker",
+        "attachment",
+        "mail",
+        "gateway",
+        "issue-tracker (client)",
+        "client (browser)",
+        "codegen: supergraph"
+      ]
+    },
+    {
       "name": "dev (linux + browser)",
       "stopAll": true,
       "preLaunchTask": "dev:prepare",
@@ -55,6 +70,62 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "issue-tracker (client + browser)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["client"],
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "webRoot": "${workspaceFolder}/clients/issue-tracker"
+      }
+    },
+    {
+      "name": "client (browser)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "sourceMaps": true,
+      "userDataDir": true,
+      "pathMapping": {
+        "/@fs": ""
+      },
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/src/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*",
+        "webpack:///*": "*",
+        "/@fs/*": "/*",
+        "/src/*": "${webRoot}/src/*"
+      }
+    },
+    {
+      "name": "client (browser - edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "sourceMaps": true,
+      "userDataDir": true,
+      "pathMapping": {
+        "/@fs": ""
+      },
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/src/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*",
+        "webpack:///*": "*",
+        "/@fs/*": "/*",
+        "/src/*": "${webRoot}/src/*"
+      }
+    },
+    {
       "name": "brave (debug - scoop)",
       "request": "launch",
       "type": "chrome",
@@ -62,7 +133,8 @@
       "userDataDir": true,
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": ["--remote-debugging-port=9222"]
+      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "sourceMaps": true
     },
     {
       "name": "brave (debug)",
@@ -72,7 +144,8 @@
       "userDataDir": true,
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": ["--remote-debugging-port=9222"]
+      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "sourceMaps": true
     },
     {
       "name": "auth",

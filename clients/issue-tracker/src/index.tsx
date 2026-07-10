@@ -1,38 +1,26 @@
-import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-  from,
-} from "@apollo/client";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
 
-import { store } from "./app/stores/redux.store";
-import { theme } from "./app/themes/mui.theme";
+import { createAppQueryClient } from "./core/query-client";
+import { store } from "./core/stores/redux.store";
+import { theme } from "./core/themes/mui.theme";
 
-import App from "./app/App";
+import App from "./core/App";
 import { SnackbarContent } from "./common/components/Snackbar";
 
 const element = document.getElementById("root");
 if (!element) throw new Error("Cannot find root element in DOM");
 
 const root = createRoot(element);
-const httpLink = new HttpLink({
-  uri: import.meta.env.VITE_SUPERGRAPH_URL,
-  credentials: "include",
-});
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: from([httpLink]),
-});
+const queryClient = createAppQueryClient();
 
 root.render(
-  <ApolloProvider client={client}>
+  <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
       <SnackbarProvider
         Components={{ success: SnackbarContent, error: SnackbarContent }}
@@ -41,12 +29,11 @@ root.render(
         autoHideDuration={2000}
       >
         <Provider store={store}>
-          <BrowserRouter>
-            <CssBaseline />
-            <App />
-          </BrowserRouter>
+          <CssBaseline />
+          <App />
         </Provider>
       </SnackbarProvider>
     </ThemeProvider>
-  </ApolloProvider>,
+    {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+  </QueryClientProvider>,
 );

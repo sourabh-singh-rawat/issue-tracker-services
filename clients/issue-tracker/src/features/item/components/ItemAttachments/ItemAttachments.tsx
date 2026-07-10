@@ -10,14 +10,14 @@ import {
 import MuiImageList from "@mui/material/ImageList";
 import { Stack } from "@mui/system";
 import { GridDeleteIcon } from "@mui/x-data-grid";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import {
   useDeleteAttachmentMutation,
   useFindAttachmentsQuery,
-} from "../../../../api/codegen/gql/graphql";
-import { useCreateAttachmentMutation } from "../../../../api/codegen/rest/attachment.api";
-import { AppLoader } from "../../../../common/components/AppLoader";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
+} from "@generated/gql";
+import { useCreateAttachmentMutation } from "@api";
+import { AppLoader, useSnackbar } from "@common";
 import { ImageCard } from "../ImageCard";
 
 const VisuallyHiddenInput = styled(Input)({
@@ -38,26 +38,23 @@ interface ItemAttachmentProps {
 
 /**
  * Used to upload attachments
- * @param props.itemId Id of item that this attachment belongs to
  */
 export const ItemAttachments = ({ itemId }: ItemAttachmentProps) => {
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
   const [createAttachment, { isLoading }] = useCreateAttachmentMutation();
-  const { data: attachments, refetch } = useFindAttachmentsQuery({
-    variables: { itemId },
-    fetchPolicy: "network-only",
-  });
-  const [deleteAttachment] = useDeleteAttachmentMutation({
-    onCompleted(response) {
-      snackbar.success(response.deleteAttachment);
-      refetch();
+  const { data: attachments } = useFindAttachmentsQuery(
+    { itemId },
+    {
+      select: (data) => data.findAttachments,
+      enabled: Boolean(itemId),
+      staleTime: 0,
+      refetchOnMount: "always",
     },
-    onError(error) {
-      snackbar.error(error.message);
-    },
-  });
+  );
+  const { mutateAsync: deleteAttachment } = useDeleteAttachmentMutation();
 
   return (
     <>
@@ -100,7 +97,9 @@ export const ItemAttachments = ({ itemId }: ItemAttachmentProps) => {
               formData.append("files", file);
 
               await createAttachment({ itemId, body: formData as any });
-              refetch();
+              void queryClient.invalidateQueries({
+                queryKey: useFindAttachmentsQuery.getKey({ itemId }),
+              });
             }}
           />
         </IconButton>
@@ -112,14 +111,23 @@ export const ItemAttachments = ({ itemId }: ItemAttachmentProps) => {
         variant="quilted"
       >
         {(attachments &&
-          attachments.findAttachments.rows.map(({ id, thumbnailLink }) => (
+          attachments.rows.map(({ id, thumbnailLink }) => (
             <div key={id}>
               <ImageCard key={id} path={thumbnailLink} />
               <IconButton
                 onClick={async () => {
-                  await deleteAttachment({
-                    variables: { deleteAttachmentId: id },
-                  });
+                  try {
+                    const response = await deleteAttachment({
+                      deleteAttachmentId: id,
+                    });
+                    snackbar.success(response.deleteAttachment);
+                  } catch (error) {
+                    snackbar.error(
+                      error instanceof Error
+                        ? error.message
+                        : "Failed to delete attachment",
+                    );
+                  }
                 }}
               >
                 <GridDeleteIcon />

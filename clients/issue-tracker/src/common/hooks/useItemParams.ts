@@ -1,7 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 
 export const useItemParams = () => {
-  const { itemId } = useParams<{ itemId: string }>();
+  const { itemId } = useParams({ strict: false });
 
   if (!itemId) throw new Error("Item ID is required");
 

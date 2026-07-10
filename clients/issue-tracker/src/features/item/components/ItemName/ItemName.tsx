@@ -7,8 +7,9 @@ import { alpha, styled, useTheme } from "@mui/material/styles";
 import MuiTextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { UpdateItemInput, useUpdateItemMutation } from "../../../../api";
-import { TextField, useSnackbar } from "../../../../common";
+import type { UpdateItemInput } from "@generated/gql/graphql";
+import { useUpdateItemMutation } from "@generated/gql";
+import { TextField, useSnackbar } from "@common";
 
 const TitleTextField = styled(MuiTextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -50,7 +51,6 @@ interface ItemNameProps {
 /**
  * Update the item name
  * @param props.itemId The id of the item to update
- * @returns
  */
 export const ItemName = ({ itemId, initialValue = "" }: ItemNameProps) => {
   const theme = useTheme();
@@ -58,11 +58,8 @@ export const ItemName = ({ itemId, initialValue = "" }: ItemNameProps) => {
   const form = useForm();
   const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [updateItem, { loading: isLoading }] = useUpdateItemMutation({
-    onCompleted() {
-      snackbar.success("Name updated successfully");
-    },
-  });
+  const { mutateAsync: updateItem, isPending: isLoading } =
+    useUpdateItemMutation();
 
   const handleClick = () => {
     setIsFocused(true);
@@ -80,7 +77,8 @@ export const ItemName = ({ itemId, initialValue = "" }: ItemNameProps) => {
   }) => {
     if (isLoading) return;
 
-    await updateItem({ variables: { input: { itemId, name } } });
+    await updateItem({ input: { itemId, name } });
+    snackbar.success("Name updated successfully");
 
     if (name) setDefaultValue(name);
 

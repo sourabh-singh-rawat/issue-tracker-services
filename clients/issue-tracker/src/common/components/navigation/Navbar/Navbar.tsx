@@ -1,5 +1,5 @@
 import { Box, Grid2, styled, Toolbar, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 import MuiBugReportIcon from "@mui/icons-material/BugReport";
 import MuiAppBar from "@mui/material/AppBar";

@@ -2,14 +2,10 @@ import MuiContainer from "@mui/material/Container";
 import Grid2 from "@mui/material/Grid2";
 import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import {
-  CreateListInput,
-  useCreateListMutation,
-} from "../../../../api/codegen/gql/graphql";
-import { useSnackbar } from "../../../../common/components/Snackbar/hooks";
-import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
-import { TextField } from "../../../../common/components/forms";
+import { useNavigate } from "@tanstack/react-router";
+import type { CreateListInput } from "@generated/gql/graphql";
+import { useCreateListMutation } from "@generated/gql";
+import { PrimaryButton, TextField, useSnackbar } from "@common";
 
 interface ListFormProps {
   spaceId: string;
@@ -18,21 +14,11 @@ interface ListFormProps {
 export const ListForm = ({ spaceId }: ListFormProps) => {
   const navigate = useNavigate();
   const messageBar = useSnackbar();
-  const [createList] = useCreateListMutation({
-    onCompleted({ createList }) {
-      messageBar.success("Created list successfully");
-      setTimeout(() => {
-        navigate(`/lists/${createList}/overview`);
-      }, 5000);
-    },
-    onError(error) {
-      messageBar.error(error.message);
-    },
-  });
+  const { mutateAsync: createList } = useCreateListMutation();
 
   const defaultValues: CreateListInput = useMemo(
     () => ({ name: "", spaceId }),
-    [],
+    [spaceId],
   );
   const form = useForm({
     defaultValues,
@@ -40,7 +26,21 @@ export const ListForm = ({ spaceId }: ListFormProps) => {
   });
 
   const onSubmit: SubmitHandler<CreateListInput> = async ({ name }) => {
-    await createList({ variables: { input: { name, spaceId } } });
+    try {
+      const { createList: listId } = await createList({
+        input: { name, spaceId },
+      });
+      messageBar.success("Created list successfully");
+      setTimeout(() => {
+        navigate({
+          to: `/lists/${listId}/overview` as "/me",
+        });
+      }, 5000);
+    } catch (error) {
+      messageBar.error(
+        error instanceof Error ? error.message : "Failed to create list",
+      );
+    }
   };
 
   return (

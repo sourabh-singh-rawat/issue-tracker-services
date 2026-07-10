@@ -9,34 +9,31 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 import { Logout } from "@mui/icons-material";
-import { useLogoutMutation } from "../../../../api";
-import { useAppDispatch, useAppSelector } from "../../../../common";
+import { useLogoutMutation } from "@generated/gql";
 import Avatar from "../../../../common/components/Avatar";
-import { setCurrentUser } from "../../auth.slice";
+import { useAuthStore } from "../../store";
 
 export const AccountSwitcher = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { current, isLoading } = useAppSelector((x) => x.auth);
+  const current = useAuthStore((s) => s.current);
+  const isLoading = useAuthStore((s) => s.isLoading);
+  const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const [logout] = useLogoutMutation({
-    onCompleted() {
-      dispatch(setCurrentUser({ current: null }));
-      navigate("/login");
-    },
-  });
+  const { mutateAsync: logout } = useLogoutMutation();
 
   const handleClick = (e: React.FormEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
   const handleLogout = async () => {
-    await logout();
+    await logout({});
+    setCurrentUser({ current: null });
+    navigate({ to: "/login" });
   };
 
   return (
@@ -52,7 +49,7 @@ export const AccountSwitcher = () => {
         >
           <MenuItem
             onClick={() => {
-              navigate("/me");
+              navigate({ to: "/me" });
               handleClose();
             }}
             dense

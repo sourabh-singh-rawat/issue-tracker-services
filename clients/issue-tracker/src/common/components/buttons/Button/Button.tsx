@@ -16,7 +16,7 @@ const StyledButton = styled(MuiButton)(({ theme }) => {
   };
 });
 
-interface ButtonProps {
+export interface ButtonProps {
   size?: "small" | "medium" | "large";
   type?: MuiButtonProps["type"];
   color?: string;

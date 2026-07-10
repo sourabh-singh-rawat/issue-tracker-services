@@ -1,4 +1,4 @@
-import { Status } from "../../api/codegen/gql/graphql";
+import type { Status } from "@generated/gql/graphql";
 
 export interface OutletContext {
   spaceId?: string;

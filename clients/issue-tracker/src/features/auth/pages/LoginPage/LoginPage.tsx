@@ -1,7 +1,7 @@
-import { LoginForm } from "../../components/LoginForm";
+import { LoginForm } from "../../components";
 
 import { Container, Grid2, Typography, useTheme } from "@mui/material";
-import { Link } from "../../../../common/components/base";
+import { Link } from "@common";
 
 export const LoginPage = () => {
   const theme = useTheme();

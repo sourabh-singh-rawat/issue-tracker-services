@@ -37,7 +37,22 @@ Other compounds:
 |----------|----------|
 | **dev** | Infra + compose + all services/client (default) |
 | **dev (apps only)** | Same processes, no Docker / gql pre-task |
-| **dev (linux + browser)** | Same as **dev**, plus Brave debugger |
+| **dev + browser** | Same as **dev**, plus shared Chrome client debugger |
+| **dev (linux + browser)** | Same as **dev**, plus Brave debugger (Linux path) |
+
+### Client-side (browser) debugging
+
+The Vite process alone (`issue-tracker (client)`) does not bind breakpoints in React/TSX. Use one of these **shared** configs (no machine-specific browser paths):
+
+| Configuration | Behavior |
+|---------------|----------|
+| **client (browser)** | Launch Chrome against `http://localhost:3000` (Vite must already be running) |
+| **client (browser - edge)** | Same with Microsoft Edge |
+| **issue-tracker (client + browser)** | Start Vite, then auto-attach Chrome when the dev server is ready |
+
+Optional machine-specific configs (`brave (debug)`, `brave (debug - scoop)`) remain for Brave installs.
+
+Set breakpoints in `clients/issue-tracker/src/**/*.{ts,tsx}`, start **dev + browser** (or client + browser), and the debugger will stop on client code.
 
 Individual configurations (auth, gateway, client, …) can be started one at a time.
 

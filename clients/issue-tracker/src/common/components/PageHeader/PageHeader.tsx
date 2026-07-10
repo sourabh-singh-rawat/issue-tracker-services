@@ -3,7 +3,7 @@ import MuiGrid from "@mui/material/Grid";
 import MuiTypography from "@mui/material/Typography";
 import PrimaryButton from "../buttons/PrimaryButton";
 import AddIcon from "@mui/icons-material/Add";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 interface Props {
   title: string;
@@ -27,7 +27,9 @@ export default function PageHeader({ title, showButton = true }: Props) {
             label="Create List"
             type="button"
             startIcon={<AddIcon />}
-            onClick={() => navigate("./new")}
+            onClick={() =>
+              navigate({ to: "./new" as "/me" })
+            }
           />
         </MuiGrid>
       )}
