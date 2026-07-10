@@ -113,9 +113,9 @@ type Item
 scalar join__FieldSet
 
 enum join__Graph {
-  ATTACHMENT @join__graph(name: "attachment", url: "http://localhost:5002/api/graphql")
-  AUTH @join__graph(name: "auth", url: "http://localhost:5000/api/graphql")
-  ISSUE_TRACKER @join__graph(name: "issue-tracker", url: "http://localhost:5001/api/graphql")
+  ATTACHMENT @join__graph(name: "attachment", url: "http://127.0.0.1:4003/graphql")
+  AUTH @join__graph(name: "auth", url: "http://127.0.0.1:4001/graphql")
+  ISSUE_TRACKER @join__graph(name: "issue-tracker", url: "http://127.0.0.1:4002/graphql")
 }
 
 """
@@ -193,7 +193,7 @@ type Query
   @join__type(graph: ISSUE_TRACKER)
 {
   findAttachments(itemId: String!): PaginatedAttachment! @join__field(graph: ATTACHMENT)
-  getCurrentUser: User! @join__field(graph: AUTH)
+  getCurrentUser: User @join__field(graph: AUTH)
   findCustomFields(options: FindCustomFieldsOptions!): [ListCustomField!]! @join__field(graph: ISSUE_TRACKER)
   findDefaultWorkspace: Workspace! @join__field(graph: ISSUE_TRACKER)
   findItem(id: String!): Item @join__field(graph: ISSUE_TRACKER)

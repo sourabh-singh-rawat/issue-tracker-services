@@ -24,10 +24,13 @@ export class CoreUserAuthenticationResolver
     return "User is registered successfully. We have sent you an email";
   }
 
-  @Query(() => User)
+  @Query(() => User, { nullable: true })
   async getCurrentUser(@Ctx() ctx: AppContext) {
-    const service = container.get("userProfileService");
+    if (!ctx.user?.email) {
+      return null;
+    }
 
+    const service = container.get("userProfileService");
     return await service.getUserProfileWithEmail(ctx.user.email);
   }
 

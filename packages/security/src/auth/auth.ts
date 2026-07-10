@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import "@fastify/cookie";
-import { AccessToken, JwtToken } from "../crypto";
+import { AccessToken, JwtToken, isAccessToken } from "../crypto";
 import {
   BadRequestError,
   ForbiddenError,
@@ -26,21 +26,24 @@ export class Auth {
     return done();
   };
 
-  static setCurrentUser = (
+  static setCurrentUser = async (
     request: FastifyRequest,
     _reply: FastifyReply,
-    done: HookHandlerDoneFunction,
   ) => {
     const accessToken = request.cookies.accessToken;
     if (accessToken) {
       try {
-        request.user = JwtToken.verify(accessToken, process.env.JWT_SECRET!);
-      } catch (error) {
+        const payload = await JwtToken.verify(
+          accessToken,
+          process.env.JWT_SECRET!,
+        );
+        if (isAccessToken(payload)) {
+          request.user = payload;
+        }
+      } catch {
         // ignore
       }
     }
-
-    return done();
   };
 
   static requireAuth = (

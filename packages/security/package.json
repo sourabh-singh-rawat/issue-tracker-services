@@ -11,7 +11,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.5",
     "typescript": "^5.7.2"
   },
@@ -24,7 +23,7 @@
     "awilix": "^12.0.4",
     "casbin": "^5.36.0",
     "fastify": "^5.2.1",
-    "jsonwebtoken": "^9.0.2",
+    "jose": "^5.9.6",
     "pino": "^9.6.0",
     "typeorm": "^0.3.20",
     "typeorm-adapter": "^1.7.0"

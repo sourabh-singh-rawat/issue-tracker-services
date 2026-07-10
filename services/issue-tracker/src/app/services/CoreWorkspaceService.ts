@@ -10,12 +10,9 @@ import {
   WorkspaceMemberRoles,
   WorkspaceNotFound,
 } from "@issue-tracker/common";
-import {
-  NatsPublisher,
-  WorkspaceInvitePayload,
-} from "@issue-tracker/event-bus";
+import { NatsPublisher } from "@issue-tracker/event-bus";
 import { ServiceOptions, Typeorm } from "@issue-tracker/orm";
-import { JwtToken } from "@issue-tracker/security";
+import { JwtToken, hasEmailClaim } from "@issue-tracker/security";
 import { v4 } from "uuid";
 import {
   User,
@@ -133,7 +130,7 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     const jwtid = v4();
     const exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60;
-    const token = JwtToken.create(
+    const token = await JwtToken.create(
       {
         userId,
         iss: "@issue-tracker/issue-tracker",
@@ -171,14 +168,19 @@ export class CoreWorkspaceService implements WorkspaceService {
   };
 
   confirmWorkspaceInvite = async (token: string) => {
-    let verifedToken: WorkspaceInvitePayload;
+    let email: string;
     try {
-      verifedToken = JwtToken.verify(token, process.env.JWT_SECRET!);
+      const verifedToken = await JwtToken.verify(
+        token,
+        process.env.JWT_SECRET!,
+      );
+      if (!hasEmailClaim(verifedToken)) {
+        throw new Error("Token verification failed");
+      }
+      email = verifedToken.email;
     } catch (error) {
       throw new Error("Token verification failed");
     }
-
-    const { email } = verifedToken;
     const userExists = await User.findOne({ where: { email } });
 
     if (!userExists) {

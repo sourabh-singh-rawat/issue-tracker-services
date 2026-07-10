@@ -43,6 +43,7 @@ services:
       - postgres
       - -c
       - max_connections=1000
+      
   mail-postgres-test:
     image: postgres:18.4
     container_name: mail-postgres-test

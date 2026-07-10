@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest --passWithNoTests --forceExit --logHeapUsage",
     "test:watch": "jest --watchAll --logHeapUsage",
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon src/index.ts",
+    "start": "node -r ts-node/register src/index.ts",
+    "dev": "nodemon --exec \"node -r ts-node/register\" src/index.ts",
     "build": "tsc"
   },
   "nx": {
@@ -34,7 +34,6 @@
   "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.13",
     "@types/pg": "^8.11.6",
     "@types/supertest": "^2.0.16",

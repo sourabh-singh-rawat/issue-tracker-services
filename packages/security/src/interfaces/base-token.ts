@@ -1,4 +1,6 @@
-export interface BaseToken {
+import { JWTPayload } from "jose";
+
+export interface BaseToken extends JWTPayload {
   userId: string;
   iss: string;
   aud: string;

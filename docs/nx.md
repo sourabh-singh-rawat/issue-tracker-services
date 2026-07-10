@@ -18,8 +18,10 @@ pnpm exec nx graph
 ## Common commands
 
 ```bash
-# Full local stack (infra + client + services) — see docs/dev.md
-pnpm dev
+# Local stack: VS Code compound "dev" (or pnpm dev:infra + dev:apps) — see docs/dev.md
+pnpm dev:infra
+pnpm gql:compose
+pnpm dev:apps
 
 # Full graph-aware build (uses local cache)
 pnpm build

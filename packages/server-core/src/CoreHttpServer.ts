@@ -66,15 +66,16 @@ export class CoreHttpServer implements HttpServer {
     const { host, port } = config;
 
     await apollo.start();
-    const url = `/api${path}`;
 
     server.route({
-      url,
+      url: path,
       method: ["POST", "GET"],
       handler: fastifyApolloHandler(apollo, { context: createContext }),
     });
 
-    // logger?.info(`🚀 [GraphQL] server is configured at ${host}:${port}${url}`);
+    logger?.info(
+      `🚀 [GraphQL] server is configured at ${host}:${port}${path}`,
+    );
   }
 
   async start() {

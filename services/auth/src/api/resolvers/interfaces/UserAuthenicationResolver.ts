@@ -8,7 +8,7 @@ import { User } from "../types/User";
 
 export interface UserAuthenticationResolver {
   registerUser(input: RegisterUserInput): Promise<string>;
-  getCurrentUser(ctx: AppContext): Promise<User>;
+  getCurrentUser(ctx: AppContext): Promise<User | null>;
   signInWithEmailAndPassword(
     ctx: AppContext,
     input: SignInWithEmailAndPasswordInput,
