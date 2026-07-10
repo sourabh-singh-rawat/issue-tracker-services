@@ -22,7 +22,10 @@
     "test:affected": "nx affected -t test",
     "graph": "nx graph",
     "nx:reset": "nx reset",
-    "gql:compose": "rover supergraph compose --elv2-license accept --config supergraph-config-dev.yaml > services/gateway/supergraph.graphql"
+    "gql:compose": "rover supergraph compose --elv2-license accept --config supergraph-config-dev.yaml > services/gateway/supergraph.graphql",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:release": "changeset publish"
   },
   "keywords": [],
   "author": "",
@@ -33,10 +36,11 @@
   },
   "devDependencies": {
     "@apollo/rover": "^0.34.1",
+    "@changesets/cli": "^2.31.0",
     "@redocly/cli": "^1.27.1",
+    "nx": "23.0.1",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "prettier-plugin-sort-imports": "^1.8.8",
-    "nx": "23.0.1"
+    "prettier-plugin-sort-imports": "^1.8.8"
   }
 }
