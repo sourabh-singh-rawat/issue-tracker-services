@@ -12,7 +12,7 @@ import {
 } from "./interfaces";
 
 export class CoreHttpServer implements HttpServer {
-  constructor(private readonly options: HttpServerOptions) {}
+  constructor(private readonly options: HttpServerOptions) { }
 
   private cors(options: CorsOptions) {
     const server = this.options.server;

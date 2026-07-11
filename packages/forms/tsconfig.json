@@ -15,6 +15,7 @@
     "noEmit": false,
     "jsx": "react-jsx",
     "allowJs": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     /* Linting */
     "strict": true,

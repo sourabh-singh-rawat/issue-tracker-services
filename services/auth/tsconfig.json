@@ -24,10 +24,11 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
     /* Modules */
     "module": "commonjs", /* Specify what module code is generated. */
-    // "rootDir": "./",                                  /* Specify the root folder within your source files. */
+    "rootDir": "./src",                                  /* Keep emit rooted at service source; workspace packages resolve via node_modules. */
     // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
-    // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
-    // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
     // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
@@ -99,10 +100,16 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  // tsx only applies experimentalDecorators when the loaded file matches this config.
-  // Workspace packages are loaded as source, so they must be included here.
+  // Do not include ../../packages/*/src here: tsgo sets rootDir under this service and
+  // TS6059 if package sources are program roots. Workspace packages resolve via node_modules
+  // (main/types); each package has its own tsconfig for tsx/decorators.
   "include": [
-    "src/**/*.ts",
-    "../../packages/*/src/**/*.ts"
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/__tests__/**",
+    "src/**/__mocks__/**"
   ]
 }
