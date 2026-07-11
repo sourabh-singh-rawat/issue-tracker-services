@@ -16,21 +16,21 @@ export class PaginatedAttachment {
   @Field(() => [Attachment])
   rows!: Attachment[];
 
-  @Field()
+  @Field(() => Number)
   rowCount!: number;
 }
 
 @Resolver()
 export class CoreAttachmentResolver implements AttachmentResolver {
   @Query(() => PaginatedAttachment)
-  async findAttachments(@Arg("issueId") issueId: string) {
+  async findAttachments(@Arg("issueId", () => String) issueId: string) {
     const service = container.get("attachmentService");
 
     return await service.findAttachments(issueId);
   }
 
   @Mutation(() => String)
-  async deleteAttachment(@Arg("id") id: string) {
+  async deleteAttachment(@Arg("id", () => String) id: string) {
     const service = container.get("attachmentService");
     await dataSource.transaction(async (manager) => {
       await service.deleteAttachment({ id, manager });

@@ -14,7 +14,9 @@ export class CoreUserAuthenticationResolver
   implements UserAuthenticationResolver
 {
   @Mutation(() => String)
-  async registerUser(@Arg("input") input: RegisterUserInput) {
+  async registerUser(
+    @Arg("input", () => RegisterUserInput) input: RegisterUserInput,
+  ) {
     const service = container.get("userAuthenticationService");
 
     await dataSource.transaction(async (manager) => {
@@ -37,7 +39,8 @@ export class CoreUserAuthenticationResolver
   @Mutation(() => Boolean)
   async signInWithEmailAndPassword(
     @Ctx() ctx: AppContext,
-    @Arg("input") input: SignInWithEmailAndPasswordInput,
+    @Arg("input", () => SignInWithEmailAndPasswordInput)
+    input: SignInWithEmailAndPasswordInput,
   ) {
     const service = container.get("userAuthenticationService");
     const dataSource = container.get("dataSource");
@@ -59,7 +62,8 @@ export class CoreUserAuthenticationResolver
 
   @Mutation(() => String)
   async verifyVerificationLink(
-    @Arg("input") input: VerifyVerificationLinkInput,
+    @Arg("input", () => VerifyVerificationLinkInput)
+    input: VerifyVerificationLinkInput,
   ) {
     const { token } = input;
     const service = container.get("userAuthenticationService");

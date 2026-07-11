@@ -82,7 +82,7 @@
         "uriFormat": "%s",
         "action": "debugWithChrome",
         "killOnServerStop": true,
-        "webRoot": "${workspaceFolder}/clients/issue-tracker"
+        "webRoot": "${workspaceFolder}/clients/web"
       }
     },
     {
@@ -90,7 +90,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "webRoot": "${workspaceFolder}/clients/web",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -110,7 +110,7 @@
       "type": "msedge",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "webRoot": "${workspaceFolder}/clients/web",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -132,7 +132,7 @@
       "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "webRoot": "${workspaceFolder}/clients/web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -143,7 +143,7 @@
       "runtimeExecutable": "/usr/bin/brave",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/issue-tracker",
+      "webRoot": "${workspaceFolder}/clients/web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },

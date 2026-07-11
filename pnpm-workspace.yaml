@@ -7,6 +7,7 @@ allowBuilds:
   '@apollo/protobufjs': true
   '@apollo/rover': true
   '@parcel/watcher': true
+  '@swc/core': false
   argon2: true
   core-js: true
   esbuild: true
@@ -14,3 +15,6 @@ allowBuilds:
   nx: true
   protobufjs: true
   sharp: true
+
+overrides:
+  typescript: "npm:@typescript/native-preview@7.0.0-dev.20260707.2"

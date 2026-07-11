@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "target": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": [
+      "vite/client"
+    ],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@api": ["src/api"],
+      "@api/*": ["src/api/*"],
+      "@common": ["src/common"],
+      "@common/*": ["src/common/*"],
+      "@core": ["src/core"],
+      "@core/*": ["src/core/*"],
+      "@features": ["src/features"],
+      "@features/*": ["src/features/*"],
+      "@routes": ["src/routes"],
+      "@routes/*": ["src/routes/*"],
+      "@generated": ["src/__generated__"],
+      "@generated/*": ["src/__generated__/*"]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
