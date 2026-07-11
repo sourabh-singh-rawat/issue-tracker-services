@@ -6,6 +6,6 @@ export interface DeleteAttachmentOptions extends ServiceOptions {
 }
 
 export interface AttachmentResolver {
-  findAttachments(itemId: string): Promise<PaginatedAttachment>;
+  findAttachments(issueId: string): Promise<PaginatedAttachment>;
   deleteAttachment(id: string): Promise<string>;
 }

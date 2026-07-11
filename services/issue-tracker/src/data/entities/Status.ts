@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { StatusOptionGroup } from "./StatusGroup";
+import { Project } from "./Project";
 
 @Entity({ name: "status_options" })
 export class StatusOption extends BaseEntity {
@@ -31,10 +31,10 @@ export class StatusOption extends BaseEntity {
   @Column({ name: "order_index", type: "integer" })
   orderIndex!: number;
 
-  @Column({ name: "group_id", type: "uuid" })
-  groupId!: string;
+  @Column({ name: "project_id", type: "uuid" })
+  projectId!: string;
 
-  @ManyToOne(() => StatusOptionGroup, (x) => x.statuses)
-  @JoinColumn({ name: "group_id" })
-  group!: StatusOptionGroup;
+  @ManyToOne(() => Project, (x) => x.statuses)
+  @JoinColumn({ name: "project_id" })
+  project!: Project;
 }

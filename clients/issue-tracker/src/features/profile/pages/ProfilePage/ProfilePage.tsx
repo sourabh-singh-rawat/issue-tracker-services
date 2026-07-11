@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import Button from "../../../../common/components/buttons/Button";
 import { TextField } from "../../../../common/components/forms";
 import { useAuthStore } from "@features/auth";
-import { UploadButton } from "../../../item/components/UploadButton";
+import { UploadButton } from "../../../issue/components/UploadButton";
 
 export const ProfilePage = () => {
   const theme = useTheme();

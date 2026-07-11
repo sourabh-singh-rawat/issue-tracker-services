@@ -7,8 +7,10 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format. */
   DateTimeISO: { input: string; output: string; }
-  JSON: { input: Record<string, unknown>; output: Record<string, unknown>; }
+  join__FieldSet: { input: unknown; output: unknown; }
+  link__Import: { input: unknown; output: unknown; }
 };
 
 export type Attachment = {
@@ -18,26 +20,21 @@ export type Attachment = {
   thumbnailLink: Scalars['String']['output'];
 };
 
-export type CreateItemInput = {
+export type CreateIssueInput = {
   assigneeIds: Array<Scalars['String']['input']>;
+  component?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   dueDate?: InputMaybe<Scalars['DateTimeISO']['input']>;
-  fields?: InputMaybe<Scalars['JSON']['input']>;
-  listId: Scalars['String']['input'];
+  estimate?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
-  parentItemId?: InputMaybe<Scalars['String']['input']>;
+  parentIssueId?: InputMaybe<Scalars['String']['input']>;
   priority: Scalars['String']['input'];
+  projectId: Scalars['String']['input'];
   statusId: Scalars['ID']['input'];
   type: Scalars['String']['input'];
 };
 
-export type CreateListInput = {
-  name: Scalars['String']['input'];
-  spaceId: Scalars['String']['input'];
-};
-
-export type CreateSpaceInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
+export type CreateProjectInput = {
   name: Scalars['String']['input'];
   workspaceId: Scalars['String']['input'];
 };
@@ -48,77 +45,54 @@ export type CreateWorkspaceInput = {
   name: Scalars['String']['input'];
 };
 
-export type FindCustomFieldsOptions = {
-  listId: Scalars['String']['input'];
+export type FindIssuesInput = {
+  parentIssueId: Scalars['String']['input'];
 };
 
-export type FindItemsInput = {
-  parentItemId: Scalars['String']['input'];
-};
-
-export type FindSpacesOptions = {
-  workspaceId: Scalars['String']['input'];
+export type FindProjectsOptions = {
+  workspaceId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type FindStatusesOptions = {
-  listId: Scalars['String']['input'];
+  projectId: Scalars['String']['input'];
 };
 
-export type Item = {
-  __typename?: 'Item';
+export type Issue = {
+  __typename?: 'Issue';
+  component?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  estimate?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
-  list: List;
   name: Scalars['String']['output'];
-  parentItem?: Maybe<Item>;
+  parentIssue?: Maybe<Issue>;
   priority: Scalars['String']['output'];
+  project: Project;
   statusId: Scalars['String']['output'];
-  subItems?: Maybe<Array<Item>>;
-};
-
-export type List = {
-  __typename?: 'List';
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  selectedViewId?: Maybe<Scalars['String']['output']>;
-  space: Space;
-};
-
-export type ListCustomField = {
-  __typename?: 'ListCustomField';
-  customFieldId: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  listId: Scalars['String']['output'];
+  subIssues?: Maybe<Array<Issue>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createItem: Scalars['String']['output'];
-  createList: Scalars['String']['output'];
-  createSpace: Scalars['String']['output'];
+  createIssue: Scalars['String']['output'];
+  createProject: Scalars['String']['output'];
   createWorkspace: Scalars['String']['output'];
   deleteAttachment: Scalars['String']['output'];
-  deleteItem: Scalars['String']['output'];
+  deleteIssue: Scalars['String']['output'];
   logout: Scalars['String']['output'];
   registerUser: Scalars['String']['output'];
   signInWithEmailAndPassword: Scalars['Boolean']['output'];
-  updateItem: Scalars['String']['output'];
+  updateIssue: Scalars['String']['output'];
   verifyVerificationLink: Scalars['String']['output'];
 };
 
 
-export type MutationCreateItemArgs = {
-  input: CreateItemInput;
+export type MutationCreateIssueArgs = {
+  input: CreateIssueInput;
 };
 
 
-export type MutationCreateListArgs = {
-  input: CreateListInput;
-};
-
-
-export type MutationCreateSpaceArgs = {
-  input: CreateSpaceInput;
+export type MutationCreateProjectArgs = {
+  input: CreateProjectInput;
 };
 
 
@@ -142,8 +116,8 @@ export type MutationSignInWithEmailAndPasswordArgs = {
 };
 
 
-export type MutationUpdateItemArgs = {
-  input: UpdateItemInput;
+export type MutationUpdateIssueArgs = {
+  input: UpdateIssueInput;
 };
 
 
@@ -157,58 +131,57 @@ export type PaginatedAttachment = {
   rows: Array<Attachment>;
 };
 
-export type PaginatedList = {
-  __typename?: 'PaginatedList';
+export type PaginatedProject = {
+  __typename?: 'PaginatedProject';
   rowCount: Scalars['Float']['output'];
-  rows: Array<List>;
+  rows: Array<Project>;
+};
+
+export type Project = {
+  __typename?: 'Project';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  workspace: Workspace;
+  workspaceId: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
   findAttachments: PaginatedAttachment;
-  findCustomFields: Array<ListCustomField>;
   findDefaultWorkspace: Workspace;
-  findItem?: Maybe<Item>;
-  findList: List;
-  findListItems: Array<Item>;
-  findLists: PaginatedList;
-  findSpaces: Array<Space>;
+  findIssue?: Maybe<Issue>;
+  findProject: Project;
+  findProjectIssues: Array<Issue>;
+  findProjects: PaginatedProject;
   findStatuses: Array<Status>;
-  findSubItems: Array<Item>;
-  findView: View;
-  findViews: Array<View>;
+  findSubIssues: Array<Issue>;
   findWorkspaces: Array<Workspace>;
   getCurrentUser?: Maybe<User>;
 };
 
 
 export type QueryFindAttachmentsArgs = {
-  itemId: Scalars['String']['input'];
+  issueId: Scalars['String']['input'];
 };
 
 
-export type QueryFindCustomFieldsArgs = {
-  options: FindCustomFieldsOptions;
-};
-
-
-export type QueryFindItemArgs = {
+export type QueryFindIssueArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type QueryFindListArgs = {
+export type QueryFindProjectArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type QueryFindListItemsArgs = {
-  listId: Scalars['String']['input'];
+export type QueryFindProjectIssuesArgs = {
+  projectId: Scalars['String']['input'];
 };
 
 
-export type QueryFindSpacesArgs = {
-  input: FindSpacesOptions;
+export type QueryFindProjectsArgs = {
+  input?: InputMaybe<FindProjectsOptions>;
 };
 
 
@@ -217,18 +190,8 @@ export type QueryFindStatusesArgs = {
 };
 
 
-export type QueryFindSubItemsArgs = {
-  input: FindItemsInput;
-};
-
-
-export type QueryFindViewArgs = {
-  viewId: Scalars['String']['input'];
-};
-
-
-export type QueryFindViewsArgs = {
-  listId: Scalars['String']['input'];
+export type QueryFindSubIssuesArgs = {
+  input: FindIssuesInput;
 };
 
 export type RegisterUserInput = {
@@ -242,23 +205,18 @@ export type SignInWithEmailAndPasswordInput = {
   password: Scalars['String']['input'];
 };
 
-export type Space = {
-  __typename?: 'Space';
-  id: Scalars['String']['output'];
-  lists?: Maybe<Array<List>>;
-  name: Scalars['String']['output'];
-};
-
 export type Status = {
   __typename?: 'Status';
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
 };
 
-export type UpdateItemInput = {
+export type UpdateIssueInput = {
+  component?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   dueDate?: InputMaybe<Scalars['DateTimeISO']['input']>;
-  itemId: Scalars['String']['input'];
+  estimate?: InputMaybe<Scalars['Int']['input']>;
+  issueId: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   priority?: InputMaybe<Scalars['String']['input']>;
   statusId?: InputMaybe<Scalars['String']['input']>;
@@ -280,15 +238,6 @@ export type VerifyVerificationLinkInput = {
   token: Scalars['String']['input'];
 };
 
-export type View = {
-  __typename?: 'View';
-  id: Scalars['String']['output'];
-  list: List;
-  name: Scalars['String']['output'];
-  order: Scalars['Float']['output'];
-  type: Scalars['String']['output'];
-};
-
 export type Workspace = {
   __typename?: 'Workspace';
   createdById: Scalars['String']['output'];
@@ -297,3 +246,16 @@ export type Workspace = {
   name: Scalars['String']['output'];
   status: Scalars['String']['output'];
 };
+
+export enum Join__Graph {
+  Attachment = 'ATTACHMENT',
+  Auth = 'AUTH',
+  IssueTracker = 'ISSUE_TRACKER'
+}
+
+export enum Link__Purpose {
+  /** `EXECUTION` features provide metadata necessary for operation execution. */
+  Execution = 'EXECUTION',
+  /** `SECURITY` features provide metadata necessary to securely resolve fields. */
+  Security = 'SECURITY'
+}

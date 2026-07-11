@@ -115,7 +115,7 @@ const startServer = async (container: AwilixDi<RegisteredServices>) => {
       cookie: { secret: process.env.JWT_SECRET! },
       routes: [
         {
-          url: "/attachments/:itemId",
+          url: "/attachments/:issueId",
           method: "POST",
           schema: {
             tags: ["attachment"],
@@ -168,7 +168,7 @@ const startSubscriptions = () => {};
 
 export const startWorker = () => {
   interface ImageProcessingWorkerData {
-    itemId: string;
+    issueId: string;
     userId: string;
     file: Buffer;
     filename: string;
@@ -179,7 +179,7 @@ export const startWorker = () => {
     QUEUE.IMAGE_PROCESSING,
     async ({ data }) => {
       const {
-        itemId,
+        issueId,
         userId,
         file,
         filename: originalFilename,
@@ -191,8 +191,8 @@ export const startWorker = () => {
       const thumbnail = await sharpedFile.resize(sizes.small.width).toBuffer();
       const image = await sharpedFile.resize(sizes.large.width).toBuffer();
       const filename = v4();
-      const thumbnailLink = `attachments/${itemId}/${filename}-small`;
-      const imageLink = `attachments/${itemId}/${filename}-large`;
+      const thumbnailLink = `attachments/${issueId}/${filename}-small`;
+      const imageLink = `attachments/${issueId}/${filename}-large`;
 
       await adminStorage.file(thumbnailLink).save(thumbnail, { contentType });
       await adminStorage.file(imageLink).save(image, { contentType });
@@ -200,7 +200,7 @@ export const startWorker = () => {
       const AttachmentRepo = dataSource.manager.getRepository(Attachment);
 
       await AttachmentRepo.save({
-        itemId,
+        issueId,
         ownerId: userId,
         contentType,
         thumbnailLink,

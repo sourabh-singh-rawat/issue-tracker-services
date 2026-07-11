@@ -23,10 +23,10 @@ export class PaginatedAttachment {
 @Resolver()
 export class CoreAttachmentResolver implements AttachmentResolver {
   @Query(() => PaginatedAttachment)
-  async findAttachments(@Arg("itemId") itemId: string) {
+  async findAttachments(@Arg("issueId") issueId: string) {
     const service = container.get("attachmentService");
 
-    return await service.findAttachments(itemId);
+    return await service.findAttachments(issueId);
   }
 
   @Mutation(() => String)

@@ -1,6 +1,6 @@
 import { ServiceResponseInputs } from "@issue-tracker/common";
 import { ProjectPayload } from "@issue-tracker/event-bus";
-import { ListItemActivity } from "../../../data";
+import { ProjectIssueActivity } from "../../../data";
 
 export interface ProjectActivityService {
   logCreatedProject(payload: ProjectPayload): Promise<void>;
@@ -8,5 +8,5 @@ export interface ProjectActivityService {
   logUpdatedProjectDescription(payload: ProjectPayload): Promise<void>;
   getProjectActivityList(
     id: string,
-  ): Promise<ServiceResponseInputs<ListItemActivity[]>>;
+  ): Promise<ServiceResponseInputs<ProjectIssueActivity[]>>;
 }
