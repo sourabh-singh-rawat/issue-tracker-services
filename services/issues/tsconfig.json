@@ -103,10 +103,15 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  // tsx only applies experimentalDecorators when the loaded file matches this config.
+  // Do not include ../../packages/*/src here: tsgo rootDir is this service; package
+  // sources as program roots cause TS6059. Packages resolve via node_modules.
   "include": [
-    "src/**/*.ts",
-    "../../packages/*/src/**/*.ts"
+    "src/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/__tests__/**",
+    "src/**/__mocks__/**"
+  ]
 }
