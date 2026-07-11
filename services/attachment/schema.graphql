@@ -19,5 +19,5 @@ type PaginatedAttachment {
 }
 
 type Query {
-  findAttachments(itemId: String!): PaginatedAttachment!
+  findAttachments(issueId: String!): PaginatedAttachment!
 }

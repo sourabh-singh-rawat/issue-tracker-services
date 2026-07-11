@@ -28,32 +28,25 @@ type Attachment
   thumbnailLink: String!
 }
 
-input CreateItemInput
+input CreateIssueInput
   @join__type(graph: ISSUE_TRACKER)
 {
   assigneeIds: [String!]!
+  component: String
   description: String
   dueDate: DateTimeISO
-  fields: JSON
-  listId: String!
+  estimate: Int
   name: String!
-  parentItemId: String
+  parentIssueId: String
   priority: String!
+  projectId: String!
   statusId: ID!
   type: String!
 }
 
-input CreateListInput
+input CreateProjectInput
   @join__type(graph: ISSUE_TRACKER)
 {
-  name: String!
-  spaceId: String!
-}
-
-input CreateSpaceInput
-  @join__type(graph: ISSUE_TRACKER)
-{
-  description: String
   name: String!
   workspaceId: String!
 }
@@ -73,41 +66,37 @@ scalar DateTimeISO
   @join__type(graph: AUTH)
   @join__type(graph: ISSUE_TRACKER)
 
-input FindCustomFieldsOptions
+input FindIssuesInput
   @join__type(graph: ISSUE_TRACKER)
 {
-  listId: String!
+  parentIssueId: String!
 }
 
-input FindItemsInput
+input FindProjectsOptions
   @join__type(graph: ISSUE_TRACKER)
 {
-  parentItemId: String!
-}
-
-input FindSpacesOptions
-  @join__type(graph: ISSUE_TRACKER)
-{
-  workspaceId: String!
+  workspaceId: String
 }
 
 input FindStatusesOptions
   @join__type(graph: ISSUE_TRACKER)
 {
-  listId: String!
+  projectId: String!
 }
 
-type Item
+type Issue
   @join__type(graph: ISSUE_TRACKER)
 {
+  component: String
   description: String
+  estimate: Int
   id: String!
-  list: List!
   name: String!
-  parentItem: Item
+  parentIssue: Issue
   priority: String!
+  project: Project!
   statusId: String!
-  subItems: [Item!]
+  subIssues: [Issue!]
 }
 
 scalar join__FieldSet
@@ -117,12 +106,6 @@ enum join__Graph {
   AUTH @join__graph(name: "auth", url: "http://127.0.0.1:4001/graphql")
   ISSUE_TRACKER @join__graph(name: "issue-tracker", url: "http://127.0.0.1:4002/graphql")
 }
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
-  @join__type(graph: ISSUE_TRACKER)
 
 scalar link__Import
 
@@ -138,23 +121,6 @@ enum link__Purpose {
   EXECUTION
 }
 
-type List
-  @join__type(graph: ISSUE_TRACKER)
-{
-  id: String!
-  name: String!
-  selectedViewId: String
-  space: Space!
-}
-
-type ListCustomField
-  @join__type(graph: ISSUE_TRACKER)
-{
-  customFieldId: String!
-  id: String!
-  listId: String!
-}
-
 type Mutation
   @join__type(graph: ATTACHMENT)
   @join__type(graph: AUTH)
@@ -165,12 +131,11 @@ type Mutation
   registerUser(input: RegisterUserInput!): String! @join__field(graph: AUTH)
   signInWithEmailAndPassword(input: SignInWithEmailAndPasswordInput!): Boolean! @join__field(graph: AUTH)
   verifyVerificationLink(input: VerifyVerificationLinkInput!): String! @join__field(graph: AUTH)
-  createItem(input: CreateItemInput!): String! @join__field(graph: ISSUE_TRACKER)
-  createList(input: CreateListInput!): String! @join__field(graph: ISSUE_TRACKER)
-  createSpace(input: CreateSpaceInput!): String! @join__field(graph: ISSUE_TRACKER)
+  createIssue(input: CreateIssueInput!): String! @join__field(graph: ISSUE_TRACKER)
+  createProject(input: CreateProjectInput!): String! @join__field(graph: ISSUE_TRACKER)
   createWorkspace(input: CreateWorkspaceInput!): String! @join__field(graph: ISSUE_TRACKER)
-  deleteItem: String! @join__field(graph: ISSUE_TRACKER)
-  updateItem(input: UpdateItemInput!): String! @join__field(graph: ISSUE_TRACKER)
+  deleteIssue: String! @join__field(graph: ISSUE_TRACKER)
+  updateIssue(input: UpdateIssueInput!): String! @join__field(graph: ISSUE_TRACKER)
 }
 
 type PaginatedAttachment
@@ -180,11 +145,20 @@ type PaginatedAttachment
   rows: [Attachment!]!
 }
 
-type PaginatedList
+type PaginatedProject
   @join__type(graph: ISSUE_TRACKER)
 {
   rowCount: Float!
-  rows: [List!]!
+  rows: [Project!]!
+}
+
+type Project
+  @join__type(graph: ISSUE_TRACKER)
+{
+  id: String!
+  name: String!
+  workspace: Workspace!
+  workspaceId: String!
 }
 
 type Query
@@ -192,19 +166,15 @@ type Query
   @join__type(graph: AUTH)
   @join__type(graph: ISSUE_TRACKER)
 {
-  findAttachments(itemId: String!): PaginatedAttachment! @join__field(graph: ATTACHMENT)
+  findAttachments(issueId: String!): PaginatedAttachment! @join__field(graph: ATTACHMENT)
   getCurrentUser: User @join__field(graph: AUTH)
-  findCustomFields(options: FindCustomFieldsOptions!): [ListCustomField!]! @join__field(graph: ISSUE_TRACKER)
   findDefaultWorkspace: Workspace! @join__field(graph: ISSUE_TRACKER)
-  findItem(id: String!): Item @join__field(graph: ISSUE_TRACKER)
-  findList(id: String!): List! @join__field(graph: ISSUE_TRACKER)
-  findListItems(listId: String!): [Item!]! @join__field(graph: ISSUE_TRACKER)
-  findLists: PaginatedList! @join__field(graph: ISSUE_TRACKER)
-  findSpaces(input: FindSpacesOptions!): [Space!]! @join__field(graph: ISSUE_TRACKER)
+  findIssue(id: String!): Issue @join__field(graph: ISSUE_TRACKER)
+  findProject(id: String!): Project! @join__field(graph: ISSUE_TRACKER)
+  findProjectIssues(projectId: String!): [Issue!]! @join__field(graph: ISSUE_TRACKER)
+  findProjects(input: FindProjectsOptions): PaginatedProject! @join__field(graph: ISSUE_TRACKER)
   findStatuses(input: FindStatusesOptions!): [Status!]! @join__field(graph: ISSUE_TRACKER)
-  findSubItems(input: FindItemsInput!): [Item!]! @join__field(graph: ISSUE_TRACKER)
-  findView(viewId: String!): View! @join__field(graph: ISSUE_TRACKER)
-  findViews(listId: String!): [View!]! @join__field(graph: ISSUE_TRACKER)
+  findSubIssues(input: FindIssuesInput!): [Issue!]! @join__field(graph: ISSUE_TRACKER)
   findWorkspaces: [Workspace!]! @join__field(graph: ISSUE_TRACKER)
 }
 
@@ -223,14 +193,6 @@ input SignInWithEmailAndPasswordInput
   password: String!
 }
 
-type Space
-  @join__type(graph: ISSUE_TRACKER)
-{
-  id: String!
-  lists: [List!]
-  name: String!
-}
-
 type Status
   @join__type(graph: ISSUE_TRACKER)
 {
@@ -238,12 +200,14 @@ type Status
   name: String!
 }
 
-input UpdateItemInput
+input UpdateIssueInput
   @join__type(graph: ISSUE_TRACKER)
 {
+  component: String
   description: String
   dueDate: DateTimeISO
-  itemId: String!
+  estimate: Int
+  issueId: String!
   name: String
   priority: String
   statusId: String
@@ -266,16 +230,6 @@ input VerifyVerificationLinkInput
   @join__type(graph: AUTH)
 {
   token: String!
-}
-
-type View
-  @join__type(graph: ISSUE_TRACKER)
-{
-  id: String!
-  list: List!
-  name: String!
-  order: Float!
-  type: String!
 }
 
 type Workspace

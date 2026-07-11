@@ -4,7 +4,7 @@ import {
   ServiceResponse,
 } from "@issue-tracker/common";
 import { IssueCreatedPayload, ProjectPayload } from "@issue-tracker/event-bus";
-import { IssueActivityEntity, ListItemActivity } from "../../data";
+import { IssueActivityEntity, ProjectIssueActivity } from "../../data";
 import { ProjectActivityService } from "./interfaces/project-activity.service";
 
 export class CoreProjectActivityService implements ProjectActivityService {
@@ -22,7 +22,7 @@ export class CoreProjectActivityService implements ProjectActivityService {
   logCreatedProject = async (payload: ProjectPayload) => {
     const { id, ownerUserId, createdAt } = payload;
 
-    const newProjectActivity = new ListItemActivity();
+    const newProjectActivity = new ProjectIssueActivity();
     newProjectActivity.userId = ownerUserId;
     newProjectActivity.projectId = id;
     newProjectActivity.action = ProjectActivity.CREATED;
@@ -36,7 +36,7 @@ export class CoreProjectActivityService implements ProjectActivityService {
       throw new Error("Cannot update project description without timestamp");
     }
 
-    const newProjectActivity = new ListItemActivity();
+    const newProjectActivity = new ProjectIssueActivity();
     newProjectActivity.action = ProjectActivity.UPDATED_NAME;
     newProjectActivity.projectId = id;
     newProjectActivity.userId = ownerUserId;
@@ -50,7 +50,7 @@ export class CoreProjectActivityService implements ProjectActivityService {
       throw new Error("Cannot update project description without timestamp");
     }
 
-    const newProjectActivity = new ListItemActivity();
+    const newProjectActivity = new ProjectIssueActivity();
     newProjectActivity.userId = ownerUserId;
     newProjectActivity.projectId = id;
     newProjectActivity.action = ProjectActivity.UPDATED_DESCRIPTION;

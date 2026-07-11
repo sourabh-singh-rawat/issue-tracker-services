@@ -4,13 +4,13 @@ import { useNavigate, useRouterState } from "@tanstack/react-router";
 import MuiBox from "@mui/material/Box";
 import {
   useFindDefaultWorkspaceQuery,
-  useFindSpacesQuery,
+  useFindProjectsQuery,
   useFindWorkspacesQuery,
   useGetCurrentUserQuery,
 } from "@generated/gql";
 import { useAuthStore } from "@features/auth";
 import { useWorkspaceStore } from "@features/workspace";
-import { useSpaceStore } from "@features/space/store";
+import { useProjectStore } from "@features/project";
 import { AppLoader } from "../AppLoader";
 
 interface MainProps {
@@ -21,7 +21,7 @@ export function Main({ children }: MainProps) {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
-  const setSpaces = useSpaceStore((s) => s.setSpaces);
+  const setProjects = useProjectStore((s) => s.setProjects);
   const setCurrentWorkspace = useWorkspaceStore((s) => s.setCurrentWorkspace);
   const setWorkspaces = useWorkspaceStore((s) => s.setWorkspaces);
 
@@ -36,10 +36,10 @@ export function Main({ children }: MainProps) {
     select: (data) => data.findDefaultWorkspace,
     enabled: userQuery.isSuccess,
   });
-  const spacesQuery = useFindSpacesQuery(
+  const projectsQuery = useFindProjectsQuery(
     { input: { workspaceId: defaultWsQuery.data?.id! } },
     {
-      select: (data) => data.findSpaces,
+      select: (data) => data.findProjects,
       enabled: Boolean(defaultWsQuery.data?.id),
     },
   );
@@ -63,10 +63,10 @@ export function Main({ children }: MainProps) {
   }, [defaultWsQuery.data, setCurrentWorkspace]);
 
   useEffect(() => {
-    if (spacesQuery.data) {
-      setSpaces(spacesQuery.data);
+    if (projectsQuery.data?.rows) {
+      setProjects(projectsQuery.data.rows);
     }
-  }, [spacesQuery.data, setSpaces]);
+  }, [projectsQuery.data, setProjects]);
 
   useEffect(() => {
     if (!userQuery.isError) return;
@@ -79,7 +79,7 @@ export function Main({ children }: MainProps) {
     (userQuery.isSuccess &&
       (defaultWsQuery.isPending ||
         workspacesQuery.isPending ||
-        (Boolean(defaultWsQuery.data?.id) && spacesQuery.isPending)));
+        (Boolean(defaultWsQuery.data?.id) && projectsQuery.isPending)));
 
   return (
     <MuiBox width="100vw" height="100vh">

@@ -1,13 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useSpaceStore } from "../../features/space/store";
+import { useProjectStore } from "../../features/project/store";
 
 export const useAppStore = () => {
   const navigate = useNavigate();
-  const currentList = useSpaceStore((s) => s.currentList);
+  const currentProject = useProjectStore((s) => s.currentProject);
 
-  if (!currentList) {
+  if (!currentProject) {
     navigate({ to: "/" });
   }
 
-  return { currentList };
+  return { currentProject };
 };

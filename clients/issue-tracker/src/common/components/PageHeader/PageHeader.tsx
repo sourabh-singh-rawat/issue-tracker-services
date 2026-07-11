@@ -24,7 +24,7 @@ export default function PageHeader({ title, showButton = true }: Props) {
       {showButton && (
         <MuiGrid item>
           <PrimaryButton
-            label="Create List"
+            label="Create Project"
             type="button"
             startIcon={<AddIcon />}
             onClick={() =>

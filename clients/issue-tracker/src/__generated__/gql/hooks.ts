@@ -15,7 +15,7 @@ export type DeleteAttachmentMutationVariables = Exact<{
 export type DeleteAttachmentMutation = { deleteAttachment: string };
 
 export type FindAttachmentsQueryVariables = Exact<{
-  itemId: string;
+  issueId: string;
 }>;
 
 
@@ -52,59 +52,61 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCurrentUserQuery = { getCurrentUser: { userId: string, email: string, emailVerificationStatus: string, createdAt: unknown, displayName: string | null, photoUrl: string | null, description: string | null } | null };
 
-export type CreateItemMutationVariables = Exact<{
-  input: Types.CreateItemInput;
+export type CreateIssueMutationVariables = Exact<{
+  input: Types.CreateIssueInput;
 }>;
 
 
-export type CreateItemMutation = { createItem: string };
+export type CreateIssueMutation = { createIssue: string };
 
-export type UpdateItemMutationVariables = Exact<{
-  input: Types.UpdateItemInput;
+export type UpdateIssueMutationVariables = Exact<{
+  input: Types.UpdateIssueInput;
 }>;
 
 
-export type UpdateItemMutation = { updateItem: string };
+export type UpdateIssueMutation = { updateIssue: string };
 
-export type FindItemQueryVariables = Exact<{
-  findItemId: string;
+export type FindIssueQueryVariables = Exact<{
+  findIssueId: string;
 }>;
 
 
-export type FindItemQuery = { findItem: { id: string, description: string | null, name: string, statusId: string, priority: string, list: { id: string, name: string }, parentItem: { id: string, name: string } | null } | null };
+export type FindIssueQuery = { findIssue: { id: string, description: string | null, name: string, statusId: string, priority: string, project: { id: string, name: string }, parentIssue: { id: string, name: string } | null } | null };
 
-export type FindListItemsQueryVariables = Exact<{
-  listId: string;
+export type FindProjectIssuesQueryVariables = Exact<{
+  projectId: string;
 }>;
 
 
-export type FindListItemsQuery = { findListItems: Array<{ description: string | null, id: string, name: string, statusId: string, priority: string }> };
+export type FindProjectIssuesQuery = { findProjectIssues: Array<{ description: string | null, id: string, name: string, statusId: string, priority: string }> };
 
-export type FindSubItemsQueryVariables = Exact<{
-  input: Types.FindItemsInput;
+export type FindSubIssuesQueryVariables = Exact<{
+  input: Types.FindIssuesInput;
 }>;
 
 
-export type FindSubItemsQuery = { findSubItems: Array<{ description: string | null, id: string, name: string }> };
+export type FindSubIssuesQuery = { findSubIssues: Array<{ description: string | null, id: string, name: string }> };
 
-export type CreateListMutationVariables = Exact<{
-  input: Types.CreateListInput;
+export type CreateProjectMutationVariables = Exact<{
+  input: Types.CreateProjectInput;
 }>;
 
 
-export type CreateListMutation = { createList: string };
+export type CreateProjectMutation = { createProject: string };
 
-export type FindListQueryVariables = Exact<{
-  findListId: string;
+export type FindProjectQueryVariables = Exact<{
+  findProjectId: string;
 }>;
 
 
-export type FindListQuery = { findList: { id: string, name: string } };
+export type FindProjectQuery = { findProject: { id: string, name: string, workspaceId: string, workspace: { id: string, name: string } } };
 
-export type FindListsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindProjectsQueryVariables = Exact<{
+  input?: Types.FindProjectsOptions | null | undefined;
+}>;
 
 
-export type FindListsQuery = { findLists: { rowCount: number, rows: Array<{ id: string, name: string, space: { id: string, name: string } }> } };
+export type FindProjectsQuery = { findProjects: { rowCount: number, rows: Array<{ id: string, name: string, workspaceId: string, workspace: { id: string, name: string } }> } };
 
 export type FindStatusesQueryVariables = Exact<{
   input: Types.FindStatusesOptions;
@@ -112,41 +114,6 @@ export type FindStatusesQueryVariables = Exact<{
 
 
 export type FindStatusesQuery = { findStatuses: Array<{ id: string, name: string }> };
-
-export type FindCustomFieldsQueryVariables = Exact<{
-  options: Types.FindCustomFieldsOptions;
-}>;
-
-
-export type FindCustomFieldsQuery = { findCustomFields: Array<{ customFieldId: string, id: string, listId: string }> };
-
-export type CreateSpaceMutationVariables = Exact<{
-  input: Types.CreateSpaceInput;
-}>;
-
-
-export type CreateSpaceMutation = { createSpace: string };
-
-export type FindSpacesQueryVariables = Exact<{
-  input: Types.FindSpacesOptions;
-}>;
-
-
-export type FindSpacesQuery = { findSpaces: Array<{ id: string, name: string, lists: Array<{ id: string, name: string, selectedViewId: string | null, space: { name: string } }> | null }> };
-
-export type FindViewQueryVariables = Exact<{
-  viewId: string;
-}>;
-
-
-export type FindViewQuery = { findView: { id: string, name: string, type: string, order: number, list: { id: string, name: string, selectedViewId: string | null, space: { id: string, name: string } } } };
-
-export type FindViewsQueryVariables = Exact<{
-  listId: string;
-}>;
-
-
-export type FindViewsQuery = { findViews: Array<{ id: string, name: string, type: string, order: number, list: { id: string, name: string, selectedViewId: string | null, space: { id: string, name: string } } }> };
 
 export type CreateWorkspaceMutationVariables = Exact<{
   input: Types.CreateWorkspaceInput;
@@ -207,8 +174,8 @@ export const useDeleteAttachmentMutation = <
 useDeleteAttachmentMutation.getKey = () => ['DeleteAttachment'];
 
 export const FindAttachmentsDocument = new TypedDocumentString(`
-    query FindAttachments($itemId: String!) {
-  findAttachments(itemId: $itemId) {
+    query FindAttachments($issueId: String!) {
+  findAttachments(issueId: $issueId) {
     rowCount
     rows {
       id
@@ -356,58 +323,58 @@ useGetCurrentUserQuery.document = GetCurrentUserDocument;
 
 useGetCurrentUserQuery.getKey = (variables?: GetCurrentUserQueryVariables) => variables === undefined ? ['GetCurrentUser'] : ['GetCurrentUser', variables];
 
-export const CreateItemDocument = new TypedDocumentString(`
-    mutation CreateItem($input: CreateItemInput!) {
-  createItem(input: $input)
+export const CreateIssueDocument = new TypedDocumentString(`
+    mutation CreateIssue($input: CreateIssueInput!) {
+  createIssue(input: $input)
 }
     `);
 
-export const useCreateItemMutation = <
+export const useCreateIssueMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<CreateItemMutation, TError, CreateItemMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<CreateIssueMutation, TError, CreateIssueMutationVariables, TContext>) => {
     
-    return useMutation<CreateItemMutation, TError, CreateItemMutationVariables, TContext>(
+    return useMutation<CreateIssueMutation, TError, CreateIssueMutationVariables, TContext>(
       {
-    mutationKey: ['CreateItem'],
-    mutationFn: (variables?: CreateItemMutationVariables) => customFetcher<CreateItemMutation, CreateItemMutationVariables>(CreateItemDocument, variables)(),
+    mutationKey: ['CreateIssue'],
+    mutationFn: (variables?: CreateIssueMutationVariables) => customFetcher<CreateIssueMutation, CreateIssueMutationVariables>(CreateIssueDocument, variables)(),
     ...options
   }
     )};
 
-useCreateItemMutation.getKey = () => ['CreateItem'];
+useCreateIssueMutation.getKey = () => ['CreateIssue'];
 
-export const UpdateItemDocument = new TypedDocumentString(`
-    mutation UpdateItem($input: UpdateItemInput!) {
-  updateItem(input: $input)
+export const UpdateIssueDocument = new TypedDocumentString(`
+    mutation UpdateIssue($input: UpdateIssueInput!) {
+  updateIssue(input: $input)
 }
     `);
 
-export const useUpdateItemMutation = <
+export const useUpdateIssueMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<UpdateItemMutation, TError, UpdateItemMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<UpdateIssueMutation, TError, UpdateIssueMutationVariables, TContext>) => {
     
-    return useMutation<UpdateItemMutation, TError, UpdateItemMutationVariables, TContext>(
+    return useMutation<UpdateIssueMutation, TError, UpdateIssueMutationVariables, TContext>(
       {
-    mutationKey: ['UpdateItem'],
-    mutationFn: (variables?: UpdateItemMutationVariables) => customFetcher<UpdateItemMutation, UpdateItemMutationVariables>(UpdateItemDocument, variables)(),
+    mutationKey: ['UpdateIssue'],
+    mutationFn: (variables?: UpdateIssueMutationVariables) => customFetcher<UpdateIssueMutation, UpdateIssueMutationVariables>(UpdateIssueDocument, variables)(),
     ...options
   }
     )};
 
-useUpdateItemMutation.getKey = () => ['UpdateItem'];
+useUpdateIssueMutation.getKey = () => ['UpdateIssue'];
 
-export const FindItemDocument = new TypedDocumentString(`
-    query FindItem($findItemId: String!) {
-  findItem(id: $findItemId) {
+export const FindIssueDocument = new TypedDocumentString(`
+    query FindIssue($findIssueId: String!) {
+  findIssue(id: $findIssueId) {
     id
     description
-    list {
+    project {
       id
       name
     }
-    parentItem {
+    parentIssue {
       id
       name
     }
@@ -418,29 +385,29 @@ export const FindItemDocument = new TypedDocumentString(`
 }
     `);
 
-export const useFindItemQuery = <
-      TData = FindItemQuery,
+export const useFindIssueQuery = <
+      TData = FindIssueQuery,
       TError = unknown
     >(
-      variables: FindItemQueryVariables,
-      options?: Omit<UseQueryOptions<FindItemQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindItemQuery, TError, TData>['queryKey'] }
+      variables: FindIssueQueryVariables,
+      options?: Omit<UseQueryOptions<FindIssueQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindIssueQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<FindItemQuery, TError, TData>(
+    return useQuery<FindIssueQuery, TError, TData>(
       {
-    queryKey: ['FindItem', variables],
-    queryFn: customFetcher<FindItemQuery, FindItemQueryVariables>(FindItemDocument, variables),
+    queryKey: ['FindIssue', variables],
+    queryFn: customFetcher<FindIssueQuery, FindIssueQueryVariables>(FindIssueDocument, variables),
     ...options
   }
     )};
 
-useFindItemQuery.document = FindItemDocument;
+useFindIssueQuery.document = FindIssueDocument;
 
-useFindItemQuery.getKey = (variables: FindItemQueryVariables) => ['FindItem', variables];
+useFindIssueQuery.getKey = (variables: FindIssueQueryVariables) => ['FindIssue', variables];
 
-export const FindListItemsDocument = new TypedDocumentString(`
-    query FindListItems($listId: String!) {
-  findListItems(listId: $listId) {
+export const FindProjectIssuesDocument = new TypedDocumentString(`
+    query FindProjectIssues($projectId: String!) {
+  findProjectIssues(projectId: $projectId) {
     description
     id
     name
@@ -450,29 +417,29 @@ export const FindListItemsDocument = new TypedDocumentString(`
 }
     `);
 
-export const useFindListItemsQuery = <
-      TData = FindListItemsQuery,
+export const useFindProjectIssuesQuery = <
+      TData = FindProjectIssuesQuery,
       TError = unknown
     >(
-      variables: FindListItemsQueryVariables,
-      options?: Omit<UseQueryOptions<FindListItemsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindListItemsQuery, TError, TData>['queryKey'] }
+      variables: FindProjectIssuesQueryVariables,
+      options?: Omit<UseQueryOptions<FindProjectIssuesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindProjectIssuesQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<FindListItemsQuery, TError, TData>(
+    return useQuery<FindProjectIssuesQuery, TError, TData>(
       {
-    queryKey: ['FindListItems', variables],
-    queryFn: customFetcher<FindListItemsQuery, FindListItemsQueryVariables>(FindListItemsDocument, variables),
+    queryKey: ['FindProjectIssues', variables],
+    queryFn: customFetcher<FindProjectIssuesQuery, FindProjectIssuesQueryVariables>(FindProjectIssuesDocument, variables),
     ...options
   }
     )};
 
-useFindListItemsQuery.document = FindListItemsDocument;
+useFindProjectIssuesQuery.document = FindProjectIssuesDocument;
 
-useFindListItemsQuery.getKey = (variables: FindListItemsQueryVariables) => ['FindListItems', variables];
+useFindProjectIssuesQuery.getKey = (variables: FindProjectIssuesQueryVariables) => ['FindProjectIssues', variables];
 
-export const FindSubItemsDocument = new TypedDocumentString(`
-    query FindSubItems($input: FindItemsInput!) {
-  findSubItems(input: $input) {
+export const FindSubIssuesDocument = new TypedDocumentString(`
+    query FindSubIssues($input: FindIssuesInput!) {
+  findSubIssues(input: $input) {
     description
     id
     name
@@ -480,83 +447,89 @@ export const FindSubItemsDocument = new TypedDocumentString(`
 }
     `);
 
-export const useFindSubItemsQuery = <
-      TData = FindSubItemsQuery,
+export const useFindSubIssuesQuery = <
+      TData = FindSubIssuesQuery,
       TError = unknown
     >(
-      variables: FindSubItemsQueryVariables,
-      options?: Omit<UseQueryOptions<FindSubItemsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindSubItemsQuery, TError, TData>['queryKey'] }
+      variables: FindSubIssuesQueryVariables,
+      options?: Omit<UseQueryOptions<FindSubIssuesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindSubIssuesQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<FindSubItemsQuery, TError, TData>(
+    return useQuery<FindSubIssuesQuery, TError, TData>(
       {
-    queryKey: ['FindSubItems', variables],
-    queryFn: customFetcher<FindSubItemsQuery, FindSubItemsQueryVariables>(FindSubItemsDocument, variables),
+    queryKey: ['FindSubIssues', variables],
+    queryFn: customFetcher<FindSubIssuesQuery, FindSubIssuesQueryVariables>(FindSubIssuesDocument, variables),
     ...options
   }
     )};
 
-useFindSubItemsQuery.document = FindSubItemsDocument;
+useFindSubIssuesQuery.document = FindSubIssuesDocument;
 
-useFindSubItemsQuery.getKey = (variables: FindSubItemsQueryVariables) => ['FindSubItems', variables];
+useFindSubIssuesQuery.getKey = (variables: FindSubIssuesQueryVariables) => ['FindSubIssues', variables];
 
-export const CreateListDocument = new TypedDocumentString(`
-    mutation CreateList($input: CreateListInput!) {
-  createList(input: $input)
+export const CreateProjectDocument = new TypedDocumentString(`
+    mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input)
 }
     `);
 
-export const useCreateListMutation = <
+export const useCreateProjectMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<CreateListMutation, TError, CreateListMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<CreateProjectMutation, TError, CreateProjectMutationVariables, TContext>) => {
     
-    return useMutation<CreateListMutation, TError, CreateListMutationVariables, TContext>(
+    return useMutation<CreateProjectMutation, TError, CreateProjectMutationVariables, TContext>(
       {
-    mutationKey: ['CreateList'],
-    mutationFn: (variables?: CreateListMutationVariables) => customFetcher<CreateListMutation, CreateListMutationVariables>(CreateListDocument, variables)(),
+    mutationKey: ['CreateProject'],
+    mutationFn: (variables?: CreateProjectMutationVariables) => customFetcher<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, variables)(),
     ...options
   }
     )};
 
-useCreateListMutation.getKey = () => ['CreateList'];
+useCreateProjectMutation.getKey = () => ['CreateProject'];
 
-export const FindListDocument = new TypedDocumentString(`
-    query FindList($findListId: String!) {
-  findList(id: $findListId) {
+export const FindProjectDocument = new TypedDocumentString(`
+    query FindProject($findProjectId: String!) {
+  findProject(id: $findProjectId) {
     id
     name
+    workspaceId
+    workspace {
+      id
+      name
+    }
   }
 }
     `);
 
-export const useFindListQuery = <
-      TData = FindListQuery,
+export const useFindProjectQuery = <
+      TData = FindProjectQuery,
       TError = unknown
     >(
-      variables: FindListQueryVariables,
-      options?: Omit<UseQueryOptions<FindListQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindListQuery, TError, TData>['queryKey'] }
+      variables: FindProjectQueryVariables,
+      options?: Omit<UseQueryOptions<FindProjectQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindProjectQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<FindListQuery, TError, TData>(
+    return useQuery<FindProjectQuery, TError, TData>(
       {
-    queryKey: ['FindList', variables],
-    queryFn: customFetcher<FindListQuery, FindListQueryVariables>(FindListDocument, variables),
+    queryKey: ['FindProject', variables],
+    queryFn: customFetcher<FindProjectQuery, FindProjectQueryVariables>(FindProjectDocument, variables),
     ...options
   }
     )};
 
-useFindListQuery.document = FindListDocument;
+useFindProjectQuery.document = FindProjectDocument;
 
-useFindListQuery.getKey = (variables: FindListQueryVariables) => ['FindList', variables];
+useFindProjectQuery.getKey = (variables: FindProjectQueryVariables) => ['FindProject', variables];
 
-export const FindListsDocument = new TypedDocumentString(`
-    query FindLists {
-  findLists {
+export const FindProjectsDocument = new TypedDocumentString(`
+    query FindProjects($input: FindProjectsOptions) {
+  findProjects(input: $input) {
     rows {
       id
       name
-      space {
+      workspaceId
+      workspace {
         id
         name
       }
@@ -566,25 +539,25 @@ export const FindListsDocument = new TypedDocumentString(`
 }
     `);
 
-export const useFindListsQuery = <
-      TData = FindListsQuery,
+export const useFindProjectsQuery = <
+      TData = FindProjectsQuery,
       TError = unknown
     >(
-      variables?: FindListsQueryVariables,
-      options?: Omit<UseQueryOptions<FindListsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindListsQuery, TError, TData>['queryKey'] }
+      variables?: FindProjectsQueryVariables,
+      options?: Omit<UseQueryOptions<FindProjectsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindProjectsQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<FindListsQuery, TError, TData>(
+    return useQuery<FindProjectsQuery, TError, TData>(
       {
-    queryKey: variables === undefined ? ['FindLists'] : ['FindLists', variables],
-    queryFn: customFetcher<FindListsQuery, FindListsQueryVariables>(FindListsDocument, variables),
+    queryKey: variables === undefined ? ['FindProjects'] : ['FindProjects', variables],
+    queryFn: customFetcher<FindProjectsQuery, FindProjectsQueryVariables>(FindProjectsDocument, variables),
     ...options
   }
     )};
 
-useFindListsQuery.document = FindListsDocument;
+useFindProjectsQuery.document = FindProjectsDocument;
 
-useFindListsQuery.getKey = (variables?: FindListsQueryVariables) => variables === undefined ? ['FindLists'] : ['FindLists', variables];
+useFindProjectsQuery.getKey = (variables?: FindProjectsQueryVariables) => variables === undefined ? ['FindProjects'] : ['FindProjects', variables];
 
 export const FindStatusesDocument = new TypedDocumentString(`
     query FindStatuses($input: FindStatusesOptions!) {
@@ -614,174 +587,6 @@ export const useFindStatusesQuery = <
 useFindStatusesQuery.document = FindStatusesDocument;
 
 useFindStatusesQuery.getKey = (variables: FindStatusesQueryVariables) => ['FindStatuses', variables];
-
-export const FindCustomFieldsDocument = new TypedDocumentString(`
-    query FindCustomFields($options: FindCustomFieldsOptions!) {
-  findCustomFields(options: $options) {
-    customFieldId
-    id
-    listId
-  }
-}
-    `);
-
-export const useFindCustomFieldsQuery = <
-      TData = FindCustomFieldsQuery,
-      TError = unknown
-    >(
-      variables: FindCustomFieldsQueryVariables,
-      options?: Omit<UseQueryOptions<FindCustomFieldsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindCustomFieldsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindCustomFieldsQuery, TError, TData>(
-      {
-    queryKey: ['FindCustomFields', variables],
-    queryFn: customFetcher<FindCustomFieldsQuery, FindCustomFieldsQueryVariables>(FindCustomFieldsDocument, variables),
-    ...options
-  }
-    )};
-
-useFindCustomFieldsQuery.document = FindCustomFieldsDocument;
-
-useFindCustomFieldsQuery.getKey = (variables: FindCustomFieldsQueryVariables) => ['FindCustomFields', variables];
-
-export const CreateSpaceDocument = new TypedDocumentString(`
-    mutation CreateSpace($input: CreateSpaceInput!) {
-  createSpace(input: $input)
-}
-    `);
-
-export const useCreateSpaceMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<CreateSpaceMutation, TError, CreateSpaceMutationVariables, TContext>) => {
-    
-    return useMutation<CreateSpaceMutation, TError, CreateSpaceMutationVariables, TContext>(
-      {
-    mutationKey: ['CreateSpace'],
-    mutationFn: (variables?: CreateSpaceMutationVariables) => customFetcher<CreateSpaceMutation, CreateSpaceMutationVariables>(CreateSpaceDocument, variables)(),
-    ...options
-  }
-    )};
-
-useCreateSpaceMutation.getKey = () => ['CreateSpace'];
-
-export const FindSpacesDocument = new TypedDocumentString(`
-    query FindSpaces($input: FindSpacesOptions!) {
-  findSpaces(input: $input) {
-    id
-    name
-    lists {
-      id
-      name
-      selectedViewId
-      space {
-        name
-      }
-    }
-  }
-}
-    `);
-
-export const useFindSpacesQuery = <
-      TData = FindSpacesQuery,
-      TError = unknown
-    >(
-      variables: FindSpacesQueryVariables,
-      options?: Omit<UseQueryOptions<FindSpacesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindSpacesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindSpacesQuery, TError, TData>(
-      {
-    queryKey: ['FindSpaces', variables],
-    queryFn: customFetcher<FindSpacesQuery, FindSpacesQueryVariables>(FindSpacesDocument, variables),
-    ...options
-  }
-    )};
-
-useFindSpacesQuery.document = FindSpacesDocument;
-
-useFindSpacesQuery.getKey = (variables: FindSpacesQueryVariables) => ['FindSpaces', variables];
-
-export const FindViewDocument = new TypedDocumentString(`
-    query FindView($viewId: String!) {
-  findView(viewId: $viewId) {
-    id
-    name
-    type
-    order
-    list {
-      id
-      name
-      selectedViewId
-      space {
-        id
-        name
-      }
-    }
-  }
-}
-    `);
-
-export const useFindViewQuery = <
-      TData = FindViewQuery,
-      TError = unknown
-    >(
-      variables: FindViewQueryVariables,
-      options?: Omit<UseQueryOptions<FindViewQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindViewQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindViewQuery, TError, TData>(
-      {
-    queryKey: ['FindView', variables],
-    queryFn: customFetcher<FindViewQuery, FindViewQueryVariables>(FindViewDocument, variables),
-    ...options
-  }
-    )};
-
-useFindViewQuery.document = FindViewDocument;
-
-useFindViewQuery.getKey = (variables: FindViewQueryVariables) => ['FindView', variables];
-
-export const FindViewsDocument = new TypedDocumentString(`
-    query FindViews($listId: String!) {
-  findViews(listId: $listId) {
-    id
-    name
-    type
-    order
-    list {
-      id
-      name
-      selectedViewId
-      space {
-        id
-        name
-      }
-    }
-  }
-}
-    `);
-
-export const useFindViewsQuery = <
-      TData = FindViewsQuery,
-      TError = unknown
-    >(
-      variables: FindViewsQueryVariables,
-      options?: Omit<UseQueryOptions<FindViewsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindViewsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindViewsQuery, TError, TData>(
-      {
-    queryKey: ['FindViews', variables],
-    queryFn: customFetcher<FindViewsQuery, FindViewsQueryVariables>(FindViewsDocument, variables),
-    ...options
-  }
-    )};
-
-useFindViewsQuery.document = FindViewsDocument;
-
-useFindViewsQuery.getKey = (variables: FindViewsQueryVariables) => ['FindViews', variables];
 
 export const CreateWorkspaceDocument = new TypedDocumentString(`
     mutation CreateWorkspace($input: CreateWorkspaceInput!) {

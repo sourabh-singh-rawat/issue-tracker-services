@@ -3,7 +3,7 @@ import { ServiceOptions } from "@issue-tracker/orm";
 import { Attachment } from "../../../data";
 
 export interface CreateAttachmentOptions {
-  itemId: string;
+  issueId: string;
   userId: string;
   file: Buffer;
   filename: string;

@@ -1,4 +1,4 @@
-import { StatusOption, StatusOptionGroup } from "../../data";
+import { StatusOption } from "../../data";
 import {
   CreateOptionsOptions,
   FindStatusesOptions,
@@ -7,21 +7,19 @@ import {
 
 export class CoreStatusService implements StatusService {
   async createOptions(options: CreateOptionsOptions) {
-    const { manager, statuses, listId } = options;
-    const StatusGroupRepo = manager.getRepository(StatusOptionGroup);
+    const { manager, statuses, projectId } = options;
     const StatusRepo = manager.getRepository(StatusOption);
 
-    const { id: groupId } = await StatusGroupRepo.save({ listId });
     for await (const status of statuses) {
       const { name, orderIndex, type } = status;
 
-      await StatusRepo.save({ name, type, orderIndex, groupId });
+      await StatusRepo.save({ name, type, orderIndex, projectId });
     }
   }
 
   async findStatuses(options: FindStatusesOptions) {
-    const { listId } = options;
+    const { projectId } = options;
 
-    return await StatusOption.find({ where: { group: { listId } } });
+    return await StatusOption.find({ where: { projectId } });
   }
 }

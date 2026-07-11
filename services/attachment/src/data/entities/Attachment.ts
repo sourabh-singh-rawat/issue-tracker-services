@@ -28,5 +28,5 @@ export class Attachment extends Audit {
   ownerId!: string;
 
   @Column({ name: "issue_id", type: "uuid" })
-  itemId!: string;
+  issueId!: string;
 }
