@@ -12,4 +12,4 @@ subgraphs:
   issue-tracker:
     routing_url: http://127.0.0.1:4002/graphql
     schema:
-      file: ./services/issue-tracker/schema.graphql
+      file: ./services/issues/schema.graphql

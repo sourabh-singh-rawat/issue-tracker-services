@@ -2,12 +2,12 @@ import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class Attachment {
-  @Field()
+  @Field(() => String)
   id!: string;
 
-  @Field()
+  @Field(() => String)
   bucket!: string;
 
-  @Field()
+  @Field(() => String)
   thumbnailLink!: string;
 }

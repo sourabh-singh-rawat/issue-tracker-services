@@ -25,7 +25,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Build all server packages/services once; individual runtime stages only need their graph outputs.
 # Prefer per-service targets below when optimizing layer cache further.
 RUN pnpm exec nx run-many -t build \
-    --projects=attachment,mail,auth,issue-tracker,@issue-tracker/common,@issue-tracker/comm,@issue-tracker/event-bus,@issue-tracker/orm,@issue-tracker/security,@issue-tracker/server-core
+    --projects=@issue-tracker/attachment,@issue-tracker/mail,@issue-tracker/auth,@issue-tracker/issues,@issue-tracker/common,@issue-tracker/comm,@issue-tracker/event-bus,@issue-tracker/orm,@issue-tracker/security,@issue-tracker/server-core
 
 
 # Stage 3: Attachment Service
@@ -33,7 +33,7 @@ FROM base AS attachment
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F attachment start
+CMD pnpm -F @issue-tracker/attachment start
 
 
 # Stage 3: Email / Mail Service
@@ -41,7 +41,7 @@ FROM base AS email
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F mail start
+CMD pnpm -F @issue-tracker/mail start
 
 
 # Stage 3: Auth Service
@@ -49,7 +49,7 @@ FROM base AS auth
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F auth start
+CMD pnpm -F @issue-tracker/auth start
 
 
 # Stage 3: Issue Tracker Service
@@ -57,4 +57,4 @@ FROM base AS issue-tracker
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F issue-tracker start
+CMD pnpm -F @issue-tracker/issues start
