@@ -2,12 +2,12 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class RegisterUserInput {
-  @Field()
+  @Field(() => String)
   displayName!: string;
 
-  @Field()
+  @Field(() => String)
   email!: string;
 
-  @Field()
+  @Field(() => String)
   password!: string;
 }
