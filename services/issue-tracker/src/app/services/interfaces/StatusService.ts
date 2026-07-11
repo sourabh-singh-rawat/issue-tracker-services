@@ -3,12 +3,12 @@ import { ServiceOptions } from "@issue-tracker/orm";
 import { StatusOption } from "../../../data";
 
 export interface CreateOptionsOptions extends ServiceOptions {
-  listId: string;
+  projectId: string;
   statuses: { name: string; type: StatusType; orderIndex: number }[];
 }
 
 export interface FindStatusesOptions {
-  listId: string;
+  projectId: string;
 }
 
 export interface StatusService {

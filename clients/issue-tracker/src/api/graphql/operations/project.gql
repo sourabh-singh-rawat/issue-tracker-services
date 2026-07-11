@@ -1,0 +1,38 @@
+mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input)
+}
+
+query FindProject($findProjectId: String!) {
+  findProject(id: $findProjectId) {
+    id
+    name
+    workspaceId
+    workspace {
+      id
+      name
+    }
+  }
+}
+
+query FindProjects($input: FindProjectsOptions) {
+  findProjects(input: $input) {
+    rows {
+      id
+      name
+      workspaceId
+      workspace {
+        id
+        name
+      }
+    }
+    rowCount
+  }
+}
+
+query FindStatuses($input: FindStatusesOptions!) {
+  findStatuses(input: $input) {
+    id
+    name
+  }
+}
+

@@ -17,9 +17,9 @@ export class CoreAttachmentService implements AttachmentService {
     });
   }
 
-  async findAttachments(itemId: string) {
+  async findAttachments(issueId: string) {
     const [rows, rowCount] = await Attachment.findAndCount({
-      where: { itemId },
+      where: { issueId },
     });
 
     return { rows, rowCount };

@@ -7,7 +7,7 @@ import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import MuiToolbar from "@mui/material/Toolbar";
 
-import { SpaceList } from "@features/space";
+import { ProjectList } from "@features/project";
 import WorkspaceSwitcher from "@features/workspace/components/WorkspaceSwitcher";
 import { useWorkspaceStore } from "@features/workspace";
 
@@ -60,7 +60,9 @@ export function Sidebar() {
         <WorkspaceSwitcher />
       </List>
       <MuiDivider />
-      {currentWorkspace?.id && <SpaceList workspaceId={currentWorkspace.id} />}
+      {currentWorkspace?.id && (
+        <ProjectList workspaceId={currentWorkspace.id} />
+      )}
       <MuiDivider />
     </Drawer>
   );

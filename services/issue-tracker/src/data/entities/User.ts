@@ -4,7 +4,6 @@ import {
 } from "@issue-tracker/common";
 import { Audit } from "@issue-tracker/orm";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Space } from "./Space";
 import { Workspace } from "./Workspace";
 
 @Entity({ name: "users" })
@@ -40,7 +39,4 @@ export class User extends Audit {
 
   @OneToMany(() => Workspace, (w) => w.createdBy)
   workspaces!: Workspace[];
-
-  @OneToMany(() => Space, (w) => w.createdBy)
-  spaces!: Space[];
 }

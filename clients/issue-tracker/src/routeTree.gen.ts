@@ -15,7 +15,7 @@ import { Route as EmailVerificationRouteImport } from './routes/email-verificati
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
-import { Route as AuthenticatedIItemIdRouteImport } from './routes/_authenticated/i.$itemId'
+import { Route as AuthenticatedIIssueIdRouteImport } from './routes/_authenticated/i.$issueId'
 import { Route as AuthenticatedWorkspaceIdHomeRouteImport } from './routes/_authenticated/$workspaceId.home'
 import { Route as AuthenticatedWorkspaceIdVLViewIdRouteImport } from './routes/_authenticated/$workspaceId.v.l.$viewId'
 import { Route as AuthenticatedWorkspaceIdVBViewIdRouteImport } from './routes/_authenticated/$workspaceId.v.b.$viewId'
@@ -49,9 +49,9 @@ const AuthenticatedMeRoute = AuthenticatedMeRouteImport.update({
   path: '/me',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedIItemIdRoute = AuthenticatedIItemIdRouteImport.update({
-  id: '/i/$itemId',
-  path: '/i/$itemId',
+const AuthenticatedIIssueIdRoute = AuthenticatedIIssueIdRouteImport.update({
+  id: '/i/$issueId',
+  path: '/i/$issueId',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedWorkspaceIdHomeRoute =
@@ -80,7 +80,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/me': typeof AuthenticatedMeRoute
   '/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
-  '/i/$itemId': typeof AuthenticatedIItemIdRoute
+  '/i/$issueId': typeof AuthenticatedIIssueIdRoute
   '/$workspaceId/v/b/$viewId': typeof AuthenticatedWorkspaceIdVBViewIdRoute
   '/$workspaceId/v/l/$viewId': typeof AuthenticatedWorkspaceIdVLViewIdRoute
 }
@@ -91,7 +91,7 @@ export interface FileRoutesByTo {
   '/me': typeof AuthenticatedMeRoute
   '/': typeof AuthenticatedIndexRoute
   '/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
-  '/i/$itemId': typeof AuthenticatedIItemIdRoute
+  '/i/$issueId': typeof AuthenticatedIIssueIdRoute
   '/$workspaceId/v/b/$viewId': typeof AuthenticatedWorkspaceIdVBViewIdRoute
   '/$workspaceId/v/l/$viewId': typeof AuthenticatedWorkspaceIdVLViewIdRoute
 }
@@ -104,7 +104,7 @@ export interface FileRoutesById {
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
-  '/_authenticated/i/$itemId': typeof AuthenticatedIItemIdRoute
+  '/_authenticated/i/$issueId': typeof AuthenticatedIIssueIdRoute
   '/_authenticated/$workspaceId/v/b/$viewId': typeof AuthenticatedWorkspaceIdVBViewIdRoute
   '/_authenticated/$workspaceId/v/l/$viewId': typeof AuthenticatedWorkspaceIdVLViewIdRoute
 }
@@ -117,7 +117,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/me'
     | '/$workspaceId/home'
-    | '/i/$itemId'
+    | '/i/$issueId'
     | '/$workspaceId/v/b/$viewId'
     | '/$workspaceId/v/l/$viewId'
   fileRoutesByTo: FileRoutesByTo
@@ -128,7 +128,7 @@ export interface FileRouteTypes {
     | '/me'
     | '/'
     | '/$workspaceId/home'
-    | '/i/$itemId'
+    | '/i/$issueId'
     | '/$workspaceId/v/b/$viewId'
     | '/$workspaceId/v/l/$viewId'
   id:
@@ -140,7 +140,7 @@ export interface FileRouteTypes {
     | '/_authenticated/me'
     | '/_authenticated/'
     | '/_authenticated/$workspaceId/home'
-    | '/_authenticated/i/$itemId'
+    | '/_authenticated/i/$issueId'
     | '/_authenticated/$workspaceId/v/b/$viewId'
     | '/_authenticated/$workspaceId/v/l/$viewId'
   fileRoutesById: FileRoutesById
@@ -196,11 +196,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/i/$itemId': {
-      id: '/_authenticated/i/$itemId'
-      path: '/i/$itemId'
-      fullPath: '/i/$itemId'
-      preLoaderRoute: typeof AuthenticatedIItemIdRouteImport
+    '/_authenticated/i/$issueId': {
+      id: '/_authenticated/i/$issueId'
+      path: '/i/$issueId'
+      fullPath: '/i/$issueId'
+      preLoaderRoute: typeof AuthenticatedIIssueIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/$workspaceId/home': {
@@ -231,7 +231,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedWorkspaceIdHomeRoute: typeof AuthenticatedWorkspaceIdHomeRoute
-  AuthenticatedIItemIdRoute: typeof AuthenticatedIItemIdRoute
+  AuthenticatedIIssueIdRoute: typeof AuthenticatedIIssueIdRoute
   AuthenticatedWorkspaceIdVBViewIdRoute: typeof AuthenticatedWorkspaceIdVBViewIdRoute
   AuthenticatedWorkspaceIdVLViewIdRoute: typeof AuthenticatedWorkspaceIdVLViewIdRoute
 }
@@ -240,7 +240,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedWorkspaceIdHomeRoute: AuthenticatedWorkspaceIdHomeRoute,
-  AuthenticatedIItemIdRoute: AuthenticatedIItemIdRoute,
+  AuthenticatedIIssueIdRoute: AuthenticatedIIssueIdRoute,
   AuthenticatedWorkspaceIdVBViewIdRoute: AuthenticatedWorkspaceIdVBViewIdRoute,
   AuthenticatedWorkspaceIdVLViewIdRoute: AuthenticatedWorkspaceIdVLViewIdRoute,
 }

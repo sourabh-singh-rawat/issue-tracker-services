@@ -2,8 +2,8 @@ mutation DeleteAttachment($deleteAttachmentId: String!) {
   deleteAttachment(id: $deleteAttachmentId)
 }
 
-query FindAttachments($itemId: String!) {
-  findAttachments(itemId: $itemId) {
+query FindAttachments($issueId: String!) {
+  findAttachments(issueId: $issueId) {
     rowCount
     rows {
       id

@@ -1,34 +1,35 @@
 import { Grid2, useTheme } from "@mui/material";
 import {
   useFindStatusesQuery,
-  useFindViewQuery,
+  useFindProjectQuery,
 } from "@generated/gql";
-import { SpaceContext, useViewParams } from "@common";
-import { ItemList } from "@features/item/components";
+import { useViewParams } from "@common";
+import { StatusesContext } from "@common/contexts/StatusesContext";
+import { IssueList } from "@features/issue/components";
 import { ViewLocation, ViewSwitcher } from "../../components";
 
 export const ListView = () => {
   const theme = useTheme();
-  const { viewId } = useViewParams();
-  const { data: view } = useFindViewQuery(
-    { viewId: viewId! },
+  const { viewId: projectId } = useViewParams();
+  const { data: project } = useFindProjectQuery(
+    { findProjectId: projectId! },
     {
-      select: (data) => data.findView,
-      enabled: Boolean(viewId),
+      select: (data) => data.findProject,
+      enabled: Boolean(projectId),
     },
   );
   const { data: statuses = [] } = useFindStatusesQuery(
-    { input: { listId: view?.list.id! } },
+    { input: { projectId: projectId! } },
     {
       select: (data) => data.findStatuses,
-      enabled: Boolean(view?.list.id),
+      enabled: Boolean(projectId),
     },
   );
 
   return (
     <Grid2 container>
-      <SpaceContext.Provider value={{ statuses }}>
-        {view && (
+      <StatusesContext.Provider value={{ statuses }}>
+        {project && (
           <>
             <Grid2
               size={12}
@@ -38,7 +39,7 @@ export const ListView = () => {
                 borderBottom: `1px solid ${theme.palette.action.hover}`,
               }}
             >
-              <ViewLocation list={view.list} />
+              <ViewLocation project={project} />
             </Grid2>
             <Grid2
               size={12}
@@ -47,14 +48,14 @@ export const ListView = () => {
                 borderBottom: `1px solid ${theme.palette.action.hover}`,
               }}
             >
-              <ViewSwitcher listId={view.list.id} />
+              <ViewSwitcher projectId={project.id} />
             </Grid2>
             <Grid2 size={12} sx={{ p: theme.spacing(2) }}>
-              <ItemList listId={view.list.id} />
+              <IssueList projectId={project.id} />
             </Grid2>
           </>
         )}
-      </SpaceContext.Provider>
+      </StatusesContext.Provider>
     </Grid2>
   );
 };

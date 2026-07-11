@@ -29,30 +29,21 @@ import pino from "pino";
 import { buildSchema } from "type-graphql";
 import { DataSource } from "typeorm";
 import {
-  CoreCustomFieldResolver,
-  CoreItemResolver,
-  CoreListResolver,
-  CoreSpaceResolver,
+  CoreIssueResolver,
+  CoreProjectResolver,
   CoreStatusResolver,
-  CoreViewResolver,
   CoreWorkspaceResolver,
 } from "./api/resolvers";
 import {
-  CoreCustomFieldService,
-  CoreItemService,
-  CoreListService,
-  CoreSpaceService,
+  CoreIssueService,
+  CoreProjectService,
   CoreStatusService,
   CoreUserService,
-  CoreViewService,
   CoreWorkspaceService,
-  CustomFieldService,
-  ItemService,
-  ListService,
-  SpaceService,
+  IssueService,
+  ProjectService,
   StatusService,
   UserService,
-  ViewService,
   WorkspaceService,
 } from "./app";
 import { ProjectActivityService } from "./app/services/interfaces/project-activity.service";
@@ -64,14 +55,11 @@ export interface RegisteredServices {
   orm: Typeorm;
   broker: Broker;
   userService: UserService;
-  itemService: ItemService;
-  listService: ListService;
-  fieldService: CustomFieldService;
+  issueService: IssueService;
+  projectService: ProjectService;
   statusService: StatusService;
-  viewService: ViewService;
   projectActivityService: ProjectActivityService;
   workspaceService: WorkspaceService;
-  spaceService: SpaceService;
   userEmailVerifiedSubscriber: UserEmailVerifiedSubscriber;
   publisher: Publisher<Subjects>;
 }
@@ -131,12 +119,9 @@ const main = async () => {
   container.add("orm", asValue(orm));
   container.add("broker", asValue(natsBroker));
   container.add("userService", asClass(CoreUserService));
-  container.add("itemService", asClass(CoreItemService));
+  container.add("issueService", asClass(CoreIssueService));
   container.add("statusService", asClass(CoreStatusService));
-  container.add("fieldService", asClass(CoreCustomFieldService));
-  container.add("spaceService", asClass(CoreSpaceService));
-  container.add("listService", asClass(CoreListService));
-  container.add("viewService", asClass(CoreViewService));
+  container.add("projectService", asClass(CoreProjectService));
   container.add("workspaceService", asClass(CoreWorkspaceService));
   container.add(
     "userEmailVerifiedSubscriber",
@@ -151,12 +136,9 @@ const main = async () => {
     scalarsMap: [{ type: Object, scalar: GraphQLJSON }],
     resolvers: [
       CoreWorkspaceResolver,
-      CoreSpaceResolver,
-      CoreListResolver,
-      CoreItemResolver,
+      CoreProjectResolver,
+      CoreIssueResolver,
       CoreStatusResolver,
-      CoreCustomFieldResolver,
-      CoreViewResolver,
     ],
   });
   const plugins = [fastifyApolloDrainPlugin(instance)];

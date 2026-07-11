@@ -7,17 +7,17 @@ export class CoreAttachmentController implements AttachmentController {
   constructor(private readonly attachmentService: AttachmentService) {}
 
   async createAttachment(
-    request: FastifyRequest<{ Params: { itemId: string } }>,
+    request: FastifyRequest<{ Params: { issueId: string } }>,
     reply: FastifyReply,
   ) {
-    const { itemId } = request.params;
+    const { issueId } = request.params;
     const userId = request.user.userId;
     const data = await request.file();
 
     if (!data) throw new Error("No data provided");
 
     await this.attachmentService.createAttachment({
-      itemId,
+      issueId,
       userId,
       filename: data.filename,
       mimetype: data.mimetype,
