@@ -12,7 +12,17 @@ cp .env.example .env
 cp clients/issue-tracker/.env.example clients/issue-tracker/.env
 ```
 
-Align root `.env` with Docker Compose (see `.env.example`). Compose reads secrets from the root `.env` via `--env-file` (`POSTGRES_PASSWORD`, `PGADMIN_DEFAULT_EMAIL`, `PGADMIN_DEFAULT_PASSWORD`) — keep cluster URL passwords in sync with `POSTGRES_PASSWORD`.
+Align root `.env` with Docker Compose (see `.env.example`). Compose reads secrets from the root `.env` via `--env-file`:
+
+| Variable | Purpose | Example default (local only) |
+|----------|---------|------------------------------|
+| `POSTGRES_PASSWORD` | All Compose Postgres services | `it-dev-pg-n7k4m2xq` |
+| `PGADMIN_DEFAULT_EMAIL` | pgAdmin login email | `pgadmin@issue-tracker.local` |
+| `PGADMIN_DEFAULT_PASSWORD` | pgAdmin login password | `it-dev-pgadmin-r9w3c8hp` |
+
+Keep the password segment of each `*_POSTGRES_CLUSTER_URL` identical to `POSTGRES_PASSWORD` (dotenv does not expand nested vars). These defaults are repo-specific and for local dev only — change them for any shared or non-dev environment.
+
+**Volume note:** Postgres applies `POSTGRES_PASSWORD` only on first data-dir init. After changing the password, either update the role inside Postgres or remove the Compose data volumes under `infra/data/` and bring infra up again.
 
 ## Recommended: VS Code / Cursor
 
