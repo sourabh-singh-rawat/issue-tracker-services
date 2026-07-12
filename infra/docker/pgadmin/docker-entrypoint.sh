@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# Writable locations inside the container (do not mount over /pgadmin4 —
+# Writable locations inside the container (do not mount over /pgadmin4;
 # that path owns the pgAdmin application in dpage/pgadmin4).
 CONFIG_DIR="${PGADMIN_CONFIG_DIR:-/var/lib/pgadmin}"
 PGPASS_FILE="${PGPASS_FILE:-${CONFIG_DIR}/pgpass}"
