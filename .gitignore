@@ -145,3 +145,10 @@ k8s/secrets
 
 # Docker local data
 infra/docker/data/
+
+# Combined scripts outputs
+combined_output.txt
+
+# pgAdmin generated configs
+infra/docker/pgadmin/pgpass
+infra/docker/pgadmin/servers.json

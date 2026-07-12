@@ -4,52 +4,37 @@ services:
     container_name: postgres-minimal
     restart: unless-stopped
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      # Admin role
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+
+      # Service roles
       - POSTGRES_AUTH_PASSWORD=${POSTGRES_AUTH_PASSWORD}
       - POSTGRES_ISSUES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
       - POSTGRES_MAIL_PASSWORD=${POSTGRES_MAIL_PASSWORD}
       - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
-    ports:
-      - "5432:5432"
     volumes:
-      - ./data/postgres-minimal-data:/var/lib/postgresql/data
+      - ./data/postgres-minimal-data:/var/lib/postgresql
       - ./init-db:/docker-entrypoint-initdb.d
     command:
       - postgres
       - -c
-      - max_connections=150
+      - max_connections=50
 
-  attachment-redis:
-    image: redis:8.0-M02-alpine
-    container_name: attachment-redis
-    restart: unless-stopped
-    command: redis-server --appendonly yes --replica-read-only no
-    ports:
-      - 6380:6379
-
-  nats:
-    image: nats:latest
-    container_name: nats
-    restart: unless-stopped
-    ports:
-      - "4222:4222"
-      - "6222:6222"
-      - "8222:8222"
-    command:
-      - -p
-      - "4222"
-      - -m
-      - "8222"
-      - -js
-
-  issue-tracker-services-pgadmin:
+  pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: issue-tracker-services-pgadmin
+    container_name: pgadmin
     restart: unless-stopped
+    entrypoint: ["/pgadmin4/docker-entrypoint.sh"]
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+      - PGPASS_FILE=/config/pgpass
     ports:
       - 5555:80
     volumes:
       - ./data/pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin:/pgadmin4
+      - ./pgadmin/pgpass:/config/pgpass
