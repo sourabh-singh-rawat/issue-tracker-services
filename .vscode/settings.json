@@ -1,0 +1,9 @@
+{
+  // Infra (Docker Compose) is intentionally separate from debug launches.
+  // Run Task → "infra: up" once, then F5 → "dev" for app debug sessions.
+  "task.quickOpen.detail": true,
+  "task.quickOpen.skip": false,
+  "debug.openDebug": "openOnDebugBreak",
+  "debug.internalConsoleOptions": "neverOpen",
+  "terminal.integrated.tabs.hideCondition": "never"
+}

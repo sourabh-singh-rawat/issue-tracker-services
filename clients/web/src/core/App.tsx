@@ -1,4 +1,5 @@
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { routeTree } from "../__generated__/routeTree.gen";
 
 const router = createRouter({
@@ -13,5 +14,12 @@ declare module "@tanstack/react-router" {
 }
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      {import.meta.env.DEV && (
+        <TanStackRouterDevtools router={router} initialIsOpen={false} />
+      )}
+    </>
+  );
 }

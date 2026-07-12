@@ -4,8 +4,6 @@ import ModalHeader from "../../../../common/components/ModalHeader";
 
 import MuiList from "@mui/material/List";
 
-import { useSelectedTab } from "../../../../common/hooks";
-
 interface AddProjectMemberModalProps {
   open: boolean;
   handleClose: () => void;
@@ -14,8 +12,7 @@ interface AddProjectMemberModalProps {
 export default function AddProjectMemberModal(
   { open, handleClose }: AddProjectMemberModalProps,
 ) {
-  const { id } = useSelectedTab();
-
+  // const { id } = useSelectedTab();
   // const { data: workspaceMemberList } = useGetWorkspaceMemberListQuery({
   //   id,
   // });

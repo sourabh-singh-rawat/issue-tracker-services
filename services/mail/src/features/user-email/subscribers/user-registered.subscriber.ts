@@ -1,0 +1,35 @@
+import { JsMsg } from "nats";
+import {
+  CONSUMERS,
+  NatsBroker,
+  Streams,
+  SUBJECTS,
+  Subscriber,
+  UserRegisteredPayload,
+} from "@issue-tracker/event-bus";
+import { Typeorm } from "@issue-tracker/orm";
+import { dataSource } from "@/container";
+import { UserEmailService } from "../services/interfaces/user-email.service";
+
+export class UserRegisteredSubscriber extends Subscriber<UserRegisteredPayload> {
+  readonly stream = Streams.USER;
+  readonly consumer = CONSUMERS.USER_REGISTERED_MAIL;
+  readonly subject = SUBJECTS.USER_REGISTERED;
+
+  constructor(
+    private readonly broker: NatsBroker,
+    private readonly userEmailService: UserEmailService,
+    private readonly orm: Typeorm,
+  ) {
+    super(broker.client);
+  }
+
+  onMessage = async (message: JsMsg, payload: UserRegisteredPayload) => {
+    await dataSource.transaction(async (manager) => {
+      const { userId, email, html } = payload;
+      await this.userEmailService.sendEmail({ userId, email, html, manager });
+    });
+
+    message.ack();
+  };
+}

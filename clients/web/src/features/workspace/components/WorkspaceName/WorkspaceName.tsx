@@ -1,29 +1,27 @@
 import {
-  Control,
-  FormState,
   SubmitHandler,
   UseFormHandleSubmit,
+  UseFormReturn,
 } from "react-hook-form";
 import Button from "../../../../common/components/buttons/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "../../../../common";
 import Grid from "@mui/material/Grid";
 import React from "react";
+import type { UpdateWorkspaceForm } from "../WorkspaceDescription/WorkspaceDescription";
 
 interface Props {
-  handleSubmit: UseFormHandleSubmit<UpdateWorkspaceApiArg["body"]>;
-  control: Control<UpdateWorkspaceApiArg["body"]>;
-  formState: FormState<UpdateWorkspaceApiArg["body"]>;
-  defaultSchemas: any;
+  handleSubmit: UseFormHandleSubmit<UpdateWorkspaceForm>;
+  form: UseFormReturn<UpdateWorkspaceForm>;
+  defaultSchemas?: any;
 }
 
 export default function WorkspaceName({
   handleSubmit,
-  control,
-  formState,
+  form,
   defaultSchemas,
 }: Props) {
-  const onSubmit: SubmitHandler<UpdateWorkspaceApiArg["body"]> = () => {};
+  const onSubmit: SubmitHandler<UpdateWorkspaceForm> = () => {};
 
   return (
     <>
@@ -39,8 +37,7 @@ export default function WorkspaceName({
             label="Name"
             name="name"
             placeholder="workspace name"
-            control={control}
-            formState={formState}
+            form={form}
             defaultSchemas={defaultSchemas}
           />
           <Button label="Save" />

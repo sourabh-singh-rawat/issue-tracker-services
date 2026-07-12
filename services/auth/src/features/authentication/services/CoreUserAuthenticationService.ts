@@ -15,7 +15,7 @@ import {
   hasVerificationClaims,
 } from "@issue-tracker/security";
 import { v4 } from "uuid";
-import { User, VerificationLink } from "../entities";
+import { RefreshToken, User, VerificationLink } from "../entities";
 import {
   CreateUserWithEmailAndPasswordOptions,
   GeneratePasswordResetLinkOptions,
@@ -204,6 +204,7 @@ export class CoreUserAuthenticationService
   async signInWithEmailAndPassword(options: SignInWithEmailAndPasswordOptions) {
     const { manager, email, password } = options;
     const UserRepo = manager.getRepository(User);
+    const RefreshTokenRepo = manager.getRepository(RefreshToken);
 
     const user = await UserRepo.findOne({
       where: { email },
@@ -218,14 +219,23 @@ export class CoreUserAuthenticationService
 
     const iat = Math.floor(Date.now() / 1000);
     const exp = iat + 60 * 60 * 10000000;
-    return {
-      accessToken: await this.createUserAccessToken({ user, iat, exp }),
-      refreshToken: await this.createUserRefreshToken({
-        user,
-        iat,
-        exp: exp + 60 * 60 * 24 * 7,
-      }),
-    };
+    const refreshTokenExp = exp + 60 * 60 * 24 * 7;
+
+    const accessToken = await this.createUserAccessToken({ user, iat, exp });
+    const refreshToken = await this.createUserRefreshToken({
+      user,
+      iat,
+      exp: refreshTokenExp,
+    });
+
+    // Persist refresh token server-side only — never send it to the client.
+    await RefreshTokenRepo.save({
+      userId: user.id,
+      tokenValue: refreshToken,
+      expirationAt: new Date(refreshTokenExp * 1000),
+    });
+
+    return { accessToken };
   }
 
   generateVerificationLink(

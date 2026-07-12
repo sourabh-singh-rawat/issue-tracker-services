@@ -18,7 +18,7 @@ pnpm exec nx graph
 ## Common commands
 
 ```bash
-# Local stack: VS Code compound "dev" (or pnpm dev:infra + dev:apps) — see docs/dev.md
+# Local stack: VS Code compound "dev" (or pnpm dev:infra + dev:apps)
 pnpm dev:infra
 pnpm gql:compose
 pnpm dev:apps

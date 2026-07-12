@@ -7,12 +7,14 @@ import _ from "lodash";
 import { Label } from "../forms";
 import StyledTextField from "../styled/StyledTextField";
 
+export type AutocompleteOption = { name: string; id: string };
+
 interface AutocompleteProps {
   title: string;
-  value: unknown;
-  onChange: () => void;
-  options?: { name: string; id: string }[];
-  fixedOptions?: { name: string; id: string }[];
+  value: AutocompleteOption | AutocompleteOption[] | null;
+  onChange: (value: AutocompleteOption | AutocompleteOption[] | null) => void;
+  options?: AutocompleteOption[];
+  fixedOptions?: AutocompleteOption[];
   isDisabled?: boolean;
   isClearable?: boolean;
   isMultiple?: boolean;
@@ -41,26 +43,34 @@ export default function Autocomplete({
       )}
       <MuiAutocomplete
         value={value}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (Array.isArray(newValue)) {
-            return onChange(_.uniqBy([...fixedOptions, ...newValue], "id"));
+            return onChange(
+              _.uniqBy(
+                [...fixedOptions, ...(newValue as AutocompleteOption[])],
+                "id",
+              ),
+            );
           }
-          onChange(newValue);
+          onChange(newValue as AutocompleteOption | null);
         }}
         popupIcon={<KeyboardArrowDownIcon />}
         options={options}
-        getOptionLabel={(o) => o.name}
+        getOptionLabel={(o) => (o as AutocompleteOption).name}
         renderTags={(tagValue, getTagProps) =>
-          tagValue.map((option, index) => (
-            <MuiChip
-              size="small"
-              label={option.name}
-              {...getTagProps({ index })}
-              disabled={!!fixedOptions.find((o) => o.id === option.id)}
-              sx={{ borderRadius: theme.shape.borderRadiusMedium }}
-              key={index}
-            />
-          ))
+          tagValue.map((option, index) => {
+            const opt = option as AutocompleteOption;
+            return (
+              <MuiChip
+                size="small"
+                label={opt.name}
+                {...getTagProps({ index })}
+                disabled={!!fixedOptions.find((o) => o.id === opt.id)}
+                sx={{ borderRadius: theme.shape.borderRadiusMedium }}
+                key={index}
+              />
+            );
+          })
         }
         renderInput={(params) => (
           <StyledTextField {...params} size="small" error={isError} />

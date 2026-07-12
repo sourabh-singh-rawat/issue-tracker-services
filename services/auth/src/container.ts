@@ -1,3 +1,5 @@
+import "./env";
+
 import {
   NatsBroker,
   NatsPublisher,

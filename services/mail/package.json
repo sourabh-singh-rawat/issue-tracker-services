@@ -2,12 +2,12 @@
   "name": "@issue-tracker/mail",
   "version": "0.0.0",
   "description": "Mail",
-  "main": "./src/index.ts",
+  "main": "./src/main.ts",
   "scripts": {
     "test": "jest --passWithNoTests --forceExit",
     "test:watch": "jest --watchAll --verbose",
-    "start": "tsx src/index.ts",
-    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/main.ts",
+    "dev": "tsx watch src/main.ts",
     "build": "tsgo"
   },
   "nx": {

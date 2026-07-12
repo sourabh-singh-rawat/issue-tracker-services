@@ -46,7 +46,14 @@ export function Main({ children }: MainProps) {
 
   useEffect(() => {
     if (userQuery.data) {
-      setCurrentUser({ current: userQuery.data, isLoading: false });
+      // GraphQL DateTimeISO can codegen as `unknown`; coerce for the User store type.
+      setCurrentUser({
+        current: {
+          ...userQuery.data,
+          createdAt: String(userQuery.data.createdAt ?? ""),
+        },
+        isLoading: false,
+      });
     }
   }, [userQuery.data, setCurrentUser]);
 

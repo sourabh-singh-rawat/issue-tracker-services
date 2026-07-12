@@ -19,7 +19,7 @@ export class Auth {
     _reply: FastifyReply,
     done: HookHandlerDoneFunction,
   ) => {
-    if (!request.cookies.accessToken || !request.cookies.refreshToken) {
+    if (!request.cookies.accessToken) {
       throw new BadRequestError("Bad request!");
     }
 
