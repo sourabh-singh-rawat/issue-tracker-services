@@ -3,22 +3,6 @@ services:
     image: postgres:18.4
     container_name: postgres-minimal
     restart: unless-stopped
-    # Windows bind mounts often mark *.sh as +x. The official entrypoint then
-    # *executes* them; a CRLF shebang becomes "cannot execute: required file not found".
-    # Copy into the container FS and strip CR first (same idea as pgAdmin below).
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        set -e
-        mkdir -p /docker-entrypoint-initdb.d
-        for f in /host-init-db/*; do
-          [ -f "$$f" ] || continue
-          dest="/docker-entrypoint-initdb.d/$$(basename "$$f")"
-          tr -d '\r' < "$$f" > "$$dest"
-          chmod +x "$$dest"
-        done
-        exec /usr/local/bin/docker-entrypoint.sh postgres -c max_connections=50
     environment:
       # Admin role
       - POSTGRES_USER=postgres
@@ -31,32 +15,4 @@ services:
       - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
     volumes:
       - ./data/postgres-minimal-data:/var/lib/postgresql
-      - ./init-db:/host-init-db:ro
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    restart: unless-stopped
-    # Custom wrapper lives outside /pgadmin4 so we never shadow the app tree.
-    # Strip CR so Windows CRLF checkouts still run under /bin/sh.
-    entrypoint:
-      - /bin/sh
-      - -c
-      - tr -d '\r' < /custom/docker-entrypoint.sh | /bin/sh
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
-      - PGADMIN_SERVER_JSON_FILE=/var/lib/pgadmin/servers.json
-      - PGPASS_FILE=/var/lib/pgadmin/pgpass
-      - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
-      - POSTGRES_AUTH_PASSWORD=${POSTGRES_AUTH_PASSWORD}
-      - POSTGRES_ISSUES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
-      - POSTGRES_MAIL_PASSWORD=${POSTGRES_MAIL_PASSWORD}
-      - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
-    ports:
-      - 5555:80
-    volumes:
-      - ./data/pgadmin-data:/var/lib/pgadmin
-      - ./pgadmin/docker-entrypoint.sh:/custom/docker-entrypoint.sh:ro
-
+      - ./init-db:/docker-entrypoint-initdb.d:ro
