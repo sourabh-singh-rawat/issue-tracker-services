@@ -1,3 +1,6 @@
+# Env interpolation: use infra/docker/.env (see .env.example).
+#   pnpm dev:infra
+#   docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yaml up -d
 services:
   auth-postgres:
     image: postgres:18.4
