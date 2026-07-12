@@ -13,6 +13,8 @@ services:
       - postgres
       - -c
       - max_connections=50
+    ports:
+      - 5433:5432
 
   issues-postgres:
     image: postgres:18.4
@@ -28,6 +30,8 @@ services:
       - postgres
       - -c
       - max_connections=50
+    ports:
+      - 5434:5432
 
   mail-postgres:
     image: postgres:18.4
@@ -43,6 +47,8 @@ services:
       - postgres
       - -c
       - max_connections=50
+    ports:
+      - 5435:5432
 
   attachment-postgres:
     image: postgres:18.4
@@ -58,3 +64,5 @@ services:
       - postgres
       - -c
       - max_connections=50
+    ports:
+      - 5436:5432

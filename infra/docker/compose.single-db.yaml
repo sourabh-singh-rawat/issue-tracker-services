@@ -16,3 +16,5 @@ services:
     volumes:
       - ./data/postgres-minimal-data:/var/lib/postgresql
       - ./init-db:/docker-entrypoint-initdb.d:ro
+    ports:
+      - 5432:5432
