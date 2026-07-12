@@ -142,3 +142,6 @@ k8s/secrets
 .nx/cache
 .nx/workspace-data
 .nx/migrate-runs
+
+# Docker local data
+infra/docker/data/

@@ -1,6 +1,3 @@
-# Env interpolation: use infra/docker/.env (see .env.example).
-#   pnpm dev:infra
-#   docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yaml up -d
 services:
   auth-postgres:
     image: postgres:18.4
@@ -11,26 +8,26 @@ services:
     ports:
       - "5431:5432"
     volumes:
-      - ../data/auth-postgres-data:/var/lib/postgresql
+      - ./data/auth-postgres-data:/var/lib/postgresql
     command:
       - postgres
       - -c
-      - max_connections=1000
+      - max_connections=50
 
-  issue-tracker-postgres:
+  issues-postgres:
     image: postgres:18.4
-    container_name: issue-tracker-postgres
+    container_name: issues-postgres
     restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - ../data/issue-tracker-postgres-data:/var/lib/postgresql
+      - ./data/issues-postgres-data:/var/lib/postgresql
     command:
       - postgres
       - -c
-      - max_connections=1000
+      - max_connections=50
 
   mail-postgres:
     image: postgres:18.4
@@ -41,24 +38,11 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ../data/mail-postgres-data:/var/lib/postgresql
+      - ./data/mail-postgres-data:/var/lib/postgresql
     command:
       - postgres
       - -c
-      - max_connections=1000
-
-  mail-postgres-test:
-    image: postgres:18.4
-    container_name: mail-postgres-test
-    restart: unless-stopped
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    ports:
-      - "15433:5432"
-    command:
-      - postgres
-      - -c
-      - max_connections=1000
+      - max_connections=50
 
   attachment-postgres:
     image: postgres:18.4
@@ -69,11 +53,11 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - ../data/attachment-postgres-data:/var/lib/postgresql
+      - ./data/attachment-postgres-data:/var/lib/postgresql
     command:
       - postgres
       - -c
-      - max_connections=1000
+      - max_connections=50
 
   attachment-redis:
     image: redis:8.0-M02-alpine
@@ -98,21 +82,6 @@ services:
       - "8222"
       - -js
 
-  nats-test:
-    image: nats:latest
-    container_name: nats-test
-    restart: unless-stopped
-    ports:
-      - "14222:4222"
-      - "16222:6222"
-      - "18222:8222"
-    command:
-      - -p
-      - "4222"
-      - -m
-      - "8222"
-      - -js
-
   issue-tracker-services-pgadmin:
     image: dpage/pgadmin4:latest
     container_name: issue-tracker-services-pgadmin
@@ -123,4 +92,4 @@ services:
     ports:
       - 5555:80
     volumes:
-      - ../data/pgadmin-data:/var/lib/pgadmin
+      - ./data/pgadmin-data:/var/lib/pgadmin

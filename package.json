@@ -5,6 +5,8 @@
   "scripts": {
     "dev:infra": "docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yaml up -d",
     "dev:infra:down": "docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yaml down",
+    "dev:infra:minimal": "docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.minimal.yaml up -d",
+    "dev:infra:minimal:down": "docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.minimal.yaml down",
     "dev:apps": "nx run-many -t dev --projects=@issue-tracker/web,@issue-tracker/auth,@issue-tracker/attachment,@issue-tracker/mail,@issue-tracker/issues,@issue-tracker/gateway --parallel=10",
     "client": "nx run @issue-tracker/web:dev",
     "web": "nx run @issue-tracker/web:dev",

@@ -44,6 +44,40 @@
       }
     },
     {
+      "label": "infra: up:minimal",
+      "detail": "Start Postgres (Single Instance), Redis, NATS, pgAdmin (Docker Compose Minimal). Run once; keep running while debugging apps.",
+      "type": "shell",
+      "command": "pnpm dev:infra:minimal",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: down:minimal",
+      "detail": "Stop and remove minimal infra containers (Docker Compose Minimal down).",
+      "type": "shell",
+      "command": "pnpm dev:infra:minimal:down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
       "label": "infra: status",
       "detail": "Show Docker Compose service status.",
       "type": "shell",

@@ -1,0 +1,28 @@
+services:
+  mail-postgres-test:
+    image: postgres:18.4
+    container_name: mail-postgres-test
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "15433:5432"
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+
+  nats-test:
+    image: nats:latest
+    container_name: nats-test
+    restart: unless-stopped
+    ports:
+      - "14222:4222"
+      - "16222:6222"
+      - "18222:8222"
+    command:
+      - -p
+      - "4222"
+      - -m
+      - "8222"
+      - -js
