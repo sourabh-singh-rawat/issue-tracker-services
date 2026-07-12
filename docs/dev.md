@@ -12,7 +12,7 @@ cp .env.example .env
 cp clients/issue-tracker/.env.example clients/issue-tracker/.env
 ```
 
-Align root `.env` with `docker-compose.yaml` (see `.env.example`).
+Align root `.env` with Docker Compose (see `.env.example`). Compose reads secrets from the root `.env` via `--env-file` (`POSTGRES_PASSWORD`, `PGADMIN_DEFAULT_EMAIL`, `PGADMIN_DEFAULT_PASSWORD`) — keep cluster URL passwords in sync with `POSTGRES_PASSWORD`.
 
 ## Recommended: VS Code / Cursor
 
