@@ -26,16 +26,21 @@ services:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
     restart: unless-stopped
-    entrypoint: ["/pgadmin4/docker-entrypoint.sh"]
+    # Custom wrapper lives outside /pgadmin4 so we never shadow the app tree
+    entrypoint: [ "/bin/sh", "/custom/docker-entrypoint.sh" ]
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
       - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
-      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
-      - PGPASS_FILE=/config/pgpass
+      - PGADMIN_SERVER_JSON_FILE=/var/lib/pgadmin/servers.json
+      - PGPASS_FILE=/var/lib/pgadmin/pgpass
+      - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+      - POSTGRES_AUTH_PASSWORD=${POSTGRES_AUTH_PASSWORD}
+      - POSTGRES_ISSUES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
+      - POSTGRES_MAIL_PASSWORD=${POSTGRES_MAIL_PASSWORD}
+      - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
     ports:
       - 5555:80
     volumes:
       - ./data/pgadmin-data:/var/lib/pgadmin
-      - ./pgadmin:/pgadmin4
-      - ./pgadmin/pgpass:/config/pgpass
+      - ./pgadmin/docker-entrypoint.sh:/custom/docker-entrypoint.sh:ro
