@@ -2,7 +2,8 @@
   "name": "@issue-tracker/orm",
   "version": "0.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsgo",
     "test": "jest --passWithNoTests --forceExit",

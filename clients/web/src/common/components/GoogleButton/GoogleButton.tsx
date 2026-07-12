@@ -4,7 +4,7 @@ import React from "react";
 import MuiButton from "@mui/material/Button";
 import MuiGoogleIcon from "@mui/icons-material/Google";
 import { styled } from "@mui/material/styles";
-import theme from "../../../core/themes/mui.theme";
+import { theme } from "../../../core/themes/mui.theme";
 
 const StyledButton = styled(MuiButton)(() => ({
   fontWeight: 600,
@@ -21,7 +21,12 @@ const StyledButton = styled(MuiButton)(() => ({
   },
 }));
 
-export default function GoogleButton({ onClick, message }) {
+interface GoogleButtonProps {
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  message: string;
+}
+
+export default function GoogleButton({ onClick, message }: GoogleButtonProps) {
   return (
     <StyledButton
       startIcon={<MuiGoogleIcon />}

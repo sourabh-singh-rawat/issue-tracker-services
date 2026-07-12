@@ -6,7 +6,7 @@ import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
 import MuiFormControl from "@mui/material/FormControl";
 import MuiFormHelperText from "@mui/material/FormHelperText";
-import Label from "../../../../common/components/forms/Label";
+import { Label } from "../../../../common/components/forms/Label";
 import {
   Control,
   Controller,
@@ -22,7 +22,7 @@ interface WorkspaceRoleSelectorProps<DefaultValues extends FieldValues> {
   control: Control<DefaultValues>;
   formState: FormState<DefaultValues>;
   title?: string;
-  options?: string[];
+  options?: { id: string; name: string }[];
   helperText?: string;
   rules?: UseControllerProps<DefaultValues>["rules"];
 }

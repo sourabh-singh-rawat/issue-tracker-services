@@ -1,4 +1,4 @@
-import { alpha, styled, useTheme } from "@mui/material";
+import { alpha, styled } from "@mui/material";
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import React from "react";
 
@@ -26,6 +26,7 @@ export interface ButtonProps {
   variant?: "text" | "outlined" | "contained";
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   isDisabled?: boolean;
+  sx?: MuiButtonProps["sx"];
 }
 
 export default function Button({
@@ -37,9 +38,8 @@ export default function Button({
   variant = "contained",
   onClick,
   isDisabled,
+  sx,
 }: ButtonProps) {
-  const theme = useTheme();
-
   return (
     <StyledButton
       type={type}
@@ -50,6 +50,7 @@ export default function Button({
       onClick={onClick}
       disabled={isDisabled}
       disableRipple
+      sx={sx}
     >
       {label}
     </StyledButton>

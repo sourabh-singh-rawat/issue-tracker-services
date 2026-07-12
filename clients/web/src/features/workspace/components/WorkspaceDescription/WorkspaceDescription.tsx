@@ -1,30 +1,31 @@
 import React from "react";
 import {
-  Control,
-  FormState,
   SubmitHandler,
   UseFormHandleSubmit,
+  UseFormReturn,
 } from "react-hook-form";
-import { UpdateWorkspaceApiArg } from "../../../../api/generated/workspace.api";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import TextField from "../../../../common/components/forms/TextField";
+import { TextField } from "../../../../common/components/forms/TextField";
 import Button from "../../../../common/components/buttons/Button";
 
+export type UpdateWorkspaceForm = {
+  name?: string;
+  description?: string;
+};
+
 interface Props {
-  handleSubmit: UseFormHandleSubmit<UpdateWorkspaceApiArg["body"]>;
-  control: Control<UpdateWorkspaceApiArg["body"]>;
-  formState: FormState<UpdateWorkspaceApiArg["body"]>;
-  defaultSchemas: any;
+  handleSubmit: UseFormHandleSubmit<UpdateWorkspaceForm>;
+  form: UseFormReturn<UpdateWorkspaceForm>;
+  defaultSchemas?: any;
 }
 
 export default function WorkspaceDescription({
-  control,
+  form,
   defaultSchemas,
-  formState,
   handleSubmit,
 }: Props) {
-  const onSubmit: SubmitHandler<UpdateWorkspaceApiArg["body"]> = () => {};
+  const onSubmit: SubmitHandler<UpdateWorkspaceForm> = () => {};
 
   return (
     <>
@@ -37,11 +38,10 @@ export default function WorkspaceDescription({
         </Grid>
         <Grid item xs={7} component="form" onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            title="Description"
+            label="Description"
             name="description"
             placeholder="Description"
-            control={control}
-            formState={formState}
+            form={form}
             defaultSchemas={defaultSchemas}
             rows={4}
           />

@@ -3,20 +3,10 @@
   "compounds": [
     {
       "name": "dev",
-      "stopAll": true,
-      "preLaunchTask": "dev:prepare",
-      "configurations": [
-        "auth",
-        "issue-tracker",
-        "attachment",
-        "mail",
-        "gateway",
-        "issue-tracker (client)",
-        "codegen: supergraph"
-      ]
-    },
-    {
-      "name": "dev (apps only)",
+      "presentation": {
+        "group": "dev",
+        "order": 1
+      },
       "stopAll": true,
       "configurations": [
         "auth",
@@ -30,8 +20,11 @@
     },
     {
       "name": "dev + browser",
+      "presentation": {
+        "group": "dev",
+        "order": 2
+      },
       "stopAll": true,
-      "preLaunchTask": "dev:prepare",
       "configurations": [
         "auth",
         "issue-tracker",
@@ -45,8 +38,11 @@
     },
     {
       "name": "dev (linux + browser)",
+      "presentation": {
+        "group": "dev",
+        "order": 3
+      },
       "stopAll": true,
-      "preLaunchTask": "dev:prepare",
       "configurations": [
         "auth",
         "issue-tracker",

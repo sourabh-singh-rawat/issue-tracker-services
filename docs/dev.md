@@ -16,29 +16,41 @@ Align root `.env` with `docker-compose.yaml` (see `.env.example`).
 
 ## Recommended: VS Code / Cursor
 
-### Run the full stack (debug)
+Infra (Docker) and app debug are **separate** on purpose: containers stay up across debug restarts.
+
+### 1. Start infra (once per machine session)
+
+**Terminal → Run Task…** (or Command Palette → “Tasks: Run Task”):
+
+| Task | What it does |
+|------|----------------|
+| **`infra: up`** | `docker compose up -d` (Postgres, Redis, NATS, pgAdmin) |
+| **`infra: down`** | `docker compose down` |
+| **`infra: status`** | `docker compose ps` |
+| **`infra: logs`** | Follow compose logs |
+
+Or from a shell: `pnpm dev:infra` / `pnpm dev:infra:down`.
+
+### 2. Run apps in debug (F5)
 
 1. Open the Run and Debug view.
 2. Choose compound **`dev`** and start it (F5).
 
-That compound:
+That compound only launches app processes (no Docker pre-task):
 
-1. Runs pre-launch task **`dev:prepare`**
-   - `pnpm dev:infra` → Docker Compose up
-   - `pnpm gql:compose` → writes `services/gateway/supergraph.graphql`
-2. Launches (each in its own debug terminal):
-   - `auth`, `issue-tracker`, `attachment`, `mail`, `gateway`
-   - `issue-tracker (client)` (Vite)
-   - `codegen: supergraph` (`pnpm gen` for client GraphQL types)
+- `auth`, `issue-tracker`, `attachment`, `mail`, `gateway`
+- `issue-tracker (client)` (Vite)
+- `codegen: supergraph` (`pnpm gen` for client GraphQL types)
 
 Other compounds:
 
 | Compound | Behavior |
 |----------|----------|
-| **dev** | Infra + compose + all services/client (default) |
-| **dev (apps only)** | Same processes, no Docker / gql pre-task |
-| **dev + browser** | Same as **dev**, plus shared Chrome client debugger |
+| **dev** | All services + client (debug only; infra must already be up) |
+| **dev + browser** | Same as **dev**, plus Chrome client debugger |
 | **dev (linux + browser)** | Same as **dev**, plus Brave debugger (Linux path) |
+
+If the gateway supergraph SDL is missing or stale, run task **`gql:compose`** once (`pnpm gql:compose`).
 
 ### Client-side (browser) debugging
 
@@ -56,21 +68,18 @@ Set breakpoints in `clients/issue-tracker/src/**/*.{ts,tsx}`, start **dev + brow
 
 Individual configurations (auth, gateway, client, …) can be started one at a time.
 
-### Tasks (Terminal → Run Task…)
+### Other tasks (Terminal → Run Task…)
 
 | Task | What it does |
 |------|----------------|
-| `dev:infra` | `docker compose up -d` |
-| `dev:infra:down` | `docker compose down` |
-| `gql:compose` | Rover supergraph compose |
-| `dev:prepare` | Infra then gql compose (also preLaunch for **dev**) |
-| `dev:apps` | Nx `run-many -t dev` for all apps (no debugger) |
+| `gql:compose` | Rover supergraph compose (gateway SDL) |
+| `dev:apps` | Nx `run-many -t dev` for all apps (no debugger, no Docker) |
 | `supergraph` | Long-running `rover dev` (optional alternate) |
 
 ### Stopping
 
-- Stop the debug session to kill app processes (`stopAll` on compounds).
-- Containers keep running until you run task **`dev:infra:down`** or `pnpm dev:infra:down`.
+- Stop the debug session to kill **app** processes only (`stopAll` on compounds).
+- Containers keep running until you run task **`infra: down`** or `pnpm dev:infra:down`.
 
 ## CLI helpers (no orchestrator)
 

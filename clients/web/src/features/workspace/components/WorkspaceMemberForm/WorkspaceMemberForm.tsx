@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useParams } from "@tanstack/react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import TextField from "../../../../common/components/forms/TextField";
+import { TextField } from "../../../../common/components/forms/TextField";
 
 import MuiGrid from "@mui/material/Grid";
 import MuiContainer from "@mui/material/Container";
@@ -10,64 +10,55 @@ import MuiContainer from "@mui/material/Container";
 import PrimaryButton from "../../../../common/components/buttons/PrimaryButton";
 import WorkspaceRoleSelector from "../WorkspaceMemberSelector/WorkspaceRoleSelector";
 import EmailIcon from "@mui/icons-material/Email";
-import { ajvResolver } from "@hookform/resolvers/ajv";
-import AjvFormats from "ajv-formats";
+
+type InviteForm = {
+  email: string;
+  workspaceRole: string;
+};
 
 export default function WorkspaceMemberForm() {
   const { id } = useParams({ strict: false }) as { id?: string };
-  const { data: roleList } = useGetWorkspaceRoleListQuery();
-  const [createWorkspaceInvite, { isLoading }] =
-    useCreateWorkspaceInviteMutation();
+  // TODO: wire to GraphQL once workspace invite/role queries exist
+  const roleOptions: { id: string; name: string }[] = [];
+  const isLoading = false;
 
-  const defaultValues = useMemo(() => ({ email: "", workspaceRole: "" }), []);
-  // const defaultSchemas: any = useMemo(
-  //   () =>
-  //     schema.paths["/api/v1/workspaces/{id}/invite"].post.requestBody.content[
-  //       "application/json"
-  //     ].schema,
-  //   [],
-  // );
-  const { control, formState, handleSubmit } = useForm({
+  const defaultValues = useMemo(
+    () => ({ email: "", workspaceRole: "" }) as InviteForm,
+    [],
+  );
+
+  const form = useForm<InviteForm>({
     defaultValues,
     mode: "onBlur",
-    resolver: ajvResolver(
-      {},
-      {
-        formats: { email: AjvFormats.get("email") },
-      },
-    ),
   });
 
-  const onSubmit: SubmitHandler<typeof defaultValues> = async ({
+  const onSubmit: SubmitHandler<InviteForm> = async ({
     email,
     workspaceRole,
   }) => {
     if (!id) return;
-    await createWorkspaceInvite({ id, body: { email, workspaceRole } });
+    // await createWorkspaceInvite({ id, body: { email, workspaceRole } });
+    void email;
+    void workspaceRole;
   };
 
   return (
     <MuiContainer
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit)}
       disableGutters
     >
       <MuiGrid spacing={2} container>
         <MuiGrid item xs={8}>
-          <TextField
-            name="email"
-            title="Email"
-            control={control}
-            formState={formState}
-          />
+          <TextField name="email" label="Email" form={form} />
         </MuiGrid>
         <MuiGrid item xs={4}>
           <WorkspaceRoleSelector
             name="workspaceRole"
             title="Workspace role"
-            control={control}
-            formState={formState}
-            options={roleList?.rows}
+            control={form.control}
+            formState={form.formState}
+            options={roleOptions}
           />
         </MuiGrid>
 

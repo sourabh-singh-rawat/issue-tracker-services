@@ -1,47 +1,45 @@
 import { ThemeOptions, createTheme } from "@mui/material";
 
-declare module "@mui/material/styles" {
-  interface Theme {
-    shape: {
-      borderWidthDefault: string;
-      borderWidthInput: string;
-      borderWidthInputOverlayUnfocused: string;
-      borderWidthMarked: string;
-      borderWidthSpinner: string;
-      borderWidthTag: string;
-      borderRadiusNone: string;
-      borderRadiusSmall: string;
-      borderRadiusMedium: string;
-      borderRadiusLarge: string;
-      borderRadiusExtraLarge: string;
-      borderRadiusExtraExtraLarge: string;
-      borderRadiusRounded: string;
-    };
+declare module "@mui/system" {
+  interface Shape {
+    borderWidthDefault: string;
+    borderWidthInput: string;
+    borderWidthInputOverlayUnfocused: string;
+    borderWidthMarked: string;
+    borderWidthSpinner: string;
+    borderWidthTag: string;
+    borderRadiusNone: string;
+    borderRadiusSmall: string;
+    borderRadiusMedium: string;
+    borderRadiusLarge: string;
+    borderRadiusExtraLarge: string;
+    borderRadiusExtraExtraLarge: string;
+    borderRadiusRounded: string;
   }
+}
 
-  interface ThemeOptions {
-    shape: {
-      borderWidthDefault: string;
-      borderWidthInput: string;
-      borderWidthInputOverlayUnfocused: string;
-      borderWidthMarked: string;
-      borderWidthSpinner: string;
-      borderWidthTag: string;
-      borderRadiusNone: string;
-      borderRadiusSmall: string;
-      borderRadiusMedium: string;
-      borderRadiusLarge: string;
-      borderRadiusExtraLarge: string;
-      borderRadiusExtraExtraLarge: string;
-      borderRadiusRounded: string;
-    };
+declare module "@mui/material/styles" {
+  interface Shape {
+    borderWidthDefault: string;
+    borderWidthInput: string;
+    borderWidthInputOverlayUnfocused: string;
+    borderWidthMarked: string;
+    borderWidthSpinner: string;
+    borderWidthTag: string;
+    borderRadiusNone: string;
+    borderRadiusSmall: string;
+    borderRadiusMedium: string;
+    borderRadiusLarge: string;
+    borderRadiusExtraLarge: string;
+    borderRadiusExtraExtraLarge: string;
+    borderRadiusRounded: string;
   }
 }
 
 let mode: "dark" | "light" = "dark";
 if (!mode) mode = "light";
 
-const shape: ThemeOptions["shape"] = {
+const shape = {
   borderWidthDefault: "1px",
   borderWidthInput: "2px",
   borderWidthInputOverlayUnfocused: "1px",
@@ -55,7 +53,7 @@ const shape: ThemeOptions["shape"] = {
   borderRadiusExtraLarge: "1rem",
   borderRadiusExtraExtraLarge: "1.6rem",
   borderRadiusRounded: "9000px",
-};
+} as const;
 
 const typography: ThemeOptions["typography"] = {
   fontFamily: "inter",
@@ -116,7 +114,7 @@ export const theme = createTheme({
           success: { main: "#4df498" },
         }),
   },
-  shape,
+  shape: shape as ThemeOptions["shape"],
   shadows: [
     "none",
     "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",

@@ -11,7 +11,7 @@ builder.mutationFields((t) => ({
       const service = container.get("userAuthenticationService");
       const authDataSource = container.get("dataSource");
 
-      const { accessToken, refreshToken } = await authDataSource.transaction(
+      const { accessToken } = await authDataSource.transaction(
         async (manager) => {
           return await service.signInWithEmailAndPassword({
             ...input,
@@ -20,8 +20,9 @@ builder.mutationFields((t) => ({
         },
       );
 
+      // Only the short-lived access token is sent to the client.
+      // Refresh tokens stay in the database and are never set as cookies.
       ctx.rep.setCookie("accessToken", accessToken);
-      ctx.rep.setCookie("refreshToken", refreshToken);
 
       return true;
     },
