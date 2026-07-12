@@ -34,7 +34,7 @@ export default function Avatar({
       sx={{
         width,
         height,
-        fontSize: theme.typography.body1,
+        fontSize: theme.typography.body1.fontSize,
         fontWeight: theme.typography.fontWeightBold,
         backgroundColor: theme.palette.primary.main,
       }}

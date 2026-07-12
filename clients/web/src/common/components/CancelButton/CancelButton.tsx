@@ -4,7 +4,12 @@ import React from "react";
 import MuiButton from "@mui/material/Button";
 import { alpha, useTheme } from "@mui/material";
 
-export default function CancelButton({ label, onClick }) {
+interface CancelButtonProps {
+  label: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export default function CancelButton({ label, onClick }: CancelButtonProps) {
   const theme = useTheme();
 
   return (

@@ -10,27 +10,75 @@
   },
   "tasks": [
     {
-      "label": "dev:infra",
+      "label": "infra: up",
+      "detail": "Start Postgres, Redis, NATS, pgAdmin (Docker Compose). Run once; keep running while debugging apps.",
       "type": "shell",
       "command": "pnpm dev:infra",
       "options": {
         "cwd": "${workspaceFolder}"
       },
       "problemMatcher": [],
-      "group": "none"
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
     },
     {
-      "label": "dev:infra:down",
+      "label": "infra: down",
+      "detail": "Stop and remove infra containers (Docker Compose down).",
       "type": "shell",
       "command": "pnpm dev:infra:down",
       "options": {
         "cwd": "${workspaceFolder}"
       },
       "problemMatcher": [],
-      "group": "none"
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: status",
+      "detail": "Show Docker Compose service status.",
+      "type": "shell",
+      "command": "docker compose -f infra/docker/docker-compose.yaml ps",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra"
+      }
+    },
+    {
+      "label": "infra: logs",
+      "detail": "Follow Docker Compose logs (all infra services).",
+      "type": "shell",
+      "command": "docker compose -f infra/docker/docker-compose.yaml logs -f --tail=100",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra"
+      }
     },
     {
       "label": "gql:compose",
+      "detail": "Compose Apollo supergraph SDL for the gateway (does not start Docker).",
       "type": "shell",
       "command": "pnpm gql:compose",
       "options": {
@@ -40,17 +88,8 @@
       "group": "none"
     },
     {
-      "label": "dev:prepare",
-      "dependsOrder": "sequence",
-      "dependsOn": ["dev:infra", "gql:compose"],
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
       "label": "dev:apps",
+      "detail": "Nx run-many dev for all apps (no debugger, no Docker).",
       "type": "shell",
       "command": "pnpm dev:apps",
       "options": {
@@ -63,6 +102,7 @@
     {
       "type": "shell",
       "label": "supergraph",
+      "detail": "Long-running rover dev (optional alternate to local gateway).",
       "command": "rover dev --supergraph-config supergraph-config-dev.yaml --router-config router-config-dev.yaml",
       "options": {
         "cwd": "${workspaceFolder}"

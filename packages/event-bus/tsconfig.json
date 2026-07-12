@@ -12,7 +12,6 @@
 
     /* Language and Environment */
     "target": "es2018" /* Async iterators (for-await) require ES2018+ */,
-    "downlevelIteration": true,
     // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
     "experimentalDecorators": true /* Enable experimental support for legacy experimental decorators. */,
@@ -108,5 +107,9 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["dist"]
+  "exclude": [
+    "dist",
+    "src/**/__tests__/**",
+    "src/**/__mocks__/**"
+  ]
 }

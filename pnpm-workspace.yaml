@@ -15,6 +15,7 @@ allowBuilds:
   nx: true
   protobufjs: true
   sharp: true
+  simple-git-hooks: true
 
 overrides:
   typescript: "npm:@typescript/native-preview@7.0.0-dev.20260707.2"

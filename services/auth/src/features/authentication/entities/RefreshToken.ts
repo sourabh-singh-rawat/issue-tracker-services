@@ -15,13 +15,16 @@ export class RefreshToken extends Audit {
   })
   id!: string;
 
+  @Column({ name: "user_id", type: "uuid" })
+  userId!: string;
+
   @ManyToOne(() => User)
   @JoinColumn({
     name: "user_id",
     referencedColumnName: "id",
     foreignKeyConstraintName: "refresh_token_fkey",
   })
-  userId!: string;
+  user!: User;
 
   @Column({ name: "token_value", type: "text" })
   tokenValue!: string;

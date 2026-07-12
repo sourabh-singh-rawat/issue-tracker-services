@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "A mono repo for web application that track issues in your projects",
   "scripts": {
-    "dev:infra": "docker compose up -d",
-    "dev:infra:down": "docker compose down",
+    "dev:infra": "docker compose --env-file .env -f infra/docker/docker-compose.yaml up -d",
+    "dev:infra:down": "docker compose --env-file .env -f infra/docker/docker-compose.yaml down",
     "dev:apps": "nx run-many -t dev --projects=@issue-tracker/web,@issue-tracker/auth,@issue-tracker/attachment,@issue-tracker/mail,@issue-tracker/issues,@issue-tracker/gateway --parallel=10",
     "client": "nx run @issue-tracker/web:dev",
     "web": "nx run @issue-tracker/web:dev",
@@ -26,7 +26,11 @@
     "gql:compose": "rover supergraph compose --elv2-license accept --config supergraph-config-dev.yaml > services/gateway/supergraph.graphql",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:release": "changeset publish"
+    "changeset:release": "changeset publish",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm build"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +48,7 @@
     "prettier": "^3.9.5",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-sort-imports": "^1.8.11",
+    "simple-git-hooks": "^2.13.1",
     "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
   }
 }

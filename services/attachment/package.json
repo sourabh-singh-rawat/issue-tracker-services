@@ -2,12 +2,12 @@
   "name": "@issue-tracker/attachment",
   "version": "0.0.0",
   "description": "Manage attachments",
-  "main": "src/index.ts",
+  "main": "./src/main.ts",
   "scripts": {
     "test": "jest --passWithNoTests --forceExit",
     "test:watch": "jest --watchAll",
-    "start": "tsx src/index.ts",
-    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/main.ts",
+    "dev": "tsx watch src/main.ts",
     "build": "tsgo"
   },
   "nx": {
@@ -51,9 +51,11 @@
     "@fastify/swagger": "^9.4.0",
     "@issue-tracker/common": "workspace:^",
     "@issue-tracker/event-bus": "workspace:^",
+    "@issue-tracker/graphql-core": "workspace:^",
     "@issue-tracker/orm": "workspace:^",
     "@issue-tracker/security": "workspace:^",
     "@issue-tracker/server-core": "workspace:^",
+    "@pothos/core": "^4.13.1",
     "awilix": "^12.0.4",
     "bullmq": "^5.34.8",
     "casbin": "^5.36.0",
@@ -67,8 +69,8 @@
     "nats": "^2.28.2",
     "pg": "^8.13.1",
     "pino": "^9.6.0",
+    "reflect-metadata": "^0.2.2",
     "sharp": "^0.33.5",
-    "type-graphql": "2.0.0-rc.2",
     "typeorm": "^0.3.20",
     "typeorm-adapter": "^1.7.0",
     "uuid": "^11.0.4"

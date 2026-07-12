@@ -1,7 +1,5 @@
+import "./env";
 import "reflect-metadata";
-
-import { config } from "dotenv";
-config({ path: "../../.env" });
 
 import { ApolloServer } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
