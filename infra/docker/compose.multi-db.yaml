@@ -1,0 +1,68 @@
+services:
+  auth-postgres:
+    image: postgres:18.4
+    container_name: auth-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=auth
+      - POSTGRES_PASSWORD=${POSTGRES_AUTH_PASSWORD}
+      - POSTGRES_DB=auth
+    volumes:
+      - ./data/auth-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5433:5432
+
+  issues-postgres:
+    image: postgres:18.4
+    container_name: issues-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=issues
+      - POSTGRES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
+      - POSTGRES_DB=issues
+    volumes:
+      - ./data/issues-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5434:5432
+
+  mail-postgres:
+    image: postgres:18.4
+    container_name: mail-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=mail
+      - POSTGRES_PASSWORD=${POSTGRES_MAIL_PASSWORD}
+      - POSTGRES_DB=mail
+    volumes:
+      - ./data/mail-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5435:5432
+
+  attachment-postgres:
+    image: postgres:18.4
+    container_name: attachment-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=attachment
+      - POSTGRES_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
+      - POSTGRES_DB=attachment
+    volumes:
+      - ./data/attachment-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5436:5432
