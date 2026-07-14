@@ -64,6 +64,12 @@ services:
     image: grafana/tempo:3.0.2
     container_name: tempo
     profiles: [ observability ]
+    volumes:
+      - ./observability/tempo.yaml:/etc/tempo.yaml:ro
+      - ./data/tempo-data:/var/tempo
+    command:
+      - -config.file=/etc/tempo.yaml
+      - -target=all
 
   prometheus:
     image: prom/prometheus:v3.13.1
