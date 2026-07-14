@@ -4,3 +4,15 @@ services:
     container_name: grafana
     ports:
       - 3300:3000
+
+  loki:
+    image: grafana/loki:3.5.0
+    container_name: loki
+
+  tempo:
+    image: grafana/tempo:3.0.2
+    container_name: tempo
+
+  prometheus:
+    image: prom/prometheus:v3.13.1
+    container_name: prometheus
