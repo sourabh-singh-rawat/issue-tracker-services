@@ -1,0 +1,6 @@
+services:
+  grafana:
+    image: grafana/grafana:13.1.0
+    container_name: grafana
+    ports:
+      - 3300:3000
