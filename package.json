@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "description": "A mono repo for web application that track issues in your projects",
   "scripts": {
-    "dev:infra": "docker compose --env-file .env -f infra/docker/docker-compose.yaml up -d",
-    "dev:infra:down": "docker compose --env-file .env -f infra/docker/docker-compose.yaml down",
+    "dev:infra": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml up -d",
+    "dev:infra:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml down",
+    "dev:infra:multi-db": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.multi-db.yaml up -d",
+    "dev:infra:multi-db:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.multi-db.yaml down",
+    "dev:infra:single-db": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml up -d",
+    "dev:infra:single-db:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml down",
     "dev:apps": "nx run-many -t dev --projects=@issue-tracker/web,@issue-tracker/auth,@issue-tracker/attachment,@issue-tracker/mail,@issue-tracker/issues,@issue-tracker/gateway --parallel=10",
     "client": "nx run @issue-tracker/web:dev",
     "web": "nx run @issue-tracker/web:dev",
@@ -27,6 +31,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:release": "changeset publish",
+    "concat": "tsx scripts/concat.ts",
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
@@ -43,12 +48,15 @@
     "@apollo/rover": "^0.34.1",
     "@changesets/cli": "^2.31.0",
     "@redocly/cli": "^1.34.17",
+    "@types/node": "^26.1.1",
     "depcheck": "^1.4.7",
+    "js-tiktoken": "^1.0.21",
     "nx": "23.0.1",
     "prettier": "^3.9.5",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-sort-imports": "^1.8.11",
     "simple-git-hooks": "^2.13.1",
+    "tsx": "4.23.0",
     "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
   }
 }

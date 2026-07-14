@@ -11,7 +11,7 @@
   "tasks": [
     {
       "label": "infra: up",
-      "detail": "Start Postgres, Redis, NATS, pgAdmin (Docker Compose). Run once; keep running while debugging apps.",
+      "detail": "Start Postgres (Single Instance), Redis, NATS, pgAdmin (Docker Compose Minimal). Run once; keep running while debugging apps.",
       "type": "shell",
       "command": "pnpm dev:infra",
       "options": {
@@ -28,9 +28,43 @@
     },
     {
       "label": "infra: down",
-      "detail": "Stop and remove infra containers (Docker Compose down).",
+      "detail": "Stop and remove minimal infra containers (Docker Compose Minimal down).",
       "type": "shell",
       "command": "pnpm dev:infra:down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: up:multi-db",
+      "detail": "Start Postgres (Multiple Instances), Redis, NATS, pgAdmin (Docker Compose Multi-db). Run once; keep running while debugging apps.",
+      "type": "shell",
+      "command": "pnpm dev:infra:multi-db",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: down:multi-db",
+      "detail": "Stop and remove multi-db infra containers (Docker Compose Multi-db down).",
+      "type": "shell",
+      "command": "pnpm dev:infra:multi-db:down",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -47,7 +81,7 @@
       "label": "infra: status",
       "detail": "Show Docker Compose service status.",
       "type": "shell",
-      "command": "docker compose -f infra/docker/docker-compose.yaml ps",
+      "command": "docker compose -f infra/docker/compose.yaml ps",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -63,7 +97,7 @@
       "label": "infra: logs",
       "detail": "Follow Docker Compose logs (all infra services).",
       "type": "shell",
-      "command": "docker compose -f infra/docker/docker-compose.yaml logs -f --tail=100",
+      "command": "docker compose -f infra/docker/compose.yaml logs -f --tail=100",
       "options": {
         "cwd": "${workspaceFolder}"
       },
