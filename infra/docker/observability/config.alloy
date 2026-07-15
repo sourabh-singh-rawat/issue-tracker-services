@@ -1,0 +1,54 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+prometheus.scrape "loki" {
+  targets = [
+    {"__address__" = "loki:3100", "job" = "loki"},
+  ]
+
+  scrape_interval = "15s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+  forward_to      = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.scrape "tempo" {
+  targets = [
+    {"__address__" = "tempo:3200", "job" = "tempo"},
+  ]
+
+  scrape_interval = "15s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+  forward_to      = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.scrape "prometheus" {
+  targets = [
+    {"__address__" = "prometheus:9090", "job" = "prometheus"},
+  ]
+
+  scrape_interval = "15s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+  forward_to      = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.scrape "alloy" {
+  targets = [
+    {"__address__" = "127.0.0.1:12345", "job" = "alloy"},
+  ]
+
+  scrape_interval = "15s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+  forward_to      = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://prometheus:9090/api/v1/write"
+  }
+}
