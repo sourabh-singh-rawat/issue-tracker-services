@@ -143,6 +143,21 @@ services:
           cpus: "0.10"
           memory: 128M
 
+  pyroscope:
+    image: grafana/pyroscope:2.1.1
+    container_name: pyroscope
+    profiles: [ observability ]
+    volumes:
+      - ../data/docker/pyroscope-data:/var/lib/pyroscope
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
   prometheus:
     image: prom/prometheus:v3.13.1
     container_name: prometheus
@@ -225,6 +240,7 @@ services:
       - loki
       - tempo
       - prometheus
+      - pyroscope
     deploy:
       resources:
         limits:
