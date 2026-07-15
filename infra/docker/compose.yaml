@@ -242,6 +242,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     ports:
       - 3300:3000
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
     deploy:
       resources:
         limits:
