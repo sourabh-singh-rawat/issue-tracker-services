@@ -3,17 +3,17 @@ services:
     image: redis:8.8.0
     container_name: attachment-redis
     restart: unless-stopped
-    command: redis-server --appendonly yes --replica-read-only no
+    command: redis-server --appendonly yes --replica-read-only no --maxmemory 100mb --maxmemory-policy allkeys-lru
     ports:
       - 6380:6379
     deploy:
       resources:
         limits:
           cpus: "0.50"
-          memory: 512M
+          memory: 128M
         reservations:
           cpus: "0.10"
-          memory: 128M
+          memory: 32M
 
   nats:
     image: nats:2.14.3
@@ -38,6 +38,45 @@ services:
           cpus: "0.10"
           memory: 128M
 
+  nats-exporter:
+    image: natsio/prometheus-nats-exporter:0.20.1
+    container_name: nats-exporter
+    profiles: [ observability ]
+    command:
+      - -varz
+      - -connz
+      - -routez
+      - -subz
+      - -jsz=all
+      - http://nats:8222
+    depends_on:
+      - nats
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.20.1
+    container_name: postgres-exporter
+    profiles: [ observability ]
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:${POSTGRES_ADMIN_PASSWORD}@postgres:5432/postgres?sslmode=disable
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+
   pgadmin:
     image: dpage/pgadmin4:9.16
     container_name: pgadmin
@@ -57,7 +96,7 @@ services:
     ports:
       - 5555:80
     volumes:
-      - ./data/pgadmin-data:/var/lib/pgadmin
+      - ../data/docker/pgadmin-data:/var/lib/pgadmin
       - ./pgadmin/docker-entrypoint.sh:/custom/docker-entrypoint.sh:ro
     deploy:
       resources:
@@ -74,7 +113,7 @@ services:
     profiles: [ observability ]
     volumes:
       - ./observability/loki.yaml:/etc/loki/loki.yaml:ro
-      - ./data/loki-data:/loki
+      - ../data/docker/loki-data:/loki
     command: -config.file=/etc/loki/loki.yaml
     deploy:
       resources:
@@ -91,7 +130,7 @@ services:
     profiles: [ observability ]
     volumes:
       - ./observability/tempo.yaml:/etc/tempo.yaml:ro
-      - ./data/tempo-data:/var/tempo
+      - ../data/docker/tempo-data:/var/tempo
     command:
       - -config.file=/etc/tempo.yaml
       - -target=all
@@ -110,7 +149,7 @@ services:
     profiles: [ observability ]
     volumes:
       - ./observability/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
-      - ./data/prometheus-data:/prometheus
+      - ../data/docker/prometheus-data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.enable-remote-write-receiver
@@ -123,13 +162,61 @@ services:
           cpus: "0.10"
           memory: 128M
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
+    container_name: cadvisor
+    profiles: [ observability ]
+    privileged: true
+    devices:
+      - /dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    command:
+      - --housekeeping_interval=15s
+      - --docker_only=true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  node-exporter:
+    image: prom/node-exporter:v1.12.1
+    container_name: node-exporter
+    profiles: [ observability ]
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/rootfs
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+
   alloy:
     image: grafana/alloy:v1.17.1
     container_name: alloy
     profiles: [ observability ]
     volumes:
       - ./observability/config.alloy:/etc/alloy/config.alloy:ro
-      - ./data/alloy-data:/var/lib/alloy/data
+      - ../data/docker/alloy-data:/var/lib/alloy/data
     command:
       - run
       - /etc/alloy/config.alloy
@@ -151,6 +238,8 @@ services:
     image: grafana/grafana:13.1.0
     container_name: grafana
     profiles: [ observability ]
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     ports:
       - 3300:3000
     deploy:

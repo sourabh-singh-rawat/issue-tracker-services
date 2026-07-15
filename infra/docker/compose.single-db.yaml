@@ -14,7 +14,7 @@ services:
       - POSTGRES_MAIL_PASSWORD=${POSTGRES_MAIL_PASSWORD}
       - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
     volumes:
-      - ./data/postgres-minimal-data:/var/lib/postgresql
+      - ../data/docker/postgres-minimal-data:/var/lib/postgresql
       - ./init-db:/docker-entrypoint-initdb.d:ro
     ports:
       - 5432:5432
