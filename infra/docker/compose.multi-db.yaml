@@ -15,6 +15,14 @@ services:
       - max_connections=50
     ports:
       - 5433:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   issues-postgres:
     image: postgres:18.4
@@ -32,6 +40,14 @@ services:
       - max_connections=50
     ports:
       - 5434:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   mail-postgres:
     image: postgres:18.4
@@ -49,6 +65,14 @@ services:
       - max_connections=50
     ports:
       - 5435:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   attachment-postgres:
     image: postgres:18.4
@@ -66,3 +90,11 @@ services:
       - max_connections=50
     ports:
       - 5436:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M

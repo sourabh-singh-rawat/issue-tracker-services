@@ -6,6 +6,14 @@ services:
     command: redis-server --appendonly yes --replica-read-only no
     ports:
       - 6380:6379
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   nats:
     image: nats:2.14.3
@@ -21,6 +29,14 @@ services:
       - -m
       - "8222"
       - -js
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   pgadmin:
     image: dpage/pgadmin4:9.16
@@ -43,6 +59,14 @@ services:
     volumes:
       - ./data/pgadmin-data:/var/lib/pgadmin
       - ./pgadmin/docker-entrypoint.sh:/custom/docker-entrypoint.sh:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   loki:
     image: grafana/loki:3.5.0
@@ -52,6 +76,14 @@ services:
       - ./observability/loki.yaml:/etc/loki/loki.yaml:ro
       - ./data/loki-data:/loki
     command: -config.file=/etc/loki/loki.yaml
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   tempo:
     image: grafana/tempo:3.0.2
@@ -63,6 +95,14 @@ services:
     command:
       - -config.file=/etc/tempo.yaml
       - -target=all
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   prometheus:
     image: prom/prometheus:v3.13.1
@@ -74,6 +114,14 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.enable-remote-write-receiver
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   alloy:
     image: grafana/alloy:v1.17.1
@@ -90,6 +138,14 @@ services:
       - loki
       - tempo
       - prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
 
   grafana:
     image: grafana/grafana:13.1.0
@@ -97,3 +153,11 @@ services:
     profiles: [ observability ]
     ports:
       - 3300:3000
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M

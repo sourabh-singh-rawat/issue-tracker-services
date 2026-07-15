@@ -18,3 +18,11 @@ services:
       - ./init-db:/docker-entrypoint-initdb.d:ro
     ports:
       - 5432:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
