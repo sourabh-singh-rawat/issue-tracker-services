@@ -44,13 +44,6 @@ services:
       - ./data/pgadmin-data:/var/lib/pgadmin
       - ./pgadmin/docker-entrypoint.sh:/custom/docker-entrypoint.sh:ro
 
-  grafana:
-    image: grafana/grafana:13.1.0
-    container_name: grafana
-    profiles: [ observability ]
-    ports:
-      - 3300:3000
-
   loki:
     image: grafana/loki:3.5.0
     container_name: loki
@@ -80,8 +73,27 @@ services:
       - ./data/prometheus-data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-remote-write-receiver
 
   alloy:
     image: grafana/alloy:v1.17.1
     container_name: alloy
     profiles: [ observability ]
+    volumes:
+      - ./observability/config.alloy:/etc/alloy/config.alloy:ro
+      - ./data/alloy-data:/var/lib/alloy/data
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+
+  grafana:
+    image: grafana/grafana:13.1.0
+    container_name: grafana
+    profiles: [ observability ]
+    ports:
+      - 3300:3000
