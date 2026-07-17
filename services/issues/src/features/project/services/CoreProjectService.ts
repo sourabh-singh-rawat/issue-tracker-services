@@ -1,5 +1,5 @@
-import { STATUS_TYPE, UserNotFoundError } from "@issue-tracker/common";
-import { NatsPublisher } from "@issue-tracker/event-bus";
+import { STATUS_TYPE, UserNotFoundError } from "@pine/common";
+import { NatsPublisher } from "@pine/event-bus";
 import { UserService } from "@/features/user/services/interfaces/UserService";
 import { StatusService } from "@/features/status/services/interfaces/StatusService";
 import { User } from "@/features/user/entities/User";

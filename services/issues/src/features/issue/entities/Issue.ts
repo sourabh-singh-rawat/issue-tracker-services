@@ -1,5 +1,5 @@
-import { ItemPriority } from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+import { ItemPriority } from "@pine/common";
+import { Audit } from "@pine/orm";
 import {
   Column,
   Entity,

@@ -1,5 +1,5 @@
-import { ServiceResponse, WorkspaceMemberRoles } from "@issue-tracker/common";
-import { ServiceOptions } from "@issue-tracker/orm";
+import { ServiceResponse, WorkspaceMemberRoles } from "@pine/common";
+import { ServiceOptions } from "@pine/orm";
 import { User } from "@/features/user/entities/User";
 import { Workspace } from "../../entities/Workspace";
 

@@ -4,8 +4,8 @@ import {
   AwilixDi,
   CoreLogger,
   Logger,
-} from "@issue-tracker/server-core";
-import { Broker, NatsBroker } from "@issue-tracker/event-bus";
+} from "@pine/server-core";
+import { Broker, NatsBroker } from "@pine/event-bus";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import { Queue } from "bullmq";
 import Redis from "ioredis";

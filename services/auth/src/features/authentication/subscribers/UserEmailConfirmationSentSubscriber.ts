@@ -5,7 +5,7 @@ import {
   SUBJECTS,
   Subscriber,
   UserEmailConfirmationSentPayload,
-} from "@issue-tracker/event-bus";
+} from "@pine/event-bus";
 import { JsMsg } from "nats";
 
 export class UserEmailConfirmationSentSubscriber extends Subscriber<UserEmailConfirmationSentPayload> {

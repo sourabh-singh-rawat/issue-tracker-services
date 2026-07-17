@@ -1,5 +1,5 @@
-import { ItemPriority } from "@issue-tracker/common";
-import { builder } from "@issue-tracker/graphql-core";
+import { ItemPriority } from "@pine/common";
+import { builder } from "@pine/graphql-core";
 import { container, dataSource } from "@/container";
 import { CreateIssueInput } from "../inputs/create-issue.input";
 

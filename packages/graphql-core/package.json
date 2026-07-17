@@ -1,17 +1,17 @@
 {
-  "name": "@issue-tracker/graphql-core",
+  "name": "@pine/graphql-core",
   "version": "0.0.0",
   "description": "Shared Pothos SchemaBuilder, scalars, and GraphQL infrastructure",
   "main": "src/main.ts",
   "scripts": {
-    "build": "tsgo"
+    "build": "tsc"
   },
   "keywords": ["graphql", "pothos"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.13",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "@pothos/core": "^4.13.1",

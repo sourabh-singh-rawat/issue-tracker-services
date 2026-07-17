@@ -1,4 +1,4 @@
-import { QUEUE } from "@issue-tracker/common";
+import { QUEUE } from "@pine/common";
 import { Queue } from "bullmq";
 import { redisClient } from "./redisClient";
 

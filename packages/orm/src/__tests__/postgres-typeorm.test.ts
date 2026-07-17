@@ -1,4 +1,4 @@
-import { CoreLogger } from "@issue-tracker/server-core";
+import { CoreLogger } from "@pine/server-core";
 import pino from "pino";
 import { DataSource } from "typeorm";
 import { Typeorm } from "../interfaces";

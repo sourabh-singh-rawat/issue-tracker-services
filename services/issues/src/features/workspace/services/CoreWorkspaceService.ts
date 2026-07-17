@@ -9,10 +9,10 @@ import {
   WORKSPACE_STATUS,
   WorkspaceMemberRoles,
   WorkspaceNotFound,
-} from "@issue-tracker/common";
-import { NatsPublisher } from "@issue-tracker/event-bus";
-import { ServiceOptions, Typeorm } from "@issue-tracker/orm";
-import { JwtToken, hasEmailClaim } from "@issue-tracker/security";
+} from "@pine/common";
+import { NatsPublisher } from "@pine/event-bus";
+import { ServiceOptions, Typeorm } from "@pine/orm";
+import { JwtToken, hasEmailClaim } from "@pine/security";
 import { v4 } from "uuid";
 import { User } from "@/features/user/entities/User";
 import { Workspace } from "../entities/Workspace";
@@ -131,7 +131,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     const token = await JwtToken.create(
       {
         userId,
-        iss: "@issue-tracker/issue-tracker",
+        iss: "@pine/issue-tracker",
         aud: "client",
         sub: userId,
         exp,

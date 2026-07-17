@@ -1,0 +1,22 @@
+{
+  "$schema": "https://cdn.jsdelivr.net/npm/oxfmt@0/configuration_schema.json",
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "printWidth": 80,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "ignorePatterns": [
+    "**/__generated__/**",
+    "**/routeTree.gen.ts",
+    "**/api/codegen/**",
+    "dist",
+    "node_modules",
+    "coverage",
+    "build",
+    "**/*.html"
+  ]
+}

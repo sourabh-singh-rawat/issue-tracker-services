@@ -1,4 +1,4 @@
-import { ServiceResponse, TaskFormData } from "@issue-tracker/common";
+import { ServiceResponse, TaskFormData } from "@pine/common";
 import { CheckListItem } from "../../entities/CheckListItem";
 
 export interface IssueTaskService {

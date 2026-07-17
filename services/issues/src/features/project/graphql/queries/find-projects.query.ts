@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 import { container } from "@/container";
 import { FindProjectsOptions } from "../inputs/find-projects.input";
 import { PaginatedProject } from "../objects/paginated-project.object";

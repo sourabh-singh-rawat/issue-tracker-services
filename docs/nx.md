@@ -6,9 +6,9 @@ This workspace uses **Nx** (package-based) on top of **pnpm workspaces**.
 
 | Name | Path |
 |------|------|
-| `@issue-tracker/*` | `packages/*` |
-| `auth`, `attachment`, `mail`, `issue-tracker`, `gateway` | `services/*` |
-| `client` | `clients/issue-tracker` |
+| `@pine/*` | `packages/*` |
+| `@pine/auth`, `@pine/attachment`, `@pine/mail`, `@pine/issues`, `@pine/gateway` | `services/*` |
+| `@pine/issue-web`, `@pine/identity`, `@pine/inventory` | `apps/*` |
 
 ```bash
 pnpm exec nx show projects
@@ -34,9 +34,9 @@ pnpm build:affected
 pnpm test:affected
 
 # Single project
-pnpm exec nx run auth:build
-pnpm exec nx run auth:dev          # continuous; builds deps first (^build)
-pnpm exec nx run client:dev
+pnpm exec nx run @pine/auth:build
+pnpm exec nx run @pine/auth:dev          # continuous; builds deps first (^build)
+pnpm exec nx run @pine/issue-web:dev
 
 # Cache
 pnpm nx:reset
@@ -59,7 +59,7 @@ Second identical `nx run <project>:build` should report a cache hit.
 - full git history for affected detection
 - pnpm + Node 20
 - `.nx/cache` restored between runs
-- `client` excluded until its typecheck is green
+- `@pine/issue-web` excluded until its typecheck is green
 
 ## Docker
 

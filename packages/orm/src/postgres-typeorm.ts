@@ -1,5 +1,5 @@
-import { ConnectionRefusedError } from "@issue-tracker/common";
-import { Logger } from "@issue-tracker/server-core";
+import { ConnectionRefusedError } from "@pine/common";
+import { Logger } from "@pine/server-core";
 import { DataSource, ObjectLiteral, QueryRunner } from "typeorm";
 import { SelectQueryBuilder } from "typeorm/browser";
 import { Typeorm } from "./interfaces";

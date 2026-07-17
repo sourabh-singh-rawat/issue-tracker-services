@@ -1,8 +1,8 @@
 import {
   EMAIL_VERIFICATION_TOKEN_STATUS,
   EmailVerificationTokenStatus,
-} from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+} from "@pine/common";
+import { Audit } from "@pine/orm";
 import {
   Column,
   CreateDateColumn,

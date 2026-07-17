@@ -1,4 +1,4 @@
-import { EmailVerificationStatus } from "@issue-tracker/common";
+import { EmailVerificationStatus } from "@pine/common";
 import { JWTPayload } from "jose";
 import { BaseToken } from "./base-token";
 

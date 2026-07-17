@@ -5,12 +5,12 @@ import {
   NatsPublisher,
   Publisher,
   Subjects,
-} from "@issue-tracker/event-bus";
+} from "@pine/event-bus";
 import {
   AwilixDi,
   CoreLogger,
   Logger,
-} from "@issue-tracker/server-core";
+} from "@pine/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import pino from "pino";
 import { DataSource } from "typeorm";

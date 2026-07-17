@@ -1,5 +1,5 @@
-import { JwtToken, hasUserIdentity } from "@issue-tracker/security";
-import { GraphQLContext } from "@issue-tracker/graphql-core";
+import { JwtToken, hasUserIdentity } from "@pine/security";
+import { GraphQLContext } from "@pine/graphql-core";
 import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
 
 export type AttachmentContext = GraphQLContext;

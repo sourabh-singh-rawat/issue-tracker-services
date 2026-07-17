@@ -3,8 +3,8 @@ import {
   EMAIL_TYPE,
   EmailStatus,
   EmailType,
-} from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+} from "@pine/common";
+import { Audit } from "@pine/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "emails" })

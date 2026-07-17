@@ -1,4 +1,4 @@
-import { NotFoundError } from "@issue-tracker/common";
+import { NotFoundError } from "@pine/common";
 import { Queue } from "bullmq";
 import { adminStorage } from "@/config";
 import { Attachment } from "../entities";

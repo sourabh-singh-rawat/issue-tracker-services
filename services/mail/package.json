@@ -1,5 +1,5 @@
 {
-  "name": "@issue-tracker/mail",
+  "name": "@pine/mail",
   "version": "0.0.0",
   "description": "Mail",
   "main": "./src/main.ts",
@@ -8,7 +8,7 @@
     "test:watch": "jest --watchAll --verbose",
     "start": "tsx src/main.ts",
     "dev": "tsx watch src/main.ts",
-    "build": "tsgo"
+    "build": "tsc"
   },
   "nx": {
     "targets": {
@@ -35,26 +35,24 @@
     "@types/jest": "^29.5.14",
     "@types/nodemailer": "^6.4.17",
     "@types/uuid": "^10.0.0",
-    "eslint": "^9.17.0",
     "jest": "^29.7.0",
     "pino-pretty": "^13.0.0",
-    "prettier": "^3.4.2",
     "ts-jest": "^29.2.5",
     "tsx": "4.23.0",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2",
+    "typescript": "7.0.2",
     "uuid": "^11.0.4"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^10.0.2",
-    "@issue-tracker/comm": "workspace:^",
-    "@issue-tracker/common": "workspace:^",
-    "@issue-tracker/event-bus": "workspace:^",
-    "@issue-tracker/orm": "workspace:^",
-    "@issue-tracker/security": "workspace:^",
-    "@issue-tracker/server-core": "workspace:^",
+    "@pine/comm": "workspace:^",
+    "@pine/common": "workspace:^",
+    "@pine/event-bus": "workspace:^",
+    "@pine/orm": "workspace:^",
+    "@pine/security": "workspace:^",
+    "@pine/server-core": "workspace:^",
     "awilix": "^12.0.4",
-    "dotenv": "^16.4.7",
+    "dotenv": "17.4.2",
     "fastify": "^5.2.1",
     "http-status-codes": "^2.3.0",
     "nats": "^2.28.2",

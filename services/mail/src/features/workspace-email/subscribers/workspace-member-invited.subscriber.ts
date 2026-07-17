@@ -6,7 +6,7 @@ import {
   SUBJECTS,
   Subscriber,
   WorkspaceInvitePayload,
-} from "@issue-tracker/event-bus";
+} from "@pine/event-bus";
 import { WorkspaceEmailService } from "../services/interfaces/workspace-email.service";
 
 export class WorkspaceMemberInvitedSubscriber extends Subscriber<WorkspaceInvitePayload> {

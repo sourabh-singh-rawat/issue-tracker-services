@@ -1,4 +1,4 @@
-import { UserRegisteredPayload } from "@issue-tracker/event-bus";
+import { UserRegisteredPayload } from "@pine/event-bus";
 import { EntityManager } from "typeorm";
 
 export interface SendEmailOptions {

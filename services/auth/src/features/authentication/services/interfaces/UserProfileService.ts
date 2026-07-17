@@ -1,5 +1,5 @@
-import { UserDetails } from "@issue-tracker/common";
-import { ServiceOptions } from "@issue-tracker/orm";
+import { UserDetails } from "@pine/common";
+import { ServiceOptions } from "@pine/orm";
 
 export interface CreateUserProfileOptions extends ServiceOptions {
   userId: string;

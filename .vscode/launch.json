@@ -10,11 +10,13 @@
       "stopAll": true,
       "configurations": [
         "auth",
-        "issue-tracker",
+        "issues",
         "attachment",
         "mail",
         "gateway",
-        "issue-tracker (client)",
+        "issue-web",
+        "identity",
+        "inventory",
         "codegen: supergraph"
       ]
     },
@@ -27,11 +29,13 @@
       "stopAll": true,
       "configurations": [
         "auth",
-        "issue-tracker",
+        "issues",
         "attachment",
         "mail",
         "gateway",
-        "issue-tracker (client)",
+        "issue-web",
+        "identity",
+        "inventory",
         "client (browser)",
         "codegen: supergraph"
       ]
@@ -45,11 +49,13 @@
       "stopAll": true,
       "configurations": [
         "auth",
-        "issue-tracker",
+        "issues",
         "attachment",
         "mail",
         "gateway",
-        "issue-tracker (client)",
+        "issue-web",
+        "identity",
+        "inventory",
         "brave (debug)",
         "codegen: supergraph"
       ]
@@ -57,28 +63,46 @@
   ],
   "configurations": [
     {
-      "name": "issue-tracker (client)",
+      "name": "issue-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["client"],
+      "runtimeArgs": ["issue-web"],
       "console": "integratedTerminal"
     },
     {
-      "name": "issue-tracker (client + browser)",
+      "name": "identity",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["client"],
+      "runtimeArgs": ["identity"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "inventory",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["inventory"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "issue-web + browser",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["issue-web"],
       "console": "integratedTerminal",
       "serverReadyAction": {
         "pattern": "Local:\\s+(https?://\\S+)",
         "uriFormat": "%s",
         "action": "debugWithChrome",
         "killOnServerStop": true,
-        "webRoot": "${workspaceFolder}/clients/web"
+        "webRoot": "${workspaceFolder}/apps/issues"
       }
     },
     {
@@ -86,7 +110,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/web",
+      "webRoot": "${workspaceFolder}/apps/issues",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -106,7 +130,7 @@
       "type": "msedge",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/web",
+      "webRoot": "${workspaceFolder}/apps/issues",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -128,7 +152,7 @@
       "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/web",
+      "webRoot": "${workspaceFolder}/apps/issues",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -139,7 +163,7 @@
       "runtimeExecutable": "/usr/bin/brave",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/web",
+      "webRoot": "${workspaceFolder}/apps/issues",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -162,12 +186,12 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "issue-tracker",
+      "name": "issues",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issue-tracker"],
+      "runtimeArgs": ["issues"],
       "console": "integratedTerminal"
     },
     {

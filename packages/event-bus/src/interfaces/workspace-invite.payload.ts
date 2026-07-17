@@ -1,4 +1,4 @@
-import { EmailVerificationTokenStatus } from "@issue-tracker/common";
+import { EmailVerificationTokenStatus } from "@pine/common";
 
 export interface WorkspaceInvitePayload {
   userId: string;

@@ -1,5 +1,5 @@
-import { ServiceResponseInputs } from "@issue-tracker/common";
-import { ProjectPayload } from "@issue-tracker/event-bus";
+import { ServiceResponseInputs } from "@pine/common";
+import { ProjectPayload } from "@pine/event-bus";
 import { ProjectIssueActivity } from "../../entities/ProjectIssueActivity";
 
 export interface ProjectActivityService {

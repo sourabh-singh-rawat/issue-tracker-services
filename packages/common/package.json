@@ -1,5 +1,5 @@
 {
-  "name": "@issue-tracker/common",
+  "name": "@pine/common",
   "private": "true",
   "version": "0.0.0",
   "description": "",
@@ -7,13 +7,13 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
-    "build": "npm run clean && tsgo"
+    "build": "npm run clean && tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "fastify": "^5.2.1",

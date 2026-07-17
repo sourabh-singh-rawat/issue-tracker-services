@@ -1,5 +1,5 @@
-import { MissingEnforcerError } from "@issue-tracker/common/src/constants";
-import { Logger } from "@issue-tracker/server-core";
+import { MissingEnforcerError } from "@pine/common/src/constants";
+import { Logger } from "@pine/server-core";
 import { Enforcer, newEnforcer } from "casbin";
 import { DataSource } from "typeorm";
 import TypeORMAdapter from "typeorm-adapter";
