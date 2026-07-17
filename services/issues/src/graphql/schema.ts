@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 
 import "@/features/workspace/graphql";
 import "@/features/project/graphql";

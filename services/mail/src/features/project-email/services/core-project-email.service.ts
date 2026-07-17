@@ -1,6 +1,6 @@
-import { EmailMessage, NodeMailer } from "@issue-tracker/comm";
-import { UserNotFoundError } from "@issue-tracker/common";
-import { ProjectMemberPayload } from "@issue-tracker/event-bus";
+import { EmailMessage, NodeMailer } from "@pine/comm";
+import { UserNotFoundError } from "@pine/common";
+import { ProjectMemberPayload } from "@pine/event-bus";
 import { User } from "@/features/user-email/entities/user.entity";
 import { ProjectEmailService } from "./interfaces/project-email.service";
 

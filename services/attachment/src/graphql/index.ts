@@ -1,3 +1,3 @@
-export { builder } from "@issue-tracker/graphql-core";
+export { builder } from "@pine/graphql-core";
 export type { AttachmentContext } from "./context";
 export { createContext } from "./context";

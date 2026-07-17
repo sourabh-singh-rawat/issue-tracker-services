@@ -1,4 +1,4 @@
-import { Logger } from "@issue-tracker/server-core";
+import { Logger } from "@pine/server-core";
 
 export interface BrokerOptions {
   servers: string[];

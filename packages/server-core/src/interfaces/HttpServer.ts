@@ -1,5 +1,5 @@
 import { ApolloServer } from "@apollo/server";
-import { Environment } from "@issue-tracker/common";
+import { Environment } from "@pine/common";
 import {
   FastifyInstance,
   FastifyReply,

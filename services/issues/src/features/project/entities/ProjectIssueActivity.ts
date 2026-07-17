@@ -1,5 +1,5 @@
-import { ProjectActivity } from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+import { ProjectActivity } from "@pine/common";
+import { Audit } from "@pine/orm";
 import {
   Column,
   CreateDateColumn,

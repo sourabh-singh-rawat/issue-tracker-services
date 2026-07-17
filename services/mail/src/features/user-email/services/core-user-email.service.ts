@@ -1,6 +1,6 @@
-import { EmailMessage, NodeMailer } from "@issue-tracker/comm";
-import { NatsPublisher } from "@issue-tracker/event-bus";
-import { Typeorm } from "@issue-tracker/orm";
+import { EmailMessage, NodeMailer } from "@pine/comm";
+import { NatsPublisher } from "@pine/event-bus";
+import { Typeorm } from "@pine/orm";
 import { Email } from "../entities/email.entity";
 import {
   SendEmailOptions,

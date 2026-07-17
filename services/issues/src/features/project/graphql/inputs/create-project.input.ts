@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 
 export const CreateProjectInput = builder.inputType("CreateProjectInput", {
   fields: (t) => ({

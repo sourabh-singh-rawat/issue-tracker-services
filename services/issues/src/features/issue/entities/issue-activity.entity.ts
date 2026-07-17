@@ -1,5 +1,5 @@
-import { IssueActivity } from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+import { IssueActivity } from "@pine/common";
+import { Audit } from "@pine/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "issue_activities" })

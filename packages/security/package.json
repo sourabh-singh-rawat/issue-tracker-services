@@ -1,24 +1,24 @@
 {
-  "name": "@issue-tracker/security",
+  "name": "@pine/security",
   "version": "0.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsgo"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.10.5",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^10.0.2",
-    "@issue-tracker/common": "workspace:^",
-    "@issue-tracker/server-core": "workspace:^",
+    "@pine/common": "workspace:^",
+    "@pine/server-core": "workspace:^",
     "argon2": "^0.41.1",
     "awilix": "^12.0.4",
     "casbin": "^5.36.0",

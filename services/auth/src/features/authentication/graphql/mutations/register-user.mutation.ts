@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 import { container, dataSource } from "@/container";
 import { RegisterUserInput } from "../inputs/register-user.input";
 

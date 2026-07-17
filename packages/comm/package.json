@@ -1,18 +1,18 @@
 {
-  "name": "@issue-tracker/comm",
+  "name": "@pine/comm",
   "version": "0.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsgo"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/nodemailer": "^6.4.15",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "nats": "^2.26.0",

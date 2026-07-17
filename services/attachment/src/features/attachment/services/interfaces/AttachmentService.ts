@@ -1,5 +1,5 @@
-import { PaginatedOutput } from "@issue-tracker/common";
-import { ServiceOptions } from "@issue-tracker/orm";
+import { PaginatedOutput } from "@pine/common";
+import { ServiceOptions } from "@pine/orm";
 import { Attachment } from "../../entities";
 
 export interface CreateAttachmentOptions {

@@ -6,7 +6,7 @@ import {
   Streams,
   SUBJECTS,
   Subscriber,
-} from "@issue-tracker/event-bus";
+} from "@pine/event-bus";
 import { ProjectEmailService } from "../services/interfaces/project-email.service";
 
 export class ProjectMemberInvitedSubscriber extends Subscriber<ProjectMemberPayload> {

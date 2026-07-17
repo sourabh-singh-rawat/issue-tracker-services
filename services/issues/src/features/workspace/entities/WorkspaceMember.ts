@@ -3,8 +3,8 @@ import {
   WORKSPACE_MEMBER_STATUS,
   WorkspaceMemberRoles,
   WorkspaceMemberStatus,
-} from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+} from "@pine/common";
+import { Audit } from "@pine/orm";
 import {
   Column,
   Entity,

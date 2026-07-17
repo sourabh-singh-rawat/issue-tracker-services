@@ -1,7 +1,7 @@
 import { fastifyApolloHandler } from "@as-integrations/fastify";
 import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
-import { ErrorHandlerUtil, NotFoundError } from "@issue-tracker/common";
+import { ErrorHandlerUtil, NotFoundError } from "@pine/common";
 import { RouteOptions } from "fastify";
 import {
   CookieOptions,

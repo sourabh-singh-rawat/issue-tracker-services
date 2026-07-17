@@ -1,7 +1,7 @@
-import { EmailMessage, NodeMailer } from "@issue-tracker/comm";
-import { EMAIL_TYPE, UserNotFoundError } from "@issue-tracker/common";
-import { WorkspaceInvitePayload } from "@issue-tracker/event-bus";
-import { Typeorm } from "@issue-tracker/orm";
+import { EmailMessage, NodeMailer } from "@pine/comm";
+import { EMAIL_TYPE, UserNotFoundError } from "@pine/common";
+import { WorkspaceInvitePayload } from "@pine/event-bus";
+import { Typeorm } from "@pine/orm";
 import { Email } from "@/features/user-email/entities/email.entity";
 import { User } from "@/features/user-email/entities/user.entity";
 import { WorkspaceEmailService } from "./interfaces/workspace-email.service";

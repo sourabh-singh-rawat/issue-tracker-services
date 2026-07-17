@@ -1,4 +1,4 @@
-import { Audit } from "@issue-tracker/orm";
+import { Audit } from "@pine/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "check_list_items" })

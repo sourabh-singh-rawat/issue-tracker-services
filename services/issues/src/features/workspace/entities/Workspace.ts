@@ -1,5 +1,5 @@
-import { WORKSPACE_STATUS, WorkspaceStatus } from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+import { WORKSPACE_STATUS, WorkspaceStatus } from "@pine/common";
+import { Audit } from "@pine/orm";
 import {
   Column,
   Entity,

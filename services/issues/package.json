@@ -1,5 +1,5 @@
 {
-  "name": "@issue-tracker/issues",
+  "name": "@pine/issues",
   "version": "0.0.0",
   "description": "Issues, projects, workspaces, and statuses",
   "main": "./src/main.ts",
@@ -8,7 +8,7 @@
     "test:watch": "jest --watchAll --logHeapUsage",
     "start": "tsx src/main.ts",
     "dev": "tsx watch src/main.ts",
-    "build": "tsgo"
+    "build": "tsc"
   },
   "nx": {
     "targets": {
@@ -27,21 +27,21 @@
     "pino-pretty": "^13.0.0",
     "ts-jest": "^29.2.5",
     "tsx": "4.23.0",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
     "@as-integrations/fastify": "^2.1.1",
     "@fastify/swagger": "^9.4.0",
-    "@issue-tracker/common": "workspace:*",
-    "@issue-tracker/event-bus": "workspace:*",
-    "@issue-tracker/graphql-core": "workspace:*",
-    "@issue-tracker/orm": "workspace:*",
-    "@issue-tracker/security": "workspace:*",
-    "@issue-tracker/server-core": "workspace:*",
+    "@pine/common": "workspace:*",
+    "@pine/event-bus": "workspace:*",
+    "@pine/graphql-core": "workspace:*",
+    "@pine/orm": "workspace:*",
+    "@pine/security": "workspace:*",
+    "@pine/server-core": "workspace:*",
     "@pothos/core": "^4.13.1",
     "awilix": "^12.0.4",
-    "dotenv": "^16.4.7",
+    "dotenv": "17.4.2",
     "fastify": "^5.2.1",
     "graphql": "^16.10.0",
     "graphql-scalars": "^1.24.0",

@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 import { Workspace } from "@/features/workspace/graphql/objects/workspace.object";
 
 export const Project = builder

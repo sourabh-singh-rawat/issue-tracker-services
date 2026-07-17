@@ -1,5 +1,5 @@
 packages:
-  - clients/**
+  - apps/**
   - packages/**
   - services/**
   - shared-ui/**
@@ -18,4 +18,4 @@ allowBuilds:
   simple-git-hooks: true
 
 overrides:
-  typescript: "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+  typescript: "7.0.2"

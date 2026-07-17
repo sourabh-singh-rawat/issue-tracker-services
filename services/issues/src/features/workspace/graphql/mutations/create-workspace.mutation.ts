@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 import { container, dataSource } from "@/container";
 import { CreateWorkspaceInput } from "../inputs/create-workspace.input";
 

@@ -3,8 +3,8 @@ import {
   ItemPriority,
   PagingOptions,
   ServiceResponse,
-} from "@issue-tracker/common";
-import { ServiceOptions } from "@issue-tracker/orm";
+} from "@pine/common";
+import { ServiceOptions } from "@pine/orm";
 import { Issue } from "../../entities/Issue";
 
 export interface CreateIssueOptions extends ServiceOptions {

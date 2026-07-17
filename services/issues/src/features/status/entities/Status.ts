@@ -1,4 +1,4 @@
-import { STATUS_TYPE, StatusType } from "@issue-tracker/common";
+import { STATUS_TYPE, StatusType } from "@pine/common";
 import {
   BaseEntity,
   Column,

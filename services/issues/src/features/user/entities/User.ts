@@ -1,8 +1,8 @@
 import {
   EMAIL_VERIFICATION_STATUS,
   EmailVerificationStatus,
-} from "@issue-tracker/common";
-import { Audit } from "@issue-tracker/orm";
+} from "@pine/common";
+import { Audit } from "@pine/orm";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Workspace } from "@/features/workspace/entities/Workspace";
 

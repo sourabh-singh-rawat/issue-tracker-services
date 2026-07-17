@@ -1,7 +1,7 @@
 {
-  "name": "issue-tracker",
+  "name": "pine",
   "version": "0.0.0",
-  "description": "A mono repo for web application that track issues in your projects",
+  "description": "Pine monorepo - issues and related services",
   "scripts": {
     "dev:infra": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml up -d",
     "dev:infra:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml down",
@@ -15,19 +15,22 @@
     "dev:infra:single-db:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml down",
     "dev:infra:single-db:observability": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml --profile observability up -d",
     "dev:infra:single-db:observability:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml --profile observability down",
-    "dev:apps": "nx run-many -t dev --projects=@issue-tracker/web,@issue-tracker/auth,@issue-tracker/attachment,@issue-tracker/mail,@issue-tracker/issues,@issue-tracker/gateway --parallel=10",
-    "client": "nx run @issue-tracker/web:dev",
-    "web": "nx run @issue-tracker/web:dev",
+    "dev:apps": "nx run-many -t dev --projects=@pine/issue-web,@pine/identity,@pine/inventory,@pine/auth,@pine/attachment,@pine/mail,@pine/issues,@pine/gateway --parallel=12",
+    "client": "nx run @pine/issue-web:dev",
+    "web": "nx run @pine/issue-web:dev",
+    "issue-web": "nx run @pine/issue-web:dev",
+    "identity": "nx run @pine/identity:dev",
+    "inventory": "nx run @pine/inventory:dev",
     "server": "skaffold dev",
-    "issue-tracker": "nx run @issue-tracker/issues:dev",
-    "issues": "nx run @issue-tracker/issues:dev",
-    "auth": "nx run @issue-tracker/auth:dev",
-    "mail": "nx run @issue-tracker/mail:dev",
-    "attachment": "nx run @issue-tracker/attachment:dev",
-    "gateway": "nx run @issue-tracker/gateway:dev",
-    "gen": "nx run @issue-tracker/web:gen",
+    "issues": "nx run @pine/issues:dev",
+    "issue-tracker": "nx run @pine/issues:dev",
+    "auth": "nx run @pine/auth:dev",
+    "mail": "nx run @pine/mail:dev",
+    "attachment": "nx run @pine/attachment:dev",
+    "gateway": "nx run @pine/gateway:dev",
+    "gen": "nx run @pine/issue-web:gen",
     "build": "nx run-many -t build",
-    "build:server": "nx run-many -t build --exclude=@issue-tracker/web,@issue-tracker/forms",
+    "build:server": "nx run-many -t build --exclude=@pine/issue-web,@pine/identity,@pine/inventory,@pine/forms",
     "build:affected": "nx affected -t build",
     "test": "nx run-many -t test",
     "test:affected": "nx affected -t test",
@@ -38,7 +41,10 @@
     "changeset:version": "changeset version",
     "changeset:release": "changeset publish",
     "concat": "tsx scripts/concat.ts",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm build"
@@ -58,11 +64,10 @@
     "depcheck": "^1.4.7",
     "js-tiktoken": "^1.0.21",
     "nx": "23.0.1",
-    "prettier": "^3.9.5",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-sort-imports": "^1.8.11",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.71.0",
     "simple-git-hooks": "^2.13.1",
     "tsx": "4.23.0",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   }
 }

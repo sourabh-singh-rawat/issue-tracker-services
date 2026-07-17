@@ -5,7 +5,7 @@ import {
   BadRequestError,
   ForbiddenError,
   UnauthorizedError,
-} from "@issue-tracker/common";
+} from "@pine/common";
 
 declare module "fastify" {
   interface FastifyRequest {

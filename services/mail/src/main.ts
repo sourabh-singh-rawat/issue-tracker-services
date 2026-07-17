@@ -1,7 +1,7 @@
 import "./env";
 import "reflect-metadata";
 
-import { AwilixDi } from "@issue-tracker/server-core";
+import { AwilixDi } from "@pine/server-core";
 import {
   RegisteredServices,
   broker,

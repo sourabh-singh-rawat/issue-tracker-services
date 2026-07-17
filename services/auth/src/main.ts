@@ -3,7 +3,7 @@ import "reflect-metadata";
 
 import { ApolloServer } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
-import { AwilixDi, CoreHttpServer } from "@issue-tracker/server-core";
+import { AwilixDi, CoreHttpServer } from "@pine/server-core";
 import fastify from "fastify";
 import { writeFileSync } from "fs";
 import { lexicographicSortSchema, printSchema } from "graphql";

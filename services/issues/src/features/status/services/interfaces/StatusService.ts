@@ -1,5 +1,5 @@
-import { StatusType } from "@issue-tracker/common";
-import { ServiceOptions } from "@issue-tracker/orm";
+import { StatusType } from "@pine/common";
+import { ServiceOptions } from "@pine/orm";
 import { StatusOption } from "../../entities/Status";
 
 export interface CreateOptionsOptions extends ServiceOptions {

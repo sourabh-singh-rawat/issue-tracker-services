@@ -2,7 +2,7 @@ import {
   UserAlreadyExists,
   WORKSPACE_NAME,
   WORKSPACE_STATUS,
-} from "@issue-tracker/common";
+} from "@pine/common";
 import {
   Broker,
   CONSUMERS,
@@ -10,7 +10,7 @@ import {
   Streams,
   Subscriber,
   UserEmailVerifiedPayload,
-} from "@issue-tracker/event-bus";
+} from "@pine/event-bus";
 import { JsMsg } from "nats";
 import { DataSource } from "typeorm";
 import { User } from "../entities/User";

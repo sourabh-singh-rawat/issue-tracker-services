@@ -2,7 +2,7 @@ import {
   IssueStatus,
   ITEM_PRIORITY,
   ServiceResponse,
-} from "@issue-tracker/common";
+} from "@pine/common";
 import { IsNull } from "typeorm";
 import { dataSource } from "@/container";
 import { Issue } from "../entities/Issue";

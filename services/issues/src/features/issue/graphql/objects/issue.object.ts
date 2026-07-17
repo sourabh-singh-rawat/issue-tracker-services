@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 import { Project } from "@/features/project/graphql/objects/project.object";
 
 // Shape intentionally loose: TypeORM Issue trees and nested parent/sub-issue

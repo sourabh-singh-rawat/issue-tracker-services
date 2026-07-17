@@ -1,4 +1,4 @@
-import { ServiceResponse } from "@issue-tracker/common";
+import { ServiceResponse } from "@pine/common";
 import { IssueCommentEntity } from "../../entities/issue-comment.entity";
 
 export interface IssueCommentService {

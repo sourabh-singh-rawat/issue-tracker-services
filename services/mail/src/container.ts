@@ -1,9 +1,9 @@
 import "./env";
 
-import { Mailer, NodeMailer } from "@issue-tracker/comm";
-import { Broker, NatsBroker, NatsPublisher } from "@issue-tracker/event-bus";
-import { PostgresTypeorm, Typeorm } from "@issue-tracker/orm";
-import { AwilixDi, CoreLogger, Logger } from "@issue-tracker/server-core";
+import { Mailer, NodeMailer } from "@pine/comm";
+import { Broker, NatsBroker, NatsPublisher } from "@pine/event-bus";
+import { PostgresTypeorm, Typeorm } from "@pine/orm";
+import { AwilixDi, CoreLogger, Logger } from "@pine/server-core";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import nodemailer from "nodemailer";
 import pino from "pino";

@@ -1,5 +1,5 @@
-import { PaginatedOutput, PagingOptions } from "@issue-tracker/common";
-import { ServiceOptions } from "@issue-tracker/orm";
+import { PaginatedOutput, PagingOptions } from "@pine/common";
+import { ServiceOptions } from "@pine/orm";
 import { Project } from "../../entities/Project";
 
 export interface CreateProjectOptions extends ServiceOptions {

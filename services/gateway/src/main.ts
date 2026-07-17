@@ -4,7 +4,7 @@ import {
   RemoteGraphQLDataSource,
 } from "@apollo/gateway";
 import { ApolloServer } from "@apollo/server";
-import { CoreHttpServer } from "@issue-tracker/server-core";
+import { CoreHttpServer } from "@pine/server-core";
 import { FastifyReply, FastifyRequest } from "fastify";
 import fastify from "fastify";
 import { readFileSync } from "fs";

@@ -1,7 +1,7 @@
 import {
   UserNotFoundError,
   UserProfileNotFoundError,
-} from "@issue-tracker/common";
+} from "@pine/common";
 import { User, UserProfile } from "../entities";
 import { CreateUserProfileOptions, UserProfileService } from "./interfaces";
 

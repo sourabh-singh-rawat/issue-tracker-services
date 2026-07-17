@@ -6,14 +6,14 @@ import {
   UnauthorizedError,
   UserAlreadyExists,
   UserNotFoundError,
-} from "@issue-tracker/common";
-import { NatsPublisher } from "@issue-tracker/event-bus";
+} from "@pine/common";
+import { NatsPublisher } from "@pine/event-bus";
 import {
   AccessToken,
   Hash,
   JwtToken,
   hasVerificationClaims,
-} from "@issue-tracker/security";
+} from "@pine/security";
 import { v4 } from "uuid";
 import { RefreshToken, User, VerificationLink } from "../entities";
 import {
@@ -59,8 +59,8 @@ interface CreateUserRefreshTokenOptions {
 export class CoreUserAuthenticationService
   implements UserAuthenticationService
 {
-  private readonly AUTH_SERVICE = "@issue-tracker/auth";
-  private readonly MAIL_SERVICE = "@issue-tracker/mail";
+  private readonly AUTH_SERVICE = "@pine/auth";
+  private readonly MAIL_SERVICE = "@pine/mail";
 
   constructor(
     private readonly publisher: NatsPublisher,
@@ -127,9 +127,9 @@ export class CoreUserAuthenticationService
     const exp = iat + expiresIn;
     const verificationToken = await JwtToken.create(
       {
-        sub: "@issue-tracker/auth",
-        iss: "@issue-tracker/auth",
-        aud: "@issue-tracker/mail",
+        sub: "@pine/auth",
+        iss: "@pine/auth",
+        aud: "@pine/mail",
         iat,
         exp,
         userId,

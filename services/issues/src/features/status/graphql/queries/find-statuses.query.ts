@@ -1,4 +1,4 @@
-import { builder } from "@issue-tracker/graphql-core";
+import { builder } from "@pine/graphql-core";
 import { container } from "@/container";
 import { FindStatusesOptions } from "../inputs/find-statuses.input";
 import { Status } from "../objects/status.object";

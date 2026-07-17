@@ -1,5 +1,5 @@
 {
-  "name": "@issue-tracker/gateway",
+  "name": "@pine/gateway",
   "version": "0.0.0",
   "description": "",
   "main": "src/main.ts",
@@ -19,12 +19,12 @@
   "packageManager": "pnpm@10.11.1",
   "devDependencies": {
     "tsx": "4.23.0",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260707.2"
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "@apollo/gateway": "^2.11.2",
     "@apollo/server": "^4.11.3",
-    "@issue-tracker/server-core": "workspace:*",
+    "@pine/server-core": "workspace:*",
     "fastify": "^5.2.1"
   }
 }
