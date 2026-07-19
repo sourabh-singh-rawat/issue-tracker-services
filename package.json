@@ -40,6 +40,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:release": "changeset publish",
+    "changeset:status": "node --no-warnings --experimental-strip-types scripts/require-changeset.ts",
     "concat": "tsx scripts/concat.ts",
     "prepare": "simple-git-hooks",
     "lint": "oxlint",
