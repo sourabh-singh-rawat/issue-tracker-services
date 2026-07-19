@@ -1,0 +1,69 @@
+# Require exactly one Changeset on every PR into development.
+#
+# Pass: PR adds exactly one new file under .changeset/*.md (vs the base branch).
+# Fail: zero changesets, or more than one (one feature → one changelog entry).
+# Skip: add the label "skip-changeset" (docs-only, CI-only, pure chores, etc.).
+#
+# Branch protection on development: require status check "Require changeset".
+name: Changeset required
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+    branches: [development]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: changeset-required-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  changeset:
+    name: Require changeset
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Check skip label
+        id: skip
+        env:
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: |
+          if echo ",$LABELS," | grep -q ",skip-changeset,"; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "PR has label 'skip-changeset' — changeset not required."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.skip.outputs.skip != 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        if: steps.skip.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Ensure PR base is available
+        if: steps.skip.outputs.skip != 'true'
+        run: git fetch --no-tags origin "${{ github.base_ref }}"
+
+      - name: Require exactly one new changeset since the base branch
+        if: steps.skip.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          BASE="origin/${{ github.base_ref }}"
+          echo "Expecting exactly one new .changeset/*.md file since ${BASE}…"
+          if ! node --no-warnings --experimental-strip-types \
+            scripts/require-changeset.ts "$BASE"; then
+            echo ""
+            echo "::error::This PR must include exactly one Changeset (not zero, not multiple) before merging into ${{ github.base_ref }}."
+            exit 1
+          fi
