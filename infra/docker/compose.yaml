@@ -1,7 +1,6 @@
 services:
   attachment-redis:
     image: redis:8.8.0
-    container_name: attachment-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --replica-read-only no --maxmemory 100mb --maxmemory-policy allkeys-lru
     ports:
@@ -17,7 +16,6 @@ services:
 
   nats:
     image: nats:2.14.3
-    container_name: nats
     restart: unless-stopped
     ports:
       - "4222:4222"
@@ -38,9 +36,23 @@ services:
           cpus: "0.10"
           memory: 128M
 
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    restart: unless-stopped
+    ports:
+      - "4436:4436"
+      - "4437:4437"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.05"
+          memory: 32M
+
   nats-exporter:
     image: natsio/prometheus-nats-exporter:0.20.1
-    container_name: nats-exporter
     profiles: [ observability ]
     command:
       - -varz
@@ -62,7 +74,6 @@ services:
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:v0.20.1
-    container_name: postgres-exporter
     profiles: [ observability ]
     environment:
       - DATA_SOURCE_NAME=postgresql://postgres:${POSTGRES_ADMIN_PASSWORD}@postgres:5432/postgres?sslmode=disable
@@ -79,7 +90,6 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:9.16
-    container_name: pgadmin
     restart: unless-stopped
     entrypoint: /custom/docker-entrypoint.sh
     environment:
@@ -89,7 +99,7 @@ services:
       - PGADMIN_SERVER_JSON_FILE=/var/lib/pgadmin/servers.json
       - PGPASS_FILE=/var/lib/pgadmin/pgpass
       - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
-      - POSTGRES_AUTH_PASSWORD=${POSTGRES_AUTH_PASSWORD}
+      - POSTGRES_IDENTITY_PASSWORD=${POSTGRES_IDENTITY_PASSWORD}
       - POSTGRES_ISSUES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
       - POSTGRES_MAIL_PASSWORD=${POSTGRES_MAIL_PASSWORD}
       - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
@@ -109,7 +119,6 @@ services:
 
   loki:
     image: grafana/loki:3.5.0
-    container_name: loki
     profiles: [ observability ]
     volumes:
       - ./observability/loki.yaml:/etc/loki/loki.yaml:ro
@@ -126,7 +135,6 @@ services:
 
   tempo:
     image: grafana/tempo:3.0.2
-    container_name: tempo
     profiles: [ observability ]
     volumes:
       - ./observability/tempo.yaml:/etc/tempo.yaml:ro
@@ -145,7 +153,6 @@ services:
 
   pyroscope:
     image: grafana/pyroscope:2.1.1
-    container_name: pyroscope
     profiles: [ observability ]
     volumes:
       - ../data/docker/pyroscope-data:/var/lib/pyroscope
@@ -160,7 +167,6 @@ services:
 
   prometheus:
     image: prom/prometheus:v3.13.1
-    container_name: prometheus
     profiles: [ observability ]
     volumes:
       - ./observability/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
@@ -179,7 +185,6 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.55.1
-    container_name: cadvisor
     profiles: [ observability ]
     privileged: true
     devices:
@@ -204,7 +209,6 @@ services:
 
   node-exporter:
     image: prom/node-exporter:v1.12.1
-    container_name: node-exporter
     profiles: [ observability ]
     pid: host
     volumes:
@@ -227,7 +231,6 @@ services:
 
   alloy:
     image: grafana/alloy:v1.17.1
-    container_name: alloy
     profiles: [ observability ]
     volumes:
       - ./observability/config.alloy:/etc/alloy/config.alloy:ro
@@ -252,7 +255,6 @@ services:
 
   grafana:
     image: grafana/grafana:13.1.0
-    container_name: grafana
     profiles: [ observability ]
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}

@@ -7,8 +7,8 @@ This workspace uses **Turborepo** on top of **pnpm workspaces**.
 | Name | Path |
 |------|------|
 | `@pine/*` | `packages/*` |
-| `@pine/auth`, `@pine/attachment`, `@pine/mail`, `@pine/issues`, `@pine/gateway` | `services/*` |
-| `@pine/issue-web`, `@pine/identity`, `@pine/inventory` | `apps/*` |
+| `@pine/identity-service`, `@pine/attachment`, `@pine/mail`, `@pine/issues`, `@pine/gateway` | `services/*` |
+| `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory` | `apps/*` |
 
 ```bash
 pnpm exec turbo run build --dry-run
@@ -34,8 +34,8 @@ pnpm build:affected
 pnpm test:affected
 
 # Single project
-pnpm exec turbo run build --filter=@pine/auth
-pnpm exec turbo run dev --filter=@pine/auth   # persistent; builds deps first (^build)
+pnpm exec turbo run build --filter=@pine/identity-service
+pnpm exec turbo run dev --filter=@pine/identity-service   # persistent; builds deps first (^build)
 pnpm exec turbo run dev --filter=@pine/issue-web
 
 # Cache

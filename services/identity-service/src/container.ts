@@ -49,7 +49,7 @@ export const container = new AwilixDi<RegisteredServices>(awilix, logger);
 
 export const dataSource = new DataSource({
   type: "postgres",
-  url: process.env.AUTH_POSTGRES_CLUSTER_URL,
+  url: process.env.IDENTITY_POSTGRES_CLUSTER_URL,
   entities: ["src/features/authentication/entities/*.ts"],
   synchronize: true,
 });

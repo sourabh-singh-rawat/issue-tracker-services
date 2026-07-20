@@ -5,10 +5,10 @@ subgraphs:
     routing_url: http://127.0.0.1:4003/graphql
     schema:
       file: ./services/attachment/schema.graphql
-  auth:
+  identity-service:
     routing_url: http://127.0.0.1:4001/graphql
     schema:
-      file: ./services/auth/schema.graphql
+      file: ./services/identity-service/schema.graphql
   issue-tracker:
     routing_url: http://127.0.0.1:4002/graphql
     schema:

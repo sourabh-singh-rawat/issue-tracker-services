@@ -59,7 +59,7 @@ interface CreateUserRefreshTokenOptions {
 export class CoreUserAuthenticationService
   implements UserAuthenticationService
 {
-  private readonly AUTH_SERVICE = "@pine/auth";
+  private readonly IDENTITY_SERVICE = "@pine/identity-service";
   private readonly MAIL_SERVICE = "@pine/mail";
 
   constructor(
@@ -79,8 +79,8 @@ export class CoreUserAuthenticationService
       userId: id,
       jwtid: v4(),
       iat,
-      iss: this.AUTH_SERVICE,
-      aud: this.AUTH_SERVICE,
+      iss: this.IDENTITY_SERVICE,
+      aud: this.IDENTITY_SERVICE,
       sub: this.MAIL_SERVICE,
       exp,
       userMetadata: { language: "en" },
@@ -103,8 +103,8 @@ export class CoreUserAuthenticationService
       emailVerificationStatus,
       userId: id,
       jwtid: v4(),
-      iss: this.AUTH_SERVICE,
-      aud: this.AUTH_SERVICE,
+      iss: this.IDENTITY_SERVICE,
+      aud: this.IDENTITY_SERVICE,
       sub: this.MAIL_SERVICE,
       exp,
       userMetadata: { language: "en" },
@@ -127,8 +127,8 @@ export class CoreUserAuthenticationService
     const exp = iat + expiresIn;
     const verificationToken = await JwtToken.create(
       {
-        sub: "@pine/auth",
-        iss: "@pine/auth",
+        sub: "@pine/identity-service",
+        iss: "@pine/identity-service",
         aud: "@pine/mail",
         iat,
         exp,
