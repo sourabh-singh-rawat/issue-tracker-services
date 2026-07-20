@@ -25,7 +25,7 @@ type SubgraphHttpResponse = {
 };
 
 /**
- * Forward browser Cookie header to subgraphs (auth needs accessToken cookies)
+ * Forward browser Cookie header to subgraphs (identity-service needs accessToken cookies)
  * and copy Set-Cookie headers from subgraph responses back to the client.
  */
 class SubgraphDataSource extends RemoteGraphQLDataSource<GatewayContext> {

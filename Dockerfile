@@ -27,7 +27,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 RUN pnpm exec turbo run build \
     --filter=@pine/attachment \
     --filter=@pine/mail \
-    --filter=@pine/auth \
+    --filter=@pine/identity-service \
     --filter=@pine/issues \
     --filter=@pine/common \
     --filter=@pine/comm \
@@ -54,12 +54,12 @@ EXPOSE 4000
 CMD pnpm -F @pine/mail start
 
 
-# Stage 3: Auth Service
-FROM base AS auth
+# Stage 3: Identity Service
+FROM base AS identity-service
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/auth start
+CMD pnpm -F @pine/identity-service start
 
 
 # Stage 3: Issue Tracker Service

@@ -20,10 +20,10 @@ spec:
                 port:
                   number: 4000
           - pathType: ImplementationSpecific
-            path: /api/v1/auth/?(.*)
+            path: /api/v1/identity/?(.*)
             backend:
               service:
-                name: auth-service
+                name: identity-service
                 port:
                   number: 4000
           - pathType: ImplementationSpecific

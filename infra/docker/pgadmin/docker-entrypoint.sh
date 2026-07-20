@@ -9,16 +9,38 @@ SERVERS_JSON="${PGADMIN_SERVER_JSON_FILE:-${CONFIG_DIR}/servers.json}"
 
 mkdir -p "$CONFIG_DIR"
 
-# Generate pgpass for pre-configured servers
+# Generate pgpass for pre-configured servers.
+# Ory: one host (ory-postgres), admin can open both kratos and hydra DBs.
 cat > "$PGPASS_FILE" <<EOF
-auth-postgres:5432:*:auth:${POSTGRES_AUTH_PASSWORD}
+identity-postgres:5432:*:identity:${POSTGRES_IDENTITY_PASSWORD}
 issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
 mail-postgres:5432:*:mail:${POSTGRES_MAIL_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
+ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 EOF
 
 chmod 600 "$PGPASS_FILE"
+
+# Shared Ory server fragment: one Postgres instance, databases kratos + hydra.
+# Used identically in multi-db and single-db modes.
+ory_server_json() {
+  id="$1"
+  cat <<EOF
+    "$id": {
+      "Name": "Ory Postgres",
+      "Group": "Ory",
+      "Host": "ory-postgres",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "postgres",
+      "SSLMode": "prefer",
+      "PassFile": "$PGPASS_FILE",
+      "Comment": "Shared instance for Kratos (db: kratos) and Hydra (db: hydra)",
+      "DBRestriction": "kratos,hydra"
+    }
+EOF
+}
 
 # Generate servers.json
 if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
@@ -26,12 +48,12 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
 {
   "Servers": {
     "1": {
-      "Name": "Auth Service DB",
+      "Name": "Identity Service DB",
       "Group": "Issue Tracker",
-      "Host": "auth-postgres",
+      "Host": "identity-postgres",
       "Port": 5432,
-      "MaintenanceDB": "auth",
-      "Username": "auth",
+      "MaintenanceDB": "identity",
+      "Username": "identity",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
@@ -64,11 +86,13 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "Username": "attachment",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
-    }
+    },
+$(ory_server_json 5)
   }
 }
 EOF
 else
+  # Default / single-db: app DBs on service "postgres"; Ory on shared ory-postgres
   cat > "$SERVERS_JSON" <<EOF
 {
   "Servers": {
@@ -81,7 +105,8 @@ else
       "Username": "postgres",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
-    }
+    },
+$(ory_server_json 2)
   }
 }
 EOF

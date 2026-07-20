@@ -1,14 +1,13 @@
 services:
-  auth-postgres:
+  identity-postgres:
     image: postgres:18.4
-    container_name: auth-postgres
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=auth
-      - POSTGRES_PASSWORD=${POSTGRES_AUTH_PASSWORD}
-      - POSTGRES_DB=auth
+      - POSTGRES_USER=identity
+      - POSTGRES_PASSWORD=${POSTGRES_IDENTITY_PASSWORD}
+      - POSTGRES_DB=identity
     volumes:
-      - ../data/docker/auth-postgres-data:/var/lib/postgresql
+      - ../data/docker/identity-postgres-data:/var/lib/postgresql
     command:
       - postgres
       - -c
@@ -26,7 +25,6 @@ services:
 
   issues-postgres:
     image: postgres:18.4
-    container_name: issues-postgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=issues
@@ -51,7 +49,6 @@ services:
 
   mail-postgres:
     image: postgres:18.4
-    container_name: mail-postgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=mail
@@ -76,7 +73,6 @@ services:
 
   attachment-postgres:
     image: postgres:18.4
-    container_name: attachment-postgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=attachment
@@ -98,3 +94,8 @@ services:
         reservations:
           cpus: "0.10"
           memory: 128M
+
+  # Register per-service Postgres servers (plus Ory) in pgAdmin
+  pgadmin:
+    environment:
+      - PGADMIN_CONFIG_TYPE=multi-db

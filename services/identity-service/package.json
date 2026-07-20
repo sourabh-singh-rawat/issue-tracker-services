@@ -1,7 +1,7 @@
 {
-  "name": "@pine/auth",
+  "name": "@pine/identity-service",
   "version": "0.0.0",
-  "description": "Authentication and authorization functionalities",
+  "description": "Identity service — authentication and authorization",
   "main": "./src/main.ts",
   "scripts": {
     "test": "jest --passWithNoTests --forceExit --logHeapUsage",

@@ -63,7 +63,7 @@ input CreateWorkspaceInput
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
 scalar DateTimeISO
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
   @join__type(graph: ISSUE_TRACKER)
 
 input FindIssuesInput
@@ -103,7 +103,7 @@ scalar join__FieldSet
 
 enum join__Graph {
   ATTACHMENT @join__graph(name: "attachment", url: "http://127.0.0.1:4003/graphql")
-  AUTH @join__graph(name: "auth", url: "http://127.0.0.1:4001/graphql")
+  IDENTITY_SERVICE @join__graph(name: "identity-service", url: "http://127.0.0.1:4001/graphql")
   ISSUE_TRACKER @join__graph(name: "issue-tracker", url: "http://127.0.0.1:4002/graphql")
 }
 
@@ -123,14 +123,14 @@ enum link__Purpose {
 
 type Mutation
   @join__type(graph: ATTACHMENT)
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
   @join__type(graph: ISSUE_TRACKER)
 {
   deleteAttachment(id: String!): String! @join__field(graph: ATTACHMENT)
-  logout: String! @join__field(graph: AUTH)
-  registerUser(input: RegisterUserInput!): String! @join__field(graph: AUTH)
-  signInWithEmailAndPassword(input: SignInWithEmailAndPasswordInput!): Boolean! @join__field(graph: AUTH)
-  verifyVerificationLink(input: VerifyVerificationLinkInput!): String! @join__field(graph: AUTH)
+  logout: String! @join__field(graph: IDENTITY_SERVICE)
+  registerUser(input: RegisterUserInput!): String! @join__field(graph: IDENTITY_SERVICE)
+  signInWithEmailAndPassword(input: SignInWithEmailAndPasswordInput!): Boolean! @join__field(graph: IDENTITY_SERVICE)
+  verifyVerificationLink(input: VerifyVerificationLinkInput!): String! @join__field(graph: IDENTITY_SERVICE)
   createIssue(input: CreateIssueInput!): String! @join__field(graph: ISSUE_TRACKER)
   createProject(input: CreateProjectInput!): String! @join__field(graph: ISSUE_TRACKER)
   createWorkspace(input: CreateWorkspaceInput!): String! @join__field(graph: ISSUE_TRACKER)
@@ -163,11 +163,11 @@ type Project
 
 type Query
   @join__type(graph: ATTACHMENT)
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
   @join__type(graph: ISSUE_TRACKER)
 {
   findAttachments(issueId: String!): PaginatedAttachment! @join__field(graph: ATTACHMENT)
-  getCurrentUser: User @join__field(graph: AUTH)
+  getCurrentUser: User @join__field(graph: IDENTITY_SERVICE)
   findDefaultWorkspace: Workspace! @join__field(graph: ISSUE_TRACKER)
   findIssue(id: String!): Issue @join__field(graph: ISSUE_TRACKER)
   findProject(id: String!): Project! @join__field(graph: ISSUE_TRACKER)
@@ -179,7 +179,7 @@ type Query
 }
 
 input RegisterUserInput
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
 {
   displayName: String!
   email: String!
@@ -187,7 +187,7 @@ input RegisterUserInput
 }
 
 input SignInWithEmailAndPasswordInput
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
 {
   email: String!
   password: String!
@@ -215,7 +215,7 @@ input UpdateIssueInput
 }
 
 type User
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
 {
   createdAt: DateTimeISO!
   description: String
@@ -227,7 +227,7 @@ type User
 }
 
 input VerifyVerificationLinkInput
-  @join__type(graph: AUTH)
+  @join__type(graph: IDENTITY_SERVICE)
 {
   token: String!
 }

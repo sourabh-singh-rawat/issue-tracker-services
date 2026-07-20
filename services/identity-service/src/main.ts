@@ -46,7 +46,7 @@ const main = async () => {
     server: instance,
     config: {
       host: "0.0.0.0",
-      port: parseInt(process.env.AUTH_SERVICE_PORT!),
+      port: parseInt(process.env.IDENTITY_SERVICE_PORT!),
       environment: "development",
       version: 1,
     },

@@ -9,13 +9,13 @@
       },
       "stopAll": true,
       "configurations": [
-        "auth",
+        "identity-service",
         "issues",
         "attachment",
         "mail",
         "gateway",
         "issue-web",
-        "identity",
+        "identity-web",
         "inventory",
         "codegen: supergraph"
       ]
@@ -28,13 +28,13 @@
       },
       "stopAll": true,
       "configurations": [
-        "auth",
+        "identity-service",
         "issues",
         "attachment",
         "mail",
         "gateway",
         "issue-web",
-        "identity",
+        "identity-web",
         "inventory",
         "client (browser)",
         "codegen: supergraph"
@@ -48,13 +48,13 @@
       },
       "stopAll": true,
       "configurations": [
-        "auth",
+        "identity-service",
         "issues",
         "attachment",
         "mail",
         "gateway",
         "issue-web",
-        "identity",
+        "identity-web",
         "inventory",
         "brave (debug)",
         "codegen: supergraph"
@@ -72,12 +72,12 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "identity",
+      "name": "identity-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["identity"],
+      "runtimeArgs": ["identity-web"],
       "console": "integratedTerminal"
     },
     {
@@ -168,12 +168,12 @@
       "sourceMaps": true
     },
     {
-      "name": "auth",
+      "name": "identity-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["auth"],
+      "runtimeArgs": ["identity-service"],
       "console": "integratedTerminal"
     },
     {

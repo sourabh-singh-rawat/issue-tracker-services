@@ -1,5 +1,5 @@
 {
-  "name": "@pine/identity",
+  "name": "@pine/identity-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
