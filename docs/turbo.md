@@ -55,12 +55,24 @@ Second identical `turbo run build` should report a cache hit.
 
 ## CI
 
-`.github/workflows/ci.yml` runs `turbo run build test --filter=...[origin/main]` with:
+`.github/workflows/ci.yml` runs on **pull requests and pushes to `development`/`main`** (plus manual `workflow_dispatch`). It executes:
 
-- full git history for affected detection
-- pnpm + Node 20
+```bash
+pnpm exec turbo run build test --filter=...[<base>] --filter=!@pine/issue-web
+```
+
+where `<base>` is the PR base branch, or `origin/development` on push.
+
+Requirements:
+
+- full git history for affected detection (`fetch-depth: 0`)
+- pnpm (from `packageManager` in root `package.json`) + Node 22
 - `.turbo` restored between runs
 - `@pine/issue-web` excluded until its typecheck is green
+
+**Repo setting:** Actions must be enabled under **Settings → Actions → General** (`Allow all actions and reusable workflows`). If Actions is disabled, workflows stay “active” in the API but never create runs (PR checks will only show third-party apps like GitGuardian).
+
+Related: `.github/workflows/changeset-required.yml` enforces one Changeset on non-draft PRs into `development` (skip with label `skip-changeset`).
 
 ## Docker
 
