@@ -123,7 +123,7 @@
     },
     {
       "label": "dev:apps",
-      "detail": "Nx run-many dev for all apps (no debugger, no Docker).",
+      "detail": "Turbo run dev for all apps (no debugger, no Docker).",
       "type": "shell",
       "command": "pnpm dev:apps",
       "options": {

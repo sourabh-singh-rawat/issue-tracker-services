@@ -10,13 +10,6 @@
     "dev": "tsx watch src/main.ts",
     "build": "tsc"
   },
-  "nx": {
-    "targets": {
-      "dev": {
-        "continuous": true
-      }
-    }
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -35,18 +35,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Derive Nx SHAs
-        uses: nrwl/nx-set-shas@v4
-
-      - name: Cache Nx
+      - name: Cache Turbo
         uses: actions/cache@v4
         with:
-          path: .nx/cache
-          key: nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
           restore-keys: |
-            nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
-            nx-${{ runner.os }}-
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            turbo-${{ runner.os }}-
 
-      # client has pre-existing typecheck failures (vite/tsc); track separately until green
-      - name: Build and test affected projects
-        run: pnpm exec nx affected -t build,test --parallel=3 --exclude=client
+      # issue-web has pre-existing typecheck failures (vite/tsc); track separately until green
+      - name: Build and test affected packages
+        run: pnpm exec turbo run build test --filter=...[origin/main] --filter=!@pine/issue-web

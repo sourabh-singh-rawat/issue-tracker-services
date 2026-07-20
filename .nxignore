@@ -1,9 +1,0 @@
-**/node_modules
-**/dist
-**/.git
-docs
-k8s
-rhai
-*.drawio
-**/*.md
-!**/README.md
