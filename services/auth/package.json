@@ -10,13 +10,6 @@
     "dev": "tsx watch src/main.ts",
     "build": "tsc"
   },
-  "nx": {
-    "targets": {
-      "dev": {
-        "continuous": true
-      }
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
