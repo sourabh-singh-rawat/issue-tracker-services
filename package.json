@@ -45,7 +45,8 @@
     "prepare": "simple-git-hooks",
     "lint": "oxlint",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "check:knip": "knip"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm build"
@@ -65,6 +66,7 @@
     "@types/node": "^26.1.1",
     "depcheck": "^1.4.7",
     "js-tiktoken": "^1.0.21",
+    "knip": "6.27.0",
     "oxfmt": "^0.59.0",
     "oxlint": "^1.71.0",
     "simple-git-hooks": "^2.13.1",
