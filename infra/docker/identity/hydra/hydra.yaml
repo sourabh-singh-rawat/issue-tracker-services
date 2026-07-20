@@ -1,0 +1,56 @@
+# Local / docker-compose Ory Hydra config (dev only).
+# Secrets and DSN are overridden by environment variables in compose.hydra.yaml.
+
+serve:
+  cookies:
+    same_site_mode: Lax
+  public:
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://127.0.0.1:5173
+        - http://localhost:5173
+        - http://127.0.0.1:3000
+        - http://localhost:3000
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+
+urls:
+  self:
+    issuer: http://127.0.0.1:4444
+  consent: http://127.0.0.1:5173/consent
+  login: http://127.0.0.1:5173/login
+  logout: http://127.0.0.1:5173/logout
+  device:
+    verification: http://127.0.0.1:5173/device/verify
+    success: http://127.0.0.1:5173/device/success
+
+secrets:
+  system:
+    - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+
+oidc:
+  subject_identifiers:
+    supported_types:
+      - pairwise
+      - public
+    pairwise:
+      salt: PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+strategies:
+  access_token: opaque
+  scope: exact

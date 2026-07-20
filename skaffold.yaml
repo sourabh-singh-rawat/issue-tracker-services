@@ -16,11 +16,11 @@ build:
         dockerfile: Dockerfile
         target: email
 
-    - image: sourabhrawatcc/auth
+    - image: sourabhrawatcc/identity-service
       context: .
       docker:
         dockerfile: Dockerfile
-        target: auth
+        target: identity-service
 
     - image: sourabhrawatcc/issue-tracker
       context: .
@@ -43,10 +43,10 @@ deploy:
         valuesFiles:
           - ./k8s/microservice/email.values.yaml
 
-      - name: auth
+      - name: identity
         chartPath: ./k8s/microservice
         valuesFiles:
-          - ./k8s/microservice/auth.values.yaml
+          - ./k8s/microservice/identity-service.values.yaml
 
       - name: issue-tracker
         chartPath: ./k8s/microservice
