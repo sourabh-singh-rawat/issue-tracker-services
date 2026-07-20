@@ -139,9 +139,7 @@ k8s/secrets
 *.service-account.json
 
 
-.nx/cache
-.nx/workspace-data
-.nx/migrate-runs
+.turbo
 
 # Docker local data
 infra/data/

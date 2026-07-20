@@ -14,17 +14,6 @@
     "gen": "graphql-codegen --config codegen.gql.ts --watch",
     "gen:once": "graphql-codegen --config codegen.gql.ts"
   },
-  "nx": {
-    "targets": {
-      "dev": {
-        "continuous": true
-      },
-      "gen": {
-        "continuous": true,
-        "cache": false
-      }
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"

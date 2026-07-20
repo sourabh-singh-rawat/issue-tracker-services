@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 
-# Stage 2: Install dependencies and build with Nx (task graph + cache-friendly)
+# Stage 2: Install dependencies and build with Turbo (task graph + cache-friendly)
 FROM base AS build
 
 RUN --mount=type=bind,source=package.json,target=package.json \
@@ -24,8 +24,18 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Build all server packages/services once; individual runtime stages only need their graph outputs.
 # Prefer per-service targets below when optimizing layer cache further.
-RUN pnpm exec nx run-many -t build \
-    --projects=@pine/attachment,@pine/mail,@pine/auth,@pine/issues-service,@pine/common,@pine/comm,@pine/event-bus,@pine/orm,@pine/security,@pine/server-core
+RUN pnpm exec turbo run build \
+    --filter=@pine/attachment \
+    --filter=@pine/mail \
+    --filter=@pine/auth \
+    --filter=@pine/issues \
+    --filter=@pine/common \
+    --filter=@pine/comm \
+    --filter=@pine/event-bus \
+    --filter=@pine/orm \
+    --filter=@pine/security \
+    --filter=@pine/server-core \
+    --filter=@pine/graphql-core
 
 
 # Stage 3: Attachment Service
@@ -57,4 +67,4 @@ FROM base AS issue-tracker
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/issues-service start
+CMD pnpm -F @pine/issues start
