@@ -6,17 +6,10 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   root: rootDir,
-  resolve: {
-    alias: [
-      {
-        find: /^@\//,
-        replacement: `${path.resolve(rootDir, "src")}/`,
-      },
-    ],
-  },
   test: {
     environment: "node",
     passWithNoTests: true,
+    clearMocks: true,
     exclude: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
   },
 });

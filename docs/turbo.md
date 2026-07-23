@@ -49,7 +49,7 @@ pnpm turbo:clean
 Configured in root `turbo.json`:
 
 - **`build`**: `dependsOn: ["^build"]`, cacheable, outputs `dist/**`
-- **`test`**: depends on `^build`, cacheable, non-watch Jest
+- **`test`**: depends on `^build`, cacheable, non-watch Vitest
 - **`dev`**: `dependsOn: ["^build"]`, not cached, `persistent: true`
 - **`gen`**: not cached, persistent (GraphQL codegen watch)
 

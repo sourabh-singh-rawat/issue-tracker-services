@@ -17,6 +17,7 @@ export default defineConfig({
   test: {
     environment: "node",
     passWithNoTests: true,
+    clearMocks: true,
     exclude: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
   },
 });

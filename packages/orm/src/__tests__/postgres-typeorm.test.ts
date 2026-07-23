@@ -1,24 +1,29 @@
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { CoreLogger } from "@pine/server-core";
 import pino from "pino";
 import { DataSource } from "typeorm";
 import { Typeorm } from "../interfaces";
 import { PostgresTypeorm } from "../postgres-typeorm";
 
-jest.mock("typeorm", () => {
-  const actualTypeorm = jest.requireActual("typeorm");
+vi.mock("typeorm", async (importOriginal) => {
+  const actualTypeorm = await importOriginal<typeof import("typeorm")>();
   return {
     ...actualTypeorm,
-    DataSource: jest.fn().mockImplementation(() => ({
-      initialize: jest.fn(),
-      createQueryRunner: jest.fn().mockReturnValue({
-        connect: jest.fn(),
-        startTransaction: jest.fn(),
-        release: jest.fn(),
-        rollbackTransaction: jest.fn(),
-        commitTransaction: jest.fn(),
-      }),
-      createQueryBuilder: jest.fn(),
-    })),
+    DataSource: vi.fn().mockImplementation(function MockDataSource(this: {
+      initialize: ReturnType<typeof vi.fn>;
+      createQueryRunner: ReturnType<typeof vi.fn>;
+      createQueryBuilder: ReturnType<typeof vi.fn>;
+    }) {
+      this.initialize = vi.fn();
+      this.createQueryRunner = vi.fn().mockReturnValue({
+        connect: vi.fn(),
+        startTransaction: vi.fn(),
+        release: vi.fn(),
+        rollbackTransaction: vi.fn(),
+        commitTransaction: vi.fn(),
+      });
+      this.createQueryBuilder = vi.fn();
+    }),
   };
 });
 
@@ -35,7 +40,7 @@ describe("Postgres Typeorm", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("initializes a connection with postgres", async () => {

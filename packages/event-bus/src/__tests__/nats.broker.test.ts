@@ -1,8 +1,9 @@
+import { describe, expect, it, vi } from "vitest";
 import { connect } from "nats";
 import { NatsBroker } from "../nats.broker";
 import { BrokerOptions } from "../interfaces";
 
-jest.mock("nats");
+vi.mock("nats");
 
 describe("Nats Broker Unit Test", () => {
   it("initializes nats broker with correct options", async () => {
