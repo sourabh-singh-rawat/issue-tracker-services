@@ -19,9 +19,9 @@ pnpm graph
 
 ```bash
 # Local stack: VS Code compound "dev" (or pnpm dev:infra + dev:apps)
+# The "dev" launch config also starts schemas:watch (supergraph + OpenAPI).
 pnpm dev:infra
-pnpm gql:compose
-pnpm openapi:compose
+pnpm schemas:compose   # or: pnpm schemas:watch
 pnpm dev:apps
 
 

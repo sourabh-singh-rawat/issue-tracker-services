@@ -17,6 +17,7 @@
         "issue-web",
         "identity-web",
         "inventory-web",
+        "schemas:watch",
         "codegen: supergraph"
       ]
     },
@@ -37,6 +38,7 @@
         "identity-web",
         "inventory-web",
         "client (browser)",
+        "schemas:watch",
         "codegen: supergraph"
       ]
     },
@@ -57,6 +59,7 @@
         "identity-web",
         "inventory-web",
         "brave (debug)",
+        "schemas:watch",
         "codegen: supergraph"
       ]
     }
@@ -210,6 +213,15 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["api-gateway"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "schemas:watch",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["schemas:watch"],
       "console": "integratedTerminal"
     },
     {
