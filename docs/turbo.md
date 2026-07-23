@@ -8,7 +8,7 @@ This workspace uses **Turborepo** on top of **pnpm workspaces**.
 | ----------------------------------------------------------------------------------------------- | ------------ |
 | `@pine/*`                                                                                       | `packages/*` |
 | `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail`, `@pine/issues`, `@pine/api-gateway` | `services/*` |
-| `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory`                                      | `apps/*`     |
+| `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory-web`                                  | `apps/*`     |
 
 ```bash
 pnpm exec turbo run build --dry-run

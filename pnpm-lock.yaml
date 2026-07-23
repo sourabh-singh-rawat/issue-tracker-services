@@ -14,7 +14,7 @@ importers:
     devDependencies:
       '@apollo/rover':
         specifier: ^0.34.1
-        version: 0.34.1
+        version: 0.34.1(supports-color@8.1.1)
       '@changesets/cli':
         specifier: ^2.31.0
         version: 2.31.0(@types/node@26.1.1)
@@ -140,8 +140,20 @@ importers:
         specifier: ^8.1.1
         version: 8.1.3(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0)
 
-  apps/inventory:
+  apps/inventory-web:
     dependencies:
+      '@hey-api/client-axios':
+        specifier: 0.9.1
+        version: 0.9.1(@hey-api/openapi-ts@0.99.0(magicast@0.5.3)(typescript@7.0.2))(axios@1.18.1(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))
+      '@tanstack/react-query':
+        specifier: 5.101.3
+        version: 5.101.3(react@19.2.7)
+      axios:
+        specifier: ^1.18.1
+        version: 1.18.1(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
+      graphql:
+        specifier: 16.14.2
+        version: 16.14.2
       react:
         specifier: ^19.2.7
         version: 19.2.7
@@ -152,9 +164,30 @@ importers:
       '@babel/core':
         specifier: ^7.29.7
         version: 7.29.7(supports-color@8.1.1)
+      '@graphql-codegen/add':
+        specifier: ^7.1.0
+        version: 7.1.0(graphql@16.14.2)
+      '@graphql-codegen/cli':
+        specifier: ^5.0.7
+        version: 5.0.7(@parcel/watcher@2.5.6)(@types/node@24.13.3)(encoding@0.1.13)(enquirer@2.4.1)(graphql@16.14.2)(supports-color@8.1.1)(typescript@7.0.2)
+      '@graphql-codegen/typescript':
+        specifier: ^6.1.0
+        version: 6.1.0(graphql@16.14.2)
+      '@graphql-codegen/typescript-operations':
+        specifier: ^6.1.0
+        version: 6.1.0(graphql@16.14.2)
+      '@graphql-codegen/typescript-react-query':
+        specifier: ^7.0.5
+        version: 7.0.5(graphql@16.14.2)
+      '@hey-api/openapi-ts':
+        specifier: 0.99.0
+        version: 0.99.0(magicast@0.5.3)(typescript@7.0.2)
       '@rolldown/plugin-babel':
         specifier: ^0.2.3
         version: 0.2.3(@babel/core@7.29.7(supports-color@8.1.1))(@babel/runtime@7.29.7)(rolldown@1.1.5)(vite@8.1.3(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      '@tanstack/react-query-devtools':
+        specifier: 5.101.3
+        version: 5.101.3(@tanstack/react-query@5.101.3(react@19.2.7))(react@19.2.7)
       '@types/babel__core':
         specifier: ^7.20.5
         version: 7.20.5
@@ -772,7 +805,7 @@ importers:
         version: 9.8.1(supports-color@8.1.1)
       '@ory/kratos-client':
         specifier: 26.2.0
-        version: 26.2.0(debug@4.4.3(supports-color@8.1.1))
+        version: 26.2.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       '@pine/common':
         specifier: workspace:^
         version: link:../../packages/common
@@ -9135,15 +9168,16 @@ snapshots:
       graphql: 16.14.2
       pretty-format: 29.7.0
 
-  '@apollo/rover@0.34.1':
+  '@apollo/rover@0.34.1(supports-color@8.1.1)':
     dependencies:
-      axios: 1.7.9(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.18.1(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       axios-proxy-builder: 0.1.2
       console.table: 0.10.0
       detect-libc: 2.0.3
       tar: 7.4.3
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   '@apollo/server-gateway-interface@1.1.1(graphql@16.14.2)':
     dependencies:
@@ -12245,7 +12279,7 @@ snapshots:
 
   '@npmcli/fs@3.1.1':
     dependencies:
-      semver: 7.7.4
+      semver: 7.8.4
 
   '@opentelemetry/api-logs@0.219.0':
     dependencies:
@@ -12640,11 +12674,12 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
 
-  '@ory/kratos-client@26.2.0(debug@4.4.3(supports-color@8.1.1))':
+  '@ory/kratos-client@26.2.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      axios: 1.7.9(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.18.1(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   '@oxc-parser/binding-android-arm-eabi@0.137.0':
     optional: true
