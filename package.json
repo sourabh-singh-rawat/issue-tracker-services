@@ -51,6 +51,7 @@
     "changeset:release": "changeset publish",
     "changeset-required": "node --no-warnings --experimental-strip-types scripts/changeset-required.ts",
     "release-branch-check": "node --no-warnings --experimental-strip-types scripts/release-branch-check.ts",
+    "create-release-branch": "node --no-warnings --experimental-strip-types scripts/create-release-branch.ts",
     "release": "node --no-warnings --experimental-strip-types scripts/release.ts",
     "concat": "tsx scripts/concat.ts",
     "prepare": "simple-git-hooks",
