@@ -7,20 +7,31 @@
     "types": ["vite/client"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@bootstrap": ["./src/bootstrap"],
+      "@bootstrap/*": ["./src/bootstrap/*"],
+      "@features": ["./src/features"],
+      "@features/*": ["./src/features/*"],
+      "@graphql": ["./src/graphql"],
+      "@graphql/*": ["./src/graphql/*"],
+      "@routes": ["./src/routes"],
+      "@routes/*": ["./src/routes/*"],
+      "@shared": ["./src/shared"],
+      "@shared/*": ["./src/shared/*"],
+      "@generated": ["./src/__generated__"],
+      "@generated/*": ["./src/__generated__/*"],
+      "@graphql-typed-document-node/core": ["./src/shims/graphql-typed-document-node-core.ts"]
+    }
   },
   "include": ["src"]
 }

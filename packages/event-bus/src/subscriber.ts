@@ -1,11 +1,4 @@
-import {
-  AckPolicy,
-  DeliverPolicy,
-  JSONCodec,
-  JsMsg,
-  NatsConnection,
-  ReplayPolicy,
-} from "nats";
+import { AckPolicy, DeliverPolicy, JSONCodec, JsMsg, NatsConnection, ReplayPolicy } from "nats";
 import { Consumers, Streams } from "./enums";
 
 export abstract class Subscriber<T> {
@@ -33,10 +26,7 @@ export abstract class Subscriber<T> {
       replay_policy: ReplayPolicy.Instant,
     });
 
-    const consumer = await this.jetstream.consumers.get(
-      this.stream,
-      this.consumer,
-    );
+    const consumer = await this.jetstream.consumers.get(this.stream, this.consumer);
     const messages = await consumer.consume({ max_messages: 5 });
 
     for await (const message of messages) {

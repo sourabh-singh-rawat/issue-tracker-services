@@ -6,7 +6,5 @@ export interface ProjectActivityService {
   logCreatedProject(payload: ProjectPayload): Promise<void>;
   logUpdatedProjectName(payload: ProjectPayload): Promise<void>;
   logUpdatedProjectDescription(payload: ProjectPayload): Promise<void>;
-  getProjectActivityList(
-    id: string,
-  ): Promise<ServiceResponseInputs<ProjectIssueActivity[]>>;
+  getProjectActivityList(id: string): Promise<ServiceResponseInputs<ProjectIssueActivity[]>>;
 }

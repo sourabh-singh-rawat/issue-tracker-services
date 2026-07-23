@@ -25,7 +25,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Build all server packages/services once; individual runtime stages only need their graph outputs.
 # Prefer per-service targets below when optimizing layer cache further.
 RUN pnpm exec turbo run build \
-    --filter=@pine/attachment \
+    --filter=@pine/attachment-service \
     --filter=@pine/mail \
     --filter=@pine/identity-service \
     --filter=@pine/issues \
@@ -43,7 +43,7 @@ FROM base AS attachment
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/attachment start
+CMD pnpm -F @pine/attachment-service start
 
 
 # Stage 3: Email / Mail Service

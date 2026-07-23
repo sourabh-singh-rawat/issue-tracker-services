@@ -1,12 +1,6 @@
 import React from "react";
 import Autocomplete from "../Autocomplete";
-import {
-  Control,
-  Controller,
-  FieldValues,
-  FormState,
-  Path,
-} from "react-hook-form";
+import { Control, Controller, FieldValues, FormState, Path } from "react-hook-form";
 
 interface ControlledAutocompleteProps<DefaultValues extends FieldValues> {
   name: Path<DefaultValues>;

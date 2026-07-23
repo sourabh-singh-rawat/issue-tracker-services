@@ -9,9 +9,7 @@ interface AddProjectMemberModalProps {
   handleClose: () => void;
 }
 
-export default function AddProjectMemberModal(
-  { open, handleClose }: AddProjectMemberModalProps,
-) {
+export default function AddProjectMemberModal({ open, handleClose }: AddProjectMemberModalProps) {
   // const { id } = useSelectedTab();
   // const { data: workspaceMemberList } = useGetWorkspaceMemberListQuery({
   //   id,

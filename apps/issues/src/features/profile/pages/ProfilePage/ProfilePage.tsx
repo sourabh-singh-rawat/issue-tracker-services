@@ -44,9 +44,7 @@ export const ProfilePage = () => {
                   </Stack>
                 </Grid2>
                 <Grid2 size={12}>
-                  <Typography variant="body2">
-                    We support PNG and JPEGs under 10MB
-                  </Typography>
+                  <Typography variant="body2">We support PNG and JPEGs under 10MB</Typography>
                 </Grid2>
               </Grid2>
             </Grid2>
@@ -57,18 +55,8 @@ export const ProfilePage = () => {
           <Typography variant="h6">General</Typography>
           <Stack spacing={1}>
             <Typography variant="body2"></Typography>
-            <TextField
-              form={form}
-              name="displayName"
-              label="Display Name"
-              placeholder="Name"
-            />
-            <TextField
-              form={form}
-              name="email"
-              label="Email"
-              placeholder="Email"
-            />
+            <TextField form={form} name="displayName" label="Display Name" placeholder="Name" />
+            <TextField form={form} name="email" label="Email" placeholder="Email" />
           </Stack>
         </Grid2>
       </Grid2>

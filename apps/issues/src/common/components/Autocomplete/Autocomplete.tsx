@@ -46,10 +46,7 @@ export default function Autocomplete({
         onChange={(_event, newValue) => {
           if (Array.isArray(newValue)) {
             return onChange(
-              _.uniqBy(
-                [...fixedOptions, ...(newValue as AutocompleteOption[])],
-                "id",
-              ),
+              _.uniqBy([...fixedOptions, ...(newValue as AutocompleteOption[])], "id"),
             );
           }
           onChange(newValue as AutocompleteOption | null);
@@ -72,9 +69,7 @@ export default function Autocomplete({
             );
           })
         }
-        renderInput={(params) => (
-          <StyledTextField {...params} size="small" error={isError} />
-        )}
+        renderInput={(params) => <StyledTextField {...params} size="small" error={isError} />}
         limitTags={1}
         disableClearable={isClearable}
         disabled={isDisabled}

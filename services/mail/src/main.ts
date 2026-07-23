@@ -2,12 +2,7 @@ import "./env";
 import "reflect-metadata";
 
 import { AwilixDi } from "@pine/server-core";
-import {
-  RegisteredServices,
-  broker,
-  container,
-  orm,
-} from "./container";
+import { RegisteredServices, broker, container, orm } from "./container";
 
 export { container, dataSource } from "./container";
 

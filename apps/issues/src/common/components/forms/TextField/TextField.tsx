@@ -1,22 +1,9 @@
 import React from "react";
 
-import {
-  Grid2,
-  TextField as MuiTextField,
-  SxProps,
-  alpha,
-  styled,
-  useTheme,
-} from "@mui/material";
+import { Grid2, TextField as MuiTextField, SxProps, alpha, styled, useTheme } from "@mui/material";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
-import {
-  Controller,
-  FieldValues,
-  Path,
-  UseControllerProps,
-  UseFormReturn,
-} from "react-hook-form";
+import { Controller, FieldValues, Path, UseControllerProps, UseFormReturn } from "react-hook-form";
 import { Label } from "../Label";
 
 const StyledTextField = styled(MuiTextField)(({ theme, sx }) => ({
@@ -27,11 +14,7 @@ const StyledTextField = styled(MuiTextField)(({ theme, sx }) => ({
     borderRadius: theme.shape.borderRadiusMedium,
     backgroundColor: theme.palette.background.default,
     fontSize: "inherit",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
+    transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
     "&.Mui-focused": {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,

@@ -19,10 +19,7 @@ export default function NavbarTextItem({ to, label }: NavbarTextItemProps) {
         "&:hover": { color: theme.palette.primary.main },
       }}
     >
-      <Link
-        to={to as "/"}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
+      <Link to={to as "/"} style={{ textDecoration: "none", color: "inherit" }}>
         <MuiTypography fontWeight="500">{label}</MuiTypography>
       </Link>
     </MuiLink>

@@ -15,9 +15,7 @@ export const ProjectList = ({ workspaceId }: ProjectListProps) => {
     <List
       subheader={
         <>
-          <ListItem
-            secondaryAction={<CreateProjectModal workspaceId={workspaceId} />}
-          >
+          <ListItem secondaryAction={<CreateProjectModal workspaceId={workspaceId} />}>
             <ListItemText>Projects</ListItemText>
           </ListItem>
           {isLoading ? (
@@ -28,12 +26,7 @@ export const ProjectList = ({ workspaceId }: ProjectListProps) => {
             </ListItem>
           ) : (
             projects.map(({ id, name }) => (
-              <ProjectListItem
-                key={id}
-                projectId={id}
-                workspaceId={workspaceId}
-                name={name}
-              />
+              <ProjectListItem key={id} projectId={id} workspaceId={workspaceId} name={name} />
             ))
           )}
         </>

@@ -1,11 +1,6 @@
 import { ProjectActivity } from "@pine/common";
 import { Audit } from "@pine/orm";
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "list_item_activities" })
 export class ProjectIssueActivity extends Audit {

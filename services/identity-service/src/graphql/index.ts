@@ -1,3 +1,3 @@
 export { builder } from "@pine/graphql-core";
-export type { AuthContext } from "./context";
-export { createContext } from "./context";
+export type { AuthContext } from "@/graphql/context";
+export { createContext } from "@/graphql/context";

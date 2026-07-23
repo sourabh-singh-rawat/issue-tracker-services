@@ -9,11 +9,7 @@ const StyledTextField = styled(MuiTextField)(({ theme }) => ({
     borderColor: theme.palette.divider,
     borderRadius: theme.shape.borderRadiusMedium,
     backgroundColor: theme.palette.background.default,
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
+    transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
     "&.Mui-focused": {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,

@@ -4,10 +4,7 @@ import type { User } from "@generated/gql/graphql";
 interface AuthState {
   current: User | null;
   isLoading: boolean;
-  setCurrentUser: (payload: {
-    current: User | null;
-    isLoading?: boolean;
-  }) => void;
+  setCurrentUser: (payload: { current: User | null; isLoading?: boolean }) => void;
   logout: () => void;
 }
 

@@ -24,9 +24,7 @@ export default function Container({ title, children }: Props) {
       <Grid2 size={12}>
         <MuiTypography>{title}</MuiTypography>
       </Grid2>
-      <Grid2 size={12}>
-        {children}
-      </Grid2>
+      <Grid2 size={12}>{children}</Grid2>
     </Grid2>
   );
 }

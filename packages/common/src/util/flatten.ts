@@ -2,9 +2,7 @@ type NestedObject = {
   [key: string]: string | NestedObject;
 };
 
-export const flattenObject = (
-  nestedObj: NestedObject,
-): Record<string, string> => {
+export const flattenObject = (nestedObj: NestedObject): Record<string, string> => {
   const flattenedObj: Record<string, string> = {};
 
   Object.keys(nestedObj).forEach((key) => {

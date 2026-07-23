@@ -27,9 +27,7 @@ interface WorkspaceRoleSelectorProps<DefaultValues extends FieldValues> {
   rules?: UseControllerProps<DefaultValues>["rules"];
 }
 
-export default function WorkspaceRoleSelector<
-  DefaultValues extends FieldValues,
->({
+export default function WorkspaceRoleSelector<DefaultValues extends FieldValues>({
   name,
   control,
   rules,

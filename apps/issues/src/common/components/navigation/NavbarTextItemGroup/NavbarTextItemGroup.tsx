@@ -8,10 +8,7 @@ interface NavbarGroup {
   itemSpacing?: number;
 }
 
-export default function NavbarTextItemGroup({
-  items,
-  itemSpacing = 3,
-}: NavbarGroup) {
+export default function NavbarTextItemGroup({ items, itemSpacing = 3 }: NavbarGroup) {
   return (
     <MuiGrid container columnSpacing={itemSpacing}>
       {items.map(({ to, label }) => (

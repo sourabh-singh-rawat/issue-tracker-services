@@ -19,29 +19,16 @@ export default function WorkspaceForm({ handleClose }: WorkspaceFormProps) {
     mode: "all",
   });
 
-  const onSubmit: SubmitHandler<CreateWorkspaceInput> = async ({
-    name,
-    description,
-  }) => {
+  const onSubmit: SubmitHandler<CreateWorkspaceInput> = async ({ name, description }) => {
     await createWorkspace({ input: { name, description } });
     handleClose();
   };
 
   return (
-    <Container
-      component="form"
-      onSubmit={form.handleSubmit(onSubmit)}
-      disableGutters
-    >
+    <Container component="form" onSubmit={form.handleSubmit(onSubmit)} disableGutters>
       <Grid2 rowSpacing={3} container>
         <Grid2 size={12}>
-          <TextField
-            name="name"
-            label="Name"
-            placeholder="Name"
-            form={form}
-            autoFocus
-          />
+          <TextField name="name" label="Name" placeholder="Name" form={form} autoFocus />
         </Grid2>
         <Grid2 size={12}>
           <TextField

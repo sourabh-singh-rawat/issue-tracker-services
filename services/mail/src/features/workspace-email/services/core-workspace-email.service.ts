@@ -16,13 +16,7 @@ export class CoreWorkspaceEmailService implements WorkspaceEmailService {
   ) {}
 
   sendWorkspaceInvitationEmail = async (payload: WorkspaceInvitePayload) => {
-    const {
-      userId,
-      token,
-      email: receiverEmail,
-      workspaceId,
-      workspaceName,
-    } = payload;
+    const { userId, token, email: receiverEmail, workspaceId, workspaceName } = payload;
 
     const exists = await User.exists({ where: { id: userId } });
     if (!exists) throw new UserNotFoundError();

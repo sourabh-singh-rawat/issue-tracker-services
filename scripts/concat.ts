@@ -7,7 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Helper to get all files recursively
-function getFilesRecursively(dir: string, excludeDirs = ["node_modules", ".git", "dist", "build", ".next", ".nx"]): string[] {
+function getFilesRecursively(
+  dir: string,
+  excludeDirs = ["node_modules", ".git", "dist", "build", ".next", ".nx"],
+): string[] {
   let results: string[] = [];
   const list = fs.readdirSync(dir);
   for (const file of list) {
@@ -55,7 +58,9 @@ function main(): void {
   const extensions = parsed.extensions;
 
   if (positional.length === 0) {
-    console.log("Usage: npx tsx scripts/concat.ts <target_directory_path> [output_file_path] [-e extension1,extension2,...]");
+    console.log(
+      "Usage: npx tsx scripts/concat.ts <target_directory_path> [output_file_path] [-e extension1,extension2,...]",
+    );
     process.exit(1);
   }
 
@@ -74,7 +79,7 @@ function main(): void {
   if (extensions) {
     console.log(`Filtering files by extensions: ${extensions.join(", ")}`);
   }
-  
+
   // Exclude output file itself from compilation
   let files: string[];
   try {
@@ -85,7 +90,13 @@ function main(): void {
   }
 
   // Filter out the output file, typescript/javascript script itself, and any previous script variants
-  files = files.filter((f) => f !== outputFile && f !== __filename && !f.endsWith("combine.ts") && !f.endsWith("combine.js"));
+  files = files.filter(
+    (f) =>
+      f !== outputFile &&
+      f !== __filename &&
+      !f.endsWith("combine.ts") &&
+      !f.endsWith("combine.js"),
+  );
 
   // Filter by extensions if specified
   if (extensions) {
@@ -139,8 +150,10 @@ function main(): void {
     const gitignorePath = path.resolve(__dirname, "../.gitignore");
     if (fs.existsSync(gitignorePath)) {
       const gitignoreContent = fs.readFileSync(gitignorePath, "utf8");
-      const relOutputFile = path.relative(path.dirname(gitignorePath), outputFile).replace(/\\/g, "/");
-      
+      const relOutputFile = path
+        .relative(path.dirname(gitignorePath), outputFile)
+        .replace(/\\/g, "/");
+
       if (!gitignoreContent.includes(relOutputFile)) {
         fs.appendFileSync(gitignorePath, `\n# Combined scripts output\n${relOutputFile}\n`);
         console.log(`Added ${relOutputFile} to .gitignore`);

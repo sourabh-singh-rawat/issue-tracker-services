@@ -5,13 +5,7 @@ import {
   WorkspaceMemberStatus,
 } from "@pine/common";
 import { Audit } from "@pine/orm";
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Workspace } from "./Workspace";
 
 @Entity({ name: "workspace_members" })

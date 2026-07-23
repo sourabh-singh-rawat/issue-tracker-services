@@ -9,13 +9,7 @@ import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { SxProps, alpha, useTheme } from "@mui/material";
 import dayjs from "dayjs";
-import {
-  Controller,
-  FieldValues,
-  Path,
-  UseControllerProps,
-  UseFormReturn,
-} from "react-hook-form";
+import { Controller, FieldValues, Path, UseControllerProps, UseFormReturn } from "react-hook-form";
 import { Label } from "../forms";
 
 interface DatePickerProps<T extends FieldValues> {
@@ -57,9 +51,7 @@ function DatePicker<T extends FieldValues>({
               return (
                 <MuiDatePicker
                   value={field.value ? dayjs(field.value) : null}
-                  onChange={(newValue) =>
-                    field.onChange(dayjs(newValue).format("YYYY-MM-DD"))
-                  }
+                  onChange={(newValue) => field.onChange(dayjs(newValue).format("YYYY-MM-DD"))}
                   slotProps={{
                     openPickerButton: { disableRipple: true },
                     textField: {
@@ -79,17 +71,11 @@ function DatePicker<T extends FieldValues>({
                             fontSize: theme.typography.body2,
                           },
                           "&.Mui-focused": {
-                            boxShadow: `${alpha(
-                              theme.palette.primary.main,
-                              0.25,
-                            )} 0 0 0 0.2rem`,
+                            boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
                             borderColor: theme.palette.primary.main,
                           },
                           "& .Mui-error": {
-                            boxShadow: `${alpha(
-                              theme.palette.error.main,
-                              0.25,
-                            )} 0 0 0 0.2rem`,
+                            boxShadow: `${alpha(theme.palette.error.main, 0.25)} 0 0 0 0.2rem`,
                           },
                         },
                         ".MuiFormHelperText-root": {

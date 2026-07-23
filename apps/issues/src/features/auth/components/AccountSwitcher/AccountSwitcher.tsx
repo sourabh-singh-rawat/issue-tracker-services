@@ -42,11 +42,7 @@ export const AccountSwitcher = () => {
         <Avatar label={current?.displayName} isLoading={isLoading} />
       </IconButton>
       {current && (
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
           <MenuItem
             onClick={() => {
               navigate({ to: "/me" });
@@ -58,15 +54,10 @@ export const AccountSwitcher = () => {
               <Avatar label={current.displayName} />
             </ListItemIcon>
             <Stack>
-              <Typography
-                sx={{ color: theme.palette.text.primary, fontWeight: "bold" }}
-              >
+              <Typography sx={{ color: theme.palette.text.primary, fontWeight: "bold" }}>
                 {current.displayName}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: theme.palette.text.secondary }}
-              >
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
                 {current.email}
               </Typography>
             </Stack>

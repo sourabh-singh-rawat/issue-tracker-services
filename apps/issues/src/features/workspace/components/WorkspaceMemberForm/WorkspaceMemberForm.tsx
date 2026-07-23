@@ -22,20 +22,14 @@ export default function WorkspaceMemberForm() {
   const roleOptions: { id: string; name: string }[] = [];
   const isLoading = false;
 
-  const defaultValues = useMemo(
-    () => ({ email: "", workspaceRole: "" }) as InviteForm,
-    [],
-  );
+  const defaultValues = useMemo(() => ({ email: "", workspaceRole: "" }) as InviteForm, []);
 
   const form = useForm<InviteForm>({
     defaultValues,
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<InviteForm> = async ({
-    email,
-    workspaceRole,
-  }) => {
+  const onSubmit: SubmitHandler<InviteForm> = async ({ email, workspaceRole }) => {
     if (!id) return;
     // await createWorkspaceInvite({ id, body: { email, workspaceRole } });
     void email;
@@ -43,11 +37,7 @@ export default function WorkspaceMemberForm() {
   };
 
   return (
-    <MuiContainer
-      component="form"
-      onSubmit={form.handleSubmit(onSubmit)}
-      disableGutters
-    >
+    <MuiContainer component="form" onSubmit={form.handleSubmit(onSubmit)} disableGutters>
       <MuiGrid spacing={2} container>
         <MuiGrid item xs={8}>
           <TextField name="email" label="Email" form={form} />

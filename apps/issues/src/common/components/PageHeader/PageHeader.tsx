@@ -27,9 +27,7 @@ export default function PageHeader({ title, showButton = true }: Props) {
             label="Create Project"
             type="button"
             startIcon={<AddIcon />}
-            onClick={() =>
-              navigate({ to: "./new" as "/me" })
-            }
+            onClick={() => navigate({ to: "./new" as "/me" })}
           />
         </MuiGrid>
       )}

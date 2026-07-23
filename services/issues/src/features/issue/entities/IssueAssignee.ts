@@ -1,11 +1,5 @@
 import { Audit } from "@pine/orm";
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "@/features/user/entities/User";
 import { Issue } from "./Issue";
 

@@ -5,7 +5,7 @@
   "useTabs": false,
   "semi": true,
   "singleQuote": false,
-  "printWidth": 80,
+  "printWidth": 100,
   "bracketSpacing": true,
   "arrowParens": "always",
   "endOfLine": "lf",
@@ -18,5 +18,13 @@
     "coverage",
     "build",
     "**/*.html"
+  ],
+  "overrides": [
+    {
+      "files": ["**/container.ts"],
+      "options": {
+        "printWidth": 160
+      }
+    }
   ]
 }

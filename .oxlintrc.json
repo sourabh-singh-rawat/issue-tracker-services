@@ -1,10 +1,6 @@
 {
   "$schema": "https://cdn.jsdelivr.net/npm/oxlint@1/configuration_schema.json",
-  "plugins": [
-    "react",
-    "typescript",
-    "oxc"
-  ],
+  "plugins": ["react", "typescript", "oxc"],
   "ignorePatterns": [
     "**/__generated__/**",
     "**/routeTree.gen.ts",
@@ -16,11 +12,7 @@
   ],
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": [
-      "warn",
-      {
-        "allowConstantExport": true
-      }
-    ]
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "typescript/no-explicit-any": "error"
   }
 }

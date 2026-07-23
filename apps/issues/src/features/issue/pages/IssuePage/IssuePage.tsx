@@ -1,8 +1,5 @@
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
-import {
-  useFindIssueQuery,
-  useUpdateIssueMutation,
-} from "@generated/gql";
+import { useFindIssueQuery, useUpdateIssueMutation } from "@generated/gql";
 import type { UpdateIssueInput } from "@generated/gql/graphql";
 import { useIssueParams, useSnackbar } from "@common";
 import {
@@ -33,9 +30,7 @@ export const IssuePage = () => {
       snackbar.success(response.updateIssue);
       return response;
     } catch (error) {
-      snackbar.error(
-        error instanceof Error ? error.message : "Failed to update issue",
-      );
+      snackbar.error(error instanceof Error ? error.message : "Failed to update issue");
       throw error;
     }
   };
@@ -58,10 +53,7 @@ export const IssuePage = () => {
       )}
 
       <Grid2 size={12}>
-        <IssueDescription
-          issueId={issueId}
-          initialValue={issue?.description}
-        />
+        <IssueDescription issueId={issueId} initialValue={issue?.description} />
       </Grid2>
 
       <Grid2 size={12}>

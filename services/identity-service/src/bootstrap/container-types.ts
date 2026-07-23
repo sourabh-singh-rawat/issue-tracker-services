@@ -1,0 +1,14 @@
+export const TYPES = {
+  DataSource: Symbol.for("DataSource"),
+  Logger: Symbol.for("Logger"),
+  Broker: Symbol.for("Broker"),
+  Publisher: Symbol.for("Publisher"),
+  UserRepository: Symbol.for("IUserRepository"),
+  UserProfileRepository: Symbol.for("IUserProfileRepository"),
+  UserService: Symbol.for("IUserService"),
+  UserProfileService: Symbol.for("IUserProfileService"),
+  KratosClient: Symbol.for("KratosClient"),
+  IdentityProvider: Symbol.for("IIdentityProvider"),
+  RegistrationService: Symbol.for("IRegistrationService"),
+  LoginService: Symbol.for("ILoginService"),
+} as const;

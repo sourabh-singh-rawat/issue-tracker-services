@@ -1,7 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "pine",
   "version": "0.0.0",
   "description": "Pine monorepo - issues and related services",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "scripts": {
     "dev:infra": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.kratos.yaml -f infra/docker/compose.hydra.yaml up -d",
     "dev:infra:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.yaml -f infra/docker/compose.single-db.yaml -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.kratos.yaml -f infra/docker/compose.hydra.yaml down",
@@ -19,19 +23,19 @@
     "dev:infra:kratos:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.kratos.yaml down",
     "dev:infra:hydra": "docker compose --env-file infra/docker/.env -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.hydra.yaml up -d",
     "dev:infra:hydra:down": "docker compose --env-file infra/docker/.env -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.hydra.yaml down",
-    "dev:apps": "turbo run dev --filter=@pine/issue-web --filter=@pine/identity-web --filter=@pine/inventory --filter=@pine/identity-service --filter=@pine/attachment --filter=@pine/mail --filter=@pine/issues --filter=@pine/gateway",
+    "dev:apps": "turbo run dev --filter=@pine/issue-web --filter=@pine/identity-web --filter=@pine/inventory --filter=@pine/identity-service --filter=@pine/attachment-service --filter=@pine/mail --filter=@pine/issues --filter=@pine/api-gateway",
     "client": "turbo run dev --filter=@pine/issue-web",
     "web": "turbo run dev --filter=@pine/issue-web",
     "issue-web": "turbo run dev --filter=@pine/issue-web",
     "identity-web": "turbo run dev --filter=@pine/identity-web",
     "inventory": "turbo run dev --filter=@pine/inventory",
-    "server": "skaffold dev",
+    "server": "skaffold dev -f tools/scaffold/skaffold.yaml",
     "issues": "turbo run dev --filter=@pine/issues",
     "issue-tracker": "turbo run dev --filter=@pine/issues",
     "identity-service": "turbo run dev --filter=@pine/identity-service",
     "mail": "turbo run dev --filter=@pine/mail",
-    "attachment": "turbo run dev --filter=@pine/attachment",
-    "gateway": "turbo run dev --filter=@pine/gateway",
+    "attachment-service": "turbo run dev --filter=@pine/attachment-service",
+    "api-gateway": "turbo run dev --filter=@pine/api-gateway",
     "gen": "turbo run gen --filter=@pine/issue-web",
     "build": "turbo run build",
     "build:server": "turbo run build --filter=!@pine/issue-web --filter=!@pine/identity-web --filter=!@pine/inventory --filter=!@pine/forms",
@@ -40,7 +44,8 @@
     "test:affected": "turbo run test --affected",
     "graph": "turbo run build --graph",
     "turbo:clean": "turbo daemon clean && node -e \"require('fs').rmSync('.turbo',{recursive:true,force:true})\"",
-    "gql:compose": "rover supergraph compose --elv2-license accept --config supergraph-config-dev.yaml > services/gateway/supergraph.graphql",
+    "gql:compose": "node -e \"require('fs').mkdirSync('services/api-gateway/dist',{recursive:true})\" && rover supergraph compose --elv2-license accept --config tools/apollo/supergraph.yaml > services/api-gateway/dist/supergraph.graphql",
+    "openapi:compose": "node -e \"require('fs').mkdirSync('services/api-gateway/dist',{recursive:true})\" && redocly join --config tools/redocly/redocly.yaml --prefix-tags-with-info-prop title -o services/api-gateway/dist/platform.openapi.json",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:release": "changeset publish",
@@ -52,21 +57,10 @@
     "fmt:check": "oxfmt --check",
     "check:knip": "knip"
   },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm build"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "engines": {
-    "pnpm": ">=9.0.4",
-    "node": ">=20.13.1"
-  },
-  "packageManager": "pnpm@11.15.0",
   "devDependencies": {
     "@apollo/rover": "^0.34.1",
     "@changesets/cli": "^2.31.0",
-    "@redocly/cli": "^1.34.17",
+    "@redocly/cli": "^2.40.0",
     "@types/node": "^26.1.1",
     "depcheck": "^1.4.7",
     "js-tiktoken": "^1.0.21",
@@ -77,5 +71,13 @@
     "tsx": "4.23.0",
     "turbo": "^2.5.4",
     "typescript": "7.0.2"
-  }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm build"
+  },
+  "engines": {
+    "node": ">=20.13.1",
+    "pnpm": ">=9.0.4"
+  },
+  "packageManager": "pnpm@11.15.0"
 }

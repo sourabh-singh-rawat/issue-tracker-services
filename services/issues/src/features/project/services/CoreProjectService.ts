@@ -53,9 +53,7 @@ export class CoreProjectService implements ProjectService {
 
   async findProjects(options: FindProjectsOptions) {
     const { page, pageSize, userId, workspaceId: filterWorkspaceId } = options;
-    const workspaceId =
-      filterWorkspaceId ??
-      (await this.userService.getDefaultWorkspaceId(userId));
+    const workspaceId = filterWorkspaceId ?? (await this.userService.getDefaultWorkspaceId(userId));
 
     const [rows, rowCount] = await Project.findAndCount({
       where: { workspaceId },
