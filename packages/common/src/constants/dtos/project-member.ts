@@ -17,15 +17,7 @@ export class ProjectMember {
   updatedAt?: string;
   role?: string;
 
-  constructor({
-    id,
-    name,
-    userId,
-    email,
-    role,
-    createdAt,
-    updatedAt,
-  }: ProjectMemberProps) {
+  constructor({ id, name, userId, email, role, createdAt, updatedAt }: ProjectMemberProps) {
     this.id = id;
     this.name = name;
     this.email = email;

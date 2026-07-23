@@ -1,0 +1,101 @@
+services:
+  identity-postgres:
+    image: postgres:18.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=identity
+      - POSTGRES_PASSWORD=${POSTGRES_IDENTITY_PASSWORD}
+      - POSTGRES_DB=identity
+    volumes:
+      - ../data/docker/identity-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5433:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  issues-postgres:
+    image: postgres:18.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=issues
+      - POSTGRES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
+      - POSTGRES_DB=issues
+    volumes:
+      - ../data/docker/issues-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5434:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  mail-postgres:
+    image: postgres:18.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=mail
+      - POSTGRES_PASSWORD=${POSTGRES_MAIL_PASSWORD}
+      - POSTGRES_DB=mail
+    volumes:
+      - ../data/docker/mail-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5435:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  attachment-postgres:
+    image: postgres:18.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=attachment
+      - POSTGRES_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
+      - POSTGRES_DB=attachment
+    volumes:
+      - ../data/docker/attachment-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5436:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  # Register per-service Postgres servers (plus Ory) in pgAdmin
+  pgadmin:
+    environment:
+      - PGADMIN_CONFIG_TYPE=multi-db

@@ -1,0 +1,3 @@
+name: user-updated-consumer
+stream: user
+subject: user.updated

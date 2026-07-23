@@ -3,11 +3,7 @@ import { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { ResponseError } from "./http";
 
 export class ErrorHandler {
-  static handleError(
-    error: FastifyError,
-    request: FastifyRequest,
-    reply: FastifyReply,
-  ) {
+  static handleError(error: FastifyError, request: FastifyRequest, reply: FastifyReply) {
     console.log("-----BEGIN COMMON ERROR-----", error);
     console.log("-----END COMMON ERROR-----");
     if (error instanceof ResponseError) {

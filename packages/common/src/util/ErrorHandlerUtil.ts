@@ -3,11 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseError } from "../constants/errors";
 
 export class ErrorHandlerUtil {
-  static handleError(
-    error: FastifyError,
-    request: FastifyRequest,
-    reply: FastifyReply,
-  ) {
+  static handleError(error: FastifyError, request: FastifyRequest, reply: FastifyReply) {
     if (error instanceof ResponseError) {
       return reply.status(error.statusCode).send(error.serializeError());
     }

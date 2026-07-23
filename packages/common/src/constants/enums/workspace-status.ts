@@ -6,5 +6,4 @@ export const WORKSPACE_STATUS = {
   TEMPLATE: "Template",
 } as const;
 
-export type WorkspaceStatus =
-  (typeof WORKSPACE_STATUS)[keyof typeof WORKSPACE_STATUS];
+export type WorkspaceStatus = (typeof WORKSPACE_STATUS)[keyof typeof WORKSPACE_STATUS];

@@ -1,21 +1,23 @@
 {
-  "name": "@issue-tracker/common",
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/common",
+  "version": "0.0.1",
   "private": "true",
-  "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^5.4.5"
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc"
   },
   "dependencies": {
-    "fastify": "^5.2.1",
+    "fastify": "^5.10.0",
     "http-status-codes": "^2.3.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
   }
 }

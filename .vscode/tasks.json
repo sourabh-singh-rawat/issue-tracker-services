@@ -10,11 +10,139 @@
   },
   "tasks": [
     {
+      "label": "infra: up",
+      "detail": "Start Postgres (Single Instance), Redis, NATS, pgAdmin (Docker Compose Minimal). Run once; keep running while debugging apps.",
+      "type": "shell",
+      "command": "pnpm dev:infra",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: down",
+      "detail": "Stop and remove minimal infra containers (Docker Compose Minimal down).",
+      "type": "shell",
+      "command": "pnpm dev:infra:down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: up:multi-db",
+      "detail": "Start Postgres (Multiple Instances), Redis, NATS, pgAdmin (Docker Compose Multi-db). Run once; keep running while debugging apps.",
+      "type": "shell",
+      "command": "pnpm dev:infra:multi-db",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: down:multi-db",
+      "detail": "Stop and remove multi-db infra containers (Docker Compose Multi-db down).",
+      "type": "shell",
+      "command": "pnpm dev:infra:multi-db:down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra",
+        "clear": true
+      }
+    },
+    {
+      "label": "infra: status",
+      "detail": "Show Docker Compose service status.",
+      "type": "shell",
+      "command": "docker compose -f infra/docker/compose.yaml ps",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra"
+      }
+    },
+    {
+      "label": "infra: logs",
+      "detail": "Follow Docker Compose logs (all infra services).",
+      "type": "shell",
+      "command": "docker compose -f infra/docker/compose.yaml logs -f --tail=100",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "infra"
+      }
+    },
+    {
+      "label": "gql:compose",
+      "detail": "Compose Apollo supergraph SDL for the API Gateway (does not start Docker).",
+      "type": "shell",
+      "command": "pnpm gql:compose",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "dev:apps",
+      "detail": "Turbo run dev for all apps (no debugger, no Docker).",
+      "type": "shell",
+      "command": "pnpm dev:apps",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
       "type": "shell",
       "label": "supergraph",
+      "detail": "Long-running rover dev (optional alternate to local API Gateway).",
       "command": "rover dev --supergraph-config supergraph-config-dev.yaml --router-config router-config-dev.yaml",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": [],
-      "isBackground": true,
-    },
+      "isBackground": true
+    }
   ]
 }

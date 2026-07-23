@@ -1,25 +1,26 @@
 {
-  "name": "@issue-tracker/forms",
-  "version": "1.0.0",
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/forms",
+  "version": "0.0.1",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
     "build": "tsc -b",
     "build:watch": "tsc -b --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.11.1",
   "dependencies": {
     "antd": "^5.27.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "typescript": "^5.9.3"
-  }
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "7.0.2"
+  },
+  "packageManager": "pnpm@10.11.1"
 }

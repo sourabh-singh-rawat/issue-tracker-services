@@ -1,7 +1,0 @@
-query FindSubItems($input: FindItemsInput!) {
-  findSubItems(input: $input) {
-    description
-    id
-    name
-  }
-}

@@ -1,5 +1,5 @@
-import { MissingEnforcerError } from "@issue-tracker/common/src/constants";
-import { Logger } from "@issue-tracker/server-core";
+import { MissingEnforcerError } from "@pine/common/src/constants";
+import { Logger } from "@pine/server-core";
 import { Enforcer, newEnforcer } from "casbin";
 import { DataSource } from "typeorm";
 import TypeORMAdapter from "typeorm-adapter";
@@ -89,10 +89,7 @@ export abstract class Guardian<A extends string> {
       { customCasbinRuleEntity: config.customCasbinRuleEntity },
     );
 
-    this.casbinEnforcer = await newEnforcer(
-      "./src/app/guardians/casbin/model.conf",
-      adapter,
-    );
+    this.casbinEnforcer = await newEnforcer("./src/app/guardians/casbin/model.conf", adapter);
     this.logger.info("Initialized policy manager and connected to database");
   };
 
@@ -102,11 +99,7 @@ export abstract class Guardian<A extends string> {
    * @param objectId
    * @param actionId
    */
-  abstract validatePermission(
-    subjectId: string,
-    objectId: string,
-    actionId: A,
-  ): Promise<void>;
+  abstract validatePermission(subjectId: string, objectId: string, actionId: A): Promise<void>;
 
   /**
    * Enforcer getter

@@ -1,11 +1,7 @@
 import { ApolloServer } from "@apollo/server";
-import { Environment } from "@issue-tracker/common";
-import {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  RouteOptions,
-} from "fastify";
+import type { FastifyCorsOptions } from "@fastify/cors";
+import { Environment } from "@pine/common";
+import { FastifyInstance, FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import { Logger } from "./Logger";
 
 export interface AppContext {
@@ -21,10 +17,11 @@ export interface ServerConfigurationOptions {
   version: number;
 }
 
-export interface CorsOptions {
-  credentials?: boolean;
-  origin?: string;
-}
+/**
+ * CORS options for {@link CoreHttpServer}.
+ * `origin` accepts a single value or an array (and other forms supported by @fastify/cors).
+ */
+export type CorsOptions = Pick<FastifyCorsOptions, "credentials" | "origin">;
 
 export interface CookieOptions {
   secret: string;
@@ -40,13 +37,30 @@ export interface GraphqlOptions {
   createContext: any;
 }
 
+/**
+ * Route registration entry for {@link CoreHttpServer}.
+ * Uses loose generics so routes can declare their own Body/Params types
+ * without failing assignability into the shared routes array.
+ */
+export type HttpRouteOptions = RouteOptions<
+  // Server/request/reply and route generic params are erased at the registry boundary.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any
+>;
+
 export interface HttpServerOptions {
   server: FastifyInstance;
   config: ServerConfigurationOptions;
   graphql: GraphqlOptions;
   cors?: CorsOptions;
   cookie?: CookieOptions;
-  routes?: RouteOptions[];
+  routes?: HttpRouteOptions[];
   logger?: Logger;
 }
 

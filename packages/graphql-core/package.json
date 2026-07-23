@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/graphql-core",
+  "version": "0.0.1",
+  "description": "Shared Pothos SchemaBuilder, scalars, and GraphQL infrastructure",
+  "keywords": [
+    "graphql",
+    "pothos"
+  ],
+  "license": "ISC",
+  "author": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@pothos/core": "^4.13.1",
+    "fastify": "^5.10.0",
+    "graphql": "^16.10.0",
+    "graphql-scalars": "^1.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.13",
+    "typescript": "7.0.2"
+  }
+}

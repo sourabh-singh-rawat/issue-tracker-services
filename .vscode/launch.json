@@ -2,15 +2,60 @@
   "version": "0.2.0",
   "compounds": [
     {
-      "name": "dev (linux)",
+      "name": "dev",
+      "presentation": {
+        "group": "dev",
+        "order": 1
+      },
       "stopAll": true,
-      "preLaunchTask": "supergraph",
       "configurations": [
-        "auth",
-        "issue-tracker",
-        "issue-tracker (client)",
+        "identity-service",
+        "issues",
+        "attachment-service",
         "mail",
-        "attachment",
+        "api-gateway",
+        "issue-web",
+        "identity-web",
+        "inventory",
+        "codegen: supergraph"
+      ]
+    },
+    {
+      "name": "dev + browser",
+      "presentation": {
+        "group": "dev",
+        "order": 2
+      },
+      "stopAll": true,
+      "configurations": [
+        "identity-service",
+        "issues",
+        "attachment-service",
+        "mail",
+        "api-gateway",
+        "issue-web",
+        "identity-web",
+        "inventory",
+        "client (browser)",
+        "codegen: supergraph"
+      ]
+    },
+    {
+      "name": "dev (linux + browser)",
+      "presentation": {
+        "group": "dev",
+        "order": 3
+      },
+      "stopAll": true,
+      "configurations": [
+        "identity-service",
+        "issues",
+        "attachment-service",
+        "mail",
+        "api-gateway",
+        "issue-web",
+        "identity-web",
+        "inventory",
         "brave (debug)",
         "codegen: supergraph"
       ]
@@ -18,15 +63,87 @@
   ],
   "configurations": [
     {
-      "name": "issue-tracker (client)",
+      "name": "issue-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "client"
-      ],
+      "runtimeArgs": ["issue-web"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "identity-web",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["identity-web"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "inventory",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["inventory"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "issue-web + browser",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["issue-web"],
       "console": "integratedTerminal",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "webRoot": "${workspaceFolder}/apps/issues"
+      }
+    },
+    {
+      "name": "client (browser)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/apps/issues",
+      "sourceMaps": true,
+      "userDataDir": true,
+      "pathMapping": {
+        "/@fs": ""
+      },
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/src/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*",
+        "webpack:///*": "*",
+        "/@fs/*": "/*",
+        "/src/*": "${webRoot}/src/*"
+      }
+    },
+    {
+      "name": "client (browser - edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/apps/issues",
+      "sourceMaps": true,
+      "userDataDir": true,
+      "pathMapping": {
+        "/@fs": ""
+      },
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/src/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*",
+        "webpack:///*": "*",
+        "/@fs/*": "/*",
+        "/src/*": "${webRoot}/src/*"
+      }
     },
     {
       "name": "brave (debug - scoop)",
@@ -35,10 +152,9 @@
       "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
+      "webRoot": "${workspaceFolder}/apps/issues",
+      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "sourceMaps": true
     },
     {
       "name": "brave (debug)",
@@ -47,65 +163,63 @@
       "runtimeExecutable": "/usr/bin/brave",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/clients/issue-tracker",
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ]
+      "webRoot": "${workspaceFolder}/apps/issues",
+      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "sourceMaps": true
     },
     {
-      "name": "auth",
+      "name": "identity-service",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "auth"
-      ],
+      "runtimeArgs": ["identity-service"],
       "console": "integratedTerminal"
     },
     {
       "name": "mail",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "mail"
-      ],
+      "runtimeArgs": ["mail"],
       "console": "integratedTerminal"
     },
     {
-      "name": "issue-tracker",
+      "name": "issues",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "issue-tracker"
-      ],
+      "runtimeArgs": ["issues"],
       "console": "integratedTerminal"
     },
     {
-      "name": "attachment",
+      "name": "attachment-service",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "attachment"
-      ],
-      "console": "integratedTerminal",
+      "runtimeArgs": ["attachment-service"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "api-gateway",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["api-gateway"],
+      "console": "integratedTerminal"
     },
     {
       "name": "codegen: supergraph",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "gen"
-      ],
-      "console": "integratedTerminal",
+      "runtimeArgs": ["gen"],
+      "console": "integratedTerminal"
     }
   ]
 }
