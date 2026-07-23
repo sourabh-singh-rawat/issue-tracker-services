@@ -4,7 +4,7 @@
 # - pull_request targeting development or main
 # - push to development or main
 # - workflow_dispatch (manual run from the Actions tab)
-name: CI
+name: ci
 
 on:
   push:
@@ -18,8 +18,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  main:
-    name: Build and test
+  ci:
+    name: ci
     runs-on: ubuntu-latest
     timeout-minutes: 30
 

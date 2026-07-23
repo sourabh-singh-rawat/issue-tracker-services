@@ -1,11 +1,4 @@
-# Require exactly one Changeset on every PR into development.
-#
-# Pass: PR adds exactly one new file under .changeset/*.md (vs the base branch).
-# Fail: zero changesets, or more than one (one feature → one changelog entry).
-# Skip: add the label "skip-changeset" (docs-only, CI-only, pure chores, etc.).
-#
-# Branch protection on development: require status check "Require changeset".
-name: Changeset required
+name: changeset-required
 
 on:
   pull_request:
@@ -21,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  changeset:
-    name: Require changeset
+  changeset-required:
+    name: changeset-required
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
 
@@ -49,20 +42,20 @@ jobs:
         if: steps.skip.outputs.skip != 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Ensure PR base is available
         if: steps.skip.outputs.skip != 'true'
         run: git fetch --no-tags origin "${{ github.base_ref }}"
 
-      - name: Require exactly one new changeset since the base branch
+      - name: Run changeset-required
         if: steps.skip.outputs.skip != 'true'
         run: |
           set -euo pipefail
           BASE="origin/${{ github.base_ref }}"
           echo "Expecting exactly one new .changeset/*.md file since ${BASE}…"
           if ! node --no-warnings --experimental-strip-types \
-            scripts/require-changeset.ts "$BASE"; then
+            scripts/changeset-required.ts "$BASE"; then
             echo ""
             echo "::error::This PR must include exactly one Changeset (not zero, not multiple) before merging into ${{ github.base_ref }}."
             exit 1
