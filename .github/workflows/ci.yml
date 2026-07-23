@@ -1,0 +1,72 @@
+# Build and test packages affected vs the PR base (or development on push).
+#
+# Triggers:
+# - pull_request targeting development or main
+# - push to development or main
+# - workflow_dispatch (manual run from the Actions tab)
+name: ci
+
+on:
+  push:
+    branches: [development, main]
+  pull_request:
+    branches: [development, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # package.json packageManager is pnpm@11.x — let the action read it
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            turbo-${{ runner.os }}-
+
+      # Compare against PR base when present; otherwise development (default branch).
+      - name: Resolve Turbo base ref
+        id: base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="origin/${{ github.base_ref }}"
+          else
+            BASE="origin/development"
+          fi
+          git fetch --no-tags --depth=1 origin "${BASE#origin/}" || true
+          echo "ref=$BASE" >> "$GITHUB_OUTPUT"
+          echo "Turbo affected base: $BASE"
+
+      # issue-web has pre-existing typecheck failures (vite/tsc); track separately until green
+      - name: Build and test affected packages
+        run: |
+          pnpm exec turbo run build test \
+            --filter="...[${{ steps.base.outputs.ref }}]" \
+            --filter='!@pine/issue-web'

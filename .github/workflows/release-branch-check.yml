@@ -1,0 +1,38 @@
+name: release-branch-check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-branch-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  release-branch-check:
+    name: release-branch-check
+    if: >
+      github.event.pull_request.draft == false &&
+      startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Run release-branch-check
+        env:
+          RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          node --no-warnings --experimental-strip-types \
+            scripts/release-branch-check.ts "$RELEASE_BRANCH"

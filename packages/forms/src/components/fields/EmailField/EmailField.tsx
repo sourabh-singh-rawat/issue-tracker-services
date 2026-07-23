@@ -9,10 +9,7 @@ export const EmailField = <T,>(props: EmailFieldProps<T>) => {
 
   return (
     <Form.Item
-      rules={[
-        { type: "email", message: "Please enter a valid email!" },
-        ...rules,
-      ]}
+      rules={[{ type: "email", message: "Please enter a valid email!" }, ...rules]}
       {...rest}
     >
       <Input placeholder="Please enter your email" {...input} />

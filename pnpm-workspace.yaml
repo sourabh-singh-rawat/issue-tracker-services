@@ -1,5 +1,29 @@
 packages:
-  - clients/**
+  - apps/**
   - packages/**
   - services/**
   - shared-ui/**
+allowBuilds:
+  "@apollo/protobufjs": true
+  "@apollo/rover": true
+  '@firebase/util': true
+  "@parcel/watcher": true
+  "@swc/core": false
+  argon2: true
+  core-js: true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
+  sharp: true
+  simple-git-hooks: true
+
+minimumReleaseAgeExclude:
+  - "@tanstack/query-core@5.101.3"
+  - "@tanstack/react-query@5.101.3"
+  - "@tanstack/query-devtools@5.101.3"
+  - "@tanstack/react-query-devtools@5.101.3"
+  - "@redocly/cli@2.40.0"
+
+overrides:
+  typescript: "7.0.2"
+  graphql: "16.14.2"

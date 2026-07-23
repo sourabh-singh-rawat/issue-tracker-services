@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/observability",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Observability utilities for Pine",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc"
+  },
+  "dependencies": {
+    "@fastify/otel": "^0.20.1",
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/exporter-logs-otlp-grpc": "^0.220.0",
+    "@opentelemetry/exporter-metrics-otlp-grpc": "^0.220.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.220.0",
+    "@opentelemetry/instrumentation-graphql": "^0.68.0",
+    "@opentelemetry/instrumentation-http": "^0.220.0",
+    "@opentelemetry/instrumentation-pg": "^0.72.0",
+    "@opentelemetry/instrumentation-typeorm": "^0.20.0",
+    "@opentelemetry/resources": "^2.9.0",
+    "@opentelemetry/sdk-node": "^0.220.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

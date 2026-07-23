@@ -1,12 +1,13 @@
 import { fastifyApolloHandler } from "@as-integrations/fastify";
 import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
-import { ErrorHandlerUtil, NotFoundError } from "@issue-tracker/common";
-import { RouteOptions } from "fastify";
+import "@fastify/swagger";
+import { ErrorHandlerUtil, NotFoundError } from "@pine/common";
 import {
   CookieOptions,
   CorsOptions,
   GraphqlOptions,
+  HttpRouteOptions,
   HttpServer,
   HttpServerOptions,
 } from "./interfaces";
@@ -22,13 +23,7 @@ export class CoreHttpServer implements HttpServer {
   }
 
   private cookie(options: CookieOptions) {
-    const {
-      secret,
-      httpOnly = false,
-      sameSite = false,
-      secure = false,
-      path = "/",
-    } = options;
+    const { secret, httpOnly = false, sameSite = false, secure = false, path = "/" } = options;
     const { server } = this.options;
 
     server.register(cookie, {
@@ -43,10 +38,10 @@ export class CoreHttpServer implements HttpServer {
     server.setErrorHandler(ErrorHandlerUtil.handleError);
   }
 
-  private routes(routes: RouteOptions[]) {
+  private routes(routes: HttpRouteOptions[]) {
     const { server } = this.options;
 
-    routes.map((route) => server.route(route));
+    routes.forEach((route) => server.route(route));
   }
 
   private async startListening() {
@@ -66,15 +61,15 @@ export class CoreHttpServer implements HttpServer {
     const { host, port } = config;
 
     await apollo.start();
-    const url = `/api${path}`;
 
     server.route({
-      url,
+      url: path,
       method: ["POST", "GET"],
+      schema: { hide: true },
       handler: fastifyApolloHandler(apollo, { context: createContext }),
     });
 
-    logger?.info(`🚀 [GraphQL] server is configured at ${host}:${port}${url}`);
+    logger?.info(`🚀 [GraphQL] server is configured at ${host}:${port}${path}`);
   }
 
   async start() {

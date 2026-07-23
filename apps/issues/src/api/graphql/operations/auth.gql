@@ -1,0 +1,27 @@
+mutation Logout {
+  logout
+}
+
+mutation RegisterUserWithEmailAndPassword($input: RegisterUserInput!) {
+  registerUserWithEmailAndPassword(input: $input)
+}
+
+mutation SignInWithEmailAndPassword($input: SignInWithEmailAndPasswordInput!) {
+  signInWithEmailAndPassword(input: $input)
+}
+
+mutation VerifyVerificationLink($input: VerifyVerificationLinkInput!) {
+  verifyVerificationLink(input: $input)
+}
+
+query GetCurrentUser {
+  getCurrentUser {
+    userId
+    email
+    emailVerificationStatus
+    createdAt
+    displayName
+    photoUrl
+    description
+  }
+}

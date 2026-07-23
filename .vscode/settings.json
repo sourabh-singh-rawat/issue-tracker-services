@@ -1,0 +1,40 @@
+{
+  // Infra (Docker Compose) is intentionally separate from debug launches.
+  // Run Task → "infra: up" once, then F5 → "dev" for app debug sessions.
+  "task.quickOpen.detail": true,
+  "task.quickOpen.skip": false,
+  "debug.openDebug": "openOnDebugBreak",
+  "debug.internalConsoleOptions": "neverOpen",
+  "terminal.integrated.tabs.hideCondition": "never",
+
+  // Oxfmt (Oxc formatter)
+  "oxc.enable.oxfmt": true,
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  }
+}

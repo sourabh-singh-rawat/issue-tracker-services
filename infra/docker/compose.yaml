@@ -1,0 +1,274 @@
+services:
+  attachment-redis:
+    image: redis:8.8.0
+    restart: unless-stopped
+    command: redis-server --appendonly yes --replica-read-only no --maxmemory 100mb --maxmemory-policy allkeys-lru
+    ports:
+      - 6380:6379
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 128M
+        reservations:
+          cpus: "0.10"
+          memory: 32M
+
+  nats:
+    image: nats:2.14.3
+    restart: unless-stopped
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    command:
+      - -p
+      - "4222"
+      - -m
+      - "8222"
+      - -js
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    restart: unless-stopped
+    ports:
+      - "4436:4436"
+      - "4437:4437"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.05"
+          memory: 32M
+
+  nats-exporter:
+    image: natsio/prometheus-nats-exporter:0.20.1
+    profiles: [observability]
+    command:
+      - -varz
+      - -connz
+      - -routez
+      - -subz
+      - -jsz=all
+      - http://nats:8222
+    depends_on:
+      - nats
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.20.1
+    profiles: [observability]
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:${POSTGRES_ADMIN_PASSWORD}@postgres:5432/postgres?sslmode=disable
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+
+  pgadmin:
+    image: dpage/pgadmin4:9.16
+    restart: unless-stopped
+    entrypoint: /custom/docker-entrypoint.sh
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_REPLACE_SERVERS_ON_STARTUP=True
+      - PGADMIN_SERVER_JSON_FILE=/var/lib/pgadmin/servers.json
+      - PGPASS_FILE=/var/lib/pgadmin/pgpass
+      - POSTGRES_ADMIN_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+      - POSTGRES_IDENTITY_PASSWORD=${POSTGRES_IDENTITY_PASSWORD}
+      - POSTGRES_ISSUES_PASSWORD=${POSTGRES_ISSUES_PASSWORD}
+      - POSTGRES_MAIL_PASSWORD=${POSTGRES_MAIL_PASSWORD}
+      - POSTGRES_ATTACHMENT_PASSWORD=${POSTGRES_ATTACHMENT_PASSWORD}
+    ports:
+      - 5555:80
+    volumes:
+      - ../data/docker/pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin/docker-entrypoint.sh:/custom/docker-entrypoint.sh:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  loki:
+    image: grafana/loki:3.5.0
+    profiles: [observability]
+    volumes:
+      - ./observability/loki.yaml:/etc/loki/loki.yaml:ro
+      - ../data/docker/loki-data:/loki
+    command: -config.file=/etc/loki/loki.yaml
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  tempo:
+    image: grafana/tempo:3.0.2
+    profiles: [observability]
+    volumes:
+      - ./observability/tempo.yaml:/etc/tempo.yaml:ro
+      - ../data/docker/tempo-data:/var/tempo
+    command:
+      - -config.file=/etc/tempo.yaml
+      - -target=all
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  pyroscope:
+    image: grafana/pyroscope:2.1.1
+    profiles: [observability]
+    volumes:
+      - ../data/docker/pyroscope-data:/var/lib/pyroscope
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  prometheus:
+    image: prom/prometheus:v3.13.1
+    profiles: [observability]
+    volumes:
+      - ./observability/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - ../data/docker/prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-remote-write-receiver
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
+    profiles: [observability]
+    privileged: true
+    devices:
+      - /dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    command:
+      - --housekeeping_interval=15s
+      - --docker_only=true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  node-exporter:
+    image: prom/node-exporter:v1.12.1
+    profiles: [observability]
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/rootfs
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+
+  alloy:
+    image: grafana/alloy:v1.17.1
+    profiles: [observability]
+    ports:
+      - "4317:4317"
+    volumes:
+      - ./observability/config.alloy:/etc/alloy/config.alloy:ro
+      - ../data/docker/alloy-data:/var/lib/alloy/data
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+      - pyroscope
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
+  grafana:
+    image: grafana/grafana:13.1.0
+    profiles: [observability]
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    ports:
+      - 3300:3000
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M

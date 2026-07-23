@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
@@ -90,6 +91,8 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+dist-ssr
+*.local
 
 # Gatsby files
 .cache/
@@ -137,3 +140,27 @@ build
 k8s/secrets
 
 *.service-account.json
+
+
+.turbo
+
+# Docker local data
+infra/data/
+
+# Combined scripts outputs
+combined_output.txt
+
+# pgAdmin generated configs
+infra/docker/pgadmin/pgpass
+infra/docker/pgadmin/servers.json
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

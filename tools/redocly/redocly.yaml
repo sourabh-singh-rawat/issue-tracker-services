@@ -1,0 +1,7 @@
+# Paths are relative to this config file (tools/redocly/).
+# `redocly join` with no API args joins every entry under `apis` (first entry is the main description).
+apis:
+  identity-service@v1:
+    root: ../../services/identity-service/dist/openapi.json
+  attachment@v1:
+    root: ../../services/attachment-service/dist/openapi.json

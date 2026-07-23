@@ -1,4 +1,4 @@
-import { EmailVerificationStatus } from "@issue-tracker/common";
+import { EmailVerificationStatus } from "@pine/common";
 
 export interface UserEmailVerifiedPayload {
   emailVerificationStatus: EmailVerificationStatus;
