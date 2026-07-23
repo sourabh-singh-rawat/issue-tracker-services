@@ -16,7 +16,7 @@
         "api-gateway",
         "issue-web",
         "identity-web",
-        "inventory",
+        "inventory-web",
         "codegen: supergraph"
       ]
     },
@@ -35,7 +35,7 @@
         "api-gateway",
         "issue-web",
         "identity-web",
-        "inventory",
+        "inventory-web",
         "client (browser)",
         "codegen: supergraph"
       ]
@@ -55,7 +55,7 @@
         "api-gateway",
         "issue-web",
         "identity-web",
-        "inventory",
+        "inventory-web",
         "brave (debug)",
         "codegen: supergraph"
       ]
@@ -81,12 +81,12 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "inventory",
+      "name": "inventory-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["inventory"],
+      "runtimeArgs": ["inventory-web"],
       "console": "integratedTerminal"
     },
     {
