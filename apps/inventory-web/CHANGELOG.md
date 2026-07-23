@@ -1,4 +1,4 @@
-# @pine/inventory
+# @pine/inventory-web
 
 ## 0.0.1
 
