@@ -45,7 +45,7 @@ export class KratosIdentityProvider implements IIdentityProvider {
       const traits = (data.traits ?? {}) as Record<string, unknown>;
       const email = typeof traits.email === "string" ? traits.email : input.email;
       const emailVerified = data.verifiable_addresses?.some(
-        (address: { value: string; verified: any }) => address.value === email && address.verified,
+        (address) => address.value === email && address.verified,
       );
 
       return {
@@ -61,8 +61,47 @@ export class KratosIdentityProvider implements IIdentityProvider {
     }
   }
 
-  async login(_input: LoginIdentityInput): Promise<LoginResult> {
-    throw new Error("Method not implemented.");
+  async login(input: LoginIdentityInput): Promise<LoginResult> {
+    try {
+      const { data: flow } = await this.kratos.frontendApi.createNativeLoginFlow();
+
+      const { data } = await this.kratos.frontendApi.updateLoginFlow({
+        flow: flow.id,
+        updateLoginFlowBody: {
+          method: "password",
+          identifier: input.email,
+          password: input.password,
+        },
+      });
+
+      const session = data.session;
+      const sessionIdentity = session.identity;
+      if (!sessionIdentity) {
+        throw new IdentityProviderUnavailableError();
+      }
+
+      const traits = (sessionIdentity.traits ?? {}) as Record<string, unknown>;
+      const email = typeof traits.email === "string" ? traits.email : input.email;
+      const emailVerified = sessionIdentity.verifiable_addresses?.some(
+        (address) => address.value === email && address.verified,
+      );
+
+      return {
+        identity: {
+          id: sessionIdentity.id,
+          email,
+          emailVerified,
+          traits,
+          createdAt: sessionIdentity.created_at ? new Date(sessionIdentity.created_at) : undefined,
+          updatedAt: sessionIdentity.updated_at ? new Date(sessionIdentity.updated_at) : undefined,
+        },
+        sessionToken: data.session_token,
+        sessionId: session.id,
+        expiresAt: session.expires_at ? new Date(session.expires_at) : undefined,
+      };
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
   }
 
   async logout(_sessionId: string): Promise<void> {

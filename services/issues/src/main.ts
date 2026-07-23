@@ -46,7 +46,7 @@ const main = async () => {
       environment: process.env.NODE_ENV as Environment,
       version: 1,
     },
-    cors: { credentials: true, origin: process.env.ISSUE_TRACKER_CLIENT_URL },
+    cors: { credentials: true, origin: process.env.ISSUES_WEB_CLIENT_URL },
     cookie: { secret: process.env.JWT_SECRET! },
     graphql: { apollo, path: "/graphql", createContext },
     logger,

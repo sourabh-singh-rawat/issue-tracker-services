@@ -18,7 +18,7 @@ const main = async () => {
 
   console.log(`🚀 API Gateway ready at http://127.0.0.1:${env.API_GATEWAY_PORT}`);
   console.log(`   GraphQL:  http://127.0.0.1:${env.API_GATEWAY_PORT}/graphql`);
-  console.log(`   Proxy → identity:   ${env.IDENTITY_SERVICE_URL}  (/login)`);
+  console.log(`   Proxy → identity:   ${env.IDENTITY_SERVICE_URL}  (/identity)`);
   console.log(`   Proxy → attachment: ${env.ATTACHMENT_SERVICE_URL}  (/attachments)`);
 };
 

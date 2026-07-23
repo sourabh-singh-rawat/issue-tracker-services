@@ -9,8 +9,9 @@ const attachmentServicePort = process.env.ATTACHMENT_SERVICE_PORT ?? "4003";
 export const env = {
   NODE_ENV: process.env.NODE_ENV ?? "development",
   API_GATEWAY_PORT: process.env.API_GATEWAY_PORT ?? "4000",
-  ISSUE_TRACKER_CLIENT_URL: process.env.ISSUE_TRACKER_CLIENT_URL ?? "http://localhost:3000",
-  IDENTITY_CLIENT_URL: process.env.IDENTITY_CLIENT_URL ?? "http://localhost:3001",
+  ISSUES_WEB_CLIENT_URL: process.env.ISSUES_WEB_CLIENT_URL ?? "http://localhost:3000",
+  IDENTITY_WEB_CLIENT_URL: process.env.IDENTITY_WEB_CLIENT_URL ?? "http://localhost:3001",
+  INVENTORY_WEB_CLIENT_URL: process.env.INVENTORY_WEB_CLIENT_URL ?? "http://localhost:3002",
   /** Upstream REST/GraphQL base URL for identity-service (default local port 4001). */
   IDENTITY_SERVICE_URL:
     process.env.IDENTITY_SERVICE_URL ?? `http://127.0.0.1:${identityServicePort}`,
