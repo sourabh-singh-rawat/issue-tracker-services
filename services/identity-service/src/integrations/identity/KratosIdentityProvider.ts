@@ -45,7 +45,7 @@ export class KratosIdentityProvider implements IIdentityProvider {
       const traits = (data.traits ?? {}) as Record<string, unknown>;
       const email = typeof traits.email === "string" ? traits.email : input.email;
       const emailVerified = data.verifiable_addresses?.some(
-        (address: { value: string; verified: any }) => address.value === email && address.verified,
+        (address) => address.value === email && address.verified,
       );
 
       return {
