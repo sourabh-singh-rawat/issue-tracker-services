@@ -22,21 +22,18 @@ export class GraphQLRequestError extends Error {
   }
 }
 
-export const graphQLClient = new GraphQLClient(
-  import.meta.env.VITE_SUPERGRAPH_URL,
-  {
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-    },
+export const graphQLClient = new GraphQLClient(import.meta.env.VITE_SUPERGRAPH_URL, {
+  credentials: "include",
+  headers: {
+    Accept: "application/json",
   },
-);
+});
 
 /** Typed GraphQL request — only domain data-access hooks should call this. */
-export async function gqlRequest<
-  TResult,
-  TVariables extends Variables = Variables,
->(document: RequestDocument, variables?: TVariables): Promise<TResult> {
+export async function gqlRequest<TResult, TVariables extends Variables = Variables>(
+  document: RequestDocument,
+  variables?: TVariables,
+): Promise<TResult> {
   try {
     return await graphQLClient.request<TResult>(document, variables);
   } catch (err) {
@@ -78,4 +75,3 @@ export function customFetcher<TData, TVariables extends Variables = Variables>(
     }
   };
 }
-

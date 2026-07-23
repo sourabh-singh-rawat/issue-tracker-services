@@ -1,8 +1,4 @@
-import {
-  IssueActivity,
-  ProjectActivity,
-  ServiceResponse,
-} from "@pine/common";
+import { IssueActivity, ProjectActivity, ServiceResponse } from "@pine/common";
 import { IssueCreatedPayload, ProjectPayload } from "@pine/event-bus";
 import { IssueActivityEntity } from "@/features/issue/entities/issue-activity.entity";
 import { ProjectIssueActivity } from "../entities/ProjectIssueActivity";

@@ -1,21 +1,11 @@
 import { GetApp } from "@mui/icons-material";
-import {
-  Grid2,
-  IconButton,
-  Input,
-  styled,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Grid2, IconButton, Input, styled, Typography, useTheme } from "@mui/material";
 import MuiImageList from "@mui/material/ImageList";
 import { Stack } from "@mui/system";
 import { GridDeleteIcon } from "@mui/x-data-grid";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
-import {
-  useDeleteAttachmentMutation,
-  useFindAttachmentsQuery,
-} from "@generated/gql";
+import { useDeleteAttachmentMutation, useFindFilesQuery } from "@generated/gql";
 import { useCreateAttachmentMutation } from "@api";
 import { AppLoader, useSnackbar } from "@common";
 import { ImageCard } from "../ImageCard";
@@ -45,10 +35,10 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
   const [createAttachment, { isLoading }] = useCreateAttachmentMutation();
-  const { data: attachments } = useFindAttachmentsQuery(
+  const { data: files } = useFindFilesQuery(
     { issueId },
     {
-      select: (data) => data.findAttachments,
+      select: (data) => data.findFiles,
       enabled: Boolean(issueId),
       staleTime: 0,
       refetchOnMount: "always",
@@ -71,10 +61,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
         >
           <Stack spacing={1} sx={{ alignItems: "center" }}>
             {isLoading ? <AppLoader /> : <GetApp />}
-            <Typography
-              variant="body2"
-              sx={{ color: theme.palette.primary.main }}
-            >
+            <Typography variant="body2" sx={{ color: theme.palette.primary.main }}>
               Click to upload attachment
             </Typography>
             <Typography variant="body2" sx={{ color: theme.palette.grey[700] }}>
@@ -87,31 +74,26 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
             onChange={async () => {
               if (!inputRef.current) return;
 
-              const files = inputRef.current.files;
-              if (!files) return;
+              const selectedFiles = inputRef.current.files;
+              if (!selectedFiles) return;
 
               const formData = new FormData();
-              const file = files[0];
+              const file = selectedFiles[0];
 
               if (!file) return;
               formData.append("files", file);
 
               await createAttachment({ issueId, body: formData as any });
               void queryClient.invalidateQueries({
-                queryKey: useFindAttachmentsQuery.getKey({ issueId }),
+                queryKey: useFindFilesQuery.getKey({ issueId }),
               });
             }}
           />
         </IconButton>
       </Grid2>
-      <MuiImageList
-        cols={6}
-        rowHeight={124}
-        sx={{ width: "100%" }}
-        variant="quilted"
-      >
-        {(attachments &&
-          attachments.rows.map(({ id, thumbnailLink }) => (
+      <MuiImageList cols={6} rowHeight={124} sx={{ width: "100%" }} variant="quilted">
+        {(files &&
+          files.rows.map(({ id, thumbnailLink }) => (
             <div key={id}>
               <ImageCard key={id} path={thumbnailLink} />
               <IconButton
@@ -123,9 +105,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
                     snackbar.success(response.deleteAttachment);
                   } catch (error) {
                     snackbar.error(
-                      error instanceof Error
-                        ? error.message
-                        : "Failed to delete attachment",
+                      error instanceof Error ? error.message : "Failed to delete attachment",
                     );
                   }
                 }}

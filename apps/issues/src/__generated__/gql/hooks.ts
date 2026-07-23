@@ -14,24 +14,24 @@ export type DeleteAttachmentMutationVariables = Exact<{
 
 export type DeleteAttachmentMutation = { deleteAttachment: string };
 
-export type FindAttachmentsQueryVariables = Exact<{
+export type FindFilesQueryVariables = Exact<{
   issueId: string;
 }>;
 
 
-export type FindAttachmentsQuery = { findAttachments: { rowCount: number, rows: Array<{ id: string, thumbnailLink: string }> } };
+export type FindFilesQuery = { findFiles: { rowCount: number, rows: Array<{ id: string, thumbnailLink: string }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { logout: string };
 
-export type RegisterUserMutationVariables = Exact<{
+export type RegisterUserWithEmailAndPasswordMutationVariables = Exact<{
   input: Types.RegisterUserInput;
 }>;
 
 
-export type RegisterUserMutation = { registerUser: string };
+export type RegisterUserWithEmailAndPasswordMutation = { registerUserWithEmailAndPassword: string };
 
 export type SignInWithEmailAndPasswordMutationVariables = Exact<{
   input: Types.SignInWithEmailAndPasswordInput;
@@ -173,9 +173,9 @@ export const useDeleteAttachmentMutation = <
 
 useDeleteAttachmentMutation.getKey = () => ['DeleteAttachment'];
 
-export const FindAttachmentsDocument = new TypedDocumentString(`
-    query FindAttachments($issueId: String!) {
-  findAttachments(issueId: $issueId) {
+export const FindFilesDocument = new TypedDocumentString(`
+    query FindFiles($issueId: String!) {
+  findFiles(issueId: $issueId) {
     rowCount
     rows {
       id
@@ -185,25 +185,25 @@ export const FindAttachmentsDocument = new TypedDocumentString(`
 }
     `);
 
-export const useFindAttachmentsQuery = <
-      TData = FindAttachmentsQuery,
+export const useFindFilesQuery = <
+      TData = FindFilesQuery,
       TError = unknown
     >(
-      variables: FindAttachmentsQueryVariables,
-      options?: Omit<UseQueryOptions<FindAttachmentsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindAttachmentsQuery, TError, TData>['queryKey'] }
+      variables: FindFilesQueryVariables,
+      options?: Omit<UseQueryOptions<FindFilesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindFilesQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<FindAttachmentsQuery, TError, TData>(
+    return useQuery<FindFilesQuery, TError, TData>(
       {
-    queryKey: ['FindAttachments', variables],
-    queryFn: customFetcher<FindAttachmentsQuery, FindAttachmentsQueryVariables>(FindAttachmentsDocument, variables),
+    queryKey: ['FindFiles', variables],
+    queryFn: customFetcher<FindFilesQuery, FindFilesQueryVariables>(FindFilesDocument, variables),
     ...options
   }
     )};
 
-useFindAttachmentsQuery.document = FindAttachmentsDocument;
+useFindFilesQuery.document = FindFilesDocument;
 
-useFindAttachmentsQuery.getKey = (variables: FindAttachmentsQueryVariables) => ['FindAttachments', variables];
+useFindFilesQuery.getKey = (variables: FindFilesQueryVariables) => ['FindFiles', variables];
 
 export const LogoutDocument = new TypedDocumentString(`
     mutation Logout {
@@ -226,26 +226,26 @@ export const useLogoutMutation = <
 
 useLogoutMutation.getKey = () => ['Logout'];
 
-export const RegisterUserDocument = new TypedDocumentString(`
-    mutation RegisterUser($input: RegisterUserInput!) {
-  registerUser(input: $input)
+export const RegisterUserWithEmailAndPasswordDocument = new TypedDocumentString(`
+    mutation RegisterUserWithEmailAndPassword($input: RegisterUserInput!) {
+  registerUserWithEmailAndPassword(input: $input)
 }
     `);
 
-export const useRegisterUserMutation = <
+export const useRegisterUserWithEmailAndPasswordMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<RegisterUserMutation, TError, RegisterUserMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<RegisterUserWithEmailAndPasswordMutation, TError, RegisterUserWithEmailAndPasswordMutationVariables, TContext>) => {
     
-    return useMutation<RegisterUserMutation, TError, RegisterUserMutationVariables, TContext>(
+    return useMutation<RegisterUserWithEmailAndPasswordMutation, TError, RegisterUserWithEmailAndPasswordMutationVariables, TContext>(
       {
-    mutationKey: ['RegisterUser'],
-    mutationFn: (variables?: RegisterUserMutationVariables) => customFetcher<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, variables)(),
+    mutationKey: ['RegisterUserWithEmailAndPassword'],
+    mutationFn: (variables?: RegisterUserWithEmailAndPasswordMutationVariables) => customFetcher<RegisterUserWithEmailAndPasswordMutation, RegisterUserWithEmailAndPasswordMutationVariables>(RegisterUserWithEmailAndPasswordDocument, variables)(),
     ...options
   }
     )};
 
-useRegisterUserMutation.getKey = () => ['RegisterUser'];
+useRegisterUserWithEmailAndPasswordMutation.getKey = () => ['RegisterUserWithEmailAndPassword'];
 
 export const SignInWithEmailAndPasswordDocument = new TypedDocumentString(`
     mutation SignInWithEmailAndPassword($input: SignInWithEmailAndPasswordInput!) {

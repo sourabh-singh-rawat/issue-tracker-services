@@ -26,9 +26,7 @@ export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
       <Sidebar />
       <Container
         sx={{
-          width: `calc(100% - ${
-            isLargeScreen ? theme.spacing(32) : theme.spacing(9)
-          })`,
+          width: `calc(100% - ${isLargeScreen ? theme.spacing(32) : theme.spacing(9)})`,
           overflowX: "auto",
         }}
         disableGutters

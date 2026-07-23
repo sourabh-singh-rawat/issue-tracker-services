@@ -2,8 +2,8 @@ mutation Logout {
   logout
 }
 
-mutation RegisterUser($input: RegisterUserInput!) {
-  registerUser(input: $input)
+mutation RegisterUserWithEmailAndPassword($input: RegisterUserInput!) {
+  registerUserWithEmailAndPassword(input: $input)
 }
 
 mutation SignInWithEmailAndPassword($input: SignInWithEmailAndPasswordInput!) {

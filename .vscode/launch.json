@@ -11,9 +11,9 @@
       "configurations": [
         "identity-service",
         "issues",
-        "attachment",
+        "attachment-service",
         "mail",
-        "gateway",
+        "api-gateway",
         "issue-web",
         "identity-web",
         "inventory",
@@ -30,9 +30,9 @@
       "configurations": [
         "identity-service",
         "issues",
-        "attachment",
+        "attachment-service",
         "mail",
-        "gateway",
+        "api-gateway",
         "issue-web",
         "identity-web",
         "inventory",
@@ -50,9 +50,9 @@
       "configurations": [
         "identity-service",
         "issues",
-        "attachment",
+        "attachment-service",
         "mail",
-        "gateway",
+        "api-gateway",
         "issue-web",
         "identity-web",
         "inventory",
@@ -195,21 +195,21 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "attachment",
+      "name": "attachment-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["attachment"],
+      "runtimeArgs": ["attachment-service"],
       "console": "integratedTerminal"
     },
     {
-      "name": "gateway",
+      "name": "api-gateway",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["gateway"],
+      "runtimeArgs": ["api-gateway"],
       "console": "integratedTerminal"
     },
     {

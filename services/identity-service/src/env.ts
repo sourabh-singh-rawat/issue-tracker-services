@@ -1,6 +1,16 @@
 import { config } from "dotenv";
-import path from "path";
+import path from "node:path";
 
-// Load monorepo root .env before any module reads process.env.
-// Path is relative to this file so it works regardless of process.cwd().
 config({ path: path.resolve(__dirname, "../../../.env") });
+
+export const env = {
+  NODE_ENV: process.env.NODE_ENV ?? "development",
+  IDENTITY_SERVICE_PORT: process.env.IDENTITY_SERVICE_PORT ?? "4001",
+  IDENTITY_POSTGRES_CLUSTER_URL: process.env.IDENTITY_POSTGRES_CLUSTER_URL,
+  NATS_CLUSTER_URL: process.env.NATS_CLUSTER_URL ?? "nats://localhost:4222",
+  JWT_SECRET: process.env.JWT_SECRET,
+  ISSUE_TRACKER_CLIENT_URL: process.env.ISSUE_TRACKER_CLIENT_URL,
+  KRATOS_PUBLIC_URL: process.env.KRATOS_PUBLIC_URL ?? "http://127.0.0.1:4433",
+  KRATOS_ADMIN_URL: process.env.KRATOS_ADMIN_URL ?? "http://127.0.0.1:4434",
+  OTEL_EXPORTER_OTLP_ENDPOINT: process.env.OTEL_EXPORTER_OTLP_ENDPOINT ?? "http://127.0.0.1:4317",
+} as const;

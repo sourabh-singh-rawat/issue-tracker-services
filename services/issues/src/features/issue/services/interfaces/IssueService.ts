@@ -1,9 +1,4 @@
-import {
-  IssueStatus,
-  ItemPriority,
-  PagingOptions,
-  ServiceResponse,
-} from "@pine/common";
+import { IssueStatus, ItemPriority, PagingOptions, ServiceResponse } from "@pine/common";
 import { ServiceOptions } from "@pine/orm";
 import { Issue } from "../../entities/Issue";
 

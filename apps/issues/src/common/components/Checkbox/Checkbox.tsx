@@ -7,15 +7,6 @@ interface CheckboxProps {
   handleCheckBoxClick: () => void;
 }
 
-export default function Checkbox({
-  checked,
-  handleCheckBoxClick,
-}: CheckboxProps) {
-  return (
-    <MuiCheckbox
-      checked={checked}
-      onClick={handleCheckBoxClick}
-      disableRipple
-    />
-  );
+export default function Checkbox({ checked, handleCheckBoxClick }: CheckboxProps) {
+  return <MuiCheckbox checked={checked} onClick={handleCheckBoxClick} disableRipple />;
 }

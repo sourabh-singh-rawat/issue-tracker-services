@@ -25,18 +25,10 @@ export default function WorkspaceSettings() {
     <CustomTabPanel id="0" selectedTabId={String(selectedTab)}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <WorkspaceName
-            form={form}
-            defaultSchemas={{}}
-            handleSubmit={handleSubmit}
-          />
+          <WorkspaceName form={form} defaultSchemas={{}} handleSubmit={handleSubmit} />
         </Grid>
         <Grid item xs={12}>
-          <WorkspaceDescription
-            form={form}
-            defaultSchemas={{}}
-            handleSubmit={handleSubmit}
-          />
+          <WorkspaceDescription form={form} defaultSchemas={{}} handleSubmit={handleSubmit} />
         </Grid>
       </Grid>
     </CustomTabPanel>

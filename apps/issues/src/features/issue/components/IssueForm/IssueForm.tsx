@@ -3,9 +3,7 @@ import MuiContainer from "@mui/material/Container";
 import dayjs from "dayjs";
 import { SubmitHandler, useForm } from "react-hook-form";
 import type { CreateIssueInput } from "@generated/gql/graphql";
-import {
-  useCreateIssueMutation,
-} from "@generated/gql";
+import { useCreateIssueMutation } from "@generated/gql";
 import { DatePicker, PrimaryButton, TextField, useSnackbar } from "@common";
 import { IssuePrioritySelector } from "../IssuePrioritySelector";
 import { IssueStatusSelector } from "../IssueStatusSelector";
@@ -63,18 +61,12 @@ export const IssueForm = ({ projectId, parentIssueId }: IssueFormProps) => {
       });
       messageBar.success("Issue created successfully");
     } catch (error) {
-      messageBar.error(
-        error instanceof Error ? error.message : "Failed to create issue",
-      );
+      messageBar.error(error instanceof Error ? error.message : "Failed to create issue");
     }
   };
 
   return (
-    <MuiContainer
-      component="form"
-      onSubmit={form.handleSubmit(onSubmit)}
-      disableGutters
-    >
+    <MuiContainer component="form" onSubmit={form.handleSubmit(onSubmit)} disableGutters>
       <Grid2 container spacing={2}>
         <Grid2 size={12}>
           <TextField form={form} name="name" label="Name" placeholder="Name" />
@@ -91,12 +83,7 @@ export const IssueForm = ({ projectId, parentIssueId }: IssueFormProps) => {
         </Grid2>
 
         <Grid2 size={6}>
-          <IssueStatusSelector
-            form={form}
-            name="statusId"
-            title="Status"
-            projectId={projectId}
-          />
+          <IssueStatusSelector form={form} name="statusId" title="Status" projectId={projectId} />
         </Grid2>
 
         <Grid2 size={6}>
@@ -120,12 +107,7 @@ export const IssueForm = ({ projectId, parentIssueId }: IssueFormProps) => {
           />
         </Grid2>
         <Grid2 size={12}>
-          <TextField
-            form={form}
-            name="component"
-            label="Component"
-            placeholder="Component name"
-          />
+          <TextField form={form} name="component" label="Component" placeholder="Component name" />
         </Grid2>
         <Grid2 size={6}>
           <PrimaryButton label="Create Issue" type="submit" />

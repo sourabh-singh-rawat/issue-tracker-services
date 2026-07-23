@@ -10,8 +10,8 @@ export type Scalars = {
   DateTimeISO: { input: string; output: string; }
 };
 
-export type Attachment = {
-  __typename?: 'Attachment';
+export type FileOutput = {
+  __typename?: 'FileOutput';
   bucket: Scalars['String']['output'];
   id: Scalars['String']['output'];
   thumbnailLink: Scalars['String']['output'];
@@ -76,7 +76,7 @@ export type Mutation = {
   deleteAttachment: Scalars['String']['output'];
   deleteIssue: Scalars['String']['output'];
   logout: Scalars['String']['output'];
-  registerUser: Scalars['String']['output'];
+  registerUserWithEmailAndPassword: Scalars['String']['output'];
   signInWithEmailAndPassword: Scalars['Boolean']['output'];
   updateIssue: Scalars['String']['output'];
   verifyVerificationLink: Scalars['String']['output'];
@@ -103,7 +103,7 @@ export type MutationDeleteAttachmentArgs = {
 };
 
 
-export type MutationRegisterUserArgs = {
+export type MutationRegisterUserWithEmailAndPasswordArgs = {
   input: RegisterUserInput;
 };
 
@@ -122,10 +122,10 @@ export type MutationVerifyVerificationLinkArgs = {
   input: VerifyVerificationLinkInput;
 };
 
-export type PaginatedAttachment = {
-  __typename?: 'PaginatedAttachment';
+export type PaginatedFileOutput = {
+  __typename?: 'PaginatedFileOutput';
   rowCount: Scalars['Float']['output'];
-  rows: Array<Attachment>;
+  rows: Array<FileOutput>;
 };
 
 export type PaginatedProject = {
@@ -144,8 +144,8 @@ export type Project = {
 
 export type Query = {
   __typename?: 'Query';
-  findAttachments: PaginatedAttachment;
   findDefaultWorkspace: Workspace;
+  findFiles: PaginatedFileOutput;
   findIssue?: Maybe<Issue>;
   findProject: Project;
   findProjectIssues: Array<Issue>;
@@ -157,7 +157,7 @@ export type Query = {
 };
 
 
-export type QueryFindAttachmentsArgs = {
+export type QueryFindFilesArgs = {
   issueId: Scalars['String']['input'];
 };
 

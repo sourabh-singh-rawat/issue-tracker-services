@@ -13,7 +13,6 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
   current: null,
   workspaces: [],
   isLoading: true,
-  setCurrentWorkspace: (workspace) =>
-    set({ current: workspace, isLoading: false }),
+  setCurrentWorkspace: (workspace) => set({ current: workspace, isLoading: false }),
   setWorkspaces: (workspaces) => set({ workspaces: workspaces || [] }),
 }));

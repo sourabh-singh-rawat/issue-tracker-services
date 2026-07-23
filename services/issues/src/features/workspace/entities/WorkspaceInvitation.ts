@@ -1,14 +1,6 @@
-import {
-  EMAIL_VERIFICATION_TOKEN_STATUS,
-  EmailVerificationTokenStatus,
-} from "@pine/common";
+import { EMAIL_VERIFICATION_TOKEN_STATUS, EmailVerificationTokenStatus } from "@pine/common";
 import { Audit } from "@pine/orm";
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "workspace_invitations" })
 export class WorkspaceInvitation extends Audit {

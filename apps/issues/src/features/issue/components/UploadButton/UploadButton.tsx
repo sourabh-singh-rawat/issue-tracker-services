@@ -22,18 +22,9 @@ export const UploadButton = ({ label, onChange }: UploadButtonProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Button
-      component="label"
-      variant="contained"
-      tabIndex={-1}
-      sx={{ textTransform: "none" }}
-    >
+    <Button component="label" variant="contained" tabIndex={-1} sx={{ textTransform: "none" }}>
       <Typography>{label}</Typography>
-      <VisuallyHiddenInput
-        type="file"
-        inputRef={inputRef}
-        onChange={onChange}
-      />
+      <VisuallyHiddenInput type="file" inputRef={inputRef} onChange={onChange} />
     </Button>
   );
 };

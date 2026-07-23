@@ -28,12 +28,7 @@ interface GoogleButtonProps {
 
 export default function GoogleButton({ onClick, message }: GoogleButtonProps) {
   return (
-    <StyledButton
-      startIcon={<MuiGoogleIcon />}
-      variant="outlined"
-      fullWidth
-      onClick={onClick}
-    >
+    <StyledButton startIcon={<MuiGoogleIcon />} variant="outlined" fullWidth onClick={onClick}>
       {message}
     </StyledButton>
   );

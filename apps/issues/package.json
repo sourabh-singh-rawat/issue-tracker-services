@@ -1,8 +1,24 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/issue-web",
   "version": "0.0.0",
-  "description": "React client for Pine issues",
   "private": "true",
+  "description": "React client for Pine issues",
+  "keywords": [
+    "client",
+    "issue-tracker",
+    "react"
+  ],
+  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "bugs": {
+    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+  },
+  "license": "ISC",
+  "author": "Sourabh Singh Rawat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+  },
   "main": "src/index.tsx",
   "scripts": {
     "dev": "vite",
@@ -14,21 +30,36 @@
     "gen": "graphql-codegen --config codegen.gql.ts --watch",
     "gen:once": "graphql-codegen --config codegen.gql.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@graphql-codegen/cli": "^5.0.3",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/base": "5.0.0-beta.63",
+    "@mui/icons-material": "6.1.9",
+    "@mui/material": "6.1.9",
+    "@mui/system": "6.1.9",
+    "@mui/x-data-grid": "^6.20.0",
+    "@mui/x-date-pickers": "^6.20.0",
+    "@pine/common": "workspace:*",
+    "@reduxjs/toolkit": "^1.9.7",
+    "@tanstack/react-query": "^5.101.2",
+    "@tanstack/react-router": "1.170.17",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.11",
+    "firebase": "^10.12.2",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.4.0",
+    "lodash": "^4.17.21",
+    "notistack": "^3.0.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-hook-form": "^7.51.5",
+    "react-redux": "^9.2.0",
+    "zustand": "^5.0.14"
   },
-  "keywords": [
-    "issue-tracker",
-    "react",
-    "client"
-  ],
-  "author": "Sourabh Singh Rawat",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
-  },
-  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "devDependencies": {
     "@babel/core": "^7.24.6",
     "@babel/preset-env": "^7.24.6",
@@ -58,35 +89,5 @@
     "ts-node": "^10.9.2",
     "typescript": "7.0.2",
     "vite": "8.1.3"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@graphql-codegen/cli": "^5.0.3",
-    "@hookform/resolvers": "^3.9.0",
-    "@pine/common": "workspace:*",
-    "@mui/base": "5.0.0-beta.63",
-    "@mui/icons-material": "6.1.9",
-    "@mui/material": "6.1.9",
-    "@mui/system": "6.1.9",
-    "@mui/x-data-grid": "^6.20.0",
-    "@mui/x-date-pickers": "^6.20.0",
-    "@reduxjs/toolkit": "^1.9.7",
-    "@tanstack/react-query": "^5.101.2",
-    "@tanstack/react-router": "1.170.17",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "date-fns": "^2.30.0",
-    "dayjs": "^1.11.11",
-    "firebase": "^10.12.2",
-    "graphql": "^16.9.0",
-    "graphql-request": "^7.4.0",
-    "lodash": "^4.17.21",
-    "notistack": "^3.0.1",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-hook-form": "^7.51.5",
-    "react-redux": "^9.2.0",
-    "zustand": "^5.0.14"
   }
 }

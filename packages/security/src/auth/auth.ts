@@ -1,11 +1,7 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import "@fastify/cookie";
 import { AccessToken, JwtToken, isAccessToken } from "../crypto";
-import {
-  BadRequestError,
-  ForbiddenError,
-  UnauthorizedError,
-} from "@pine/common";
+import { BadRequestError, ForbiddenError, UnauthorizedError } from "@pine/common";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -26,17 +22,11 @@ export class Auth {
     return done();
   };
 
-  static setCurrentUser = async (
-    request: FastifyRequest,
-    _reply: FastifyReply,
-  ) => {
+  static setCurrentUser = async (request: FastifyRequest, _reply: FastifyReply) => {
     const accessToken = request.cookies.accessToken;
     if (accessToken) {
       try {
-        const payload = await JwtToken.verify(
-          accessToken,
-          process.env.JWT_SECRET!,
-        );
+        const payload = await JwtToken.verify(accessToken, process.env.JWT_SECRET!);
         if (isAccessToken(payload)) {
           request.user = payload;
         }
@@ -62,9 +52,7 @@ export class Auth {
     done: HookHandlerDoneFunction,
   ) => {
     if (request.user) {
-      throw new ForbiddenError(
-        "Registration not allowed for authenticated users.",
-      );
+      throw new ForbiddenError("Registration not allowed for authenticated users.");
     }
 
     return done();

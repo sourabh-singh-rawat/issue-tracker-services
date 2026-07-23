@@ -4,11 +4,11 @@ This workspace uses **Turborepo** on top of **pnpm workspaces**.
 
 ## Projects
 
-| Name | Path |
-|------|------|
-| `@pine/*` | `packages/*` |
-| `@pine/identity-service`, `@pine/attachment`, `@pine/mail`, `@pine/issues`, `@pine/gateway` | `services/*` |
-| `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory` | `apps/*` |
+| Name                                                                                            | Path         |
+| ----------------------------------------------------------------------------------------------- | ------------ |
+| `@pine/*`                                                                                       | `packages/*` |
+| `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail`, `@pine/issues`, `@pine/api-gateway` | `services/*` |
+| `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory`                                      | `apps/*`     |
 
 ```bash
 pnpm exec turbo run build --dry-run
@@ -21,7 +21,9 @@ pnpm graph
 # Local stack: VS Code compound "dev" (or pnpm dev:infra + dev:apps)
 pnpm dev:infra
 pnpm gql:compose
+pnpm openapi:compose
 pnpm dev:apps
+
 
 # Full graph-aware build (uses local cache)
 pnpm build
@@ -47,7 +49,7 @@ pnpm turbo:clean
 Configured in root `turbo.json`:
 
 - **`build`**: `dependsOn: ["^build"]`, cacheable, outputs `dist/**`
-- **`test`**: depends on `^build`, cacheable, non-watch Jest
+- **`test`**: depends on `^build`, cacheable, non-watch Vitest
 - **`dev`**: `dependsOn: ["^build"]`, not cached, `persistent: true`
 - **`gen`**: not cached, persistent (GraphQL codegen watch)
 

@@ -8,25 +8,11 @@ import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import nodemailer from "nodemailer";
 import pino from "pino";
 import { DataSource } from "typeorm";
-import {
-  CoreProjectEmailService,
-  ProjectEmailService,
-  ProjectMemberInvitedSubscriber,
-} from "@/features/project-email";
-import {
-  CoreUserEmailService,
-  UserEmailService,
-  UserRegisteredSubscriber,
-} from "@/features/user-email";
-import {
-  CoreWorkspaceEmailService,
-  WorkspaceEmailService,
-  WorkspaceMemberInvitedSubscriber,
-} from "@/features/workspace-email";
+import { CoreProjectEmailService, ProjectEmailService, ProjectMemberInvitedSubscriber } from "@/features/project-email";
+import { CoreUserEmailService, UserEmailService, UserRegisteredSubscriber } from "@/features/user-email";
+import { CoreWorkspaceEmailService, WorkspaceEmailService, WorkspaceMemberInvitedSubscriber } from "@/features/workspace-email";
 
-export const logger = new CoreLogger(
-  pino({ transport: { target: "pino-pretty" } }),
-);
+export const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -82,11 +68,5 @@ container.add("userEmailService", asClass(CoreUserEmailService));
 container.add("projectEmailService", asClass(CoreProjectEmailService));
 container.add("workspaceEmailService", asClass(CoreWorkspaceEmailService));
 container.add("userRegisteredSubscriber", asClass(UserRegisteredSubscriber));
-container.add(
-  "projectMemberCreatedSubscriber",
-  asClass(ProjectMemberInvitedSubscriber),
-);
-container.add(
-  "workspaceMemberInvitedSubscriber",
-  asClass(WorkspaceMemberInvitedSubscriber),
-);
+container.add("projectMemberCreatedSubscriber", asClass(ProjectMemberInvitedSubscriber));
+container.add("workspaceMemberInvitedSubscriber", asClass(WorkspaceMemberInvitedSubscriber));

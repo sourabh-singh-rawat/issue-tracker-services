@@ -6,8 +6,7 @@ export const store = configureStore({
   reducer: {
     [attachmentApi.reducerPath]: attachmentApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(attachmentApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(attachmentApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -23,10 +23,7 @@ export default function SidebarGroupItem({
   isVisible,
 }: Props) {
   return to ? (
-    <Link
-      to={to as "/"}
-      style={{ color: "inherit", textDecoration: "none" }}
-    >
+    <Link to={to as "/"} style={{ color: "inherit", textDecoration: "none" }}>
       <SidebarGroupItemContent
         icon={icon}
         title={title}

@@ -10,11 +10,7 @@ interface ModalFooterProps {
 
 export default function ModalFooter({ handleClose }: ModalFooterProps) {
   return (
-    <MuiGrid
-      container
-      sx={{ mt: 2, flexDirection: "row-reverse" }}
-      columnSpacing={1}
-    >
+    <MuiGrid container sx={{ mt: 2, flexDirection: "row-reverse" }} columnSpacing={1}>
       <MuiGrid item>
         <PrimaryButton type="submit" label="Create" />
       </MuiGrid>

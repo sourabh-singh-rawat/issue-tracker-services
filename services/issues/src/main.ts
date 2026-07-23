@@ -1,25 +1,25 @@
 import "./env";
 import "reflect-metadata";
 
-import { ApolloServer } from "@apollo/server";
+import { ApolloServer, BaseContext } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
 import { Environment } from "@pine/common";
 import { AwilixDi, CoreHttpServer } from "@pine/server-core";
 import fastify from "fastify";
-import { writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
-import {
-  RegisteredServices,
-  broker,
-  container,
-  dataSource,
-  logger,
-  orm,
-} from "./container";
+import { RegisteredServices, broker, container, logger, orm } from "./container";
 import { createContext } from "./graphql";
 import { schema } from "./graphql/schema";
 export type { IssuesContext } from "./graphql";
 export { container, dataSource } from "./container";
+
+const writeSchemaToDist = () => {
+  const schemaPath = path.join(process.cwd(), "dist", "schema.graphql");
+  mkdirSync(path.dirname(schemaPath), { recursive: true });
+  writeFileSync(schemaPath, printSchema(lexicographicSortSchema(schema)));
+};
 
 const startSubscriptions = (di: AwilixDi<RegisteredServices>) => {
   di.get("userEmailVerifiedSubscriber").fetchMessages();
@@ -30,13 +30,10 @@ const main = async () => {
   await broker.init();
   container.init();
 
-  writeFileSync(
-    "./schema.graphql",
-    printSchema(lexicographicSortSchema(schema)),
-  );
+  writeSchemaToDist();
 
   const instance = fastify();
-  const apollo = new ApolloServer<any>({
+  const apollo = new ApolloServer<BaseContext>({
     schema,
     plugins: [fastifyApolloDrainPlugin(instance)],
   });

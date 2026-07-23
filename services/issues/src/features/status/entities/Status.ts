@@ -1,12 +1,5 @@
 import { STATUS_TYPE, StatusType } from "@pine/common";
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Project } from "@/features/project/entities/Project";
 
 @Entity({ name: "status_options" })
@@ -19,12 +12,7 @@ export class StatusOption extends BaseEntity {
 
   @Column({
     type: "enum",
-    enum: [
-      STATUS_TYPE.NOT_STARTED,
-      STATUS_TYPE.ACTIVE,
-      STATUS_TYPE.COMPLETED,
-      STATUS_TYPE.CLOSED,
-    ],
+    enum: [STATUS_TYPE.NOT_STARTED, STATUS_TYPE.ACTIVE, STATUS_TYPE.COMPLETED, STATUS_TYPE.CLOSED],
   })
   type!: StatusType;
 

@@ -19,7 +19,5 @@ export default function Chip({ label, color }: Props) {
     border: `1px solid ${color}`,
   };
 
-  return (
-    <StyledChip label={label} size="small" variant="outlined" sx={chipStyles} />
-  );
+  return <StyledChip label={label} size="small" variant="outlined" sx={chipStyles} />;
 }

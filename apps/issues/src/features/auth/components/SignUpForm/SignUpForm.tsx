@@ -1,40 +1,30 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import {
-  PasswordField,
-  PrimaryButton,
-  TextField,
-  useSnackbar,
-} from "@common";
+import { PasswordField, PrimaryButton, TextField, useSnackbar } from "@common";
 
 import { Container, Grid2, Typography } from "@mui/material";
 
 import type { RegisterUserInput } from "@generated/gql/graphql";
-import { useRegisterUserMutation } from "@generated/gql";
+import { useRegisterUserWithEmailAndPasswordMutation } from "@generated/gql";
 
 export const SignUpForm = () => {
   const snackbar = useSnackbar();
-  const { mutateAsync: registerUser } = useRegisterUserMutation();
+  const { mutateAsync: registerUserWithEmailAndPassword } =
+    useRegisterUserWithEmailAndPasswordMutation();
 
   const form = useForm({
     defaultValues: { displayName: "", email: "", password: "" },
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<RegisterUserInput> = async ({
-    email,
-    password,
-    displayName,
-  }) => {
+  const onSubmit: SubmitHandler<RegisterUserInput> = async ({ email, password, displayName }) => {
     try {
-      const response = await registerUser({
+      const response = await registerUserWithEmailAndPassword({
         input: { email, password, displayName },
       });
-      snackbar.success(response.registerUser);
+      snackbar.success(response.registerUserWithEmailAndPassword);
     } catch (error) {
-      snackbar.error(
-        error instanceof Error ? error.message : "Registration failed",
-      );
+      snackbar.error(error instanceof Error ? error.message : "Registration failed");
     }
   };
 
@@ -53,13 +43,7 @@ export const SignUpForm = () => {
           />
         </Grid2>
         <Grid2 size={12}>
-          <TextField
-            name="email"
-            label="Email"
-            placeholder="Email"
-            form={form}
-            type="email"
-          />
+          <TextField name="email" label="Email" placeholder="Email" form={form} type="email" />
         </Grid2>
         <Grid2 size={12}>
           <PasswordField name="password" label="Password" form={form} />

@@ -1,9 +1,4 @@
-import {
-  EMAIL_STATUS,
-  EMAIL_TYPE,
-  EmailStatus,
-  EmailType,
-} from "@pine/common";
+import { EMAIL_STATUS, EMAIL_TYPE, EmailStatus, EmailType } from "@pine/common";
 import { Audit } from "@pine/orm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 

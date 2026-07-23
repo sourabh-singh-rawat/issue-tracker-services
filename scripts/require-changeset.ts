@@ -12,10 +12,7 @@ import { pathToFileURL } from "node:url";
 
 const execFileAsync = promisify(execFile);
 
-const IGNORED = new Set([
-  ".changeset/README.md",
-  ".changeset/config.json",
-]);
+const IGNORED = new Set([".changeset/README.md", ".changeset/config.json"]);
 
 export const EXPECTED_CHANGESET_COUNT = 1;
 
@@ -27,9 +24,7 @@ export type ChangesetCountVerdict =
       readonly files: readonly string[];
     };
 
-export function evaluateChangesetCount(
-  files: readonly string[],
-): ChangesetCountVerdict {
+export function evaluateChangesetCount(files: readonly string[]): ChangesetCountVerdict {
   if (files.length === EXPECTED_CHANGESET_COUNT) {
     return { ok: true, files };
   }
@@ -48,19 +43,9 @@ async function runGit(args: readonly string[], cwd: string): Promise<string> {
   return stdout.trim();
 }
 
-export async function listNewChangesets(
-  cwd: string,
-  baseRef: string,
-): Promise<string[]> {
+export async function listNewChangesets(cwd: string, baseRef: string): Promise<string[]> {
   const raw = await runGit(
-    [
-      "diff",
-      "--name-only",
-      "--diff-filter=A",
-      `${baseRef}...HEAD`,
-      "--",
-      ".changeset",
-    ],
+    ["diff", "--name-only", "--diff-filter=A", `${baseRef}...HEAD`, "--", ".changeset"],
     cwd,
   );
 
@@ -102,9 +87,7 @@ function formatFailure(
   );
 }
 
-export async function main(
-  argv: readonly string[] = process.argv.slice(2),
-): Promise<number> {
+export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<number> {
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(`Usage: require-changeset [base-ref]
 
@@ -125,8 +108,7 @@ Skip in CI: add the PR label "skip-changeset".
     await runGit(["rev-parse", "--verify", baseRef], cwd);
   } catch {
     console.error(
-      `Base ref not found: ${baseRef}\n` +
-        `Fetch it first, e.g. git fetch origin development`,
+      `Base ref not found: ${baseRef}\n` + `Fetch it first, e.g. git fetch origin development`,
     );
     return 1;
   }
@@ -150,9 +132,7 @@ Skip in CI: add the PR label "skip-changeset".
       return 1;
     }
 
-    console.log(
-      `OK: exactly ${EXPECTED_CHANGESET_COUNT} new changeset since ${baseRef}:`,
-    );
+    console.log(`OK: exactly ${EXPECTED_CHANGESET_COUNT} new changeset since ${baseRef}:`);
     for (const file of verdict.files) {
       console.log(`  - ${file}`);
     }

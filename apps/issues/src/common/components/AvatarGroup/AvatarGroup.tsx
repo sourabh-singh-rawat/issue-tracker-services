@@ -38,12 +38,7 @@ interface AvatarGroupProps {
   max?: number;
 }
 
-export default function AvatarGroup({
-  max = 3,
-  members = [],
-  onClick,
-  total,
-}: AvatarGroupProps) {
+export default function AvatarGroup({ max = 3, members = [], onClick, total }: AvatarGroupProps) {
   const theme = useTheme();
 
   return (

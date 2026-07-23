@@ -5,11 +5,7 @@ import { IssueCommentService } from "./interfaces/issue-comment.service";
 export class CoreIssueCommentService implements IssueCommentService {
   constructor() {}
 
-  createIssueComment = async (
-    userId: string,
-    issueId: string,
-    description: string,
-  ) => {
+  createIssueComment = async (userId: string, issueId: string, description: string) => {
     const newIssueComment = new IssueCommentEntity();
     newIssueComment.userId = userId;
     newIssueComment.issueId = issueId;

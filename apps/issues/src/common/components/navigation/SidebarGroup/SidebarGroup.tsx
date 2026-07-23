@@ -11,11 +11,7 @@ interface SidebarGroupProps {
   icon?: React.JSX.Element;
 }
 
-export default function SidebarGroup({
-  icon,
-  title,
-  isVisible,
-}: SidebarGroupProps) {
+export default function SidebarGroup({ icon, title, isVisible }: SidebarGroupProps) {
   const [isSidebarGroupOpen, setIsSidebarGroupOpen] = useState(false);
 
   const handleClickMenuItem = () => setIsSidebarGroupOpen(!isSidebarGroupOpen);

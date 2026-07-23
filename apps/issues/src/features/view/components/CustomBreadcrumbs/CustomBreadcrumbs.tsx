@@ -1,20 +1,11 @@
-import {
-  Breadcrumbs,
-  Link,
-  Skeleton,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Breadcrumbs, Link, Skeleton, Typography, useTheme } from "@mui/material";
 
 interface CustomBreadcrumbsProps {
   items: { text: string; onClick?: () => void }[];
   isLoading?: boolean;
 }
 
-export const CustomBreadcrumbs = ({
-  items,
-  isLoading,
-}: CustomBreadcrumbsProps) => {
+export const CustomBreadcrumbs = ({ items, isLoading }: CustomBreadcrumbsProps) => {
   const theme = useTheme();
 
   return (
