@@ -3,7 +3,7 @@
  * Ensure a PR branch adds exactly one new Changeset file since a base ref.
  *
  * CI: PRs into development (see .github/workflows/changeset-required.yml)
- * Local: pnpm changeset:status
+ * Local: pnpm changeset-required
  */
 
 import { execFile } from "node:child_process";
@@ -89,7 +89,7 @@ function formatFailure(
 
 export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<number> {
   if (argv.includes("--help") || argv.includes("-h")) {
-    console.log(`Usage: require-changeset [base-ref]
+    console.log(`Usage: changeset-required [base-ref]
 
 Default base-ref: origin/development
 
@@ -152,7 +152,7 @@ function isMainModule(): boolean {
   try {
     return import.meta.url === pathToFileURL(entry).href;
   } catch {
-    return entry.replace(/\\/g, "/").endsWith("/scripts/require-changeset.ts");
+    return entry.replace(/\\/g, "/").endsWith("/scripts/changeset-required.ts");
   }
 }
 
