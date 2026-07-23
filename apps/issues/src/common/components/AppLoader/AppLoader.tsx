@@ -4,14 +4,7 @@ import MuiCircularProgress from "@mui/material/CircularProgress";
 
 interface AppLoaderProps {
   size?: number;
-  color?:
-    | "inherit"
-    | "primary"
-    | "secondary"
-    | "error"
-    | "info"
-    | "success"
-    | "warning";
+  color?: "inherit" | "primary" | "secondary" | "error" | "info" | "success" | "warning";
 }
 
 export function AppLoader({ size = 4, color = "primary" }: AppLoaderProps) {

@@ -1,8 +1,4 @@
-import {
-  IssueStatus,
-  ITEM_PRIORITY,
-  ServiceResponse,
-} from "@pine/common";
+import { IssueStatus, ITEM_PRIORITY, ServiceResponse } from "@pine/common";
 import { IsNull } from "typeorm";
 import { dataSource } from "@/container";
 import { Issue } from "../entities/Issue";
@@ -31,8 +27,7 @@ export class CoreIssueService implements IssueService {
   }
 
   async createIssue(options: CreateIssueOptions) {
-    const { manager, userId, assigneeIds, parentIssueId, estimate, component, ...input } =
-      options;
+    const { manager, userId, assigneeIds, parentIssueId, estimate, component, ...input } = options;
     const IssueRepo = manager.getRepository(Issue);
     const IssueAssigneeRepo = manager.getRepository(IssueAssignee);
 

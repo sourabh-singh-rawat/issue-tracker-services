@@ -106,13 +106,6 @@
   },
   // Do not include ../../packages/*/src here: tsgo rootDir is this service; package
   // sources as program roots cause TS6059. Packages resolve via node_modules.
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/**/__tests__/**",
-    "src/**/__mocks__/**"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/**/__tests__/**", "src/**/__mocks__/**"]
 }

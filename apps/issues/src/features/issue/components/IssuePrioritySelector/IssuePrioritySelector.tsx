@@ -1,19 +1,7 @@
 /* eslint-disable react/prop-types */
 
-import {
-  FormControl,
-  FormHelperText,
-  Grid2,
-  Skeleton,
-  Typography,
-} from "@mui/material";
-import {
-  Controller,
-  FieldValues,
-  Path,
-  UseControllerProps,
-  UseFormReturn,
-} from "react-hook-form";
+import { FormControl, FormHelperText, Grid2, Skeleton, Typography } from "@mui/material";
+import { Controller, FieldValues, Path, UseControllerProps, UseFormReturn } from "react-hook-form";
 import Select from "../../../../common/components/Select";
 import { Label } from "../../../../common/components/forms";
 

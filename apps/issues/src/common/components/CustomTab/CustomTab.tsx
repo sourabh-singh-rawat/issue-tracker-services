@@ -9,12 +9,6 @@ interface CustomTabProps {
 
 export const CustomTab = ({ label, index, ...props }: CustomTabProps) => {
   return (
-    <Tab
-      value={index}
-      label={label}
-      sx={{ textTransform: "none" }}
-      disableRipple
-      {...props}
-    />
+    <Tab value={index} label={label} sx={{ textTransform: "none" }} disableRipple {...props} />
   );
 };

@@ -17,9 +17,7 @@ export default function App() {
   return (
     <>
       <RouterProvider router={router} />
-      {import.meta.env.DEV && (
-        <TanStackRouterDevtools router={router} initialIsOpen={false} />
-      )}
+      {import.meta.env.DEV && <TanStackRouterDevtools router={router} initialIsOpen={false} />}
     </>
   );
 }

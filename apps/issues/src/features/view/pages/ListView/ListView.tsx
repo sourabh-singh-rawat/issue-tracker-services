@@ -1,8 +1,5 @@
 import { Grid2, useTheme } from "@mui/material";
-import {
-  useFindStatusesQuery,
-  useFindProjectQuery,
-} from "@generated/gql";
+import { useFindStatusesQuery, useFindProjectQuery } from "@generated/gql";
 import { useViewParams } from "@common";
 import { StatusesContext } from "@common/contexts/StatusesContext";
 import { IssueList } from "@features/issue/components";

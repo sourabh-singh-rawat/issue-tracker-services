@@ -3,13 +3,7 @@ import MuiFormHelperText from "@mui/material/FormHelperText";
 import Grid2 from "@mui/material/Grid2";
 import MuiSkeleton from "@mui/material/Skeleton";
 import MuiTypography from "@mui/material/Typography";
-import {
-  Controller,
-  FieldValues,
-  Path,
-  UseControllerProps,
-  UseFormReturn,
-} from "react-hook-form";
+import { Controller, FieldValues, Path, UseControllerProps, UseFormReturn } from "react-hook-form";
 import { useFindStatusesQuery } from "@generated/gql";
 import { Label, Select } from "@common";
 

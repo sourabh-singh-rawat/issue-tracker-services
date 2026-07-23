@@ -32,18 +32,12 @@ export const ProjectForm = ({ workspaceId }: ProjectFormProps) => {
       // Reload so the new project appears in the sidebar list
       window.location.reload();
     } catch (error) {
-      messageBar.error(
-        error instanceof Error ? error.message : "Failed to create project",
-      );
+      messageBar.error(error instanceof Error ? error.message : "Failed to create project");
     }
   };
 
   return (
-    <MuiContainer
-      component="form"
-      onSubmit={form.handleSubmit(onSubmit)}
-      disableGutters
-    >
+    <MuiContainer component="form" onSubmit={form.handleSubmit(onSubmit)} disableGutters>
       <Grid2 spacing={2} container>
         <Grid2 size={12}>
           <TextField

@@ -9,9 +9,7 @@ export interface EmailMessage {
 }
 
 export class NodeMailer implements Mailer {
-  constructor(
-    private readonly transporter: Transporter<SMTPTransport.SentMessageInfo>,
-  ) {}
+  constructor(private readonly transporter: Transporter<SMTPTransport.SentMessageInfo>) {}
 
   send = async (sender: string, receiver: string, message: EmailMessage) => {
     const options = {

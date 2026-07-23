@@ -1,10 +1,6 @@
 import { useTheme } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import {
-  GridColDef,
-  GridValidRowModel,
-  DataGrid as MuiDataGrid,
-} from "@mui/x-data-grid";
+import { GridColDef, GridValidRowModel, DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 
 const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => {

@@ -101,11 +101,7 @@ export class CoreWorkspaceService implements WorkspaceService {
     return "";
   }
 
-  createWorkspaceMember = async (
-    userId: string,
-    email: string,
-    role: WorkspaceMemberRoles,
-  ) => {
+  createWorkspaceMember = async (userId: string, email: string, role: WorkspaceMemberRoles) => {
     const isReceiverMember = await WorkspaceMember.findOne({
       where: { email },
     });
@@ -168,10 +164,7 @@ export class CoreWorkspaceService implements WorkspaceService {
   confirmWorkspaceInvite = async (token: string) => {
     let email: string;
     try {
-      const verifedToken = await JwtToken.verify(
-        token,
-        process.env.JWT_SECRET!,
-      );
+      const verifedToken = await JwtToken.verify(token, process.env.JWT_SECRET!);
       if (!hasEmailClaim(verifedToken)) {
         throw new Error("Token verification failed");
       }

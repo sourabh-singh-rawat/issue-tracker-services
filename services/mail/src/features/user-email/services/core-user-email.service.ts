@@ -2,10 +2,7 @@ import { EmailMessage, NodeMailer } from "@pine/comm";
 import { NatsPublisher } from "@pine/event-bus";
 import { Typeorm } from "@pine/orm";
 import { Email } from "../entities/email.entity";
-import {
-  SendEmailOptions,
-  UserEmailService,
-} from "./interfaces/user-email.service";
+import { SendEmailOptions, UserEmailService } from "./interfaces/user-email.service";
 
 export class CoreUserEmailService implements UserEmailService {
   private readonly senderEmail = "no-reply@issue-tracker.com";

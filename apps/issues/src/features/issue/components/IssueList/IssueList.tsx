@@ -1,18 +1,11 @@
-import {
-  ArchiveOutlined,
-  DeleteOutlineOutlined,
-  EditOutlined,
-} from "@mui/icons-material";
+import { ArchiveOutlined, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import {
   GridActionsCellItem,
   GridColDef,
   GridRenderCellParams,
   GridValidRowModel,
 } from "@mui/x-data-grid";
-import {
-  useFindProjectIssuesQuery,
-  useFindSubIssuesQuery,
-} from "@generated/gql";
+import { useFindProjectIssuesQuery, useFindSubIssuesQuery } from "@generated/gql";
 import { DataGrid, Link } from "@common";
 
 interface IssueListProps {
@@ -46,9 +39,7 @@ export const IssueList = ({ issueId, projectId, style }: IssueListProps) => {
       enabled: Boolean(issueId),
     },
   );
-  const rows: GridValidRowModel[] = issueId
-    ? (subIssues.data ?? [])
-    : (projectIssues.data ?? []);
+  const rows: GridValidRowModel[] = issueId ? (subIssues.data ?? []) : (projectIssues.data ?? []);
 
   const columns: GridColDef<GridValidRowModel>[] = [
     {
@@ -89,12 +80,5 @@ export const IssueList = ({ issueId, projectId, style }: IssueListProps) => {
     },
   ];
 
-  return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      hideFooter
-      showBorder={style?.showBorder}
-    />
-  );
+  return <DataGrid rows={rows} columns={columns} hideFooter showBorder={style?.showBorder} />;
 };

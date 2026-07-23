@@ -22,18 +22,11 @@ export interface WorkspaceService {
     workspaceId: string,
     role: WorkspaceMemberRoles,
   ): Promise<void>;
-  createWorkspaceMember(
-    userId: string,
-    email: string,
-    role: WorkspaceMemberRoles,
-  ): Promise<void>;
+  createWorkspaceMember(userId: string, email: string, role: WorkspaceMemberRoles): Promise<void>;
   confirmWorkspaceInvite(token: string): Promise<ServiceResponse<string>>;
   findWorkspaces(userId: string): Promise<Workspace[]>;
   findDefaultWorkspace(userId: string): Promise<Workspace>;
   getWorkspace(id: string): Promise<ServiceResponse<Workspace>>;
   getWorkspaceRoleList(): Promise<ServiceResponse<WorkspaceMemberRoles[]>>;
-  updateWorkspace(
-    id: string,
-    updateables: { name?: string },
-  ): Promise<ServiceResponse<string>>;
+  updateWorkspace(id: string, updateables: { name?: string }): Promise<ServiceResponse<string>>;
 }

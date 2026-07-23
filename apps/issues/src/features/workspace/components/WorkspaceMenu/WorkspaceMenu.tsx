@@ -7,13 +7,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 import { AddOutlined } from "@mui/icons-material";
-import {
-  Divider,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "@tanstack/react-router";
 import type { Workspace } from "@generated/gql/graphql";
 
@@ -31,11 +25,7 @@ interface MenuItemAlt {
   onClick?: () => void;
 }
 
-export const WorkspaceMenu = ({
-  anchorEl,
-  handleClose,
-  selectedOption,
-}: WorkspaceMenuProps) => {
+export const WorkspaceMenu = ({ anchorEl, handleClose, selectedOption }: WorkspaceMenuProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const workspaceId = selectedOption.id;

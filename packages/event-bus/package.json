@@ -1,26 +1,26 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/event-bus",
   "version": "0.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest --passWithNoTests --forceExit",
-    "test:watch": "jest --watchAll --verbose"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.4",
-    "typescript": "7.0.2"
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts"
   },
   "dependencies": {
     "@pine/common": "workspace:^",
     "@pine/server-core": "workspace:^",
     "nats": "^2.26.0",
     "pino": "^8.21.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "^4.1.10"
   }
 }
+

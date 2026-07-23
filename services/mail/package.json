@@ -1,39 +1,30 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/mail",
   "version": "0.0.0",
   "description": "Mail",
-  "main": "./src/main.ts",
-  "scripts": {
-    "test": "jest --passWithNoTests --forceExit",
-    "test:watch": "jest --watchAll --verbose",
-    "start": "tsx src/main.ts",
-    "dev": "tsx watch src/main.ts",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
-  },
   "keywords": [
     "email",
     "management"
   ],
-  "author": "Sourabh Singh Rawat",
-  "license": "ISC",
+  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "bugs": {
     "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
   },
-  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
-  "devDependencies": {
-    "@types/jest": "^29.5.14",
-    "@types/nodemailer": "^6.4.17",
-    "@types/uuid": "^10.0.0",
-    "jest": "^29.7.0",
-    "pino-pretty": "^13.0.0",
-    "ts-jest": "^29.2.5",
-    "tsx": "4.23.0",
-    "typescript": "7.0.2",
-    "uuid": "^11.0.4"
+  "license": "ISC",
+  "author": "Sourabh Singh Rawat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+  },
+  "main": "./src/main.ts",
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts",
+
+    "start": "tsx src/main.ts",
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
@@ -46,7 +37,7 @@
     "@pine/server-core": "workspace:^",
     "awilix": "^12.0.4",
     "dotenv": "17.4.2",
-    "fastify": "^5.2.1",
+    "fastify": "^5.10.0",
     "http-status-codes": "^2.3.0",
     "nats": "^2.28.2",
     "nodemailer": "^9.0.3",
@@ -54,5 +45,15 @@
     "pino": "^9.6.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
+    "@types/uuid": "^10.0.0",
+    "pino-pretty": "^13.0.0",
+    "tsx": "4.23.0",
+    "typescript": "7.0.2",
+    "uuid": "^11.0.4",
+    "vitest": "^4.1.10"
   }
+
 }

@@ -1,8 +1,4 @@
-import {
-  SubmitHandler,
-  UseFormHandleSubmit,
-  UseFormReturn,
-} from "react-hook-form";
+import { SubmitHandler, UseFormHandleSubmit, UseFormReturn } from "react-hook-form";
 import Button from "../../../../common/components/buttons/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "../../../../common";
@@ -16,11 +12,7 @@ interface Props {
   defaultSchemas?: any;
 }
 
-export default function WorkspaceName({
-  handleSubmit,
-  form,
-  defaultSchemas,
-}: Props) {
+export default function WorkspaceName({ handleSubmit, form, defaultSchemas }: Props) {
   const onSubmit: SubmitHandler<UpdateWorkspaceForm> = () => {};
 
   return (
@@ -28,9 +20,7 @@ export default function WorkspaceName({
       <Grid container>
         <Grid item xs={5}>
           <Typography variant="body1">Information</Typography>
-          <Typography variant="body2">
-            The basic information about your workspace
-          </Typography>
+          <Typography variant="body2">The basic information about your workspace</Typography>
         </Grid>
         <Grid item xs={7} component="form" onSubmit={handleSubmit(onSubmit)}>
           <TextField

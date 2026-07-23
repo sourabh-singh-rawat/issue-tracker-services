@@ -1,45 +1,18 @@
 import "./env";
 
-import {
-  NatsBroker,
-  NatsPublisher,
-  Publisher,
-  Subjects,
-} from "@pine/event-bus";
-import {
-  AwilixDi,
-  CoreLogger,
-  Logger,
-} from "@pine/server-core";
+import { NatsBroker, NatsPublisher, Publisher, Subjects } from "@pine/event-bus";
+import { AwilixDi, CoreLogger, Logger } from "@pine/server-core";
 import { PostgresTypeorm, Typeorm } from "@pine/orm";
 import { InjectionMode, asClass, asValue, createContainer } from "awilix";
 import pino from "pino";
 import { DataSource } from "typeorm";
-import {
-  CoreIssueService,
-  IssueService,
-} from "@/features/issue";
-import {
-  CoreProjectService,
-  ProjectService,
-} from "@/features/project";
-import {
-  CoreStatusService,
-  StatusService,
-} from "@/features/status";
-import {
-  CoreUserService,
-  UserEmailVerifiedSubscriber,
-  UserService,
-} from "@/features/user";
-import {
-  CoreWorkspaceService,
-  WorkspaceService,
-} from "@/features/workspace";
+import { CoreIssueService, IssueService } from "@/features/issue";
+import { CoreProjectService, ProjectService } from "@/features/project";
+import { CoreStatusService, StatusService } from "@/features/status";
+import { CoreUserService, UserEmailVerifiedSubscriber, UserService } from "@/features/user";
+import { CoreWorkspaceService, WorkspaceService } from "@/features/workspace";
 
-export const logger = new CoreLogger(
-  pino({ transport: { target: "pino-pretty" } }),
-);
+export const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
 
 export const broker = new NatsBroker({
   servers: [process.env.NATS_CLUSTER_URL || "nats"],
@@ -85,8 +58,5 @@ container.add("issueService", asClass(CoreIssueService));
 container.add("statusService", asClass(CoreStatusService));
 container.add("projectService", asClass(CoreProjectService));
 container.add("workspaceService", asClass(CoreWorkspaceService));
-container.add(
-  "userEmailVerifiedSubscriber",
-  asClass(UserEmailVerifiedSubscriber),
-);
+container.add("userEmailVerifiedSubscriber", asClass(UserEmailVerifiedSubscriber));
 container.add("publisher", asClass(NatsPublisher));

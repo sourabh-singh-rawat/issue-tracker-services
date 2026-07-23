@@ -1,8 +1,4 @@
-import {
-  CalendarMonthOutlined,
-  CircleOutlined,
-  FlagOutlined,
-} from "@mui/icons-material";
+import { CalendarMonthOutlined, CircleOutlined, FlagOutlined } from "@mui/icons-material";
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import type { UpdateIssueInput } from "@generated/gql/graphql";

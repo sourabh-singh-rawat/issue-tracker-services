@@ -1,0 +1,35 @@
+import { CoreHttpServer } from "@pine/server-core";
+import type { FastifyReply, FastifyRequest } from "fastify";
+import fastify from "fastify";
+import { env } from "../env";
+import type { GatewayContext } from "./graphql-gateway";
+import { graphqlServer } from "./graphql-server";
+import { registerHttpProxies } from "./http-proxy";
+
+export const createHttpServer = async () => {
+  const server = fastify();
+
+  await registerHttpProxies(server);
+
+  return new CoreHttpServer({
+    graphql: {
+      path: "/graphql",
+      apollo: graphqlServer,
+      createContext: async (req: FastifyRequest, reply: FastifyReply): Promise<GatewayContext> => ({
+        cookie: req.headers.cookie,
+        reply,
+      }),
+    },
+    cors: {
+      credentials: true,
+      origin: [env.ISSUE_TRACKER_CLIENT_URL, env.IDENTITY_CLIENT_URL],
+    },
+    config: {
+      host: "0.0.0.0",
+      port: Number.parseInt(env.API_GATEWAY_PORT, 10),
+      environment: env.NODE_ENV as "development" | "production",
+      version: 1,
+    },
+    server,
+  });
+};

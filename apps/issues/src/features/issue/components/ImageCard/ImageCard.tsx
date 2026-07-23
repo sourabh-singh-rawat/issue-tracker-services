@@ -36,11 +36,7 @@ export const ImageCard = ({ path }: ImageCardProps) => {
         width: "100%",
       }}
     >
-      {isLoading ? (
-        <Skeleton />
-      ) : (
-        <img alt="imageTag" loading="lazy" src={src} />
-      )}
+      {isLoading ? <Skeleton /> : <img alt="imageTag" loading="lazy" src={src} />}
     </ImageListItem>
   );
 };

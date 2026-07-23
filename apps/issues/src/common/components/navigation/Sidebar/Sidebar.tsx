@@ -60,9 +60,7 @@ export function Sidebar() {
         <WorkspaceSwitcher />
       </List>
       <MuiDivider />
-      {currentWorkspace?.id && (
-        <ProjectList workspaceId={currentWorkspace.id} />
-      )}
+      {currentWorkspace?.id && <ProjectList workspaceId={currentWorkspace.id} />}
       <MuiDivider />
     </Drawer>
   );

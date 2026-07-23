@@ -1,11 +1,6 @@
 import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import {
-  Outlet,
-  useNavigate,
-  useParams,
-  useRouterState,
-} from "@tanstack/react-router";
+import { Outlet, useNavigate, useParams, useRouterState } from "@tanstack/react-router";
 import { createContext, useEffect, useState } from "react";
 import { CustomTab, CustomTabs } from "../../../../common";
 import PageHeader from "../../../../common/components/PageHeader";

@@ -89,10 +89,7 @@ export abstract class Guardian<A extends string> {
       { customCasbinRuleEntity: config.customCasbinRuleEntity },
     );
 
-    this.casbinEnforcer = await newEnforcer(
-      "./src/app/guardians/casbin/model.conf",
-      adapter,
-    );
+    this.casbinEnforcer = await newEnforcer("./src/app/guardians/casbin/model.conf", adapter);
     this.logger.info("Initialized policy manager and connected to database");
   };
 
@@ -102,11 +99,7 @@ export abstract class Guardian<A extends string> {
    * @param objectId
    * @param actionId
    */
-  abstract validatePermission(
-    subjectId: string,
-    objectId: string,
-    actionId: A,
-  ): Promise<void>;
+  abstract validatePermission(subjectId: string, objectId: string, actionId: A): Promise<void>;
 
   /**
    * Enforcer getter

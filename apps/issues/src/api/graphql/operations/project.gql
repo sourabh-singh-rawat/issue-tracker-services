@@ -35,4 +35,3 @@ query FindStatuses($input: FindStatusesOptions!) {
     name
   }
 }
-

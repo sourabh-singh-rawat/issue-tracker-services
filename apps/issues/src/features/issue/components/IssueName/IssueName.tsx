@@ -35,11 +35,7 @@ const TitleTextField = styled(MuiTextField)(({ theme }) => ({
       borderColor: theme.palette.primary.main,
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
     },
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
+    transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
   },
 }));
 
@@ -58,8 +54,7 @@ export const IssueName = ({ issueId, initialValue = "" }: IssueNameProps) => {
   const form = useForm();
   const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const { mutateAsync: UpdateIssue, isPending: isLoading } =
-    useUpdateIssueMutation();
+  const { mutateAsync: UpdateIssue, isPending: isLoading } = useUpdateIssueMutation();
 
   const handleClick = () => {
     setIsFocused(true);
@@ -72,9 +67,7 @@ export const IssueName = ({ issueId, initialValue = "" }: IssueNameProps) => {
     form.setValue("name", defaultValue);
   };
 
-  const onSubmit: SubmitHandler<Pick<UpdateIssueInput, "name">> = async ({
-    name,
-  }) => {
+  const onSubmit: SubmitHandler<Pick<UpdateIssueInput, "name">> = async ({ name }) => {
     if (isLoading) return;
 
     await UpdateIssue({ input: { issueId, name } });

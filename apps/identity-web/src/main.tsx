@@ -1,10 +1,12 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { createRoot } from "react-dom/client";
+import { AppQueryProvider } from "@bootstrap/query-client";
+import { AppRouterProvider } from "@bootstrap/router";
+import { AppThemeProvider } from "@bootstrap/theme";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+createRoot(document.getElementById("root")!).render(
+  <AppQueryProvider>
+    <AppThemeProvider>
+      <AppRouterProvider />
+    </AppThemeProvider>
+  </AppQueryProvider>,
+);

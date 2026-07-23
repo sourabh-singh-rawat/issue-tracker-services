@@ -17,17 +17,13 @@ interface IssueDescriptionProps {
 /**
  * Update the item description
  */
-export const IssueDescription = ({
-  issueId,
-  initialValue = "",
-}: IssueDescriptionProps) => {
+export const IssueDescription = ({ issueId, initialValue = "" }: IssueDescriptionProps) => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const form = useForm();
   const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const { mutateAsync: UpdateIssue, isPending: isLoading } =
-    useUpdateIssueMutation();
+  const { mutateAsync: UpdateIssue, isPending: isLoading } = useUpdateIssueMutation();
 
   const handleClick = () => {
     setIsFocused(true);
@@ -62,12 +58,7 @@ export const IssueDescription = ({
 
   return (
     <ClickAwayListener onClickAway={handleCancel}>
-      <Grid2
-        rowSpacing={1}
-        container
-        component="form"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <Grid2 rowSpacing={1} container component="form" onSubmit={form.handleSubmit(onSubmit)}>
         <Grid2 size={12}>
           {isFocused ? (
             <TextField

@@ -4,18 +4,12 @@ import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
 
 export type IssuesContext = GraphQLContext;
 
-export const createContext: ApolloFastifyContextFunction<any> = async (
-  req,
-  rep,
-) => {
+export const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
   if (accessToken) {
     try {
-      const token = await JwtToken.verify(
-        accessToken,
-        process.env.JWT_SECRET!,
-      );
+      const token = await JwtToken.verify(accessToken, process.env.JWT_SECRET!);
       if (hasUserIdentity(token)) {
         return {
           req,

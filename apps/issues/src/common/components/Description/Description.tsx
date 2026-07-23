@@ -16,9 +16,13 @@ interface Props<T extends { name: string; description: string }> {
   isDisabled?: boolean;
 }
 
-export default function Description<
-  T extends { name: string; description: string },
->({ page, setPage, isLoading, updateQuery, isDisabled }: Props<T>) {
+export default function Description<T extends { name: string; description: string }>({
+  page,
+  setPage,
+  isLoading,
+  updateQuery,
+  isDisabled,
+}: Props<T>) {
   const theme = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const [previousDescription, setPreviousDescription] = useState("");
