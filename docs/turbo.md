@@ -7,7 +7,7 @@ This workspace uses **Turborepo** on top of **pnpm workspaces**.
 | Name                                                                                            | Path         |
 | ----------------------------------------------------------------------------------------------- | ------------ |
 | `@pine/*`                                                                                       | `packages/*` |
-| `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail`, `@pine/issues`, `@pine/api-gateway` | `services/*` |
+| `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail`, `@pine/issues-service`, `@pine/api-gateway` | `services/*` |
 | `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory-web`                                  | `apps/*`     |
 
 ```bash
