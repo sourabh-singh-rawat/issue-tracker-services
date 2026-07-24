@@ -22,7 +22,11 @@ export const createHttpServer = async () => {
     },
     cors: {
       credentials: true,
-      origin: [env.ISSUE_TRACKER_CLIENT_URL, env.IDENTITY_CLIENT_URL],
+      origin: [
+        env.ISSUES_WEB_CLIENT_URL,
+        env.IDENTITY_WEB_CLIENT_URL,
+        env.INVENTORY_WEB_CLIENT_URL,
+      ],
     },
     config: {
       host: "0.0.0.0",

@@ -176,12 +176,12 @@ export class CoreWorkspaceService implements WorkspaceService {
 
     if (!userExists) {
       return new ServiceResponse({
-        rows: `${process.env.CLIENT_SERVER}/signup?inviteToken=${token}`,
+        rows: `${process.env.ISSUES_WEB_CLIENT_URL}/signup?inviteToken=${token}`,
       });
     }
 
     return new ServiceResponse({
-      rows: `${process.env.CLIENT_SERVER}/login?inviteToken=${token}`,
+      rows: `${process.env.ISSUES_WEB_CLIENT_URL}/login?inviteToken=${token}`,
     });
   };
 

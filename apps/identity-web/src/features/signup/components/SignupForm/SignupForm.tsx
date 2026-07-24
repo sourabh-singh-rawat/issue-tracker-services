@@ -2,23 +2,27 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useForm } from "@tanstack/react-form";
-import { useRegisterUserWithEmailAndPasswordMutation } from "@generated/gql/hooks";
-import type { RegisterUserInput } from "@generated/gql/graphql";
+import { useRegisterWithEmailAndPasswordMutation } from "@generated/api/@tanstack/react-query.gen";
 import { useSignUpStore } from "@features/signup/stores";
 import { Form, FormItem, PasswordInput, TextInput } from "@shared/ui";
 
 export const SignupForm = () => {
   useSignUpStore();
 
-  const { mutateAsync: registerUser, isPending } = useRegisterUserWithEmailAndPasswordMutation();
+  const { mutateAsync: registerUser, isPending } = useRegisterWithEmailAndPasswordMutation();
 
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
-    } satisfies RegisterUserInput,
+    },
     onSubmit: async ({ value }) => {
-      await registerUser({ input: value });
+      await registerUser({
+        body: {
+          email: value.email,
+          password: value.password,
+        },
+      });
     },
   });
 

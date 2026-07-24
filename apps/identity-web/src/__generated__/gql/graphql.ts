@@ -19,9 +19,9 @@ export type Scalars = {
 
 export type FileOutput = {
   __typename?: 'FileOutput';
-  bucket: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  thumbnailLink: Scalars['String']['output'];
+  bucket?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  thumbnailLink?: Maybe<Scalars['String']['output']>;
 };
 
 export type HelloXyz = {
@@ -32,8 +32,8 @@ export type HelloXyz = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  deleteAttachment: Scalars['String']['output'];
-  registerUserWithEmailAndPassword?: Maybe<Scalars['String']['output']>;
+  deleteAttachment?: Maybe<Scalars['String']['output']>;
+  hello?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -41,20 +41,15 @@ export type MutationDeleteAttachmentArgs = {
   id: Scalars['String']['input'];
 };
 
-
-export type MutationRegisterUserWithEmailAndPasswordArgs = {
-  input: RegisterUserInput;
-};
-
 export type PaginatedFileOutput = {
   __typename?: 'PaginatedFileOutput';
-  rowCount: Scalars['Float']['output'];
-  rows: Array<FileOutput>;
+  rowCount?: Maybe<Scalars['Float']['output']>;
+  rows?: Maybe<Array<FileOutput>>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  findFiles: PaginatedFileOutput;
+  findFiles?: Maybe<PaginatedFileOutput>;
   hello?: Maybe<HelloXyz>;
   hello2?: Maybe<Scalars['String']['output']>;
 };
@@ -62,11 +57,6 @@ export type Query = {
 
 export type QueryFindFilesArgs = {
   issueId: Scalars['String']['input'];
-};
-
-export type RegisterUserInput = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
 };
 
 export type Join__Graph =

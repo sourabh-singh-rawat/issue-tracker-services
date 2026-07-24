@@ -12,7 +12,6 @@ export type IdentitySchemaId = "user";
 export interface RegisterIdentityInput {
   email: string;
   password: string;
-  /** Kratos identity schema id. Defaults to `user`. */
   schemaId?: IdentitySchemaId;
   traits?: Record<string, unknown>;
 }
@@ -24,7 +23,7 @@ export interface LoginIdentityInput {
 
 export interface LoginResult {
   identity: Identity;
-  accessToken?: string;
+  sessionToken?: string;
   refreshToken?: string;
   sessionId?: string;
   expiresAt?: Date;
