@@ -6,7 +6,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
   TreeParent,
@@ -22,9 +21,6 @@ import { User } from "@/entities/User";
 })
 @Entity({ name: "items" })
 export class Issue extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({ type: "text" })
   name!: string;
 

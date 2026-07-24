@@ -1,5 +1,5 @@
-import { NodeMailer } from "@pine/comm";
 import nodemailer from "nodemailer";
+import { NodeMailer } from "@/integrations/email";
 
 const brevoTransporter = nodemailer.createTransport({
   host: "smtp-relay.sendinblue.com",

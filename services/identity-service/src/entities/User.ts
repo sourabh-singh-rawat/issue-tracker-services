@@ -1,17 +1,17 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne } from "typeorm";
 import { UserProfile } from "@/entities/UserProfile";
 
 @Entity({ name: "users" })
 export class User extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({ type: "text", unique: true })
   email!: string;
 
-  @Column({ type: "text", name: "external_id", unique: true })
-  externalId!: string;
+  @Column({ type: "text", name: "idp_id", nullable: true })
+  idpId?: string;
+
+  @Column({ type: "text", name: "idp_provider", nullable: true })
+  idpProvider?: string;
 
   @OneToOne(() => UserProfile, ({ user }) => user)
   profile!: UserProfile;

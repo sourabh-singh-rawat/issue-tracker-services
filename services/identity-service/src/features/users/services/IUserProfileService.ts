@@ -13,7 +13,8 @@ export interface IUserProfileService {
   getUserProfileWithEmail(email: string): Promise<{
     userId: string;
     email: string;
-    externalId: string;
+    idpId?: string;
+    idpProvider?: string;
     displayName: string;
     description?: string;
     photoUrl?: string;

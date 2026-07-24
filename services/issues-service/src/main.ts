@@ -4,7 +4,7 @@ import "reflect-metadata";
 import { ApolloServer, BaseContext } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
 import { Environment } from "@pine/common";
-import { CoreHttpServer } from "@pine/server-core";
+import { FastifyHttpServer } from "@pine/http-core";
 import fastify from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -39,7 +39,7 @@ const main = async () => {
     plugins: [fastifyApolloDrainPlugin(instance)],
   });
 
-  const server = new CoreHttpServer({
+  const server = new FastifyHttpServer({
     server: instance,
     config: {
       host: "0.0.0.0",

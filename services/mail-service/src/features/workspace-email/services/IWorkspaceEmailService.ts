@@ -1,5 +1,5 @@
-import { WorkspaceInvitePayload } from "@pine/event-bus";
+import { WorkspaceMemberInvitedData } from "@pine/events";
 
 export interface IWorkspaceEmailService {
-  sendWorkspaceInvitationEmail(payload: WorkspaceInvitePayload): Promise<void>;
+  sendWorkspaceInvitationEmail(payload: WorkspaceMemberInvitedData): Promise<void>;
 }

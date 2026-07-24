@@ -15,9 +15,11 @@
   },
   "dependencies": {
     "fastify": "^5.10.0",
-    "http-status-codes": "^2.3.0"
+    "http-status-codes": "^2.3.0",
+    "uuid": "14.0.1"
   },
   "devDependencies": {
     "typescript": "7.0.2"
   }
 }
+

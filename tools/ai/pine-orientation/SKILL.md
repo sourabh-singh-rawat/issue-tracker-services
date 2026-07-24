@@ -1,0 +1,69 @@
+---
+name: pine-orientation
+description: >
+  Map the Pine monorepo: which app/service/package owns a domain, package renames,
+  where to edit. Triggers: where does X live, monorepo map, which service, package layout.
+---
+
+# Pine orientation
+
+pnpm + Turborepo monorepo. Workspace: `apps/**`, `packages/**`, `services/**`.
+
+## Where to edit
+
+| Change | Location |
+|--------|----------|
+| UI | `apps/<web>` |
+| Business rules / API | owning `services/<service>/src/features/` |
+| Shared enum/DTO/error (2+ consumers) | `packages/common` (or other `@pine/*`) |
+| Cross-service async | `@pine/events` → `pine-events` |
+| HTTP server / logger | `@pine/http-core` |
+| Local stack | `infra/docker` + root `pnpm dev:infra*` |
+| Agent skills | `tools/ai/*/SKILL.md` |
+
+Extract to `packages/*` only when **two** services need the same logic.
+
+## Ownership
+
+| Domain | Owner |
+|--------|--------|
+| Auth / IdP / OAuth | `identity-service` + Ory (Kratos/Hydra) |
+| Workspaces / projects / issues / statuses | `issues-service` + `issues-web` |
+| Attachments | `attachment-service` |
+| Transactional email | `mail-service` (`integrations/email`, not a shared package) |
+| Federated GraphQL supergraph | `api-gateway` (`dist/supergraph.graphql`) |
+| Client GraphQL ops | `apps/*/src/graphql/**/*.gql` |
+
+## Apps / services / packages
+
+**Apps:** `issues-web` (primary UI), `identity-web`, `inventory-web`
+
+**Services:** `identity-service`, `issues-service`, `attachment-service`, `mail-service`, `api-gateway`
+
+| Package | Import for |
+|---------|------------|
+| `@pine/common` | enums, DTOs, errors, `uuidv7` |
+| `@pine/errors` | `ApplicationError` |
+| `@pine/events` | NATS, `SUBJECTS`, subscribers |
+| `@pine/http-core` | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
+| `@pine/graphql-core` | Pothos `builder`, scalars |
+| `@pine/orm` | TypeORM helpers, `Audit` |
+| `@pine/security` | JWT, hashing, guardian |
+| `@pine/observability` | OTEL bootstrap |
+
+## Dead packages (never import)
+
+| Dead | Use |
+|------|-----|
+| `@pine/server-core` | `@pine/http-core` |
+| `@pine/event-bus` | `@pine/events` |
+| `@pine/comm` | `mail-service/src/integrations/email` |
+| `@pine/forms` | app `shared/ui` / feature components |
+
+Dockerfile turbo `--filter`s must use **current** names only.
+
+## Traps
+
+- Root `README` install steps are legacy; monorepo + `package.json` scripts are source of truth
+- Do not hand-edit `**/__generated__/**` or `api-gateway/dist/*`
+- Do not search `infra/data/` or `node_modules/` for product code

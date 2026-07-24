@@ -1,3 +1,3 @@
-import "./datetime-iso.scalar";
-import "./email-address.scalar";
-import "./uuid.scalar";
+import "./DateTimeISOScalar";
+import "./EmailAddressScalar";
+import "./UUIDScalar";

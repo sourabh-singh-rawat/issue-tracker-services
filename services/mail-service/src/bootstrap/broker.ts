@@ -1,4 +1,4 @@
-import { NatsBroker } from "@pine/event-bus";
+import { NatsBroker } from "@pine/events";
 import { logger } from "@/bootstrap/logger";
 
 export const broker = new NatsBroker({

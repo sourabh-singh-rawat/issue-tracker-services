@@ -38,7 +38,7 @@
     "api-gateway": "turbo run dev --filter=@pine/api-gateway",
     "gen": "turbo run gen --filter=@pine/issues-web",
     "build": "turbo run build",
-    "build:server": "turbo run build --filter=!@pine/issues-web --filter=!@pine/identity-web --filter=!@pine/inventory-web --filter=!@pine/forms",
+    "build:server": "turbo run build --filter=!@pine/issues-web --filter=!@pine/identity-web --filter=!@pine/inventory-web",
     "build:affected": "turbo run build --affected",
     "test": "turbo run test",
     "test:affected": "turbo run test --affected",
@@ -63,18 +63,18 @@
     "check:knip": "knip"
   },
   "devDependencies": {
-    "@apollo/rover": "^0.34.1",
-    "@changesets/cli": "^2.31.0",
+    "@apollo/rover": "^0.41.0",
+    "@changesets/cli": "^2.31.1",
     "@redocly/cli": "^2.40.0",
     "@types/node": "^26.1.1",
     "depcheck": "^1.4.7",
     "js-tiktoken": "^1.0.21",
-    "knip": "6.27.0",
-    "oxfmt": "^0.59.0",
-    "oxlint": "^1.71.0",
+    "knip": "6.29.0",
+    "oxfmt": "^0.60.0",
+    "oxlint": "^1.75.0",
     "simple-git-hooks": "^2.13.1",
-    "tsx": "4.23.0",
-    "turbo": "^2.5.4",
+    "tsx": "4.23.1",
+    "turbo": "^2.10.6",
     "typescript": "7.0.2"
   },
   "simple-git-hooks": {
@@ -84,5 +84,5 @@
     "node": ">=20.13.1",
     "pnpm": ">=9.0.4"
   },
-  "packageManager": "pnpm@11.15.0"
+  "packageManager": "pnpm@11.17.0"
 }

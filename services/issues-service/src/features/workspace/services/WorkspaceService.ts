@@ -9,12 +9,12 @@ import {
   WORKSPACE_STATUS,
   WorkspaceMemberRoles,
   WorkspaceNotFound,
+  uuidv7,
 } from "@pine/common";
-import { Publisher, Subjects } from "@pine/event-bus";
+import { type IPublisher, SUBJECTS } from "@pine/events";
 import { ServiceOptions, Typeorm } from "@pine/orm";
 import { JwtToken, hasEmailClaim } from "@pine/security";
 import { inject, injectable } from "inversify";
-import { v4 } from "uuid";
 import { TYPES } from "@/bootstrap/container-types";
 import { User } from "@/entities/User";
 import { Workspace } from "@/entities/Workspace";
@@ -38,7 +38,7 @@ export class WorkspaceService implements IWorkspaceService {
     @inject(TYPES.Orm)
     private readonly orm: Typeorm,
     @inject(TYPES.Publisher)
-    private readonly publisher: Publisher<Subjects>,
+    private readonly publisher: IPublisher,
   ) {}
 
   private async saveWorkspace(options: SaveWorkspaceOptions) {
@@ -54,7 +54,7 @@ export class WorkspaceService implements IWorkspaceService {
 
     // if (!savedWorkspaceMember.userId) throw new Error("userId is required");
 
-    // await this.publisher.send("workspace.created", {
+    // await this.publisher.send(SUBJECTS.WORKSPACE_CREATED, {
     //   id: savedWorkspace.id,
     //   name: savedWorkspace.name,
     //   createdById: savedWorkspace.createdById,
@@ -69,23 +69,24 @@ export class WorkspaceService implements IWorkspaceService {
 
   async createDefaultWorkspace(options: CreateDefaultWorkspaceOptions) {
     const { manager, user } = options;
-    const { defaultWorkspaceId, id } = user;
+    const { id } = user;
+    const workspaceId = uuidv7();
 
     const workspace = new Workspace();
-    workspace.id = defaultWorkspaceId;
+    workspace.id = workspaceId;
     workspace.name = "Default Workspace";
     workspace.createdById = id;
 
     const workspaceMember = new WorkspaceMember();
     workspaceMember.userId = id;
-    workspaceMember.workspaceId = defaultWorkspaceId;
+    workspaceMember.workspaceId = workspaceId;
 
     await this.saveWorkspace({ workspace, workspaceMember, user, manager });
   }
 
   async createWorkspace(options: CreateWorkspaceOptions) {
     const { name, description, userId, manager } = options;
-    const id = v4();
+    const id = uuidv7();
 
     const workspace = new Workspace();
     workspace.id = id;
@@ -114,20 +115,17 @@ export class WorkspaceService implements IWorkspaceService {
 
     const sender = await User.findOne({ where: { id: userId } });
     if (!sender) throw new UserNotFoundError();
-    const { defaultWorkspaceId } = sender;
 
-    const workspace = await Workspace.findOne({
-      where: { id: defaultWorkspaceId },
-    });
+    const workspace = await this.findDefaultWorkspace(userId);
     if (!workspace) throw new NotFoundError("Workspace Not Found");
 
     const workspaceMember = new WorkspaceMember();
     workspaceMember.email = email;
     workspaceMember.role = role;
-    workspaceMember.workspaceId = defaultWorkspaceId;
+    workspaceMember.workspaceId = workspace.id;
     workspaceMember.status = WORKSPACE_MEMBER_STATUS.PENDING;
 
-    const jwtid = v4();
+    const jwtid = uuidv7();
     const exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60;
     const token = await JwtToken.create(
       {
@@ -155,7 +153,7 @@ export class WorkspaceService implements IWorkspaceService {
     this.orm.transaction(queryRunner, async (queryRunner) => {
       await WorkspaceMember.save(workspaceMember);
       await WorkspaceInvitation.save(newWorkspaceInviteToken);
-      await this.publisher.send("workspace.member-invited", {
+      await this.publisher.send(SUBJECTS.WORKSPACE_MEMBER_INVITED, {
         userId,
         email,
         token,
@@ -167,22 +165,13 @@ export class WorkspaceService implements IWorkspaceService {
   };
 
   confirmWorkspaceInvite = async (token: string) => {
-    let email: string;
     try {
       const verifedToken = await JwtToken.verify(token, process.env.JWT_SECRET!);
       if (!hasEmailClaim(verifedToken)) {
         throw new Error("Token verification failed");
       }
-      email = verifedToken.email;
     } catch (error) {
       throw new Error("Token verification failed");
-    }
-    const userExists = await User.findOne({ where: { email } });
-
-    if (!userExists) {
-      return new ServiceResponse({
-        rows: `${process.env.ISSUES_WEB_CLIENT_URL}/signup?inviteToken=${token}`,
-      });
     }
 
     return new ServiceResponse({

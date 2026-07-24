@@ -1,12 +1,9 @@
 import { EMAIL_STATUS, EMAIL_TYPE, EmailStatus, EmailType } from "@pine/common";
 import { Audit } from "@pine/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
 
 @Entity({ name: "emails" })
 export class Email extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({
     name: "type",
     type: "enum",

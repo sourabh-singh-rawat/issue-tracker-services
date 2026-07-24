@@ -1,5 +1,5 @@
-import { ProjectMemberPayload } from "@pine/event-bus";
+import { ProjectMemberData } from "@pine/events";
 
 export interface IProjectEmailService {
-  sendProjectInvitationEmail(payload: ProjectMemberPayload): Promise<void>;
+  sendProjectInvitationEmail(payload: ProjectMemberData): Promise<void>;
 }

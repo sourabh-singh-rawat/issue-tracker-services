@@ -1,5 +1,5 @@
 import { ConnectionRefusedError } from "@pine/common";
-import { Logger } from "@pine/server-core";
+import { ILogger } from "@pine/http-core";
 import { DataSource, ObjectLiteral, QueryRunner } from "typeorm";
 import { SelectQueryBuilder } from "typeorm/browser";
 import { Typeorm } from "./interfaces";
@@ -7,7 +7,7 @@ import { Typeorm } from "./interfaces";
 export class PostgresTypeorm implements Typeorm {
   constructor(
     private readonly dataSource: DataSource,
-    private readonly logger: Logger,
+    private readonly logger: ILogger,
   ) {}
 
   async init() {

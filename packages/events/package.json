@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/events",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@pine/common": "workspace:^",
+    "@pine/errors": "workspace:^",
+    "@pine/http-core": "workspace:^",
+    "nats": "^2.29.3",
+    "pino": "^10.3.1",
+    "typebox": "1.3.6"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

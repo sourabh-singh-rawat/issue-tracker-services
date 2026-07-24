@@ -16,11 +16,11 @@
   "dependencies": {
     "@pothos/core": "^4.13.1",
     "fastify": "^5.10.0",
-    "graphql": "^16.10.0",
-    "graphql-scalars": "^1.24.0"
+    "graphql": "16.14.2",
+    "graphql-scalars": "^1.25.0"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
+    "@types/node": "^26.1.1",
     "typescript": "7.0.2"
   }
 }

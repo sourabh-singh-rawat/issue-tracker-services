@@ -30,7 +30,6 @@ RUN pnpm exec turbo run build \
     --filter=@pine/identity-service \
     --filter=@pine/issues-service \
     --filter=@pine/common \
-    --filter=@pine/comm \
     --filter=@pine/event-bus \
     --filter=@pine/orm \
     --filter=@pine/security \

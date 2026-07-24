@@ -1,10 +1,10 @@
-import { EmailMessage, Mailer } from "@pine/comm";
 import { EMAIL_TYPE, UserNotFoundError } from "@pine/common";
-import { WorkspaceInvitePayload } from "@pine/event-bus";
+import { WorkspaceMemberInvitedData } from "@pine/events";
 import { Typeorm } from "@pine/orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { Email, User } from "@/entities";
+import type { EmailMessage, IMailer } from "@/integrations/email";
 import { IWorkspaceEmailService } from "./IWorkspaceEmailService";
 
 @injectable()
@@ -16,10 +16,10 @@ export class WorkspaceEmailService implements IWorkspaceEmailService {
     @inject(TYPES.Orm)
     private readonly orm: Typeorm,
     @inject(TYPES.Mailer)
-    private readonly mailer: Mailer,
+    private readonly mailer: IMailer,
   ) {}
 
-  sendWorkspaceInvitationEmail = async (payload: WorkspaceInvitePayload) => {
+  sendWorkspaceInvitationEmail = async (payload: WorkspaceMemberInvitedData) => {
     const { userId, token, email: receiverEmail, workspaceId, workspaceName } = payload;
 
     const exists = await User.exists({ where: { id: userId } });

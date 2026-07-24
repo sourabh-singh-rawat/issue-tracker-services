@@ -5,7 +5,7 @@ import { ApolloServer, BaseContext } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
 import swagger from "@fastify/swagger";
 import { initializeObservability } from "@pine/observability";
-import { CoreHttpServer } from "@pine/server-core";
+import { FastifyHttpServer } from "@pine/http-core";
 import fastify, { type FastifyInstance } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -56,7 +56,7 @@ const main = async () => {
 
   const port = Number.parseInt(env.IDENTITY_SERVICE_PORT, 10);
 
-  const server = new CoreHttpServer({
+  const server = new FastifyHttpServer({
     server: instance,
     config: { host: "0.0.0.0", port, environment: "development", version: 1 },
     cors: { credentials: true, origin: env.IDENTITY_WEB_CLIENT_URL },

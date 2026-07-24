@@ -67,18 +67,18 @@ export type HelloXyz = {
   message2?: Maybe<Scalars['String']['output']>;
 };
 
-export type Issue = {
-  __typename?: 'Issue';
+export type IssueObject = {
+  __typename?: 'IssueObject';
   component?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   estimate?: Maybe<Scalars['Int']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
-  parentIssue?: Maybe<Issue>;
+  parentIssue?: Maybe<IssueObject>;
   priority?: Maybe<Scalars['String']['output']>;
-  project?: Maybe<Project>;
+  project?: Maybe<ProjectObject>;
   statusId?: Maybe<Scalars['String']['output']>;
-  subIssues?: Maybe<Array<Issue>>;
+  subIssues?: Maybe<Array<IssueObject>>;
 };
 
 export type Mutation = {
@@ -128,31 +128,31 @@ export type PaginatedFileOutput = {
   rows?: Maybe<Array<FileOutput>>;
 };
 
-export type PaginatedProject = {
-  __typename?: 'PaginatedProject';
+export type PaginatedProjectObject = {
+  __typename?: 'PaginatedProjectObject';
   rowCount?: Maybe<Scalars['Float']['output']>;
-  rows?: Maybe<Array<Project>>;
+  rows?: Maybe<Array<ProjectObject>>;
 };
 
-export type Project = {
-  __typename?: 'Project';
+export type ProjectObject = {
+  __typename?: 'ProjectObject';
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
-  workspace?: Maybe<Workspace>;
+  workspace?: Maybe<WorkspaceObject>;
   workspaceId?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  findDefaultWorkspace?: Maybe<Workspace>;
+  findDefaultWorkspace?: Maybe<WorkspaceObject>;
   findFiles?: Maybe<PaginatedFileOutput>;
-  findIssue?: Maybe<Issue>;
-  findProject?: Maybe<Project>;
-  findProjectIssues?: Maybe<Array<Issue>>;
-  findProjects?: Maybe<PaginatedProject>;
-  findStatuses?: Maybe<Array<Status>>;
-  findSubIssues?: Maybe<Array<Issue>>;
-  findWorkspaces?: Maybe<Array<Workspace>>;
+  findIssue?: Maybe<IssueObject>;
+  findProject?: Maybe<ProjectObject>;
+  findProjectIssues?: Maybe<Array<IssueObject>>;
+  findProjects?: Maybe<PaginatedProjectObject>;
+  findStatuses?: Maybe<Array<StatusObject>>;
+  findSubIssues?: Maybe<Array<IssueObject>>;
+  findWorkspaces?: Maybe<Array<WorkspaceObject>>;
   hello?: Maybe<HelloXyz>;
   hello2?: Maybe<Scalars['String']['output']>;
 };
@@ -192,8 +192,8 @@ export type QueryFindSubIssuesArgs = {
   input: FindIssuesInput;
 };
 
-export type Status = {
-  __typename?: 'Status';
+export type StatusObject = {
+  __typename?: 'StatusObject';
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
@@ -210,8 +210,8 @@ export type UpdateIssueInput = {
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type Workspace = {
-  __typename?: 'Workspace';
+export type WorkspaceObject = {
+  __typename?: 'WorkspaceObject';
   createdById?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;

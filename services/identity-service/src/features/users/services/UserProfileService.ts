@@ -40,7 +40,8 @@ export class UserProfileService implements IUserProfileService {
     return {
       userId: user.id,
       email: user.email,
-      externalId: user.externalId,
+      idpId: user.idpId,
+      idpProvider: user.idpProvider,
       displayName: profile.displayName,
       description: profile.description,
       photoUrl: profile.photoUrl,

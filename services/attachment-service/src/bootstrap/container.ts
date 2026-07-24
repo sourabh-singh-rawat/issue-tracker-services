@@ -6,6 +6,7 @@ import { logger } from "@/bootstrap/logger";
 import { imageProcessingQueue } from "@/bootstrap/queue";
 import { redisClient } from "@/bootstrap/redis-client";
 import { AttachmentService, CoreAttachmentService } from "@/features/attachment";
+import { UserEmailVerifiedSubscriber } from "@/features/user";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -16,3 +17,6 @@ container.bind(TYPES.RedisClient).toConstantValue(redisClient);
 container.bind(TYPES.ImageProcessingQueue).toConstantValue(imageProcessingQueue);
 
 container.bind<AttachmentService>(TYPES.AttachmentService).to(CoreAttachmentService);
+container
+  .bind<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber)
+  .to(UserEmailVerifiedSubscriber);

@@ -9,8 +9,11 @@ export const TYPES = {
   UserProfileService: Symbol.for("IUserProfileService"),
   KratosClient: Symbol.for("KratosClient"),
   IdentityProvider: Symbol.for("IIdentityProvider"),
+  HydraClient: Symbol.for("HydraClient"),
+  OAuthProvider: Symbol.for("IOAuthProvider"),
   RegistrationService: Symbol.for("IRegistrationService"),
   LoginService: Symbol.for("ILoginService"),
   LogoutService: Symbol.for("ILogoutService"),
   MeService: Symbol.for("IMeService"),
+  OAuthService: Symbol.for("IOAuthService"),
 } as const;

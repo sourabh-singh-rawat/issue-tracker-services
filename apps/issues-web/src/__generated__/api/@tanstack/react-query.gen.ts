@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
-import type { CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
+import { authorize, createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
+import type { AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -118,6 +118,32 @@ export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => 
  * Return basic information about the current user by verifying the session cookie
  */
 export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const authorizeMutation = (options?: Partial<Options<AuthorizeData>>): UseMutationOptions<AuthorizeResponse, AxiosError<DefaultError>, Options<AuthorizeData>> => {
+    const mutationOptions: UseMutationOptions<AuthorizeResponse, AxiosError<DefaultError>, Options<AuthorizeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await authorize({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const useAuthorizeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AuthorizeResponse, AxiosError<DefaultError>, Options<AuthorizeData>>, 'mutationFn'>>) => useMutation({ ...authorizeMutation(), ...mutationOptions });
 
 /**
  * Register with email and password

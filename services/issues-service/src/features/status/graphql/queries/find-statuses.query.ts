@@ -1,12 +1,12 @@
 import { builder } from "@pine/graphql-core";
 import { TYPES, container } from "@/bootstrap";
 import { IStatusService } from "@/features/status";
-import { FindStatusesOptions } from "../inputs/find-statuses.input";
-import { Status } from "../objects/status.object";
+import { FindStatusesOptions } from "../inputs/FindStatusesOptions";
+import { StatusObject } from "../objects/StatusObject";
 
 builder.queryFields((t) => ({
   findStatuses: t.field({
-    type: [Status],
+    type: [StatusObject],
     args: {
       input: t.arg({ type: FindStatusesOptions, required: true }),
     },

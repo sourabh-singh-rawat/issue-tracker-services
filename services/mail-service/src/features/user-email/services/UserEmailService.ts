@@ -1,9 +1,9 @@
-import { EmailMessage, Mailer } from "@pine/comm";
-import { Publisher, Subjects } from "@pine/event-bus";
+import { type IPublisher, SUBJECTS } from "@pine/events";
 import { Typeorm } from "@pine/orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { Email } from "@/entities";
+import type { EmailMessage, IMailer } from "@/integrations/email";
 import { IUserEmailService, SendEmailOptions } from "./IUserEmailService";
 
 @injectable()
@@ -14,9 +14,9 @@ export class UserEmailService implements IUserEmailService {
     @inject(TYPES.Orm)
     private readonly orm: Typeorm,
     @inject(TYPES.Publisher)
-    private readonly publisher: Publisher<Subjects>,
+    private readonly publisher: IPublisher,
     @inject(TYPES.Mailer)
-    private readonly mailer: Mailer,
+    private readonly mailer: IMailer,
   ) {}
 
   async sendEmail(payload: SendEmailOptions) {
@@ -32,7 +32,7 @@ export class UserEmailService implements IUserEmailService {
     await this.mailer.send(this.senderEmail, email, message);
     savedEmail.status = "Sent";
     await EmailRepo.save(savedEmail);
-    await this.publisher.send("user.confirmation-email-sent", {
+    await this.publisher.send(SUBJECTS.USER_CONFIRMATION_EMAIL_SENT, {
       userId,
       email,
       sentAt: new Date(),

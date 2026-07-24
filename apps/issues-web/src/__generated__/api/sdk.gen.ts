@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
+import type { AuthorizeData, AuthorizeResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -53,6 +53,21 @@ export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: O
     responseType: 'json',
     url: '/identity/me',
     ...options
+});
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const authorize = <ThrowOnError extends boolean = false>(options: Options<AuthorizeData, ThrowOnError>): RequestResult<AuthorizeResponses, unknown, ThrowOnError> => (options.client ?? client).post<AuthorizeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/authorize',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**

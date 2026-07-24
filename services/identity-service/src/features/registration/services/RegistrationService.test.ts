@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import { IdentityProviderType } from "@/features/users/constants";
 import {
   IdentityAlreadyExistsError,
   IdentityProviderUnavailableError,
@@ -26,7 +27,8 @@ describe("RegistrationService", () => {
     });
     expect(userRepository.save).toHaveBeenCalledWith({
       email: "a@b.com",
-      externalId: "identity-1",
+      idpId: "identity-1",
+      idpProvider: IdentityProviderType.KRATOS,
     });
   });
 
@@ -93,7 +95,8 @@ describe("RegistrationService", () => {
     });
     expect(userRepository.save).toHaveBeenCalledWith({
       email: "a@b.com",
-      externalId: "identity-1",
+      idpId: "identity-1",
+      idpProvider: IdentityProviderType.KRATOS,
     });
   });
 });

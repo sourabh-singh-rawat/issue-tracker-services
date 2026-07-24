@@ -1,14 +1,9 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { User } from "@/entities/User";
 
 @Entity("user_profiles")
 export class UserProfile extends Audit {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "user_profiles_pkey",
-  })
-  id!: string;
-
   @Column({ name: "user_id", type: "uuid" })
   userId!: string;
 

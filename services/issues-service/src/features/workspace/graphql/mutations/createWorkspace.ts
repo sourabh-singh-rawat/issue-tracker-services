@@ -1,7 +1,7 @@
 import { builder } from "@pine/graphql-core";
 import { TYPES, container, dataSource } from "@/bootstrap";
 import { IWorkspaceService } from "@/features/workspace";
-import { CreateWorkspaceInput } from "../inputs/create-workspace.input";
+import { CreateWorkspaceInput } from "../inputs/CreateWorkspaceInput";
 
 builder.mutationFields((t) => ({
   createWorkspace: t.string({

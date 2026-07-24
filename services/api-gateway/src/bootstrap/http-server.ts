@@ -1,4 +1,4 @@
-import { CoreHttpServer } from "@pine/server-core";
+import { FastifyHttpServer } from "@pine/http-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import fastify from "fastify";
 import { env } from "../env";
@@ -11,7 +11,7 @@ export const createHttpServer = async () => {
 
   await registerHttpProxies(server);
 
-  return new CoreHttpServer({
+  return new FastifyHttpServer({
     graphql: {
       path: "/graphql",
       apollo: graphqlServer,

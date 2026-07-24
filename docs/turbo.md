@@ -28,7 +28,7 @@ pnpm dev:apps
 # Full graph-aware build (uses local cache)
 pnpm build
 
-# Server packages + services only (skips client UI and forms)
+# Server packages + services only (skips client UI apps)
 pnpm build:server
 
 # Only packages affected vs the default base branch

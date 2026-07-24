@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { FindProjectsQuery } from "@generated/gql";
-import type { Project } from "@generated/gql/graphql";
+import type { ProjectObject } from "@generated/gql/graphql";
 
 type FindProjectsResult = NonNullable<FindProjectsQuery["findProjects"]>;
 type ProjectRows = NonNullable<FindProjectsResult["rows"]>;
@@ -8,9 +8,9 @@ export type ProjectFromQuery = ProjectRows[number];
 
 interface ProjectState {
   projects: ProjectFromQuery[];
-  currentProject: Project | null;
+  currentProject: ProjectObject | null;
   isLoading: boolean;
-  setCurrentProject: (project: Project | null) => void;
+  setCurrentProject: (project: ProjectObject | null) => void;
   setProjects: (projects: ProjectFromQuery[]) => void;
 }
 

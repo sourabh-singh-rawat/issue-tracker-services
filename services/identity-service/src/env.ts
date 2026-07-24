@@ -12,5 +12,7 @@ export const env = {
   IDENTITY_WEB_CLIENT_URL: process.env.IDENTITY_WEB_CLIENT_URL ?? "http://localhost:3001",
   KRATOS_PUBLIC_URL: process.env.KRATOS_PUBLIC_URL ?? "http://127.0.0.1:4433",
   KRATOS_ADMIN_URL: process.env.KRATOS_ADMIN_URL ?? "http://127.0.0.1:4434",
+  HYDRA_PUBLIC_URL: process.env.HYDRA_PUBLIC_URL ?? "http://127.0.0.1:4444",
+  HYDRA_ADMIN_URL: process.env.HYDRA_ADMIN_URL ?? "http://127.0.0.1:4445",
   OTEL_EXPORTER_OTLP_ENDPOINT: process.env.OTEL_EXPORTER_OTLP_ENDPOINT ?? "http://127.0.0.1:4317",
 } as const;

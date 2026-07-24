@@ -1,6 +1,11 @@
 ---
-"@pine/issues-web": minor
+"@pine/events": minor
+"@pine/http-core": minor
+"@pine/identity-service": minor
+"@pine/issues-service": minor
 "@pine/mail-service": minor
+"@pine/attachment-service": minor
+"@pine/issues-web": minor
 ---
 
-refactor(issues-web): rename app and align structure with identity-web
+refactor: rename packages to events/http-core, add CloudEvents and Hydra OAuth

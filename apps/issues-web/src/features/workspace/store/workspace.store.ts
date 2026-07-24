@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import type { Workspace } from "@generated/gql/graphql";
+import type { WorkspaceObject } from "@generated/gql/graphql";
 
 interface WorkspaceState {
-  current: Workspace | null;
-  workspaces: Workspace[];
+  current: WorkspaceObject | null;
+  workspaces: WorkspaceObject[];
   isLoading: boolean;
-  setCurrentWorkspace: (workspace: Workspace) => void;
-  setWorkspaces: (workspaces: Workspace[]) => void;
+  setCurrentWorkspace: (workspace: WorkspaceObject) => void;
+  setWorkspaces: (workspaces: WorkspaceObject[]) => void;
 }
 
 export const useWorkspaceStore = create<WorkspaceState>((set) => ({

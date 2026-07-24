@@ -9,13 +9,13 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { AddOutlined } from "@mui/icons-material";
 import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "@tanstack/react-router";
-import type { Workspace } from "@generated/gql/graphql";
+import type { WorkspaceObject } from "@generated/gql/graphql";
 
 interface WorkspaceMenuProps {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
-  selectedOption: Workspace;
-  options?: Workspace[];
+  selectedOption: WorkspaceObject;
+  options?: WorkspaceObject[];
 }
 
 interface MenuItemAlt {

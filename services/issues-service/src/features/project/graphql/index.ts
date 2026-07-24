@@ -1,7 +1,7 @@
-import "@/features/workspace/graphql/objects/workspace.object";
-import "./objects/project.object";
-import "./objects/paginated-project.object";
-import "./inputs/create-project.input";
-import "./inputs/find-projects.input";
+import "@/features/workspace/graphql/objects/WorkspaceObject";
+import "./objects/ProjectObject";
+import "./objects/PaginatedProjectObject";
+import "./inputs/CreateProjectInput";
+import "./inputs/FindProjectsOptions";
 import "./queries/find-projects.query";
 import "./mutations/createProject";
