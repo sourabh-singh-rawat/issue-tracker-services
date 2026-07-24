@@ -33,16 +33,20 @@ export const login: RouteOptions<
     const service = container.get<ILoginService>(TYPES.LoginService);
     const result = await service.loginWithEmailAndPassword(input.email, input.password);
 
+    reply.setCookie("session", result.sessionToken, {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      expires: result.expiresAt,
+    });
+
     const response: LoginResponse = {
       identity: {
         id: result.identity.id,
         email: result.identity.email,
         emailVerified: result.identity.emailVerified,
       },
-      sessionToken: result.sessionToken,
-      refreshToken: result.refreshToken,
-      sessionId: result.sessionId,
-      expiresAt: result.expiresAt?.toISOString(),
     };
 
     return reply.send(response);

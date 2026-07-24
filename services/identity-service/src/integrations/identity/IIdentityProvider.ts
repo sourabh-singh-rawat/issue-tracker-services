@@ -23,10 +23,12 @@ export interface LoginIdentityInput {
 
 export interface LoginResult {
   identity: Identity;
-  sessionToken?: string;
+  /** Session token from the identity provider; used as the `session` cookie value. */
+  sessionToken: string;
+  /** Session expiry from the identity provider; always applied when writing the `session` cookie. */
+  expiresAt: Date;
   refreshToken?: string;
   sessionId?: string;
-  expiresAt?: Date;
 }
 
 export interface UpdateIdentityInput {
@@ -40,7 +42,13 @@ export interface IIdentityProvider {
   /** Throws `IdentityAlreadyExistsError` when the email is already registered. */
   register(input: RegisterIdentityInput): Promise<Identity>;
   login(input: LoginIdentityInput): Promise<LoginResult>;
-  logout(sessionId: string): Promise<void>;
+  /** Invalidate the session identified by the given session token (cookie value). */
+  logout(sessionToken: string): Promise<void>;
+  /**
+   * Validate the session token (cookie value) and return the authenticated identity.
+   * Throws `InvalidCredentialError` when the session is missing or invalid.
+   */
+  getSession(sessionToken: string): Promise<Identity>;
   getIdentity(id: string): Promise<Identity>;
   existsByEmail(email: string): Promise<boolean>;
   updateIdentity(id: string, input: UpdateIdentityInput): Promise<Identity>;

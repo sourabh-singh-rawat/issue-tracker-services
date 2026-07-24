@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
+import type { CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -31,6 +31,28 @@ export const loginWithEmailAndPassword = <ThrowOnError extends boolean = false>(
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Logout
+ *
+ * Invalidate the current session and clear the session cookie
+ */
+export const logout = <ThrowOnError extends boolean = false>(options?: Options<LogoutData, ThrowOnError>): RequestResult<LogoutResponses, unknown, ThrowOnError> => (options?.client ?? client).post<LogoutResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/logout',
+    ...options
+});
+
+/**
+ * Get current authenticated user
+ *
+ * Return basic information about the current user by verifying the session cookie
+ */
+export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentUserData, ThrowOnError>): RequestResult<GetCurrentUserResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetCurrentUserResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/me',
+    ...options
 });
 
 /**

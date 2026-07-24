@@ -6,6 +6,8 @@ import { kratosClient } from "@/bootstrap/kratos-client";
 import { logger } from "@/bootstrap/logger";
 import { TYPES } from "@/bootstrap/container-types";
 import { ILoginService, LoginService } from "@/features/login";
+import { ILogoutService, LogoutService } from "@/features/logout";
+import { IMeService, MeService } from "@/features/me";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
 import {
   IUserProfileRepository,
@@ -34,3 +36,5 @@ container.bind<IUserProfileService>(TYPES.UserProfileService).to(UserProfileServ
 container.bind<IIdentityProvider>(TYPES.IdentityProvider).to(KratosIdentityProvider);
 container.bind<IRegistrationService>(TYPES.RegistrationService).to(RegistrationService);
 container.bind<ILoginService>(TYPES.LoginService).to(LoginService);
+container.bind<ILogoutService>(TYPES.LogoutService).to(LogoutService);
+container.bind<IMeService>(TYPES.MeService).to(MeService);
