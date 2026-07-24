@@ -76,7 +76,10 @@ export class KratosIdentityProvider implements IIdentityProvider {
 
       const session = data.session;
       const sessionIdentity = session.identity;
-      if (!sessionIdentity) {
+      const sessionToken = data.session_token;
+      const expiresAt = session.expires_at;
+
+      if (!sessionIdentity || !sessionToken || !expiresAt) {
         throw new IdentityProviderUnavailableError();
       }
 
@@ -91,21 +94,63 @@ export class KratosIdentityProvider implements IIdentityProvider {
           id: sessionIdentity.id,
           email,
           emailVerified,
-          traits,
-          createdAt: sessionIdentity.created_at ? new Date(sessionIdentity.created_at) : undefined,
-          updatedAt: sessionIdentity.updated_at ? new Date(sessionIdentity.updated_at) : undefined,
         },
-        sessionToken: data.session_token,
+        sessionToken,
         sessionId: session.id,
-        expiresAt: session.expires_at ? new Date(session.expires_at) : undefined,
+        expiresAt: new Date(expiresAt),
       };
     } catch (error) {
       this.rethrowAsApplicationError(error);
     }
   }
 
-  async logout(_sessionId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async logout(sessionToken: string): Promise<void> {
+    try {
+      await this.kratos.frontendApi.performNativeLogout({
+        performNativeLogoutBody: {
+          session_token: sessionToken,
+        },
+      });
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
+  }
+
+  async getSession(sessionToken: string): Promise<Identity> {
+    try {
+      const { data: session } = await this.kratos.frontendApi.toSession({
+        xSessionToken: sessionToken,
+      });
+
+      const sessionIdentity = session.identity;
+      if (!sessionIdentity) {
+        throw new InvalidCredentialError("No active session");
+      }
+
+      const traits = (sessionIdentity.traits ?? {}) as Record<string, unknown>;
+      const email = typeof traits.email === "string" ? traits.email : "";
+      const emailVerified = sessionIdentity.verifiable_addresses?.some(
+        (address) => address.value === email && address.verified,
+      );
+
+      return {
+        id: sessionIdentity.id,
+        email,
+        emailVerified,
+        traits,
+        createdAt: sessionIdentity.created_at
+          ? new Date(sessionIdentity.created_at)
+          : undefined,
+        updatedAt: sessionIdentity.updated_at
+          ? new Date(sessionIdentity.updated_at)
+          : undefined,
+      };
+    } catch (error) {
+      if (error instanceof InvalidCredentialError) {
+        throw error;
+      }
+      this.rethrowAsApplicationError(error);
+    }
   }
 
   async getIdentity(_id: string): Promise<Identity> {

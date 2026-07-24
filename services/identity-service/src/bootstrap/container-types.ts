@@ -11,4 +11,6 @@ export const TYPES = {
   IdentityProvider: Symbol.for("IIdentityProvider"),
   RegistrationService: Symbol.for("IRegistrationService"),
   LoginService: Symbol.for("ILoginService"),
+  LogoutService: Symbol.for("ILogoutService"),
+  MeService: Symbol.for("IMeService"),
 } as const;
