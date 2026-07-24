@@ -8,6 +8,7 @@ describe("LoginService", () => {
       identity: { id: "identity-1", email: "a@b.com" },
       sessionId: "session-1",
       sessionToken: "session-token",
+      expiresAt: new Date("2030-01-01T00:00:00.000Z"),
     };
     const identityProvider = {
       login: vi.fn().mockResolvedValue(loginResult),
