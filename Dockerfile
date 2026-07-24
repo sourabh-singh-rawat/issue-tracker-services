@@ -28,7 +28,7 @@ RUN pnpm exec turbo run build \
     --filter=@pine/attachment-service \
     --filter=@pine/mail \
     --filter=@pine/identity-service \
-    --filter=@pine/issues \
+    --filter=@pine/issues-service \
     --filter=@pine/common \
     --filter=@pine/comm \
     --filter=@pine/event-bus \
@@ -67,4 +67,4 @@ FROM base AS issue-tracker
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/issues start
+CMD pnpm -F @pine/issues-service start

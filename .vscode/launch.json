@@ -10,7 +10,7 @@
       "stopAll": true,
       "configurations": [
         "identity-service",
-        "issues",
+        "issues-service",
         "attachment-service",
         "mail",
         "api-gateway",
@@ -30,7 +30,7 @@
       "stopAll": true,
       "configurations": [
         "identity-service",
-        "issues",
+        "issues-service",
         "attachment-service",
         "mail",
         "api-gateway",
@@ -51,7 +51,7 @@
       "stopAll": true,
       "configurations": [
         "identity-service",
-        "issues",
+        "issues-service",
         "attachment-service",
         "mail",
         "api-gateway",
@@ -189,12 +189,12 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "issues",
+      "name": "issues-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issues"],
+      "runtimeArgs": ["issues-service"],
       "console": "integratedTerminal"
     },
     {
