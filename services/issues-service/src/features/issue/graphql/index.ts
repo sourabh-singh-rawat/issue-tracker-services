@@ -1,0 +1,9 @@
+import "@/features/project/graphql/objects/project.object";
+import "./objects/issue.object";
+import "./inputs/create-issue.input";
+import "./inputs/update-issue.input";
+import "./inputs/find-issues.input";
+import "./queries/find-issues.query";
+import "./mutations/createIssue";
+import "./mutations/updateIssue";
+import "./mutations/deleteIssue";
