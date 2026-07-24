@@ -133,6 +133,9 @@ export class KratosIdentityProvider implements IIdentityProvider {
     const status = this.getHttpStatus(error);
 
     switch (status) {
+      // Kratos password login/register validation failures are typically 400;
+      // 401/403 cover unauthorized/forbidden credential cases.
+      case 400:
       case 401:
       case 403:
         throw new InvalidCredentialError();
