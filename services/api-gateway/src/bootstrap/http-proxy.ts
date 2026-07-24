@@ -10,9 +10,9 @@ type ProxyRoute = {
 
 const proxyRoutes: ProxyRoute[] = [
   {
-    prefix: "/login",
+    prefix: "/identity",
     upstream: env.IDENTITY_SERVICE_URL,
-    proxyPayloads: false,
+    proxyPayloads: true,
   },
   {
     prefix: "/attachments",

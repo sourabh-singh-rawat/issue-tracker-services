@@ -16,7 +16,7 @@ export const login: RouteOptions<
   ServerResponse,
   { Body: LoginBody; Reply: LoginResponse }
 > = {
-  url: "/login",
+  url: "/identity/login",
   method: "POST",
   schema: {
     tags: ["auth"],
@@ -39,7 +39,7 @@ export const login: RouteOptions<
         email: result.identity.email,
         emailVerified: result.identity.emailVerified,
       },
-      accessToken: result.accessToken,
+      sessionToken: result.sessionToken,
       refreshToken: result.refreshToken,
       sessionId: result.sessionId,
       expiresAt: result.expiresAt?.toISOString(),

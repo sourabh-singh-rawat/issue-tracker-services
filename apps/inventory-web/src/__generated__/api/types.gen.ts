@@ -11,7 +11,7 @@ export type LoginWithEmailAndPasswordData = {
     };
     path?: never;
     query?: never;
-    url: '/login';
+    url: '/identity/login';
 };
 
 export type LoginWithEmailAndPasswordResponses = {

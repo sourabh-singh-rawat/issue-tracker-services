@@ -3,8 +3,8 @@
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { createAttachment, loginWithEmailAndPassword, type Options } from '../sdk.gen';
-import type { CreateAttachmentData, CreateAttachmentError, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse } from '../types.gen';
+import { createAttachment, loginWithEmailAndPassword, type Options, registerWithEmailAndPassword } from '../sdk.gen';
+import type { CreateAttachmentData, CreateAttachmentError, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -31,6 +31,32 @@ export const loginWithEmailAndPasswordMutation = (options?: Partial<Options<Logi
  * Authenticate a user with email and password via the identity provider
  */
 export const useLoginWithEmailAndPasswordMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<LoginWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<LoginWithEmailAndPasswordData>>, 'mutationFn'>>) => useMutation({ ...loginWithEmailAndPasswordMutation(), ...mutationOptions });
+
+/**
+ * Register with email and password
+ *
+ * Register a new user with email and password via the identity provider
+ */
+export const registerWithEmailAndPasswordMutation = (options?: Partial<Options<RegisterWithEmailAndPasswordData>>): UseMutationOptions<RegisterWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<RegisterWithEmailAndPasswordData>> => {
+    const mutationOptions: UseMutationOptions<RegisterWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<RegisterWithEmailAndPasswordData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await registerWithEmailAndPassword({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Register with email and password
+ *
+ * Register a new user with email and password via the identity provider
+ */
+export const useRegisterWithEmailAndPasswordMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RegisterWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<RegisterWithEmailAndPasswordData>>, 'mutationFn'>>) => useMutation({ ...registerWithEmailAndPasswordMutation(), ...mutationOptions });
 
 /**
  * Create a new issue attachment
