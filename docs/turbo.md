@@ -7,8 +7,8 @@ This workspace uses **Turborepo** on top of **pnpm workspaces**.
 | Name                                                                                            | Path         |
 | ----------------------------------------------------------------------------------------------- | ------------ |
 | `@pine/*`                                                                                       | `packages/*` |
-| `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail`, `@pine/issues-service`, `@pine/api-gateway` | `services/*` |
-| `@pine/issue-web`, `@pine/identity-web`, `@pine/inventory-web`                                  | `apps/*`     |
+| `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail-service`, `@pine/issues-service`, `@pine/api-gateway` | `services/*` |
+| `@pine/issues-web`, `@pine/identity-web`, `@pine/inventory-web`                                  | `apps/*`     |
 
 ```bash
 pnpm exec turbo run build --dry-run
@@ -38,7 +38,7 @@ pnpm test:affected
 # Single project
 pnpm exec turbo run build --filter=@pine/identity-service
 pnpm exec turbo run dev --filter=@pine/identity-service   # persistent; builds deps first (^build)
-pnpm exec turbo run dev --filter=@pine/issue-web
+pnpm exec turbo run dev --filter=@pine/issues-web
 
 # Cache
 pnpm turbo:clean
@@ -60,7 +60,7 @@ Second identical `turbo run build` should report a cache hit.
 `.github/workflows/ci.yml` runs on **pull requests and pushes to `development`/`main`** (plus manual `workflow_dispatch`). It executes:
 
 ```bash
-pnpm exec turbo run build test --filter=...[<base>] --filter=!@pine/issue-web
+pnpm exec turbo run build test --filter=...[<base>] --filter=!@pine/issues-web
 ```
 
 where `<base>` is the PR base branch, or `origin/development` on push.
@@ -70,7 +70,7 @@ Requirements:
 - full git history for affected detection (`fetch-depth: 0`)
 - pnpm (from `packageManager` in root `package.json`) + Node 22
 - `.turbo` restored between runs
-- `@pine/issue-web` excluded until its typecheck is green
+- `@pine/issues-web` excluded until its typecheck is green
 
 **Repo setting:** Actions must be enabled under **Settings → Actions → General** (`Allow all actions and reusable workflows`). If Actions is disabled, workflows stay “active” in the API but never create runs (PR checks will only show third-party apps like GitGuardian).
 

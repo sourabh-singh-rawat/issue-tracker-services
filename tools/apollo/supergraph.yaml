@@ -8,3 +8,7 @@ subgraphs:
     routing_url: http://127.0.0.1:4001/graphql
     schema:
       file: ../../services/identity-service/dist/schema.graphql
+  issues-service:
+    routing_url: http://127.0.0.1:4002/graphql
+    schema:
+      file: ../../services/issues-service/dist/schema.graphql

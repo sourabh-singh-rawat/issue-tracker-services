@@ -1,0 +1,9 @@
+query FindWorkspaces {
+  findWorkspaces {
+    description
+    id
+    name
+    createdById
+    status
+  }
+}
