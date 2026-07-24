@@ -13,7 +13,7 @@ export class RegistrationService implements IRegistrationService {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async registerUserWithEmailAndPassword(email: string, password: string): Promise<void> {
+  async registerWithEmailAndPassword(email: string, password: string): Promise<void> {
     const identity = await this.identityProvider.register({ email, password });
 
     await this.userRepository.save({ email: identity.email, externalId: identity.id });

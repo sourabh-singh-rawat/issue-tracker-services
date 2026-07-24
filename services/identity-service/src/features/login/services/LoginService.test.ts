@@ -7,7 +7,7 @@ describe("LoginService", () => {
     const loginResult = {
       identity: { id: "identity-1", email: "a@b.com" },
       sessionId: "session-1",
-      accessToken: "access-token",
+      sessionToken: "session-token",
     };
     const identityProvider = {
       login: vi.fn().mockResolvedValue(loginResult),

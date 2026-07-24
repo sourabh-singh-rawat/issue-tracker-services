@@ -25,7 +25,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  */
 export const loginWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<LoginWithEmailAndPasswordData, ThrowOnError>): RequestResult<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/login',
+    url: '/identity/login',
     ...options,
     headers: {
         'Content-Type': 'application/json',

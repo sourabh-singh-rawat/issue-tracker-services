@@ -17,7 +17,7 @@ describe("RegistrationService", () => {
     const service = new RegistrationService(identityProvider as never, userRepository as never);
 
     await expect(
-      service.registerUserWithEmailAndPassword("a@b.com", "password"),
+      service.registerWithEmailAndPassword("a@b.com", "password"),
     ).resolves.toBeUndefined();
 
     expect(identityProvider.register).toHaveBeenCalledWith({
@@ -41,7 +41,7 @@ describe("RegistrationService", () => {
     const service = new RegistrationService(identityProvider as never, userRepository as never);
 
     await expect(
-      service.registerUserWithEmailAndPassword("a@b.com", "password"),
+      service.registerWithEmailAndPassword("a@b.com", "password"),
     ).rejects.toBeInstanceOf(IdentityAlreadyExistsError);
 
     expect(identityProvider.register).toHaveBeenCalledWith({
@@ -62,7 +62,7 @@ describe("RegistrationService", () => {
     const service = new RegistrationService(identityProvider as never, userRepository as never);
 
     await expect(
-      service.registerUserWithEmailAndPassword("a@b.com", "password"),
+      service.registerWithEmailAndPassword("a@b.com", "password"),
     ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
 
     expect(identityProvider.register).toHaveBeenCalledWith({
@@ -83,7 +83,7 @@ describe("RegistrationService", () => {
 
     const service = new RegistrationService(identityProvider as never, userRepository as never);
 
-    await expect(service.registerUserWithEmailAndPassword("a@b.com", "password")).rejects.toBe(
+    await expect(service.registerWithEmailAndPassword("a@b.com", "password")).rejects.toBe(
       saveError,
     );
 

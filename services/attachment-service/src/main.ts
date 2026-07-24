@@ -46,7 +46,7 @@ const startServer = async () => {
     },
     cors: {
       credentials: true,
-      origin: process.env.ISSUE_TRACKER_CLIENT_URL || "http://localhost:3000",
+      origin: process.env.ISSUES_WEB_CLIENT_URL || "http://localhost:3000",
     },
     graphql: { apollo, createContext, path: "/graphql" },
     cookie: { secret: process.env.JWT_SECRET! },

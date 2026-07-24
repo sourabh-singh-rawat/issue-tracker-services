@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses } from './types.gen';
+import type { CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -25,7 +25,22 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  */
 export const loginWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<LoginWithEmailAndPasswordData, ThrowOnError>): RequestResult<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/login',
+    url: '/identity/login',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Register with email and password
+ *
+ * Register a new user with email and password via the identity provider
+ */
+export const registerWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<RegisterWithEmailAndPasswordData, ThrowOnError>): RequestResult<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/registerWithEmailAndPassword',
     ...options,
     headers: {
         'Content-Type': 'application/json',

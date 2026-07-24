@@ -22,7 +22,7 @@
   "scripts": {
     "start": "tsx src/main.ts",
     "dev": "tsx watch src/main.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts"
   },

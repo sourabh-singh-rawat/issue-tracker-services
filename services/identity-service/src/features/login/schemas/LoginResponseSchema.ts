@@ -4,7 +4,7 @@ import { LoginIdentitySchema } from "@/features/login/schemas/LoginIdentitySchem
 export const LoginResponseSchema = Type.Object(
   {
     identity: LoginIdentitySchema,
-    accessToken: Type.Optional(Type.String()),
+    sessionToken: Type.Optional(Type.String()),
     refreshToken: Type.Optional(Type.String()),
     sessionId: Type.Optional(Type.String()),
     expiresAt: Type.Optional(Type.String({ format: "date-time" })),
