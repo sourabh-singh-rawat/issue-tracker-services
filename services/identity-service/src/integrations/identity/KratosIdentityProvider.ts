@@ -138,12 +138,8 @@ export class KratosIdentityProvider implements IIdentityProvider {
         email,
         emailVerified,
         traits,
-        createdAt: sessionIdentity.created_at
-          ? new Date(sessionIdentity.created_at)
-          : undefined,
-        updatedAt: sessionIdentity.updated_at
-          ? new Date(sessionIdentity.updated_at)
-          : undefined,
+        createdAt: sessionIdentity.created_at ? new Date(sessionIdentity.created_at) : undefined,
+        updatedAt: sessionIdentity.updated_at ? new Date(sessionIdentity.updated_at) : undefined,
       };
     } catch (error) {
       if (error instanceof InvalidCredentialError) {
@@ -182,8 +178,6 @@ export class KratosIdentityProvider implements IIdentityProvider {
     const status = this.getHttpStatus(error);
 
     switch (status) {
-      // Kratos password login/register validation failures are typically 400;
-      // 401/403 cover unauthorized/forbidden credential cases.
       case 400:
       case 401:
       case 403:

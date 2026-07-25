@@ -37,13 +37,13 @@ describe("authorize route", () => {
     const send = vi.fn((payload) => payload);
     const req = {
       query: {
-        clientId: "issues-web",
-        redirectUri: "http://localhost:3000/callback",
-        responseType: "code" as const,
+        client_id: "issues-web",
+        redirect_uri: "http://localhost:3000/callback",
+        response_type: "code" as const,
         scope: "openid offline",
         state: "state-1",
-        codeChallenge: "challenge",
-        codeChallengeMethod: "S256" as const,
+        code_challenge: "challenge",
+        code_challenge_method: "S256" as const,
         nonce: "nonce-1",
       },
     };
@@ -77,9 +77,9 @@ describe("authorize route", () => {
     const send = vi.fn();
     const req = {
       query: {
-        clientId: "issues-web",
-        redirectUri: "http://localhost:3000/callback",
-        responseType: "code" as const,
+        client_id: "issues-web",
+        redirect_uri: "http://localhost:3000/callback",
+        response_type: "code" as const,
         scope: "openid",
         state: "state-1",
       },
@@ -101,9 +101,9 @@ describe("authorize route", () => {
     const send = vi.fn();
     const req = {
       query: {
-        clientId: "issues-web",
-        redirectUri: "http://localhost:3000/callback",
-        responseType: "code" as const,
+        client_id: "issues-web",
+        redirect_uri: "http://localhost:3000/callback",
+        response_type: "code" as const,
         scope: "openid",
         state: "state-1",
       },

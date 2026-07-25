@@ -2,29 +2,29 @@ import { uuidv7 } from "@pine/common";
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { type Database, type User, Users } from "@/db";
+import { type Database, type Identity, Identities } from "@/db";
 import {
-  IUserRepository,
-  UserRepositoryOptions,
-} from "@/features/users/repositories/IUserRepository";
+  IIdentityRepository,
+  IdentityRepositoryOptions,
+} from "@/features/identities/repositories/IIdentityRepository";
 
 @injectable()
-export class UserRepository implements IUserRepository {
+export class IdentityRepository implements IIdentityRepository {
   constructor(@inject(TYPES.Database) private readonly db: Database) {}
 
-  private client(options?: UserRepositoryOptions) {
+  private client(options?: IdentityRepositoryOptions) {
     return options?.tx ?? this.db;
   }
 
   async save(
-    entity: Partial<User> & { email: string },
-    options?: UserRepositoryOptions,
-  ): Promise<User> {
+    entity: Partial<Identity> & { email: string },
+    options?: IdentityRepositoryOptions,
+  ): Promise<Identity> {
     const client = this.client(options);
     const now = new Date();
 
     const [created] = await client
-      .insert(Users)
+      .insert(Identities)
       .values({
         id: uuidv7(),
         email: entity.email,
@@ -40,27 +40,27 @@ export class UserRepository implements IUserRepository {
 
   async update(
     id: string,
-    entity: Partial<Pick<User, "email" | "idpId" | "idpProvider" | "deletedAt">>,
-    options?: UserRepositoryOptions,
-  ): Promise<User> {
+    entity: Partial<Pick<Identity, "email" | "idpId" | "idpProvider" | "deletedAt">>,
+    options?: IdentityRepositoryOptions,
+  ): Promise<Identity> {
     const client = this.client(options);
     const now = new Date();
 
     const [updated] = await client
-      .update(Users)
+      .update(Identities)
       .set({
         ...(entity.email !== undefined ? { email: entity.email } : {}),
         ...(entity.idpId !== undefined ? { idpId: entity.idpId } : {}),
         ...(entity.idpProvider !== undefined ? { idpProvider: entity.idpProvider } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
         updatedAt: now,
-        version: sql`${Users.version} + 1`,
+        version: sql`${Identities.version} + 1`,
       })
-      .where(and(eq(Users.id, id), isNull(Users.deletedAt)))
+      .where(and(eq(Identities.id, id), isNull(Identities.deletedAt)))
       .returning();
 
     if (!updated) {
-      throw new Error(`User not found for update: ${id}`);
+      throw new Error(`Identity not found for update: ${id}`);
     }
 
     return updated;
@@ -68,9 +68,9 @@ export class UserRepository implements IUserRepository {
 
   async existsById(id: string) {
     const row = await this.db
-      .select({ id: Users.id })
-      .from(Users)
-      .where(and(eq(Users.id, id), isNull(Users.deletedAt)))
+      .select({ id: Identities.id })
+      .from(Identities)
+      .where(and(eq(Identities.id, id), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row.length > 0;
@@ -78,23 +78,23 @@ export class UserRepository implements IUserRepository {
 
   async existsByEmail(email: string) {
     const row = await this.db
-      .select({ id: Users.id })
-      .from(Users)
-      .where(and(eq(Users.email, email), isNull(Users.deletedAt)))
+      .select({ id: Identities.id })
+      .from(Identities)
+      .where(and(eq(Identities.email, email), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row.length > 0;
   }
 
-  async softDelete(id: string, options?: UserRepositoryOptions) {
+  async softDelete(id: string, options?: IdentityRepositoryOptions) {
     await this.update(id, { deletedAt: new Date() }, options);
   }
 
   async findById(id: string) {
     const [row] = await this.db
       .select()
-      .from(Users)
-      .where(and(eq(Users.id, id), isNull(Users.deletedAt)))
+      .from(Identities)
+      .where(and(eq(Identities.id, id), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row ?? null;
@@ -103,8 +103,8 @@ export class UserRepository implements IUserRepository {
   async findByEmail(email: string) {
     const [row] = await this.db
       .select()
-      .from(Users)
-      .where(and(eq(Users.email, email), isNull(Users.deletedAt)))
+      .from(Identities)
+      .where(and(eq(Identities.email, email), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row ?? null;
@@ -113,8 +113,8 @@ export class UserRepository implements IUserRepository {
   async findAll() {
     return this.db
       .select()
-      .from(Users)
-      .where(isNull(Users.deletedAt))
-      .orderBy(desc(Users.createdAt));
+      .from(Identities)
+      .where(isNull(Identities.deletedAt))
+      .orderBy(desc(Identities.createdAt));
   }
 }

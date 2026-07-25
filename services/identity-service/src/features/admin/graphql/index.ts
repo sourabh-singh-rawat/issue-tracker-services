@@ -1,4 +1,4 @@
-import "@/features/admin/graphql/objects/UserObject";
-import "@/features/admin/graphql/inputs/DeleteUserInput";
-import "@/features/admin/graphql/queries/findUsers";
-import "@/features/admin/graphql/mutations/deleteUser";
+import "@/features/admin/graphql/objects/IdentityObject";
+import "@/features/admin/graphql/inputs/DeleteIdentityInput";
+import "@/features/admin/graphql/queries/findIdentities";
+import "@/features/admin/graphql/mutations/deleteIdentity";

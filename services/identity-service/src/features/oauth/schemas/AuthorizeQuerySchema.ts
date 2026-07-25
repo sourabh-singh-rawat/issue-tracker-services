@@ -1,14 +1,15 @@
 import Type from "typebox";
 
+/** OAuth 2.0 / OpenID Connect authorize query parameters (snake_case wire format). */
 export const AuthorizeQuerySchema = Type.Object(
   {
-    responseType: Type.Literal("code"),
-    clientId: Type.String({ minLength: 1 }),
-    redirectUri: Type.String({ minLength: 1 }),
+    response_type: Type.Literal("code"),
+    client_id: Type.String({ minLength: 1 }),
+    redirect_uri: Type.String({ minLength: 1 }),
     scope: Type.String({ minLength: 1 }),
     state: Type.String({ minLength: 1 }),
-    codeChallenge: Type.Optional(Type.String({ minLength: 1 })),
-    codeChallengeMethod: Type.Optional(
+    code_challenge: Type.Optional(Type.String({ minLength: 1 })),
+    code_challenge_method: Type.Optional(
       Type.Union([Type.Literal("S256"), Type.Literal("plain")]),
     ),
     nonce: Type.Optional(Type.String({ minLength: 1 })),

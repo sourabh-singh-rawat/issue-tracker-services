@@ -18,7 +18,7 @@ vi.mock("@pine/graphql-core", () => ({
   },
 }));
 
-describe("deleteUser mutation", () => {
+describe("deleteIdentity mutation", () => {
   beforeEach(() => {
     get.mockReset();
     mutationFields.mockReset();
@@ -26,14 +26,14 @@ describe("deleteUser mutation", () => {
     vi.resetModules();
   });
 
-  it("deletes the user via AdminService and returns a success message", async () => {
-    const deleteUserFn = vi.fn().mockResolvedValue(undefined);
-    get.mockReturnValue({ deleteUser: deleteUserFn });
+  it("deletes the identity via AdminService and returns a success message", async () => {
+    const deleteIdentityFn = vi.fn().mockResolvedValue(undefined);
+    get.mockReturnValue({ deleteIdentity: deleteIdentityFn });
 
     let resolve:
       | ((
           root: unknown,
-          args: { input: { userId: string } },
+          args: { input: { identityId: string } },
         ) => Promise<string>)
       | undefined;
 
@@ -42,7 +42,7 @@ describe("deleteUser mutation", () => {
         string: (config: {
           resolve: (
             root: unknown,
-            args: { input: { userId: string } },
+            args: { input: { identityId: string } },
           ) => Promise<string>;
         }) => {
           resolve = config.resolve;
@@ -53,22 +53,22 @@ describe("deleteUser mutation", () => {
       return fn(t);
     });
 
-    await import("@/features/admin/graphql/inputs/DeleteUserInput");
-    await import("@/features/admin/graphql/mutations/deleteUser");
+    await import("@/features/admin/graphql/inputs/DeleteIdentityInput");
+    await import("@/features/admin/graphql/mutations/deleteIdentity");
 
-    const userId = "01900000-0000-7000-8000-000000000001";
-    const response = await resolve!(null, { input: { userId } });
+    const identityId = "01900000-0000-7000-8000-000000000001";
+    const response = await resolve!(null, { input: { identityId } });
 
     expect(get).toHaveBeenCalledWith(Symbol.for("IAdminService"));
-    expect(deleteUserFn).toHaveBeenCalledWith(userId);
-    expect(response).toBe("User deleted successfully.");
+    expect(deleteIdentityFn).toHaveBeenCalledWith(identityId);
+    expect(response).toBe("Identity deleted successfully.");
   });
 
-  it("keeps userId on DeleteUserInput", async () => {
-    await import("@/features/admin/graphql/inputs/DeleteUserInput");
+  it("keeps identityId on DeleteIdentityInput", async () => {
+    await import("@/features/admin/graphql/inputs/DeleteIdentityInput");
 
     expect(inputType).toHaveBeenCalledWith(
-      "DeleteUserInput",
+      "DeleteIdentityInput",
       expect.objectContaining({
         fields: expect.any(Function),
       }),
@@ -85,7 +85,7 @@ describe("deleteUser mutation", () => {
     });
 
     expect(fields).toEqual({
-      userId: { required: true },
+      identityId: { required: true },
     });
   });
 });

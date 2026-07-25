@@ -1,19 +1,20 @@
 import { relations } from "drizzle-orm";
 import { pgTable, unique, uuid } from "drizzle-orm/pg-core";
-import { auditColumns } from "@/db/audit-columns";
+import { auditColumns, idColumn } from "@/db/columns";
 import { Clients } from "@/db/tables/Clients";
 import { Scopes } from "@/db/tables/Scopes";
 
 export const ClientScopes = pgTable(
   "client_scopes",
   {
-    ...auditColumns,
+    ...idColumn,
     clientId: uuid("client_id")
       .notNull()
       .references(() => Clients.id),
     scopeId: uuid("scope_id")
       .notNull()
       .references(() => Scopes.id),
+    ...auditColumns,
   },
   (table) => [unique().on(table.clientId, table.scopeId)],
 );

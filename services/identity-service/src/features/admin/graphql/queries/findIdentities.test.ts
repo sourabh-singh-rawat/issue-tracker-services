@@ -16,30 +16,30 @@ vi.mock("@pine/graphql-core", () => ({
   },
 }));
 
-vi.mock("@/features/admin/graphql/objects/UserObject", () => ({
-  UserObject: "UserObject",
+vi.mock("@/features/admin/graphql/objects/IdentityObject", () => ({
+  IdentityObject: "IdentityObject",
 }));
 
-describe("findUsers query", () => {
+describe("findIdentities query", () => {
   beforeEach(() => {
     get.mockReset();
     queryFields.mockReset();
     vi.resetModules();
   });
 
-  it("returns all users from AdminService", async () => {
-    const users = [
-      { id: "user-1", email: "a@b.com" },
-      { id: "user-2", email: "c@d.com" },
+  it("returns all identities from AdminService", async () => {
+    const identities = [
+      { id: "identity-1", email: "a@b.com" },
+      { id: "identity-2", email: "c@d.com" },
     ];
-    const findUsersFn = vi.fn().mockResolvedValue(users);
-    get.mockReturnValue({ findUsers: findUsersFn });
+    const findIdentitiesFn = vi.fn().mockResolvedValue(identities);
+    get.mockReturnValue({ findIdentities: findIdentitiesFn });
 
-    let resolve: (() => Promise<typeof users>) | undefined;
+    let resolve: (() => Promise<typeof identities>) | undefined;
 
     queryFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
-        field: (config: { resolve: () => Promise<typeof users> }) => {
+        field: (config: { resolve: () => Promise<typeof identities> }) => {
           resolve = config.resolve;
           return config;
         },
@@ -47,12 +47,12 @@ describe("findUsers query", () => {
       return fn(t);
     });
 
-    await import("@/features/admin/graphql/queries/findUsers");
+    await import("@/features/admin/graphql/queries/findIdentities");
 
     const response = await resolve!();
 
     expect(get).toHaveBeenCalledWith(Symbol.for("IAdminService"));
-    expect(findUsersFn).toHaveBeenCalledOnce();
-    expect(response).toEqual(users);
+    expect(findIdentitiesFn).toHaveBeenCalledOnce();
+    expect(response).toEqual(identities);
   });
 });

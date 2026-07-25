@@ -1,12 +1,12 @@
-import type { User } from "@/db";
+import type { Identity } from "@/db";
 
 export interface IAdminService {
   /**
-   * Soft-delete a user and their profile after removing the IdP identity.
-   * Profile soft-delete and user soft-delete run in one DB transaction.
+   * Soft-delete an identity and their profile after removing the IdP identity.
+   * Profile soft-delete and identity soft-delete run in one DB transaction.
    */
-  deleteUser(userId: string): Promise<void>;
+  deleteIdentity(identityId: string): Promise<void>;
 
-  /** List all non-deleted users (admin). */
-  findUsers(): Promise<User[]>;
+  /** List all non-deleted identities (admin). */
+  findIdentities(): Promise<Identity[]>;
 }

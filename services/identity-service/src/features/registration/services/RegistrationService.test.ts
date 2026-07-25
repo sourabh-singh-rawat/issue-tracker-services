@@ -1,6 +1,6 @@
 import { SUBJECTS, UserRegisteredEvent } from "@pine/events";
 import { describe, it, expect, vi } from "vitest";
-import { IdentityProviderType } from "@/features/users/constants";
+import { IdentityProviderType } from "@/features/identities/constants";
 import {
   IdentityAlreadyExistsError,
   IdentityProviderUnavailableError,
@@ -8,13 +8,13 @@ import {
 import { RegistrationService } from "./RegistrationService";
 
 describe("RegistrationService", () => {
-  it("registers a new user with the identity provider, saves locally, and publishes UserRegistered", async () => {
+  it("registers a new identity with the identity provider, saves locally, and publishes UserRegistered", async () => {
     const identityProvider = {
-      register: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      register: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com" }),
       deleteIdentity: vi.fn(),
     };
-    const userRepository = {
-      save: vi.fn().mockResolvedValue({ id: "user-1", email: "a@b.com" }),
+    const identityRepository = {
+      save: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
     };
     const publisher = {
       send: vi.fn().mockResolvedValue(undefined),
@@ -22,7 +22,7 @@ describe("RegistrationService", () => {
 
     const service = new RegistrationService(
       identityProvider as never,
-      userRepository as never,
+      identityRepository as never,
       publisher as never,
     );
 
@@ -34,9 +34,9 @@ describe("RegistrationService", () => {
       email: "a@b.com",
       password: "password",
     });
-    expect(userRepository.save).toHaveBeenCalledWith({
+    expect(identityRepository.save).toHaveBeenCalledWith({
       email: "a@b.com",
-      idpId: "identity-1",
+      idpId: "idp-1",
       idpProvider: IdentityProviderType.KRATOS,
     });
     expect(publisher.send).toHaveBeenCalledWith(
@@ -45,10 +45,10 @@ describe("RegistrationService", () => {
         type: UserRegisteredEvent.type,
         source: "pine/identity-service",
         specversion: "1.0",
-        subject: "user-1",
+        subject: "identity-1",
         datacontenttype: "application/json",
         data: {
-          userId: "user-1",
+          userId: "identity-1",
           email: "a@b.com",
         },
       }),
@@ -63,7 +63,7 @@ describe("RegistrationService", () => {
       register: vi.fn().mockRejectedValue(new IdentityAlreadyExistsError()),
       deleteIdentity: vi.fn(),
     };
-    const userRepository = {
+    const identityRepository = {
       save: vi.fn(),
     };
     const publisher = {
@@ -72,7 +72,7 @@ describe("RegistrationService", () => {
 
     const service = new RegistrationService(
       identityProvider as never,
-      userRepository as never,
+      identityRepository as never,
       publisher as never,
     );
 
@@ -84,7 +84,7 @@ describe("RegistrationService", () => {
       email: "a@b.com",
       password: "password",
     });
-    expect(userRepository.save).not.toHaveBeenCalled();
+    expect(identityRepository.save).not.toHaveBeenCalled();
     expect(publisher.send).not.toHaveBeenCalled();
   });
 
@@ -93,7 +93,7 @@ describe("RegistrationService", () => {
       register: vi.fn().mockRejectedValue(new IdentityProviderUnavailableError()),
       deleteIdentity: vi.fn(),
     };
-    const userRepository = {
+    const identityRepository = {
       save: vi.fn(),
     };
     const publisher = {
@@ -102,7 +102,7 @@ describe("RegistrationService", () => {
 
     const service = new RegistrationService(
       identityProvider as never,
-      userRepository as never,
+      identityRepository as never,
       publisher as never,
     );
 
@@ -114,17 +114,17 @@ describe("RegistrationService", () => {
       email: "a@b.com",
       password: "password",
     });
-    expect(userRepository.save).not.toHaveBeenCalled();
+    expect(identityRepository.save).not.toHaveBeenCalled();
     expect(publisher.send).not.toHaveBeenCalled();
   });
 
   it("deletes the IdP identity and propagates the error when local persistence fails", async () => {
     const saveError = new Error("database unavailable");
     const identityProvider = {
-      register: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      register: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com" }),
       deleteIdentity: vi.fn().mockResolvedValue(undefined),
     };
-    const userRepository = {
+    const identityRepository = {
       save: vi.fn().mockRejectedValue(saveError),
     };
     const publisher = {
@@ -133,7 +133,7 @@ describe("RegistrationService", () => {
 
     const service = new RegistrationService(
       identityProvider as never,
-      userRepository as never,
+      identityRepository as never,
       publisher as never,
     );
 
@@ -145,23 +145,23 @@ describe("RegistrationService", () => {
       email: "a@b.com",
       password: "password",
     });
-    expect(userRepository.save).toHaveBeenCalledWith({
+    expect(identityRepository.save).toHaveBeenCalledWith({
       email: "a@b.com",
-      idpId: "identity-1",
+      idpId: "idp-1",
       idpProvider: IdentityProviderType.KRATOS,
     });
-    expect(identityProvider.deleteIdentity).toHaveBeenCalledWith("identity-1");
+    expect(identityProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
     expect(publisher.send).not.toHaveBeenCalled();
   });
 
   it("does not delete the IdP identity when publishing fails after a successful save", async () => {
     const publishError = new Error("broker unavailable");
     const identityProvider = {
-      register: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      register: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com" }),
       deleteIdentity: vi.fn(),
     };
-    const userRepository = {
-      save: vi.fn().mockResolvedValue({ id: "user-1", email: "a@b.com" }),
+    const identityRepository = {
+      save: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
     };
     const publisher = {
       send: vi.fn().mockRejectedValue(publishError),
@@ -169,7 +169,7 @@ describe("RegistrationService", () => {
 
     const service = new RegistrationService(
       identityProvider as never,
-      userRepository as never,
+      identityRepository as never,
       publisher as never,
     );
 
@@ -177,7 +177,7 @@ describe("RegistrationService", () => {
       publishError,
     );
 
-    expect(userRepository.save).toHaveBeenCalled();
+    expect(identityRepository.save).toHaveBeenCalled();
     expect(identityProvider.deleteIdentity).not.toHaveBeenCalled();
   });
 });

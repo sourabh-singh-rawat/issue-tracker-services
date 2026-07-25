@@ -33,13 +33,13 @@ export const authorize: RouteOptions<
     const service = container.get<IOAuthService>(TYPES.OAuthService);
 
     const result = await service.authorize({
-      clientId: input.clientId,
-      redirectUri: input.redirectUri,
-      responseType: input.responseType,
+      clientId: input.client_id,
+      redirectUri: input.redirect_uri,
+      responseType: input.response_type,
       scope: input.scope,
       state: input.state,
-      codeChallenge: input.codeChallenge,
-      codeChallengeMethod: input.codeChallengeMethod,
+      codeChallenge: input.code_challenge,
+      codeChallengeMethod: input.code_challenge_method,
       nonce: input.nonce,
     });
 

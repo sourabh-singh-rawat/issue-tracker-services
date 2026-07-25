@@ -2,32 +2,32 @@ import { uuidv7 } from "@pine/common";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { type Database, type UserProfile, UserProfiles } from "@/db";
+import { type Database, type IdentityProfile, IdentityProfiles } from "@/db";
 import {
-  IUserProfileRepository,
-  UserProfileRepositoryOptions,
-} from "@/features/users/repositories/IUserProfileRepository";
+  IIdentityProfileRepository,
+  IdentityProfileRepositoryOptions,
+} from "@/features/identities/repositories/IIdentityProfileRepository";
 
 @injectable()
-export class UserProfileRepository implements IUserProfileRepository {
+export class IdentityProfileRepository implements IIdentityProfileRepository {
   constructor(@inject(TYPES.Database) private readonly db: Database) {}
 
-  private client(options?: UserProfileRepositoryOptions) {
+  private client(options?: IdentityProfileRepositoryOptions) {
     return options?.tx ?? this.db;
   }
 
   async save(
-    entity: Partial<UserProfile> & { userId: string; displayName: string },
-    options?: UserProfileRepositoryOptions,
-  ): Promise<UserProfile> {
+    entity: Partial<IdentityProfile> & { identityId: string; displayName: string },
+    options?: IdentityProfileRepositoryOptions,
+  ): Promise<IdentityProfile> {
     const client = this.client(options);
     const now = new Date();
 
     const [created] = await client
-      .insert(UserProfiles)
+      .insert(IdentityProfiles)
       .values({
         id: uuidv7(),
-        userId: entity.userId,
+        identityId: entity.identityId,
         displayName: entity.displayName,
         description: entity.description ?? null,
         photoUrl: entity.photoUrl ?? null,
@@ -41,27 +41,29 @@ export class UserProfileRepository implements IUserProfileRepository {
 
   async update(
     id: string,
-    entity: Partial<Pick<UserProfile, "displayName" | "description" | "photoUrl" | "deletedAt">>,
-    options?: UserProfileRepositoryOptions,
-  ): Promise<UserProfile> {
+    entity: Partial<
+      Pick<IdentityProfile, "displayName" | "description" | "photoUrl" | "deletedAt">
+    >,
+    options?: IdentityProfileRepositoryOptions,
+  ): Promise<IdentityProfile> {
     const client = this.client(options);
     const now = new Date();
 
     const [updated] = await client
-      .update(UserProfiles)
+      .update(IdentityProfiles)
       .set({
         ...(entity.displayName !== undefined ? { displayName: entity.displayName } : {}),
         ...(entity.description !== undefined ? { description: entity.description } : {}),
         ...(entity.photoUrl !== undefined ? { photoUrl: entity.photoUrl } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
         updatedAt: now,
-        version: sql`${UserProfiles.version} + 1`,
+        version: sql`${IdentityProfiles.version} + 1`,
       })
-      .where(and(eq(UserProfiles.id, id), isNull(UserProfiles.deletedAt)))
+      .where(and(eq(IdentityProfiles.id, id), isNull(IdentityProfiles.deletedAt)))
       .returning();
 
     if (!updated) {
-      throw new Error(`UserProfile not found for update: ${id}`);
+      throw new Error(`IdentityProfile not found for update: ${id}`);
     }
 
     return updated;
@@ -69,34 +71,36 @@ export class UserProfileRepository implements IUserProfileRepository {
 
   async existsById(id: string) {
     const row = await this.db
-      .select({ id: UserProfiles.id })
-      .from(UserProfiles)
-      .where(and(eq(UserProfiles.id, id), isNull(UserProfiles.deletedAt)))
+      .select({ id: IdentityProfiles.id })
+      .from(IdentityProfiles)
+      .where(and(eq(IdentityProfiles.id, id), isNull(IdentityProfiles.deletedAt)))
       .limit(1);
 
     return row.length > 0;
   }
 
-  async softDelete(id: string, options?: UserProfileRepositoryOptions) {
+  async softDelete(id: string, options?: IdentityProfileRepositoryOptions) {
     await this.update(id, { deletedAt: new Date() }, options);
   }
 
   async findById(id: string) {
     const [row] = await this.db
       .select()
-      .from(UserProfiles)
-      .where(and(eq(UserProfiles.id, id), isNull(UserProfiles.deletedAt)))
+      .from(IdentityProfiles)
+      .where(and(eq(IdentityProfiles.id, id), isNull(IdentityProfiles.deletedAt)))
       .limit(1);
 
     return row ?? null;
   }
 
-  async findByUserId(userId: string, options?: UserProfileRepositoryOptions) {
+  async findByIdentityId(identityId: string, options?: IdentityProfileRepositoryOptions) {
     const client = this.client(options);
     const [row] = await client
       .select()
-      .from(UserProfiles)
-      .where(and(eq(UserProfiles.userId, userId), isNull(UserProfiles.deletedAt)))
+      .from(IdentityProfiles)
+      .where(
+        and(eq(IdentityProfiles.identityId, identityId), isNull(IdentityProfiles.deletedAt)),
+      )
       .limit(1);
 
     return row ?? null;

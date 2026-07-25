@@ -1,14 +1,14 @@
 import { builder } from "@pine/graphql-core";
 import { container, TYPES } from "@/bootstrap";
 import type { IAdminService } from "@/features/admin/services";
-import { UserObject } from "@/features/admin/graphql/objects/UserObject";
+import { IdentityObject } from "@/features/admin/graphql/objects/IdentityObject";
 
 builder.queryFields((t) => ({
-  findUsers: t.field({
-    type: [UserObject],
+  findIdentities: t.field({
+    type: [IdentityObject],
     resolve: async () => {
       const service = container.get<IAdminService>(TYPES.AdminService);
-      return service.findUsers();
+      return service.findIdentities();
     },
   }),
 }));

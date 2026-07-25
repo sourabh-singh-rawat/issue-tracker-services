@@ -1,12 +1,13 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { auditColumns } from "@/db/audit-columns";
+import { auditColumns, idColumn } from "@/db/columns";
 import { ClientGrantTypes } from "@/db/tables/ClientGrantTypes";
 
 export const Grants = pgTable("grants", {
-  ...auditColumns,
+  ...idColumn,
   name: text("name").notNull().unique(),
   description: text("description"),
+  ...auditColumns,
 });
 
 export const GrantsRelations = relations(Grants, ({ many }) => ({

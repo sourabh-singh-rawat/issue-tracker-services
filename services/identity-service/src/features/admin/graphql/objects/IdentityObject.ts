@@ -1,9 +1,9 @@
 import { builder } from "@pine/graphql-core";
-import type { User } from "@/db";
+import type { Identity } from "@/db";
 
-export const UserObject = builder.objectRef<User>("UserObject");
+export const IdentityObject = builder.objectRef<Identity>("IdentityObject");
 
-UserObject.implement({
+IdentityObject.implement({
   fields: (t) => ({
     id: t.exposeString("id"),
     email: t.exposeString("email"),

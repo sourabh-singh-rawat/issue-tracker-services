@@ -34,10 +34,15 @@ export {
   Scopes,
   ScopesRelations,
 } from "@/db/tables/Scopes";
-export { type NewUser, type User, Users, UsersRelations } from "@/db/tables/Users";
 export {
-  type NewUserProfile,
-  type UserProfile,
-  UserProfiles,
-  UserProfilesRelations,
-} from "@/db/tables/UserProfiles";
+  type Identity,
+  type NewIdentity,
+  Identities,
+  IdentitiesRelations,
+} from "@/db/tables/Identities";
+export {
+  type IdentityProfile,
+  type NewIdentityProfile,
+  IdentityProfiles,
+  IdentityProfilesRelations,
+} from "@/db/tables/IdentityProfiles";
