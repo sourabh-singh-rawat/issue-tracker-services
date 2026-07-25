@@ -1,5 +1,19 @@
 # @pine/mail-service
 
+## 0.1.0
+
+### Minor Changes
+
+- d05915a: refactor: rename packages to events/http-core, add CloudEvents and Hydra OAuth
+
+### Patch Changes
+
+- Updated dependencies [d05915a]
+  - @pine/events@0.1.0
+  - @pine/http-core@0.2.0
+  - @pine/orm@0.0.2
+  - @pine/security@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes

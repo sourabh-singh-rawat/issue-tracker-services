@@ -1,5 +1,12 @@
 # @pine/orm
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [d05915a]
+  - @pine/http-core@0.2.0
+
 ## 0.0.1
 
 ### Patch Changes
