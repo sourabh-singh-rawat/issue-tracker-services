@@ -14,7 +14,12 @@ const config: CodegenConfig = {
     },
     "src/__generated__/gql/hooks.ts": {
       plugins: [
-        { add: { content: "import { graphQLFetcher } from '../../graphql/fetcher';" } },
+        {
+          add: {
+            content:
+              "import { graphQLFetcher } from '../../graphql/fetcher';\nexport { graphQLFetcher };",
+          },
+        },
         "typescript-operations",
         "typescript-react-query",
       ],

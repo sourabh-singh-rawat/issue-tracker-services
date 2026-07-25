@@ -1,0 +1,17 @@
+query FindIssue($findIssueId: String!) {
+  findIssue(id: $findIssueId) {
+    id
+    description
+    project {
+      id
+      name
+    }
+    parentIssue {
+      id
+      name
+    }
+    name
+    statusId
+    priority
+  }
+}

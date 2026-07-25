@@ -1,12 +1,23 @@
+import { uuidv7 } from "@pine/common";
 import {
   BaseEntity,
+  BeforeInsert,
   CreateDateColumn,
   DeleteDateColumn,
+  PrimaryColumn,
   UpdateDateColumn,
   VersionColumn,
 } from "typeorm";
 
 export abstract class Audit extends BaseEntity {
+  @PrimaryColumn("uuid")
+  id!: string;
+
+  @BeforeInsert()
+  generateId() {
+    if (!this.id) this.id = uuidv7();
+  }
+
   @CreateDateColumn({
     name: "created_at",
     type: "timestamp with time zone",

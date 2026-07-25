@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, AuthorizeResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses, RejectConsentChallengeData, RejectConsentChallengeResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -25,7 +25,111 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  */
 export const loginWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<LoginWithEmailAndPasswordData, ThrowOnError>): RequestResult<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/login',
+    url: '/identity/login',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Logout
+ *
+ * Invalidate the current session and clear the session cookie
+ */
+export const logout = <ThrowOnError extends boolean = false>(options?: Options<LogoutData, ThrowOnError>): RequestResult<LogoutResponses, unknown, ThrowOnError> => (options?.client ?? client).post<LogoutResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/logout',
+    ...options
+});
+
+/**
+ * Get current authenticated user
+ *
+ * Return basic information about the current user by verifying the session cookie
+ */
+export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentUserData, ThrowOnError>): RequestResult<GetCurrentUserResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetCurrentUserResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/me',
+    ...options
+});
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const authorize = <ThrowOnError extends boolean = false>(options: Options<AuthorizeData, ThrowOnError>): RequestResult<AuthorizeResponses, unknown, ThrowOnError> => (options.client ?? client).get<AuthorizeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/authorize',
+    ...options
+});
+
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const getConsentChallenge = <ThrowOnError extends boolean = false>(options: Options<GetConsentChallengeData, ThrowOnError>): RequestResult<GetConsentChallengeResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetConsentChallengeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/consent',
+    ...options
+});
+
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const acceptConsentChallenge = <ThrowOnError extends boolean = false>(options: Options<AcceptConsentChallengeData, ThrowOnError>): RequestResult<AcceptConsentChallengeResponses, unknown, ThrowOnError> => (options.client ?? client).post<AcceptConsentChallengeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/consent/accept',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const rejectConsentChallenge = <ThrowOnError extends boolean = false>(options: Options<RejectConsentChallengeData, ThrowOnError>): RequestResult<RejectConsentChallengeResponses, unknown, ThrowOnError> => (options.client ?? client).post<RejectConsentChallengeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/consent/reject',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * OAuth token
+ *
+ * Exchange an authorization code for access (and optional refresh/id) tokens
+ */
+export const exchangeToken = <ThrowOnError extends boolean = false>(options: Options<ExchangeTokenData, ThrowOnError>): RequestResult<ExchangeTokenResponses, unknown, ThrowOnError> => (options.client ?? client).post<ExchangeTokenResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/token',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Register with email and password
+ *
+ * Register a new user with email and password via the identity provider
+ */
+export const registerWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<RegisterWithEmailAndPasswordData, ThrowOnError>): RequestResult<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/registerWithEmailAndPassword',
     ...options,
     headers: {
         'Content-Type': 'application/json',

@@ -5,19 +5,19 @@ import { ApolloServer, BaseContext } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
 import swagger from "@fastify/swagger";
 import { initializeObservability } from "@pine/observability";
-import { CoreHttpServer } from "@pine/server-core";
+import { FastifyHttpServer } from "@pine/http-core";
 import fastify, { type FastifyInstance } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
-import { broker, dataSource, logger } from "@/bootstrap";
+import { broker, db, initializeDb, logger } from "@/bootstrap";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
 export { builder, createContext } from "@/graphql";
 export type { AuthContext } from "@/graphql";
 export { schema } from "@/graphql/schema";
-export { container, dataSource } from "@/bootstrap";
+export { container, db } from "@/bootstrap";
 
 const writeSchemaToDist = () => {
   const schemaPath = path.join(process.cwd(), "dist", "schema.graphql");
@@ -43,7 +43,7 @@ const main = async () => {
   });
   observability?.start();
 
-  await dataSource.initialize();
+  await initializeDb();
   await broker.init();
 
   writeSchemaToDist();
@@ -56,10 +56,10 @@ const main = async () => {
 
   const port = Number.parseInt(env.IDENTITY_SERVICE_PORT, 10);
 
-  const server = new CoreHttpServer({
+  const server = new FastifyHttpServer({
     server: instance,
     config: { host: "0.0.0.0", port, environment: "development", version: 1 },
-    cors: { credentials: true, origin: process.env.ISSUE_TRACKER_CLIENT_URL },
+    cors: { credentials: true, origin: env.IDENTITY_WEB_CLIENT_URL },
     cookie: { secret: process.env.JWT_SECRET! },
     graphql: { apollo, path: "/graphql", createContext },
     routes,

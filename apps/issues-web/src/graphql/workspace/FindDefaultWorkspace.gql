@@ -1,0 +1,9 @@
+query FindDefaultWorkspace {
+  findDefaultWorkspace {
+    createdById
+    description
+    id
+    name
+    status
+  }
+}

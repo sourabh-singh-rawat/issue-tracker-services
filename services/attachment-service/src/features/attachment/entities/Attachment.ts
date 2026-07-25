@@ -1,11 +1,9 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { User } from "@/entities/User";
 
 @Entity({ name: "attachments" })
 export class Attachment extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({ type: "text" })
   filename!: string;
 
@@ -26,6 +24,10 @@ export class Attachment extends Audit {
 
   @Column({ name: "owner_id", type: "uuid" })
   ownerId!: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "owner_id" })
+  owner!: User;
 
   @Column({ name: "issue_id", type: "uuid" })
   issueId!: string;

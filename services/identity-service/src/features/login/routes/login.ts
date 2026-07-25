@@ -5,8 +5,10 @@ import { TYPES } from "@/bootstrap/container-types";
 import type { ILoginService } from "@/features/login/services";
 import {
   LoginBodySchema,
+  LoginQuerySchema,
   LoginResponseSchema,
   type LoginBody,
+  type LoginQuery,
   type LoginResponse,
 } from "@/features/login/schemas";
 
@@ -14,9 +16,9 @@ export const login: RouteOptions<
   Server,
   IncomingMessage,
   ServerResponse,
-  { Body: LoginBody; Reply: LoginResponse }
+  { Body: LoginBody; Querystring: LoginQuery; Reply: LoginResponse }
 > = {
-  url: "/login",
+  url: "/identity/login",
   method: "POST",
   schema: {
     tags: ["auth"],
@@ -24,6 +26,7 @@ export const login: RouteOptions<
     description: "Authenticate a user with email and password via the identity provider",
     operationId: "loginWithEmailAndPassword",
     body: LoginBodySchema,
+    querystring: LoginQuerySchema,
     response: {
       200: LoginResponseSchema,
     },
@@ -31,7 +34,19 @@ export const login: RouteOptions<
   handler: async (req, reply) => {
     const input = req.body;
     const service = container.get<ILoginService>(TYPES.LoginService);
-    const result = await service.loginWithEmailAndPassword(input.email, input.password);
+    const result = await service.loginWithEmailAndPassword({
+      email: input.email,
+      password: input.password,
+      loginChallenge: req.query.login_challenge,
+    });
+
+    reply.setCookie("session", result.sessionToken, {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      expires: result.expiresAt,
+    });
 
     const response: LoginResponse = {
       identity: {
@@ -39,10 +54,7 @@ export const login: RouteOptions<
         email: result.identity.email,
         emailVerified: result.identity.emailVerified,
       },
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
-      sessionId: result.sessionId,
-      expiresAt: result.expiresAt?.toISOString(),
+      ...(result.redirectTo ? { redirectTo: result.redirectTo } : {}),
     };
 
     return reply.send(response);

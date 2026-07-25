@@ -1,0 +1,14 @@
+query FindProjects($input: FindProjectsOptions) {
+  findProjects(input: $input) {
+    rows {
+      id
+      name
+      workspaceId
+      workspace {
+        id
+        name
+      }
+    }
+    rowCount
+  }
+}

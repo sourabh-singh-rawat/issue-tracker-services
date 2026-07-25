@@ -1,0 +1,64 @@
+---
+name: pine-service-feature
+description: >
+  Backend feature slice in services/*: Inversify TYPES, I*Service, entities, routes
+  or GraphQL, subscribers. Triggers: new feature, DI, repository, service module.
+---
+
+# Service feature
+
+Mirror a feature **in the same service**. Canonical refs: `issues-service` (GraphQL), `identity-service` (HTTP/OpenAPI).
+
+## Layout
+
+```text
+services/<svc>/src/
+  features/<feature>/{services,graphql|routes,schemas,repositories,subscribers}/
+  entities/          # prefer Audit from @pine/orm
+  integrations/      # service-local adapters (idp, oauth, email)
+  bootstrap/{container-types,container,broker,logger}.ts
+  main.ts            # FastifyHttpServer + subscriber start
+```
+
+## Imports
+
+| Need | From |
+|------|------|
+| Server / routes / logger | `@pine/http-core` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger` |
+| Bus | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Subscriber`, `SUBJECTS` |
+| Entity base | `@pine/orm` → `Audit` |
+| Enums / errors | `@pine/common`, `@pine/errors` |
+
+**Forbidden:** `@pine/server-core`, `@pine/event-bus`, `@pine/comm`.
+
+## Recipe
+
+1. Entity (if needed) → extend `Audit` unless a lighter base is intentional.
+2. `IFooService` + `@injectable() FooService` under `features/<f>/services/`.
+3. `TYPES.FooService = Symbol.for("IFooService")` + `container.bind(...).to(...)`.
+4. Transport:
+   - GraphQL → `pine-graphql` (`container.get` + `dataSource.transaction` when mutating)
+   - HTTP → `features/<f>/routes/` with `operationId`; register in `routes/index.ts`
+5. Events → `pine-events`: map DTOs before `publisher.send`; never raw TypeORM entities.
+6. Colocated `*.test.ts` for non-trivial logic.
+
+```ts
+// mutation resolve sketch
+const service = container.get<IIssueService>(TYPES.IssueService);
+return dataSource.transaction((manager) =>
+  service.createIssue({ manager, userId: ctx.user!.userId, ... }),
+);
+```
+
+## Service-specific
+
+**Identity HTTP:** `HttpRouteOptions` + TypeBox schemas; IdP behind `IIdentityProvider` / `IOAuthProvider` in `integrations/`.
+
+**Mail:** transporter under `integrations/email/{IMailer,NodeMailer}`; `TYPES.Mailer`; bootstrap in `bootstrap/mailer.ts`.
+
+## Done when
+
+- TYPES + bind + barrels wired
+- New entity registered on data source
+- Event payloads match `@pine/events` schemas if publishing
+- `pnpm exec turbo run build --filter=@pine/<service>` green

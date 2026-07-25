@@ -1,17 +1,20 @@
-import { CoreHttpServer } from "@pine/server-core";
+import { FastifyHttpServer } from "@pine/http-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import fastify from "fastify";
 import { env } from "../env";
+import { getCorsOrigins } from "./cors-origins";
 import type { GatewayContext } from "./graphql-gateway";
 import { graphqlServer } from "./graphql-server";
 import { registerHttpProxies } from "./http-proxy";
+import { registerSwagger } from "./swagger";
 
 export const createHttpServer = async () => {
   const server = fastify();
 
+  await registerSwagger(server);
   await registerHttpProxies(server);
 
-  return new CoreHttpServer({
+  return new FastifyHttpServer({
     graphql: {
       path: "/graphql",
       apollo: graphqlServer,
@@ -22,7 +25,7 @@ export const createHttpServer = async () => {
     },
     cors: {
       credentials: true,
-      origin: [env.ISSUE_TRACKER_CLIENT_URL, env.IDENTITY_CLIENT_URL],
+      origin: getCorsOrigins(),
     },
     config: {
       host: "0.0.0.0",

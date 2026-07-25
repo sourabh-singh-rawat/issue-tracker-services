@@ -26,11 +26,10 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Prefer per-service targets below when optimizing layer cache further.
 RUN pnpm exec turbo run build \
     --filter=@pine/attachment-service \
-    --filter=@pine/mail \
+    --filter=@pine/mail-service \
     --filter=@pine/identity-service \
-    --filter=@pine/issues \
+    --filter=@pine/issues-service \
     --filter=@pine/common \
-    --filter=@pine/comm \
     --filter=@pine/event-bus \
     --filter=@pine/orm \
     --filter=@pine/security \
@@ -51,7 +50,7 @@ FROM base AS email
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/mail start
+CMD pnpm -F @pine/mail-service start
 
 
 # Stage 3: Identity Service
@@ -67,4 +66,4 @@ FROM base AS issue-tracker
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/issues start
+CMD pnpm -F @pine/issues-service start

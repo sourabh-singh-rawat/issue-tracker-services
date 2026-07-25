@@ -17,7 +17,7 @@ import {
   formatReleaseBranchExample,
   formatReleaseTagExample,
   parseReleaseBranch,
-} from "./lib/release-version.ts";
+} from "./release-version.ts";
 
 const CHANGESET_IGNORED = new Set([
   ".changeset/README.md",

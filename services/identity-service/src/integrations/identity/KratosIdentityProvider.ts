@@ -45,7 +45,7 @@ export class KratosIdentityProvider implements IIdentityProvider {
       const traits = (data.traits ?? {}) as Record<string, unknown>;
       const email = typeof traits.email === "string" ? traits.email : input.email;
       const emailVerified = data.verifiable_addresses?.some(
-        (address: { value: string; verified: any }) => address.value === email && address.verified,
+        (address) => address.value === email && address.verified,
       );
 
       return {
@@ -61,12 +61,92 @@ export class KratosIdentityProvider implements IIdentityProvider {
     }
   }
 
-  async login(_input: LoginIdentityInput): Promise<LoginResult> {
-    throw new Error("Method not implemented.");
+  async login(input: LoginIdentityInput): Promise<LoginResult> {
+    try {
+      const { data: flow } = await this.kratos.frontendApi.createNativeLoginFlow();
+
+      const { data } = await this.kratos.frontendApi.updateLoginFlow({
+        flow: flow.id,
+        updateLoginFlowBody: {
+          method: "password",
+          identifier: input.email,
+          password: input.password,
+        },
+      });
+
+      const session = data.session;
+      const sessionIdentity = session.identity;
+      const sessionToken = data.session_token;
+      const expiresAt = session.expires_at;
+
+      if (!sessionIdentity || !sessionToken || !expiresAt) {
+        throw new IdentityProviderUnavailableError();
+      }
+
+      const traits = (sessionIdentity.traits ?? {}) as Record<string, unknown>;
+      const email = typeof traits.email === "string" ? traits.email : input.email;
+      const emailVerified = sessionIdentity.verifiable_addresses?.some(
+        (address) => address.value === email && address.verified,
+      );
+
+      return {
+        identity: {
+          id: sessionIdentity.id,
+          email,
+          emailVerified,
+        },
+        sessionToken,
+        sessionId: session.id,
+        expiresAt: new Date(expiresAt),
+      };
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
   }
 
-  async logout(_sessionId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async logout(sessionToken: string): Promise<void> {
+    try {
+      await this.kratos.frontendApi.performNativeLogout({
+        performNativeLogoutBody: {
+          session_token: sessionToken,
+        },
+      });
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
+  }
+
+  async getSession(sessionToken: string): Promise<Identity> {
+    try {
+      const { data: session } = await this.kratos.frontendApi.toSession({
+        xSessionToken: sessionToken,
+      });
+
+      const sessionIdentity = session.identity;
+      if (!sessionIdentity) {
+        throw new InvalidCredentialError("No active session");
+      }
+
+      const traits = (sessionIdentity.traits ?? {}) as Record<string, unknown>;
+      const email = typeof traits.email === "string" ? traits.email : "";
+      const emailVerified = sessionIdentity.verifiable_addresses?.some(
+        (address) => address.value === email && address.verified,
+      );
+
+      return {
+        id: sessionIdentity.id,
+        email,
+        emailVerified,
+        traits,
+        createdAt: sessionIdentity.created_at ? new Date(sessionIdentity.created_at) : undefined,
+        updatedAt: sessionIdentity.updated_at ? new Date(sessionIdentity.updated_at) : undefined,
+      };
+    } catch (error) {
+      if (error instanceof InvalidCredentialError) {
+        throw error;
+      }
+      this.rethrowAsApplicationError(error);
+    }
   }
 
   async getIdentity(_id: string): Promise<Identity> {
@@ -86,14 +166,19 @@ export class KratosIdentityProvider implements IIdentityProvider {
     throw new Error("Method not implemented.");
   }
 
-  async deleteIdentity(_id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteIdentity(id: string): Promise<void> {
+    try {
+      await this.kratos.identityApi.deleteIdentity({ id });
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
   }
 
   private rethrowAsApplicationError(error: unknown): never {
     const status = this.getHttpStatus(error);
 
     switch (status) {
+      case 400:
       case 401:
       case 403:
         throw new InvalidCredentialError();

@@ -26,6 +26,8 @@
       "@bootstrap/*": ["./src/bootstrap/*"],
       "@graphql": ["./src/graphql"],
       "@graphql/*": ["./src/graphql/*"],
+      "@routes": ["./src/routes"],
+      "@routes/*": ["./src/routes/*"],
       "@generated": ["./src/__generated__"],
       "@generated/*": ["./src/__generated__/*"],
       "@graphql-typed-document-node/core": ["./src/shims/graphql-typed-document-node-core.ts"]
