@@ -4,6 +4,7 @@ import { LoginIdentitySchema } from "@/features/login/schemas/LoginIdentitySchem
 export const LoginResponseSchema = Type.Object(
   {
     identity: LoginIdentitySchema,
+    redirectTo: Type.Optional(Type.String({ minLength: 1 })),
   },
   { additionalProperties: false },
 );

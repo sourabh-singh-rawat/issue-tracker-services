@@ -43,10 +43,6 @@ export const authorize: RouteOptions<
       nonce: input.nonce,
     });
 
-    const response: AuthorizeResponse = {
-      redirectTo: result.redirectTo,
-    };
-
-    return reply.send(response);
+    return reply.send(result);
   },
 };

@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AuthorizeData, AuthorizeResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
+import type { AuthorizeData, AuthorizeResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -63,6 +63,17 @@ export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: O
 export const authorize = <ThrowOnError extends boolean = false>(options: Options<AuthorizeData, ThrowOnError>): RequestResult<AuthorizeResponses, unknown, ThrowOnError> => (options.client ?? client).get<AuthorizeResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/identity/oauth/authorize',
+    ...options
+});
+
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const getConsentChallenge = <ThrowOnError extends boolean = false>(options: Options<GetConsentChallengeData, ThrowOnError>): RequestResult<GetConsentChallengeResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetConsentChallengeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/consent',
     ...options
 });
 

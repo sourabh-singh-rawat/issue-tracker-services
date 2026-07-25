@@ -60,8 +60,8 @@ export type CreateWorkspaceInput = {
   name: Scalars['String']['input'];
 };
 
-export type DeleteUserInput = {
-  userId: Scalars['String']['input'];
+export type DeleteIdentityInput = {
+  identityId: Scalars['String']['input'];
 };
 
 export type FileOutput = {
@@ -89,6 +89,16 @@ export type HelloXyz = {
   message2?: Maybe<Scalars['String']['output']>;
 };
 
+export type IdentityObject = {
+  __typename?: 'IdentityObject';
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  idpId?: Maybe<Scalars['String']['output']>;
+  idpProvider?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
 export type IssueObject = {
   __typename?: 'IssueObject';
   component?: Maybe<Scalars['String']['output']>;
@@ -110,8 +120,9 @@ export type Mutation = {
   createProject?: Maybe<Scalars['String']['output']>;
   createWorkspace?: Maybe<Scalars['String']['output']>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
+  deleteClient?: Maybe<Scalars['String']['output']>;
+  deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
-  deleteUser?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
   updateIssue?: Maybe<Scalars['String']['output']>;
 };
@@ -142,13 +153,18 @@ export type MutationDeleteAttachmentArgs = {
 };
 
 
-export type MutationDeleteIssueArgs = {
+export type MutationDeleteClientArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type MutationDeleteUserArgs = {
-  input: DeleteUserInput;
+export type MutationDeleteIdentityArgs = {
+  input: DeleteIdentityInput;
+};
+
+
+export type MutationDeleteIssueArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -180,14 +196,15 @@ export type Query = {
   __typename?: 'Query';
   findDefaultWorkspace?: Maybe<WorkspaceObject>;
   findFiles?: Maybe<PaginatedFileOutput>;
+  findIdentities?: Maybe<Array<IdentityObject>>;
   findIssue?: Maybe<IssueObject>;
   findProject?: Maybe<ProjectObject>;
   findProjectIssues?: Maybe<Array<IssueObject>>;
   findProjects?: Maybe<PaginatedProjectObject>;
   findStatuses?: Maybe<Array<StatusObject>>;
   findSubIssues?: Maybe<Array<IssueObject>>;
-  findUsers?: Maybe<Array<UserObject>>;
   findWorkspaces?: Maybe<Array<WorkspaceObject>>;
+  getClient?: Maybe<ClientObject>;
   hello?: Maybe<HelloXyz>;
   hello2?: Maybe<Scalars['String']['output']>;
 };
@@ -227,6 +244,11 @@ export type QueryFindSubIssuesArgs = {
   input: FindIssuesInput;
 };
 
+
+export type QueryGetClientArgs = {
+  id: Scalars['String']['input'];
+};
+
 export type StatusObject = {
   __typename?: 'StatusObject';
   id?: Maybe<Scalars['String']['output']>;
@@ -243,16 +265,6 @@ export type UpdateIssueInput = {
   priority?: InputMaybe<Scalars['String']['input']>;
   statusId?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UserObject = {
-  __typename?: 'UserObject';
-  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  idpId?: Maybe<Scalars['String']['output']>;
-  idpProvider?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type WorkspaceObject = {
