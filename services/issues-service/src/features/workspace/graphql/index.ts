@@ -1,4 +1,4 @@
-import "./objects/workspace.object";
-import "./inputs/create-workspace.input";
+import "./objects/WorkspaceObject";
+import "./inputs/CreateWorkspaceInput";
 import "./queries/find-workspaces.query";
 import "./mutations/createWorkspace";

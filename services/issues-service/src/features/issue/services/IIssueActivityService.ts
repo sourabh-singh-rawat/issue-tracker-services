@@ -1,5 +1,5 @@
-import { IssueCreatedPayload } from "@pine/event-bus";
+import { IssueCreatedData } from "@pine/events";
 
 export interface IIssueActivityService {
-  logCreatedIssue(payload: IssueCreatedPayload): Promise<void>;
+  logCreatedIssue(payload: IssueCreatedData): Promise<void>;
 }

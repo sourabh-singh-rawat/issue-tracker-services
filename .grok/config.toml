@@ -1,0 +1,5 @@
+# Project Grok config for Pine monorepo
+# Skills live under tools/ai/ (not default .grok/skills)
+
+[skills]
+paths = ["tools/ai"]

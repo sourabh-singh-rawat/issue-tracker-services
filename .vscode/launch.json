@@ -12,9 +12,9 @@
         "identity-service",
         "issues-service",
         "attachment-service",
-        "mail",
+        "mail-service",
         "api-gateway",
-        "issue-web",
+        "issues-web",
         "identity-web",
         "inventory-web",
         "schemas:watch",
@@ -32,9 +32,9 @@
         "identity-service",
         "issues-service",
         "attachment-service",
-        "mail",
+        "mail-service",
         "api-gateway",
-        "issue-web",
+        "issues-web",
         "identity-web",
         "inventory-web",
         "client (browser)",
@@ -53,9 +53,9 @@
         "identity-service",
         "issues-service",
         "attachment-service",
-        "mail",
+        "mail-service",
         "api-gateway",
-        "issue-web",
+        "issues-web",
         "identity-web",
         "inventory-web",
         "brave (debug)",
@@ -66,12 +66,12 @@
   ],
   "configurations": [
     {
-      "name": "issue-web",
+      "name": "issues-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issue-web"],
+      "runtimeArgs": ["issues-web"],
       "console": "integratedTerminal"
     },
     {
@@ -93,19 +93,19 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "issue-web + browser",
+      "name": "issues-web + browser",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issue-web"],
+      "runtimeArgs": ["issues-web"],
       "console": "integratedTerminal",
       "serverReadyAction": {
         "pattern": "Local:\\s+(https?://\\S+)",
         "uriFormat": "%s",
         "action": "debugWithChrome",
         "killOnServerStop": true,
-        "webRoot": "${workspaceFolder}/apps/issues"
+        "webRoot": "${workspaceFolder}/apps/issues-web"
       }
     },
     {
@@ -113,7 +113,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues",
+      "webRoot": "${workspaceFolder}/apps/issues-web",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -133,7 +133,7 @@
       "type": "msedge",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues",
+      "webRoot": "${workspaceFolder}/apps/issues-web",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -155,7 +155,7 @@
       "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues",
+      "webRoot": "${workspaceFolder}/apps/issues-web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -166,7 +166,7 @@
       "runtimeExecutable": "/usr/bin/brave",
       "userDataDir": true,
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues",
+      "webRoot": "${workspaceFolder}/apps/issues-web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -180,12 +180,12 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "mail",
+      "name": "mail-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["mail"],
+      "runtimeArgs": ["mail-service"],
       "console": "integratedTerminal"
     },
     {

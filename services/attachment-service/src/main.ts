@@ -5,17 +5,17 @@ import { ApolloServer, BaseContext } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
 import multipart from "@fastify/multipart";
 import swagger from "@fastify/swagger";
-import { QUEUE } from "@pine/common";
-import { CoreHttpServer } from "@pine/server-core";
+import { QUEUE, uuidv7 } from "@pine/common";
+import { FastifyHttpServer } from "@pine/http-core";
 import { Worker } from "bullmq";
 import fastify from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import sharp from "sharp";
-import { v4 } from "uuid";
-import { broker, dataSource, logger, redisClient } from "@/bootstrap";
+import { TYPES, broker, container, dataSource, logger, redisClient } from "@/bootstrap";
 import { Attachment } from "./features/attachment";
+import { UserEmailVerifiedSubscriber } from "./features/user";
 import { createContext } from "./graphql";
 import { schema } from "./graphql/schema";
 import { routes } from "./routes";
@@ -34,7 +34,7 @@ const startServer = async () => {
 
   await instance.register(multipart, { limits: { fileSize: 32000000 } });
 
-  const server = new CoreHttpServer({
+  const server = new FastifyHttpServer({
     server: instance,
     config: {
       host: "0.0.0.0",
@@ -77,7 +77,9 @@ const startServer = async () => {
   writeFileSync(openapiPath, JSON.stringify(openapi, null, 2));
 };
 
-const startSubscriptions = () => {};
+const startSubscriptions = () => {
+  container.get<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber).fetchMessages();
+};
 
 export const startWorker = () => {
   interface ImageProcessingWorkerData {
@@ -97,7 +99,7 @@ export const startWorker = () => {
       const sizes = { small: { width: 250 }, large: { width: 1200 } };
       await sharpedFile.resize(sizes.small.width).toBuffer();
       await sharpedFile.resize(sizes.large.width).toBuffer();
-      const filename = v4();
+      const filename = uuidv7();
       const thumbnailLink = `attachments/${issueId}/${filename}-small`;
       const imageLink = `attachments/${issueId}/${filename}-large`;
 

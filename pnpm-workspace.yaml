@@ -17,13 +17,10 @@ allowBuilds:
   sharp: true
   simple-git-hooks: true
 
-minimumReleaseAgeExclude:
-  - "@tanstack/query-core@5.101.3"
-  - "@tanstack/react-query@5.101.3"
-  - "@tanstack/query-devtools@5.101.3"
-  - "@tanstack/react-query-devtools@5.101.3"
-  - "@redocly/cli@2.40.0"
+# Only install versions published at least 24h ago (pnpm default).
+minimumReleaseAge: 1440
 
 overrides:
   typescript: "7.0.2"
   graphql: "16.14.2"
+  uuid: "14.0.1"

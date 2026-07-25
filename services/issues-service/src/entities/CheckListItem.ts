@@ -1,11 +1,8 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
 
 @Entity({ name: "check_list_items" })
 export class CheckListItem extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({ type: "text", nullable: true })
   description?: string;
 

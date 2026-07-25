@@ -14,7 +14,6 @@ const config: CodegenConfig = {
     },
     "src/__generated__/gql/hooks.ts": {
       plugins: [
-        // Import + re-export so fetcher is in scope for hooks and unused when documents are empty.
         {
           add: {
             content:

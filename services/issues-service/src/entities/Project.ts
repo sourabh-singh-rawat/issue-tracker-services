@@ -1,14 +1,11 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Issue } from "@/entities/Issue";
 import { StatusOption } from "@/entities/Status";
 import { Workspace } from "@/entities/Workspace";
 
 @Entity({ name: "lists" })
 export class Project extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({ type: "text" })
   name!: string;
 

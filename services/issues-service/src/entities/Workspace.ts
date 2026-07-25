@@ -1,26 +1,23 @@
 import { WORKSPACE_STATUS, WorkspaceStatus } from "@pine/common";
 import { Audit } from "@pine/orm";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Project } from "@/entities/Project";
 import { User } from "@/entities/User";
 
 @Entity({ name: "workspaces" })
 export class Workspace extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
   @Column({ type: "text" })
-  name: string;
+  name!: string;
 
   @Column({ type: "text", nullable: true })
   description?: string;
 
   @Column({ name: "created_by_id", type: "uuid" })
-  createdById: string;
+  createdById!: string;
 
   @ManyToOne(() => User, (u) => u.workspaces)
   @JoinColumn({ name: "created_by_id" })
-  createdBy: User;
+  createdBy!: User;
 
   @Column({
     name: "status",
@@ -34,8 +31,8 @@ export class Workspace extends Audit {
       WORKSPACE_STATUS.TEMPLATE,
     ],
   })
-  status: WorkspaceStatus;
+  status!: WorkspaceStatus;
 
   @OneToMany(() => Project, (u) => u.workspace)
-  projects: Project;
+  projects!: Project;
 }

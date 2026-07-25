@@ -1,11 +1,11 @@
 import { builder } from "@pine/graphql-core";
 import { TYPES, container } from "@/bootstrap";
 import { IWorkspaceService } from "@/features/workspace";
-import { Workspace } from "../objects/workspace.object";
+import { WorkspaceObject } from "../objects/WorkspaceObject";
 
 builder.queryFields((t) => ({
   findWorkspaces: t.field({
-    type: [Workspace],
+    type: [WorkspaceObject],
     resolve: async (_root, _args, ctx) => {
       const userId = ctx.user!.userId;
       const service = container.get<IWorkspaceService>(TYPES.WorkspaceService);
@@ -13,7 +13,7 @@ builder.queryFields((t) => ({
     },
   }),
   findDefaultWorkspace: t.field({
-    type: Workspace,
+    type: WorkspaceObject,
     resolve: async (_root, _args, ctx) => {
       const userId = ctx.user!.userId;
       const service = container.get<IWorkspaceService>(TYPES.WorkspaceService);

@@ -5,14 +5,11 @@ import {
   WorkspaceMemberStatus,
 } from "@pine/common";
 import { Audit } from "@pine/orm";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { Workspace } from "@/entities/Workspace";
 
 @Entity({ name: "workspace_members" })
 export class WorkspaceMember extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @Column({ name: "user_id", type: "uuid", nullable: true })
   userId?: string;
 

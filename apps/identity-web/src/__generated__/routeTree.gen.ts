@@ -9,17 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
-import { Route as noAuthSignupRouteImport } from './../routes/(no-auth)/signup'
 import { Route as noAuthLoginRouteImport } from './../routes/(no-auth)/login'
+import { Route as noAuthSignupRouteImport } from './../routes/(no-auth)/signup'
 
-const noAuthSignupRoute = noAuthSignupRouteImport.update({
-  id: '/(no-auth)/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const noAuthLoginRoute = noAuthLoginRouteImport.update({
   id: '/(no-auth)/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const noAuthSignupRoute = noAuthSignupRouteImport.update({
+  id: '/(no-auth)/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -51,18 +51,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(no-auth)/signup': {
-      id: '/(no-auth)/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof noAuthSignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(no-auth)/login': {
       id: '/(no-auth)/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof noAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(no-auth)/signup': {
+      id: '/(no-auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof noAuthSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

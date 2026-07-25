@@ -1,14 +1,9 @@
 import { IssueActivity as IssueActivityType } from "@pine/common";
 import { Audit } from "@pine/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
 
 @Entity({ name: "issue_activities" })
 export class IssueActivity extends Audit {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "issue_activities_pkey",
-  })
-  id!: string;
-
   @Column({ type: "text" })
   type!: IssueActivityType;
 

@@ -11,18 +11,20 @@
     "dev": "tsx watch src/main.ts"
   },
   "dependencies": {
-    "@apollo/gateway": "^2.14.2",
+    "@apollo/gateway": "^2.14.3",
     "@apollo/server": "^5.5.1",
     "@fastify/http-proxy": "^11.6.0",
+    "@fastify/swagger": "^9.8.1",
+    "@fastify/swagger-ui": "^5.2.6",
+    "@pine/http-core": "workspace:*",
     "@pine/observability": "workspace:*",
-    "@pine/server-core": "workspace:*",
     "dotenv": "17.4.2",
     "fastify": "^5.10.0",
-    "graphql": "^16.10.0"
+    "graphql": "16.14.2"
   },
   "devDependencies": {
-    "tsx": "4.23.0",
+    "tsx": "4.23.1",
     "typescript": "7.0.2"
   },
-  "packageManager": "pnpm@10.11.1"
+  "packageManager": "pnpm@11.17.0"
 }

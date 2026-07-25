@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import {
+  IdentityNotFoundError,
   IdentityProviderUnavailableError,
   InvalidCredentialError,
 } from "@/integrations/identity/errors";
@@ -10,6 +11,7 @@ function createKratosMock(overrides?: {
   updateLoginFlow?: ReturnType<typeof vi.fn>;
   performNativeLogout?: ReturnType<typeof vi.fn>;
   toSession?: ReturnType<typeof vi.fn>;
+  deleteIdentity?: ReturnType<typeof vi.fn>;
 }) {
   return {
     frontendApi: {
@@ -19,7 +21,9 @@ function createKratosMock(overrides?: {
       performNativeLogout: overrides?.performNativeLogout ?? vi.fn().mockResolvedValue(undefined),
       toSession: overrides?.toSession ?? vi.fn(),
     },
-    identityApi: {},
+    identityApi: {
+      deleteIdentity: overrides?.deleteIdentity ?? vi.fn().mockResolvedValue(undefined),
+    },
   };
 }
 
@@ -304,6 +308,37 @@ describe("KratosIdentityProvider.getSession", () => {
     const provider = new KratosIdentityProvider(createKratosMock({ toSession }) as never);
 
     await expect(provider.getSession("session-token-1")).rejects.toBeInstanceOf(
+      IdentityProviderUnavailableError,
+    );
+  });
+});
+
+describe("KratosIdentityProvider.deleteIdentity", () => {
+  it("deletes the identity via the Kratos admin API", async () => {
+    const deleteIdentity = vi.fn().mockResolvedValue(undefined);
+    const provider = new KratosIdentityProvider(createKratosMock({ deleteIdentity }) as never);
+
+    await expect(provider.deleteIdentity("identity-1")).resolves.toBeUndefined();
+
+    expect(deleteIdentity).toHaveBeenCalledWith({ id: "identity-1" });
+  });
+
+  it("throws IdentityNotFoundError when Kratos returns 404", async () => {
+    const deleteIdentity = vi.fn().mockRejectedValue({
+      response: { status: 404 },
+    });
+    const provider = new KratosIdentityProvider(createKratosMock({ deleteIdentity }) as never);
+
+    await expect(provider.deleteIdentity("missing")).rejects.toBeInstanceOf(IdentityNotFoundError);
+  });
+
+  it("throws IdentityProviderUnavailableError when Kratos is down", async () => {
+    const deleteIdentity = vi.fn().mockRejectedValue({
+      response: { status: 503 },
+    });
+    const provider = new KratosIdentityProvider(createKratosMock({ deleteIdentity }) as never);
+
+    await expect(provider.deleteIdentity("identity-1")).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
     );
   });

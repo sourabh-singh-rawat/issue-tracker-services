@@ -1,13 +1,8 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
 
 @Entity({ name: "issue_comments" })
 export class IssueComment extends Audit {
-  @PrimaryGeneratedColumn("uuid", {
-    primaryKeyConstraintName: "issue_comments_pkey",
-  })
-  id!: string;
-
   @Column({ name: "description", type: "text" })
   description!: string;
 

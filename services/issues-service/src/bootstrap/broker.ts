@@ -1,4 +1,4 @@
-import { NatsBroker } from "@pine/event-bus";
+import { NatsBroker } from "@pine/events";
 import { logger } from "@/bootstrap/logger";
 import { env } from "@/env";
 
