@@ -20,6 +20,14 @@ describe("authorize route", () => {
     get.mockReset();
   });
 
+  it("is a GET endpoint that accepts OAuth authorize query params", () => {
+    expect(authorize.method).toBe("GET");
+    expect(authorize.url).toBe("/identity/oauth/authorize");
+    expect(authorize.schema).toMatchObject({
+      querystring: expect.anything(),
+    });
+  });
+
   it("returns redirectTo from the OAuth service", async () => {
     const authorizeFn = vi.fn().mockResolvedValue({
       redirectTo: "http://127.0.0.1:4444/oauth2/auth?client_id=issues-web",
@@ -28,12 +36,15 @@ describe("authorize route", () => {
 
     const send = vi.fn((payload) => payload);
     const req = {
-      body: {
+      query: {
         clientId: "issues-web",
         redirectUri: "http://localhost:3000/callback",
         responseType: "code" as const,
         scope: "openid offline",
         state: "state-1",
+        codeChallenge: "challenge",
+        codeChallengeMethod: "S256" as const,
+        nonce: "nonce-1",
       },
     };
     const reply = { send };
@@ -47,6 +58,9 @@ describe("authorize route", () => {
       responseType: "code",
       scope: "openid offline",
       state: "state-1",
+      codeChallenge: "challenge",
+      codeChallengeMethod: "S256",
+      nonce: "nonce-1",
     });
     expect(response).toEqual({
       redirectTo: "http://127.0.0.1:4444/oauth2/auth?client_id=issues-web",
@@ -62,7 +76,7 @@ describe("authorize route", () => {
 
     const send = vi.fn();
     const req = {
-      body: {
+      query: {
         clientId: "issues-web",
         redirectUri: "http://localhost:3000/callback",
         responseType: "code" as const,
@@ -86,7 +100,7 @@ describe("authorize route", () => {
 
     const send = vi.fn();
     const req = {
-      body: {
+      query: {
         clientId: "issues-web",
         redirectUri: "http://localhost:3000/callback",
         responseType: "code" as const,

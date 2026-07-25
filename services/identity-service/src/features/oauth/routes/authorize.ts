@@ -4,9 +4,9 @@ import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IOAuthService } from "@/features/oauth/services";
 import {
-  AuthorizeBodySchema,
+  AuthorizeQuerySchema,
   AuthorizeResponseSchema,
-  type AuthorizeBody,
+  type AuthorizeQuery,
   type AuthorizeResponse,
 } from "@/features/oauth/schemas";
 
@@ -14,22 +14,22 @@ export const authorize: RouteOptions<
   Server,
   IncomingMessage,
   ServerResponse,
-  { Body: AuthorizeBody; Reply: AuthorizeResponse }
+  { Querystring: AuthorizeQuery; Reply: AuthorizeResponse }
 > = {
   url: "/identity/oauth/authorize",
-  method: "POST",
+  method: "GET",
   schema: {
     tags: ["oauth"],
     summary: "OAuth authorize",
     description: "Start the OAuth authorization code flow",
     operationId: "authorize",
-    body: AuthorizeBodySchema,
+    querystring: AuthorizeQuerySchema,
     response: {
       200: AuthorizeResponseSchema,
     },
   },
   handler: async (req, reply) => {
-    const input = req.body;
+    const input = req.query;
     const service = container.get<IOAuthService>(TYPES.OAuthService);
 
     const result = await service.authorize({
@@ -38,6 +38,9 @@ export const authorize: RouteOptions<
       responseType: input.responseType,
       scope: input.scope,
       state: input.state,
+      codeChallenge: input.codeChallenge,
+      codeChallengeMethod: input.codeChallengeMethod,
+      nonce: input.nonce,
     });
 
     const response: AuthorizeResponse = {

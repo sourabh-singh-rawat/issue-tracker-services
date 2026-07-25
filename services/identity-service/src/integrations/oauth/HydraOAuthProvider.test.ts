@@ -15,6 +15,7 @@ function createHydraMock(overrides?: {
   rejectOAuth2ConsentRequest?: ReturnType<typeof vi.fn>;
   introspectOAuth2Token?: ReturnType<typeof vi.fn>;
   revokeOAuth2Token?: ReturnType<typeof vi.fn>;
+  deleteOAuth2Client?: ReturnType<typeof vi.fn>;
 }) {
   return {
     publicUrl: "http://127.0.0.1:4444",
@@ -26,6 +27,7 @@ function createHydraMock(overrides?: {
       acceptOAuth2ConsentRequest: overrides?.acceptOAuth2ConsentRequest ?? vi.fn(),
       rejectOAuth2ConsentRequest: overrides?.rejectOAuth2ConsentRequest ?? vi.fn(),
       introspectOAuth2Token: overrides?.introspectOAuth2Token ?? vi.fn(),
+      deleteOAuth2Client: overrides?.deleteOAuth2Client ?? vi.fn(),
     },
     publicApi: {
       revokeOAuth2Token: overrides?.revokeOAuth2Token ?? vi.fn().mockResolvedValue(undefined),
@@ -424,5 +426,26 @@ describe("HydraOAuthProvider.revokeToken", () => {
 
     await expect(provider.revokeToken("access-token")).resolves.toBeUndefined();
     expect(revokeOAuth2Token).toHaveBeenCalledWith({ token: "access-token" });
+  });
+});
+
+describe("HydraOAuthProvider.deleteClient", () => {
+  it("deletes the OAuth client via the admin API", async () => {
+    const deleteOAuth2Client = vi.fn().mockResolvedValue(undefined);
+    const provider = new HydraOAuthProvider(
+      createHydraMock({ deleteOAuth2Client }) as never,
+    );
+
+    await expect(provider.deleteClient("client-1")).resolves.toBeUndefined();
+    expect(deleteOAuth2Client).toHaveBeenCalledWith({ id: "client-1" });
+  });
+
+  it("ignores 404 when the client is already gone", async () => {
+    const deleteOAuth2Client = vi.fn().mockRejectedValue({ response: { status: 404 } });
+    const provider = new HydraOAuthProvider(
+      createHydraMock({ deleteOAuth2Client }) as never,
+    );
+
+    await expect(provider.deleteClient("missing")).resolves.toBeUndefined();
   });
 });

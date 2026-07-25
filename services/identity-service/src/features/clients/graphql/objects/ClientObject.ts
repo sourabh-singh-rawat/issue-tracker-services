@@ -1,0 +1,16 @@
+import { builder } from "@pine/graphql-core";
+import type { ClientDetails } from "@/features/clients/services/IClientService";
+
+export const ClientObject = builder.objectRef<ClientDetails>("ClientObject");
+
+ClientObject.implement({
+  fields: (t) => ({
+    id: t.exposeString("id"),
+    name: t.exposeString("name"),
+    redirectUris: t.exposeStringList("redirectUris"),
+    scopes: t.exposeStringList("scopes"),
+    grantTypes: t.exposeStringList("grantTypes"),
+    createdAt: t.expose("createdAt", { type: "DateTimeISO" }),
+    updatedAt: t.expose("updatedAt", { type: "DateTimeISO", nullable: true }),
+  }),
+});

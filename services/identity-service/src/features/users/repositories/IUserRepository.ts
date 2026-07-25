@@ -1,5 +1,4 @@
-import type { User } from "@/db";
-import type { DbClient } from "@/db";
+import type { User, DbClient } from "@/db";
 
 export type UserRepositoryOptions = { tx: DbClient };
 

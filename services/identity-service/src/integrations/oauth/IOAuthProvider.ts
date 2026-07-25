@@ -75,6 +75,25 @@ export interface IntrospectTokenResult {
   extra?: Record<string, unknown>;
 }
 
+export interface RegisterOAuthClientInput {
+  clientId: string;
+  name: string;
+  redirectUris: string[];
+  grantTypes: string[];
+  scopes: string[];
+  tokenEndpointAuthMethod?: "none" | "client_secret_basic" | "client_secret_post" | "private_key_jwt";
+  clientSecret?: string;
+}
+
+export interface RegisteredOAuthClient {
+  clientId: string;
+  name?: string;
+  redirectUris?: string[];
+  grantTypes?: string[];
+  scopes?: string[];
+  clientSecret?: string;
+}
+
 export interface IOAuthProvider {
   getAuthorizationUrl(input: AuthorizeInput): string;
 
@@ -88,4 +107,7 @@ export interface IOAuthProvider {
 
   introspectToken(token: string, scope?: string): Promise<IntrospectTokenResult>;
   revokeToken(token: string): Promise<void>;
+
+  registerClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient>;
+  deleteClient(providerClientId: string): Promise<void>;
 }

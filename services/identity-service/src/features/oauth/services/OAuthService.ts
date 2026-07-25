@@ -21,6 +21,9 @@ export class OAuthService implements IOAuthService {
       responseType: params.responseType,
       scope: params.scope,
       state: params.state,
+      codeChallenge: params.codeChallenge,
+      codeChallengeMethod: params.codeChallengeMethod,
+      nonce: params.nonce,
     });
 
     return { redirectTo };

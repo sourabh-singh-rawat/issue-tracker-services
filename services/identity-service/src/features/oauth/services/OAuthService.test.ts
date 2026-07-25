@@ -56,6 +56,40 @@ describe("OAuthService.authorize", () => {
       responseType: "code",
       scope: "openid offline",
       state: "state-1",
+      codeChallenge: undefined,
+      codeChallengeMethod: undefined,
+      nonce: undefined,
+    });
+  });
+
+  it("forwards codeChallenge, codeChallengeMethod, and nonce to the OAuth provider", async () => {
+    const getAuthorizationUrl = vi
+      .fn()
+      .mockReturnValue("http://127.0.0.1:4444/oauth2/auth?client_id=issues-web");
+    const service = new OAuthService(
+      createOAuthProviderMock({ getAuthorizationUrl }) as never,
+    );
+
+    await service.authorize({
+      clientId: "issues-web",
+      redirectUri: "http://localhost:3000/callback",
+      responseType: "code",
+      scope: "openid offline",
+      state: "state-1",
+      codeChallenge: "challenge",
+      codeChallengeMethod: "S256",
+      nonce: "nonce-1",
+    });
+
+    expect(getAuthorizationUrl).toHaveBeenCalledWith({
+      clientId: "issues-web",
+      redirectUri: "http://localhost:3000/callback",
+      responseType: "code",
+      scope: "openid offline",
+      state: "state-1",
+      codeChallenge: "challenge",
+      codeChallengeMethod: "S256",
+      nonce: "nonce-1",
     });
   });
 
@@ -97,10 +131,6 @@ describe("OAuthService.authorize", () => {
     ).rejects.toBeInstanceOf(InvalidOAuthRequestError);
   });
 
-  // TODO: forward PKCE + OIDC params once AuthorizeOptions supports them
-  it.todo(
-    "forwards codeChallenge, codeChallengeMethod, and nonce to the OAuth provider",
-  );
 });
 
 describe("OAuthService login challenge flow", () => {

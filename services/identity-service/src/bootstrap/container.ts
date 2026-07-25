@@ -13,6 +13,26 @@ import { IMeService, MeService } from "@/features/me";
 import { IOAuthService, OAuthService } from "@/features/oauth";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
 import {
+  ClientGrantTypeRepository,
+  ClientRedirectUriRepository,
+  ClientRepository,
+  ClientScopeRepository,
+  ClientService,
+  IClientGrantTypeRepository,
+  IClientRedirectUriRepository,
+  IClientRepository,
+  IClientScopeRepository,
+  IClientService,
+} from "@/features/clients";
+import {
+  GrantRepository,
+  IGrantRepository,
+} from "@/features/grants";
+import {
+  IScopeRepository,
+  ScopeRepository,
+} from "@/features/scopes";
+import {
   IUserProfileRepository,
   IUserProfileService,
   IUserRepository,
@@ -38,8 +58,19 @@ container.bind(TYPES.HydraClient).toConstantValue(hydraClient);
 
 container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
 container.bind<IUserProfileRepository>(TYPES.UserProfileRepository).to(UserProfileRepository);
+container.bind<IClientRepository>(TYPES.ClientRepository).to(ClientRepository);
+container
+  .bind<IClientRedirectUriRepository>(TYPES.ClientRedirectUriRepository)
+  .to(ClientRedirectUriRepository);
+container.bind<IClientScopeRepository>(TYPES.ClientScopeRepository).to(ClientScopeRepository);
+container
+  .bind<IClientGrantTypeRepository>(TYPES.ClientGrantTypeRepository)
+  .to(ClientGrantTypeRepository);
+container.bind<IScopeRepository>(TYPES.ScopeRepository).to(ScopeRepository);
+container.bind<IGrantRepository>(TYPES.GrantRepository).to(GrantRepository);
 container.bind<IUserService>(TYPES.UserService).to(UserService);
 container.bind<IUserProfileService>(TYPES.UserProfileService).to(UserProfileService);
+container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IIdentityProvider>(TYPES.IdentityProvider).to(KratosIdentityProvider);
 container.bind<IOAuthProvider>(TYPES.OAuthProvider).to(HydraOAuthProvider);
 container.bind<IRegistrationService>(TYPES.RegistrationService).to(RegistrationService);

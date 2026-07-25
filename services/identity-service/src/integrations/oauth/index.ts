@@ -8,6 +8,8 @@ export type {
   LoginChallenge,
   OAuthClientInfo,
   OAuthRedirectResult,
+  RegisterOAuthClientInput,
+  RegisteredOAuthClient,
   RejectRequestInput,
 } from "@/integrations/oauth/IOAuthProvider";
 export {

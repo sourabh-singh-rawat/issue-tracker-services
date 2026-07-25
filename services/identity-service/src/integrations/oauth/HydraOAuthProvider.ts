@@ -11,6 +11,8 @@ import type {
   LoginChallenge,
   OAuthClientInfo,
   OAuthRedirectResult,
+  RegisterOAuthClientInput,
+  RegisteredOAuthClient,
   RejectRequestInput,
 } from "@/integrations/oauth/IOAuthProvider";
 import type { HydraClient } from "@/integrations/oauth/HydraClient";
@@ -188,6 +190,52 @@ export class HydraOAuthProvider implements IOAuthProvider {
     try {
       await this.hydra.publicApi.revokeOAuth2Token({ token });
     } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
+  }
+
+  async registerClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient> {
+    const tokenEndpointAuthMethod = input.tokenEndpointAuthMethod ?? "none";
+    const responseTypes = input.grantTypes.includes("authorization_code")
+      ? ["code"]
+      : [];
+
+    try {
+      const { data } = await this.hydra.adminApi.createOAuth2Client({
+        oAuth2Client: {
+          client_id: input.clientId,
+          client_name: input.name,
+          redirect_uris: input.redirectUris,
+          grant_types: input.grantTypes,
+          response_types: responseTypes,
+          scope: input.scopes.join(" "),
+          token_endpoint_auth_method: tokenEndpointAuthMethod,
+          ...(input.clientSecret !== undefined
+            ? { client_secret: input.clientSecret }
+            : {}),
+        },
+      });
+
+      return {
+        clientId: data.client_id ?? input.clientId,
+        name: data.client_name,
+        redirectUris: data.redirect_uris,
+        grantTypes: data.grant_types,
+        scopes: data.scope?.split(/\s+/).filter(Boolean),
+        clientSecret: data.client_secret,
+      };
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
+  }
+
+  async deleteClient(providerClientId: string): Promise<void> {
+    try {
+      await this.hydra.adminApi.deleteOAuth2Client({ id: providerClientId });
+    } catch (error) {
+      if (this.getHttpStatus(error) === 404) {
+        return;
+      }
       this.rethrowAsApplicationError(error);
     }
   }

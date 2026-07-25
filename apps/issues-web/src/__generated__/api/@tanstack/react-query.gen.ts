@@ -4,34 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { adminDeleteUser, authorize, createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
-import type { AdminDeleteUserData, AdminDeleteUserResponse, AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
-
-/**
- * Delete user
- *
- * Admin endpoint: soft-delete the local user (and profile) and permanently delete the identity from the identity provider
- */
-export const adminDeleteUserMutation = (options?: Partial<Options<AdminDeleteUserData>>): UseMutationOptions<AdminDeleteUserResponse, AxiosError<DefaultError>, Options<AdminDeleteUserData>> => {
-    const mutationOptions: UseMutationOptions<AdminDeleteUserResponse, AxiosError<DefaultError>, Options<AdminDeleteUserData>> = {
-        mutationFn: async (fnOptions) => {
-            const { data } = await adminDeleteUser({
-                ...options,
-                ...fnOptions,
-                throwOnError: true
-            });
-            return data;
-        }
-    };
-    return mutationOptions;
-};
-
-/**
- * Delete user
- *
- * Admin endpoint: soft-delete the local user (and profile) and permanently delete the identity from the identity provider
- */
-export const useAdminDeleteUserMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AdminDeleteUserResponse, AxiosError<DefaultError>, Options<AdminDeleteUserData>>, 'mutationFn'>>) => useMutation({ ...adminDeleteUserMutation(), ...mutationOptions });
+import { authorize, createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
+import type { AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -145,31 +119,32 @@ export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => 
  */
 export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
 
-/**
- * OAuth authorize
- *
- * Start the OAuth authorization code flow
- */
-export const authorizeMutation = (options?: Partial<Options<AuthorizeData>>): UseMutationOptions<AuthorizeResponse, AxiosError<DefaultError>, Options<AuthorizeData>> => {
-    const mutationOptions: UseMutationOptions<AuthorizeResponse, AxiosError<DefaultError>, Options<AuthorizeData>> = {
-        mutationFn: async (fnOptions) => {
-            const { data } = await authorize({
-                ...options,
-                ...fnOptions,
-                throwOnError: true
-            });
-            return data;
-        }
-    };
-    return mutationOptions;
-};
+export const authorizeQueryKey = (options: Options<AuthorizeData>) => createQueryKey('authorize', options);
 
 /**
  * OAuth authorize
  *
  * Start the OAuth authorization code flow
  */
-export const useAuthorizeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AuthorizeResponse, AxiosError<DefaultError>, Options<AuthorizeData>>, 'mutationFn'>>) => useMutation({ ...authorizeMutation(), ...mutationOptions });
+export const authorizeOptions = (options: Options<AuthorizeData>) => queryOptions<AuthorizeResponse, AxiosError<DefaultError>, AuthorizeResponse, ReturnType<typeof authorizeQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await authorize({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: authorizeQueryKey(options)
+});
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const useAuthorizeQuery = (options: Options<AuthorizeData>) => useQuery(authorizeOptions(options));
 
 /**
  * Register with email and password
