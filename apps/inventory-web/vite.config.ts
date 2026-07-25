@@ -1,3 +1,4 @@
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
 import path from "node:path";
@@ -6,13 +7,22 @@ import { defineConfig } from "vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
+  plugins: [
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+      routesDirectory: "./src/routes",
+      generatedRouteTree: "./src/__generated__/routeTree.gen.ts",
+    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
+  ],
   resolve: {
     alias: {
       "@bootstrap": path.resolve(__dirname, "src/bootstrap"),
       "@graphql": path.resolve(__dirname, "src/graphql"),
+      "@routes": path.resolve(__dirname, "src/routes"),
       "@generated": path.resolve(__dirname, "src/__generated__"),
       "@graphql-typed-document-node/core": path.resolve(
         __dirname,

@@ -20,7 +20,7 @@ import {
   formatReleaseBranchExample,
   formatReleaseTagExample,
   parseReleaseBranch,
-} from "./lib/release-version.ts";
+} from "./release-version.ts";
 
 const execFileAsync = promisify(execFile);
 

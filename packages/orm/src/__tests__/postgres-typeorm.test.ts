@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { CoreLogger } from "@pine/server-core";
+import { PinoLogger } from "@pine/http-core";
 import pino from "pino";
 import { DataSource } from "typeorm";
 import { Typeorm } from "../interfaces";
@@ -29,7 +29,7 @@ vi.mock("typeorm", async (importOriginal) => {
 
 describe("Postgres Typeorm", () => {
   const mockDataSource = new DataSource({ type: "postgres" });
-  const logger = new CoreLogger(
+  const logger = new PinoLogger(
     pino({ transport: { target: "pino-pretty", options: { colorize: true } } }),
   );
   let orm: Typeorm;

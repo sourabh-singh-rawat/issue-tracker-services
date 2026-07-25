@@ -6,7 +6,6 @@ export * from "./errors";
 export * from "./http";
 export * from "./invalid-credentials.error";
 export * from "./missing-data-source.error";
-export * from "./missing-enforcer.error";
 export * from "./missing-sender.error";
 export * from "./project-not-found.error";
 export * from "./query-execution.error";

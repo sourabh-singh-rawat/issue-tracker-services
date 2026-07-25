@@ -9,12 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
-import { Route as noAuthSignupRouteImport } from './../routes/(no-auth)/signup'
+import { Route as noAuthCallbackRouteImport } from './../routes/(no-auth)/callback'
+import { Route as noAuthConsentRouteImport } from './../routes/(no-auth)/consent'
 import { Route as noAuthLoginRouteImport } from './../routes/(no-auth)/login'
+import { Route as noAuthSignupRouteImport } from './../routes/(no-auth)/signup'
 
-const noAuthSignupRoute = noAuthSignupRouteImport.update({
-  id: '/(no-auth)/signup',
-  path: '/signup',
+const noAuthCallbackRoute = noAuthCallbackRouteImport.update({
+  id: '/(no-auth)/callback',
+  path: '/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const noAuthConsentRoute = noAuthConsentRouteImport.update({
+  id: '/(no-auth)/consent',
+  path: '/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const noAuthLoginRoute = noAuthLoginRouteImport.update({
@@ -22,40 +29,65 @@ const noAuthLoginRoute = noAuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const noAuthSignupRoute = noAuthSignupRouteImport.update({
+  id: '/(no-auth)/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/callback': typeof noAuthCallbackRoute
+  '/consent': typeof noAuthConsentRoute
   '/login': typeof noAuthLoginRoute
   '/signup': typeof noAuthSignupRoute
 }
 export interface FileRoutesByTo {
+  '/callback': typeof noAuthCallbackRoute
+  '/consent': typeof noAuthConsentRoute
   '/login': typeof noAuthLoginRoute
   '/signup': typeof noAuthSignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(no-auth)/callback': typeof noAuthCallbackRoute
+  '/(no-auth)/consent': typeof noAuthConsentRoute
   '/(no-auth)/login': typeof noAuthLoginRoute
   '/(no-auth)/signup': typeof noAuthSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/signup'
+  fullPaths: '/callback' | '/consent' | '/login' | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/signup'
-  id: '__root__' | '/(no-auth)/login' | '/(no-auth)/signup'
+  to: '/callback' | '/consent' | '/login' | '/signup'
+  id:
+    | '__root__'
+    | '/(no-auth)/callback'
+    | '/(no-auth)/consent'
+    | '/(no-auth)/login'
+    | '/(no-auth)/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  noAuthCallbackRoute: typeof noAuthCallbackRoute
+  noAuthConsentRoute: typeof noAuthConsentRoute
   noAuthLoginRoute: typeof noAuthLoginRoute
   noAuthSignupRoute: typeof noAuthSignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(no-auth)/signup': {
-      id: '/(no-auth)/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof noAuthSignupRouteImport
+    '/(no-auth)/callback': {
+      id: '/(no-auth)/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof noAuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(no-auth)/consent': {
+      id: '/(no-auth)/consent'
+      path: '/consent'
+      fullPath: '/consent'
+      preLoaderRoute: typeof noAuthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(no-auth)/login': {
@@ -65,10 +97,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof noAuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(no-auth)/signup': {
+      id: '/(no-auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof noAuthSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  noAuthCallbackRoute: noAuthCallbackRoute,
+  noAuthConsentRoute: noAuthConsentRoute,
   noAuthLoginRoute: noAuthLoginRoute,
   noAuthSignupRoute: noAuthSignupRoute,
 }

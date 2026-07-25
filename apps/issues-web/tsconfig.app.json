@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@bootstrap": ["./src/bootstrap"],
+      "@bootstrap/*": ["./src/bootstrap/*"],
+      "@shared": ["./src/shared"],
+      "@shared/*": ["./src/shared/*"],
+      "@features": ["./src/features"],
+      "@features/*": ["./src/features/*"],
+      "@graphql": ["./src/graphql"],
+      "@graphql/*": ["./src/graphql/*"],
+      "@routes": ["./src/routes"],
+      "@routes/*": ["./src/routes/*"],
+      "@generated": ["./src/__generated__"],
+      "@generated/*": ["./src/__generated__/*"],
+      "@graphql-typed-document-node/core": ["./src/shims/graphql-typed-document-node-core.ts"]
+    }
+  },
+  "include": ["src"]
+}

@@ -111,10 +111,49 @@
       }
     },
     {
+      "label": "schemas:compose",
+      "detail": "One-shot compose of GraphQL supergraph + platform OpenAPI for the API Gateway.",
+      "type": "shell",
+      "command": "pnpm schemas:compose",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "schemas:watch",
+      "detail": "Watch microservice schema artifacts and re-compose supergraph + OpenAPI on change.",
+      "type": "shell",
+      "command": "pnpm schemas:watch",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "schemas"
+      }
+    },
+    {
       "label": "gql:compose",
-      "detail": "Compose Apollo supergraph SDL for the API Gateway (does not start Docker).",
+      "detail": "Compose Apollo supergraph SDL only (alias of schemas:compose --graphql).",
       "type": "shell",
       "command": "pnpm gql:compose",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "openapi:compose",
+      "detail": "Compose platform OpenAPI JSON only.",
+      "type": "shell",
+      "command": "pnpm openapi:compose",
       "options": {
         "cwd": "${workspaceFolder}"
       },

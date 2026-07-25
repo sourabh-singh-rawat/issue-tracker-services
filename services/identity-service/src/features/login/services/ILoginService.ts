@@ -1,5 +1,17 @@
 import type { LoginResult } from "@/integrations/identity";
 
+export interface LoginWithEmailAndPasswordInput {
+  email: string;
+  password: string;
+  loginChallenge?: string;
+}
+
+export interface LoginWithEmailAndPasswordResult extends LoginResult {
+  redirectTo?: string;
+}
+
 export interface ILoginService {
-  loginWithEmailAndPassword(email: string, password: string): Promise<LoginResult>;
+  loginWithEmailAndPassword(
+    input: LoginWithEmailAndPasswordInput,
+  ): Promise<LoginWithEmailAndPasswordResult>;
 }

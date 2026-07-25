@@ -27,7 +27,7 @@ import {
   parseReleaseBranch,
   parseReleaseVersionParts,
   type ReleaseVersionParts,
-} from "./lib/release-version.ts";
+} from "./release-version.ts";
 
 const execFileAsync = promisify(execFile);
 
