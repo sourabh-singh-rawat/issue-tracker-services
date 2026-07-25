@@ -1,10 +1,19 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import axios from "axios";
 import {
   InvalidOAuthRequestError,
   OAuthProviderUnavailableError,
   OAuthRequestNotFoundError,
 } from "@/integrations/oauth/errors";
 import { HydraOAuthProvider } from "@/integrations/oauth/HydraOAuthProvider";
+
+vi.mock("axios", () => ({
+  default: {
+    post: vi.fn(),
+  },
+}));
+
+const axiosPost = vi.mocked(axios.post);
 
 function createHydraMock(overrides?: {
   getOAuth2LoginRequest?: ReturnType<typeof vi.fn>;
@@ -377,6 +386,113 @@ describe("HydraOAuthProvider.getAuthorizationUrl edge cases", () => {
     const parsed = new URL(url);
     expect(parsed.searchParams.get("code_challenge")).toBe("challenge-only");
     expect(parsed.searchParams.get("code_challenge_method")).toBe("S256");
+  });
+});
+
+describe("HydraOAuthProvider.exchangeToken", () => {
+  beforeEach(() => {
+    axiosPost.mockReset();
+  });
+
+  it("posts an authorization_code grant to Hydra and maps the token response", async () => {
+    axiosPost.mockResolvedValue({
+      data: {
+        access_token: "access-1",
+        token_type: "bearer",
+        expires_in: 3600,
+        refresh_token: "refresh-1",
+        id_token: "id-1",
+        scope: "openid offline",
+      },
+    });
+
+    const provider = new HydraOAuthProvider(createHydraMock() as never);
+
+    await expect(
+      provider.exchangeToken({
+        grantType: "authorization_code",
+        clientId: "issues-web",
+        code: "auth-code-1",
+        redirectUri: "http://localhost:3000/callback",
+        codeVerifier: "verifier",
+      }),
+    ).resolves.toEqual({
+      accessToken: "access-1",
+      tokenType: "bearer",
+      expiresIn: 3600,
+      refreshToken: "refresh-1",
+      idToken: "id-1",
+      scope: "openid offline",
+    });
+
+    expect(axiosPost).toHaveBeenCalledTimes(1);
+    const [url, body, options] = axiosPost.mock.calls[0]!;
+    expect(url).toBe("http://127.0.0.1:4444/oauth2/token");
+    expect(body).toBe(
+      new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: "issues-web",
+        code: "auth-code-1",
+        redirect_uri: "http://localhost:3000/callback",
+        code_verifier: "verifier",
+      }).toString(),
+    );
+    expect(options).toMatchObject({
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+  });
+
+  it("includes client_secret when provided", async () => {
+    axiosPost.mockResolvedValue({
+      data: {
+        access_token: "access-1",
+        token_type: "bearer",
+      },
+    });
+
+    const provider = new HydraOAuthProvider(createHydraMock() as never);
+
+    await provider.exchangeToken({
+      grantType: "authorization_code",
+      clientId: "confidential-client",
+      code: "auth-code-1",
+      redirectUri: "http://localhost:3000/callback",
+      codeVerifier: "verifier",
+      clientSecret: "super-secret",
+    });
+
+    const body = axiosPost.mock.calls[0]![1] as string;
+    expect(body).toContain("client_secret=super-secret");
+  });
+
+  it("throws InvalidOAuthRequestError when Hydra returns 400", async () => {
+    axiosPost.mockRejectedValue({ response: { status: 400 } });
+    const provider = new HydraOAuthProvider(createHydraMock() as never);
+
+    await expect(
+      provider.exchangeToken({
+        grantType: "authorization_code",
+        clientId: "issues-web",
+        code: "bad-code",
+        redirectUri: "http://localhost:3000/callback",
+        codeVerifier: "verifier",
+      }),
+    ).rejects.toBeInstanceOf(InvalidOAuthRequestError);
+  });
+
+  it("throws OAuthProviderUnavailableError when Hydra is down", async () => {
+    axiosPost.mockRejectedValue({ response: { status: 503 } });
+    const provider = new HydraOAuthProvider(createHydraMock() as never);
+
+    await expect(
+      provider.exchangeToken({
+        grantType: "authorization_code",
+        clientId: "issues-web",
+        code: "auth-code-1",
+        redirectUri: "http://localhost:3000/callback",
+        codeVerifier: "verifier",
+      }),
+    ).rejects.toBeInstanceOf(OAuthProviderUnavailableError);
   });
 });
 

@@ -1,11 +1,13 @@
 import { inject, injectable } from "inversify";
 import type { OAuth2Client } from "@ory/hydra-client";
 import { TYPES } from "@/bootstrap/container-types";
+import axios from "axios";
 import type {
   AcceptConsentInput,
   AcceptLoginInput,
   AuthorizeInput,
   ConsentChallenge,
+  ExchangeTokenInput,
   IntrospectTokenResult,
   IOAuthProvider,
   LoginChallenge,
@@ -14,6 +16,7 @@ import type {
   RegisterOAuthClientInput,
   RegisteredOAuthClient,
   RejectRequestInput,
+  TokenResult,
 } from "@/integrations/oauth/IOAuthProvider";
 import type { HydraClient } from "@/integrations/oauth/HydraClient";
 import {
@@ -39,10 +42,7 @@ export class HydraOAuthProvider implements IOAuthProvider {
 
     if (input.codeChallenge) {
       url.searchParams.set("code_challenge", input.codeChallenge);
-      url.searchParams.set(
-        "code_challenge_method",
-        input.codeChallengeMethod ?? "S256",
-      );
+      url.searchParams.set("code_challenge_method", input.codeChallengeMethod ?? "S256");
     }
     if (input.nonce) {
       url.searchParams.set("nonce", input.nonce);
@@ -164,6 +164,50 @@ export class HydraOAuthProvider implements IOAuthProvider {
     }
   }
 
+  async exchangeToken(input: ExchangeTokenInput): Promise<TokenResult> {
+    const form = new URLSearchParams();
+    form.set("grant_type", input.grantType);
+    form.set("client_id", input.clientId);
+    form.set("code", input.code);
+    form.set("redirect_uri", input.redirectUri);
+    form.set("code_verifier", input.codeVerifier);
+    if (input.clientSecret) {
+      form.set("client_secret", input.clientSecret);
+    }
+
+    try {
+      const { data } = await axios.post<{
+        access_token?: string;
+        token_type?: string;
+        expires_in?: number;
+        refresh_token?: string;
+        id_token?: string;
+        scope?: string;
+      }>(`${this.hydra.publicUrl}/oauth2/token`, form.toString(), {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        validateStatus: (status) => status >= 200 && status < 300,
+      });
+
+      if (!data.access_token || !data.token_type) {
+        throw new InvalidOAuthRequestError("Token response missing access_token or token_type");
+      }
+
+      return {
+        accessToken: data.access_token,
+        tokenType: data.token_type,
+        expiresIn: data.expires_in,
+        refreshToken: data.refresh_token,
+        idToken: data.id_token,
+        scope: data.scope,
+      };
+    } catch (error) {
+      if (error instanceof InvalidOAuthRequestError) {
+        throw error;
+      }
+      this.rethrowAsApplicationError(error);
+    }
+  }
+
   async introspectToken(token: string, scope?: string): Promise<IntrospectTokenResult> {
     try {
       const { data } = await this.hydra.adminApi.introspectOAuth2Token({
@@ -196,9 +240,7 @@ export class HydraOAuthProvider implements IOAuthProvider {
 
   async registerClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient> {
     const tokenEndpointAuthMethod = input.tokenEndpointAuthMethod ?? "none";
-    const responseTypes = input.grantTypes.includes("authorization_code")
-      ? ["code"]
-      : [];
+    const responseTypes = input.grantTypes.includes("authorization_code") ? ["code"] : [];
 
     try {
       const { data } = await this.hydra.adminApi.createOAuth2Client({
@@ -210,9 +252,7 @@ export class HydraOAuthProvider implements IOAuthProvider {
           response_types: responseTypes,
           scope: input.scopes.join(" "),
           token_endpoint_auth_method: tokenEndpointAuthMethod,
-          ...(input.clientSecret !== undefined
-            ? { client_secret: input.clientSecret }
-            : {}),
+          ...(input.clientSecret !== undefined ? { client_secret: input.clientSecret } : {}),
         },
       });
 

@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
-import type { CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, createAttachment, getConsentChallenge, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword, rejectConsentChallenge } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse, RejectConsentChallengeData, RejectConsentChallengeResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -118,6 +118,112 @@ export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => 
  * Return basic information about the current user by verifying the session cookie
  */
 export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
+
+export const authorizeQueryKey = (options: Options<AuthorizeData>) => createQueryKey('authorize', options);
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const authorizeOptions = (options: Options<AuthorizeData>) => queryOptions<AuthorizeResponse, AxiosError<DefaultError>, AuthorizeResponse, ReturnType<typeof authorizeQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await authorize({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: authorizeQueryKey(options)
+});
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow
+ */
+export const useAuthorizeQuery = (options: Options<AuthorizeData>) => useQuery(authorizeOptions(options));
+
+export const getConsentChallengeQueryKey = (options: Options<GetConsentChallengeData>) => createQueryKey('getConsentChallenge', options);
+
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const getConsentChallengeOptions = (options: Options<GetConsentChallengeData>) => queryOptions<GetConsentChallengeResponse, AxiosError<DefaultError>, GetConsentChallengeResponse, ReturnType<typeof getConsentChallengeQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getConsentChallenge({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getConsentChallengeQueryKey(options)
+});
+
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const useGetConsentChallengeQuery = (options: Options<GetConsentChallengeData>) => useQuery(getConsentChallengeOptions(options));
+
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const acceptConsentChallengeMutation = (options?: Partial<Options<AcceptConsentChallengeData>>): UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>> => {
+    const mutationOptions: UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await acceptConsentChallenge({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const useAcceptConsentChallengeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>>, 'mutationFn'>>) => useMutation({ ...acceptConsentChallengeMutation(), ...mutationOptions });
+
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const rejectConsentChallengeMutation = (options?: Partial<Options<RejectConsentChallengeData>>): UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>> => {
+    const mutationOptions: UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await rejectConsentChallenge({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const useRejectConsentChallengeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>>, 'mutationFn'>>) => useMutation({ ...rejectConsentChallengeMutation(), ...mutationOptions });
 
 /**
  * Register with email and password
