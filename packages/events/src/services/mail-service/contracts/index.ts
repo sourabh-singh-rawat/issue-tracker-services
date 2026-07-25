@@ -1,0 +1,1 @@
+export { UserConfirmationEmailSentEvent } from "./UserConfirmationEmailSentEvent";

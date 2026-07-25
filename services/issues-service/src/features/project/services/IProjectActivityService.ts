@@ -1,10 +1,10 @@
 import { ServiceResponseInputs } from "@pine/common";
-import { ProjectPayload } from "@pine/event-bus";
+import { ProjectData } from "@pine/events";
 import { ProjectIssueActivity } from "@/entities/ProjectIssueActivity";
 
 export interface IProjectActivityService {
-  logCreatedProject(payload: ProjectPayload): Promise<void>;
-  logUpdatedProjectName(payload: ProjectPayload): Promise<void>;
-  logUpdatedProjectDescription(payload: ProjectPayload): Promise<void>;
+  logCreatedProject(payload: ProjectData): Promise<void>;
+  logUpdatedProjectName(payload: ProjectData): Promise<void>;
+  logUpdatedProjectDescription(payload: ProjectData): Promise<void>;
   getProjectActivityList(id: string): Promise<ServiceResponseInputs<ProjectIssueActivity[]>>;
 }

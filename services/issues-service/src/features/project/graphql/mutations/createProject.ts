@@ -1,7 +1,7 @@
 import { builder } from "@pine/graphql-core";
 import { TYPES, container, dataSource } from "@/bootstrap";
 import { IProjectService } from "@/features/project";
-import { CreateProjectInput } from "../inputs/create-project.input";
+import { CreateProjectInput } from "../inputs/CreateProjectInput";
 
 builder.mutationFields((t) => ({
   createProject: t.string({

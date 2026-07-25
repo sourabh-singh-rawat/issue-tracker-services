@@ -1,12 +1,10 @@
 import { STATUS_TYPE, StatusType } from "@pine/common";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Audit } from "@pine/orm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { Project } from "@/entities/Project";
 
 @Entity({ name: "status_options" })
-export class StatusOption extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
+export class StatusOption extends Audit {
   @Column({ type: "text" })
   name!: string;
 

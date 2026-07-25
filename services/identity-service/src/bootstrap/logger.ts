@@ -1,4 +1,4 @@
-import { CoreLogger } from "@pine/server-core";
+import { PinoLogger } from "@pine/http-core";
 import pino from "pino";
 
-export const logger = new CoreLogger(pino({ transport: { target: "pino-pretty" } }));
+export const logger = new PinoLogger(pino({ transport: { target: "pino-pretty" } }));

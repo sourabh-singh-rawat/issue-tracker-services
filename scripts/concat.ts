@@ -1,3 +1,4 @@
+import { execFileSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
@@ -6,11 +7,24 @@ import { encodingForModel } from "js-tiktoken";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Helper to get all files recursively
-function getFilesRecursively(
-  dir: string,
-  excludeDirs = ["node_modules", ".git", "dist", "build", ".next", ".nx"],
-): string[] {
+const DEFAULT_EXCLUDE_DIRS = ["node_modules", ".git", "dist", "build", ".next", ".nx"];
+const IS_WINDOWS = process.platform === "win32";
+
+/** Normalize for comparison (slashes + case on Windows). */
+function normalizeForCompare(p: string): string {
+  const resolved = path.resolve(p).replace(/\\/g, "/");
+  return IS_WINDOWS ? resolved.toLowerCase() : resolved;
+}
+
+/** True if `file` is the same as `dir` or a descendant of it. */
+function isPathInside(file: string, dir: string): boolean {
+  const f = normalizeForCompare(file);
+  const d = normalizeForCompare(dir);
+  return f === d || f.startsWith(d.endsWith("/") ? d : d + "/");
+}
+
+/** Walk the tree with a fixed exclude-dir list (used when not inside a git repo). */
+function getFilesRecursively(dir: string, excludeDirs = DEFAULT_EXCLUDE_DIRS): string[] {
   let results: string[] = [];
   const list = fs.readdirSync(dir);
   for (const file of list) {
@@ -25,6 +39,80 @@ function getFilesRecursively(
     }
   }
   return results;
+}
+
+/**
+ * List files under targetDir that are not ignored by git (.gitignore, nested
+ * gitignores, .git/info/exclude, and global excludes). Includes tracked files
+ * and untracked non-ignored files. Returns null if targetDir is not in a git repo.
+ */
+function getFilesRespectingGitignore(targetDir: string): string[] | null {
+  try {
+    // Resolve so drive-letter / slash style matches path.resolve(gitRoot, rel) below.
+    // On Windows, git often reports "D:/..." while the user may pass "d:\...".
+    const gitRoot = path.resolve(
+      execFileSync("git", ["rev-parse", "--show-toplevel"], {
+        cwd: targetDir,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim(),
+    );
+
+    const relativeTarget = path.relative(gitRoot, targetDir).replace(/\\/g, "/") || ".";
+
+    // --cached: tracked files
+    // --others: untracked files
+    // --exclude-standard: apply .gitignore, info/exclude, and global excludes
+    // Prefer a pathspec under the repo; if roots disagree (e.g. odd casing), list all and filter.
+    const pathspec =
+      relativeTarget.startsWith("..") || path.isAbsolute(relativeTarget)
+        ? ["."]
+        : [relativeTarget];
+
+    const output = execFileSync(
+      "git",
+      ["ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", ...pathspec],
+      {
+        cwd: gitRoot,
+        encoding: "utf8",
+        maxBuffer: 50 * 1024 * 1024,
+        stdio: ["ignore", "pipe", "ignore"],
+      },
+    );
+
+    if (!output) {
+      return [];
+    }
+
+    return output
+      .split("\0")
+      .filter(Boolean)
+      .map((rel) => path.resolve(gitRoot, rel))
+      .filter((abs) => {
+        if (!isPathInside(abs, targetDir)) {
+          return false;
+        }
+        try {
+          return fs.statSync(abs).isFile();
+        } catch {
+          return false;
+        }
+      });
+  } catch {
+    return null;
+  }
+}
+
+function collectFiles(targetDir: string): { files: string[]; usedGitignore: boolean } {
+  const gitFiles = getFilesRespectingGitignore(targetDir);
+  if (gitFiles !== null) {
+    return { files: gitFiles, usedGitignore: true };
+  }
+
+  console.warn(
+    "Warning: Not inside a git repository; falling back to default directory excludes (node_modules, dist, …).",
+  );
+  return { files: getFilesRecursively(targetDir), usedGitignore: false };
 }
 
 function parseArgs(args: string[]) {
@@ -80,23 +168,26 @@ function main(): void {
     console.log(`Filtering files by extensions: ${extensions.join(", ")}`);
   }
 
-  // Exclude output file itself from compilation
   let files: string[];
+  let usedGitignore: boolean;
   try {
-    files = getFilesRecursively(targetDir);
+    ({ files, usedGitignore } = collectFiles(targetDir));
   } catch (err: any) {
     console.error("Error scanning directory:", err.message);
     process.exit(1);
   }
 
-  // Filter out the output file, typescript/javascript script itself, and any previous script variants
-  files = files.filter(
-    (f) =>
-      f !== outputFile &&
-      f !== __filename &&
-      !f.endsWith("combine.ts") &&
-      !f.endsWith("combine.js"),
-  );
+  if (usedGitignore) {
+    console.log("Respecting .gitignore (and related git exclude rules).");
+  }
+
+  // Filter out the output file, this script, and any previous script variants
+  files = files.filter((f) => {
+    if (normalizeForCompare(f) === normalizeForCompare(outputFile)) return false;
+    if (normalizeForCompare(f) === normalizeForCompare(__filename)) return false;
+    if (f.endsWith("combine.ts") || f.endsWith("combine.js")) return false;
+    return true;
+  });
 
   // Filter by extensions if specified
   if (extensions) {
@@ -105,6 +196,9 @@ function main(): void {
       return extensions.includes(ext);
     });
   }
+
+  // Stable order for reproducible output
+  files.sort((a, b) => a.localeCompare(b));
 
   console.log(`Found ${files.length} files to combine.`);
 

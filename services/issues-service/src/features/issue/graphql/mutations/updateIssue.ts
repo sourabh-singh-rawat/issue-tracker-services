@@ -2,7 +2,7 @@ import { ItemPriority } from "@pine/common";
 import { builder } from "@pine/graphql-core";
 import { TYPES, container, dataSource } from "@/bootstrap";
 import { IIssueService } from "@/features/issue";
-import { UpdateIssueInput } from "../inputs/update-issue.input";
+import { UpdateIssueInput } from "../inputs/UpdateIssueInput";
 
 builder.mutationFields((t) => ({
   updateIssue: t.string({

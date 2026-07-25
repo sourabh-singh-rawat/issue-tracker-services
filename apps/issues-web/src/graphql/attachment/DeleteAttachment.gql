@@ -1,0 +1,3 @@
+mutation DeleteAttachment($deleteAttachmentId: String!) {
+  deleteAttachment(id: $deleteAttachmentId)
+}

@@ -4,7 +4,7 @@ import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
 
 export type IssuesContext = GraphQLContext;
 
-export const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
+export const createContext: ApolloFastifyContextFunction<IssuesContext> = async (req, rep) => {
   const { accessToken } = req.cookies;
 
   if (accessToken) {

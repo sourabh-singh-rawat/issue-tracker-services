@@ -1,5 +1,5 @@
 import { IssueActivity as IssueActivityType, ProjectActivity, ServiceResponse } from "@pine/common";
-import { IssueCreatedPayload, ProjectPayload } from "@pine/event-bus";
+import { IssueCreatedData, ProjectData } from "@pine/events";
 import { IssueActivity } from "@/entities/IssueActivity";
 import { ProjectIssueActivity } from "@/entities/ProjectIssueActivity";
 import { IProjectActivityService } from "./IProjectActivityService";
@@ -7,7 +7,7 @@ import { IProjectActivityService } from "./IProjectActivityService";
 export class ProjectActivityService implements IProjectActivityService {
   constructor() {}
 
-  logCreatedIssue = async (payload: IssueCreatedPayload) => {
+  logCreatedIssue = async (payload: IssueCreatedData) => {
     const { id, projectId } = payload;
 
     const newIssueActivity = new IssueActivity();
@@ -16,17 +16,17 @@ export class ProjectActivityService implements IProjectActivityService {
     newIssueActivity.projectId = projectId;
   };
 
-  logCreatedProject = async (payload: ProjectPayload) => {
+  logCreatedProject = async (payload: ProjectData) => {
     const { id, ownerUserId, createdAt } = payload;
 
     const newProjectActivity = new ProjectIssueActivity();
     newProjectActivity.userId = ownerUserId;
     newProjectActivity.projectId = id;
     newProjectActivity.action = ProjectActivity.CREATED;
-    newProjectActivity.createdAt = createdAt;
+    newProjectActivity.createdAt = new Date(createdAt);
   };
 
-  logUpdatedProjectName = async (payload: ProjectPayload) => {
+  logUpdatedProjectName = async (payload: ProjectData) => {
     const { id, ownerUserId, updatedAt } = payload;
 
     if (!updatedAt) {
@@ -37,10 +37,10 @@ export class ProjectActivityService implements IProjectActivityService {
     newProjectActivity.action = ProjectActivity.UPDATED_NAME;
     newProjectActivity.projectId = id;
     newProjectActivity.userId = ownerUserId;
-    newProjectActivity.createdAt = updatedAt;
+    newProjectActivity.createdAt = new Date(updatedAt);
   };
 
-  logUpdatedProjectDescription = async (payload: ProjectPayload) => {
+  logUpdatedProjectDescription = async (payload: ProjectData) => {
     const { id, ownerUserId, updatedAt } = payload;
 
     if (!updatedAt) {
@@ -51,7 +51,7 @@ export class ProjectActivityService implements IProjectActivityService {
     newProjectActivity.userId = ownerUserId;
     newProjectActivity.projectId = id;
     newProjectActivity.action = ProjectActivity.UPDATED_DESCRIPTION;
-    newProjectActivity.createdAt = updatedAt;
+    newProjectActivity.createdAt = new Date(updatedAt);
   };
 
   getProjectActivityList = async (id: string) => {

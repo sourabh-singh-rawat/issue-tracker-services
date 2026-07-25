@@ -1,5 +1,5 @@
 import { STATUS_TYPE, UserNotFoundError } from "@pine/common";
-import { Publisher, Subjects } from "@pine/event-bus";
+import { type IPublisher, SUBJECTS } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { IStatusService } from "@/features/status/services/IStatusService";
@@ -18,7 +18,7 @@ import {
 export class ProjectService implements IProjectService {
   constructor(
     @inject(TYPES.Publisher)
-    private readonly publisher: Publisher<Subjects>,
+    private readonly publisher: IPublisher,
     @inject(TYPES.UserService)
     private readonly userService: IUserService,
     @inject(TYPES.StatusService)
@@ -52,7 +52,7 @@ export class ProjectService implements IProjectService {
         { name: "Cancelled", type: STATUS_TYPE.CLOSED, orderIndex: 3 },
       ],
     });
-    await this.publisher.send("project.created", savedProject);
+    await this.publisher.send(SUBJECTS.PROJECT_CREATED, savedProject);
 
     return projectId;
   }
@@ -85,6 +85,6 @@ export class ProjectService implements IProjectService {
 
     const updatedProject = await ProjectRepo.update({ id }, { name });
 
-    await this.publisher.send("project.updated", updatedProject);
+    await this.publisher.send(SUBJECTS.PROJECT_UPDATED, updatedProject);
   }
 }

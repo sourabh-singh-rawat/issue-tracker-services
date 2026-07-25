@@ -1,4 +1,4 @@
-import { NatsPublisher } from "@pine/event-bus";
+import { NatsPublisher, type IPublisher } from "@pine/events";
 import { Container } from "inversify";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
@@ -17,7 +17,9 @@ container.bind(TYPES.DataSource).toConstantValue(dataSource);
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind(TYPES.Orm).toConstantValue(orm);
-container.bind(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
+container
+  .bind<IPublisher>(TYPES.Publisher)
+  .toConstantValue(new NatsPublisher(broker));
 
 container.bind<IUserService>(TYPES.UserService).to(UserService);
 container.bind<IIssueService>(TYPES.IssueService).to(IssueService);

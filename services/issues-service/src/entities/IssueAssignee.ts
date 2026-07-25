@@ -1,13 +1,10 @@
 import { Audit } from "@pine/orm";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { Issue } from "@/entities/Issue";
 import { User } from "@/entities/User";
 
 @Entity({ name: "item_assignees" })
 export class IssueAssignee extends Audit {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
   @JoinColumn({ name: "item_id" })
   issueId!: string;
 
