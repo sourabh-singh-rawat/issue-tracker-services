@@ -3,6 +3,7 @@ export type {
   AcceptLoginInput,
   AuthorizeInput,
   ConsentChallenge,
+  ExchangeTokenInput,
   IntrospectTokenResult,
   IOAuthProvider,
   LoginChallenge,
@@ -11,6 +12,7 @@ export type {
   RegisterOAuthClientInput,
   RegisteredOAuthClient,
   RejectRequestInput,
+  TokenResult,
 } from "@/integrations/oauth/IOAuthProvider";
 export {
   InvalidOAuthRequestError,

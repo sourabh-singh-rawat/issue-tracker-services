@@ -1,5 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { InvalidOAuthRequestError } from "@/integrations/oauth/errors";
+import {
+  InvalidOAuthRequestError,
+  OAuthProviderUnavailableError,
+  OAuthRequestNotFoundError,
+} from "@/integrations/oauth/errors";
 import { OAuthService } from "@/features/oauth/services/OAuthService";
 
 function createOAuthProviderMock(
@@ -11,6 +15,7 @@ function createOAuthProviderMock(
     getConsentRequest: ReturnType<typeof vi.fn>;
     acceptConsentRequest: ReturnType<typeof vi.fn>;
     rejectConsentRequest: ReturnType<typeof vi.fn>;
+    exchangeToken: ReturnType<typeof vi.fn>;
     introspectToken: ReturnType<typeof vi.fn>;
     revokeToken: ReturnType<typeof vi.fn>;
   }> = {},
@@ -23,6 +28,7 @@ function createOAuthProviderMock(
     getConsentRequest: overrides.getConsentRequest ?? vi.fn(),
     acceptConsentRequest: overrides.acceptConsentRequest ?? vi.fn(),
     rejectConsentRequest: overrides.rejectConsentRequest ?? vi.fn(),
+    exchangeToken: overrides.exchangeToken ?? vi.fn(),
     introspectToken: overrides.introspectToken ?? vi.fn(),
     revokeToken: overrides.revokeToken ?? vi.fn(),
   };
@@ -167,36 +173,207 @@ describe("OAuthService login challenge flow", () => {
 });
 
 describe("OAuthService consent challenge flow", () => {
-  // TODO: implement OAuthService.getConsentChallenge / handleConsentChallenge
-  it.todo("loads a consent challenge from the OAuth provider by challenge id");
+  it("loads a consent challenge from the OAuth provider by challenge id", async () => {
+    const consentChallenge = {
+      challenge: "consent-challenge-1",
+      skip: false,
+      subject: "user-1",
+      client: { id: "issues-web", name: "Issues Web" },
+      requestedScope: ["openid"],
+      requestUrl: "http://127.0.0.1:4444/oauth2/auth?...",
+      loginChallenge: "login-challenge-1",
+      loginSessionId: "login-session-1",
+    };
+    const getConsentRequest = vi.fn().mockResolvedValue(consentChallenge);
+    const service = new OAuthService(
+      createOAuthProviderMock({ getConsentRequest }) as never,
+    );
 
-  it.todo(
-    "accepts a consent challenge with granted scopes and returns redirectTo",
-  );
+    await expect(service.getConsentChallenge("consent-challenge-1")).resolves.toEqual(
+      consentChallenge,
+    );
+    expect(getConsentRequest).toHaveBeenCalledWith("consent-challenge-1");
+  });
 
-  it.todo(
-    "accepts consent with remember, accessTokenExtra, and idTokenExtra claims",
-  );
+  it("accepts a consent challenge with granted scopes and returns redirectTo", async () => {
+    const acceptConsentRequest = vi.fn().mockResolvedValue({
+      redirectTo: "http://127.0.0.1:4444/oauth2/auth?consent_verifier=abc",
+    });
+    const service = new OAuthService(
+      createOAuthProviderMock({ acceptConsentRequest }) as never,
+    );
 
-  it.todo(
-    "auto-accepts a skipable consent challenge with previously granted scopes",
-  );
+    await expect(
+      service.acceptConsent({
+        challenge: "consent-challenge-1",
+        grantScope: ["openid", "offline"],
+      }),
+    ).resolves.toEqual({
+      redirectTo: "http://127.0.0.1:4444/oauth2/auth?consent_verifier=abc",
+    });
+    expect(acceptConsentRequest).toHaveBeenCalledWith({
+      challenge: "consent-challenge-1",
+      grantScope: ["openid", "offline"],
+      remember: undefined,
+      rememberFor: undefined,
+    });
+  });
 
-  it.todo(
-    "rejects a consent challenge with an error code and description and returns redirectTo",
-  );
+  it("accepts consent with remember options", async () => {
+    const acceptConsentRequest = vi.fn().mockResolvedValue({
+      redirectTo: "http://127.0.0.1:4444/oauth2/auth?consent_verifier=abc",
+    });
+    const service = new OAuthService(
+      createOAuthProviderMock({ acceptConsentRequest }) as never,
+    );
 
-  it.todo(
-    "propagates OAuthRequestNotFoundError when the consent challenge is unknown",
-  );
+    await expect(
+      service.acceptConsent({
+        challenge: "consent-challenge-1",
+        grantScope: ["openid"],
+        remember: true,
+        rememberFor: 3600,
+      }),
+    ).resolves.toEqual({
+      redirectTo: "http://127.0.0.1:4444/oauth2/auth?consent_verifier=abc",
+    });
+    expect(acceptConsentRequest).toHaveBeenCalledWith({
+      challenge: "consent-challenge-1",
+      grantScope: ["openid"],
+      remember: true,
+      rememberFor: 3600,
+    });
+  });
 
-  it.todo(
-    "propagates InvalidOAuthRequestError when the consent challenge is invalid",
-  );
+  it("rejects a consent challenge with an error code and description and returns redirectTo", async () => {
+    const rejectConsentRequest = vi.fn().mockResolvedValue({
+      redirectTo: "http://127.0.0.1:4444/oauth2/auth?error=access_denied",
+    });
+    const service = new OAuthService(
+      createOAuthProviderMock({ rejectConsentRequest }) as never,
+    );
 
-  it.todo(
-    "propagates OAuthProviderUnavailableError when the OAuth provider is down",
-  );
+    await expect(
+      service.rejectConsent({
+        challenge: "consent-challenge-1",
+        error: "access_denied",
+        errorDescription: "User denied consent",
+      }),
+    ).resolves.toEqual({
+      redirectTo: "http://127.0.0.1:4444/oauth2/auth?error=access_denied",
+    });
+    expect(rejectConsentRequest).toHaveBeenCalledWith({
+      challenge: "consent-challenge-1",
+      error: "access_denied",
+      errorDescription: "User denied consent",
+    });
+  });
+
+  it("propagates OAuthRequestNotFoundError when the consent challenge is unknown", async () => {
+    const getConsentRequest = vi
+      .fn()
+      .mockRejectedValue(new OAuthRequestNotFoundError());
+    const service = new OAuthService(
+      createOAuthProviderMock({ getConsentRequest }) as never,
+    );
+
+    await expect(service.getConsentChallenge("missing")).rejects.toBeInstanceOf(
+      OAuthRequestNotFoundError,
+    );
+  });
+
+  it("propagates InvalidOAuthRequestError when the consent challenge is invalid", async () => {
+    const getConsentRequest = vi.fn().mockRejectedValue(new InvalidOAuthRequestError());
+    const service = new OAuthService(
+      createOAuthProviderMock({ getConsentRequest }) as never,
+    );
+
+    await expect(service.getConsentChallenge("bad")).rejects.toBeInstanceOf(
+      InvalidOAuthRequestError,
+    );
+  });
+
+  it("propagates OAuthProviderUnavailableError when the OAuth provider is down", async () => {
+    const getConsentRequest = vi
+      .fn()
+      .mockRejectedValue(new OAuthProviderUnavailableError());
+    const service = new OAuthService(
+      createOAuthProviderMock({ getConsentRequest }) as never,
+    );
+
+    await expect(service.getConsentChallenge("consent-challenge-1")).rejects.toBeInstanceOf(
+      OAuthProviderUnavailableError,
+    );
+  });
+});
+
+describe("OAuthService.exchangeToken", () => {
+  it("exchanges an authorization code via the OAuth provider", async () => {
+    const exchangeToken = vi.fn().mockResolvedValue({
+      accessToken: "access-1",
+      tokenType: "bearer",
+      expiresIn: 3600,
+      refreshToken: "refresh-1",
+      idToken: "id-1",
+      scope: "openid offline",
+    });
+    const service = new OAuthService(createOAuthProviderMock({ exchangeToken }) as never);
+
+    await expect(
+      service.exchangeToken({
+        grantType: "authorization_code",
+        code: "auth-code-1",
+        clientId: "inventory-web",
+        redirectUri: "http://localhost:3001/callback",
+        codeVerifier: "verifier-1",
+      }),
+    ).resolves.toEqual({
+      accessToken: "access-1",
+      tokenType: "bearer",
+      expiresIn: 3600,
+      refreshToken: "refresh-1",
+      idToken: "id-1",
+      scope: "openid offline",
+    });
+
+    expect(exchangeToken).toHaveBeenCalledWith({
+      grantType: "authorization_code",
+      clientId: "inventory-web",
+      code: "auth-code-1",
+      redirectUri: "http://localhost:3001/callback",
+      codeVerifier: "verifier-1",
+    });
+  });
+
+  it("propagates InvalidOAuthRequestError from the OAuth provider", async () => {
+    const exchangeToken = vi.fn().mockRejectedValue(new InvalidOAuthRequestError());
+    const service = new OAuthService(createOAuthProviderMock({ exchangeToken }) as never);
+
+    await expect(
+      service.exchangeToken({
+        grantType: "authorization_code",
+        code: "bad-code",
+        clientId: "inventory-web",
+        redirectUri: "http://localhost:3001/callback",
+        codeVerifier: "verifier-1",
+      }),
+    ).rejects.toBeInstanceOf(InvalidOAuthRequestError);
+  });
+
+  it("propagates OAuthProviderUnavailableError when the OAuth provider is down", async () => {
+    const exchangeToken = vi.fn().mockRejectedValue(new OAuthProviderUnavailableError());
+    const service = new OAuthService(createOAuthProviderMock({ exchangeToken }) as never);
+
+    await expect(
+      service.exchangeToken({
+        grantType: "authorization_code",
+        code: "auth-code-1",
+        clientId: "inventory-web",
+        redirectUri: "http://localhost:3001/callback",
+        codeVerifier: "verifier-1",
+      }),
+    ).rejects.toBeInstanceOf(OAuthProviderUnavailableError);
+  });
 });
 
 describe("OAuthService token operations", () => {

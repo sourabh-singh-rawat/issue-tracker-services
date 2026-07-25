@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { authorize, createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
-import type { AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
+import { authorize, createAttachment, getConsentChallenge, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
+import type { AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -145,6 +145,33 @@ export const authorizeOptions = (options: Options<AuthorizeData>) => queryOption
  * Start the OAuth authorization code flow
  */
 export const useAuthorizeQuery = (options: Options<AuthorizeData>) => useQuery(authorizeOptions(options));
+
+export const getConsentChallengeQueryKey = (options: Options<GetConsentChallengeData>) => createQueryKey('getConsentChallenge', options);
+
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const getConsentChallengeOptions = (options: Options<GetConsentChallengeData>) => queryOptions<GetConsentChallengeResponse, AxiosError<DefaultError>, GetConsentChallengeResponse, ReturnType<typeof getConsentChallengeQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getConsentChallenge({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getConsentChallengeQueryKey(options)
+});
+
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const useGetConsentChallengeQuery = (options: Options<GetConsentChallengeData>) => useQuery(getConsentChallengeOptions(options));
 
 /**
  * Register with email and password
