@@ -18,9 +18,12 @@ export class UserProfileService implements IUserProfileService {
   ) {}
 
   async createUserProfile(options: CreateUserProfileOptions) {
-    const { manager, displayName, userId, description } = options;
+    const { tx, displayName, userId, description } = options;
 
-    await this.userProfileRepository.save({ displayName, userId, description }, { manager });
+    await this.userProfileRepository.save(
+      { displayName, userId, description },
+      { tx },
+    );
   }
 
   async getUserProfileByUserId(userId: string) {

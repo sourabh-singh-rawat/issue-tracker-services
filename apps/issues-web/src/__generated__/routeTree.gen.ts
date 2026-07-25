@@ -12,8 +12,6 @@ import { Route as rootRouteImport } from './../routes/__root'
 import { Route as AuthenticatedRouteImport } from './../routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticated/index'
 import { Route as AuthenticatedMeRouteImport } from './../routes/_authenticated/me'
-import { Route as noAuthSignupRouteImport } from './../routes/(no-auth)/signup'
-import { Route as noAuthLoginRouteImport } from './../routes/(no-auth)/login'
 import { Route as noAuthEmailVerificationRouteImport } from './../routes/(no-auth)/email-verification'
 import { Route as AuthenticatedWorkspacesIdRouteImport } from './../routes/_authenticated/workspaces.$id'
 import { Route as AuthenticatedIIssueIdRouteImport } from './../routes/_authenticated/i.$issueId'
@@ -36,16 +34,6 @@ const AuthenticatedMeRoute = AuthenticatedMeRouteImport.update({
   id: '/me',
   path: '/me',
   getParentRoute: () => AuthenticatedRoute,
-} as any)
-const noAuthSignupRoute = noAuthSignupRouteImport.update({
-  id: '/(no-auth)/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const noAuthLoginRoute = noAuthLoginRouteImport.update({
-  id: '/(no-auth)/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const noAuthEmailVerificationRoute = noAuthEmailVerificationRouteImport.update({
   id: '/(no-auth)/email-verification',
@@ -97,8 +85,6 @@ const AuthenticatedWorkspaceIdVBViewIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
-  '/login': typeof noAuthLoginRoute
-  '/signup': typeof noAuthSignupRoute
   '/me': typeof AuthenticatedMeRoute
   '/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
   '/i/$issueId': typeof AuthenticatedIIssueIdRoute
@@ -110,8 +96,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/email-verification': typeof noAuthEmailVerificationRoute
-  '/login': typeof noAuthLoginRoute
-  '/signup': typeof noAuthSignupRoute
   '/me': typeof AuthenticatedMeRoute
   '/': typeof AuthenticatedIndexRoute
   '/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
@@ -126,8 +110,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/(no-auth)/email-verification': typeof noAuthEmailVerificationRoute
-  '/(no-auth)/login': typeof noAuthLoginRoute
-  '/(no-auth)/signup': typeof noAuthSignupRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
@@ -143,8 +125,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/email-verification'
-    | '/login'
-    | '/signup'
     | '/me'
     | '/$workspaceId/home'
     | '/i/$issueId'
@@ -156,8 +136,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/email-verification'
-    | '/login'
-    | '/signup'
     | '/me'
     | '/'
     | '/$workspaceId/home'
@@ -171,8 +149,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/(no-auth)/email-verification'
-    | '/(no-auth)/login'
-    | '/(no-auth)/signup'
     | '/_authenticated/me'
     | '/_authenticated/'
     | '/_authenticated/$workspaceId/home'
@@ -187,8 +163,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   noAuthEmailVerificationRoute: typeof noAuthEmailVerificationRoute
-  noAuthLoginRoute: typeof noAuthLoginRoute
-  noAuthSignupRoute: typeof noAuthSignupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -213,20 +187,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/me'
       preLoaderRoute: typeof AuthenticatedMeRouteImport
       parentRoute: typeof AuthenticatedRoute
-    }
-    '/(no-auth)/signup': {
-      id: '/(no-auth)/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof noAuthSignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(no-auth)/login': {
-      id: '/(no-auth)/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof noAuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/(no-auth)/email-verification': {
       id: '/(no-auth)/email-verification'
@@ -332,8 +292,6 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   noAuthEmailVerificationRoute: noAuthEmailVerificationRoute,
-  noAuthLoginRoute: noAuthLoginRoute,
-  noAuthSignupRoute: noAuthSignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

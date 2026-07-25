@@ -170,8 +170,12 @@ export class KratosIdentityProvider implements IIdentityProvider {
     throw new Error("Method not implemented.");
   }
 
-  async deleteIdentity(_id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteIdentity(id: string): Promise<void> {
+    try {
+      await this.kratos.identityApi.deleteIdentity({ id });
+    } catch (error) {
+      this.rethrowAsApplicationError(error);
+    }
   }
 
   private rethrowAsApplicationError(error: unknown): never {

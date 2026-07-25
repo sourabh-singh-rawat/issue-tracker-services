@@ -1,4 +1,4 @@
-import { User } from "@/entities/User";
+import type { User } from "@/db";
 
 export interface IUserService {
   getUserById(id: string): Promise<User>;

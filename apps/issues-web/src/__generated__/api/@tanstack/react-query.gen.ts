@@ -4,8 +4,34 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { authorize, createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
-import type { AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
+import { adminDeleteUser, authorize, createAttachment, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
+import type { AdminDeleteUserData, AdminDeleteUserResponse, AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
+
+/**
+ * Delete user
+ *
+ * Admin endpoint: soft-delete the local user (and profile) and permanently delete the identity from the identity provider
+ */
+export const adminDeleteUserMutation = (options?: Partial<Options<AdminDeleteUserData>>): UseMutationOptions<AdminDeleteUserResponse, AxiosError<DefaultError>, Options<AdminDeleteUserData>> => {
+    const mutationOptions: UseMutationOptions<AdminDeleteUserResponse, AxiosError<DefaultError>, Options<AdminDeleteUserData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await adminDeleteUser({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Delete user
+ *
+ * Admin endpoint: soft-delete the local user (and profile) and permanently delete the identity from the identity provider
+ */
+export const useAdminDeleteUserMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AdminDeleteUserResponse, AxiosError<DefaultError>, Options<AdminDeleteUserData>>, 'mutationFn'>>) => useMutation({ ...adminDeleteUserMutation(), ...mutationOptions });
 
 /**
  * Login with email and password

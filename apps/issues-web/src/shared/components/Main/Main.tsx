@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { useRouterState } from "@tanstack/react-router";
 
 import MuiBox from "@mui/material/Box";
 import {
@@ -11,17 +11,16 @@ import { useGetCurrentUserQuery } from "@generated/api/@tanstack/react-query.gen
 import { useAuthStore } from "@features/auth";
 import { useWorkspaceStore } from "@features/workspace";
 import { useProjectStore } from "@features/project";
+import { redirectToIdentityLogin } from "../../utils/identity-web";
 import { AppLoader } from "../AppLoader";
 
 interface MainProps {
   children?: React.ReactNode;
 }
 
-const isPublicPath = (pathname: string) =>
-  pathname === "/login" || pathname === "/signup" || pathname === "/email-verification";
+const isPublicPath = (pathname: string) => pathname === "/email-verification";
 
 export function Main({ children }: MainProps) {
-  const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
   const setProjects = useProjectStore((s) => s.setProjects);
@@ -85,8 +84,8 @@ export function Main({ children }: MainProps) {
   useEffect(() => {
     if (!userQuery.isError) return;
     if (isPublicPath(pathname)) return;
-    void navigate({ to: "/login", replace: true });
-  }, [userQuery.isError, pathname, navigate]);
+    redirectToIdentityLogin();
+  }, [userQuery.isError, pathname]);
 
   const loading =
     userQuery.isPending ||

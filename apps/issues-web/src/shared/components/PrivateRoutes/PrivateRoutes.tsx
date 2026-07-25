@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import { Box, Container, Grid2, Toolbar, useTheme } from "@mui/material";
-import { Navigate } from "@tanstack/react-router";
 import { useAuthStore } from "@features/auth";
 import { useWorkspaceStore } from "@features/workspace";
 import { useLargeScreen } from "../../hooks";
+import { redirectToIdentityLogin } from "../../utils/identity-web";
 import { AppLoader } from "../AppLoader";
 import { Navbar } from "../navigation/Navbar";
 import { Sidebar } from "../navigation/Sidebar";
@@ -18,9 +19,15 @@ export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
   const isLargeScreen = useLargeScreen();
   const workspaceId = useWorkspaceStore((s) => s.current?.id);
 
-  if (isLoading) return <AppLoader />;
+  useEffect(() => {
+    if (!isLoading && !current) {
+      redirectToIdentityLogin();
+    }
+  }, [isLoading, current]);
 
-  return current ? (
+  if (isLoading || !current) return <AppLoader />;
+
+  return (
     <Box display="flex" height="100vh">
       <Navbar />
       <Sidebar />
@@ -39,7 +46,5 @@ export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
         )}
       </Container>
     </Box>
-  ) : (
-    <Navigate to="/login" replace />
   );
 };

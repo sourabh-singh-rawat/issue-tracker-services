@@ -1,5 +1,5 @@
 export const TYPES = {
-  DataSource: Symbol.for("DataSource"),
+  Database: Symbol.for("Database"),
   Logger: Symbol.for("Logger"),
   Broker: Symbol.for("Broker"),
   Publisher: Symbol.for("Publisher"),
@@ -16,4 +16,5 @@ export const TYPES = {
   LogoutService: Symbol.for("ILogoutService"),
   MeService: Symbol.for("IMeService"),
   OAuthService: Symbol.for("IOAuthService"),
+  AdminService: Symbol.for("IAdminService"),
 } as const;

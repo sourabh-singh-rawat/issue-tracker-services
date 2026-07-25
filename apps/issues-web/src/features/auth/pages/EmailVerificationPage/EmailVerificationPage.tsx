@@ -1,7 +1,8 @@
 import MuiGrid from "@mui/material/Grid";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useSnackbar } from "@shared";
+import { getIdentityWebLoginUrl } from "@shared/utils/identity-web";
 
 /**
  * Email verification landing page.
@@ -10,7 +11,6 @@ import { useSnackbar } from "@shared";
  */
 export function EmailVerificationPage() {
   const [pageMessage, setPageMessage] = useState("Please wait while we verify your email");
-  const navigate = useNavigate();
   const { token } = useSearch({ strict: false }) as { token?: string };
   const messageBar = useSnackbar();
 
@@ -22,17 +22,18 @@ export function EmailVerificationPage() {
     }
 
     // Token-based email verification is currently completed server-side
-    // (identity / Kratos). Surface a friendly success and send users to login.
+    // (identity / Kratos). Surface a friendly success and send users to identity-web login.
     messageBar.success("Email verification received");
     setPageMessage("Email verified. You will be redirected shortly");
 
     const timeout = setTimeout(() => {
-      const redirectPath = import.meta.env.VITE_EMAIL_VERIFICATION_REDIRECT_PATH || "login";
-      void navigate({ to: `/${redirectPath}` as "/login" });
+      const redirectUrl =
+        import.meta.env.VITE_EMAIL_VERIFICATION_REDIRECT_URL || getIdentityWebLoginUrl();
+      window.location.assign(redirectUrl);
     }, 2500);
 
     return () => clearTimeout(timeout);
-  }, [token, messageBar, navigate]);
+  }, [token, messageBar]);
 
   return (
     <MuiGrid container>

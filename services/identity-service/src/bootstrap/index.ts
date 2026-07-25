@@ -1,6 +1,6 @@
 export { broker } from "@/bootstrap/broker";
 export { container } from "@/bootstrap/container";
-export { dataSource } from "@/bootstrap/data-source";
+export { closeDb, db, initializeDb } from "@/bootstrap/db";
 export { hydraClient } from "@/bootstrap/hydra-client";
 export { kratosClient } from "@/bootstrap/kratos-client";
 export { logger } from "@/bootstrap/logger";

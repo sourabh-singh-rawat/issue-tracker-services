@@ -1,10 +1,13 @@
 import {
+  type CloudEvent,
   type IBroker,
+  type UserRegisteredData,
   CONSUMERS,
   Streams,
   SUBJECTS,
   Subscriber,
-  UserRegisteredData,
+  UserRegisteredEvent,
+  validateEvent,
 } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
@@ -14,7 +17,7 @@ import { User } from "@/entities";
 import { IUserEmailService } from "../services/IUserEmailService";
 
 @injectable()
-export class UserRegisteredSubscriber extends Subscriber<UserRegisteredData> {
+export class UserRegisteredSubscriber extends Subscriber<CloudEvent<UserRegisteredData>> {
   readonly stream = Streams.USER;
   readonly consumer = CONSUMERS.USER_REGISTERED_MAIL;
   readonly subject = SUBJECTS.USER_REGISTERED;
@@ -28,9 +31,11 @@ export class UserRegisteredSubscriber extends Subscriber<UserRegisteredData> {
     super(broker.client);
   }
 
-  onMessage = async (message: JsMsg, payload: UserRegisteredData) => {
+  onMessage = async (message: JsMsg, payload: CloudEvent<UserRegisteredData>) => {
+    const event = validateEvent(UserRegisteredEvent, payload);
+    const { userId, email } = event.data!;
+
     await dataSource.transaction(async (manager) => {
-      const { userId, email, html } = payload;
       const UserRepo = manager.getRepository(User);
 
       const existing = await UserRepo.findOne({ where: { id: userId } });
@@ -38,7 +43,7 @@ export class UserRegisteredSubscriber extends Subscriber<UserRegisteredData> {
         await UserRepo.save({ id: userId });
       }
 
-      await this.userEmailService.sendEmail({ userId, email, html, manager });
+      await this.userEmailService.sendEmail({ userId, email, manager });
     });
 
     message.ack();

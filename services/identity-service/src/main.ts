@@ -10,14 +10,14 @@ import fastify, { type FastifyInstance } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
-import { broker, dataSource, logger } from "@/bootstrap";
+import { broker, db, initializeDb, logger } from "@/bootstrap";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
 export { builder, createContext } from "@/graphql";
 export type { AuthContext } from "@/graphql";
 export { schema } from "@/graphql/schema";
-export { container, dataSource } from "@/bootstrap";
+export { container, db } from "@/bootstrap";
 
 const writeSchemaToDist = () => {
   const schemaPath = path.join(process.cwd(), "dist", "schema.graphql");
@@ -43,7 +43,7 @@ const main = async () => {
   });
   observability?.start();
 
-  await dataSource.initialize();
+  await initializeDb();
   await broker.init();
 
   writeSchemaToDist();

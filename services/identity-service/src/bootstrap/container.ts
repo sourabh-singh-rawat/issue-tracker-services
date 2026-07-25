@@ -1,11 +1,12 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
 import { Container } from "inversify";
 import { broker } from "@/bootstrap/broker";
-import { dataSource } from "@/bootstrap/data-source";
+import { db } from "@/bootstrap/db";
 import { hydraClient } from "@/bootstrap/hydra-client";
 import { kratosClient } from "@/bootstrap/kratos-client";
 import { logger } from "@/bootstrap/logger";
 import { TYPES } from "@/bootstrap/container-types";
+import { IAdminService, AdminService } from "@/features/admin";
 import { ILoginService, LoginService } from "@/features/login";
 import { ILogoutService, LogoutService } from "@/features/logout";
 import { IMeService, MeService } from "@/features/me";
@@ -26,7 +27,7 @@ import { HydraOAuthProvider, IOAuthProvider } from "@/integrations/oauth";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
-container.bind(TYPES.DataSource).toConstantValue(dataSource);
+container.bind(TYPES.Database).toConstantValue(db);
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind(TYPES.Broker).toConstantValue(broker);
 container
@@ -46,3 +47,4 @@ container.bind<ILoginService>(TYPES.LoginService).to(LoginService);
 container.bind<ILogoutService>(TYPES.LogoutService).to(LogoutService);
 container.bind<IMeService>(TYPES.MeService).to(MeService);
 container.bind<IOAuthService>(TYPES.OAuthService).to(OAuthService);
+container.bind<IAdminService>(TYPES.AdminService).to(AdminService);

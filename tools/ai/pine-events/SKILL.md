@@ -15,13 +15,13 @@ description: >
 2. `publisher.send(SUBJECTS.*, payloadObject)`
 3. `Subscriber<T>`: set `stream` / `consumer` / `subject`; decode body as `T`; `message.ack()`
 
-CloudEvents (`defineEvent`, `createCloudEvent`, `identity.user.*` types) exist under `features/` but **publishers/subscribers do not use them yet**. Subject `user.registered` ≠ type `identity.user.registered`.
+CloudEvents (`defineEvent`, `createCloudEvent`, `identity.user.*` types) exist under `cloud-events/` and per-service folders under `services/` but **publishers/subscribers do not use them yet**. Subject `user.registered` ≠ type `identity.user.registered`.
 
 ## Hard rules
 
 | Do | Don’t |
 |----|--------|
-| Map to TypeBox data schemas in `features/*/schemas` | Publish TypeORM entities / `UpdateResult` |
+| Map to TypeBox data schemas in `services/*/schemas` | Publish TypeORM entities / `UpdateResult` |
 | Align numbers vs ISO with schema (`Date.now()` vs `Type.Number()`) | Send `new Date()` when schema wants number |
 | Start `fetchMessages()` after `broker.init()` | Assume identity still publishes `USER_*` events (verify call sites) |
 | Import `@pine/events` | Import `@pine/event-bus` |
@@ -44,7 +44,7 @@ Subscriber: `@injectable()`, `super(broker.client)`, start from `main.ts`.
 ## New event
 
 1. `constants/subjects.ts` (+ stream/consumer if new)
-2. TypeBox schema under owning service folder in `packages/events/src/features/`
+2. TypeBox schema under owning service folder in `packages/events/src/services/`
 3. Optional `defineEvent` contract (for later CloudEvents cutover)
 4. Publish mapped payload; implement `Subscriber` per consumer; DI + `main.ts`
 5. Cluster: `infra/k8s/nats-stream` + `nats-consumer` (`pine-k8s`)

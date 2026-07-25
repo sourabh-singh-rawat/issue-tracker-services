@@ -48,7 +48,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 | `@pine/http-core` | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
 | `@pine/graphql-core` | Pothos `builder`, scalars |
 | `@pine/orm` | TypeORM helpers, `Audit` |
-| `@pine/security` | JWT, hashing, guardian |
+| `@pine/security` | JWT, hashing, auth helpers |
 | `@pine/observability` | OTEL bootstrap |
 
 ## Dead packages (never import)

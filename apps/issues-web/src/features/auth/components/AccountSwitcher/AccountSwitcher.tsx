@@ -13,6 +13,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Logout } from "@mui/icons-material";
 import { useLogoutMutation } from "@generated/api/@tanstack/react-query.gen";
 import Avatar from "../../../../shared/components/Avatar";
+import { redirectToIdentityLogin } from "../../../../shared/utils/identity-web";
 import { useAuthStore } from "../../store";
 
 export const AccountSwitcher = () => {
@@ -32,7 +33,7 @@ export const AccountSwitcher = () => {
   const handleLogout = async () => {
     await logout({});
     setCurrentUser({ current: null });
-    void navigate({ to: "/login" });
+    redirectToIdentityLogin();
   };
 
   const label = current?.displayName || current?.email;

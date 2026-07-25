@@ -17,12 +17,9 @@
     "@pine/http-core": "workspace:^",
     "argon2": "^0.45.1",
     "awilix": "^13.0.5",
-    "casbin": "^5.51.1",
     "fastify": "^5.10.0",
     "jose": "^6.2.4",
-    "pino": "^10.3.1",
-    "typeorm": "^1.1.0",
-    "typeorm-adapter": "^1.10.0"
+    "pino": "^10.3.1"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

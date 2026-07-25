@@ -1,7 +1,7 @@
-import { ServiceOptions } from "@pine/orm";
-import { UserProfile } from "@/entities/UserProfile";
+import type { DbClient, UserProfile } from "@/db";
 
-export interface CreateUserProfileOptions extends ServiceOptions {
+export interface CreateUserProfileOptions {
+  tx: DbClient;
   userId: string;
   displayName: string;
   description?: string;
@@ -13,11 +13,11 @@ export interface IUserProfileService {
   getUserProfileWithEmail(email: string): Promise<{
     userId: string;
     email: string;
-    idpId?: string;
-    idpProvider?: string;
+    idpId?: string | null;
+    idpProvider?: string | null;
     displayName: string;
-    description?: string;
-    photoUrl?: string;
+    description?: string | null;
+    photoUrl?: string | null;
     createdAt: Date;
   }>;
 }
