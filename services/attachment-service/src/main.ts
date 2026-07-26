@@ -13,7 +13,7 @@ import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import sharp from "sharp";
 import { TYPES, broker, container, dataSource, logger, redisClient } from "@/bootstrap";
-import { env } from "@/bootstrap/env";
+import { env, listenPortFromUrl } from "@/bootstrap/env";
 import { Attachment } from "./features/attachment";
 import { UserEmailVerifiedSubscriber } from "./features/user";
 import { createContext } from "./graphql";
@@ -34,7 +34,7 @@ const startServer = async () => {
 
   await instance.register(multipart, { limits: { fileSize: 32000000 } });
 
-  const port = Number.parseInt(env.ATTACHMENT_SERVICE_PORT, 10);
+  const port = listenPortFromUrl(env.ATTACHMENT_SERVICE_URL);
 
   const server = new FastifyHttpServer({
     server: instance,
@@ -46,7 +46,7 @@ const startServer = async () => {
     },
     cors: {
       credentials: true,
-      origin: env.ISSUES_WEB_CLIENT_URL,
+      origin: env.ISSUES_WEB_URL,
     },
     graphql: { apollo, createContext, path: "/graphql" },
     cookie: { secret: env.JWT_SECRET },
@@ -64,7 +64,7 @@ const startServer = async () => {
           url: "https://opensource.org/license/isc-license-txt",
         },
       },
-      servers: [{ url: `http://localhost:${port}` }],
+      servers: [{ url: env.ATTACHMENT_SERVICE_URL }],
       tags: [{ name: "attachment", description: "Attachment related end-points" }],
     },
   });

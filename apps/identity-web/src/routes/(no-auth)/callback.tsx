@@ -60,8 +60,8 @@ function CallbackPage() {
         await httpClient.post("/identity/oauth/token", {
           grant_type: "authorization_code",
           code,
-          client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
-          redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI,
+          client_id: import.meta.env.VITE_IDENTITY_WEB_OIDC_CLIENT_ID,
+          redirect_uri: import.meta.env.VITE_IDENTITY_WEB_OIDC_REDIRECT_URI,
           code_verifier: codeVerifier,
         });
         sessionStorage.removeItem(CODE_VERIFIER_KEY);

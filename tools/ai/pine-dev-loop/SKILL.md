@@ -24,7 +24,7 @@ pnpm dev:apps
 | + OTEL stack | `dev:infra:observability` |
 | Kratos / Hydra only | `dev:infra:kratos` / `dev:infra:hydra` |
 
-Compose: `infra/docker/*`. Secrets: `infra/docker/.env`. App env: root `.env`.
+Compose: `infra/docker/*`. All secrets and app/Vite env: single root `.env` (from `.env.example`).
 
 ## One package
 

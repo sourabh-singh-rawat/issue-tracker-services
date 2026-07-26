@@ -70,8 +70,8 @@ function CallbackPage() {
           body: {
             grant_type: "authorization_code",
             code,
-            client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
-            redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI,
+            client_id: import.meta.env.VITE_INVENTORY_WEB_OIDC_CLIENT_ID,
+            redirect_uri: import.meta.env.VITE_INVENTORY_WEB_OIDC_REDIRECT_URI,
             code_verifier: codeVerifier,
           },
         });

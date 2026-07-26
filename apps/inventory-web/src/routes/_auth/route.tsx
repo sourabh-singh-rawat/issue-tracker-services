@@ -17,8 +17,8 @@ const startOidcLogin = async (): Promise<string> => {
   const { data } = await authorize({
     query: {
       response_type: "code",
-      client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
-      redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI,
+      client_id: import.meta.env.VITE_INVENTORY_WEB_OIDC_CLIENT_ID,
+      redirect_uri: import.meta.env.VITE_INVENTORY_WEB_OIDC_REDIRECT_URI,
       scope: import.meta.env.VITE_OIDC_SCOPES,
       state,
       code_challenge: codeChallenge,

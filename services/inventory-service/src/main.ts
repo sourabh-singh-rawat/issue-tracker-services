@@ -1,4 +1,4 @@
-import { env } from "@/bootstrap/env";
+import { env, listenPortFromUrl } from "@/bootstrap/env";
 import "reflect-metadata";
 
 import swagger from "@fastify/swagger";
@@ -34,12 +34,12 @@ const main = async () => {
   await broker.init();
 
   const instance = fastify();
-  const port = Number.parseInt(env.INVENTORY_SERVICE_PORT, 10);
+  const port = listenPortFromUrl(env.INVENTORY_SERVICE_URL);
 
   const server = new FastifyHttpServer({
     server: instance,
     config: { host: "0.0.0.0", port, environment: "development", version: 1 },
-    cors: { credentials: true, origin: env.INVENTORY_WEB_CLIENT_URL },
+    cors: { credentials: true, origin: env.INVENTORY_WEB_URL },
     cookie: { secret: env.JWT_SECRET },
     routes,
     logger,
@@ -54,7 +54,7 @@ const main = async () => {
         description: "Inventory APIs",
         license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
       },
-      servers: [{ url: `http://localhost:${port}` }],
+      servers: [{ url: env.INVENTORY_SERVICE_URL }],
       tags: [{ name: "auth", description: "Authentication related end-points" }],
     },
   });

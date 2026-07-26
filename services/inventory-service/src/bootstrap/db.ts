@@ -4,7 +4,7 @@ import * as schema from "@/db/schema";
 import { env } from "@/bootstrap/env";
 
 const pool = new Pool({
-  connectionString: env.INVENTORY_POSTGRES_CLUSTER_URL,
+  connectionString: env.INVENTORY_DATABASE_URL,
 });
 
 export const db = drizzle(pool, { schema });
