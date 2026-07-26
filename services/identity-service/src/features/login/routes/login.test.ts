@@ -51,7 +51,7 @@ describe("login route", () => {
       httpOnly: true,
       path: "/",
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       expires: expiresAt,
     });
     expect(response).toEqual({

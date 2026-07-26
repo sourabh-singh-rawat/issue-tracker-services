@@ -1,5 +1,5 @@
 import { Configuration, OAuth2Api } from "@ory/hydra-client";
-import { env } from "@/env";
+import { env } from "@/bootstrap/env";
 
 export class HydraClient {
   readonly publicUrl: string;

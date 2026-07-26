@@ -584,15 +584,15 @@ importers:
       '@pine/observability':
         specifier: workspace:*
         version: link:../../packages/observability
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       fastify:
         specifier: ^5.10.0
         version: 5.10.0
       graphql:
         specifier: 16.14.2
         version: 16.14.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
     devDependencies:
       tsx:
         specifier: 4.23.1
@@ -645,9 +645,6 @@ importers:
       bullmq:
         specifier: ^5.81.0
         version: 5.81.0(supports-color@7.2.0)
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       fastify:
         specifier: ^5.10.0
         version: 5.10.0
@@ -760,9 +757,6 @@ importers:
       axios:
         specifier: ^1.18.1
         version: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       drizzle-orm:
         specifier: 0.45.2
         version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.22.0)
@@ -828,6 +822,88 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
 
+  services/inventory-service:
+    dependencies:
+      '@fastify/cookie':
+        specifier: ^11.1.2
+        version: 11.1.2
+      '@fastify/cors':
+        specifier: ^11.3.0
+        version: 11.3.0
+      '@fastify/swagger':
+        specifier: ^9.8.1
+        version: 9.8.1(supports-color@7.2.0)
+      '@pine/common':
+        specifier: workspace:^
+        version: link:../../packages/common
+      '@pine/errors':
+        specifier: workspace:^
+        version: link:../../packages/errors
+      '@pine/events':
+        specifier: workspace:^
+        version: link:../../packages/events
+      '@pine/http-core':
+        specifier: workspace:^
+        version: link:../../packages/http-core
+      '@pine/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
+      '@pine/security':
+        specifier: workspace:^
+        version: link:../../packages/security
+      '@vitest/coverage-v8':
+        specifier: ^4.1.10
+        version: 4.1.10(vitest@4.1.10)
+      drizzle-orm:
+        specifier: 0.45.2
+        version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.22.0)
+      fastify:
+        specifier: ^5.10.0
+        version: 5.10.0
+      http-status-codes:
+        specifier: ^2.3.0
+        version: 2.3.0
+      inversify:
+        specifier: 8.2.2
+        version: 8.2.2(reflect-metadata@0.2.2)
+      nats:
+        specifier: ^2.29.3
+        version: 2.29.3
+      pg:
+        specifier: ^8.22.0
+        version: 8.22.0
+      pino:
+        specifier: ^10.3.1
+        version: 10.3.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
+    devDependencies:
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
+      drizzle-kit:
+        specifier: 0.31.8
+        version: 0.31.8(supports-color@7.2.0)
+      pino-pretty:
+        specifier: ^13.1.3
+        version: 13.1.3
+      tsx:
+        specifier: 4.23.1
+        version: 4.23.1
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+
   services/issues-service:
     dependencies:
       '@apollo/server':
@@ -860,9 +936,6 @@ importers:
       '@pothos/core':
         specifier: ^4.13.1
         version: 4.13.1(graphql@16.14.2)
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       fastify:
         specifier: ^5.10.0
         version: 5.10.0
@@ -887,6 +960,9 @@ importers:
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
       typeorm:
         specifier: ^1.1.0
         version: 1.1.0(babel-plugin-macros@3.1.0)(ioredis@5.11.1(supports-color@7.2.0))(pg@8.22.0)(supports-color@7.2.0)(ts-node@10.9.2(@types/node@26.1.1)(typescript@7.0.2))
@@ -927,9 +1003,6 @@ importers:
       '@pine/security':
         specifier: workspace:^
         version: link:../../packages/security
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       fastify:
         specifier: ^5.10.0
         version: 5.10.0
@@ -954,6 +1027,9 @@ importers:
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
       typeorm:
         specifier: ^1.1.0
         version: 1.1.0(babel-plugin-macros@3.1.0)(ioredis@5.11.1(supports-color@7.2.0))(pg@8.22.0)(supports-color@7.2.0)(ts-node@10.9.2(@types/node@26.1.1)(typescript@7.0.2))

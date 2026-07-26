@@ -2,7 +2,7 @@ import { authorize } from "@generated/api";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import {
   createPkcePair,
-  getAccessToken,
+  isAuthenticated,
   setOidcCodeVerifier,
   setOidcState,
 } from "../../lib/auth";
@@ -35,7 +35,7 @@ const startOidcLogin = async (): Promise<string> => {
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async () => {
-    if (getAccessToken()) {
+    if (isAuthenticated()) {
       return;
     }
 

@@ -11,6 +11,7 @@ import {
   type LoginQuery,
   type LoginResponse,
 } from "@/features/login/schemas";
+import { env } from "@/bootstrap/env";
 
 export const login: RouteOptions<
   Server,
@@ -44,7 +45,7 @@ export const login: RouteOptions<
       httpOnly: true,
       path: "/",
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
       expires: result.expiresAt,
     });
 

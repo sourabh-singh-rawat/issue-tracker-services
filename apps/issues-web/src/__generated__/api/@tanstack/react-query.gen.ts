@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { authorize, createAttachment, getConsentChallenge, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword } from '../sdk.gen';
-import type { AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword, rejectConsentChallenge } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, AuthorizeResponse, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse, RejectConsentChallengeData, RejectConsentChallengeResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -172,6 +172,84 @@ export const getConsentChallengeOptions = (options: Options<GetConsentChallengeD
  * Load OAuth consent challenge details by consent_challenge
  */
 export const useGetConsentChallengeQuery = (options: Options<GetConsentChallengeData>) => useQuery(getConsentChallengeOptions(options));
+
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const acceptConsentChallengeMutation = (options?: Partial<Options<AcceptConsentChallengeData>>): UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>> => {
+    const mutationOptions: UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await acceptConsentChallenge({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const useAcceptConsentChallengeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>>, 'mutationFn'>>) => useMutation({ ...acceptConsentChallengeMutation(), ...mutationOptions });
+
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const rejectConsentChallengeMutation = (options?: Partial<Options<RejectConsentChallengeData>>): UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>> => {
+    const mutationOptions: UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await rejectConsentChallenge({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const useRejectConsentChallengeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>>, 'mutationFn'>>) => useMutation({ ...rejectConsentChallengeMutation(), ...mutationOptions });
+
+/**
+ * OAuth token
+ *
+ * Exchange an authorization code for access (and optional refresh/id) tokens
+ */
+export const exchangeTokenMutation = (options?: Partial<Options<ExchangeTokenData>>): UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>> => {
+    const mutationOptions: UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await exchangeToken({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * OAuth token
+ *
+ * Exchange an authorization code for access (and optional refresh/id) tokens
+ */
+export const useExchangeTokenMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>>, 'mutationFn'>>) => useMutation({ ...exchangeTokenMutation(), ...mutationOptions });
 
 /**
  * Register with email and password
