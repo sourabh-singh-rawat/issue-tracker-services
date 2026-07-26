@@ -358,7 +358,7 @@ function isMainModule(): boolean {
   try {
     return import.meta.url === pathToFileURL(entry).href;
   } catch {
-    return entry.replace(/\\/g, "/").endsWith("/scripts/create-release-branch.ts");
+    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/create-release-branch.ts");
   }
 }
 
