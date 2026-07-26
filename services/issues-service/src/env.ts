@@ -1,15 +1,21 @@
-import { config } from "dotenv";
-import path from "node:path";
+import Type from "typebox";
+import Value from "typebox/value";
 
-// Load monorepo root .env before any module reads process.env.
-// Path is relative to this file so it works regardless of process.cwd().
-config({ path: path.resolve(__dirname, "../../../.env") });
+export const EnvSchema = Type.Object({
+  NODE_ENV: Type.String({ default: "development" }),
+  ISSUE_TRACKER_SERVICE_PORT: Type.String({ default: "4002" }),
+  ISSUE_TRACKER_POSTGRES_CLUSTER_URL: Type.String({ minLength: 1 }),
+  NATS_CLUSTER_URL: Type.String({ default: "nats://localhost:4222" }),
+  JWT_SECRET: Type.String({ minLength: 1 }),
+  ISSUES_WEB_CLIENT_URL: Type.String({ default: "http://localhost:3000" }),
+});
 
-export const env = {
-  NODE_ENV: process.env.NODE_ENV ?? "development",
-  ISSUE_TRACKER_SERVICE_PORT: process.env.ISSUE_TRACKER_SERVICE_PORT ?? "4002",
-  ISSUE_TRACKER_POSTGRES_CLUSTER_URL: process.env.ISSUE_TRACKER_POSTGRES_CLUSTER_URL,
-  NATS_CLUSTER_URL: process.env.NATS_CLUSTER_URL ?? "nats://localhost:4222",
-  JWT_SECRET: process.env.JWT_SECRET,
-  ISSUES_WEB_CLIENT_URL: process.env.ISSUES_WEB_CLIENT_URL ?? "http://localhost:3000",
-} as const;
+export type Env = Type.Static<typeof EnvSchema>;
+
+const parseEnv = (): Env => {
+  const withDefaults = Value.Default(EnvSchema, { ...process.env });
+  const cleaned = Value.Clean(EnvSchema, withDefaults);
+  return Value.Parse(EnvSchema, cleaned);
+};
+
+export const env = parseEnv();

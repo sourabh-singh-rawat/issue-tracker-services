@@ -1,5 +1,6 @@
 import { NatsBroker } from "@pine/events";
+import { env } from "@/bootstrap/env";
 
 export const broker = new NatsBroker({
-  servers: [process.env.NATS_CLUSTER_URL || "nats"],
+  servers: [env.NATS_CLUSTER_URL],
 });

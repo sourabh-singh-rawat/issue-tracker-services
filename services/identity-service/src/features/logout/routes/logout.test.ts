@@ -35,7 +35,7 @@ describe("logout route", () => {
     expect(clearCookie).toHaveBeenCalledWith("session", {
       path: "/",
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
     });
     expect(response).toEqual({
       message: "Logged out successfully.",

@@ -6,7 +6,7 @@ import {
   clearOidcState,
   getOidcCodeVerifier,
   getOidcState,
-  storeTokens,
+  markAuthenticated,
 } from "../lib/auth";
 
 export const Route = createFileRoute("/callback")({
@@ -66,7 +66,7 @@ function CallbackPage() {
       }
 
       try {
-        const { data: tokens } = await exchangeToken({
+        await exchangeToken({
           body: {
             grant_type: "authorization_code",
             code,
@@ -76,11 +76,8 @@ function CallbackPage() {
           },
         });
 
-        if (!tokens) {
-          throw new Error("Token exchange returned no data.");
-        }
-
-        storeTokens(tokens);
+        // Tokens are set as HTTP-only cookies by the identity service.
+        markAuthenticated();
         clearOidcState();
         clearOidcCodeVerifier();
         await navigate({ to: "/" });

@@ -9,6 +9,7 @@ import {
   type TokenBody,
   type TokenResponse,
 } from "@/features/oauth/schemas";
+import { env } from "@/bootstrap/env";
 
 export const token: RouteOptions<
   Server,
@@ -21,7 +22,8 @@ export const token: RouteOptions<
   schema: {
     tags: ["oauth"],
     summary: "OAuth token",
-    description: "Exchange an authorization code for access (and optional refresh/id) tokens",
+    description:
+      "Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies",
     operationId: "exchangeToken",
     body: TokenBodySchema,
     response: {
@@ -38,6 +40,38 @@ export const token: RouteOptions<
       codeVerifier: req.body.code_verifier,
     });
 
-    return reply.send(result);
+    const tokenCookieOptions = {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax" as const,
+      secure: env.NODE_ENV === "production",
+    };
+
+    const accessExpires =
+      typeof result.expiresIn === "number"
+        ? new Date(Date.now() + result.expiresIn * 1000)
+        : undefined;
+
+    reply.setCookie("accessToken", result.accessToken, {
+      ...tokenCookieOptions,
+      ...(accessExpires ? { expires: accessExpires } : {}),
+    });
+
+    if (result.refreshToken) {
+      reply.setCookie("refreshToken", result.refreshToken, tokenCookieOptions);
+    }
+
+    if (result.idToken) {
+      reply.setCookie("idToken", result.idToken, {
+        ...tokenCookieOptions,
+        ...(accessExpires ? { expires: accessExpires } : {}),
+      });
+    }
+
+    const response: TokenResponse = {
+      message: "Tokens issued successfully.",
+    };
+
+    return reply.send(response);
   },
 };

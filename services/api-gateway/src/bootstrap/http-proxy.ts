@@ -1,7 +1,7 @@
 import proxy from "@fastify/http-proxy";
 import type { IncomingHttpHeaders } from "node:http";
 import type { FastifyInstance } from "fastify";
-import { env } from "../env";
+import { env } from "./env";
 import { getCorsOrigins, isAllowedCorsOrigin } from "./cors-origins";
 
 type ProxyRoute = {
@@ -19,6 +19,11 @@ const proxyRoutes: ProxyRoute[] = [
   {
     prefix: "/attachments",
     upstream: env.ATTACHMENT_SERVICE_URL,
+    proxyPayloads: true,
+  },
+  {
+    prefix: "/inventory",
+    upstream: env.INVENTORY_SERVICE_URL,
     proxyPayloads: true,
   },
 ];
