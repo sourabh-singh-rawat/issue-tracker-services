@@ -1,4 +1,4 @@
-import { env } from "@/bootstrap/env";
+import { env, listenPortFromUrl } from "@/bootstrap/env";
 import "reflect-metadata";
 
 import { ApolloServer, BaseContext } from "@apollo/server";
@@ -10,7 +10,7 @@ import fastify, { type FastifyInstance } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
-import { broker, db, initializeDb, logger } from "@/bootstrap";
+import { broker, initializeDb, logger } from "@/bootstrap";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
@@ -54,12 +54,12 @@ const main = async () => {
     plugins: [fastifyApolloDrainPlugin(instance)],
   });
 
-  const port = Number.parseInt(env.IDENTITY_SERVICE_PORT, 10);
+  const port = listenPortFromUrl(env.IDENTITY_SERVICE_URL);
 
   const server = new FastifyHttpServer({
     server: instance,
     config: { host: "0.0.0.0", port, environment: "development", version: 1 },
-    cors: { credentials: true, origin: env.IDENTITY_WEB_CLIENT_URL },
+    cors: { credentials: true, origin: env.IDENTITY_WEB_URL },
     cookie: { secret: env.JWT_SECRET },
     graphql: { apollo, path: "/graphql", createContext },
     routes,
@@ -75,7 +75,7 @@ const main = async () => {
         description: "Authentication and identity APIs",
         license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
       },
-      servers: [{ url: `http://localhost:${port}` }],
+      servers: [{ url: env.IDENTITY_SERVICE_URL }],
       tags: [{ name: "auth", description: "Authentication related end-points" }],
     },
   });

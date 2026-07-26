@@ -2,11 +2,10 @@ import { env } from "./env";
 
 export const getCorsOrigins = (): string[] => {
   const base = [
-    env.ISSUES_WEB_CLIENT_URL,
-    env.IDENTITY_WEB_CLIENT_URL,
-    env.INVENTORY_WEB_CLIENT_URL,
-    `http://localhost:${env.API_GATEWAY_PORT}`,
-    `http://127.0.0.1:${env.API_GATEWAY_PORT}`,
+    env.ISSUES_WEB_URL,
+    env.IDENTITY_WEB_URL,
+    env.INVENTORY_WEB_URL,
+    env.API_GATEWAY_URL,
   ];
 
   const origins = new Set<string>();
