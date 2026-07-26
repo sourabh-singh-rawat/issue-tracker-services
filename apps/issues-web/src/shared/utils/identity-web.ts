@@ -1,6 +1,6 @@
 /** Base URL of identity-web (login/signup live there). */
 export function getIdentityWebBaseUrl(): string {
-  const base = import.meta.env.VITE_IDENTITY_WEB_URL ?? "http://localhost:3001";
+  const base = import.meta.env.VITE_IDENTITY_WEB_URL ?? "http://localhost:3000";
   return base.replace(/\/$/, "");
 }
 

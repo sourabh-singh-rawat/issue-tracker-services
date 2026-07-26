@@ -3,7 +3,11 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", "!**/*.{spec,test}.{ts,tsx,js,jsx}", "!**/vitest.config.{ts,js,mts}"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.{spec,test}.{ts,tsx,js,jsx}",
+        "!**/vitest.config.{ts,js,mts}"
+      ],
       "outputs": ["dist/**"]
     },
     "test": {
@@ -18,6 +22,10 @@
     "gen": {
       "cache": false,
       "persistent": true
+    },
+    "db:migrate": {
+      "dependsOn": ["^db:migrate"],
+      "outputs": []
     }
   }
 }

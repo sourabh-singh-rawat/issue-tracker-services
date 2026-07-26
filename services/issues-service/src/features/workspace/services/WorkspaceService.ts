@@ -176,7 +176,7 @@ export class WorkspaceService implements IWorkspaceService {
     }
 
     return new ServiceResponse({
-      rows: `${env.ISSUES_WEB_CLIENT_URL}/login?inviteToken=${token}`,
+      rows: `${env.ISSUES_WEB_URL}/login?inviteToken=${token}`,
     });
   };
 

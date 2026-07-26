@@ -228,7 +228,7 @@ export const useRejectConsentChallengeMutation = (mutationOptions?: Partial<Omit
 /**
  * OAuth token
  *
- * Exchange an authorization code for access (and optional refresh/id) tokens
+ * Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies
  */
 export const exchangeTokenMutation = (options?: Partial<Options<ExchangeTokenData>>): UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>> => {
     const mutationOptions: UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>> = {
@@ -247,7 +247,7 @@ export const exchangeTokenMutation = (options?: Partial<Options<ExchangeTokenDat
 /**
  * OAuth token
  *
- * Exchange an authorization code for access (and optional refresh/id) tokens
+ * Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies
  */
 export const useExchangeTokenMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>>, 'mutationFn'>>) => useMutation({ ...exchangeTokenMutation(), ...mutationOptions });
 
