@@ -6,6 +6,6 @@ export default defineConfig({
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
-    url: env.INVENTORY_POSTGRES_CLUSTER_URL,
+    url: env.INVENTORY_DATABASE_URL,
   },
 });

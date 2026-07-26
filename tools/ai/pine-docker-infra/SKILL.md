@@ -1,25 +1,27 @@
 ---
 name: pine-docker-infra
 description: >
-  Local Docker Compose: Postgres, Ory, NATS, ports, env split. Triggers: dev:infra,
+  Local Docker Compose: Postgres, Ory, NATS, ports, single root env. Triggers: dev:infra,
   Kratos, Hydra, compose, single-db, multi-db.
 ---
 
 # Docker infra
 
-## Env split
+## Env (single file at monorepo root)
 
 | File | Holds |
 |------|--------|
-| `infra/docker/.env` | Compose secrets (Postgres roles, Kratos/Hydra, Grafana, pgAdmin) |
-| Root `.env` | App runtime (DB URLs, JWT, OTEL, Kratos/Hydra URLs) |
+| Root `.env` / `.env.example` | Everything: compose secrets, app runtime, Vite `VITE_*` |
 
-Password segments in root DB URLs must **match** compose `POSTGRES_*` (dotenv does not expand compose vars into root `.env`).
+Set each `POSTGRES_*_PASSWORD` **once**. Apps derive single-db URLs
+(`postgres://{role}:{password}@localhost:5432/{db}`) from those passwords.
+For multi-db or remote, set `<DOMAIN>_DATABASE_URL` (full URL) instead.
 
 ```bash
-cp infra/docker/.env.example infra/docker/.env
 cp .env.example .env
 ```
+
+Compose is always started with `--env-file .env` (see root `pnpm dev:infra*`).
 
 ## Commands (prefer these)
 
@@ -38,7 +40,7 @@ Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default),
 |------|---------|
 | 5432 | Postgres |
 | 4222 / 8222 | NATS client / monitor |
-| 6380 | attachment redis |
+| 6380 | Redis (`REDIS_URL`) |
 | 4433 / 4434 | Kratos public / admin |
 | 4444 / 4445 | Hydra public / admin |
 | 4436 / 4437 | mailslurper |
@@ -59,4 +61,4 @@ Confirm in active compose + root `.env.example`.
 2. Extend existing overlays; don’t invent new compose basenames
 3. Data under `infra/data/docker/*` — not source; don’t recurse for code
 4. DB reset = down + delete volume dir (confirm with user first)
-5. Port/password changes → update both `.env.example` files
+5. Port/password changes → update root `.env.example` (and local `.env`) only — no per-package env files

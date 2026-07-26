@@ -7,6 +7,7 @@ import { defineConfig } from "vite";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  envDir: path.resolve(__dirname, "../.."),
   plugins: [
     tanstackRouter({
       target: "react",
@@ -31,6 +32,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3001,
+    port: 3000,
   },
 });

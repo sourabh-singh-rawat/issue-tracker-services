@@ -3,7 +3,7 @@ import { logger } from "@/bootstrap/logger";
 import { env } from "@/bootstrap/env";
 
 export const broker = new NatsBroker({
-  servers: [env.NATS_CLUSTER_URL || "nats"],
+  servers: [env.NATS_URL || "nats"],
   streams: ["user"],
   logger,
 });

@@ -110,7 +110,7 @@ export const rejectConsentChallenge = <ThrowOnError extends boolean = false>(opt
 /**
  * OAuth token
  *
- * Exchange an authorization code for access (and optional refresh/id) tokens
+ * Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies
  */
 export const exchangeToken = <ThrowOnError extends boolean = false>(options: Options<ExchangeTokenData, ThrowOnError>): RequestResult<ExchangeTokenResponses, unknown, ThrowOnError> => (options.client ?? client).post<ExchangeTokenResponses, unknown, ThrowOnError>({
     responseType: 'json',

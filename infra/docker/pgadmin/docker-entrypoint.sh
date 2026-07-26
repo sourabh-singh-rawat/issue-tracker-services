@@ -14,9 +14,9 @@ mkdir -p "$CONFIG_DIR"
 cat > "$PGPASS_FILE" <<EOF
 identity-postgres:5432:*:identity:${POSTGRES_IDENTITY_PASSWORD}
 issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
-mail-postgres:5432:*:mail:${POSTGRES_MAIL_PASSWORD}
-attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
 inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
+attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
+mail-postgres:5432:*:mail:${POSTGRES_MAIL_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 EOF
@@ -69,12 +69,12 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "3": {
-      "Name": "Mail Service DB",
+      "Name": "Inventory Service DB",
       "Group": "Issue Tracker",
-      "Host": "mail-postgres",
+      "Host": "inventory-postgres",
       "Port": 5432,
-      "MaintenanceDB": "mail",
-      "Username": "mail",
+      "MaintenanceDB": "inventory",
+      "Username": "inventory",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
@@ -89,12 +89,12 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "5": {
-      "Name": "Inventory Service DB",
+      "Name": "Mail Service DB",
       "Group": "Issue Tracker",
-      "Host": "inventory-postgres",
+      "Host": "mail-postgres",
       "Port": 5432,
-      "MaintenanceDB": "inventory",
-      "Username": "inventory",
+      "MaintenanceDB": "mail",
+      "Username": "mail",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
