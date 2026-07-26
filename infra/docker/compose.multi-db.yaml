@@ -95,6 +95,30 @@ services:
           cpus: "0.10"
           memory: 128M
 
+  inventory-postgres:
+    image: postgres:18.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=inventory
+      - POSTGRES_PASSWORD=${POSTGRES_INVENTORY_PASSWORD}
+      - POSTGRES_DB=inventory
+    volumes:
+      - ../data/docker/inventory-postgres-data:/var/lib/postgresql
+    command:
+      - postgres
+      - -c
+      - max_connections=50
+    ports:
+      - 5437:5432
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+
   # Register per-service Postgres servers (plus Ory) in pgAdmin
   pgadmin:
     environment:

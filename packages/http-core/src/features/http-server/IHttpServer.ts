@@ -58,7 +58,7 @@ export function asHttpRoute(route: object): HttpRouteOptions {
 export interface HttpServerOptions<Context extends BaseContext = BaseContext> {
   server: FastifyInstance;
   config: ServerConfigurationOptions;
-  graphql: GraphqlOptions<Context>;
+  graphql?: GraphqlOptions<Context>;
   cors?: CorsOptions;
   cookie?: CookieOptions;
   routes?: HttpRouteOptions[];

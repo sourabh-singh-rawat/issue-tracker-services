@@ -1,7 +1,7 @@
 import { FastifyHttpServer } from "@pine/http-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import fastify from "fastify";
-import { env } from "../env";
+import { env } from "./env";
 import { getCorsOrigins } from "./cors-origins";
 import type { GatewayContext } from "./graphql-gateway";
 import { graphqlServer } from "./graphql-server";

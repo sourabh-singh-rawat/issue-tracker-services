@@ -263,7 +263,7 @@ describe("token route", () => {
     });
   });
 
-  it("exchanges a code via the OAuth service and returns tokens", async () => {
+  it("exchanges a code via the OAuth service and sets tokens as HTTP-only cookies", async () => {
     const exchangeToken = vi.fn().mockResolvedValue({
       accessToken: "access-1",
       tokenType: "bearer",
@@ -274,6 +274,7 @@ describe("token route", () => {
     });
     get.mockReturnValue({ exchangeToken });
 
+    const setCookie = vi.fn();
     const send = vi.fn((payload) => payload);
     const req = {
       body: {
@@ -284,7 +285,7 @@ describe("token route", () => {
         code_verifier: "verifier-1",
       },
     };
-    const reply = { send };
+    const reply = { setCookie, send };
 
     const response = await token.handler!(req as never, reply as never);
 
@@ -296,13 +297,40 @@ describe("token route", () => {
       redirectUri: "http://localhost:3001/callback",
       codeVerifier: "verifier-1",
     });
+
+    expect(setCookie).toHaveBeenCalledWith(
+      "accessToken",
+      "access-1",
+      expect.objectContaining({
+        httpOnly: true,
+        path: "/",
+        sameSite: "lax",
+        secure: false,
+        expires: expect.any(Date),
+      }),
+    );
+    expect(setCookie).toHaveBeenCalledWith("refreshToken", "refresh-1", {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: false,
+    });
+    expect(setCookie).toHaveBeenCalledWith(
+      "idToken",
+      "id-1",
+      expect.objectContaining({
+        httpOnly: true,
+        path: "/",
+        sameSite: "lax",
+        secure: false,
+        expires: expect.any(Date),
+      }),
+    );
     expect(response).toEqual({
-      accessToken: "access-1",
-      tokenType: "bearer",
-      expiresIn: 3600,
-      refreshToken: "refresh-1",
-      idToken: "id-1",
-      scope: "openid offline",
+      message: "Tokens issued successfully.",
+    });
+    expect(send).toHaveBeenCalledWith({
+      message: "Tokens issued successfully.",
     });
   });
 
@@ -310,6 +338,7 @@ describe("token route", () => {
     const exchangeToken = vi.fn().mockRejectedValue(new InvalidOAuthRequestError());
     get.mockReturnValue({ exchangeToken });
 
+    const setCookie = vi.fn();
     const send = vi.fn();
     const req = {
       body: {
@@ -320,11 +349,12 @@ describe("token route", () => {
         code_verifier: "verifier-1",
       },
     };
-    const reply = { send };
+    const reply = { setCookie, send };
 
     await expect(token.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
       InvalidOAuthRequestError,
     );
+    expect(setCookie).not.toHaveBeenCalled();
     expect(send).not.toHaveBeenCalled();
   });
 });

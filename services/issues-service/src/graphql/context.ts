@@ -1,6 +1,7 @@
 import { JwtToken, hasUserIdentity } from "@pine/security";
 import { GraphQLContext } from "@pine/graphql-core";
 import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
+import { env } from "@/env";
 
 export type IssuesContext = GraphQLContext;
 
@@ -9,7 +10,7 @@ export const createContext: ApolloFastifyContextFunction<IssuesContext> = async 
 
   if (accessToken) {
     try {
-      const token = await JwtToken.verify(accessToken, process.env.JWT_SECRET!);
+      const token = await JwtToken.verify(accessToken, env.JWT_SECRET);
       if (hasUserIdentity(token)) {
         return {
           req,
