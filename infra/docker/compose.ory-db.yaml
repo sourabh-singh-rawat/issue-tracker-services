@@ -9,7 +9,7 @@ services:
       - POSTGRES_KRATOS_PASSWORD=${POSTGRES_KRATOS_PASSWORD}
       - POSTGRES_HYDRA_PASSWORD=${POSTGRES_HYDRA_PASSWORD}
     volumes:
-      - ../data/docker/ory-postgres-data:/var/lib/postgresql
+      - ../data/docker/pg-ory-data:/var/lib/postgresql
       - ./init-db/ory:/docker-entrypoint-initdb.d:ro
     command:
       - postgres

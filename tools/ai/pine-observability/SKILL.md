@@ -42,4 +42,4 @@ pnpm dev:infra:observability
 Without the profile, **:4317 is closed**. Point services at **Alloy**, not Tempo directly.
 
 Config: `infra/docker/observability/{config.alloy,tempo,loki,prometheus}.yaml`.  
-Grafana password: `GRAFANA_ADMIN_PASSWORD` in `infra/docker/.env`.
+Grafana password: `GRAFANA_ADMIN_PASSWORD` in root `.env`.

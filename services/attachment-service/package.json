@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/attachment-service",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Manage attachments",
   "keywords": [
     "attachment",
@@ -21,8 +21,8 @@
   "scripts": {
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts",
-    "start": "tsx src/main.ts",
-    "dev": "tsx watch src/main.ts",
+    "start": "tsx --env-file=../../.env src/main.ts",
+    "dev": "tsx watch --env-file=../../.env src/main.ts",
     "build": "tsc"
   },
   "dependencies": {
@@ -40,7 +40,6 @@
     "@pine/security": "workspace:^",
     "@pothos/core": "^4.13.1",
     "bullmq": "^5.81.0",
-    "dotenv": "17.4.2",
     "fastify": "^5.10.0",
     "graphql": "16.14.2",
     "graphql-scalars": "^1.25.0",

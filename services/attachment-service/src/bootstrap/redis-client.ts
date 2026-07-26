@@ -1,9 +1,6 @@
 import Redis from "ioredis";
+import { env } from "@/bootstrap/env";
 
-export const redisClient = new Redis({
-  host: process.env.ATTACHMENT_REDIS_HOST,
-  port: process.env.ATTACHMENT_REDIS_PORT
-    ? Number.parseInt(process.env.ATTACHMENT_REDIS_PORT)
-    : 6379,
+export const redisClient = new Redis(env.REDIS_URL, {
   maxRetriesPerRequest: null,
 });

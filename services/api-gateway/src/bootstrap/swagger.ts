@@ -3,7 +3,7 @@ import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyInstance } from "fastify";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { env } from "../env";
+import { env } from "./env";
 
 const PLATFORM_OPENAPI_PATH = path.join(process.cwd(), "dist", "platform.openapi.json");
 
@@ -50,7 +50,11 @@ const rewriteServersForGateway = (document: OpenApiDocument, gatewayUrl: string)
 export const registerSwagger = async (server: FastifyInstance): Promise<void> => {
   // Relative URL keeps Try-it-out on the same origin as /docs (avoids localhost vs 127.0.0.1 CSP/CORS).
   const gatewayUrl = "/";
-  const port = env.API_GATEWAY_PORT;
+  const gatewayOrigin = new URL(env.API_GATEWAY_URL).origin;
+  const loopbackOrigin =
+    gatewayOrigin.includes("127.0.0.1")
+      ? gatewayOrigin.replace("127.0.0.1", "localhost")
+      : gatewayOrigin.replace("localhost", "127.0.0.1");
 
   if (!existsSync(PLATFORM_OPENAPI_PATH)) {
     console.warn(
@@ -79,6 +83,6 @@ export const registerSwagger = async (server: FastifyInstance): Promise<void> =>
     staticCSP: true,
     transformStaticCSP: (header) =>
       // Allow fetch/XHR to the gateway when opened as localhost or 127.0.0.1
-      `${header} connect-src 'self' http://localhost:${port} http://127.0.0.1:${port};`,
+      `${header} connect-src 'self' ${gatewayOrigin} ${loopbackOrigin};`,
   });
 };

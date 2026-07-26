@@ -1,6 +1,6 @@
 import { initializeObservability } from "@pine/observability";
 import { createHttpServer } from "./bootstrap";
-import { env } from "./env";
+import { env } from "./bootstrap/env";
 
 const main = async () => {
   const observability = initializeObservability({
@@ -16,11 +16,12 @@ const main = async () => {
   const httpServer = await createHttpServer();
   await httpServer.start();
 
-  console.log(`🚀 API Gateway ready at http://127.0.0.1:${env.API_GATEWAY_PORT}`);
-  console.log(`   GraphQL:  http://127.0.0.1:${env.API_GATEWAY_PORT}/graphql`);
-  console.log(`   Swagger:  http://127.0.0.1:${env.API_GATEWAY_PORT}/docs`);
+  console.log(`🚀 API Gateway ready at ${env.API_GATEWAY_URL}`);
+  console.log(`   GraphQL:  ${env.API_GATEWAY_URL}/graphql`);
+  console.log(`   Swagger:  ${env.API_GATEWAY_URL}/docs`);
   console.log(`   Proxy → identity:   ${env.IDENTITY_SERVICE_URL}  (/identity)`);
   console.log(`   Proxy → attachment: ${env.ATTACHMENT_SERVICE_URL}  (/attachments)`);
+  console.log(`   Proxy → inventory:  ${env.INVENTORY_SERVICE_URL}  (/inventory)`);
 };
 
 main().catch((err) => {

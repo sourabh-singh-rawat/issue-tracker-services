@@ -16,6 +16,7 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    setupFiles: ["./vitest.setup.ts"],
     passWithNoTests: true,
     clearMocks: true,
     exclude: ["**/node_modules/**", "**/dist/**", "**/.git/**"],

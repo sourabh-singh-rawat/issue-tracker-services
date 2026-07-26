@@ -1,5 +1,5 @@
 import { Configuration, FrontendApi, IdentityApi } from "@ory/kratos-client";
-import { env } from "@/env";
+import { env } from "@/bootstrap/env";
 
 export class KratosClient {
   readonly publicConfiguration: Configuration;
