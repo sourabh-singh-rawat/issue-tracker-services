@@ -3,7 +3,7 @@ import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyInstance } from "fastify";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { env } from "../env";
+import { env } from "./env";
 
 const PLATFORM_OPENAPI_PATH = path.join(process.cwd(), "dist", "platform.openapi.json");
 

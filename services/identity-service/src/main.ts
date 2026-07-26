@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "@/bootstrap/env";
 import "reflect-metadata";
 
 import { ApolloServer, BaseContext } from "@apollo/server";
@@ -60,7 +60,7 @@ const main = async () => {
     server: instance,
     config: { host: "0.0.0.0", port, environment: "development", version: 1 },
     cors: { credentials: true, origin: env.IDENTITY_WEB_CLIENT_URL },
-    cookie: { secret: process.env.JWT_SECRET! },
+    cookie: { secret: env.JWT_SECRET },
     graphql: { apollo, path: "/graphql", createContext },
     routes,
     logger,

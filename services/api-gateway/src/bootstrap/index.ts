@@ -1,3 +1,4 @@
+export { env } from "./env";
 export { graphqlGateway } from "./graphql-gateway";
 export type { GatewayContext } from "./graphql-gateway";
 export { graphqlServer } from "./graphql-server";

@@ -1,6 +1,6 @@
 import { initializeObservability } from "@pine/observability";
 import { createHttpServer } from "./bootstrap";
-import { env } from "./env";
+import { env } from "./bootstrap/env";
 
 const main = async () => {
   const observability = initializeObservability({

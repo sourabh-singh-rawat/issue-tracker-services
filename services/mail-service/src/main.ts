@@ -1,5 +1,5 @@
-import "./env";
 import "reflect-metadata";
+import "@/bootstrap/env";
 
 import { TYPES, broker, container, orm } from "@/bootstrap";
 import { ProjectMemberInvitedSubscriber } from "@/features/project-email";
