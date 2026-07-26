@@ -1,5 +1,11 @@
 # @pine/identity-web
 
+## 0.3.0
+
+### Minor Changes
+
+- 1ab5ff4: refactor(env): unify root .env and URL-based service bootstrap
+
 ## 0.2.0
 
 ### Minor Changes

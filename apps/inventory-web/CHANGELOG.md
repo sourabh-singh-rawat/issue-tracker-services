@@ -1,5 +1,12 @@
 # @pine/inventory-web
 
+## 0.3.0
+
+### Minor Changes
+
+- dfa43fd: feat(inventory): add inventory-service with gateway proxy, bootstrap env modules, and OAuth token cookies
+- 1ab5ff4: refactor(env): unify root .env and URL-based service bootstrap
+
 ## 0.2.0
 
 ### Minor Changes
