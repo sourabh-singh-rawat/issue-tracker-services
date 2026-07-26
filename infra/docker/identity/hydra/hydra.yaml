@@ -6,6 +6,7 @@ serve:
       enabled: true
       allowed_origins:
         - http://localhost:3000
+        - http://localhost:3001
         - http://localhost:3002
       allowed_methods:
         - POST
@@ -22,12 +23,12 @@ serve:
 urls:
   self:
     issuer: http://localhost:4444
-  consent: http://localhost:3001/consent
-  login: http://localhost:3001/login
-  logout: http://localhost:3001/logout
+  consent: http://localhost:3000/consent
+  login: http://localhost:3000/login
+  logout: http://localhost:3000/logout
   device:
-    verification: http://localhost:3001/device/verify
-    success: http://localhost:3001/device/success
+    verification: http://localhost:3000/device/verify
+    success: http://localhost:3000/device/success
 
 secrets:
   system:

@@ -1,7 +1,7 @@
 import { FastifyHttpServer } from "@pine/http-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import fastify from "fastify";
-import { env } from "../env";
+import { env, listenPortFromUrl } from "./env";
 import { getCorsOrigins } from "./cors-origins";
 import type { GatewayContext } from "./graphql-gateway";
 import { graphqlServer } from "./graphql-server";
@@ -29,7 +29,7 @@ export const createHttpServer = async () => {
     },
     config: {
       host: "0.0.0.0",
-      port: Number.parseInt(env.API_GATEWAY_PORT, 10),
+      port: listenPortFromUrl(env.API_GATEWAY_URL),
       environment: env.NODE_ENV as "development" | "production",
       version: 1,
     },

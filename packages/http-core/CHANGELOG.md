@@ -1,5 +1,11 @@
 # @pine/http-core
 
+## 0.2.1
+
+### Patch Changes
+
+- dfa43fd: feat(inventory): add inventory-service with gateway proxy, bootstrap env modules, and OAuth token cookies
+
 ## 0.2.0
 
 ### Minor Changes

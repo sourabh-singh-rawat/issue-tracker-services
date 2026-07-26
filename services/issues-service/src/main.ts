@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env, listenPortFromUrl } from "@/env";
 import "reflect-metadata";
 
 import { ApolloServer, BaseContext } from "@apollo/server";
@@ -43,11 +43,11 @@ const main = async () => {
     server: instance,
     config: {
       host: "0.0.0.0",
-      port: Number.parseInt(env.ISSUE_TRACKER_SERVICE_PORT, 10),
+      port: listenPortFromUrl(env.ISSUES_SERVICE_URL),
       environment: env.NODE_ENV as Environment,
       version: 1,
     },
-    cors: { credentials: true, origin: env.ISSUES_WEB_CLIENT_URL },
+    cors: { credentials: true, origin: env.ISSUES_WEB_URL },
     cookie: { secret: env.JWT_SECRET! },
     graphql: { apollo, path: "/graphql", createContext },
     logger,

@@ -38,7 +38,6 @@ export class RegistrationService implements IRegistrationService {
       source: "pine/identity-service",
       subject: identity.id,
       data: {
-        // Event contract still uses userId until events package is renamed.
         userId: identity.id,
         email: identity.email,
       },

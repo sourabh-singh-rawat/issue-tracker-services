@@ -5,6 +5,7 @@ import { TYPES } from "@/bootstrap/container-types";
 import type { ILogoutService } from "@/features/logout/services";
 import { LogoutResponseSchema, type LogoutResponse } from "@/features/logout/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
+import { env } from "@/bootstrap/env";
 
 export const logout: RouteOptions<
   Server,
@@ -36,7 +37,7 @@ export const logout: RouteOptions<
     reply.clearCookie("session", {
       path: "/",
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
     });
 
     const response: LogoutResponse = {

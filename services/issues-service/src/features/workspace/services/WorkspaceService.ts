@@ -20,6 +20,7 @@ import { User } from "@/entities/User";
 import { Workspace } from "@/entities/Workspace";
 import { WorkspaceInvitation } from "@/entities/WorkspaceInvitation";
 import { WorkspaceMember } from "@/entities/WorkspaceMember";
+import { env } from "@/env";
 import {
   CreateDefaultWorkspaceOptions,
   CreateWorkspaceOptions,
@@ -138,7 +139,7 @@ export class WorkspaceService implements IWorkspaceService {
         email,
         role,
       },
-      process.env.JWT_SECRET!,
+      env.JWT_SECRET,
     );
 
     const newWorkspaceInviteToken = new WorkspaceInvitation();
@@ -166,7 +167,7 @@ export class WorkspaceService implements IWorkspaceService {
 
   confirmWorkspaceInvite = async (token: string) => {
     try {
-      const verifedToken = await JwtToken.verify(token, process.env.JWT_SECRET!);
+      const verifedToken = await JwtToken.verify(token, env.JWT_SECRET);
       if (!hasEmailClaim(verifedToken)) {
         throw new Error("Token verification failed");
       }
@@ -175,7 +176,7 @@ export class WorkspaceService implements IWorkspaceService {
     }
 
     return new ServiceResponse({
-      rows: `${process.env.ISSUES_WEB_CLIENT_URL}/login?inviteToken=${token}`,
+      rows: `${env.ISSUES_WEB_URL}/login?inviteToken=${token}`,
     });
   };
 

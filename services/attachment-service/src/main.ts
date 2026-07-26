@@ -1,4 +1,3 @@
-import "./env";
 import "reflect-metadata";
 
 import { ApolloServer, BaseContext } from "@apollo/server";
@@ -14,6 +13,7 @@ import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import sharp from "sharp";
 import { TYPES, broker, container, dataSource, logger, redisClient } from "@/bootstrap";
+import { env, listenPortFromUrl } from "@/bootstrap/env";
 import { Attachment } from "./features/attachment";
 import { UserEmailVerifiedSubscriber } from "./features/user";
 import { createContext } from "./graphql";
@@ -34,22 +34,22 @@ const startServer = async () => {
 
   await instance.register(multipart, { limits: { fileSize: 32000000 } });
 
+  const port = listenPortFromUrl(env.ATTACHMENT_SERVICE_URL);
+
   const server = new FastifyHttpServer({
     server: instance,
     config: {
       host: "0.0.0.0",
-      port: process.env.ATTACHMENT_SERVICE_PORT
-        ? Number.parseInt(process.env.ATTACHMENT_SERVICE_PORT)
-        : 5002,
+      port,
       environment: "development",
       version: 1,
     },
     cors: {
       credentials: true,
-      origin: process.env.ISSUES_WEB_CLIENT_URL || "http://localhost:3000",
+      origin: env.ISSUES_WEB_URL,
     },
     graphql: { apollo, createContext, path: "/graphql" },
-    cookie: { secret: process.env.JWT_SECRET! },
+    cookie: { secret: env.JWT_SECRET },
     routes,
   });
 
@@ -64,7 +64,7 @@ const startServer = async () => {
           url: "https://opensource.org/license/isc-license-txt",
         },
       },
-      servers: [{ url: "http://localhost:4003" }],
+      servers: [{ url: env.ATTACHMENT_SERVICE_URL }],
       tags: [{ name: "attachment", description: "Attachment related end-points" }],
     },
   });

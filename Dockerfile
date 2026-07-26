@@ -28,12 +28,13 @@ RUN pnpm exec turbo run build \
     --filter=@pine/attachment-service \
     --filter=@pine/mail-service \
     --filter=@pine/identity-service \
+    --filter=@pine/inventory-service \
     --filter=@pine/issues-service \
     --filter=@pine/common \
-    --filter=@pine/event-bus \
+    --filter=@pine/events \
     --filter=@pine/orm \
     --filter=@pine/security \
-    --filter=@pine/server-core \
+    --filter=@pine/http-core \
     --filter=@pine/graphql-core
 
 
@@ -59,6 +60,14 @@ COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
 CMD pnpm -F @pine/identity-service start
+
+
+# Stage 3: Inventory Service
+FROM base AS inventory-service
+COPY --from=build /usr/src/app /usr/src/app
+USER node
+EXPOSE 4000
+CMD pnpm -F @pine/inventory-service start
 
 
 # Stage 3: Issue Tracker Service
