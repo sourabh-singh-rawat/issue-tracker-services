@@ -14,7 +14,7 @@ description: >
 | Release branch | `release/YYYY.MM.DD.N` |
 | Config | `.changeset/config.json` (`baseBranch: main`) |
 
-Scripts: `scripts/changeset-required.ts`, `create-release-branch.ts`, `release-branch-check.ts`, `release.ts`.
+Scripts: `tools/scripts/changeset-required.ts`, `create-release-branch.ts`, `release-branch-check.ts`, `release.ts`.
 
 ## PR → `development`
 

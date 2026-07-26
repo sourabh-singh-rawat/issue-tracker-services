@@ -8,7 +8,7 @@
  * Usage (CI):
  *   RELEASE_BRANCH=release/2026.08.01.1 \
  *   MERGE_SHA=<sha> \
- *   node --no-warnings --experimental-strip-types scripts/release.ts
+ *   node --no-warnings --experimental-strip-types tools/scripts/release.ts
  *
  * Optional: PR_TITLE, PR_BODY, PR_NUMBER, PR_URL for release notes.
  */
@@ -279,7 +279,7 @@ function isMainModule(): boolean {
   try {
     return import.meta.url === pathToFileURL(entry).href;
   } catch {
-    return entry.replace(/\\/g, "/").endsWith("/scripts/release.ts");
+    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/release.ts");
   }
 }
 

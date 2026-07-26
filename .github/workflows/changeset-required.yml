@@ -55,7 +55,7 @@ jobs:
           BASE="origin/${{ github.base_ref }}"
           echo "Expecting exactly one new .changeset/*.md file since ${BASE}…"
           if ! node --no-warnings --experimental-strip-types \
-            scripts/changeset-required.ts "$BASE"; then
+            tools/scripts/changeset-required.ts "$BASE"; then
             echo ""
             echo "::error::This PR must include exactly one Changeset (not zero, not multiple) before merging into ${{ github.base_ref }}."
             exit 1

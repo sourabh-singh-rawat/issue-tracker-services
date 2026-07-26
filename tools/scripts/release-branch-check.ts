@@ -133,7 +133,7 @@ function isMainModule(): boolean {
   } catch {
     return entry
       .replace(/\\/g, "/")
-      .endsWith("/scripts/release-branch-check.ts");
+      .endsWith("/tools/scripts/release-branch-check.ts");
   }
 }
 

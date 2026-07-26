@@ -19,6 +19,7 @@ pnpm + Turborepo monorepo. Workspace: `apps/**`, `packages/**`, `services/**`.
 | Cross-service async | `@pine/events` → `pine-events` |
 | HTTP server / logger | `@pine/http-core` |
 | Local stack | `infra/docker` + root `pnpm dev:infra*` |
+| Repo tooling scripts | `tools/scripts/` (release, schemas compose, concat) |
 | Agent skills | `tools/ai/*/SKILL.md` |
 
 Extract to `packages/*` only when **two** services need the same logic.
