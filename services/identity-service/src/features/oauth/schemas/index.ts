@@ -1,6 +1,5 @@
 export * from "@/features/oauth/schemas/AcceptConsentBodySchema";
 export * from "@/features/oauth/schemas/AuthorizeQuerySchema";
-export * from "@/features/oauth/schemas/AuthorizeResponseSchema";
 export * from "@/features/oauth/schemas/ConsentActionResponseSchema";
 export * from "@/features/oauth/schemas/ConsentQuerySchema";
 export * from "@/features/oauth/schemas/ConsentResponseSchema";

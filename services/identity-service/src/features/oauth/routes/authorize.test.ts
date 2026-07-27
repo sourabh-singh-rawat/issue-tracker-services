@@ -33,13 +33,12 @@ describe("authorize route", () => {
     });
   });
 
-  it("returns the authorization URL from the OAuth service", async () => {
-    const authorizeFn = vi.fn().mockResolvedValue({
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?client_id=issues-web",
-    });
+  it("redirects to the authorization URL from the OAuth service", async () => {
+    const redirectTo = "http://127.0.0.1:4444/oauth2/auth?client_id=issues-web";
+    const authorizeFn = vi.fn().mockResolvedValue({ redirectTo });
     get.mockReturnValue({ authorize: authorizeFn });
 
-    const send = vi.fn((body) => body);
+    const redirect = vi.fn((url: string) => url);
     const req = {
       query: {
         client_id: "issues-web",
@@ -52,7 +51,7 @@ describe("authorize route", () => {
         nonce: "nonce-1",
       },
     };
-    const reply = { send };
+    const reply = { redirect };
 
     const response = await authorize.handler!(req as never, reply as never);
 
@@ -67,19 +66,15 @@ describe("authorize route", () => {
       codeChallengeMethod: "S256",
       nonce: "nonce-1",
     });
-    expect(send).toHaveBeenCalledWith({
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?client_id=issues-web",
-    });
-    expect(response).toEqual({
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?client_id=issues-web",
-    });
+    expect(redirect).toHaveBeenCalledWith(redirectTo);
+    expect(response).toBe(redirectTo);
   });
 
   it("propagates InvalidOAuthRequestError from the OAuth service", async () => {
     const authorizeFn = vi.fn().mockRejectedValue(new InvalidOAuthRequestError());
     get.mockReturnValue({ authorize: authorizeFn });
 
-    const send = vi.fn();
+    const redirect = vi.fn();
     const req = {
       query: {
         client_id: "issues-web",
@@ -89,12 +84,12 @@ describe("authorize route", () => {
         state: "state-1",
       },
     };
-    const reply = { send };
+    const reply = { redirect };
 
     await expect(authorize.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
       InvalidOAuthRequestError,
     );
-    expect(send).not.toHaveBeenCalled();
+    expect(redirect).not.toHaveBeenCalled();
   });
 
   it("propagates OAuthProviderUnavailableError from the OAuth service", async () => {
@@ -103,7 +98,7 @@ describe("authorize route", () => {
       .mockRejectedValue(new OAuthProviderUnavailableError());
     get.mockReturnValue({ authorize: authorizeFn });
 
-    const send = vi.fn();
+    const redirect = vi.fn();
     const req = {
       query: {
         client_id: "issues-web",
@@ -113,12 +108,12 @@ describe("authorize route", () => {
         state: "state-1",
       },
     };
-    const reply = { send };
+    const reply = { redirect };
 
     await expect(authorize.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
       OAuthProviderUnavailableError,
     );
-    expect(send).not.toHaveBeenCalled();
+    expect(redirect).not.toHaveBeenCalled();
   });
 });
 

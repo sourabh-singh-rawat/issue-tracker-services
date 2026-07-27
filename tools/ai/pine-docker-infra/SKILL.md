@@ -13,9 +13,8 @@ description: >
 |------|--------|
 | Root `.env` / `.env.example` | Everything: compose secrets, app runtime, Vite `VITE_*` |
 
-Set each `POSTGRES_*_PASSWORD` **once**. Apps derive single-db URLs
-(`postgres://{role}:{password}@localhost:5432/{db}`) from those passwords.
-For multi-db or remote, set `<DOMAIN>_DATABASE_URL` (full URL) instead.
+Set each `POSTGRES_*_PASSWORD` for compose init. Apps require full
+`<DOMAIN>_DATABASE_URL` (e.g. `postgres://{role}:{password}@localhost:5432/{db}`).
 
 ```bash
 cp .env.example .env
