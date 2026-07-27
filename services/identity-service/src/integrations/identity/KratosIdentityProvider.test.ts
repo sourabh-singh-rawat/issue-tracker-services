@@ -194,9 +194,7 @@ describe("KratosIdentityProvider.login", () => {
 describe("KratosIdentityProvider.logout", () => {
   it("logs out via the native Kratos logout API with the session token", async () => {
     const performNativeLogout = vi.fn().mockResolvedValue(undefined);
-    const provider = new KratosIdentityProvider(
-      createKratosMock({ performNativeLogout }) as never,
-    );
+    const provider = new KratosIdentityProvider(createKratosMock({ performNativeLogout }) as never);
 
     await expect(provider.logout("session-token-1")).resolves.toBeUndefined();
 
@@ -211,9 +209,7 @@ describe("KratosIdentityProvider.logout", () => {
     const performNativeLogout = vi.fn().mockRejectedValue({
       response: { status: 401 },
     });
-    const provider = new KratosIdentityProvider(
-      createKratosMock({ performNativeLogout }) as never,
-    );
+    const provider = new KratosIdentityProvider(createKratosMock({ performNativeLogout }) as never);
 
     await expect(provider.logout("session-token-1")).rejects.toBeInstanceOf(InvalidCredentialError);
   });
@@ -222,9 +218,7 @@ describe("KratosIdentityProvider.logout", () => {
     const performNativeLogout = vi.fn().mockRejectedValue({
       response: { status: 403 },
     });
-    const provider = new KratosIdentityProvider(
-      createKratosMock({ performNativeLogout }) as never,
-    );
+    const provider = new KratosIdentityProvider(createKratosMock({ performNativeLogout }) as never);
 
     await expect(provider.logout("session-token-1")).rejects.toBeInstanceOf(InvalidCredentialError);
   });
@@ -233,9 +227,7 @@ describe("KratosIdentityProvider.logout", () => {
     const performNativeLogout = vi.fn().mockRejectedValue({
       response: { status: 503 },
     });
-    const provider = new KratosIdentityProvider(
-      createKratosMock({ performNativeLogout }) as never,
-    );
+    const provider = new KratosIdentityProvider(createKratosMock({ performNativeLogout }) as never);
 
     await expect(provider.logout("session-token-1")).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,

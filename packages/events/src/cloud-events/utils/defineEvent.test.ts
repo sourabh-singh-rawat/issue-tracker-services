@@ -56,9 +56,7 @@ describe("defineEvent + validateEvent / isEvent", () => {
         }),
       ),
     ).toBe(false);
-    expect(isEvent(IssueCreatedEvent, { type: "issues.issue.created" })).toBe(
-      false,
-    );
+    expect(isEvent(IssueCreatedEvent, { type: "issues.issue.created" })).toBe(false);
   });
 
   it("validateEvent returns a typed event and throws EventValidationError on mismatches", () => {

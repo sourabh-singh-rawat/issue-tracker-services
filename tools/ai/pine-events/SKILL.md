@@ -19,12 +19,12 @@ CloudEvents (`defineEvent`, `createCloudEvent`, `identity.user.*` types) exist u
 
 ## Hard rules
 
-| Do | Don’t |
-|----|--------|
-| Map to TypeBox data schemas in `services/*/schemas` | Publish TypeORM entities / `UpdateResult` |
-| Align numbers vs ISO with schema (`Date.now()` vs `Type.Number()`) | Send `new Date()` when schema wants number |
-| Start `fetchMessages()` after `broker.init()` | Assume identity still publishes `USER_*` events (verify call sites) |
-| Import `@pine/events` | Import `@pine/event-bus` |
+| Do                                                                 | Don’t                                                               |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Map to TypeBox data schemas in `services/*/schemas`                | Publish TypeORM entities / `UpdateResult`                           |
+| Align numbers vs ISO with schema (`Date.now()` vs `Type.Number()`) | Send `new Date()` when schema wants number                          |
+| Start `fetchMessages()` after `broker.init()`                      | Assume identity still publishes `USER_*` events (verify call sites) |
+| Import `@pine/events`                                              | Import `@pine/event-bus`                                            |
 
 Field names often differ from entities (`ownerUserId` ≠ `createdById`).
 

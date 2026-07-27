@@ -1,10 +1,5 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import {
-  createPkcePair,
-  isAuthenticated,
-  setOidcCodeVerifier,
-  setOidcState,
-} from "../../lib/auth";
+import { createPkcePair, isAuthenticated, setOidcCodeVerifier, setOidcState } from "../../lib/auth";
 
 const startOidcLogin = async (): Promise<string> => {
   const state = crypto.randomUUID();
@@ -13,15 +8,9 @@ const startOidcLogin = async (): Promise<string> => {
   setOidcState(state);
   setOidcCodeVerifier(codeVerifier);
 
-  const authorizeUrl = new URL(
-    "/identity/oauth/authorize",
-    import.meta.env.VITE_API_BASE_URL,
-  );
+  const authorizeUrl = new URL("/identity/oauth/authorize", import.meta.env.VITE_API_BASE_URL);
   authorizeUrl.searchParams.set("response_type", "code");
-  authorizeUrl.searchParams.set(
-    "client_id",
-    import.meta.env.VITE_INVENTORY_WEB_OIDC_CLIENT_ID,
-  );
+  authorizeUrl.searchParams.set("client_id", import.meta.env.VITE_INVENTORY_WEB_OIDC_CLIENT_ID);
   authorizeUrl.searchParams.set(
     "redirect_uri",
     import.meta.env.VITE_INVENTORY_WEB_OIDC_REDIRECT_URI,

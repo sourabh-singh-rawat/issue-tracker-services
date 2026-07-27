@@ -9,21 +9,25 @@ vi.mock("typeorm", async (importOriginal) => {
   const actualTypeorm = await importOriginal<typeof import("typeorm")>();
   return {
     ...actualTypeorm,
-    DataSource: vi.fn().mockImplementation(function MockDataSource(this: {
-      initialize: ReturnType<typeof vi.fn>;
-      createQueryRunner: ReturnType<typeof vi.fn>;
-      createQueryBuilder: ReturnType<typeof vi.fn>;
-    }) {
-      this.initialize = vi.fn();
-      this.createQueryRunner = vi.fn().mockReturnValue({
-        connect: vi.fn(),
-        startTransaction: vi.fn(),
-        release: vi.fn(),
-        rollbackTransaction: vi.fn(),
-        commitTransaction: vi.fn(),
-      });
-      this.createQueryBuilder = vi.fn();
-    }),
+    DataSource: vi
+      .fn()
+      .mockImplementation(
+        function MockDataSource(this: {
+          initialize: ReturnType<typeof vi.fn>;
+          createQueryRunner: ReturnType<typeof vi.fn>;
+          createQueryBuilder: ReturnType<typeof vi.fn>;
+        }) {
+          this.initialize = vi.fn();
+          this.createQueryRunner = vi.fn().mockReturnValue({
+            connect: vi.fn(),
+            startTransaction: vi.fn(),
+            release: vi.fn(),
+            rollbackTransaction: vi.fn(),
+            commitTransaction: vi.fn(),
+          });
+          this.createQueryBuilder = vi.fn();
+        },
+      ),
   };
 });
 

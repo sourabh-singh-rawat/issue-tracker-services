@@ -17,6 +17,4 @@ container.bind(TYPES.RedisClient).toConstantValue(redisClient);
 container.bind(TYPES.ImageProcessingQueue).toConstantValue(imageProcessingQueue);
 
 container.bind<AttachmentService>(TYPES.AttachmentService).to(CoreAttachmentService);
-container
-  .bind<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber)
-  .to(UserEmailVerifiedSubscriber);
+container.bind<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber).to(UserEmailVerifiedSubscriber);

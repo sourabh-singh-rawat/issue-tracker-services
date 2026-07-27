@@ -90,9 +90,7 @@ describe("HydraOAuthProvider.getLoginRequest", () => {
       },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ getOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ getOAuth2LoginRequest }) as never);
 
     await expect(provider.getLoginRequest("login-challenge-1")).resolves.toEqual({
       challenge: "login-challenge-1",
@@ -118,9 +116,7 @@ describe("HydraOAuthProvider.getLoginRequest", () => {
       response: { status: 404 },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ getOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ getOAuth2LoginRequest }) as never);
 
     await expect(provider.getLoginRequest("missing")).rejects.toBeInstanceOf(
       OAuthRequestNotFoundError,
@@ -132,13 +128,9 @@ describe("HydraOAuthProvider.getLoginRequest", () => {
       response: { status: 400 },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ getOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ getOAuth2LoginRequest }) as never);
 
-    await expect(provider.getLoginRequest("bad")).rejects.toBeInstanceOf(
-      InvalidOAuthRequestError,
-    );
+    await expect(provider.getLoginRequest("bad")).rejects.toBeInstanceOf(InvalidOAuthRequestError);
   });
 
   it("throws OAuthProviderUnavailableError when Hydra is down", async () => {
@@ -146,9 +138,7 @@ describe("HydraOAuthProvider.getLoginRequest", () => {
       response: { status: 503 },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ getOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ getOAuth2LoginRequest }) as never);
 
     await expect(provider.getLoginRequest("challenge")).rejects.toBeInstanceOf(
       OAuthProviderUnavailableError,
@@ -162,9 +152,7 @@ describe("HydraOAuthProvider.acceptLoginRequest", () => {
       data: { redirect_to: "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc" },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ acceptOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ acceptOAuth2LoginRequest }) as never);
 
     await expect(
       provider.acceptLoginRequest({
@@ -197,9 +185,7 @@ describe("HydraOAuthProvider.rejectLoginRequest", () => {
       data: { redirect_to: "http://localhost:3000/callback?error=access_denied" },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ rejectOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ rejectOAuth2LoginRequest }) as never);
 
     await expect(
       provider.rejectLoginRequest({
@@ -225,13 +211,11 @@ describe("HydraOAuthProvider.rejectLoginRequest", () => {
       response: { status: 404 },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ rejectOAuth2LoginRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ rejectOAuth2LoginRequest }) as never);
 
-    await expect(
-      provider.rejectLoginRequest({ challenge: "missing" }),
-    ).rejects.toBeInstanceOf(OAuthRequestNotFoundError);
+    await expect(provider.rejectLoginRequest({ challenge: "missing" })).rejects.toBeInstanceOf(
+      OAuthRequestNotFoundError,
+    );
   });
 });
 
@@ -250,9 +234,7 @@ describe("HydraOAuthProvider.getConsentRequest", () => {
       },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ getOAuth2ConsentRequest }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ getOAuth2ConsentRequest }) as never);
 
     await expect(provider.getConsentRequest("consent-challenge-1")).resolves.toEqual({
       challenge: "consent-challenge-1",
@@ -511,9 +493,7 @@ describe("HydraOAuthProvider.introspectToken", () => {
       },
     });
 
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ introspectOAuth2Token }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ introspectOAuth2Token }) as never);
 
     await expect(provider.introspectToken("access-token", "openid")).resolves.toEqual({
       active: true,
@@ -536,9 +516,7 @@ describe("HydraOAuthProvider.introspectToken", () => {
 describe("HydraOAuthProvider.revokeToken", () => {
   it("revokes a token via the public Hydra API", async () => {
     const revokeOAuth2Token = vi.fn().mockResolvedValue(undefined);
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ revokeOAuth2Token }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ revokeOAuth2Token }) as never);
 
     await expect(provider.revokeToken("access-token")).resolves.toBeUndefined();
     expect(revokeOAuth2Token).toHaveBeenCalledWith({ token: "access-token" });
@@ -548,9 +526,7 @@ describe("HydraOAuthProvider.revokeToken", () => {
 describe("HydraOAuthProvider.deleteClient", () => {
   it("deletes the OAuth client via the admin API", async () => {
     const deleteOAuth2Client = vi.fn().mockResolvedValue(undefined);
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ deleteOAuth2Client }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ deleteOAuth2Client }) as never);
 
     await expect(provider.deleteClient("client-1")).resolves.toBeUndefined();
     expect(deleteOAuth2Client).toHaveBeenCalledWith({ id: "client-1" });
@@ -558,9 +534,7 @@ describe("HydraOAuthProvider.deleteClient", () => {
 
   it("ignores 404 when the client is already gone", async () => {
     const deleteOAuth2Client = vi.fn().mockRejectedValue({ response: { status: 404 } });
-    const provider = new HydraOAuthProvider(
-      createHydraMock({ deleteOAuth2Client }) as never,
-    );
+    const provider = new HydraOAuthProvider(createHydraMock({ deleteOAuth2Client }) as never);
 
     await expect(provider.deleteClient("missing")).resolves.toBeUndefined();
   });

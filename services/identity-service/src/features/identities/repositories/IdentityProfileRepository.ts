@@ -98,9 +98,7 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
     const [row] = await client
       .select()
       .from(IdentityProfiles)
-      .where(
-        and(eq(IdentityProfiles.identityId, identityId), isNull(IdentityProfiles.deletedAt)),
-      )
+      .where(and(eq(IdentityProfiles.identityId, identityId), isNull(IdentityProfiles.deletedAt)))
       .limit(1);
 
     return row ?? null;

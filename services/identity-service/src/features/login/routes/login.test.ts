@@ -16,7 +16,7 @@ describe("login route", () => {
     get.mockReset();
   });
 
-  it("sets the session cookie with the provider session token and expiresAt", async () => {
+  it("sets the session cookie and returns 204 with no body", async () => {
     const expiresAt = new Date("2030-01-01T00:00:00.000Z");
     const loginWithEmailAndPassword = vi.fn().mockResolvedValue({
       identity: {
@@ -32,14 +32,16 @@ describe("login route", () => {
     get.mockReturnValue({ loginWithEmailAndPassword });
 
     const setCookie = vi.fn();
-    const send = vi.fn((payload) => payload);
+    const status = vi.fn().mockReturnThis();
+    const send = vi.fn().mockReturnThis();
+    const redirect = vi.fn();
     const req = {
       body: { email: "a@b.com", password: "password" },
       query: {},
     };
-    const reply = { setCookie, send };
+    const reply = { setCookie, status, send, redirect };
 
-    const response = await login.handler!(req as never, reply as never);
+    await login.handler!(req as never, reply as never);
 
     expect(get).toHaveBeenCalledWith(TYPES.LoginService);
     expect(loginWithEmailAndPassword).toHaveBeenCalledWith({
@@ -54,24 +56,14 @@ describe("login route", () => {
       secure: false,
       expires: expiresAt,
     });
-    expect(response).toEqual({
-      identity: {
-        id: "identity-1",
-        email: "a@b.com",
-        emailVerified: true,
-      },
-    });
-    expect(send).toHaveBeenCalledWith({
-      identity: {
-        id: "identity-1",
-        email: "a@b.com",
-        emailVerified: true,
-      },
-    });
+    expect(status).toHaveBeenCalledWith(204);
+    expect(send).toHaveBeenCalledWith();
+    expect(redirect).not.toHaveBeenCalled();
   });
 
-  it("passes login_challenge from the query string to the service and includes redirectTo", async () => {
+  it("passes login_challenge from the query string and redirects when redirectTo is present", async () => {
     const expiresAt = new Date("2030-01-01T00:00:00.000Z");
+    const redirectTo = "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc";
     const loginWithEmailAndPassword = vi.fn().mockResolvedValue({
       identity: {
         id: "identity-1",
@@ -81,13 +73,15 @@ describe("login route", () => {
       sessionToken: "session-token-1",
       expiresAt,
       sessionId: "session-1",
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc",
+      redirectTo,
     });
 
     get.mockReturnValue({ loginWithEmailAndPassword });
 
     const setCookie = vi.fn();
-    const send = vi.fn((payload) => payload);
+    const status = vi.fn().mockReturnThis();
+    const send = vi.fn().mockReturnThis();
+    const redirect = vi.fn((url: string) => url);
     const req = {
       body: {
         email: "a@b.com",
@@ -97,7 +91,7 @@ describe("login route", () => {
         login_challenge: "login-challenge-1",
       },
     };
-    const reply = { setCookie, send };
+    const reply = { setCookie, status, send, redirect };
 
     const response = await login.handler!(req as never, reply as never);
 
@@ -106,13 +100,16 @@ describe("login route", () => {
       password: "password",
       loginChallenge: "login-challenge-1",
     });
-    expect(response).toEqual({
-      identity: {
-        id: "identity-1",
-        email: "a@b.com",
-        emailVerified: true,
-      },
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc",
+    expect(setCookie).toHaveBeenCalledWith("session", "session-token-1", {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: false,
+      expires: expiresAt,
     });
+    expect(redirect).toHaveBeenCalledWith(redirectTo);
+    expect(response).toBe(redirectTo);
+    expect(status).not.toHaveBeenCalled();
+    expect(send).not.toHaveBeenCalled();
   });
 });

@@ -4,19 +4,9 @@ import type { CloudEvent } from "../CloudEvent";
 import { createCloudEvent } from "./createCloudEvent";
 import { isCloudEvent, validateCloudEvent } from "./validateCloudEvent";
 
-const REQUIRED_CONTEXT_ATTRIBUTES = [
-  "id",
-  "source",
-  "specversion",
-  "type",
-] as const;
+const REQUIRED_CONTEXT_ATTRIBUTES = ["id", "source", "specversion", "type"] as const;
 
-const OPTIONAL_CONTEXT_ATTRIBUTES = [
-  "datacontenttype",
-  "dataschema",
-  "subject",
-  "time",
-] as const;
+const OPTIONAL_CONTEXT_ATTRIBUTES = ["datacontenttype", "dataschema", "subject", "time"] as const;
 
 const minimalValidEvent = {
   id: "A234-1234-1234",
@@ -88,9 +78,7 @@ describe("CloudEvents 1.0 compliance", () => {
         const incomplete = { ...minimalValidEvent };
         delete (incomplete as Record<string, unknown>)[attribute];
 
-        expect(() => validateCloudEvent(incomplete)).toThrow(
-          CloudEventValidationError,
-        );
+        expect(() => validateCloudEvent(incomplete)).toThrow(CloudEventValidationError);
         expect(isCloudEvent(incomplete)).toBe(false);
       },
     );
@@ -100,9 +88,7 @@ describe("CloudEvents 1.0 compliance", () => {
       (attribute) => {
         const invalid = { ...minimalValidEvent, [attribute]: "" };
 
-        expect(() => validateCloudEvent(invalid)).toThrow(
-          CloudEventValidationError,
-        );
+        expect(() => validateCloudEvent(invalid)).toThrow(CloudEventValidationError);
         expect(isCloudEvent(invalid)).toBe(false);
       },
     );
@@ -115,9 +101,9 @@ describe("CloudEvents 1.0 compliance", () => {
       expect(typeof withId.id).toBe("string");
       expect(withId.id).toBe("unique-event-id-42");
 
-      expect(() =>
-        validateCloudEvent({ ...minimalValidEvent, id: 123 }),
-      ).toThrow(CloudEventValidationError);
+      expect(() => validateCloudEvent({ ...minimalValidEvent, id: 123 })).toThrow(
+        CloudEventValidationError,
+      );
     });
 
     it("source MUST be a non-empty string (URI-reference in the spec)", () => {
@@ -147,15 +133,14 @@ describe("CloudEvents 1.0 compliance", () => {
       });
       expect(event.specversion).toBe("1.0");
 
-      expect(
-        validateCloudEvent({ ...minimalValidEvent, specversion: "1.0" })
-          .specversion,
-      ).toBe("1.0");
+      expect(validateCloudEvent({ ...minimalValidEvent, specversion: "1.0" }).specversion).toBe(
+        "1.0",
+      );
 
       for (const bad of ["0.3", "1", "1.0.0", "2.0", ""]) {
-        expect(() =>
-          validateCloudEvent({ ...minimalValidEvent, specversion: bad }),
-        ).toThrow(CloudEventValidationError);
+        expect(() => validateCloudEvent({ ...minimalValidEvent, specversion: bad })).toThrow(
+          CloudEventValidationError,
+        );
       }
     });
 
@@ -166,9 +151,9 @@ describe("CloudEvents 1.0 compliance", () => {
       });
       expect(event.type).toBe("com.github.pull_request.opened");
 
-      expect(() =>
-        validateCloudEvent({ ...minimalValidEvent, type: 99 }),
-      ).toThrow(CloudEventValidationError);
+      expect(() => validateCloudEvent({ ...minimalValidEvent, type: 99 })).toThrow(
+        CloudEventValidationError,
+      );
     });
 
     it("id + source uniquely identify an event occurrence (producer generates distinct ids)", () => {
@@ -201,18 +186,14 @@ describe("CloudEvents 1.0 compliance", () => {
       expect(isCloudEvent(full)).toBe(true);
     });
 
-    it.each(OPTIONAL_CONTEXT_ATTRIBUTES)(
-      "OPTIONAL attribute %s may be omitted",
-      (attribute) => {
-        const event = { ...minimalValidEvent };
-        expect(event).not.toHaveProperty(attribute);
-        expect(isCloudEvent(event)).toBe(true);
-      },
-    );
+    it.each(OPTIONAL_CONTEXT_ATTRIBUTES)("OPTIONAL attribute %s may be omitted", (attribute) => {
+      const event = { ...minimalValidEvent };
+      expect(event).not.toHaveProperty(attribute);
+      expect(isCloudEvent(event)).toBe(true);
+    });
 
     it("time SHOULD be RFC 3339 when produced by createCloudEvent", () => {
-      const rfc3339 =
-        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+      const rfc3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 
       const defaultTime = createCloudEvent({
         type: "com.example.event",
@@ -273,9 +254,7 @@ describe("CloudEvents 1.0 compliance", () => {
       });
 
       expect(event.dataschema).toBe("https://example.com/schemas/user.json");
-      expect(validateCloudEvent(event).dataschema).toBe(
-        "https://example.com/schemas/user.json",
-      );
+      expect(validateCloudEvent(event).dataschema).toBe("https://example.com/schemas/user.json");
     });
   });
 
@@ -379,9 +358,7 @@ describe("CloudEvents 1.0 compliance", () => {
     it("rejects non-object values", () => {
       for (const value of [null, undefined, "event", 1, true, []]) {
         expect(isCloudEvent(value)).toBe(false);
-        expect(() => validateCloudEvent(value)).toThrow(
-          CloudEventValidationError,
-        );
+        expect(() => validateCloudEvent(value)).toThrow(CloudEventValidationError);
       }
     });
 
@@ -391,13 +368,9 @@ describe("CloudEvents 1.0 compliance", () => {
         expect.unreachable("expected throw");
       } catch (error) {
         expect(error).toBeInstanceOf(CloudEventValidationError);
-        expect((error as CloudEventValidationError).code).toBe(
-          "CLOUD_EVENT_VALIDATION_ERROR",
-        );
+        expect((error as CloudEventValidationError).code).toBe("CLOUD_EVENT_VALIDATION_ERROR");
         expect((error as CloudEventValidationError).expose).toBe(true);
-        expect(
-          (error as CloudEventValidationError).errors.length,
-        ).toBeGreaterThan(0);
+        expect((error as CloudEventValidationError).errors.length).toBeGreaterThan(0);
       }
     });
   });

@@ -77,8 +77,7 @@ export const registerHttpProxies = async (server: FastifyInstance): Promise<void
         bodyTimeout: 120_000,
       },
       replyOptions: {
-        rewriteHeaders: (headers, request) =>
-          rewriteProxyHeaders(headers, request, allowedOrigins),
+        rewriteHeaders: (headers, request) => rewriteProxyHeaders(headers, request, allowedOrigins),
       },
     });
   }

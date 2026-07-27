@@ -17,6 +17,4 @@ export const WorkspaceMemberInvitedDataSchema = Type.Object(
   { additionalProperties: false },
 );
 
-export type WorkspaceMemberInvitedData = Type.Static<
-  typeof WorkspaceMemberInvitedDataSchema
->;
+export type WorkspaceMemberInvitedData = Type.Static<typeof WorkspaceMemberInvitedDataSchema>;

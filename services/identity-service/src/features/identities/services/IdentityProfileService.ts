@@ -20,10 +20,7 @@ export class IdentityProfileService implements IIdentityProfileService {
   async createIdentityProfile(options: CreateIdentityProfileOptions) {
     const { tx, displayName, identityId, description } = options;
 
-    await this.identityProfileRepository.save(
-      { displayName, identityId, description },
-      { tx },
-    );
+    await this.identityProfileRepository.save({ displayName, identityId, description }, { tx });
   }
 
   async getIdentityProfileByIdentityId(identityId: string) {

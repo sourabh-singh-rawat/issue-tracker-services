@@ -65,9 +65,7 @@ function getFilesRespectingGitignore(targetDir: string): string[] | null {
     // --exclude-standard: apply .gitignore, info/exclude, and global excludes
     // Prefer a pathspec under the repo; if roots disagree (e.g. odd casing), list all and filter.
     const pathspec =
-      relativeTarget.startsWith("..") || path.isAbsolute(relativeTarget)
-        ? ["."]
-        : [relativeTarget];
+      relativeTarget.startsWith("..") || path.isAbsolute(relativeTarget) ? ["."] : [relativeTarget];
 
     const output = execFileSync(
       "git",

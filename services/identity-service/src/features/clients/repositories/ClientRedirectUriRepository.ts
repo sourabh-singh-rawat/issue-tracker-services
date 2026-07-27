@@ -2,11 +2,7 @@ import { uuidv7 } from "@pine/common";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import {
-  type ClientRedirectUri,
-  ClientRedirectUris,
-  type Database,
-} from "@/db";
+import { type ClientRedirectUri, ClientRedirectUris, type Database } from "@/db";
 import {
   type ClientRedirectUriRepositoryOptions,
   type IClientRedirectUriRepository,
@@ -68,9 +64,7 @@ export class ClientRedirectUriRepository implements IClientRedirectUriRepository
     return this.db
       .select()
       .from(ClientRedirectUris)
-      .where(
-        and(eq(ClientRedirectUris.clientId, clientId), isNull(ClientRedirectUris.deletedAt)),
-      );
+      .where(and(eq(ClientRedirectUris.clientId, clientId), isNull(ClientRedirectUris.deletedAt)));
   }
 
   async softDelete(id: string, options?: ClientRedirectUriRepositoryOptions): Promise<void> {

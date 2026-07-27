@@ -13,9 +13,7 @@ import {
   IHttpServer,
 } from "./IHttpServer";
 
-export class FastifyHttpServer<Context extends BaseContext = BaseContext>
-  implements IHttpServer
-{
+export class FastifyHttpServer<Context extends BaseContext = BaseContext> implements IHttpServer {
   constructor(private readonly options: HttpServerOptions<Context>) {}
 
   private cors(options: CorsOptions) {

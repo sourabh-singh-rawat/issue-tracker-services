@@ -16,9 +16,7 @@ export type EventSchemaOf<TDef extends EventDefinition> = TDef["schema"];
 
 export type EventVersionOf<TDef extends EventDefinition> = TDef["version"];
 
-export type EventDataOf<TDef extends EventDefinition> = Type.Static<
-  TDef["schema"]
->;
+export type EventDataOf<TDef extends EventDefinition> = Type.Static<TDef["schema"]>;
 
 export const defineEvent = <
   const TType extends string,

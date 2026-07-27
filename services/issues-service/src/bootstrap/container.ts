@@ -17,15 +17,11 @@ container.bind(TYPES.DataSource).toConstantValue(dataSource);
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind(TYPES.Orm).toConstantValue(orm);
-container
-  .bind<IPublisher>(TYPES.Publisher)
-  .toConstantValue(new NatsPublisher(broker));
+container.bind<IPublisher>(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
 
 container.bind<IUserService>(TYPES.UserService).to(UserService);
 container.bind<IIssueService>(TYPES.IssueService).to(IssueService);
 container.bind<IStatusService>(TYPES.StatusService).to(StatusService);
 container.bind<IProjectService>(TYPES.ProjectService).to(ProjectService);
 container.bind<IWorkspaceService>(TYPES.WorkspaceService).to(WorkspaceService);
-container
-  .bind<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber)
-  .to(UserEmailVerifiedSubscriber);
+container.bind<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber).to(UserEmailVerifiedSubscriber);

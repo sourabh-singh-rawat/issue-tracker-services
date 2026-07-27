@@ -9,8 +9,8 @@ description: >
 
 ## Env (single file at monorepo root)
 
-| File | Holds |
-|------|--------|
+| File                         | Holds                                                   |
+| ---------------------------- | ------------------------------------------------------- |
 | Root `.env` / `.env.example` | Everything: compose secrets, app runtime, Vite `VITE_*` |
 
 Set each `POSTGRES_*_PASSWORD` for compose init. Apps require full
@@ -24,27 +24,27 @@ Compose is always started with `--env-file .env` (see root `pnpm dev:infra*`).
 
 ## Commands (prefer these)
 
-| Script | Stack |
-|--------|--------|
-| `pnpm dev:infra` / `:down` | compose + single-db + ory-db + kratos + hydra |
-| `dev:infra:multi-db` | multi-db overlay |
-| `dev:infra:observability` | + Alloy/Tempo/Loki/Grafana profile |
-| `dev:infra:kratos` / `hydra` | Ory only |
+| Script                       | Stack                                         |
+| ---------------------------- | --------------------------------------------- |
+| `pnpm dev:infra` / `:down`   | compose + single-db + ory-db + kratos + hydra |
+| `dev:infra:multi-db`         | multi-db overlay                              |
+| `dev:infra:observability`    | + Alloy/Tempo/Loki/Grafana profile            |
+| `dev:infra:kratos` / `hydra` | Ory only                                      |
 
 Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default), `compose.multi-db.yaml`, `compose.ory-db.yaml`, `compose.kratos.yaml`, `compose.hydra.yaml`.
 
 ## Ports (typical)
 
-| Host | Service |
-|------|---------|
-| 5432 | Postgres |
-| 4222 / 8222 | NATS client / monitor |
-| 6380 | Redis (`REDIS_URL`) |
-| 4433 / 4434 | Kratos public / admin |
-| 4444 / 4445 | Hydra public / admin |
-| 4436 / 4437 | mailslurper |
-| 5555 | pgAdmin |
-| 4317 | Alloy OTLP (obs profile only) |
+| Host        | Service                       |
+| ----------- | ----------------------------- |
+| 5432        | Postgres                      |
+| 4222 / 8222 | NATS client / monitor         |
+| 6380        | Redis (`REDIS_URL`)           |
+| 4433 / 4434 | Kratos public / admin         |
+| 4444 / 4445 | Hydra public / admin          |
+| 4436 / 4437 | mailslurper                   |
+| 5555        | pgAdmin                       |
+| 4317        | Alloy OTLP (obs profile only) |
 
 Confirm in active compose + root `.env.example`.
 

@@ -1,9 +1,6 @@
 import Type from "typebox";
 import Value, { Assert, AssertError } from "typebox/value";
-import {
-  EventValidationError,
-  type SchemaValidationErrors,
-} from "../../errors";
+import { EventValidationError, type SchemaValidationErrors } from "../../errors";
 import type { CloudEvent } from "../CloudEvent";
 import type { EventDefinition } from "./defineEvent";
 import { isCloudEvent, validateCloudEvent } from "./validateCloudEvent";
@@ -15,9 +12,7 @@ export type TypedCloudEvent<TDef extends EventDefinition> = CloudEvent<
 };
 
 const formatSchemaErrors = (errors: SchemaValidationErrors): string => {
-  return errors
-    .map((error) => `${error.instancePath || "/"}: ${error.message}`)
-    .join("; ");
+  return errors.map((error) => `${error.instancePath || "/"}: ${error.message}`).join("; ");
 };
 
 const assertEventData = <Schema extends Type.TSchema>(

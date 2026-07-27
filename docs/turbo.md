@@ -4,11 +4,11 @@ This workspace uses **Turborepo** on top of **pnpm workspaces**.
 
 ## Projects
 
-| Name                                                                                            | Path         |
-| ----------------------------------------------------------------------------------------------- | ------------ |
-| `@pine/*`                                                                                       | `packages/*` |
+| Name                                                                                                                    | Path         |
+| ----------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `@pine/*`                                                                                                               | `packages/*` |
 | `@pine/identity-service`, `@pine/attachment-service`, `@pine/mail-service`, `@pine/issues-service`, `@pine/api-gateway` | `services/*` |
-| `@pine/issues-web`, `@pine/identity-web`, `@pine/inventory-web`                                  | `apps/*`     |
+| `@pine/issues-web`, `@pine/identity-web`, `@pine/inventory-web`                                                         | `apps/*`     |
 
 ```bash
 pnpm exec turbo run build --dry-run

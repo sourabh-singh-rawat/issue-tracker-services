@@ -9,6 +9,4 @@ export const UserConfirmationEmailSentDataSchema = Type.Object(
   { additionalProperties: false },
 );
 
-export type UserConfirmationEmailSentData = Type.Static<
-  typeof UserConfirmationEmailSentDataSchema
->;
+export type UserConfirmationEmailSentData = Type.Static<typeof UserConfirmationEmailSentDataSchema>;

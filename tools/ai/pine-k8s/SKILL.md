@@ -22,8 +22,8 @@ infra/k8s/
 
 ## Install order
 
-1. Dashboard (optional) → 2. Ingress → 3. Secrets → 4. PGO  
-5. Per-service Postgres → 6. NATS + nack → 7. Streams → 8. Consumers → 9. Microservices
+1. Dashboard (optional) → 2. Ingress → 3. Secrets → 4. PGO
+2. Per-service Postgres → 6. NATS + nack → 7. Streams → 8. Consumers → 9. Microservices
 
 Stream/consumer names must match `@pine/events` (`pine-events`).
 
