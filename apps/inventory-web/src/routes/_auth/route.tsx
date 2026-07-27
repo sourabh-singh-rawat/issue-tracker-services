@@ -1,4 +1,3 @@
-import { authorize } from "@generated/api";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import {
   createPkcePair,
@@ -14,23 +13,26 @@ const startOidcLogin = async (): Promise<string> => {
   setOidcState(state);
   setOidcCodeVerifier(codeVerifier);
 
-  const { data } = await authorize({
-    query: {
-      response_type: "code",
-      client_id: import.meta.env.VITE_INVENTORY_WEB_OIDC_CLIENT_ID,
-      redirect_uri: import.meta.env.VITE_INVENTORY_WEB_OIDC_REDIRECT_URI,
-      scope: import.meta.env.VITE_OIDC_SCOPES,
-      state,
-      code_challenge: codeChallenge,
-      code_challenge_method: "S256",
-    },
-  });
+  const authorizeUrl = new URL(
+    "/identity/oauth/authorize",
+    import.meta.env.VITE_API_BASE_URL,
+  );
+  authorizeUrl.searchParams.set("response_type", "code");
+  authorizeUrl.searchParams.set(
+    "client_id",
+    import.meta.env.VITE_INVENTORY_WEB_OIDC_CLIENT_ID,
+  );
+  authorizeUrl.searchParams.set(
+    "redirect_uri",
+    import.meta.env.VITE_INVENTORY_WEB_OIDC_REDIRECT_URI,
+  );
+  authorizeUrl.searchParams.set("scope", import.meta.env.VITE_OIDC_SCOPES);
+  authorizeUrl.searchParams.set("state", state);
+  authorizeUrl.searchParams.set("code_challenge", codeChallenge);
+  authorizeUrl.searchParams.set("code_challenge_method", "S256");
 
-  if (!data?.redirectTo) {
-    throw new Error("Authorize response did not include redirectTo.");
-  }
-
-  return data.redirectTo;
+  // Full-page navigation so the browser follows the server's 302 to the IdP.
+  return authorizeUrl.toString();
 };
 
 export const Route = createFileRoute("/_auth")({
