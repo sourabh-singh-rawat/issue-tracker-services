@@ -9,12 +9,7 @@ import { MeResponseSchema } from "@/features/me/schemas";
 import type { IMeService } from "@/features/me/services";
 import { env } from "@/bootstrap/env";
 
-export const me: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Reply: MeResponse }
-> = {
+export const me: RouteOptions<Server, IncomingMessage, ServerResponse, { Reply: MeResponse }> = {
   url: "/inventory/me",
   method: "GET",
   schema: {

@@ -3,6 +3,4 @@ import { registerWithEmailAndPassword } from "@/features/registration/routes/reg
 
 export * from "@/features/registration/routes/registerWithEmailAndPassword";
 
-export const registrationRoutes: HttpRouteOptions[] = [
-  asHttpRoute(registerWithEmailAndPassword),
-];
+export const registrationRoutes: HttpRouteOptions[] = [asHttpRoute(registerWithEmailAndPassword)];

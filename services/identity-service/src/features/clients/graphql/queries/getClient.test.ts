@@ -45,10 +45,7 @@ describe("getClient query", () => {
     queryFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
         field: (config: {
-          resolve: (
-            _root: unknown,
-            args: { id: string },
-          ) => Promise<typeof client | null>;
+          resolve: (_root: unknown, args: { id: string }) => Promise<typeof client | null>;
         }) => {
           resolve = config.resolve;
           return config;
@@ -73,15 +70,11 @@ describe("getClient query", () => {
     const getClientById = vi.fn().mockResolvedValue(null);
     get.mockReturnValue({ getClientById });
 
-    let resolve:
-      | ((_root: unknown, args: { id: string }) => Promise<null>)
-      | undefined;
+    let resolve: ((_root: unknown, args: { id: string }) => Promise<null>) | undefined;
 
     queryFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
-        field: (config: {
-          resolve: (_root: unknown, args: { id: string }) => Promise<null>;
-        }) => {
+        field: (config: { resolve: (_root: unknown, args: { id: string }) => Promise<null> }) => {
           resolve = config.resolve;
           return config;
         },

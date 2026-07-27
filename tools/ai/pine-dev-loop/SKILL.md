@@ -17,12 +17,12 @@ pnpm schemas:compose    # or schemas:watch
 pnpm dev:apps
 ```
 
-| Infra variant | Script |
-|---------------|--------|
-| Default single-db + Ory | `dev:infra` |
-| Multi-db | `dev:infra:multi-db` |
-| + OTEL stack | `dev:infra:observability` |
-| Kratos / Hydra only | `dev:infra:kratos` / `dev:infra:hydra` |
+| Infra variant           | Script                                 |
+| ----------------------- | -------------------------------------- |
+| Default single-db + Ory | `dev:infra`                            |
+| Multi-db                | `dev:infra:multi-db`                   |
+| + OTEL stack            | `dev:infra:observability`              |
+| Kratos / Hydra only     | `dev:infra:kratos` / `dev:infra:hydra` |
 
 Compose: `infra/docker/*`. All secrets and app/Vite env: single root `.env` (from `.env.example`).
 
@@ -37,12 +37,12 @@ Shortcuts: `pnpm issues-web`, `identity-service`, `issues-service`, `api-gateway
 
 ## Verify
 
-| Touched | Command |
-|---------|---------|
-| Package/service | `turbo run build test --filter=@pine/<name>...` |
-| GraphQL schema | service writes `dist/schema.graphql` → `schemas:compose` → web `gen` |
-| Shared lib | `build:server` or affected filters |
-| Style | `pnpm lint` / `fmt:check` |
+| Touched         | Command                                                              |
+| --------------- | -------------------------------------------------------------------- |
+| Package/service | `turbo run build test --filter=@pine/<name>...`                      |
+| GraphQL schema  | service writes `dist/schema.graphql` → `schemas:compose` → web `gen` |
+| Shared lib      | `build:server` or affected filters                                   |
+| Style           | `pnpm lint` / `fmt:check`                                            |
 
 Also: `pnpm build`, `build:server`, `build:affected`, `test`, `test:affected`, `check:knip`.
 

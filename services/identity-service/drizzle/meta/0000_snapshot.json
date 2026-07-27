@@ -59,12 +59,8 @@
           "name": "client_grant_types_client_id_clients_id_fk",
           "tableFrom": "client_grant_types",
           "tableTo": "clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -72,12 +68,8 @@
           "name": "client_grant_types_grant_id_grants_id_fk",
           "tableFrom": "client_grant_types",
           "tableTo": "grants",
-          "columnsFrom": [
-            "grant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["grant_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -87,10 +79,7 @@
         "client_grant_types_client_id_grant_id_unique": {
           "name": "client_grant_types_client_id_grant_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "client_id",
-            "grant_id"
-          ]
+          "columns": ["client_id", "grant_id"]
         }
       },
       "policies": {},
@@ -152,12 +141,8 @@
           "name": "client_redirect_uris_client_id_clients_id_fk",
           "tableFrom": "client_redirect_uris",
           "tableTo": "clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -167,10 +152,7 @@
         "client_redirect_uris_client_id_uri_unique": {
           "name": "client_redirect_uris_client_id_uri_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "client_id",
-            "uri"
-          ]
+          "columns": ["client_id", "uri"]
         }
       },
       "policies": {},
@@ -232,12 +214,8 @@
           "name": "client_scopes_client_id_clients_id_fk",
           "tableFrom": "client_scopes",
           "tableTo": "clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -245,12 +223,8 @@
           "name": "client_scopes_scope_id_scopes_id_fk",
           "tableFrom": "client_scopes",
           "tableTo": "scopes",
-          "columnsFrom": [
-            "scope_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["scope_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -260,10 +234,7 @@
         "client_scopes_client_id_scope_id_unique": {
           "name": "client_scopes_client_id_scope_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "client_id",
-            "scope_id"
-          ]
+          "columns": ["client_id", "scope_id"]
         }
       },
       "policies": {},
@@ -389,9 +360,7 @@
         "grants_name_unique": {
           "name": "grants_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -454,9 +423,7 @@
         "scopes_name_unique": {
           "name": "scopes_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -530,12 +497,8 @@
           "name": "user_profiles_user_id_users_id_fk",
           "tableFrom": "user_profiles",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -608,9 +571,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},

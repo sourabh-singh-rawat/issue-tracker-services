@@ -99,7 +99,11 @@ export interface RegisterOAuthClientInput {
   redirectUris: string[];
   grantTypes: string[];
   scopes: string[];
-  tokenEndpointAuthMethod?: "none" | "client_secret_basic" | "client_secret_post" | "private_key_jwt";
+  tokenEndpointAuthMethod?:
+    | "none"
+    | "client_secret_basic"
+    | "client_secret_post"
+    | "private_key_jwt";
   clientSecret?: string;
 }
 

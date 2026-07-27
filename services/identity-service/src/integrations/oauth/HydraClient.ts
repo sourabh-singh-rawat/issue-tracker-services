@@ -8,10 +8,7 @@ export class HydraClient {
   readonly publicApi: OAuth2Api;
   readonly adminApi: OAuth2Api;
 
-  constructor(
-    publicUrl: string = env.HYDRA_PUBLIC_URL,
-    adminUrl: string = env.HYDRA_ADMIN_URL,
-  ) {
+  constructor(publicUrl: string = env.HYDRA_PUBLIC_URL, adminUrl: string = env.HYDRA_ADMIN_URL) {
     this.publicUrl = publicUrl;
     this.publicConfiguration = new Configuration({ basePath: publicUrl });
     this.adminConfiguration = new Configuration({ basePath: adminUrl });

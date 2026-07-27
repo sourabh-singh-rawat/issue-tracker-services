@@ -1,5 +1,1 @@
-export {
-  type Identity,
-  type NewIdentity,
-  Identities,
-} from "@/db/tables/Identities";
+export { type Identity, type NewIdentity, Identities } from "@/db/tables/Identities";

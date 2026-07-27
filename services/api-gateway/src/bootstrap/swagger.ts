@@ -16,7 +16,10 @@ type OpenApiDocument = {
   [key: string]: unknown;
 };
 
-const rewriteServersForGateway = (document: OpenApiDocument, gatewayUrl: string): OpenApiDocument => {
+const rewriteServersForGateway = (
+  document: OpenApiDocument,
+  gatewayUrl: string,
+): OpenApiDocument => {
   const gatewayServer: OpenApiServer = { url: gatewayUrl, description: "API Gateway" };
 
   const paths = Object.fromEntries(
@@ -51,10 +54,9 @@ export const registerSwagger = async (server: FastifyInstance): Promise<void> =>
   // Relative URL keeps Try-it-out on the same origin as /docs (avoids localhost vs 127.0.0.1 CSP/CORS).
   const gatewayUrl = "/";
   const gatewayOrigin = new URL(env.API_GATEWAY_URL).origin;
-  const loopbackOrigin =
-    gatewayOrigin.includes("127.0.0.1")
-      ? gatewayOrigin.replace("127.0.0.1", "localhost")
-      : gatewayOrigin.replace("localhost", "127.0.0.1");
+  const loopbackOrigin = gatewayOrigin.includes("127.0.0.1")
+    ? gatewayOrigin.replace("127.0.0.1", "localhost")
+    : gatewayOrigin.replace("localhost", "127.0.0.1");
 
   if (!existsSync(PLATFORM_OPENAPI_PATH)) {
     console.warn(
@@ -69,7 +71,10 @@ export const registerSwagger = async (server: FastifyInstance): Promise<void> =>
       path: PLATFORM_OPENAPI_PATH,
       baseDir: path.dirname(PLATFORM_OPENAPI_PATH),
       postProcessor: (swaggerObject) =>
-        rewriteServersForGateway(swaggerObject as unknown as OpenApiDocument, gatewayUrl) as typeof swaggerObject,
+        rewriteServersForGateway(
+          swaggerObject as unknown as OpenApiDocument,
+          gatewayUrl,
+        ) as typeof swaggerObject,
     },
   });
 

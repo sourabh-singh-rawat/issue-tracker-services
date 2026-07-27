@@ -1,8 +1,5 @@
 export type { CloudEvent, CreateCloudEventInput } from "./CloudEvent";
-export {
-  CloudEventSchema,
-  type CloudEventBase,
-} from "./schemas";
+export { CloudEventSchema, type CloudEventBase } from "./schemas";
 export {
   createCloudEvent,
   defineEvent,

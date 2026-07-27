@@ -7,9 +7,9 @@ description: >
 
 # Observability
 
-| Layer | Where |
-|-------|--------|
-| SDK | `@pine/observability` → OTLP gRPC |
+| Layer       | Where                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| SDK         | `@pine/observability` → OTLP gRPC                                    |
 | Local stack | `pnpm dev:infra:observability` (Alloy :4317 → Tempo/Loki/Prometheus) |
 
 ## Instrument a service

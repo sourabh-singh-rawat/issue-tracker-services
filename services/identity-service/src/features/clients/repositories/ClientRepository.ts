@@ -61,9 +61,7 @@ export class ClientRepository implements IClientRepository {
 
   async update(
     id: string,
-    entity: Partial<
-      Pick<Client, "name" | "deletedAt" | "oauthProvider" | "providerClientId">
-    >,
+    entity: Partial<Pick<Client, "name" | "deletedAt" | "oauthProvider" | "providerClientId">>,
     options?: ClientRepositoryOptions,
   ): Promise<Client> {
     const client = this.client(options);
@@ -74,9 +72,7 @@ export class ClientRepository implements IClientRepository {
       .set({
         ...(entity.name !== undefined ? { name: entity.name } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
-        ...(entity.oauthProvider !== undefined
-          ? { oauthProvider: entity.oauthProvider }
-          : {}),
+        ...(entity.oauthProvider !== undefined ? { oauthProvider: entity.oauthProvider } : {}),
         ...(entity.providerClientId !== undefined
           ? { providerClientId: entity.providerClientId }
           : {}),
@@ -132,9 +128,7 @@ export class ClientRepository implements IClientRepository {
             ...softDeleteSet,
             version: sql`${ClientRedirectUris.version} + 1`,
           })
-          .where(
-            and(eq(ClientRedirectUris.clientId, id), isNull(ClientRedirectUris.deletedAt)),
-          ),
+          .where(and(eq(ClientRedirectUris.clientId, id), isNull(ClientRedirectUris.deletedAt))),
         tx
           .update(ClientScopes)
           .set({
@@ -191,10 +185,7 @@ export class ClientRepository implements IClientRepository {
       .from(Clients)
       .leftJoin(
         ClientRedirectUris,
-        and(
-          eq(ClientRedirectUris.clientId, Clients.id),
-          isNull(ClientRedirectUris.deletedAt),
-        ),
+        and(eq(ClientRedirectUris.clientId, Clients.id), isNull(ClientRedirectUris.deletedAt)),
       )
       .leftJoin(
         ClientScopes,

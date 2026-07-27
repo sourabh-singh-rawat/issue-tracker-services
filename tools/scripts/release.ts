@@ -39,10 +39,7 @@ async function run(
   return { stdout: stdout.trim(), stderr: stderr.trim() };
 }
 
-async function git(
-  args: readonly string[],
-  cwd: string,
-): Promise<string> {
+async function git(args: readonly string[], cwd: string): Promise<string> {
   const { stdout } = await run("git", args, { cwd });
   return stdout;
 }
@@ -67,10 +64,7 @@ async function releaseExists(tag: string, cwd: string): Promise<boolean> {
 
 async function listReleaseTagsNewestFirst(cwd: string): Promise<string[]> {
   try {
-    const out = await git(
-      ["tag", "--list", "v20*.*.*.*", "--sort=-v:refname"],
-      cwd,
-    );
+    const out = await git(["tag", "--list", "v20*.*.*.*", "--sort=-v:refname"], cwd);
     if (out.length === 0) {
       return [];
     }
@@ -92,13 +86,7 @@ async function commitLogSince(
   const range = fromTag === null ? toSha : `${fromTag}..${toSha}`;
   try {
     return await git(
-      [
-        "log",
-        range,
-        `--max-count=${limit}`,
-        "--pretty=format:- %s (%h)",
-        "--no-merges",
-      ],
+      ["log", range, `--max-count=${limit}`, "--pretty=format:- %s (%h)", "--no-merges"],
       cwd,
     );
   } catch {
@@ -126,11 +114,7 @@ export function buildReleaseNotes(input: {
         : input.prNumber.length > 0
           ? `#${input.prNumber}`
           : "";
-    lines.push(
-      prLink.length > 0
-        ? `**${input.prTitle}** (${prLink})`
-        : `**${input.prTitle}**`,
-    );
+    lines.push(prLink.length > 0 ? `**${input.prTitle}** (${prLink})` : `**${input.prTitle}**`);
     lines.push("");
   }
 
@@ -153,9 +137,7 @@ export function buildReleaseNotes(input: {
   return lines.join("\n").trimEnd() + "\n";
 }
 
-export async function main(
-  argv: readonly string[] = process.argv.slice(2),
-): Promise<number> {
+export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<number> {
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(`Usage: release
 
@@ -177,9 +159,7 @@ Optional env:
   const cwd = process.cwd();
   const releaseBranch = process.env.RELEASE_BRANCH?.trim() ?? "";
   if (releaseBranch.length === 0) {
-    console.error(
-      `Missing RELEASE_BRANCH (e.g. ${formatReleaseBranchExample()}).`,
-    );
+    console.error(`Missing RELEASE_BRANCH (e.g. ${formatReleaseBranchExample()}).`);
     return 1;
   }
 
@@ -204,8 +184,7 @@ Optional env:
   const prNumber = process.env.PR_NUMBER?.trim() ?? "";
   const prUrl = process.env.PR_URL?.trim() ?? "";
 
-  const sinceTag =
-    (await listReleaseTagsNewestFirst(cwd)).find((t) => t !== tag) ?? null;
+  const sinceTag = (await listReleaseTagsNewestFirst(cwd)).find((t) => t !== tag) ?? null;
 
   const commitLog = await commitLogSince(cwd, sinceTag, mergeSha);
   const notes = buildReleaseNotes({
@@ -253,17 +232,7 @@ Optional env:
   console.log(`Creating GitHub Release ${tag}…`);
   await run(
     "gh",
-    [
-      "release",
-      "create",
-      tag,
-      "--target",
-      mergeSha,
-      "--title",
-      tag,
-      "--notes",
-      notes,
-    ],
+    ["release", "create", tag, "--target", mergeSha, "--title", tag, "--notes", notes],
     { cwd, env: { GH_TOKEN: token, GITHUB_TOKEN: token } },
   );
 

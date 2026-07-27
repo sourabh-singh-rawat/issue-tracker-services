@@ -93,9 +93,7 @@ describe("authorize route", () => {
   });
 
   it("propagates OAuthProviderUnavailableError from the OAuth service", async () => {
-    const authorizeFn = vi
-      .fn()
-      .mockRejectedValue(new OAuthProviderUnavailableError());
+    const authorizeFn = vi.fn().mockRejectedValue(new OAuthProviderUnavailableError());
     get.mockReturnValue({ authorize: authorizeFn });
 
     const redirect = vi.fn();
@@ -121,13 +119,9 @@ describe("OAuth login challenge routes", () => {
   // TODO: POST/GET /identity/oauth/login routes
   it.todo("returns the login challenge details for a valid login_challenge");
 
-  it.todo(
-    "accepts a login challenge when the user is authenticated and returns redirectTo",
-  );
+  it.todo("accepts a login challenge when the user is authenticated and returns redirectTo");
 
-  it.todo(
-    "rejects a login challenge when the user denies login and returns redirectTo",
-  );
+  it.todo("rejects a login challenge when the user denies login and returns redirectTo");
 
   it.todo("returns not found when the login_challenge is unknown");
 });
@@ -229,9 +223,7 @@ describe("OAuth consent challenge routes", () => {
   });
 
   it("returns not found when the consent_challenge is unknown", async () => {
-    const getConsentChallenge = vi
-      .fn()
-      .mockRejectedValue(new OAuthRequestNotFoundError());
+    const getConsentChallenge = vi.fn().mockRejectedValue(new OAuthRequestNotFoundError());
     get.mockReturnValue({ getConsentChallenge });
 
     const send = vi.fn();
@@ -353,7 +345,6 @@ describe("token route", () => {
     expect(send).not.toHaveBeenCalled();
   });
 });
-
 
 describe("OAuth introspect/revoke routes", () => {
   // TODO: POST /identity/oauth/introspect and /identity/oauth/revoke

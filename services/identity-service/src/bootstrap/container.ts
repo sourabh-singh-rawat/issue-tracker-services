@@ -24,14 +24,8 @@ import {
   IClientScopeRepository,
   IClientService,
 } from "@/features/clients";
-import {
-  GrantRepository,
-  IGrantRepository,
-} from "@/features/grants";
-import {
-  IScopeRepository,
-  ScopeRepository,
-} from "@/features/scopes";
+import { GrantRepository, IGrantRepository } from "@/features/grants";
+import { IScopeRepository, ScopeRepository } from "@/features/scopes";
 import {
   IIdentityProfileRepository,
   IIdentityProfileService,
@@ -50,30 +44,20 @@ export const container = new Container({ defaultScope: "Singleton" });
 container.bind(TYPES.Database).toConstantValue(db);
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind(TYPES.Broker).toConstantValue(broker);
-container
-  .bind<IPublisher>(TYPES.Publisher)
-  .toConstantValue(new NatsPublisher(broker));
+container.bind<IPublisher>(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
 container.bind(TYPES.KratosClient).toConstantValue(kratosClient);
 container.bind(TYPES.HydraClient).toConstantValue(hydraClient);
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
-container
-  .bind<IIdentityProfileRepository>(TYPES.IdentityProfileRepository)
-  .to(IdentityProfileRepository);
+container.bind<IIdentityProfileRepository>(TYPES.IdentityProfileRepository).to(IdentityProfileRepository);
 container.bind<IClientRepository>(TYPES.ClientRepository).to(ClientRepository);
-container
-  .bind<IClientRedirectUriRepository>(TYPES.ClientRedirectUriRepository)
-  .to(ClientRedirectUriRepository);
+container.bind<IClientRedirectUriRepository>(TYPES.ClientRedirectUriRepository).to(ClientRedirectUriRepository);
 container.bind<IClientScopeRepository>(TYPES.ClientScopeRepository).to(ClientScopeRepository);
-container
-  .bind<IClientGrantTypeRepository>(TYPES.ClientGrantTypeRepository)
-  .to(ClientGrantTypeRepository);
+container.bind<IClientGrantTypeRepository>(TYPES.ClientGrantTypeRepository).to(ClientGrantTypeRepository);
 container.bind<IScopeRepository>(TYPES.ScopeRepository).to(ScopeRepository);
 container.bind<IGrantRepository>(TYPES.GrantRepository).to(GrantRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
-container
-  .bind<IIdentityProfileService>(TYPES.IdentityProfileService)
-  .to(IdentityProfileService);
+container.bind<IIdentityProfileService>(TYPES.IdentityProfileService).to(IdentityProfileService);
 container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IIdentityProvider>(TYPES.IdentityProvider).to(KratosIdentityProvider);
 container.bind<IOAuthProvider>(TYPES.OAuthProvider).to(HydraOAuthProvider);

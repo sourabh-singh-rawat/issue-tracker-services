@@ -1,4 +1,1 @@
-export {
-  CloudEventSchema,
-  type CloudEventBase,
-} from "./CloudEventSchema";
+export { CloudEventSchema, type CloudEventBase } from "./CloudEventSchema";

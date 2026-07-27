@@ -1,9 +1,6 @@
 import { UserNotFoundError, UserProfileNotFoundError } from "@pine/common";
 import { describe, it, expect, vi } from "vitest";
-import {
-  IdentityNotFoundError,
-  IdentityProviderUnavailableError,
-} from "@/integrations/identity";
+import { IdentityNotFoundError, IdentityProviderUnavailableError } from "@/integrations/identity";
 import { AdminService } from "./AdminService";
 
 function createDbMock() {

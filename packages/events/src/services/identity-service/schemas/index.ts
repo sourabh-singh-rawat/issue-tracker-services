@@ -1,7 +1,4 @@
-export {
-  UserRegisteredDataSchema,
-  type UserRegisteredData,
-} from "./UserRegisteredDataSchema";
+export { UserRegisteredDataSchema, type UserRegisteredData } from "./UserRegisteredDataSchema";
 export {
   UserEmailVerifiedDataSchema,
   type UserEmailVerifiedData,

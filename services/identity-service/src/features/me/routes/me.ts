@@ -6,19 +6,13 @@ import type { IMeService } from "@/features/me/services";
 import { MeResponseSchema, type MeResponse } from "@/features/me/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
 
-export const me: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Reply: MeResponse }
-> = {
+export const me: RouteOptions<Server, IncomingMessage, ServerResponse, { Reply: MeResponse }> = {
   url: "/identity/me",
   method: "GET",
   schema: {
     tags: ["auth"],
     summary: "Get current authenticated user",
-    description:
-      "Return basic information about the current user by verifying the session cookie",
+    description: "Return basic information about the current user by verifying the session cookie",
     operationId: "getCurrentUser",
     response: {
       200: MeResponseSchema,

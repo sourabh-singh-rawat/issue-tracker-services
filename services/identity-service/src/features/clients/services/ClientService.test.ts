@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { ClientService } from "./ClientService";
 
-function createService(
-  clientRepository: unknown,
-  oauthProvider: unknown = {},
-) {
+function createService(clientRepository: unknown, oauthProvider: unknown = {}) {
   return new ClientService(
     clientRepository as never,
     {} as never,

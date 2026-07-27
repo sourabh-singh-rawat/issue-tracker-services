@@ -162,9 +162,7 @@ function parseDateOverride(
 ): Pick<ReleaseVersionParts, "year" | "month" | "day"> | null {
   const normalized = input.trim().replace(/-/g, ".");
   // Accept YYYY.MM.DD (no sequence) by appending .1 for the regex
-  const withSeq = RELEASE_DATE_ONLY_RE.test(normalized)
-    ? `${normalized}.1`
-    : normalized;
+  const withSeq = RELEASE_DATE_ONLY_RE.test(normalized) ? `${normalized}.1` : normalized;
   const parts = parseReleaseVersionParts(withSeq);
   if (parts === null) {
     return null;
@@ -172,8 +170,7 @@ function parseDateOverride(
   return { year: parts.year, month: parts.month, day: parts.day };
 }
 
-const RELEASE_DATE_ONLY_RE =
-  /^(20\d{2})\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])$/;
+const RELEASE_DATE_ONLY_RE = /^(20\d{2})\.(0[1-9]|1[0-2])\.(0[1-9]|[12]\d|3[01])$/;
 
 function resolveExplicit(explicit: string): ReleaseVersionParts | null {
   const asBranch = parseReleaseBranch(explicit);
@@ -198,8 +195,14 @@ async function collectKnownRefs(cwd: string): Promise<string[]> {
   const refs: string[] = [];
 
   try {
+    refs.push(...splitLines(await git(["tag", "--list", "v20*.*.*.*"], cwd)));
+  } catch {
+    // ignore
+  }
+
+  try {
     refs.push(
-      ...splitLines(await git(["tag", "--list", "v20*.*.*.*"], cwd)),
+      ...splitLines(await git(["branch", "--list", "release/*", "--format=%(refname:short)"], cwd)),
     );
   } catch {
     // ignore
@@ -208,23 +211,7 @@ async function collectKnownRefs(cwd: string): Promise<string[]> {
   try {
     refs.push(
       ...splitLines(
-        await git(["branch", "--list", "release/*", "--format=%(refname:short)"], cwd),
-      ),
-    );
-  } catch {
-    // ignore
-  }
-
-  try {
-    refs.push(
-      ...splitLines(
-        await git([
-          "branch",
-          "-r",
-          "--list",
-          "*/release/*",
-          "--format=%(refname:short)",
-        ], cwd),
+        await git(["branch", "-r", "--list", "*/release/*", "--format=%(refname:short)"], cwd),
       ).map((name) => name.replace(/^origin\//, "")),
     );
   } catch {
@@ -244,12 +231,7 @@ async function refExists(cwd: string, ref: string): Promise<boolean> {
 }
 
 async function resolveBaseRef(cwd: string, base: string): Promise<string | null> {
-  const candidates = [
-    base,
-    `refs/heads/${base}`,
-    `origin/${base}`,
-    `refs/remotes/origin/${base}`,
-  ];
+  const candidates = [base, `refs/heads/${base}`, `origin/${base}`, `refs/remotes/origin/${base}`];
   for (const candidate of candidates) {
     if (await refExists(cwd, candidate)) {
       return candidate;
@@ -258,9 +240,7 @@ async function resolveBaseRef(cwd: string, base: string): Promise<string | null>
   return null;
 }
 
-export async function main(
-  argv: readonly string[] = process.argv.slice(2),
-): Promise<number> {
+export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<number> {
   const parsed = parseArgs(argv);
   if ("error" in parsed) {
     console.error(parsed.error);
@@ -290,9 +270,7 @@ export async function main(
     if (parsed.date !== null) {
       const override = parseDateOverride(parsed.date);
       if (override === null) {
-        console.error(
-          `Invalid --date. Expected YYYY.MM.DD (e.g. 2026.07.23). Got: ${parsed.date}`,
-        );
+        console.error(`Invalid --date. Expected YYYY.MM.DD (e.g. 2026.07.23). Got: ${parsed.date}`);
         return 1;
       }
       day = override;
@@ -319,9 +297,7 @@ export async function main(
 
   const baseRef = await resolveBaseRef(cwd, parsed.base);
   if (baseRef === null) {
-    console.error(
-      `Base branch not found locally or on origin: ${parsed.base}`,
-    );
+    console.error(`Base branch not found locally or on origin: ${parsed.base}`);
     return 1;
   }
 
@@ -342,9 +318,7 @@ export async function main(
     console.log(`Pushed origin/${branch}`);
   } else {
     console.log(`Next: git push -u origin ${branch}`);
-    console.log(
-      `Then open a PR into main (not development). Merge creates tag ${tag}.`,
-    );
+    console.log(`Then open a PR into main (not development). Merge creates tag ${tag}.`);
   }
 
   return 0;

@@ -1,10 +1,6 @@
 import { injectable } from "inversify";
 import { StatusOption } from "@/entities/Status";
-import {
-  CreateOptionsOptions,
-  FindStatusesOptions,
-  IStatusService,
-} from "./IStatusService";
+import { CreateOptionsOptions, FindStatusesOptions, IStatusService } from "./IStatusService";
 
 @injectable()
 export class StatusService implements IStatusService {
