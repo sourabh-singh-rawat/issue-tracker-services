@@ -16,7 +16,7 @@ describe("login route", () => {
     get.mockReset();
   });
 
-  it("sets the session cookie and returns 204 with no body", async () => {
+  it("sets the session cookie and returns 200 with identity", async () => {
     const expiresAt = new Date("2030-01-01T00:00:00.000Z");
     const loginWithEmailAndPassword = vi.fn().mockResolvedValue({
       identity: {
@@ -56,12 +56,18 @@ describe("login route", () => {
       secure: false,
       expires: expiresAt,
     });
-    expect(status).toHaveBeenCalledWith(204);
-    expect(send).toHaveBeenCalledWith();
+    expect(status).toHaveBeenCalledWith(200);
+    expect(send).toHaveBeenCalledWith({
+      identity: {
+        id: "identity-1",
+        email: "a@b.com",
+        emailVerified: true,
+      },
+    });
     expect(redirect).not.toHaveBeenCalled();
   });
 
-  it("passes login_challenge from the query string and redirects when redirectTo is present", async () => {
+  it("passes login_challenge and returns redirectTo in JSON (no HTTP 302)", async () => {
     const expiresAt = new Date("2030-01-01T00:00:00.000Z");
     const redirectTo = "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc";
     const loginWithEmailAndPassword = vi.fn().mockResolvedValue({
@@ -81,7 +87,7 @@ describe("login route", () => {
     const setCookie = vi.fn();
     const status = vi.fn().mockReturnThis();
     const send = vi.fn().mockReturnThis();
-    const redirect = vi.fn((url: string) => url);
+    const redirect = vi.fn();
     const req = {
       body: {
         email: "a@b.com",
@@ -93,7 +99,7 @@ describe("login route", () => {
     };
     const reply = { setCookie, status, send, redirect };
 
-    const response = await login.handler!(req as never, reply as never);
+    await login.handler!(req as never, reply as never);
 
     expect(loginWithEmailAndPassword).toHaveBeenCalledWith({
       email: "a@b.com",
@@ -107,9 +113,15 @@ describe("login route", () => {
       secure: false,
       expires: expiresAt,
     });
-    expect(redirect).toHaveBeenCalledWith(redirectTo);
-    expect(response).toBe(redirectTo);
-    expect(status).not.toHaveBeenCalled();
-    expect(send).not.toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith(200);
+    expect(send).toHaveBeenCalledWith({
+      identity: {
+        id: "identity-1",
+        email: "a@b.com",
+        emailVerified: true,
+      },
+      redirectTo,
+    });
+    expect(redirect).not.toHaveBeenCalled();
   });
 });

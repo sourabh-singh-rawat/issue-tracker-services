@@ -7,7 +7,7 @@ export const EnvSchema = Type.Object({
   INVENTORY_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
-  INVENTORY_WEB_URL: Type.String({ default: "http://localhost:3002" }),
+  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
   OTEL_EXPORTER_OTLP_ENDPOINT: Type.String({ default: "http://127.0.0.1:4317" }),
 });
 

@@ -19,13 +19,17 @@ export const LoginForm = () => {
       password: "",
     },
     onSubmit: async ({ value }) => {
-      await login({
+      const result = await login({
         body: {
           email: value.email,
           password: value.password,
         },
         query: loginChallenge ? { login_challenge: loginChallenge } : undefined,
       });
+
+      if (result.redirectTo) {
+        window.location.assign(result.redirectTo);
+      }
     },
   });
 

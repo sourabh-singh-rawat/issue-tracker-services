@@ -33,7 +33,7 @@ helm install pgo ./k8s/pgo
 
 ```powershell
 helm install attachment-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
-helm install email-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
+helm install notification-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install identity-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 helm install issue-tracker-postgres ./k8s/postgres --values ./k8s/postgres/values.yaml
 ```

@@ -54,7 +54,7 @@ return dataSource.transaction((manager) =>
 
 **Identity HTTP:** `HttpRouteOptions` + TypeBox schemas; IdP behind `IIdentityProvider` / `IOAuthProvider` in `integrations/`.
 
-**Mail:** transporter under `integrations/email/{IMailer,NodeMailer}`; `TYPES.Mailer`; bootstrap in `bootstrap/mailer.ts`.
+**Notification (email channel):** transporter under `integrations/email/{IMailer,NodeMailer}`; `TYPES.Mailer`; bootstrap in `bootstrap/mailer.ts` (`notification-service`).
 
 ## Done when
 

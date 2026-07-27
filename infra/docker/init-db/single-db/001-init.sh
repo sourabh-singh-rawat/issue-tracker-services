@@ -1,17 +1,17 @@
 #!/bin/sh
 set -e
 
-# Service order matches .env: identity, issues, inventory, attachment, mail
+# Service order matches .env: identity, issues, inventory, attachment, notification
 psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" <<EOF
 CREATE ROLE identity WITH LOGIN PASSWORD '${POSTGRES_IDENTITY_PASSWORD}';
 CREATE ROLE issues WITH LOGIN PASSWORD '${POSTGRES_ISSUES_PASSWORD}';
 CREATE ROLE inventory WITH LOGIN PASSWORD '${POSTGRES_INVENTORY_PASSWORD}';
 CREATE ROLE attachment WITH LOGIN PASSWORD '${POSTGRES_ATTACHMENT_PASSWORD}';
-CREATE ROLE mail WITH LOGIN PASSWORD '${POSTGRES_MAIL_PASSWORD}';
+CREATE ROLE notification WITH LOGIN PASSWORD '${POSTGRES_NOTIFICATION_PASSWORD}';
 
 CREATE DATABASE identity OWNER identity;
 CREATE DATABASE issues OWNER issues;
 CREATE DATABASE inventory OWNER inventory;
 CREATE DATABASE attachment OWNER attachment;
-CREATE DATABASE mail OWNER mail;
+CREATE DATABASE notification OWNER notification;
 EOF

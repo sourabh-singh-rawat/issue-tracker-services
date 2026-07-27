@@ -11,12 +11,12 @@
       "configurations": [
         "identity-service",
         "issues-service",
+        "inventory-service",
         "attachment-service",
-        "mail-service",
+        "notification-service",
         "api-gateway",
-        "issues-web",
+        "erp-web",
         "identity-web",
-        "inventory-web",
         "schemas:watch",
         "codegen: supergraph"
       ]
@@ -31,12 +31,12 @@
       "configurations": [
         "identity-service",
         "issues-service",
+        "inventory-service",
         "attachment-service",
-        "mail-service",
+        "notification-service",
         "api-gateway",
-        "issues-web",
+        "erp-web",
         "identity-web",
-        "inventory-web",
         "client (browser)",
         "schemas:watch",
         "codegen: supergraph"
@@ -52,12 +52,12 @@
       "configurations": [
         "identity-service",
         "issues-service",
+        "inventory-service",
         "attachment-service",
-        "mail-service",
+        "notification-service",
         "api-gateway",
-        "issues-web",
+        "erp-web",
         "identity-web",
-        "inventory-web",
         "brave (debug)",
         "schemas:watch",
         "codegen: supergraph"
@@ -66,12 +66,12 @@
   ],
   "configurations": [
     {
-      "name": "issues-web",
+      "name": "erp-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issues-web"],
+      "runtimeArgs": ["erp-web"],
       "console": "integratedTerminal"
     },
     {
@@ -84,36 +84,27 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "inventory-web",
+      "name": "erp-web + browser",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["inventory-web"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "issues-web + browser",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issues-web"],
+      "runtimeArgs": ["erp-web"],
       "console": "integratedTerminal",
       "serverReadyAction": {
         "pattern": "Local:\\s+(https?://\\S+)",
         "uriFormat": "%s",
         "action": "debugWithChrome",
         "killOnServerStop": true,
-        "webRoot": "${workspaceFolder}/apps/issues-web"
+        "webRoot": "${workspaceFolder}/apps/erp-web"
       }
     },
     {
       "name": "client (browser)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues-web",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/apps/erp-web",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -132,8 +123,8 @@
       "name": "client (browser - edge)",
       "type": "msedge",
       "request": "launch",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues-web",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/apps/erp-web",
       "sourceMaps": true,
       "userDataDir": true,
       "pathMapping": {
@@ -154,8 +145,8 @@
       "type": "chrome",
       "runtimeExecutable": "C:\\Users\\Soura\\scoop\\apps\\brave\\current\\brave.exe",
       "userDataDir": true,
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues-web",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/apps/erp-web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -165,8 +156,8 @@
       "type": "chrome",
       "runtimeExecutable": "/usr/bin/brave",
       "userDataDir": true,
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/apps/issues-web",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/apps/erp-web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
       "sourceMaps": true
     },
@@ -180,12 +171,12 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "mail-service",
+      "name": "notification-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["mail-service"],
+      "runtimeArgs": ["notification-service"],
       "console": "integratedTerminal"
     },
     {
@@ -195,6 +186,15 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["issues-service"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "inventory-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["inventory-service"],
       "console": "integratedTerminal"
     },
     {

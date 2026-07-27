@@ -10,11 +10,11 @@ build:
         dockerfile: Dockerfile
         target: attachment
 
-    - image: sourabhrawatcc/email
+    - image: sourabhrawatcc/notification-service
       context: ../..
       docker:
         dockerfile: Dockerfile
-        target: email
+        target: notification-service
 
     - image: sourabhrawatcc/identity-service
       context: ../..
@@ -38,10 +38,10 @@ deploy:
         valuesFiles:
           - ../../infra/k8s/microservice/attachment.values.yaml
 
-      - name: email
+      - name: notification
         chartPath: ../../infra/k8s/microservice
         valuesFiles:
-          - ../../infra/k8s/microservice/email.values.yaml
+          - ../../infra/k8s/microservice/notification.values.yaml
 
       - name: identity
         chartPath: ../../infra/k8s/microservice

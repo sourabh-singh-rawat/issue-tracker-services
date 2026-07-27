@@ -95,15 +95,15 @@ services:
           cpus: "0.10"
           memory: 128M
 
-  mail-postgres:
+  notification-postgres:
     image: postgres:18.4
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=mail
-      - POSTGRES_PASSWORD=${POSTGRES_MAIL_PASSWORD}
-      - POSTGRES_DB=mail
+      - POSTGRES_USER=notification
+      - POSTGRES_PASSWORD=${POSTGRES_NOTIFICATION_PASSWORD}
+      - POSTGRES_DB=notification
     volumes:
-      - ../data/docker/pg-mail-data:/var/lib/postgresql
+      - ../data/docker/pg-notification-data:/var/lib/postgresql
     command:
       - postgres
       - -c

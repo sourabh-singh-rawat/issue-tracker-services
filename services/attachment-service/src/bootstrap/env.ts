@@ -7,7 +7,7 @@ export const EnvSchema = Type.Object({
   ATTACHMENT_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
-  ISSUES_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
   REDIS_URL: Type.String({ default: "redis://localhost:6380" }),
 });
 

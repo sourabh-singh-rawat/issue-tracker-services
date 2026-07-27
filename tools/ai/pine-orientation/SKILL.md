@@ -29,17 +29,18 @@ Extract to `packages/*` only when **two** services need the same logic.
 | Domain                                    | Owner                                                       |
 | ----------------------------------------- | ----------------------------------------------------------- |
 | Auth / IdP / OAuth                        | `identity-service` + Ory (Kratos/Hydra)                     |
-| Workspaces / projects / issues / statuses | `issues-service` + `issues-web`                             |
+| Workspaces / projects / issues / statuses | `issues-service` + `erp-web`                                |
+| Inventory UI                              | `inventory-service` + `erp-web`                             |
 | Attachments                               | `attachment-service`                                        |
-| Transactional email                       | `mail-service` (`integrations/email`, not a shared package) |
+| Transactional email / notifications       | `notification-service` (`integrations/email`, not a shared package) |
 | Federated GraphQL supergraph              | `api-gateway` (`dist/supergraph.graphql`)                   |
 | Client GraphQL ops                        | `apps/*/src/graphql/**/*.gql`                               |
 
 ## Apps / services / packages
 
-**Apps:** `issues-web` (primary UI), `identity-web`, `inventory-web`
+**Apps:** `erp-web` (primary product UI — issues + inventory), `identity-web` (login/signup/consent)
 
-**Services:** `identity-service`, `issues-service`, `attachment-service`, `mail-service`, `api-gateway`
+**Services:** `identity-service`, `issues-service`, `attachment-service`, `notification-service`, `api-gateway`
 
 | Package               | Import for                                                       |
 | --------------------- | ---------------------------------------------------------------- |
@@ -58,7 +59,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 | ------------------- | ------------------------------------- |
 | `@pine/server-core` | `@pine/http-core`                     |
 | `@pine/event-bus`   | `@pine/events`                        |
-| `@pine/comm`        | `mail-service/src/integrations/email` |
+| `@pine/comm`        | `notification-service/src/integrations/email` |
 | `@pine/forms`       | app `shared/ui` / feature components  |
 
 Dockerfile turbo `--filter`s must use **current** names only.

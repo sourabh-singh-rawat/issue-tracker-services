@@ -1,13 +1,13 @@
 ---
 name: pine-web-feature
 description: >
-  React features in issues-web / identity-web: TanStack routes, .gql ops, codegen,
+  React features in erp-web / identity-web: TanStack routes, .gql ops, codegen,
   Zustand. Triggers: add page, route, CreateIssue.gql, gen:gql, gen:api.
 ---
 
 # Web feature
 
-Primary reference: `apps/issues-web`. Stack: React 19, Vite, MUI, TanStack Router/Query, Zustand, GraphQL codegen, Hey API.
+Primary reference: `apps/erp-web`. Stack: React 19, Vite, MUI, TanStack Router/Query, Zustand, GraphQL codegen, Hey API.
 
 No `@pine/forms` — use app `shared/` / feature components.
 
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/_authenticated/i/$issueId")({
 ```bash
 # after server schema + compose
 pnpm schemas:compose
-pnpm --filter @pine/issues-web gen        # gql + api
+pnpm --filter @pine/erp-web gen        # gql + api
 # or: gen:gql / gen:api
 ```
 
@@ -51,4 +51,4 @@ Schema for codegen: `services/api-gateway/dist/supergraph.graphql` (must exist).
 - Regenerated clients only — no hand-copied server types
 - Routes stay thin; UI lives in features
 - Prefer existing MUI + `shared` primitives over new kits
-- Build check: `pnpm exec turbo run build --filter=@pine/issues-web`
+- Build check: `pnpm exec turbo run build --filter=@pine/erp-web`
