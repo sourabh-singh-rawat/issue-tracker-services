@@ -65,7 +65,7 @@ Match the feature you’re editing.
 ```bash
 # service must write dist/schema.graphql first
 pnpm schemas:compose
-pnpm --filter @pine/issues-web gen:gql   # if UI consumes it
+pnpm --filter @pine/erp-web gen:gql   # if UI consumes it
 ```
 
 Never hand-edit `api-gateway/dist` or app `__generated__`.

@@ -64,9 +64,9 @@ jobs:
           echo "ref=$BASE" >> "$GITHUB_OUTPUT"
           echo "Turbo affected base: $BASE"
 
-      # issues-web has pre-existing typecheck failures (vite/tsc); track separately until green
+      # erp-web has pre-existing typecheck failures (vite/tsc); track separately until green
       - name: Build and test affected packages
         run: |
           pnpm exec turbo run build test \
             --filter="...[${{ steps.base.outputs.ref }}]" \
-            --filter='!@pine/issues-web'
+            --filter='!@pine/erp-web'

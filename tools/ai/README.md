@@ -17,7 +17,7 @@ Loaded via `.grok/config.toml` → `skills.paths = ["tools/ai"]`.
 
 ## Dead → live packages
 
-`server-core`→`http-core` · `event-bus`→`events` · `comm`→mail `integrations/email` · `forms`→app UI
+`server-core`→`http-core` · `event-bus`→`events` · `comm`→notification-service `integrations/email` · `forms`→app UI
 
 ## Missing skills (backlog)
 

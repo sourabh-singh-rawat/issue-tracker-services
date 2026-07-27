@@ -162,13 +162,48 @@
     },
     {
       "label": "dev:apps",
-      "detail": "Turbo run dev for all apps (no debugger, no Docker).",
+      "detail": "Turbo run dev for erp-web, identity-web, and backend services (no debugger, no Docker).",
       "type": "shell",
       "command": "pnpm dev:apps",
       "options": {
         "cwd": "${workspaceFolder}"
       },
       "isBackground": true,
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "erp-web",
+      "detail": "Start ERP web only (issues + inventory UI on :3001).",
+      "type": "shell",
+      "command": "pnpm erp-web",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "identity-web",
+      "detail": "Start identity-web only (login/signup/consent on :3000).",
+      "type": "shell",
+      "command": "pnpm identity-web",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "gen",
+      "detail": "Regenerate erp-web GraphQL + OpenAPI clients.",
+      "type": "shell",
+      "command": "pnpm gen",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": [],
       "group": "none"
     },

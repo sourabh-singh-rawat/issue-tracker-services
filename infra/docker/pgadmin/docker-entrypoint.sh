@@ -16,7 +16,7 @@ identity-postgres:5432:*:identity:${POSTGRES_IDENTITY_PASSWORD}
 issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
 inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
-mail-postgres:5432:*:mail:${POSTGRES_MAIL_PASSWORD}
+notification-postgres:5432:*:notification:${POSTGRES_NOTIFICATION_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 EOF
@@ -89,12 +89,12 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "5": {
-      "Name": "Mail Service DB",
+      "Name": "Notification Service DB",
       "Group": "Issue Tracker",
-      "Host": "mail-postgres",
+      "Host": "notification-postgres",
       "Port": 5432,
-      "MaintenanceDB": "mail",
-      "Username": "mail",
+      "MaintenanceDB": "notification",
+      "Username": "notification",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },

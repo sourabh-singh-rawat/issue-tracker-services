@@ -5,9 +5,12 @@ serve:
     cors:
       enabled: true
       allowed_origins:
+        - http://127.0.0.1:3000
         - http://localhost:3000
+        - http://127.0.0.1:3001
         - http://localhost:3001
-        - http://localhost:3002
+        - http://127.0.0.1:5173
+        - http://localhost:5173
       allowed_methods:
         - POST
         - GET
@@ -22,13 +25,13 @@ serve:
 
 urls:
   self:
-    issuer: http://localhost:4444
-  consent: http://localhost:3000/consent
-  login: http://localhost:3000/login
-  logout: http://localhost:3000/logout
+    issuer: http://127.0.0.1:4444
+  consent: http://127.0.0.1:3000/consent
+  login: http://127.0.0.1:3000/login
+  logout: http://127.0.0.1:3000/logout
   device:
-    verification: http://localhost:3000/device/verify
-    success: http://localhost:3000/device/success
+    verification: http://127.0.0.1:3000/device/verify
+    success: http://127.0.0.1:3000/device/success
 
 secrets:
   system:

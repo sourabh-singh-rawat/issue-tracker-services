@@ -39,7 +39,7 @@ const main = async () => {
   const server = new FastifyHttpServer({
     server: instance,
     config: { host: "0.0.0.0", port, environment: "development", version: 1 },
-    cors: { credentials: true, origin: env.INVENTORY_WEB_URL },
+    cors: { credentials: true, origin: env.ERP_WEB_URL },
     cookie: { secret: env.JWT_SECRET },
     routes,
     logger,

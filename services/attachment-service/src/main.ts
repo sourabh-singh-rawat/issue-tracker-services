@@ -46,7 +46,7 @@ const startServer = async () => {
     },
     cors: {
       credentials: true,
-      origin: env.ISSUES_WEB_URL,
+      origin: env.ERP_WEB_URL,
     },
     graphql: { apollo, createContext, path: "/graphql" },
     cookie: { secret: env.JWT_SECRET },

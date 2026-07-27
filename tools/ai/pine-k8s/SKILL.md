@@ -39,7 +39,7 @@ container:
 jwtSecretRef: jwt-secret
 ```
 
-Env secrets come from PGO user secret naming `{release}-postgres-pguser-{release}-postgres` (+ optional JWT/SMTP refs). Values files still use some legacy names (`issue-tracker`, `email`) — map to current package names carefully.
+Env secrets come from PGO user secret naming `{release}-postgres-pguser-{release}-postgres` (+ optional JWT/SMTP refs). Values files still use some legacy names (`issue-tracker`) — map to current package names carefully (`notification-service` for notifications).
 
 ## New event on cluster
 

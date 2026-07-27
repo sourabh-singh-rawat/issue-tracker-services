@@ -6,8 +6,10 @@ import type { ILoginService } from "@/features/login/services";
 import {
   LoginBodySchema,
   LoginQuerySchema,
+  LoginResponseSchema,
   type LoginBody,
   type LoginQuery,
+  type LoginResponse,
 } from "@/features/login/schemas";
 import { env } from "@/bootstrap/env";
 
@@ -15,7 +17,7 @@ export const login: RouteOptions<
   Server,
   IncomingMessage,
   ServerResponse,
-  { Body: LoginBody; Querystring: LoginQuery }
+  { Body: LoginBody; Querystring: LoginQuery; Reply: LoginResponse }
 > = {
   url: "/identity/login",
   method: "POST",
@@ -23,19 +25,12 @@ export const login: RouteOptions<
     tags: ["auth"],
     summary: "Login with email and password",
     description:
-      "Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, redirects to the OAuth provider.",
+      "Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.",
     operationId: "loginWithEmailAndPassword",
     body: LoginBodySchema,
     querystring: LoginQuerySchema,
     response: {
-      204: {
-        description: "Login succeeded; session cookie set",
-        type: "null",
-      },
-      302: {
-        description: "Login succeeded; redirect to continue the OAuth flow",
-        type: "null",
-      },
+      200: LoginResponseSchema,
     },
   },
   handler: async (req, reply) => {
@@ -55,10 +50,13 @@ export const login: RouteOptions<
       expires: result.expiresAt,
     });
 
-    if (result.redirectTo) {
-      return reply.redirect(result.redirectTo);
-    }
-
-    return reply.status(204).send();
+    return reply.status(200).send({
+      identity: {
+        id: result.identity.id,
+        email: result.identity.email,
+        emailVerified: result.identity.emailVerified,
+      },
+      ...(result.redirectTo ? { redirectTo: result.redirectTo } : {}),
+    });
   },
 };
