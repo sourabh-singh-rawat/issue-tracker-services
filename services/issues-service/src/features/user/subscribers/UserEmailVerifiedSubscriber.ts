@@ -1,11 +1,13 @@
 import { UserAlreadyExists, WORKSPACE_NAME, WORKSPACE_STATUS } from "@pine/common";
 import {
+  type CloudEvent,
   type IBroker,
+  type UserEmailVerifiedData,
   CONSUMERS,
-  SUBJECTS,
   Streams,
   Subscriber,
-  UserEmailVerifiedData,
+  UserEmailVerifiedEvent,
+  validateEvent,
 } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
@@ -15,10 +17,10 @@ import { User } from "@/entities/User";
 import { Workspace } from "@/entities/Workspace";
 
 @injectable()
-export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedData> {
-  readonly stream = Streams.USER;
+export class UserEmailVerifiedSubscriber extends Subscriber<CloudEvent<UserEmailVerifiedData>> {
+  readonly stream = Streams.IDENTITY;
   readonly consumer = CONSUMERS.USER_EMAIL_VERIFIED_ISSUE_TRACKER;
-  readonly subject = SUBJECTS.USER_EMAIL_VERIFIED;
+  readonly subject = UserEmailVerifiedEvent.type;
 
   constructor(
     @inject(TYPES.Broker)
@@ -29,8 +31,9 @@ export class UserEmailVerifiedSubscriber extends Subscriber<UserEmailVerifiedDat
     super(broker.client);
   }
 
-  async onMessage(message: JsMsg, payload: UserEmailVerifiedData) {
-    const { userId } = payload;
+  async onMessage(message: JsMsg, payload: CloudEvent<UserEmailVerifiedData>) {
+    const event = validateEvent(UserEmailVerifiedEvent, payload);
+    const { userId } = event.data!;
 
     await this.dataSource.transaction(async (manager) => {
       const UserRepo = manager.getRepository(User);

@@ -1,4 +1,8 @@
-import { type IPublisher, SUBJECTS } from "@pine/events";
+import {
+  createCloudEvent,
+  type IPublisher,
+  UserConfirmationEmailSentEvent,
+} from "@pine/events";
 import { Typeorm } from "@pine/orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
@@ -51,10 +55,19 @@ export class UserEmailService implements IUserEmailService {
     await this.mailer.send(this.senderEmail, email, message);
     savedEmail.status = "Sent";
     await EmailRepo.save(savedEmail);
-    await this.publisher.send(SUBJECTS.USER_CONFIRMATION_EMAIL_SENT, {
-      userId,
-      email,
-      sentAt: new Date(),
+
+    const event = createCloudEvent({
+      type: UserConfirmationEmailSentEvent.type,
+      version: UserConfirmationEmailSentEvent.version,
+      schema: UserConfirmationEmailSentEvent.schema,
+      source: "pine/notification-service",
+      subject: userId,
+      data: {
+        userId,
+        email,
+        sentAt: Date.now(),
+      },
     });
+    await this.publisher.send(event);
   }
 }

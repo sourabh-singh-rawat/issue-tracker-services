@@ -4,6 +4,6 @@ import { env } from "@/env";
 
 export const broker = new NatsBroker({
   servers: [env.NATS_URL || "nats"],
-  streams: ["issue", "workspace", "project", "user"],
+  streams: ["issues", "identity"],
   logger,
 });

@@ -1,7 +1,6 @@
 export enum Streams {
-  EMAIL = "email",
-  ISSUE = "issue",
-  PROJECT = "project",
-  USER = "user",
-  WORKSPACE = "workspace",
+  IDENTITY = "identity",
+  ISSUES = "issues",
+  MAIL = "mail",
+  PRODUCT = "product",
 }

@@ -1,5 +1,10 @@
 import { STATUS_TYPE, UserNotFoundError } from "@pine/common";
-import { type IPublisher, SUBJECTS } from "@pine/events";
+import {
+  createCloudEvent,
+  type IPublisher,
+  ProjectCreatedEvent,
+  ProjectUpdatedEvent,
+} from "@pine/events";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { IStatusService } from "@/features/status/services/IStatusService";
@@ -29,6 +34,18 @@ export class ProjectService implements IProjectService {
     return await User.findOne({ where: { id: userId } });
   }
 
+  private toProjectEventData(project: Project) {
+    return {
+      id: project.id,
+      name: project.name,
+      status: "active",
+      ownerUserId: project.createdById,
+      workspaceId: project.workspaceId,
+      createdAt: project.createdAt.toISOString(),
+      ...(project.updatedAt != null ? { updatedAt: project.updatedAt.toISOString() } : {}),
+    };
+  }
+
   async createProject(options: CreateProjectOptions) {
     const { manager, name, userId, workspaceId } = options;
     const user = await this.getUserById(userId);
@@ -52,7 +69,16 @@ export class ProjectService implements IProjectService {
         { name: "Cancelled", type: STATUS_TYPE.CLOSED, orderIndex: 3 },
       ],
     });
-    await this.publisher.send(SUBJECTS.PROJECT_CREATED, savedProject);
+
+    const event = createCloudEvent({
+      type: ProjectCreatedEvent.type,
+      version: ProjectCreatedEvent.version,
+      schema: ProjectCreatedEvent.schema,
+      source: "pine/issues-service",
+      subject: savedProject.id,
+      data: this.toProjectEventData(savedProject),
+    });
+    await this.publisher.send(event);
 
     return projectId;
   }
@@ -83,8 +109,17 @@ export class ProjectService implements IProjectService {
     const { manager, id, name } = options;
     const ProjectRepo = manager.getRepository(Project);
 
-    const updatedProject = await ProjectRepo.update({ id }, { name });
+    await ProjectRepo.update({ id }, { name });
+    const updatedProject = await ProjectRepo.findOneOrFail({ where: { id } });
 
-    await this.publisher.send(SUBJECTS.PROJECT_UPDATED, updatedProject);
+    const event = createCloudEvent({
+      type: ProjectUpdatedEvent.type,
+      version: ProjectUpdatedEvent.version,
+      schema: ProjectUpdatedEvent.schema,
+      source: "pine/issues-service",
+      subject: updatedProject.id,
+      data: this.toProjectEventData(updatedProject),
+    });
+    await this.publisher.send(event);
   }
 }

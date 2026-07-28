@@ -7,6 +7,14 @@ import { logger } from "@/bootstrap/logger";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
 import { IIdentityRepository, IdentityRepository } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
+import {
+  ProductRepository,
+  type IProductRepository,
+  ProductUnitRepository,
+  type IProductUnitRepository,
+  ProductService,
+  type IProductService,
+} from "@/features/products";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -19,3 +27,6 @@ container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityReposit
 container.bind<IMeService>(TYPES.MeService).to(MeService);
 container.bind<IBrandRepository>(TYPES.BrandRepository).to(BrandRepository);
 container.bind<IBrandService>(TYPES.BrandService).to(BrandService);
+container.bind<IProductRepository>(TYPES.ProductRepository).to(ProductRepository);
+container.bind<IProductUnitRepository>(TYPES.ProductUnitRepository).to(ProductUnitRepository);
+container.bind<IProductService>(TYPES.ProductService).to(ProductService);

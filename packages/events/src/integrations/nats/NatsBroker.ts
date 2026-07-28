@@ -17,7 +17,7 @@ export class NatsBroker implements IBroker {
     streams.forEach(async (stream) => {
       await jetstreamManager?.streams.add({
         name: stream,
-        subjects: [`${stream}.*`],
+        subjects: [`${stream}.>`],
       });
     });
   }

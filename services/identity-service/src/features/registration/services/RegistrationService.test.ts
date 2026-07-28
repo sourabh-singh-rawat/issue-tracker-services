@@ -1,4 +1,4 @@
-import { SUBJECTS, UserRegisteredEvent } from "@pine/events";
+import { UserRegisteredEvent } from "@pine/events";
 import { describe, it, expect, vi } from "vitest";
 import { IdentityProviderType } from "@/features/identities/constants";
 import {
@@ -40,12 +40,12 @@ describe("RegistrationService", () => {
       idpProvider: IdentityProviderType.KRATOS,
     });
     expect(publisher.send).toHaveBeenCalledWith(
-      SUBJECTS.USER_REGISTERED,
       expect.objectContaining({
         type: UserRegisteredEvent.type,
         source: "pine/identity-service",
         specversion: "1.0",
         subject: "identity-1",
+        dataschema: `urn:pine:events:${UserRegisteredEvent.type}:v${UserRegisteredEvent.version}`,
         datacontenttype: "application/json",
         data: {
           userId: "identity-1",
@@ -53,7 +53,7 @@ describe("RegistrationService", () => {
         },
       }),
     );
-    const published = publisher.send.mock.calls[0][1];
+    const published = publisher.send.mock.calls[0][0];
     expect(published.id).toEqual(expect.any(String));
     expect(published.time).toEqual(expect.any(String));
   });

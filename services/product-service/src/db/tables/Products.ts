@@ -15,7 +15,7 @@ export const Products = pgTable("products", {
   productType: varchar("product_type", { length: 50 }).notNull(),
   categoryId: uuid("category_id"),
   brandId: uuid("brand_id"),
-  defaultUnitId: uuid("default_unit_id"),
+  defaultUnitId: uuid("default_unit_id").notNull(),
   isActive: boolean("is_active").notNull().default(true),
   ...auditColumns,
 });

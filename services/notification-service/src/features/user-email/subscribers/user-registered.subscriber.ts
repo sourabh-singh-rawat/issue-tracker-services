@@ -4,7 +4,6 @@ import {
   type UserRegisteredData,
   CONSUMERS,
   Streams,
-  SUBJECTS,
   Subscriber,
   UserRegisteredEvent,
   validateEvent,
@@ -18,9 +17,9 @@ import { IUserEmailService } from "../services/IUserEmailService";
 
 @injectable()
 export class UserRegisteredSubscriber extends Subscriber<CloudEvent<UserRegisteredData>> {
-  readonly stream = Streams.USER;
+  readonly stream = Streams.IDENTITY;
   readonly consumer = CONSUMERS.USER_REGISTERED_NOTIFICATION;
-  readonly subject = SUBJECTS.USER_REGISTERED;
+  readonly subject = UserRegisteredEvent.type;
 
   constructor(
     @inject(TYPES.Broker)
