@@ -4,4 +4,4 @@
 "@pine/inventory-service": patch
 ---
 
-feat(product): add product-service with dedicated database, gateway proxy, and bootstrap scaffold mirrored from inventory-service
+feat(product): add product-service with dedicated database, gateway proxy and bootstrap; add brand operations
