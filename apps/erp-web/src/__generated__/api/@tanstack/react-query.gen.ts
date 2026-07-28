@@ -10,7 +10,7 @@ import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, Author
 /**
  * Login with email and password
  *
- * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, redirects to the OAuth provider.
+ * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.
  */
 export const loginWithEmailAndPasswordMutation = (options?: Partial<Options<LoginWithEmailAndPasswordData>>): UseMutationOptions<LoginWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<LoginWithEmailAndPasswordData>> => {
     const mutationOptions: UseMutationOptions<LoginWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<LoginWithEmailAndPasswordData>> = {
@@ -29,7 +29,7 @@ export const loginWithEmailAndPasswordMutation = (options?: Partial<Options<Logi
 /**
  * Login with email and password
  *
- * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, redirects to the OAuth provider.
+ * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.
  */
 export const useLoginWithEmailAndPasswordMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<LoginWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<LoginWithEmailAndPasswordData>>, 'mutationFn'>>) => useMutation({ ...loginWithEmailAndPasswordMutation(), ...mutationOptions });
 

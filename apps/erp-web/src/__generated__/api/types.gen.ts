@@ -18,9 +18,16 @@ export type LoginWithEmailAndPasswordData = {
 
 export type LoginWithEmailAndPasswordResponses = {
     /**
-     * Login succeeded; session cookie set
+     * Default Response
      */
-    204: void;
+    200: {
+        identity: {
+            id: string;
+            email: string;
+            emailVerified?: boolean;
+        };
+        redirectTo?: string;
+    };
 };
 
 export type LoginWithEmailAndPasswordResponse = LoginWithEmailAndPasswordResponses[keyof LoginWithEmailAndPasswordResponses];
