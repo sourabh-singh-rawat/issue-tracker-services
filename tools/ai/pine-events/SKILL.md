@@ -1,53 +1,65 @@
 ---
 name: pine-events
 description: >
-  @pine/events NATS JetStream: SUBJECTS, publish/subscribe, TypeBox payloads,
-  CloudEvents helpers (not on wire yet). Triggers: NATS, Subscriber, SUBJECTS, CloudEvent.
+  @pine/events NATS JetStream: CloudEvent publish/subscribe, TypeBox payloads,
+  defineEvent contracts. Triggers: NATS, Subscriber, CloudEvent, publisher.send.
 ---
 
 # Events (`@pine/events`)
 
 ## Wire format (production)
 
-**Bare JSON data** on NATS subject. Not CloudEvent envelopes.
+**CloudEvent envelopes** on NATS. Subject = CloudEvent `type` (e.g. `product.product.created`).
 
-1. `NatsBroker` → streams with subjects `` `${stream}.*` ``
-2. `publisher.send(SUBJECTS.*, payloadObject)`
-3. `Subscriber<T>`: set `stream` / `consumer` / `subject`; decode body as `T`; `message.ack()`
+1. `NatsBroker` → streams with subjects `` `${stream}.>` `` (multi-token types)
+2. `publisher.send(cloudEvent)` — no separate subject argument
+3. `Subscriber<CloudEvent<T>>`: set `stream` / `consumer` / `subject = SomeEvent.type`; `validateEvent`; `message.ack()`
 
-CloudEvents (`defineEvent`, `createCloudEvent`, `identity.user.*` types) exist under `cloud-events/` and per-service folders under `services/` but **publishers/subscribers do not use them yet**. Subject `user.registered` ≠ type `identity.user.registered`.
+Stream names match the first token of `type`: `identity`, `issues`, `mail`, `product`.
 
 ## Hard rules
 
 | Do                                                                 | Don’t                                                               |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| Map to TypeBox data schemas in `services/*/schemas`                | Publish TypeORM entities / `UpdateResult`                           |
-| Align numbers vs ISO with schema (`Date.now()` vs `Type.Number()`) | Send `new Date()` when schema wants number                          |
-| Start `fetchMessages()` after `broker.init()`                      | Assume identity still publishes `USER_*` events (verify call sites) |
-| Import `@pine/events`                                              | Import `@pine/event-bus`                                            |
-
-Field names often differ from entities (`ownerUserId` ≠ `createdById`).
+| `createCloudEvent` + `defineEvent` contract before publish         | Publish TypeORM entities / `UpdateResult` / bare objects            |
+| Map entity fields to TypeBox schemas (`ownerUserId` ≠ `createdById`) | Send `new Date()` when schema wants number (`Date.now()`)         |
+| Filter subscribers with `SomeEvent.type`                           | Reintroduce a parallel `SUBJECTS` constant                          |
+| Start `fetchMessages()` after `broker.init()`                      | Import `@pine/event-bus`                                            |
 
 ## Bootstrap
 
 ```ts
-// broker.ts
-new NatsBroker({ servers, streams: ["user", "issue", ...], logger })
+// broker.ts — stream names = first type token
+new NatsBroker({ servers, streams: ["identity", "product"], logger })
 
 // container
 TYPES.Publisher → new NatsPublisher(broker)
 TYPES.Broker → broker
 ```
 
+```ts
+// publish
+const event = createCloudEvent({
+  type: ProductCreatedEvent.type,
+  version: ProductCreatedEvent.version,
+  schema: ProductCreatedEvent.schema,
+  source: "pine/product-service",
+  subject: product.id, // domain resource id, not NATS subject
+  data: { /* mapped DTO */ },
+});
+await this.publisher.send(event);
+```
+
 Subscriber: `@injectable()`, `super(broker.client)`, start from `main.ts`.
 
 ## New event
 
-1. `constants/subjects.ts` (+ stream/consumer if new)
-2. TypeBox schema under owning service folder in `packages/events/src/services/`
-3. Optional `defineEvent` contract (for later CloudEvents cutover)
-4. Publish mapped payload; implement `Subscriber` per consumer; DI + `main.ts`
-5. Cluster: `infra/k8s/nats-stream` + `nats-consumer` (`pine-k8s`)
+1. TypeBox schema under `packages/events/src/services/<service>/schemas/`
+2. `defineEvent({ type, version, schema })` contract
+3. Stream/consumer constants if needed (`Streams`, `CONSUMERS`)
+4. Publish via `createCloudEvent` + `publisher.send(event)`
+5. Implement `Subscriber` with `subject = SomeEvent.type`; DI + `main.ts`
+6. Cluster: `infra/k8s/nats-stream` + `nats-consumer` (`pine-k8s`) if applicable
 
 ## Package pitfalls
 

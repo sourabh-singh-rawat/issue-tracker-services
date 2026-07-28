@@ -11,7 +11,7 @@ import {
   WorkspaceNotFound,
   uuidv7,
 } from "@pine/common";
-import { type IPublisher, SUBJECTS } from "@pine/events";
+import { createCloudEvent, type IPublisher, WorkspaceMemberInvitedEvent } from "@pine/events";
 import { ServiceOptions, Typeorm } from "@pine/orm";
 import { JwtToken, hasEmailClaim } from "@pine/security";
 import { inject, injectable } from "inversify";
@@ -42,29 +42,7 @@ export class WorkspaceService implements IWorkspaceService {
     private readonly publisher: IPublisher,
   ) {}
 
-  private async saveWorkspace(options: SaveWorkspaceOptions) {
-    const { manager, workspace, workspaceMember, user } = options;
-    // const UserRepo = manager.getRepository(User);
-    // const WorkspaceRepo = manager.getRepository(Workspace);
-    // const WorkspaceMemberRepo = manager.getRepository(WorkspaceMember);
-
-    // if (user) await UserRepo.save(user);
-    // const savedWorkspace = await WorkspaceRepo.save(workspace);
-    // const savedWorkspaceMember =
-    //   await WorkspaceMemberRepo.save(workspaceMember);
-
-    // if (!savedWorkspaceMember.userId) throw new Error("userId is required");
-
-    // await this.publisher.send(SUBJECTS.WORKSPACE_CREATED, {
-    //   id: savedWorkspace.id,
-    //   name: savedWorkspace.name,
-    //   createdById: savedWorkspace.createdById,
-    //   member: {
-    //     userId: savedWorkspaceMember.userId,
-    //     workspaceId: savedWorkspaceMember.workspaceId,
-    //   },
-    // });
-
+  private async saveWorkspace(_options: SaveWorkspaceOptions) {
     return "";
   }
 
@@ -154,14 +132,23 @@ export class WorkspaceService implements IWorkspaceService {
     this.orm.transaction(queryRunner, async (queryRunner) => {
       await WorkspaceMember.save(workspaceMember);
       await WorkspaceInvitation.save(newWorkspaceInviteToken);
-      await this.publisher.send(SUBJECTS.WORKSPACE_MEMBER_INVITED, {
-        userId,
-        email,
-        token,
-        status: EMAIL_VERIFICATION_TOKEN_STATUS.VALID,
-        workspaceId: workspace.id,
-        workspaceName: workspace.name,
-      });
+      await this.publisher.send(
+        createCloudEvent({
+          type: WorkspaceMemberInvitedEvent.type,
+          version: WorkspaceMemberInvitedEvent.version,
+          schema: WorkspaceMemberInvitedEvent.schema,
+          source: "pine/issues-service",
+          subject: workspace.id,
+          data: {
+            userId,
+            email,
+            token,
+            status: EMAIL_VERIFICATION_TOKEN_STATUS.VALID,
+            workspaceId: workspace.id,
+            workspaceName: workspace.name,
+          },
+        }),
+      );
     });
   };
 

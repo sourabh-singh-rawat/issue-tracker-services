@@ -9,7 +9,7 @@ describe("Nats Broker Unit Test", () => {
   it("initializes nats broker with correct options", async () => {
     const options: IBrokerOptions = {
       servers: ["nats"],
-      streams: ["user"],
+      streams: ["identity"],
     };
     const nats = new NatsBroker(options);
 

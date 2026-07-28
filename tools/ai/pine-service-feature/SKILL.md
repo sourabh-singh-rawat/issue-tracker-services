@@ -25,7 +25,7 @@ services/<svc>/src/
 | Need                     | From                                                                      |
 | ------------------------ | ------------------------------------------------------------------------- |
 | Server / routes / logger | `@pine/http-core` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger` |
-| Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Subscriber`, `SUBJECTS`  |
+| Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Subscriber`, `createCloudEvent` |
 | Entity base              | `@pine/orm` → `Audit`                                                     |
 | Enums / errors           | `@pine/common`, `@pine/errors`                                            |
 
@@ -39,7 +39,7 @@ services/<svc>/src/
 4. Transport:
    - GraphQL → `pine-graphql` (`container.get` + `dataSource.transaction` when mutating)
    - HTTP → `features/<f>/routes/` with `operationId`; register in `routes/index.ts`
-5. Events → `pine-events`: map DTOs before `publisher.send`; never raw TypeORM entities.
+5. Events → `pine-events`: `createCloudEvent` + `publisher.send(event)`; never raw TypeORM entities.
 6. Colocated `*.test.ts` for non-trivial logic.
 
 ```ts

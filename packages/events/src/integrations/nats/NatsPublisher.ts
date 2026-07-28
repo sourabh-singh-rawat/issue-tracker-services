@@ -1,16 +1,18 @@
 import { JSONCodec } from "nats";
-import type { IPublisher, MessagePayload } from "./IPublisher";
+import type { CloudEvent } from "../../cloud-events";
+import type { IPublisher } from "./IPublisher";
 import type { NatsBroker } from "./NatsBroker";
 
-/**
- * NATS JetStream implementation of {@link IPublisher}.
- */
 export class NatsPublisher implements IPublisher {
   constructor(private readonly broker: NatsBroker) {}
 
-  async send(subject: string, message: MessagePayload): Promise<void> {
-    const codec = JSONCodec<MessagePayload>();
-    const encodedMessage = codec.encode(message);
+  async send(event: CloudEvent): Promise<void> {
+    if (!event.type) {
+      throw new Error("CloudEvent type is required for publishing");
+    }
+
+    const codec = JSONCodec<CloudEvent>();
+    const encodedMessage = codec.encode(event);
 
     const client = this.broker.client;
     if (!client) {
@@ -18,6 +20,6 @@ export class NatsPublisher implements IPublisher {
     }
 
     const jetstream = client.jetstream();
-    await jetstream.publish(subject, encodedMessage);
+    await jetstream.publish(event.type, encodedMessage);
   }
 }

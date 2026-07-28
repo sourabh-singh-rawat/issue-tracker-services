@@ -1,18 +1,37 @@
+import Type from "typebox";
 import { describe, expect, it } from "vitest";
+import { EventValidationError } from "../../errors";
 import { createCloudEvent } from "./createCloudEvent";
 import { isCloudEvent, validateCloudEvent } from "./validateCloudEvent";
 
+const UserRegisteredDataSchema = Type.Object({
+  userId: Type.String(),
+  email: Type.String(),
+});
+
+const ProjectCreatedDataSchema = Type.Object({
+  id: Type.String(),
+});
+
+const WorkspaceMemberInvitedDataSchema = Type.Object({
+  userId: Type.String(),
+  workspaceId: Type.String(),
+  email: Type.String(),
+});
+
 describe("createCloudEvent", () => {
-  it("fills defaults for id, specversion, time, and datacontenttype", () => {
+  it("fills defaults for id, specversion, time, dataschema, and datacontenttype", () => {
     const event = createCloudEvent({
       type: "user.registered",
       source: "pine/identity-service",
+      schema: UserRegisteredDataSchema,
       data: { userId: "u-1", email: "a@b.com" },
     });
 
     expect(event.specversion).toBe("1.0");
     expect(event.type).toBe("user.registered");
     expect(event.source).toBe("pine/identity-service");
+    expect(event.dataschema).toBe("urn:pine:events:user.registered");
     expect(event.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
     );
@@ -21,11 +40,35 @@ describe("createCloudEvent", () => {
     expect(event.data).toEqual({ userId: "u-1", email: "a@b.com" });
   });
 
+  it("requires schema and always sets dataschema on the envelope", () => {
+    const event = createCloudEvent({
+      type: "product.product.created",
+      source: "pine/product-service",
+      schema: Type.Object({ id: Type.String() }),
+      data: { id: "p-1" },
+    });
+
+    expect(event.dataschema).toBe("urn:pine:events:product.product.created");
+  });
+
+  it("includes version in default dataschema when provided", () => {
+    const event = createCloudEvent({
+      type: "product.product.created",
+      version: 1,
+      source: "pine/product-service",
+      schema: Type.Object({ id: Type.String() }),
+      data: { id: "p-1" },
+    });
+
+    expect(event.dataschema).toBe("urn:pine:events:product.product.created:v1");
+  });
+
   it("respects explicit overrides", () => {
     const event = createCloudEvent({
       id: "fixed-id",
       type: "project.created",
       source: "pine/issues-service",
+      schema: ProjectCreatedDataSchema,
       time: "2020-01-01T00:00:00.000Z",
       subject: "project/abc",
       datacontenttype: "application/cloudevents+json",
@@ -50,18 +93,32 @@ describe("createCloudEvent", () => {
     const event = createCloudEvent({
       type: "workspace.created",
       source: "pine/issues-service",
+      schema: Type.Object({}),
       time: new Date("2021-06-15T12:00:00.000Z"),
     });
 
     expect(event.time).toBe("2021-06-15T12:00:00.000Z");
+    expect(event.dataschema).toBe("urn:pine:events:workspace.created");
     expect(event.data).toBeUndefined();
     expect(event.datacontenttype).toBeUndefined();
+  });
+
+  it("validates data against the required schema", () => {
+    expect(() =>
+      createCloudEvent({
+        type: "user.registered",
+        source: "pine/identity-service",
+        schema: UserRegisteredDataSchema,
+        data: { userId: "u-1" } as never,
+      }),
+    ).toThrow(EventValidationError);
   });
 
   it("round-trips create → validate", () => {
     const created = createCloudEvent({
       type: "workspace.member-invited",
       source: "pine/issues-service",
+      schema: WorkspaceMemberInvitedDataSchema,
       data: {
         userId: "u-1",
         workspaceId: "w-1",

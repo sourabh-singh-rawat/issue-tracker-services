@@ -1,4 +1,4 @@
-import { type IPublisher, createCloudEvent, SUBJECTS, UserRegisteredEvent } from "@pine/events";
+import { type IPublisher, createCloudEvent, UserRegisteredEvent } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { IRegistrationService } from "@/features/registration/services/IRegistrationService";
@@ -35,6 +35,8 @@ export class RegistrationService implements IRegistrationService {
 
     const event = createCloudEvent({
       type: UserRegisteredEvent.type,
+      version: UserRegisteredEvent.version,
+      schema: UserRegisteredEvent.schema,
       source: "pine/identity-service",
       subject: identity.id,
       data: {
@@ -43,6 +45,6 @@ export class RegistrationService implements IRegistrationService {
       },
     });
 
-    await this.publisher.send(SUBJECTS.USER_REGISTERED, event);
+    await this.publisher.send(event);
   }
 }

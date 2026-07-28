@@ -47,7 +47,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 | --------------------- | ---------------------------------------------------------------- |
 | `@pine/common`        | enums, DTOs, errors, `uuidv7`                                    |
 | `@pine/errors`        | `ApplicationError`                                               |
-| `@pine/events`        | NATS, `SUBJECTS`, subscribers                                    |
+| `@pine/events`        | NATS, CloudEvents, `publisher.send(event)`, subscribers          |
 | `@pine/http-core`     | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
 | `@pine/graphql-core`  | Pothos `builder`, scalars                                        |
 | `@pine/orm`           | TypeORM helpers, `Audit`                                         |

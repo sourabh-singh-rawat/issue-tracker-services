@@ -1,10 +1,12 @@
 import {
+  type CloudEvent,
   type IBroker,
+  type WorkspaceMemberInvitedData,
   CONSUMERS,
   Streams,
-  SUBJECTS,
   Subscriber,
-  WorkspaceMemberInvitedData,
+  WorkspaceMemberInvitedEvent,
+  validateEvent,
 } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
@@ -12,10 +14,12 @@ import { TYPES } from "@/bootstrap/container-types";
 import { IWorkspaceEmailService } from "../services/IWorkspaceEmailService";
 
 @injectable()
-export class WorkspaceMemberInvitedSubscriber extends Subscriber<WorkspaceMemberInvitedData> {
-  readonly stream = Streams.WORKSPACE;
+export class WorkspaceMemberInvitedSubscriber extends Subscriber<
+  CloudEvent<WorkspaceMemberInvitedData>
+> {
+  readonly stream = Streams.ISSUES;
   readonly consumer = CONSUMERS.WORKSPACE_INVITE_CREATED_NOTIFICATION;
-  readonly subject = SUBJECTS.WORKSPACE_MEMBER_INVITED;
+  readonly subject = WorkspaceMemberInvitedEvent.type;
 
   constructor(
     @inject(TYPES.Broker)
@@ -26,8 +30,9 @@ export class WorkspaceMemberInvitedSubscriber extends Subscriber<WorkspaceMember
     super(broker.client);
   }
 
-  onMessage = async (message: JsMsg, payload: WorkspaceMemberInvitedData) => {
-    await this.workspaceEmailService.sendWorkspaceInvitationEmail(payload);
+  onMessage = async (message: JsMsg, payload: CloudEvent<WorkspaceMemberInvitedData>) => {
+    const event = validateEvent(WorkspaceMemberInvitedEvent, payload);
+    await this.workspaceEmailService.sendWorkspaceInvitationEmail(event.data!);
 
     message.ack();
   };

@@ -7,4 +7,7 @@ export const TYPES = {
   MeService: Symbol.for("IMeService"),
   BrandRepository: Symbol.for("IBrandRepository"),
   BrandService: Symbol.for("IBrandService"),
+  ProductRepository: Symbol.for("IProductRepository"),
+  ProductUnitRepository: Symbol.for("IProductUnitRepository"),
+  ProductService: Symbol.for("IProductService"),
 } as const;
