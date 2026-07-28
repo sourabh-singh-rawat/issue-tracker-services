@@ -21,9 +21,10 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * Login with email and password
  *
- * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, redirects to the OAuth provider.
+ * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.
  */
 export const loginWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<LoginWithEmailAndPasswordData, ThrowOnError>): RequestResult<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError>({
+    responseType: 'json',
     url: '/identity/login',
     ...options,
     headers: {

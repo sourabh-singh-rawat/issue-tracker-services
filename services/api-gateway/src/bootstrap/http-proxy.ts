@@ -26,6 +26,11 @@ const proxyRoutes: ProxyRoute[] = [
     upstream: env.INVENTORY_SERVICE_URL,
     proxyPayloads: true,
   },
+  {
+    prefix: "/products",
+    upstream: env.PRODUCT_SERVICE_URL,
+    proxyPayloads: true,
+  },
 ];
 
 const CORS_RESPONSE_HEADERS = [
