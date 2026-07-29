@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1750000000000,
-      "tag": "0000_init",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1785156500959,
-      "tag": "0001_remarkable_santa_claus",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1785156592644,
-      "tag": "0002_watery_gladiator",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1785156617222,
-      "tag": "0003_sturdy_maggott",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1785156644236,
-      "tag": "0004_easy_vapor",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1785156669148,
-      "tag": "0005_funny_doctor_octopus",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1785216298328,
-      "tag": "0006_gifted_morbius",
+      "when": 1785301226712,
+      "tag": "0000_lumpy_hiroim",
       "breakpoints": true
     }
   ]

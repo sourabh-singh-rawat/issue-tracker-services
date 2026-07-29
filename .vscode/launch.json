@@ -12,6 +12,7 @@
         "identity-service",
         "issues-service",
         "inventory-service",
+        "product-service",
         "attachment-service",
         "notification-service",
         "api-gateway",
@@ -32,6 +33,7 @@
         "identity-service",
         "issues-service",
         "inventory-service",
+        "product-service",
         "attachment-service",
         "notification-service",
         "api-gateway",
@@ -53,6 +55,7 @@
         "identity-service",
         "issues-service",
         "inventory-service",
+        "product-service",
         "attachment-service",
         "notification-service",
         "api-gateway",
@@ -195,6 +198,15 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["inventory-service"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "product-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["product-service"],
       "console": "integratedTerminal"
     },
     {

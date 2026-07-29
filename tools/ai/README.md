@@ -2,6 +2,8 @@
 
 Loaded via `.grok/config.toml` → `skills.paths = ["tools/ai"]`.
 
+Repo-wide agent rules (including **never auto-generate DB migrations**): root [`AGENTS.md`](../../AGENTS.md).
+
 | Skill                                                       | Load when                       |
 | ----------------------------------------------------------- | ------------------------------- |
 | [pine-orientation](./pine-orientation/SKILL.md)             | Where does X live / ownership   |

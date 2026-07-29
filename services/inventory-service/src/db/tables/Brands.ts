@@ -1,5 +1,5 @@
-import { boolean, integer, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
-import { idColumn } from "@/db/columns";
+import { boolean, pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { auditColumns, idColumn } from "@/db/columns";
 
 export const Brands = pgTable("brands", {
   ...idColumn,
@@ -7,9 +7,7 @@ export const Brands = pgTable("brands", {
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
   isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-  version: integer("version").notNull().default(1),
+  ...auditColumns,
 });
 
 export type Brand = typeof Brands.$inferSelect;

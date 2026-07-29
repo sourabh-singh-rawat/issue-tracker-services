@@ -1,3 +1,4 @@
+import { BrandCreatedEvent, BrandUpdatedEvent } from "@pine/events";
 import { describe, expect, it, vi } from "vitest";
 import { BrandCodeConflictError, BrandNotFoundError } from "@/features/brands/errors";
 import { BrandService } from "@/features/brands/services/BrandService";
@@ -8,18 +9,22 @@ const brand = {
   name: "Acme Corp",
   description: "A brand",
   isActive: true,
+  version: 1,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   updatedAt: null,
 };
 
 describe("BrandService", () => {
-  it("creates a brand when the code is available", async () => {
+  it("creates a brand and publishes BrandCreated", async () => {
     const brandRepository = {
       existsByCode: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(brand),
     };
+    const publisher = {
+      send: vi.fn().mockResolvedValue(undefined),
+    };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(
       service.createBrand({ code: "ACME", name: "Acme Corp", description: "A brand" }),
@@ -32,6 +37,25 @@ describe("BrandService", () => {
       description: "A brand",
       isActive: undefined,
     });
+    expect(publisher.send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: BrandCreatedEvent.type,
+        source: "pine/product-service",
+        specversion: "1.0",
+        subject: "brand-1",
+        dataschema: `urn:pine:events:${BrandCreatedEvent.type}:v${BrandCreatedEvent.version}`,
+        datacontenttype: "application/json",
+        data: {
+          id: "brand-1",
+          code: "ACME",
+          name: "Acme Corp",
+          isActive: true,
+          version: 1,
+          createdAt: "2026-01-01T00:00:00.000Z",
+          description: "A brand",
+        },
+      }),
+    );
   });
 
   it("throws BrandCodeConflictError when creating with a duplicate code", async () => {
@@ -39,21 +63,24 @@ describe("BrandService", () => {
       existsByCode: vi.fn().mockResolvedValue(true),
       save: vi.fn(),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.createBrand({ code: "ACME", name: "Acme" })).rejects.toBeInstanceOf(
       BrandCodeConflictError,
     );
     expect(brandRepository.save).not.toHaveBeenCalled();
+    expect(publisher.send).not.toHaveBeenCalled();
   });
 
   it("returns a brand by id", async () => {
     const brandRepository = {
       findById: vi.fn().mockResolvedValue(brand),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.getBrandById("brand-1")).resolves.toEqual(brand);
   });
@@ -62,8 +89,9 @@ describe("BrandService", () => {
     const brandRepository = {
       findById: vi.fn().mockResolvedValue(null),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.getBrandById("missing")).rejects.toBeInstanceOf(BrandNotFoundError);
   });
@@ -72,26 +100,54 @@ describe("BrandService", () => {
     const brandRepository = {
       findAll: vi.fn().mockResolvedValue([brand]),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.listBrands()).resolves.toEqual([brand]);
   });
 
-  it("updates a brand", async () => {
-    const updated = { ...brand, name: "Acme Updated" };
+  it("updates a brand and publishes BrandUpdated with version", async () => {
+    const updated = {
+      ...brand,
+      name: "Acme Updated",
+      version: 2,
+      updatedAt: new Date("2026-01-02T00:00:00.000Z"),
+    };
     const brandRepository = {
       findById: vi.fn().mockResolvedValue(brand),
       existsByCode: vi.fn(),
       update: vi.fn().mockResolvedValue(updated),
     };
+    const publisher = {
+      send: vi.fn().mockResolvedValue(undefined),
+    };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.updateBrand("brand-1", { name: "Acme Updated" })).resolves.toEqual(
       updated,
     );
     expect(brandRepository.update).toHaveBeenCalledWith("brand-1", { name: "Acme Updated" });
+    expect(publisher.send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: BrandUpdatedEvent.type,
+        source: "pine/product-service",
+        specversion: "1.0",
+        subject: "brand-1",
+        dataschema: `urn:pine:events:${BrandUpdatedEvent.type}:v${BrandUpdatedEvent.version}`,
+        datacontenttype: "application/json",
+        data: {
+          id: "brand-1",
+          code: "ACME",
+          name: "Acme Updated",
+          isActive: true,
+          version: 2,
+          updatedAt: "2026-01-02T00:00:00.000Z",
+          description: "A brand",
+        },
+      }),
+    );
   });
 
   it("throws BrandCodeConflictError when updating to a taken code", async () => {
@@ -100,22 +156,25 @@ describe("BrandService", () => {
       existsByCode: vi.fn().mockResolvedValue(true),
       update: vi.fn(),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.updateBrand("brand-1", { code: "OTHER" })).rejects.toBeInstanceOf(
       BrandCodeConflictError,
     );
     expect(brandRepository.existsByCode).toHaveBeenCalledWith("OTHER", "brand-1");
     expect(brandRepository.update).not.toHaveBeenCalled();
+    expect(publisher.send).not.toHaveBeenCalled();
   });
 
   it("deletes a brand", async () => {
     const brandRepository = {
       delete: vi.fn().mockResolvedValue(true),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.deleteBrand("brand-1")).resolves.toBeUndefined();
     expect(brandRepository.delete).toHaveBeenCalledWith("brand-1");
@@ -125,8 +184,9 @@ describe("BrandService", () => {
     const brandRepository = {
       delete: vi.fn().mockResolvedValue(false),
     };
+    const publisher = { send: vi.fn() };
 
-    const service = new BrandService(brandRepository as never);
+    const service = new BrandService(brandRepository as never, publisher as never);
 
     await expect(service.deleteBrand("missing")).rejects.toBeInstanceOf(BrandNotFoundError);
   });
