@@ -24,6 +24,7 @@
     "dev:infra:hydra": "docker compose --env-file .env -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.hydra.yaml up -d",
     "dev:infra:hydra:down": "docker compose --env-file .env -f infra/docker/compose.ory-db.yaml -f infra/docker/compose.hydra.yaml down",
     "dev:apps": "turbo run dev --filter=@pine/erp-web --filter=@pine/identity-web --filter=@pine/identity-service --filter=@pine/inventory-service --filter=@pine/product-service --filter=@pine/attachment-service --filter=@pine/notification-service --filter=@pine/issues-service --filter=@pine/api-gateway",
+    "dev:db:generate": "turbo run db:generate",
     "dev:db:migrate": "turbo run db:migrate",
     "client": "turbo run dev --filter=@pine/erp-web",
     "web": "turbo run dev --filter=@pine/erp-web",

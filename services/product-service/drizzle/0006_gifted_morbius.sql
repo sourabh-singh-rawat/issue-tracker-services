@@ -1,1 +1,0 @@
-ALTER TABLE "products" ALTER COLUMN "default_unit_id" SET NOT NULL;

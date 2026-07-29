@@ -23,6 +23,10 @@
       "cache": false,
       "persistent": true
     },
+    "db:generate": {
+      "dependsOn": ["^db:generate"],
+      "outputs": []
+    },
     "db:migrate": {
       "dependsOn": ["^db:migrate"],
       "outputs": []

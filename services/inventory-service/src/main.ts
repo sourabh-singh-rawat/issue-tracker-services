@@ -7,7 +7,9 @@ import { FastifyHttpServer } from "@pine/http-core";
 import fastify, { type FastifyInstance } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { broker, initializeDb, logger } from "@/bootstrap";
+import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
+import { BrandCreatedSubscriber, BrandUpdatedSubscriber } from "@/features/brands";
+import { ProductCreatedSubscriber } from "@/features/products";
 import { routes } from "@/routes";
 
 export { container, db } from "@/bootstrap";
@@ -61,6 +63,10 @@ const main = async () => {
 
   await server.start();
   writeOpenApiToDist(instance);
+
+  container.get<BrandCreatedSubscriber>(TYPES.BrandCreatedSubscriber).fetchMessages();
+  container.get<BrandUpdatedSubscriber>(TYPES.BrandUpdatedSubscriber).fetchMessages();
+  container.get<ProductCreatedSubscriber>(TYPES.ProductCreatedSubscriber).fetchMessages();
 };
 
 main().catch((error) => {
