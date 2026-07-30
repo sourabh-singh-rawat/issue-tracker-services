@@ -1,9 +1,4 @@
-import {
-  BrandCreatedEvent,
-  BrandUpdatedEvent,
-  createCloudEvent,
-  type IPublisher,
-} from "@pine/events";
+import { BrandCreatedEvent, BrandUpdatedEvent, createCloudEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
@@ -21,8 +16,6 @@ export class BrandService implements IBrandService {
   constructor(
     @inject(TYPES.BrandRepository)
     private readonly brandRepository: IBrandRepository,
-    @inject(TYPES.Publisher)
-    private readonly publisher: IPublisher,
     @inject(TYPES.OutboxService)
     private readonly outboxService: IOutboxService,
     @inject(TYPES.Database)
@@ -35,33 +28,48 @@ export class BrandService implements IBrandService {
       throw new BrandCodeConflictError(`Brand code already exists: ${input.code}`);
     }
 
-    const brand = await this.brandRepository.save({
-      code: input.code,
-      name: input.name,
-      description: input.description,
-      isActive: input.isActive,
+    return this.db.transaction(async (tx) => {
+      const brand = await this.brandRepository.save(
+        {
+          code: input.code,
+          name: input.name,
+          description: input.description,
+          isActive: input.isActive,
+        },
+        { tx },
+      );
+
+      const event = createCloudEvent({
+        type: BrandCreatedEvent.type,
+        version: BrandCreatedEvent.version,
+        schema: BrandCreatedEvent.schema,
+        source: "pine/product-service",
+        subject: brand.id,
+        data: {
+          id: brand.id,
+          code: brand.code,
+          name: brand.name,
+          isActive: brand.isActive,
+          version: brand.version,
+          createdAt: brand.createdAt.toISOString(),
+          ...(brand.description != null ? { description: brand.description } : {}),
+        },
+      });
+
+      await this.outboxService.schedule(
+        {
+          eventId: event.id,
+          eventType: event.type,
+          eventVersion: BrandCreatedEvent.version,
+          aggregateType: "brand",
+          aggregateId: brand.id,
+          payload: event,
+        },
+        { tx },
+      );
+
+      return brand;
     });
-
-    const event = createCloudEvent({
-      type: BrandCreatedEvent.type,
-      version: BrandCreatedEvent.version,
-      schema: BrandCreatedEvent.schema,
-      source: "pine/product-service",
-      subject: brand.id,
-      data: {
-        id: brand.id,
-        code: brand.code,
-        name: brand.name,
-        isActive: brand.isActive,
-        version: brand.version,
-        createdAt: brand.createdAt.toISOString(),
-        ...(brand.description != null ? { description: brand.description } : {}),
-      },
-    });
-
-    await this.publisher.send(event);
-
-    return brand;
   }
 
   async getBrandById(id: string): Promise<Brand> {

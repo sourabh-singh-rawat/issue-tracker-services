@@ -106,7 +106,9 @@ describe("OutboxCleanupWorker", () => {
 
     it("delays with errorDelayMs when tick throws and keeps looping", async () => {
       const cleanupService = createCleanupService();
-      cleanupService.cleanup.mockRejectedValueOnce(new Error("db unavailable")).mockResolvedValue(0);
+      cleanupService.cleanup
+        .mockRejectedValueOnce(new Error("db unavailable"))
+        .mockResolvedValue(0);
 
       const worker = new OutboxCleanupWorker(cleanupService, {
         pollIntervalMs: 5_000,

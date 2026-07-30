@@ -16,54 +16,67 @@ const brand = {
 
 const createService = (
   brandRepository: unknown,
-  publisher: unknown = { send: vi.fn() },
   outboxService: unknown = { schedule: vi.fn() },
   db: unknown = {
     transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn({})),
   },
-) => new BrandService(brandRepository as never, publisher as never, outboxService as never, db as never);
+) => new BrandService(brandRepository as never, outboxService as never, db as never);
 
 describe("BrandService", () => {
-  it("creates a brand and publishes BrandCreated", async () => {
+  it("creates a brand and schedules BrandCreated in the outbox", async () => {
     const brandRepository = {
       existsByCode: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(brand),
     };
-    const publisher = {
-      send: vi.fn().mockResolvedValue(undefined),
+    const outboxService = {
+      schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
+    };
+    const tx = { kind: "tx" };
+    const db = {
+      transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn(tx)),
     };
 
-    const service = createService(brandRepository, publisher);
+    const service = createService(brandRepository, outboxService, db);
 
     await expect(
       service.createBrand({ code: "ACME", name: "Acme Corp", description: "A brand" }),
     ).resolves.toEqual(brand);
 
     expect(brandRepository.existsByCode).toHaveBeenCalledWith("ACME");
-    expect(brandRepository.save).toHaveBeenCalledWith({
-      code: "ACME",
-      name: "Acme Corp",
-      description: "A brand",
-      isActive: undefined,
-    });
-    expect(publisher.send).toHaveBeenCalledWith(
+    expect(brandRepository.save).toHaveBeenCalledWith(
+      {
+        code: "ACME",
+        name: "Acme Corp",
+        description: "A brand",
+        isActive: undefined,
+      },
+      { tx },
+    );
+    expect(outboxService.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
-        type: BrandCreatedEvent.type,
-        source: "pine/product-service",
-        specversion: "1.0",
-        subject: "brand-1",
-        dataschema: `urn:pine:events:${BrandCreatedEvent.type}:v${BrandCreatedEvent.version}`,
-        datacontenttype: "application/json",
-        data: {
-          id: "brand-1",
-          code: "ACME",
-          name: "Acme Corp",
-          isActive: true,
-          version: 1,
-          createdAt: "2026-01-01T00:00:00.000Z",
-          description: "A brand",
-        },
+        eventType: BrandCreatedEvent.type,
+        eventVersion: BrandCreatedEvent.version,
+        aggregateType: "brand",
+        aggregateId: "brand-1",
+        payload: expect.objectContaining({
+          type: BrandCreatedEvent.type,
+          source: "pine/product-service",
+          specversion: "1.0",
+          subject: "brand-1",
+          dataschema: `urn:pine:events:${BrandCreatedEvent.type}:v${BrandCreatedEvent.version}`,
+          datacontenttype: "application/json",
+          data: {
+            id: "brand-1",
+            code: "ACME",
+            name: "Acme Corp",
+            isActive: true,
+            version: 1,
+            createdAt: "2026-01-01T00:00:00.000Z",
+            description: "A brand",
+          },
+        }),
       }),
+      { tx },
     );
   });
 
@@ -72,15 +85,15 @@ describe("BrandService", () => {
       existsByCode: vi.fn().mockResolvedValue(true),
       save: vi.fn(),
     };
-    const publisher = { send: vi.fn() };
+    const outboxService = { schedule: vi.fn() };
 
-    const service = createService(brandRepository, publisher);
+    const service = createService(brandRepository, outboxService);
 
     await expect(service.createBrand({ code: "ACME", name: "Acme" })).rejects.toBeInstanceOf(
       BrandCodeConflictError,
     );
     expect(brandRepository.save).not.toHaveBeenCalled();
-    expect(publisher.send).not.toHaveBeenCalled();
+    expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 
   it("returns a brand by id", async () => {
@@ -125,7 +138,6 @@ describe("BrandService", () => {
       existsByCode: vi.fn(),
       update: vi.fn().mockResolvedValue(updated),
     };
-    const publisher = { send: vi.fn() };
     const outboxService = {
       schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
     };
@@ -134,7 +146,7 @@ describe("BrandService", () => {
       transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn(tx)),
     };
 
-    const service = createService(brandRepository, publisher, outboxService, db);
+    const service = createService(brandRepository, outboxService, db);
 
     await expect(service.updateBrand("brand-1", { name: "Acme Updated" })).resolves.toEqual(
       updated,
@@ -144,7 +156,6 @@ describe("BrandService", () => {
       { name: "Acme Updated" },
       { tx },
     );
-    expect(publisher.send).not.toHaveBeenCalled();
     expect(outboxService.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
         eventType: BrandUpdatedEvent.type,
@@ -179,10 +190,9 @@ describe("BrandService", () => {
       existsByCode: vi.fn().mockResolvedValue(true),
       update: vi.fn(),
     };
-    const publisher = { send: vi.fn() };
     const outboxService = { schedule: vi.fn() };
 
-    const service = createService(brandRepository, publisher, outboxService);
+    const service = createService(brandRepository, outboxService);
 
     await expect(service.updateBrand("brand-1", { code: "OTHER" })).rejects.toBeInstanceOf(
       BrandCodeConflictError,
@@ -190,7 +200,6 @@ describe("BrandService", () => {
     expect(brandRepository.existsByCode).toHaveBeenCalledWith("OTHER", "brand-1");
     expect(brandRepository.update).not.toHaveBeenCalled();
     expect(outboxService.schedule).not.toHaveBeenCalled();
-    expect(publisher.send).not.toHaveBeenCalled();
   });
 
   it("deletes a brand", async () => {

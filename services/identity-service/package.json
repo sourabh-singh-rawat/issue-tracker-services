@@ -44,6 +44,7 @@
     "@pine/graphql-core": "workspace:^",
     "@pine/http-core": "workspace:^",
     "@pine/observability": "workspace:*",
+    "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",
     "@pothos/core": "^4.13.1",
     "@vitest/coverage-v8": "^4.1.10",

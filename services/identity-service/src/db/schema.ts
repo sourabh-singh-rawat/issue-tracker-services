@@ -1,3 +1,4 @@
+export { OutboxMessages } from "@pine/outbox";
 export { auditColumns, idColumn } from "@/db/columns";
 export {
   type Client,

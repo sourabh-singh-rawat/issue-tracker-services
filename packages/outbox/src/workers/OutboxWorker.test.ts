@@ -126,12 +126,7 @@ describe("OutboxWorker", () => {
       const worker = new OutboxWorker(outboxService, publisher);
       await worker.tick();
 
-      expect(order).toEqual([
-        "send:evt-1",
-        "complete:msg-1",
-        "send:evt-1",
-        "complete:msg-2",
-      ]);
+      expect(order).toEqual(["send:evt-1", "complete:msg-1", "send:evt-1", "complete:msg-2"]);
     });
 
     it("marks a message failed when publish throws an Error", async () => {
@@ -139,7 +134,9 @@ describe("OutboxWorker", () => {
       const message = createMessage();
       outboxService.claimBatch.mockResolvedValue([message]);
       publisher.send.mockRejectedValue(new Error("nats down"));
-      outboxService.failed.mockResolvedValue(createMessage({ id: message.id, status: OutboxStatus.Failed }));
+      outboxService.failed.mockResolvedValue(
+        createMessage({ id: message.id, status: OutboxStatus.Failed }),
+      );
 
       const worker = new OutboxWorker(outboxService, publisher);
       const processed = await worker.tick();
@@ -159,7 +156,9 @@ describe("OutboxWorker", () => {
         payload: { id: "evt-1", data: {} },
       });
       outboxService.claimBatch.mockResolvedValue([message]);
-      outboxService.failed.mockResolvedValue(createMessage({ id: "msg-bad", status: OutboxStatus.Failed }));
+      outboxService.failed.mockResolvedValue(
+        createMessage({ id: "msg-bad", status: OutboxStatus.Failed }),
+      );
 
       const worker = new OutboxWorker(outboxService, publisher);
       await worker.tick();
@@ -223,7 +222,10 @@ describe("OutboxWorker", () => {
     it("continues the batch after an individual message failure", async () => {
       const { outboxService, publisher } = createDeps();
       const first = createMessage({ id: "msg-1" });
-      const second = createMessage({ id: "msg-2", payload: { type: "product.product.created", id: "evt-2" } });
+      const second = createMessage({
+        id: "msg-2",
+        payload: { type: "product.product.created", id: "evt-2" },
+      });
       outboxService.claimBatch.mockResolvedValue([first, second]);
       publisher.send
         .mockRejectedValueOnce(new Error("first failed"))
