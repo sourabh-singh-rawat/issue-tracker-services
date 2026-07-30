@@ -3,6 +3,5 @@ export type UpdateUserPayload = {
 };
 
 export interface IUserService {
-  getDefaultWorkspaceId(userId: string): Promise<string>;
   updateUser(payload: UpdateUserPayload): Promise<void>;
 }

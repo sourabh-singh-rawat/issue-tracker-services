@@ -1,6 +1,6 @@
 import { ItemPriority } from "@pine/common";
 import { builder } from "@pine/graphql-core";
-import { TYPES, container, dataSource } from "@/bootstrap";
+import { TYPES, container } from "@/bootstrap";
 import { IIssueService } from "@/features/issue";
 import { UpdateIssueInput } from "../inputs/UpdateIssueInput";
 
@@ -14,20 +14,17 @@ builder.mutationFields((t) => ({
       const service = container.get<IIssueService>(TYPES.IssueService);
       const { issueId } = input;
 
-      await dataSource.transaction(async (manager) => {
-        return await service.updateIssue({
-          manager,
-          userId,
-          issueId,
-          name: input.name ?? undefined,
-          type: input.type ?? undefined,
-          statusId: input.statusId ?? undefined,
-          priority: (input.priority as ItemPriority | null) ?? undefined,
-          dueDate: input.dueDate ?? undefined,
-          description: input.description ?? undefined,
-          estimate: input.estimate ?? undefined,
-          component: input.component ?? undefined,
-        });
+      await service.updateIssue({
+        userId,
+        issueId,
+        name: input.name ?? undefined,
+        type: input.type ?? undefined,
+        statusId: input.statusId ?? undefined,
+        priority: (input.priority as ItemPriority | null) ?? undefined,
+        dueDate: input.dueDate ?? undefined,
+        description: input.description ?? undefined,
+        estimate: input.estimate ?? undefined,
+        component: input.component ?? undefined,
       });
 
       return "Updated successfully";

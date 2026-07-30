@@ -1,20 +1,14 @@
 import { ServiceResponse } from "@pine/common";
-import { IssueComment } from "@/entities/IssueComment";
 import { IIssueCommentService } from "./IIssueCommentService";
 
 export class IssueCommentService implements IIssueCommentService {
   constructor() {}
 
-  createIssueComment = async (userId: string, issueId: string, description: string) => {
-    const newIssueComment = new IssueComment();
-    newIssueComment.userId = userId;
-    newIssueComment.issueId = issueId;
-    newIssueComment.description = description;
-  };
+  createIssueComment = async (_userId: string, _issueId: string, _description: string) => {};
 
-  getIssueCommentList = async (issueId: string) => {
+  getIssueCommentList = async (_issueId: string) => {
     return new ServiceResponse({ rows: [], filteredRowCount: 1 });
   };
 
-  deleteIssueComment = async (commentId: string) => {};
+  deleteIssueComment = async (_commentId: string) => {};
 }

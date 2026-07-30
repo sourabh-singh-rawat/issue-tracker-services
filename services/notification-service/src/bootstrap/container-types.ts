@@ -7,8 +7,6 @@ export const TYPES = {
   Mailer: Symbol.for("Mailer"),
   UserEmailService: Symbol.for("IUserEmailService"),
   ProjectEmailService: Symbol.for("IProjectEmailService"),
-  WorkspaceEmailService: Symbol.for("IWorkspaceEmailService"),
   UserRegisteredConsumer: Symbol.for("UserRegisteredConsumer"),
   ProjectMemberInviteConsumer: Symbol.for("ProjectMemberInviteConsumer"),
-  WorkspaceInviteConsumer: Symbol.for("WorkspaceInviteConsumer"),
 } as const;

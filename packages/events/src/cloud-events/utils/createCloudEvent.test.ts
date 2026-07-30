@@ -13,9 +13,9 @@ const ProjectCreatedDataSchema = Type.Object({
   id: Type.String(),
 });
 
-const WorkspaceMemberInvitedDataSchema = Type.Object({
+const MemberInvitedDataSchema = Type.Object({
   userId: Type.String(),
-  workspaceId: Type.String(),
+  projectId: Type.String(),
   email: Type.String(),
 });
 
@@ -91,14 +91,14 @@ describe("createCloudEvent", () => {
 
   it("accepts Date for time and omits data defaults when data is absent", () => {
     const event = createCloudEvent({
-      type: "workspace.created",
+      type: "project.created",
       source: "pine/issues-service",
       schema: Type.Object({}),
       time: new Date("2021-06-15T12:00:00.000Z"),
     });
 
     expect(event.time).toBe("2021-06-15T12:00:00.000Z");
-    expect(event.dataschema).toBe("urn:pine:events:workspace.created");
+    expect(event.dataschema).toBe("urn:pine:events:project.created");
     expect(event.data).toBeUndefined();
     expect(event.datacontenttype).toBeUndefined();
   });
@@ -116,12 +116,12 @@ describe("createCloudEvent", () => {
 
   it("round-trips create → validate", () => {
     const created = createCloudEvent({
-      type: "workspace.member-invited",
+      type: "project.member-invited",
       source: "pine/issues-service",
-      schema: WorkspaceMemberInvitedDataSchema,
+      schema: MemberInvitedDataSchema,
       data: {
         userId: "u-1",
-        workspaceId: "w-1",
+        projectId: "p-1",
         email: "a@b.com",
       },
     });
@@ -130,3 +130,4 @@ describe("createCloudEvent", () => {
     expect(isCloudEvent(created)).toBe(true);
   });
 });
+

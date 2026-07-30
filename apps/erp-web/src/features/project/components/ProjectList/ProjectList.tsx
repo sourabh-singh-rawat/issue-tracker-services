@@ -3,11 +3,7 @@ import { useProjectStore } from "../../store";
 import { CreateProjectModal } from "../CreateProjectModal";
 import { ProjectListItem } from "../ProjectListItem";
 
-interface ProjectListProps {
-  workspaceId: string;
-}
-
-export const ProjectList = ({ workspaceId }: ProjectListProps) => {
+export const ProjectList = () => {
   const projects = useProjectStore((s) => s.projects);
   const isLoading = useProjectStore((s) => s.isLoading);
 
@@ -15,7 +11,7 @@ export const ProjectList = ({ workspaceId }: ProjectListProps) => {
     <List
       subheader={
         <>
-          <ListItem secondaryAction={<CreateProjectModal workspaceId={workspaceId} />}>
+          <ListItem secondaryAction={<CreateProjectModal />}>
             <ListItemText>Projects</ListItemText>
           </ListItem>
           {isLoading ? (
@@ -31,7 +27,7 @@ export const ProjectList = ({ workspaceId }: ProjectListProps) => {
                   Boolean(project.id) && Boolean(project.name),
               )
               .map(({ id, name }) => (
-                <ProjectListItem key={id} projectId={id} workspaceId={workspaceId} name={name} />
+                <ProjectListItem key={id} projectId={id} name={name} />
               ))
           )}
         </>

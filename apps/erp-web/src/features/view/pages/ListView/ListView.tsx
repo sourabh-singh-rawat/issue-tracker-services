@@ -28,11 +28,10 @@ export const ListView = () => {
   );
 
   const projectView =
-    project?.id && project.name && project.workspace?.id && project.workspace.name
+    project?.id && project.name
       ? {
           id: project.id,
           name: project.name,
-          workspace: { id: project.workspace.id, name: project.workspace.name },
         }
       : null;
 

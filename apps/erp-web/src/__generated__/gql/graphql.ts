@@ -81,7 +81,6 @@ export type CreateProductInput = {
 
 export type CreateProjectInput = {
   name: Scalars['String']['input'];
-  workspaceId: Scalars['String']['input'];
 };
 
 export type CreateUnitInput = {
@@ -89,12 +88,6 @@ export type CreateUnitInput = {
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
   symbol?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateWorkspaceInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
 };
 
 export type DeleteIdentityInput = {
@@ -113,7 +106,7 @@ export type FindIssuesInput = {
 };
 
 export type FindProjectsOptions = {
-  workspaceId?: InputMaybe<Scalars['String']['input']>;
+  _?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type FindStatusesOptions = {
@@ -158,7 +151,6 @@ export type Mutation = {
   createProduct?: Maybe<ProductObject>;
   createProject?: Maybe<Scalars['String']['output']>;
   createUnit?: Maybe<UnitObject>;
-  createWorkspace?: Maybe<Scalars['String']['output']>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
   deleteBrand?: Maybe<Scalars['String']['output']>;
   deleteClient?: Maybe<Scalars['String']['output']>;
@@ -199,11 +191,6 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateUnitArgs = {
   input: CreateUnitInput;
-};
-
-
-export type MutationCreateWorkspaceArgs = {
-  input: CreateWorkspaceInput;
 };
 
 
@@ -283,14 +270,11 @@ export type ProjectObject = {
   __typename?: 'ProjectObject';
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
-  workspace?: Maybe<WorkspaceObject>;
-  workspaceId?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   findBrands?: Maybe<Array<BrandObject>>;
-  findDefaultWorkspace?: Maybe<WorkspaceObject>;
   findFiles?: Maybe<PaginatedFileOutput>;
   findIdentities?: Maybe<Array<IdentityObject>>;
   findIssue?: Maybe<IssueObject>;
@@ -300,7 +284,6 @@ export type Query = {
   findStatuses?: Maybe<Array<StatusObject>>;
   findSubIssues?: Maybe<Array<IssueObject>>;
   findUnits?: Maybe<Array<UnitObject>>;
-  findWorkspaces?: Maybe<Array<WorkspaceObject>>;
   getBrand?: Maybe<BrandObject>;
   getClient?: Maybe<ClientObject>;
   getProduct?: Maybe<ProductObject>;
@@ -408,15 +391,6 @@ export type UpdateUnitInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   symbol?: InputMaybe<Scalars['String']['input']>;
   unitId: Scalars['String']['input'];
-};
-
-export type WorkspaceObject = {
-  __typename?: 'WorkspaceObject';
-  createdById?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  status?: Maybe<Scalars['String']['output']>;
 };
 
 export type Join__Graph =

@@ -7,13 +7,11 @@ import ModalHeader from "../../../../shared/components/ModalHeader";
 import { ProjectForm } from "../ProjectForm";
 
 interface CreateProjectModalProps {
-  workspaceId: string;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateProjectModal = ({
-  workspaceId,
   open: controlledOpen,
   setOpen: controlledSetOpen,
 }: CreateProjectModalProps) => {
@@ -51,7 +49,7 @@ export const CreateProjectModal = ({
           handleClose={handleClose}
         />
         <ModalBody>
-          <ProjectForm workspaceId={workspaceId} />
+          <ProjectForm />
         </ModalBody>
       </Modal>
     </>

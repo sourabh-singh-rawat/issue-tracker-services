@@ -1,7 +1,7 @@
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
 import type { RouteOptions } from "fastify";
 import { StatusCodes } from "http-status-codes";
-import { Auth } from "@pine/security";
+import { requireAuth, setSession } from "@pine/security";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { AttachmentService } from "@/features/attachment/services";
@@ -35,7 +35,7 @@ export const createAttachment: RouteOptions<
       500: CreateAttachmentErrorSchema,
     },
   },
-  preHandler: [Auth.setCurrentUser, Auth.requireAuth],
+  preHandler: [setSession, requireAuth],
   handler: async (request, reply) => {
     const { issueId } = request.params;
     const userId = request.user.userId;

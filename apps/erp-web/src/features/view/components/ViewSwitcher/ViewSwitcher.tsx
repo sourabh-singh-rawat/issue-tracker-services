@@ -1,6 +1,5 @@
 import { Grid2 } from "@mui/material";
 import { useState } from "react";
-import { useViewParams } from "@shared";
 import { CustomTab } from "../../../../shared/components/CustomTab";
 import { CustomTabs } from "../../../../shared/components/CustomTabs";
 import { AddIssueButton } from "../../../issue/components/AddIssueButton";
@@ -10,10 +9,9 @@ interface ViewProps {
 }
 
 export const ViewSwitcher = ({ projectId }: ViewProps) => {
-  const { viewId, workspaceId } = useViewParams();
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleChange = (e: unknown, newValue: number) => {
+  const handleChange = (_e: unknown, newValue: number) => {
     setSelectedTab(newValue);
   };
 

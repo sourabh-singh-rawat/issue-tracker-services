@@ -6,10 +6,6 @@ interface LocationProps {
   project: {
     id: string;
     name: string;
-    workspace: {
-      id: string;
-      name: string;
-    };
   };
 }
 
@@ -25,10 +21,7 @@ export const ViewLocation = ({ project }: LocationProps) => {
         <Grid2 sx={{ alignContent: "center" }}>
           <CustomBreadcrumbs
             isLoading={false}
-            items={[
-              { text: project.workspace.name, onClick() {} },
-              { text: project.name, onClick() {} },
-            ]}
+            items={[{ text: project.name, onClick() {} }]}
           />
         </Grid2>
       </Grid2>

@@ -1,4 +1,4 @@
-import { UserAlreadyExists, WORKSPACE_NAME, WORKSPACE_STATUS } from "@pine/common";
+import { UserAlreadyExists } from "@pine/common";
 import {
   type CloudEvent,
   type IBroker,
@@ -10,10 +10,9 @@ import {
 } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
-import { DataSource } from "typeorm";
 import { TYPES } from "@/bootstrap/container-types";
-import { User } from "@/entities/User";
-import { Workspace } from "@/entities/Workspace";
+import type { Database } from "@/db";
+import type { IUserRepository } from "@/features/user/repositories";
 
 @injectable()
 export class UserSyncConsumer extends Consumer<CloudEvent<UserEmailVerifiedData>> {
@@ -24,8 +23,10 @@ export class UserSyncConsumer extends Consumer<CloudEvent<UserEmailVerifiedData>
   constructor(
     @inject(TYPES.Broker)
     private readonly broker: IBroker,
-    @inject(TYPES.DataSource)
-    private readonly dataSource: DataSource,
+    @inject(TYPES.Database)
+    private readonly db: Database,
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: IUserRepository,
   ) {
     super(broker.client);
   }
@@ -34,19 +35,11 @@ export class UserSyncConsumer extends Consumer<CloudEvent<UserEmailVerifiedData>
     const event = validateEvent(UserEmailVerifiedEvent, payload);
     const { userId } = event.data!;
 
-    await this.dataSource.transaction(async (manager) => {
-      const UserRepo = manager.getRepository(User);
-      const WorkspaceRepo = manager.getRepository(Workspace);
-
-      const isAlreadyUser = await UserRepo.findOne({ where: { id: userId } });
+    await this.db.transaction(async (tx) => {
+      const isAlreadyUser = await this.userRepository.existsById(userId, { tx });
       if (isAlreadyUser) throw new UserAlreadyExists();
 
-      await UserRepo.save({ id: userId });
-      await WorkspaceRepo.save({
-        name: WORKSPACE_NAME.DEFAULT,
-        status: WORKSPACE_STATUS.DEFAULT,
-        createdById: userId,
-      });
+      await this.userRepository.save({ id: userId }, { tx });
     });
 
     message.ack();

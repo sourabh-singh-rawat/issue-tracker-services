@@ -6,7 +6,6 @@ export const ProjectDataSchema = Type.Object(
     name: Type.String(),
     status: Type.String(),
     ownerUserId: Type.String(),
-    workspaceId: Type.String(),
     createdAt: Type.String(),
     description: Type.Optional(Type.String()),
     startDate: Type.Optional(Type.String()),
