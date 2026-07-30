@@ -64,30 +64,16 @@ container.bind<IOutboxRepository>(TYPES.OutboxRepository).toConstantValue(new Ou
 container.bind<IRetryPolicy>(TYPES.RetryPolicy).toConstantValue(new ExponentialBackoffPolicy());
 container
   .bind<IOutboxService>(TYPES.OutboxService)
-  .toConstantValue(
-    new OutboxService(
-      container.get<IOutboxRepository>(TYPES.OutboxRepository),
-      container.get<IRetryPolicy>(TYPES.RetryPolicy),
-    ),
-  );
+  .toConstantValue(new OutboxService(container.get<IOutboxRepository>(TYPES.OutboxRepository), container.get<IRetryPolicy>(TYPES.RetryPolicy)));
 container
   .bind<IOutboxWorker>(TYPES.OutboxWorker)
-  .toConstantValue(
-    new OutboxWorker(
-      container.get<IOutboxService>(TYPES.OutboxService),
-      container.get<IPublisher>(TYPES.Publisher) as IOutboxPublisher,
-    ),
-  );
+  .toConstantValue(new OutboxWorker(container.get<IOutboxService>(TYPES.OutboxService), container.get<IPublisher>(TYPES.Publisher) as IOutboxPublisher));
 container
   .bind<IOutboxCleanupService>(TYPES.OutboxCleanupService)
-  .toConstantValue(
-    new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)),
-  );
+  .toConstantValue(new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)));
 container
   .bind<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker)
-  .toConstantValue(
-    new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)),
-  );
+  .toConstantValue(new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)));
 container.bind(TYPES.KratosClient).toConstantValue(kratosClient);
 container.bind(TYPES.HydraClient).toConstantValue(hydraClient);
 
