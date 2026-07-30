@@ -1,8 +1,4 @@
-import {
-  createCloudEvent,
-  type IPublisher,
-  UserConfirmationEmailSentEvent,
-} from "@pine/events";
+import { createCloudEvent, type IPublisher, UserConfirmationEmailSentEvent } from "@pine/events";
 import { Typeorm } from "@pine/orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";

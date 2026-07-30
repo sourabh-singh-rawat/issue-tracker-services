@@ -9,5 +9,6 @@ export const TYPES = {
   BrandCreatedSubscriber: Symbol.for("BrandCreatedSubscriber"),
   BrandUpdatedSubscriber: Symbol.for("BrandUpdatedSubscriber"),
   ProductRepository: Symbol.for("IProductRepository"),
+  ProductUnitRepository: Symbol.for("IProductUnitRepository"),
   ProductCreatedSubscriber: Symbol.for("ProductCreatedSubscriber"),
 } as const;

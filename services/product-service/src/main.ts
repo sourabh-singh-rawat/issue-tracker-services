@@ -10,7 +10,8 @@ import fastify, { type FastifyInstance } from "fastify";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { broker, initializeDb, logger } from "@/bootstrap";
+import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
+import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
@@ -46,6 +47,12 @@ const main = async () => {
 
   await initializeDb();
   await broker.init();
+
+  const outboxWorker = container.get<IOutboxWorker>(TYPES.OutboxWorker);
+  outboxWorker.start();
+
+  const outboxCleanupWorker = container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker);
+  outboxCleanupWorker.start();
 
   writeSchemaToDist();
 

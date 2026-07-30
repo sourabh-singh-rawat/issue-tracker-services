@@ -26,16 +26,16 @@ Extract to `packages/*` only when **two** services need the same logic.
 
 ## Ownership
 
-| Domain                                    | Owner                                                       |
-| ----------------------------------------- | ----------------------------------------------------------- |
-| Auth / IdP / OAuth                        | `identity-service` + Ory (Kratos/Hydra)                     |
-| Workspaces / projects / issues / statuses | `issues-service` + `erp-web`                                |
-| Inventory UI                              | `inventory-service` + `erp-web`                             |
-| Product catalog                           | `product-service` + `erp-web`                               |
-| Attachments                               | `attachment-service`                                        |
+| Domain                                    | Owner                                                               |
+| ----------------------------------------- | ------------------------------------------------------------------- |
+| Auth / IdP / OAuth                        | `identity-service` + Ory (Kratos/Hydra)                             |
+| Workspaces / projects / issues / statuses | `issues-service` + `erp-web`                                        |
+| Inventory UI                              | `inventory-service` + `erp-web`                                     |
+| Product catalog                           | `product-service` + `erp-web`                                       |
+| Attachments                               | `attachment-service`                                                |
 | Transactional email / notifications       | `notification-service` (`integrations/email`, not a shared package) |
-| Federated GraphQL supergraph              | `api-gateway` (`dist/supergraph.graphql`)                   |
-| Client GraphQL ops                        | `apps/*/src/graphql/**/*.gql`                               |
+| Federated GraphQL supergraph              | `api-gateway` (`dist/supergraph.graphql`)                           |
+| Client GraphQL ops                        | `apps/*/src/graphql/**/*.gql`                                       |
 
 ## Apps / services / packages
 
@@ -56,12 +56,12 @@ Extract to `packages/*` only when **two** services need the same logic.
 
 ## Dead packages (never import)
 
-| Dead                | Use                                   |
-| ------------------- | ------------------------------------- |
-| `@pine/server-core` | `@pine/http-core`                     |
-| `@pine/event-bus`   | `@pine/events`                        |
+| Dead                | Use                                           |
+| ------------------- | --------------------------------------------- |
+| `@pine/server-core` | `@pine/http-core`                             |
+| `@pine/event-bus`   | `@pine/events`                                |
 | `@pine/comm`        | `notification-service/src/integrations/email` |
-| `@pine/forms`       | app `shared/ui` / feature components  |
+| `@pine/forms`       | app `shared/ui` / feature components          |
 
 Dockerfile turbo `--filter`s must use **current** names only.
 
