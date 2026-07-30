@@ -2,26 +2,22 @@ import "reflect-metadata";
 import "@/bootstrap/env";
 
 import { TYPES, broker, container, orm } from "@/bootstrap";
-import { ProjectMemberInvitedSubscriber } from "@/features/project-email";
-import { UserRegisteredSubscriber } from "@/features/user-email";
-import { WorkspaceMemberInvitedSubscriber } from "@/features/workspace-email";
+import { ProjectMemberInviteConsumer } from "@/features/project-email";
+import { UserRegisteredConsumer } from "@/features/user-email";
+import { WorkspaceInviteConsumer } from "@/features/workspace-email";
 
 export { container, dataSource } from "@/bootstrap";
 
-const startSubscriptions = () => {
-  container.get<UserRegisteredSubscriber>(TYPES.UserRegisteredSubscriber).fetchMessages();
-  container
-    .get<ProjectMemberInvitedSubscriber>(TYPES.ProjectMemberInvitedSubscriber)
-    .fetchMessages();
-  container
-    .get<WorkspaceMemberInvitedSubscriber>(TYPES.WorkspaceMemberInvitedSubscriber)
-    .fetchMessages();
+const startConsumers = () => {
+  void container.get<UserRegisteredConsumer>(TYPES.UserRegisteredConsumer).start();
+  void container.get<ProjectMemberInviteConsumer>(TYPES.ProjectMemberInviteConsumer).start();
+  void container.get<WorkspaceInviteConsumer>(TYPES.WorkspaceInviteConsumer).start();
 };
 
 const main = async () => {
   await orm.init();
   await broker.init();
-  startSubscriptions();
+  startConsumers();
 };
 
 main().catch((error) => {

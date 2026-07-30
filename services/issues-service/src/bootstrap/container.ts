@@ -8,7 +8,7 @@ import { orm } from "@/bootstrap/orm";
 import { IIssueService, IssueService } from "@/features/issue";
 import { IProjectService, ProjectService } from "@/features/project";
 import { IStatusService, StatusService } from "@/features/status";
-import { IUserService, UserEmailVerifiedSubscriber, UserService } from "@/features/user";
+import { IUserService, UserService, UserSyncConsumer } from "@/features/user";
 import { IWorkspaceService, WorkspaceService } from "@/features/workspace";
 
 export const container = new Container({ defaultScope: "Singleton" });
@@ -24,4 +24,4 @@ container.bind<IIssueService>(TYPES.IssueService).to(IssueService);
 container.bind<IStatusService>(TYPES.StatusService).to(StatusService);
 container.bind<IProjectService>(TYPES.ProjectService).to(ProjectService);
 container.bind<IWorkspaceService>(TYPES.WorkspaceService).to(WorkspaceService);
-container.bind<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber).to(UserEmailVerifiedSubscriber);
+container.bind<UserSyncConsumer>(TYPES.UserSyncConsumer).to(UserSyncConsumer);

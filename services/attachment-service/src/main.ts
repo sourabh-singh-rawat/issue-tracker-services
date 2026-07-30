@@ -15,7 +15,7 @@ import sharp from "sharp";
 import { TYPES, broker, container, dataSource, logger, redisClient } from "@/bootstrap";
 import { env, listenPortFromUrl } from "@/bootstrap/env";
 import { Attachment } from "./features/attachment";
-import { UserEmailVerifiedSubscriber } from "./features/user";
+import { UserSyncConsumer } from "./features/user";
 import { createContext } from "./graphql";
 import { schema } from "./graphql/schema";
 import { routes } from "./routes";
@@ -77,8 +77,8 @@ const startServer = async () => {
   writeFileSync(openapiPath, JSON.stringify(openapi, null, 2));
 };
 
-const startSubscriptions = () => {
-  container.get<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber).fetchMessages();
+const startConsumers = () => {
+  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
 };
 
 export const startWorker = () => {
@@ -140,7 +140,7 @@ const main = async () => {
   writeFileSync(schemaPath, printSchema(lexicographicSortSchema(schema)));
 
   await startServer();
-  startSubscriptions();
+  startConsumers();
   startWorker();
 };
 

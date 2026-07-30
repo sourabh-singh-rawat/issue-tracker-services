@@ -5,5 +5,5 @@ export const TYPES = {
   RedisClient: Symbol.for("RedisClient"),
   ImageProcessingQueue: Symbol.for("ImageProcessingQueue"),
   AttachmentService: Symbol.for("AttachmentService"),
-  UserEmailVerifiedSubscriber: Symbol.for("UserEmailVerifiedSubscriber"),
+  UserSyncConsumer: Symbol.for("UserSyncConsumer"),
 } as const;

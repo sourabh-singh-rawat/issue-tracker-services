@@ -3,4 +3,4 @@ export type { IBrokerOptions } from "./IBrokerOptions";
 export type { IPublisher } from "./IPublisher";
 export { NatsBroker } from "./NatsBroker";
 export { NatsPublisher } from "./NatsPublisher";
-export { Subscriber } from "./Subscriber";
+export { Consumer } from "./Consumer";

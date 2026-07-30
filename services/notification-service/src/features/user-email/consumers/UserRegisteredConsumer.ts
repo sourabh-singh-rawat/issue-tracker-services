@@ -2,9 +2,8 @@ import {
   type CloudEvent,
   type IBroker,
   type UserRegisteredData,
-  CONSUMERS,
   Streams,
-  Subscriber,
+  Consumer,
   UserRegisteredEvent,
   validateEvent,
 } from "@pine/events";
@@ -16,10 +15,10 @@ import { User } from "@/entities";
 import { IUserEmailService } from "../services/IUserEmailService";
 
 @injectable()
-export class UserRegisteredSubscriber extends Subscriber<CloudEvent<UserRegisteredData>> {
+export class UserRegisteredConsumer extends Consumer<CloudEvent<UserRegisteredData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = CONSUMERS.USER_REGISTERED_NOTIFICATION;
-  readonly subject = UserRegisteredEvent.type;
+  readonly consumer = "notification-user-registered";
+  readonly subjects = [UserRegisteredEvent.type];
 
   constructor(
     @inject(TYPES.Broker)
