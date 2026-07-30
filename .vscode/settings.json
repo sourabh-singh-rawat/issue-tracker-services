@@ -8,6 +8,37 @@
   "debug.internalConsoleOptions": "neverOpen",
   "terminal.integrated.tabs.hideCondition": "never",
 
+  // Performance: stop watching / searching heavy monorepo noise (Windows especially).
+  // infra/data is local Docker volumes (~thousands of files).
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.turbo/**": true,
+    "**/coverage/**": true,
+    "**/.pnpm-store/**": true,
+    "**/infra/data/**": true,
+    "**/*.tsbuildinfo": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    "**/coverage": true,
+    "**/infra/data": true,
+    "**/pnpm-lock.yaml": true,
+    "**/*.tsbuildinfo": true
+  },
+  "files.exclude": {
+    "**/.turbo": true,
+    "**/infra/data": true
+  },
+
+  // TypeScript: prefer project service; cap memory for multi-package workspace.
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "typescript.disableAutomaticTypeAcquisition": true,
+
   // Oxfmt (Oxc formatter)
   "oxc.enable.oxfmt": true,
   "oxc.fmt.configPath": ".oxfmtrc.json",
