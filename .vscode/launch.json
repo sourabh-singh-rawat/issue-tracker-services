@@ -8,18 +8,20 @@
         "order": 1
       },
       "stopAll": true,
+      // VS Code shows compound sessions newest-first (last started on top).
+      // List bottom→top of desired UI order so services land on top and schemas:watch at the bottom.
       "configurations": [
-        "identity-service",
-        "issues-service",
-        "inventory-service",
-        "product-service",
-        "attachment-service",
-        "notification-service",
-        "api-gateway",
+        "schemas:watch",
+        "codegen: supergraph",
         "erp-web",
         "identity-web",
-        "schemas:watch",
-        "codegen: supergraph"
+        "api-gateway",
+        "notification-service",
+        "attachment-service",
+        "product-service",
+        "inventory-service",
+        "issues-service",
+        "identity-service"
       ]
     },
     {
@@ -30,18 +32,18 @@
       },
       "stopAll": true,
       "configurations": [
-        "identity-service",
-        "issues-service",
-        "inventory-service",
-        "product-service",
-        "attachment-service",
-        "notification-service",
-        "api-gateway",
+        "schemas:watch",
+        "client (browser)",
+        "codegen: supergraph",
         "erp-web",
         "identity-web",
-        "client (browser)",
-        "schemas:watch",
-        "codegen: supergraph"
+        "api-gateway",
+        "notification-service",
+        "attachment-service",
+        "product-service",
+        "inventory-service",
+        "issues-service",
+        "identity-service"
       ]
     },
     {
@@ -52,30 +54,91 @@
       },
       "stopAll": true,
       "configurations": [
-        "identity-service",
-        "issues-service",
-        "inventory-service",
-        "product-service",
-        "attachment-service",
-        "notification-service",
-        "api-gateway",
+        "schemas:watch",
+        "brave (debug)",
+        "codegen: supergraph",
         "erp-web",
         "identity-web",
-        "brave (debug)",
-        "schemas:watch",
-        "codegen: supergraph"
+        "api-gateway",
+        "notification-service",
+        "attachment-service",
+        "product-service",
+        "inventory-service",
+        "issues-service",
+        "identity-service"
       ]
     }
   ],
   "configurations": [
     {
-      "name": "erp-web",
+      "name": "identity-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["erp-web"],
-      "console": "integratedTerminal"
+      "runtimeArgs": ["identity-service"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 1 }
+    },
+    {
+      "name": "issues-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["issues-service"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 2 }
+    },
+    {
+      "name": "inventory-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["inventory-service"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 3 }
+    },
+    {
+      "name": "product-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["product-service"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 4 }
+    },
+    {
+      "name": "attachment-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["attachment-service"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 5 }
+    },
+    {
+      "name": "notification-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["notification-service"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 6 }
+    },
+    {
+      "name": "api-gateway",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["api-gateway"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-services", "order": 7 }
     },
     {
       "name": "identity-web",
@@ -84,7 +147,18 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["identity-web"],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "presentation": { "group": "2-web", "order": 1 }
+    },
+    {
+      "name": "erp-web",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["erp-web"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "2-web", "order": 2 }
     },
     {
       "name": "erp-web + browser",
@@ -94,6 +168,7 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["erp-web"],
       "console": "integratedTerminal",
+      "presentation": { "group": "2-web", "order": 3 },
       "serverReadyAction": {
         "pattern": "Local:\\s+(https?://\\S+)",
         "uriFormat": "%s",
@@ -103,6 +178,25 @@
       }
     },
     {
+      "name": "codegen: supergraph",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["gen"],
+      "console": "integratedTerminal",
+      "presentation": { "group": "3-tools", "order": 1 }
+    },
+    {
+      "name": "schemas:watch",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "command": "pnpm schemas:watch",
+      "presentation": { "group": "5-schemas", "order": 1 }
+    },
+
+    {
       "name": "client (browser)",
       "type": "chrome",
       "request": "launch",
@@ -110,6 +204,7 @@
       "webRoot": "${workspaceFolder}/apps/erp-web",
       "sourceMaps": true,
       "userDataDir": true,
+      "presentation": { "group": "4-browser", "order": 1 },
       "pathMapping": {
         "/@fs": ""
       },
@@ -130,6 +225,7 @@
       "webRoot": "${workspaceFolder}/apps/erp-web",
       "sourceMaps": true,
       "userDataDir": true,
+      "presentation": { "group": "4-browser", "order": 2 },
       "pathMapping": {
         "/@fs": ""
       },
@@ -151,7 +247,8 @@
       "url": "http://localhost:3001",
       "webRoot": "${workspaceFolder}/apps/erp-web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
-      "sourceMaps": true
+      "sourceMaps": true,
+      "presentation": { "group": "4-browser", "order": 3 }
     },
     {
       "name": "brave (debug)",
@@ -162,88 +259,8 @@
       "url": "http://localhost:3001",
       "webRoot": "${workspaceFolder}/apps/erp-web",
       "runtimeArgs": ["--remote-debugging-port=9222"],
-      "sourceMaps": true
-    },
-    {
-      "name": "identity-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["identity-service"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "notification-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["notification-service"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "issues-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["issues-service"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "inventory-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["inventory-service"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "product-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["product-service"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "attachment-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["attachment-service"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "api-gateway",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["api-gateway"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "schemas:watch",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["schemas:watch"],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "codegen: supergraph",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["gen"],
-      "console": "integratedTerminal"
+      "sourceMaps": true,
+      "presentation": { "group": "4-browser", "order": 4 }
     }
   ]
 }
