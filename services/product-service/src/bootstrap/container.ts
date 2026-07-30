@@ -20,6 +20,12 @@ import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
+import {
+  CategoryRepository,
+  type ICategoryRepository,
+  CategoryService,
+  type ICategoryService,
+} from "@/features/categories";
 import { IIdentityRepository, IdentityRepository, UserSyncConsumer } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
 import {
@@ -58,6 +64,8 @@ container.bind<UserSyncConsumer>(TYPES.UserSyncConsumer).to(UserSyncConsumer);
 container.bind<IMeService>(TYPES.MeService).to(MeService);
 container.bind<IBrandRepository>(TYPES.BrandRepository).to(BrandRepository);
 container.bind<IBrandService>(TYPES.BrandService).to(BrandService);
+container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository);
+container.bind<ICategoryService>(TYPES.CategoryService).to(CategoryService);
 container.bind<IUnitRepository>(TYPES.UnitRepository).to(UnitRepository);
 container.bind<IUnitService>(TYPES.UnitService).to(UnitService);
 container.bind<IProductRepository>(TYPES.ProductRepository).to(ProductRepository);
