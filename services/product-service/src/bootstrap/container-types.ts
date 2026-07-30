@@ -14,6 +14,8 @@ export const TYPES = {
   MeService: Symbol.for("IMeService"),
   BrandRepository: Symbol.for("IBrandRepository"),
   BrandService: Symbol.for("IBrandService"),
+  CategoryRepository: Symbol.for("ICategoryRepository"),
+  CategoryService: Symbol.for("ICategoryService"),
   UnitRepository: Symbol.for("IUnitRepository"),
   UnitService: Symbol.for("IUnitService"),
   ProductRepository: Symbol.for("IProductRepository"),
