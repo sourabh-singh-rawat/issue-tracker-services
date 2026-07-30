@@ -1,2 +1,2 @@
 export * from "@/features/products/repositories";
-export * from "@/features/products/subscribers";
+export * from "@/features/products/consumers";

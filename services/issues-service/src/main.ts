@@ -10,7 +10,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import { TYPES, broker, container, logger, orm } from "@/bootstrap";
-import { UserEmailVerifiedSubscriber } from "@/features/user";
+import { UserSyncConsumer } from "@/features/user";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 
@@ -23,8 +23,8 @@ const writeSchemaToDist = () => {
   writeFileSync(schemaPath, printSchema(lexicographicSortSchema(schema)));
 };
 
-const startSubscriptions = () => {
-  container.get<UserEmailVerifiedSubscriber>(TYPES.UserEmailVerifiedSubscriber).fetchMessages();
+const startConsumers = () => {
+  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
 };
 
 const main = async () => {
@@ -54,7 +54,7 @@ const main = async () => {
   });
 
   await server.start();
-  startSubscriptions();
+  startConsumers();
 };
 
 main().catch((error) => {

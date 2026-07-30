@@ -2,10 +2,9 @@ import {
   type CloudEvent,
   type IBroker,
   type ProjectMemberData,
-  CONSUMERS,
   ProjectMemberInvitedEvent,
   Streams,
-  Subscriber,
+  Consumer,
   validateEvent,
 } from "@pine/events";
 import { inject, injectable } from "inversify";
@@ -14,10 +13,10 @@ import { TYPES } from "@/bootstrap/container-types";
 import { IProjectEmailService } from "../services/IProjectEmailService";
 
 @injectable()
-export class ProjectMemberInvitedSubscriber extends Subscriber<CloudEvent<ProjectMemberData>> {
+export class ProjectMemberInviteConsumer extends Consumer<CloudEvent<ProjectMemberData>> {
   readonly stream = Streams.ISSUES;
-  readonly consumer = CONSUMERS.PROJECT_MEMBER_INVITE_CREATED_NOTIFICATION;
-  readonly subject = ProjectMemberInvitedEvent.type;
+  readonly consumer = "notification-project-member-invite";
+  readonly subjects = [ProjectMemberInvitedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)

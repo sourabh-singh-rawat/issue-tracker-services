@@ -3,9 +3,8 @@ import {
   type CloudEvent,
   type IBroker,
   type UserEmailVerifiedData,
-  CONSUMERS,
   Streams,
-  Subscriber,
+  Consumer,
   UserEmailVerifiedEvent,
   validateEvent,
 } from "@pine/events";
@@ -16,10 +15,10 @@ import { TYPES } from "@/bootstrap/container-types";
 import { User } from "@/entities/User";
 
 @injectable()
-export class UserEmailVerifiedSubscriber extends Subscriber<CloudEvent<UserEmailVerifiedData>> {
+export class UserSyncConsumer extends Consumer<CloudEvent<UserEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = CONSUMERS.USER_EMAIL_VERIFIED_ATTACHMENT;
-  readonly subject = UserEmailVerifiedEvent.type;
+  readonly consumer = "attachment-user-sync";
+  readonly subjects = [UserEmailVerifiedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)

@@ -29,20 +29,6 @@ describe("NatsPublisher", () => {
     expect(encoded).toBeDefined();
   });
 
-  it("throws when the broker is not connected", async () => {
-    const publisher = new NatsPublisher({ client: undefined } as NatsBroker);
-
-    await expect(
-      publisher.send({
-        id: "evt-1",
-        source: "pine/test",
-        specversion: "1.0",
-        type: "identity.user.registered",
-        dataschema: "urn:pine:events:identity.user.registered:v1",
-      }),
-    ).rejects.toThrow("NATS broker is not connected");
-  });
-
   it("throws when event.type is missing", async () => {
     const publisher = new NatsPublisher({
       client: { jetstream: () => ({ publish: vi.fn() }) },

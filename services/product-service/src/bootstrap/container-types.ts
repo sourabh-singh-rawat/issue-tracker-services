@@ -10,6 +10,7 @@ export const TYPES = {
   OutboxCleanupWorker: Symbol.for("IOutboxCleanupWorker"),
   RetryPolicy: Symbol.for("IRetryPolicy"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
+  UserSyncConsumer: Symbol.for("UserSyncConsumer"),
   MeService: Symbol.for("IMeService"),
   BrandRepository: Symbol.for("IBrandRepository"),
   BrandService: Symbol.for("IBrandService"),

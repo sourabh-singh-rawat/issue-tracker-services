@@ -3,9 +3,8 @@ import {
   type CloudEvent,
   type IBroker,
   type UserEmailVerifiedData,
-  CONSUMERS,
   Streams,
-  Subscriber,
+  Consumer,
   UserEmailVerifiedEvent,
   validateEvent,
 } from "@pine/events";
@@ -17,10 +16,10 @@ import { User } from "@/entities/User";
 import { Workspace } from "@/entities/Workspace";
 
 @injectable()
-export class UserEmailVerifiedSubscriber extends Subscriber<CloudEvent<UserEmailVerifiedData>> {
+export class UserSyncConsumer extends Consumer<CloudEvent<UserEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = CONSUMERS.USER_EMAIL_VERIFIED_ISSUE_TRACKER;
-  readonly subject = UserEmailVerifiedEvent.type;
+  readonly consumer = "issues-user-sync";
+  readonly subjects = [UserEmailVerifiedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)

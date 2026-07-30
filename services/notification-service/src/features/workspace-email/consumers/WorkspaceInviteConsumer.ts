@@ -2,9 +2,8 @@ import {
   type CloudEvent,
   type IBroker,
   type WorkspaceMemberInvitedData,
-  CONSUMERS,
   Streams,
-  Subscriber,
+  Consumer,
   WorkspaceMemberInvitedEvent,
   validateEvent,
 } from "@pine/events";
@@ -14,12 +13,10 @@ import { TYPES } from "@/bootstrap/container-types";
 import { IWorkspaceEmailService } from "../services/IWorkspaceEmailService";
 
 @injectable()
-export class WorkspaceMemberInvitedSubscriber extends Subscriber<
-  CloudEvent<WorkspaceMemberInvitedData>
-> {
+export class WorkspaceInviteConsumer extends Consumer<CloudEvent<WorkspaceMemberInvitedData>> {
   readonly stream = Streams.ISSUES;
-  readonly consumer = CONSUMERS.WORKSPACE_INVITE_CREATED_NOTIFICATION;
-  readonly subject = WorkspaceMemberInvitedEvent.type;
+  readonly consumer = "notification-workspace-invite";
+  readonly subjects = [WorkspaceMemberInvitedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)

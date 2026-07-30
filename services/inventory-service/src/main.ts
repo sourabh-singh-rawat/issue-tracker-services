@@ -8,8 +8,9 @@ import fastify, { type FastifyInstance } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
-import { BrandCreatedSubscriber, BrandUpdatedSubscriber } from "@/features/brands";
-import { ProductCreatedSubscriber } from "@/features/products";
+import { BrandSyncConsumer } from "@/features/brands";
+import { UserSyncConsumer } from "@/features/identities";
+import { ProductSyncConsumer } from "@/features/products";
 import { routes } from "@/routes";
 
 export { container, db } from "@/bootstrap";
@@ -64,9 +65,9 @@ const main = async () => {
   await server.start();
   writeOpenApiToDist(instance);
 
-  container.get<BrandCreatedSubscriber>(TYPES.BrandCreatedSubscriber).fetchMessages();
-  container.get<BrandUpdatedSubscriber>(TYPES.BrandUpdatedSubscriber).fetchMessages();
-  container.get<ProductCreatedSubscriber>(TYPES.ProductCreatedSubscriber).fetchMessages();
+  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
+  void container.get<BrandSyncConsumer>(TYPES.BrandSyncConsumer).start();
+  void container.get<ProductSyncConsumer>(TYPES.ProductSyncConsumer).start();
 };
 
 main().catch((error) => {

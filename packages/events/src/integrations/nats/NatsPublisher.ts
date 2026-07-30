@@ -14,12 +14,7 @@ export class NatsPublisher implements IPublisher {
     const codec = JSONCodec<CloudEvent>();
     const encodedMessage = codec.encode(event);
 
-    const client = this.broker.client;
-    if (!client) {
-      throw new Error("NATS broker is not connected");
-    }
-
-    const jetstream = client.jetstream();
+    const jetstream = this.broker.client.jetstream();
     await jetstream.publish(event.type, encodedMessage);
   }
 }

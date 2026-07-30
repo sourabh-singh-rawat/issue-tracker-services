@@ -2,10 +2,9 @@ import {
   type CloudEvent,
   type IBroker,
   type ProductCreatedData,
-  CONSUMERS,
   ProductCreatedEvent,
   Streams,
-  Subscriber,
+  Consumer,
   validateEvent,
 } from "@pine/events";
 import { inject, injectable } from "inversify";
@@ -15,10 +14,10 @@ import type { Database } from "@/db";
 import type { IProductRepository, IProductUnitRepository } from "@/features/products/repositories";
 
 @injectable()
-export class ProductCreatedSubscriber extends Subscriber<CloudEvent<ProductCreatedData>> {
+export class ProductSyncConsumer extends Consumer<CloudEvent<ProductCreatedData>> {
   readonly stream = Streams.PRODUCT;
-  readonly consumer = CONSUMERS.PRODUCT_CREATED_INVENTORY;
-  readonly subject = ProductCreatedEvent.type;
+  readonly consumer = "inventory-product-sync";
+  readonly subjects = [ProductCreatedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)

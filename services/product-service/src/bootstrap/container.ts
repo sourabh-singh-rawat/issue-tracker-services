@@ -20,7 +20,7 @@ import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
-import { IIdentityRepository, IdentityRepository } from "@/features/identities";
+import { IIdentityRepository, IdentityRepository, UserSyncConsumer } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
 import {
   ProductRepository,
@@ -54,6 +54,7 @@ container
   .toConstantValue(new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)));
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
+container.bind<UserSyncConsumer>(TYPES.UserSyncConsumer).to(UserSyncConsumer);
 container.bind<IMeService>(TYPES.MeService).to(MeService);
 container.bind<IBrandRepository>(TYPES.BrandRepository).to(BrandRepository);
 container.bind<IBrandService>(TYPES.BrandService).to(BrandService);

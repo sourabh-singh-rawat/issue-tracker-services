@@ -2,7 +2,7 @@
 name: pine-service-feature
 description: >
   Backend feature slice in services/*: Inversify TYPES, I*Service, entities, routes
-  or GraphQL, subscribers. Triggers: new feature, DI, repository, service module.
+  or GraphQL, consumers. Triggers: new feature, DI, repository, service module.
 ---
 
 # Service feature
@@ -13,11 +13,11 @@ Mirror a feature **in the same service**. Canonical refs: `issues-service` (Grap
 
 ```text
 services/<svc>/src/
-  features/<feature>/{services,graphql|routes,schemas,repositories,subscribers}/
+  features/<feature>/{services,graphql|routes,schemas,repositories,consumers}/
   entities/          # prefer Audit from @pine/orm
   integrations/      # service-local adapters (idp, oauth, email)
   bootstrap/{container-types,container,broker,logger}.ts
-  main.ts            # FastifyHttpServer + subscriber start
+  main.ts            # FastifyHttpServer + consumer start
 ```
 
 ## Imports
@@ -25,7 +25,7 @@ services/<svc>/src/
 | Need                     | From                                                                             |
 | ------------------------ | -------------------------------------------------------------------------------- |
 | Server / routes / logger | `@pine/http-core` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger`        |
-| Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Subscriber`, `createCloudEvent` |
+| Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Consumer`, `createCloudEvent`   |
 | Entity base              | `@pine/orm` → `Audit`                                                            |
 | Enums / errors           | `@pine/common`, `@pine/errors`                                                   |
 
