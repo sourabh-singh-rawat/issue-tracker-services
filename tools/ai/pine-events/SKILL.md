@@ -19,12 +19,12 @@ Stream names match the first token of `type`: `identity`, `issues`, `mail`, `pro
 
 ## Hard rules
 
-| Do                                                                 | Don’t                                                               |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| `createCloudEvent` + `defineEvent` contract before publish         | Publish TypeORM entities / `UpdateResult` / bare objects            |
-| Map entity fields to TypeBox schemas (`ownerUserId` ≠ `createdById`) | Send `new Date()` when schema wants number (`Date.now()`)         |
-| Filter subscribers with `SomeEvent.type`                           | Reintroduce a parallel `SUBJECTS` constant                          |
-| Start `fetchMessages()` after `broker.init()`                      | Import `@pine/event-bus`                                            |
+| Do                                                                   | Don’t                                                     |
+| -------------------------------------------------------------------- | --------------------------------------------------------- |
+| `createCloudEvent` + `defineEvent` contract before publish           | Publish TypeORM entities / `UpdateResult` / bare objects  |
+| Map entity fields to TypeBox schemas (`ownerUserId` ≠ `createdById`) | Send `new Date()` when schema wants number (`Date.now()`) |
+| Filter subscribers with `SomeEvent.type`                             | Reintroduce a parallel `SUBJECTS` constant                |
+| Start `fetchMessages()` after `broker.init()`                        | Import `@pine/event-bus`                                  |
 
 ## Bootstrap
 
@@ -45,7 +45,7 @@ const event = createCloudEvent({
   schema: ProductCreatedEvent.schema,
   source: "pine/product-service",
   subject: product.id, // domain resource id, not NATS subject
-  data: { /* mapped DTO */ },
+  data: {/* mapped DTO */},
 });
 await this.publisher.send(event);
 ```

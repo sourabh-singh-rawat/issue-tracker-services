@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "description": "Product service — product catalog domain",
   "keywords": [
-    "product",
-    "catalog"
+    "catalog",
+    "product"
   ],
   "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "bugs": {
@@ -41,6 +41,7 @@
     "@pine/graphql-core": "workspace:^",
     "@pine/http-core": "workspace:^",
     "@pine/observability": "workspace:*",
+    "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",
     "@pothos/core": "^4.13.1",
     "@vitest/coverage-v8": "^4.1.10",

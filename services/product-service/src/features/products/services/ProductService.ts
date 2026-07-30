@@ -1,8 +1,5 @@
-import {
-  createCloudEvent,
-  type IPublisher,
-  ProductCreatedEvent,
-} from "@pine/events";
+import { createCloudEvent, ProductCreatedEvent } from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Product } from "@/db";
@@ -11,10 +8,7 @@ import {
   ProductNotFoundError,
   ProductSkuConflictError,
 } from "@/features/products/errors";
-import type {
-  IProductRepository,
-  IProductUnitRepository,
-} from "@/features/products/repositories";
+import type { IProductRepository, IProductUnitRepository } from "@/features/products/repositories";
 import type {
   CreateProductInput,
   IProductService,
@@ -27,8 +21,8 @@ export class ProductService implements IProductService {
     private readonly productRepository: IProductRepository,
     @inject(TYPES.ProductUnitRepository)
     private readonly productUnitRepository: IProductUnitRepository,
-    @inject(TYPES.Publisher)
-    private readonly publisher: IPublisher,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
     @inject(TYPES.Database)
     private readonly db: Database,
   ) {}
@@ -44,8 +38,8 @@ export class ProductService implements IProductService {
       throw new ProductSkuConflictError(`Product SKU already exists: ${input.sku}`);
     }
 
-    const product = await this.db.transaction(async (tx) => {
-      const created = await this.productRepository.save(
+    return this.db.transaction(async (tx) => {
+      const product = await this.productRepository.save(
         {
           code: input.code,
           sku: input.sku,
@@ -60,9 +54,9 @@ export class ProductService implements IProductService {
         { tx },
       );
 
-      await this.productUnitRepository.save(
+      const productUnit = await this.productUnitRepository.save(
         {
-          productId: created.id,
+          productId: product.id,
           unitId: input.defaultUnitId,
           baseUnitMultiplier: "1",
           isBaseUnit: true,
@@ -71,33 +65,52 @@ export class ProductService implements IProductService {
         { tx },
       );
 
-      return created;
+      const event = createCloudEvent({
+        type: ProductCreatedEvent.type,
+        version: ProductCreatedEvent.version,
+        schema: ProductCreatedEvent.schema,
+        source: "pine/product-service",
+        subject: product.id,
+        data: {
+          id: product.id,
+          code: product.code,
+          sku: product.sku,
+          name: product.name,
+          productType: product.productType,
+          isActive: product.isActive,
+          createdAt: product.createdAt.toISOString(),
+          defaultUnitId: product.defaultUnitId,
+          productUnits: [
+            {
+              id: productUnit.id,
+              productId: productUnit.productId,
+              unitId: productUnit.unitId,
+              baseUnitMultiplier: productUnit.baseUnitMultiplier,
+              isBaseUnit: productUnit.isBaseUnit,
+              isActive: productUnit.isActive,
+              createdAt: productUnit.createdAt.toISOString(),
+            },
+          ],
+          ...(product.description != null ? { description: product.description } : {}),
+          ...(product.categoryId != null ? { categoryId: product.categoryId } : {}),
+          ...(product.brandId != null ? { brandId: product.brandId } : {}),
+        },
+      });
+
+      await this.outboxService.schedule(
+        {
+          eventId: event.id,
+          eventType: event.type,
+          eventVersion: ProductCreatedEvent.version,
+          aggregateType: "product",
+          aggregateId: product.id,
+          payload: event,
+        },
+        { tx },
+      );
+
+      return product;
     });
-
-    const event = createCloudEvent({
-      type: ProductCreatedEvent.type,
-      version: ProductCreatedEvent.version,
-      schema: ProductCreatedEvent.schema,
-      source: "pine/product-service",
-      subject: product.id,
-      data: {
-        id: product.id,
-        code: product.code,
-        sku: product.sku,
-        name: product.name,
-        productType: product.productType,
-        isActive: product.isActive,
-        createdAt: product.createdAt.toISOString(),
-        defaultUnitId: product.defaultUnitId,
-        ...(product.description != null ? { description: product.description } : {}),
-        ...(product.categoryId != null ? { categoryId: product.categoryId } : {}),
-        ...(product.brandId != null ? { brandId: product.brandId } : {}),
-      },
-    });
-
-    await this.publisher.send(event);
-
-    return product;
   }
 
   async getProductById(id: string): Promise<Product> {

@@ -4,10 +4,10 @@
   "version": "0.2.0",
   "description": "Notification service",
   "keywords": [
-    "notification",
-    "notification-service",
     "email",
-    "management"
+    "management",
+    "notification",
+    "notification-service"
   ],
   "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "bugs": {

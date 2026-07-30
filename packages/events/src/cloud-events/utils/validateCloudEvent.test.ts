@@ -5,13 +5,7 @@ import type { CloudEvent } from "../CloudEvent";
 import { createCloudEvent } from "./createCloudEvent";
 import { isCloudEvent, validateCloudEvent } from "./validateCloudEvent";
 
-const REQUIRED_CONTEXT_ATTRIBUTES = [
-  "id",
-  "source",
-  "specversion",
-  "type",
-  "dataschema",
-] as const;
+const REQUIRED_CONTEXT_ATTRIBUTES = ["id", "source", "specversion", "type", "dataschema"] as const;
 
 const OPTIONAL_CONTEXT_ATTRIBUTES = ["datacontenttype", "subject", "time"] as const;
 

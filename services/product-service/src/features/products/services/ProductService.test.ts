@@ -43,7 +43,7 @@ function createDbMock(tx: unknown = { tx: true }) {
 }
 
 describe("ProductService", () => {
-  it("creates a product, product unit mapping, and publishes ProductCreated", async () => {
+  it("creates a product, product unit mapping, and schedules ProductCreated in the outbox", async () => {
     const tx = { tx: true };
     const db = createDbMock(tx);
     const productRepository = {
@@ -54,14 +54,14 @@ describe("ProductService", () => {
     const productUnitRepository = {
       save: vi.fn().mockResolvedValue(productUnit),
     };
-    const publisher = {
-      send: vi.fn().mockResolvedValue(undefined),
+    const outboxService = {
+      schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
     };
 
     const service = new ProductService(
       productRepository as never,
       productUnitRepository as never,
-      publisher as never,
+      outboxService as never,
       db as never,
     );
 
@@ -105,28 +105,47 @@ describe("ProductService", () => {
       },
       { tx },
     );
-    expect(publisher.send).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: ProductCreatedEvent.type,
-        source: "pine/product-service",
-        specversion: "1.0",
-        subject: "product-1",
-        dataschema: `urn:pine:events:${ProductCreatedEvent.type}:v${ProductCreatedEvent.version}`,
-        datacontenttype: "application/json",
-        data: {
-          id: "product-1",
-          code: "WIDGET",
-          sku: "WDG-001",
-          name: "Widget",
-          productType: PRODUCT_TYPE.STOCK_ITEM,
-          isActive: true,
-          createdAt: "2026-01-01T00:00:00.000Z",
-          defaultUnitId: "unit-1",
-          description: "A widget",
-          categoryId: "category-1",
-          brandId: "brand-1",
-        },
-      }),
+    expect(outboxService.schedule).toHaveBeenCalledWith(
+      {
+        eventId: expect.any(String),
+        eventType: ProductCreatedEvent.type,
+        eventVersion: ProductCreatedEvent.version,
+        aggregateType: "product",
+        aggregateId: "product-1",
+        payload: expect.objectContaining({
+          type: ProductCreatedEvent.type,
+          source: "pine/product-service",
+          specversion: "1.0",
+          subject: "product-1",
+          dataschema: `urn:pine:events:${ProductCreatedEvent.type}:v${ProductCreatedEvent.version}`,
+          datacontenttype: "application/json",
+          data: {
+            id: "product-1",
+            code: "WIDGET",
+            sku: "WDG-001",
+            name: "Widget",
+            productType: PRODUCT_TYPE.STOCK_ITEM,
+            isActive: true,
+            createdAt: "2026-01-01T00:00:00.000Z",
+            defaultUnitId: "unit-1",
+            productUnits: [
+              {
+                id: "product-unit-1",
+                productId: "product-1",
+                unitId: "unit-1",
+                baseUnitMultiplier: "1",
+                isBaseUnit: true,
+                isActive: true,
+                createdAt: "2026-01-01T00:00:00.000Z",
+              },
+            ],
+            description: "A widget",
+            categoryId: "category-1",
+            brandId: "brand-1",
+          },
+        }),
+      },
+      { tx },
     );
   });
 
@@ -141,14 +160,14 @@ describe("ProductService", () => {
     const productUnitRepository = {
       save: vi.fn().mockResolvedValue(productUnit),
     };
-    const publisher = {
-      send: vi.fn().mockResolvedValue(undefined),
+    const outboxService = {
+      schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
     };
 
     const service = new ProductService(
       productRepository as never,
       productUnitRepository as never,
-      publisher as never,
+      outboxService as never,
       db as never,
     );
 
@@ -182,12 +201,12 @@ describe("ProductService", () => {
     const productUnitRepository = {
       save: vi.fn(),
     };
-    const publisher = { send: vi.fn() };
+    const outboxService = { schedule: vi.fn() };
 
     const service = new ProductService(
       productRepository as never,
       productUnitRepository as never,
-      publisher as never,
+      outboxService as never,
       db as never,
     );
 
@@ -204,7 +223,7 @@ describe("ProductService", () => {
     expect(productRepository.existsBySku).not.toHaveBeenCalled();
     expect(productRepository.save).not.toHaveBeenCalled();
     expect(productUnitRepository.save).not.toHaveBeenCalled();
-    expect(publisher.send).not.toHaveBeenCalled();
+    expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 
   it("throws ProductSkuConflictError when SKU is taken", async () => {
@@ -217,12 +236,12 @@ describe("ProductService", () => {
     const productUnitRepository = {
       save: vi.fn(),
     };
-    const publisher = { send: vi.fn() };
+    const outboxService = { schedule: vi.fn() };
 
     const service = new ProductService(
       productRepository as never,
       productUnitRepository as never,
-      publisher as never,
+      outboxService as never,
       db as never,
     );
 
@@ -238,7 +257,7 @@ describe("ProductService", () => {
 
     expect(productRepository.save).not.toHaveBeenCalled();
     expect(productUnitRepository.save).not.toHaveBeenCalled();
-    expect(publisher.send).not.toHaveBeenCalled();
+    expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 
   it("returns a product by id", async () => {
@@ -249,12 +268,12 @@ describe("ProductService", () => {
     const productUnitRepository = {
       save: vi.fn(),
     };
-    const publisher = { send: vi.fn() };
+    const outboxService = { schedule: vi.fn() };
 
     const service = new ProductService(
       productRepository as never,
       productUnitRepository as never,
-      publisher as never,
+      outboxService as never,
       db as never,
     );
 
@@ -269,12 +288,12 @@ describe("ProductService", () => {
     const productUnitRepository = {
       save: vi.fn(),
     };
-    const publisher = { send: vi.fn() };
+    const outboxService = { schedule: vi.fn() };
 
     const service = new ProductService(
       productRepository as never,
       productUnitRepository as never,
-      publisher as never,
+      outboxService as never,
       db as never,
     );
 

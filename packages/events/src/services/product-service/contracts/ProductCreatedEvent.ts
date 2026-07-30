@@ -3,6 +3,6 @@ import { ProductCreatedDataSchema } from "../schemas";
 
 export const ProductCreatedEvent = defineEvent({
   type: "product.product.created",
-  version: 1,
+  version: 2,
   schema: ProductCreatedDataSchema,
 });
