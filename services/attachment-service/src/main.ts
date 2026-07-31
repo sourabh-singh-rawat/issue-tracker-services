@@ -12,7 +12,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import sharp from "sharp";
-import { TYPES, broker, container, db, initializeDb, logger, redisClient } from "@/bootstrap";
+import { TYPES, broker, initializeDb, logger, redisClient, container } from "@/bootstrap";
 import { env, listenPortFromUrl } from "@/bootstrap/env";
 import type { IAttachmentRepository } from "./features/attachment";
 import { IdentitySyncConsumer } from "./features/identities";
@@ -23,7 +23,6 @@ import { routes } from "./routes";
 export { builder, createContext } from "./graphql";
 export type { AttachmentContext } from "./graphql";
 export { schema } from "./graphql/schema";
-export { container, db } from "@/bootstrap";
 
 const startServer = async () => {
   const instance = fastify();
@@ -103,9 +102,7 @@ export const startWorker = () => {
       const thumbnailLink = `attachments/${issueId}/${filename}-small`;
       const imageLink = `attachments/${issueId}/${filename}-large`;
 
-      const attachmentRepository = container.get<IAttachmentRepository>(
-        TYPES.AttachmentRepository,
-      );
+      const attachmentRepository = container.get<IAttachmentRepository>(TYPES.AttachmentRepository);
 
       await attachmentRepository.save({
         id: uuidv7(),

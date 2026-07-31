@@ -11,6 +11,14 @@ CREATE TABLE "check_list_items" (
 	"version" integer DEFAULT 1 NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "identities" (
+	"id" uuid PRIMARY KEY NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone,
+	"deleted_at" timestamp with time zone,
+	"version" integer DEFAULT 1 NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "issue_activities" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"type" text NOT NULL,
@@ -127,14 +135,6 @@ CREATE TABLE "status_options" (
 	"type" text NOT NULL,
 	"order_index" integer NOT NULL,
 	"project_id" uuid NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone,
-	"deleted_at" timestamp with time zone,
-	"version" integer DEFAULT 1 NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "users" (
-	"id" uuid PRIMARY KEY NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone,
 	"deleted_at" timestamp with time zone,

@@ -1,5 +1,5 @@
 {
-  "id": "a9a456a0-3ee4-4a6c-b895-3f440dd93bba",
+  "id": "4a86c57b-9213-4310-9b33-869ad7040f94",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -91,10 +91,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "attachments_owner_id_users_id_fk": {
-          "name": "attachments_owner_id_users_id_fk",
+        "attachments_owner_id_identities_id_fk": {
+          "name": "attachments_owner_id_identities_id_fk",
           "tableFrom": "attachments",
-          "tableTo": "users",
+          "tableTo": "identities",
           "columnsFrom": [
             "owner_id"
           ],
@@ -111,8 +111,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.identities": {
+      "name": "identities",
       "schema": "",
       "columns": {
         "id": {
