@@ -3,10 +3,7 @@ import type { RouteOptions } from "fastify";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISessionService } from "@/features/session/services";
-import {
-  SessionResponseSchema,
-  type SessionResponse,
-} from "@/features/session/schemas";
+import { SessionResponseSchema, type SessionResponse } from "@/features/session/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
 
 const BEARER_PREFIX = /^Bearer\s+/i;
@@ -52,9 +49,7 @@ export const getTokenSession: RouteOptions<
       identity: {
         id: identity.id,
         ...(identity.email ? { email: identity.email } : {}),
-        ...(identity.emailVerified !== undefined
-          ? { emailVerified: identity.emailVerified }
-          : {}),
+        ...(identity.emailVerified !== undefined ? { emailVerified: identity.emailVerified } : {}),
       },
     };
 

@@ -22,12 +22,12 @@ services/<svc>/src/
 
 ## Imports
 
-| Need                     | From                                                                             |
-| ------------------------ | -------------------------------------------------------------------------------- |
-| Server / routes / logger | `@pine/http-core` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger`        |
-| Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Consumer`, `createCloudEvent`   |
-| Entity base              | `@pine/orm` → `Audit`                                                            |
-| Enums / errors           | `@pine/common`, `@pine/errors`                                                   |
+| Need                     | From                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| Server / routes / logger | `@pine/http-core` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger`      |
+| Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Consumer`, `createCloudEvent` |
+| Entity base              | `@pine/orm` → `Audit`                                                          |
+| Enums / errors           | `@pine/common`, `@pine/errors`                                                 |
 
 **Forbidden:** `@pine/server-core`, `@pine/event-bus`, `@pine/comm`.
 

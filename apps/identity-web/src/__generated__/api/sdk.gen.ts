@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, AuthorizeResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses, RejectConsentChallengeData, RejectConsentChallengeResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, GetTokenSessionIdentityData, GetTokenSessionIdentityResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -19,13 +19,13 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
- * Login with email and password
+ * Sign in with email and password
  *
- * Authenticate a user with email and password via the identity provider
+ * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.
  */
-export const loginWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<LoginWithEmailAndPasswordData, ThrowOnError>): RequestResult<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<LoginWithEmailAndPasswordResponses, unknown, ThrowOnError>({
+export const signInWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<SignInWithEmailAndPasswordData, ThrowOnError>): RequestResult<SignInWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<SignInWithEmailAndPasswordResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/identity/login',
+    url: '/identity/signin',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -56,15 +56,34 @@ export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: O
 });
 
 /**
- * OAuth authorize
+ * Resolve session identity
  *
- * Start the OAuth authorization code flow
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
  */
-export const authorize = <ThrowOnError extends boolean = false>(options: Options<AuthorizeData, ThrowOnError>): RequestResult<AuthorizeResponses, unknown, ThrowOnError> => (options.client ?? client).get<AuthorizeResponses, unknown, ThrowOnError>({
+export const getSessionIdentity = <ThrowOnError extends boolean = false>(options?: Options<GetSessionIdentityData, ThrowOnError>): RequestResult<GetSessionIdentityResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetSessionIdentityResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/identity/oauth/authorize',
+    url: '/identity/getSession',
     ...options
 });
+
+/**
+ * Resolve identity from OAuth access token
+ *
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const getTokenSessionIdentity = <ThrowOnError extends boolean = false>(options?: Options<GetTokenSessionIdentityData, ThrowOnError>): RequestResult<GetTokenSessionIdentityResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetTokenSessionIdentityResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/identity/getTokenSession',
+    ...options
+});
+
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow. Redirects (302) to the OAuth provider authorization endpoint.
+ */
+export const authorize = <ThrowOnError extends boolean = false>(options: Options<AuthorizeData, ThrowOnError>): RequestResult<unknown, unknown, ThrowOnError> => (options.client ?? client).get<unknown, unknown, ThrowOnError>({ url: '/identity/oauth/authorize', ...options });
 
 /**
  * OAuth consent challenge
@@ -108,6 +127,21 @@ export const rejectConsentChallenge = <ThrowOnError extends boolean = false>(opt
 });
 
 /**
+ * OAuth token
+ *
+ * Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies
+ */
+export const exchangeToken = <ThrowOnError extends boolean = false>(options: Options<ExchangeTokenData, ThrowOnError>): RequestResult<ExchangeTokenResponses, unknown, ThrowOnError> => (options.client ?? client).post<ExchangeTokenResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/oauth/token',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * Register with email and password
  *
  * Register a new user with email and password via the identity provider
@@ -115,6 +149,32 @@ export const rejectConsentChallenge = <ThrowOnError extends boolean = false>(opt
 export const registerWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<RegisterWithEmailAndPasswordData, ThrowOnError>): RequestResult<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/identity/registerWithEmailAndPassword',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Verify email with Kratos code
+ *
+ * Complete email verification using the one-time code from the Kratos verification email
+ */
+export const verifyEmail = <ThrowOnError extends boolean = false>(options: Options<VerifyEmailData, ThrowOnError>): RequestResult<VerifyEmailResponses, unknown, ThrowOnError> => (options.client ?? client).get<VerifyEmailResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/verifyEmail',
+    ...options
+});
+
+/**
+ * Resend verification email
+ *
+ * Request a new email verification code. Always returns success to avoid revealing whether the email is registered.
+ */
+export const resendVerificationEmail = <ThrowOnError extends boolean = false>(options: Options<ResendVerificationEmailData, ThrowOnError>): RequestResult<ResendVerificationEmailResponses, unknown, ThrowOnError> => (options.client ?? client).post<ResendVerificationEmailResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/resendVerificationEmail',
     ...options,
     headers: {
         'Content-Type': 'application/json',

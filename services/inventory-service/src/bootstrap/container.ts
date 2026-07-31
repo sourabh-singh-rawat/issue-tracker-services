@@ -7,13 +7,7 @@ import { logger } from "@/bootstrap/logger";
 import { BrandRepository, BrandSyncConsumer, type IBrandRepository } from "@/features/brands";
 import { IIdentityRepository, IdentityRepository, UserSyncConsumer } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
-import {
-  IProductRepository,
-  IProductUnitRepository,
-  ProductRepository,
-  ProductSyncConsumer,
-  ProductUnitRepository,
-} from "@/features/products";
+import { IProductRepository, IProductUnitRepository, ProductRepository, ProductSyncConsumer, ProductUnitRepository } from "@/features/products";
 
 export const container = new Container({ defaultScope: "Singleton" });
 

@@ -1,0 +1,131 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const { get } = vi.hoisted(() => ({
+  get: vi.fn(),
+}));
+
+vi.mock("@/bootstrap", () => ({
+  container: { get },
+}));
+
+import { TYPES } from "@/bootstrap/container-types";
+import { signin } from "@/features/signin/routes/signin";
+
+describe("signin route", () => {
+  beforeEach(() => {
+    get.mockReset();
+  });
+
+  it("sets the session cookie and returns 200 with identity", async () => {
+    const expiresAt = new Date("2030-01-01T00:00:00.000Z");
+    const signInWithEmailAndPassword = vi.fn().mockResolvedValue({
+      identity: {
+        id: "identity-1",
+        email: "a@b.com",
+        emailVerified: true,
+      },
+      sessionToken: "session-token-1",
+      expiresAt,
+      sessionId: "session-1",
+    });
+
+    get.mockReturnValue({ signInWithEmailAndPassword });
+
+    const setCookie = vi.fn();
+    const status = vi.fn().mockReturnThis();
+    const send = vi.fn().mockReturnThis();
+    const redirect = vi.fn();
+    const req = {
+      body: { email: "a@b.com", password: "password" },
+      query: {},
+    };
+    const reply = { setCookie, status, send, redirect };
+
+    await signin.handler!(req as never, reply as never);
+
+    expect(get).toHaveBeenCalledWith(TYPES.SignInService);
+    expect(signInWithEmailAndPassword).toHaveBeenCalledWith({
+      email: "a@b.com",
+      password: "password",
+      loginChallenge: undefined,
+    });
+    expect(setCookie).toHaveBeenCalledWith("session", "session-token-1", {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: false,
+      expires: expiresAt,
+    });
+    expect(status).toHaveBeenCalledWith(200);
+    expect(send).toHaveBeenCalledWith({
+      data: {
+        identity: {
+          id: "identity-1",
+          email: "a@b.com",
+          emailVerified: true,
+        },
+      },
+    });
+    expect(redirect).not.toHaveBeenCalled();
+  });
+
+  it("passes login_challenge and returns redirectTo in JSON (no HTTP 302)", async () => {
+    const expiresAt = new Date("2030-01-01T00:00:00.000Z");
+    const redirectTo = "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc";
+    const signInWithEmailAndPassword = vi.fn().mockResolvedValue({
+      identity: {
+        id: "identity-1",
+        email: "a@b.com",
+        emailVerified: true,
+      },
+      sessionToken: "session-token-1",
+      expiresAt,
+      sessionId: "session-1",
+      redirectTo,
+    });
+
+    get.mockReturnValue({ signInWithEmailAndPassword });
+
+    const setCookie = vi.fn();
+    const status = vi.fn().mockReturnThis();
+    const send = vi.fn().mockReturnThis();
+    const redirect = vi.fn();
+    const req = {
+      body: {
+        email: "a@b.com",
+        password: "password",
+      },
+      query: {
+        login_challenge: "login-challenge-1",
+      },
+    };
+    const reply = { setCookie, status, send, redirect };
+
+    await signin.handler!(req as never, reply as never);
+
+    expect(signInWithEmailAndPassword).toHaveBeenCalledWith({
+      email: "a@b.com",
+      password: "password",
+      loginChallenge: "login-challenge-1",
+    });
+    expect(setCookie).toHaveBeenCalledWith("session", "session-token-1", {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: false,
+      expires: expiresAt,
+    });
+    expect(status).toHaveBeenCalledWith(200);
+    expect(send).toHaveBeenCalledWith({
+      data: {
+        identity: {
+          id: "identity-1",
+          email: "a@b.com",
+          emailVerified: true,
+        },
+        redirectTo,
+      },
+    });
+    expect(redirect).not.toHaveBeenCalled();
+  });
+});

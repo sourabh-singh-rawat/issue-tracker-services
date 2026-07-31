@@ -11,6 +11,9 @@ export type CreateStatusEntity = {
 };
 
 export interface IStatusRepository {
-  saveMany(entities: CreateStatusEntity[], options?: StatusRepositoryOptions): Promise<StatusOption[]>;
+  saveMany(
+    entities: CreateStatusEntity[],
+    options?: StatusRepositoryOptions,
+  ): Promise<StatusOption[]>;
   findByProjectId(projectId: string, options?: StatusRepositoryOptions): Promise<StatusOption[]>;
 }

@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { exchangeToken } from "@generated/api";
+import { useSnackbar } from "@shared";
 import {
   clearOidcCodeVerifier,
   clearOidcState,
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/callback")({
 
 function CallbackPage() {
   const navigate = useNavigate();
+  const snackbar = useSnackbar();
   const {
     code,
     state,
@@ -80,6 +82,7 @@ function CallbackPage() {
         markAuthenticated();
         clearOidcState();
         clearOidcCodeVerifier();
+        snackbar.success("Signed in successfully.");
         await navigate({ to: "/" });
       } catch (err) {
         setMessage(err instanceof Error ? err.message : "Token exchange failed.");
@@ -87,7 +90,7 @@ function CallbackPage() {
     };
 
     void run();
-  }, [code, state, error, errorDescription, navigate]);
+  }, [code, state, error, errorDescription, navigate, snackbar]);
 
   return <h1>{message}</h1>;
 }

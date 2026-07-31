@@ -1,4 +1,4 @@
-import { Add } from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
 import { IconButton, useTheme } from "@mui/material";
 import React from "react";
 import Modal from "../../../../shared/components/Modal";

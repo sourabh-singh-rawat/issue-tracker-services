@@ -39,7 +39,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 
 ## Apps / services / packages
 
-**Apps:** `erp-web` (primary product UI — issues + inventory), `identity-web` (login/signup/consent)
+**Apps:** `erp-web` (primary product UI — issues + inventory), `identity-web` (sign-in/registration/consent)
 
 **Services:** `identity-service`, `issues-service`, `inventory-service`, `product-service`, `attachment-service`, `notification-service`, `api-gateway`
 

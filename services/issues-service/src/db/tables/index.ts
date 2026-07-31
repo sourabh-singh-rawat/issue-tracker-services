@@ -1,4 +1,8 @@
-export { type CheckListItem, type NewCheckListItem, CheckListItems } from "@/db/tables/CheckListItems";
+export {
+  type CheckListItem,
+  type NewCheckListItem,
+  CheckListItems,
+} from "@/db/tables/CheckListItems";
 export {
   type IssueActivity,
   type NewIssueActivity,
@@ -22,9 +26,5 @@ export {
   ProjectIssueActivities,
 } from "@/db/tables/ProjectIssueActivities";
 export { type Project, type NewProject, Projects } from "@/db/tables/Projects";
-export {
-  type StatusOption,
-  type NewStatusOption,
-  StatusOptions,
-} from "@/db/tables/StatusOptions";
+export { type StatusOption, type NewStatusOption, StatusOptions } from "@/db/tables/StatusOptions";
 export { type User, type NewUser, Users } from "@/db/tables/Users";

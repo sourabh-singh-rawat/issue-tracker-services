@@ -70,9 +70,7 @@ export class IssueRepository implements IIssueRepository {
         updatedAt: now,
         version: sql`${Issues.version} + 1`,
       })
-      .where(
-        and(eq(Issues.id, id), eq(Issues.createdById, userId), isNull(Issues.deletedAt)),
-      );
+      .where(and(eq(Issues.id, id), eq(Issues.createdById, userId), isNull(Issues.deletedAt)));
   }
 
   async hardDelete(id: string, options?: IssueRepositoryOptions): Promise<void> {

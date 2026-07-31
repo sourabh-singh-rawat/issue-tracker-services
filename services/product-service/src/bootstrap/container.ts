@@ -20,12 +20,7 @@ import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
-import {
-  CategoryRepository,
-  type ICategoryRepository,
-  CategoryService,
-  type ICategoryService,
-} from "@/features/categories";
+import { CategoryRepository, type ICategoryRepository, CategoryService, type ICategoryService } from "@/features/categories";
 import { IIdentityRepository, IdentityRepository, UserSyncConsumer } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
 import {

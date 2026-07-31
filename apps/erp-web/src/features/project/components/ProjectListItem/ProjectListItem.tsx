@@ -1,4 +1,4 @@
-import { FolderOutlined } from "@mui/icons-material";
+import FolderOutlined from "@mui/icons-material/FolderOutlined";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useNavigate } from "@tanstack/react-router";
 import { useProjectStore } from "../../store";

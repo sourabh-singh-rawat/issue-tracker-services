@@ -1,4 +1,4 @@
-import { GetApp } from "@mui/icons-material";
+import GetApp from "@mui/icons-material/GetApp";
 import { Grid2, IconButton, Input, styled, Typography, useTheme } from "@mui/material";
 import MuiImageList from "@mui/material/ImageList";
 import { Stack } from "@mui/system";
@@ -34,8 +34,8 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutateAsync: createAttachment, isPending: isLoading } = useCreateAttachmentMutation();
-  const { data: files } = useFindFilesQuery(
+  const createAttachmentMutation = useCreateAttachmentMutation();
+  const filesQuery = useFindFilesQuery(
     { issueId },
     {
       select: (data) => data.findFiles,
@@ -44,7 +44,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
       refetchOnMount: "always",
     },
   );
-  const { mutateAsync: deleteAttachment } = useDeleteAttachmentMutation();
+  const deleteAttachmentMutation = useDeleteAttachmentMutation();
 
   return (
     <>
@@ -60,7 +60,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
           disableRipple
         >
           <Stack spacing={1} sx={{ alignItems: "center" }}>
-            {isLoading ? <AppLoader /> : <GetApp />}
+            {createAttachmentMutation.isPending ? <AppLoader /> : <GetApp />}
             <Typography variant="body2" sx={{ color: theme.palette.primary.main }}>
               Click to upload attachment
             </Typography>
@@ -80,7 +80,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
               const file = selectedFiles[0];
               if (!file) return;
 
-              await createAttachment({
+              await createAttachmentMutation.mutateAsync({
                 path: { issueId },
                 body: { file },
               });
@@ -92,7 +92,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
         </IconButton>
       </Grid2>
       <MuiImageList cols={6} rowHeight={124} sx={{ width: "100%" }} variant="quilted">
-        {(files?.rows ?? [])
+        {(filesQuery.data?.rows ?? [])
           .filter(
             (row): row is { id: string; thumbnailLink: string } =>
               Boolean(row.id) && Boolean(row.thumbnailLink),
@@ -103,7 +103,7 @@ export const IssueAttachments = ({ issueId }: ItemAttachmentProps) => {
               <IconButton
                 onClick={async () => {
                   try {
-                    const response = await deleteAttachment({
+                    const response = await deleteAttachmentMutation.mutateAsync({
                       deleteAttachmentId: id,
                     });
                     snackbar.success(response.deleteAttachment ?? "Attachment deleted");

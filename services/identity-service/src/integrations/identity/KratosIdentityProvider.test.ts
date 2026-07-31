@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import {
+  IdentityAlreadyExistsError,
   IdentityNotFoundError,
   IdentityProviderUnavailableError,
   InvalidCredentialError,
@@ -9,8 +10,13 @@ import { KratosIdentityProvider } from "@/integrations/identity/KratosIdentityPr
 function createKratosMock(overrides?: {
   createNativeLoginFlow?: ReturnType<typeof vi.fn>;
   updateLoginFlow?: ReturnType<typeof vi.fn>;
+  createNativeRegistrationFlow?: ReturnType<typeof vi.fn>;
+  updateRegistrationFlow?: ReturnType<typeof vi.fn>;
   performNativeLogout?: ReturnType<typeof vi.fn>;
   toSession?: ReturnType<typeof vi.fn>;
+  getVerificationFlow?: ReturnType<typeof vi.fn>;
+  createNativeVerificationFlow?: ReturnType<typeof vi.fn>;
+  updateVerificationFlow?: ReturnType<typeof vi.fn>;
   deleteIdentity?: ReturnType<typeof vi.fn>;
 }) {
   return {
@@ -18,8 +24,17 @@ function createKratosMock(overrides?: {
       createNativeLoginFlow:
         overrides?.createNativeLoginFlow ?? vi.fn().mockResolvedValue({ data: { id: "flow-1" } }),
       updateLoginFlow: overrides?.updateLoginFlow ?? vi.fn(),
+      createNativeRegistrationFlow:
+        overrides?.createNativeRegistrationFlow ??
+        vi.fn().mockResolvedValue({ data: { id: "reg-flow-1" } }),
+      updateRegistrationFlow: overrides?.updateRegistrationFlow ?? vi.fn(),
       performNativeLogout: overrides?.performNativeLogout ?? vi.fn().mockResolvedValue(undefined),
       toSession: overrides?.toSession ?? vi.fn(),
+      getVerificationFlow: overrides?.getVerificationFlow ?? vi.fn(),
+      createNativeVerificationFlow:
+        overrides?.createNativeVerificationFlow ??
+        vi.fn().mockResolvedValue({ data: { id: "verify-flow-1", ui: { nodes: [] } } }),
+      updateVerificationFlow: overrides?.updateVerificationFlow ?? vi.fn(),
     },
     identityApi: {
       deleteIdentity: overrides?.deleteIdentity ?? vi.fn().mockResolvedValue(undefined),
@@ -27,8 +42,157 @@ function createKratosMock(overrides?: {
   };
 }
 
-describe("KratosIdentityProvider.login", () => {
-  it("logs in with email and password via the native Kratos login flow", async () => {
+describe("KratosIdentityProvider.register", () => {
+  it("registers with email and password via the native Kratos registration flow", async () => {
+    const updateRegistrationFlow = vi.fn().mockResolvedValue({
+      data: {
+        identity: {
+          id: "identity-1",
+          traits: { email: "a@b.com" },
+          verifiable_addresses: [{ value: "a@b.com", verified: false }],
+          created_at: "2024-01-01T00:00:00.000Z",
+          updated_at: "2024-01-01T00:00:00.000Z",
+        },
+      },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateRegistrationFlow }) as never,
+    );
+
+    await expect(provider.register({ email: "a@b.com", password: "password" })).resolves.toEqual({
+      id: "identity-1",
+      email: "a@b.com",
+      emailVerified: false,
+      traits: { email: "a@b.com" },
+      createdAt: new Date("2024-01-01T00:00:00.000Z"),
+      updatedAt: new Date("2024-01-01T00:00:00.000Z"),
+    });
+
+    expect(updateRegistrationFlow).toHaveBeenCalledWith({
+      flow: "reg-flow-1",
+      updateRegistrationFlowBody: {
+        method: "password",
+        password: "password",
+        traits: { email: "a@b.com" },
+      },
+    });
+  });
+
+  it("passes identitySchema when schemaId is provided", async () => {
+    const createNativeRegistrationFlow = vi.fn().mockResolvedValue({ data: { id: "reg-flow-1" } });
+    const updateRegistrationFlow = vi.fn().mockResolvedValue({
+      data: {
+        identity: {
+          id: "identity-1",
+          traits: { email: "a@b.com" },
+        },
+      },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ createNativeRegistrationFlow, updateRegistrationFlow }) as never,
+    );
+
+    await provider.register({
+      email: "a@b.com",
+      password: "password",
+      schemaId: "user",
+      traits: { name: { first: "Ada" } },
+    });
+
+    expect(createNativeRegistrationFlow).toHaveBeenCalledWith({
+      identitySchema: "user",
+    });
+    expect(updateRegistrationFlow).toHaveBeenCalledWith({
+      flow: "reg-flow-1",
+      updateRegistrationFlowBody: {
+        method: "password",
+        password: "password",
+        traits: { name: { first: "Ada" }, email: "a@b.com" },
+      },
+    });
+  });
+
+  it("throws IdentityAlreadyExistsError when Kratos reports a duplicate identifier", async () => {
+    const updateRegistrationFlow = vi.fn().mockRejectedValue({
+      response: {
+        status: 400,
+        data: {
+          ui: {
+            messages: [
+              {
+                id: 4000007,
+                text: "An account with the same identifier already exists.",
+                type: "error",
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateRegistrationFlow }) as never,
+    );
+
+    await expect(
+      provider.register({ email: "a@b.com", password: "password" }),
+    ).rejects.toBeInstanceOf(IdentityAlreadyExistsError);
+  });
+
+  it("throws InvalidCredentialError when Kratos returns a generic 400", async () => {
+    const updateRegistrationFlow = vi.fn().mockRejectedValue({
+      response: {
+        status: 400,
+        data: {
+          ui: {
+            messages: [{ id: 4000005, text: "The password can not be used.", type: "error" }],
+          },
+        },
+      },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateRegistrationFlow }) as never,
+    );
+
+    await expect(provider.register({ email: "a@b.com", password: "weak" })).rejects.toBeInstanceOf(
+      InvalidCredentialError,
+    );
+  });
+
+  it("throws IdentityProviderUnavailableError when the identity is missing", async () => {
+    const updateRegistrationFlow = vi.fn().mockResolvedValue({
+      data: {},
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateRegistrationFlow }) as never,
+    );
+
+    await expect(
+      provider.register({ email: "a@b.com", password: "password" }),
+    ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
+  });
+
+  it("throws IdentityProviderUnavailableError when Kratos is down", async () => {
+    const createNativeRegistrationFlow = vi.fn().mockRejectedValue({
+      response: { status: 503 },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ createNativeRegistrationFlow }) as never,
+    );
+
+    await expect(
+      provider.register({ email: "a@b.com", password: "password" }),
+    ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
+  });
+});
+
+describe("KratosIdentityProvider.signIn", () => {
+  it("signs in with email and password via the native Kratos login flow", async () => {
     const expiresAt = "2030-01-01T00:00:00.000Z";
     const updateLoginFlow = vi.fn().mockResolvedValue({
       data: {
@@ -47,7 +211,7 @@ describe("KratosIdentityProvider.login", () => {
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
 
-    await expect(provider.login({ email: "a@b.com", password: "password" })).resolves.toEqual({
+    await expect(provider.signIn({ email: "a@b.com", password: "password" })).resolves.toEqual({
       identity: {
         id: "identity-1",
         email: "a@b.com",
@@ -75,7 +239,7 @@ describe("KratosIdentityProvider.login", () => {
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
 
-    await expect(provider.login({ email: "a@b.com", password: "wrong" })).rejects.toBeInstanceOf(
+    await expect(provider.signIn({ email: "a@b.com", password: "wrong" })).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
   });
@@ -87,7 +251,7 @@ describe("KratosIdentityProvider.login", () => {
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
 
-    await expect(provider.login({ email: "a@b.com", password: "wrong" })).rejects.toBeInstanceOf(
+    await expect(provider.signIn({ email: "a@b.com", password: "wrong" })).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
   });
@@ -101,7 +265,7 @@ describe("KratosIdentityProvider.login", () => {
       createKratosMock({ createNativeLoginFlow }) as never,
     );
 
-    await expect(provider.login({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
+    await expect(provider.signIn({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
     );
   });
@@ -119,7 +283,7 @@ describe("KratosIdentityProvider.login", () => {
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
 
-    await expect(provider.login({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
+    await expect(provider.signIn({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
     );
   });
@@ -140,7 +304,7 @@ describe("KratosIdentityProvider.login", () => {
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
 
-    await expect(provider.login({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
+    await expect(provider.signIn({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
     );
   });
@@ -161,12 +325,12 @@ describe("KratosIdentityProvider.login", () => {
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
 
-    await expect(provider.login({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
+    await expect(provider.signIn({ email: "a@b.com", password: "password" })).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
     );
   });
 
-  it("always returns a sessionToken and expiresAt on successful login", async () => {
+  it("always returns a sessionToken and expiresAt on successful sign-in", async () => {
     const expiresAt = "2030-01-01T00:00:00.000Z";
     const updateLoginFlow = vi.fn().mockResolvedValue({
       data: {
@@ -183,7 +347,7 @@ describe("KratosIdentityProvider.login", () => {
     });
 
     const provider = new KratosIdentityProvider(createKratosMock({ updateLoginFlow }) as never);
-    const result = await provider.login({ email: "a@b.com", password: "password" });
+    const result = await provider.signIn({ email: "a@b.com", password: "password" });
 
     expect(result.sessionToken).toBe("session-token-1");
     expect(result.expiresAt).toEqual(new Date(expiresAt));
@@ -331,6 +495,121 @@ describe("KratosIdentityProvider.deleteIdentity", () => {
     const provider = new KratosIdentityProvider(createKratosMock({ deleteIdentity }) as never);
 
     await expect(provider.deleteIdentity("identity-1")).rejects.toBeInstanceOf(
+      IdentityProviderUnavailableError,
+    );
+  });
+});
+
+describe("KratosIdentityProvider.verifyEmail", () => {
+  it("submits the verification code against the Kratos flow", async () => {
+    const updateVerificationFlow = vi.fn().mockResolvedValue({
+      data: {
+        id: "flow-1",
+        state: "passed_challenge",
+      },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateVerificationFlow }) as never,
+    );
+
+    await expect(
+      provider.verifyEmail({ flowId: "flow-1", code: "123456" }),
+    ).resolves.toBeUndefined();
+
+    expect(updateVerificationFlow).toHaveBeenCalledWith({
+      flow: "flow-1",
+      updateVerificationFlowBody: {
+        method: "code",
+        code: "123456",
+      },
+    });
+  });
+
+  it("throws InvalidCredentialError when verification did not pass", async () => {
+    const updateVerificationFlow = vi.fn().mockResolvedValue({
+      data: { id: "flow-1", state: "sent_email" },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateVerificationFlow }) as never,
+    );
+
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "bad" })).rejects.toBeInstanceOf(
+      InvalidCredentialError,
+    );
+  });
+
+  it("throws InvalidCredentialError when Kratos returns 400", async () => {
+    const updateVerificationFlow = vi.fn().mockRejectedValue({
+      response: { status: 400 },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateVerificationFlow }) as never,
+    );
+
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "bad" })).rejects.toBeInstanceOf(
+      InvalidCredentialError,
+    );
+  });
+
+  it("throws IdentityProviderUnavailableError when Kratos is down", async () => {
+    const updateVerificationFlow = vi.fn().mockRejectedValue({
+      response: { status: 503 },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ updateVerificationFlow }) as never,
+    );
+
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "123456" })).rejects.toBeInstanceOf(
+      IdentityProviderUnavailableError,
+    );
+  });
+});
+
+describe("KratosIdentityProvider.resendVerificationEmail", () => {
+  it("creates a verification flow and submits the email to resend the code", async () => {
+    const createNativeVerificationFlow = vi.fn().mockResolvedValue({
+      data: {
+        id: "verify-flow-1",
+        state: "choose_method",
+      },
+    });
+    const updateVerificationFlow = vi.fn().mockResolvedValue({
+      data: {
+        id: "verify-flow-1",
+        state: "sent_email",
+      },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ createNativeVerificationFlow, updateVerificationFlow }) as never,
+    );
+
+    await expect(provider.resendVerificationEmail({ email: "a@b.com" })).resolves.toBeUndefined();
+
+    expect(createNativeVerificationFlow).toHaveBeenCalled();
+    expect(updateVerificationFlow).toHaveBeenCalledWith({
+      flow: "verify-flow-1",
+      updateVerificationFlowBody: {
+        method: "code",
+        email: "a@b.com",
+      },
+    });
+  });
+
+  it("throws IdentityProviderUnavailableError when Kratos is down", async () => {
+    const createNativeVerificationFlow = vi.fn().mockRejectedValue({
+      response: { status: 503 },
+    });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ createNativeVerificationFlow }) as never,
+    );
+
+    await expect(provider.resendVerificationEmail({ email: "a@b.com" })).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
     );
   });

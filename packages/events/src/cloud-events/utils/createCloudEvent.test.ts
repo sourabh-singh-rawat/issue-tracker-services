@@ -130,4 +130,3 @@ describe("createCloudEvent", () => {
     expect(isCloudEvent(created)).toBe(true);
   });
 });
-

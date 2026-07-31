@@ -81,9 +81,7 @@ export class ProjectRepository implements IProjectRepository {
     const [row] = await client
       .select()
       .from(Projects)
-      .where(
-        and(eq(Projects.id, id), eq(Projects.createdById, userId), isNull(Projects.deletedAt)),
-      )
+      .where(and(eq(Projects.id, id), eq(Projects.createdById, userId), isNull(Projects.deletedAt)))
       .limit(1);
 
     return row ?? null;

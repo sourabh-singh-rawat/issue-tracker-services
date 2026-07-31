@@ -6,7 +6,7 @@ import { useFindProjectsQuery } from "@generated/gql";
 import { useGetCurrentUserQuery } from "@generated/api/@tanstack/react-query.gen";
 import { useAuthStore } from "@features/auth";
 import { useProjectStore } from "@features/project";
-import { redirectToOidcLogin } from "../../../lib/auth";
+import { redirectToOidcSignIn } from "../../../lib/auth";
 import { AppLoader } from "../AppLoader";
 
 interface MainProps {
@@ -55,11 +55,10 @@ export function Main({ children }: MainProps) {
   useEffect(() => {
     if (!userQuery.isError) return;
     if (isPublicPath(pathname)) return;
-    redirectToOidcLogin();
+    redirectToOidcSignIn();
   }, [userQuery.isError, pathname]);
 
-  const loading =
-    userQuery.isPending || (userQuery.isSuccess && projectsQuery.isPending);
+  const loading = userQuery.isPending || (userQuery.isSuccess && projectsQuery.isPending);
 
   return (
     <MuiBox width="100vw" height="100vh">

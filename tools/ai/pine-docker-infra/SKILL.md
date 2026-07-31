@@ -53,6 +53,13 @@ Confirm in active compose + root `.env.example`.
 - Config: `infra/docker/identity/kratos/`, `identity/hydra/`
 - `KRATOS_SECRETS_CIPHER` must be **32 chars**
 - App URLs: `KRATOS_*_URL`, `HYDRA_*_URL` in root `.env`
+- Kratos mail (verification/recovery): root `.env` only — never secrets in `kratos.yaml`
+  - `BREVO_EMAIL` → `COURIER_SMTP_FROM_ADDRESS` (Brevo-verified sender)
+  - `COURIER_SMTP_CONNECTION_URI` → Brevo SMTP relay URI
+  - `COURIER_SMTP_FROM_NAME` (optional, default `Pine`)
+  - Verification email links: custom templates under `identity/kratos/courier-templates/` rewrite
+    Kratos’ `VerificationURL` (`:4433/self-service/verification?...`) to
+    `http://localhost:3000/verification?code=…&flow=…` (identity-web)
 
 ## Rules
 

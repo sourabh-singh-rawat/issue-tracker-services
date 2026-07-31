@@ -26,9 +26,7 @@ export const ProjectList = () => {
                 (project): project is typeof project & { id: string; name: string } =>
                   Boolean(project.id) && Boolean(project.name),
               )
-              .map(({ id, name }) => (
-                <ProjectListItem key={id} projectId={id} name={name} />
-              ))
+              .map(({ id, name }) => <ProjectListItem key={id} projectId={id} name={name} />)
           )}
         </>
       }

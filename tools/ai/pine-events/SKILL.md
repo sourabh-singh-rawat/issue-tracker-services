@@ -75,13 +75,13 @@ Set the durable name **directly** on the consumer class (`readonly consumer = "â
 readonly consumer = "product-user-sync";
 ```
 
-| Service token  | Example durable name                 |
-| -------------- | ------------------------------------ |
-| `product`      | `product-user-sync`                  |
-| `inventory`    | `inventory-brand-sync`               |
-| `issues`       | `issues-user-sync`                   |
-| `attachment`   | `attachment-user-sync`               |
-| `notification` | `notification-user-registered`       |
+| Service token  | Example durable name           |
+| -------------- | ------------------------------ |
+| `product`      | `product-user-sync`            |
+| `inventory`    | `inventory-brand-sync`         |
+| `issues`       | `issues-user-sync`             |
+| `attachment`   | `attachment-user-sync`         |
+| `notification` | `notification-user-registered` |
 
 - **service** = consuming service (who owns the durable cursor)
 - **purpose** = projection or side-effect intent (`user-sync`, `brand-sync`, `workspace-invite`, â€¦), **not** one durable per event verb

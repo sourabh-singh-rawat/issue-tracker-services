@@ -116,7 +116,7 @@ describe("authorize route", () => {
 });
 
 describe("OAuth login challenge routes", () => {
-  // TODO: POST/GET /identity/oauth/login routes
+  // TODO: POST/GET /identity/oauth sign-in routes
   it.todo("returns the login challenge details for a valid login_challenge");
 
   it.todo("accepts a login challenge when the user is authenticated and returns redirectTo");

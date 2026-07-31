@@ -54,7 +54,7 @@ export const createPkcePair = async (): Promise<{
 };
 
 /** Build the identity-service OAuth authorize URL and persist PKCE state. */
-export const startOidcLogin = async (): Promise<string> => {
+export const startOidcSignIn = async (): Promise<string> => {
   const state = crypto.randomUUID();
   const { codeVerifier, codeChallenge } = await createPkcePair();
 
@@ -74,8 +74,8 @@ export const startOidcLogin = async (): Promise<string> => {
 };
 
 /** Full-page navigation into the OIDC authorize flow. */
-export const redirectToOidcLogin = (): void => {
-  void startOidcLogin().then((href) => {
+export const redirectToOidcSignIn = (): void => {
+  void startOidcSignIn().then((href) => {
     window.location.assign(href);
   });
 };

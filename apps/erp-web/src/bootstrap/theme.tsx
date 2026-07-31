@@ -184,6 +184,7 @@ export const AppThemeProvider = ({ children }: Readonly<PropsWithChildren>) => (
       <SnackbarProvider
         Components={{ success: SnackbarContent, error: SnackbarContent }}
         iconVariant={{ error: "❌", success: "✅" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         maxSnack={4}
         autoHideDuration={2000}
       >

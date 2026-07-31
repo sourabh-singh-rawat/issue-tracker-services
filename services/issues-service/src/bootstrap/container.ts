@@ -19,33 +19,10 @@ import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
-import {
-  IIssueAssigneeRepository,
-  IIssueRepository,
-  IIssueService,
-  IssueAssigneeRepository,
-  IssueRepository,
-  IssueService,
-} from "@/features/issue";
-import {
-  IProjectRepository,
-  IProjectService,
-  ProjectRepository,
-  ProjectService,
-} from "@/features/project";
-import {
-  IStatusRepository,
-  IStatusService,
-  StatusRepository,
-  StatusService,
-} from "@/features/status";
-import {
-  IUserRepository,
-  IUserService,
-  UserRepository,
-  UserService,
-  UserSyncConsumer,
-} from "@/features/user";
+import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigneeRepository, IssueRepository, IssueService } from "@/features/issue";
+import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
+import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
+import { IUserRepository, IUserService, UserRepository, UserService, UserSyncConsumer } from "@/features/user";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -57,30 +34,16 @@ container.bind<IOutboxRepository>(TYPES.OutboxRepository).toConstantValue(new Ou
 container.bind<IRetryPolicy>(TYPES.RetryPolicy).toConstantValue(new ExponentialBackoffPolicy());
 container
   .bind<IOutboxService>(TYPES.OutboxService)
-  .toConstantValue(
-    new OutboxService(
-      container.get<IOutboxRepository>(TYPES.OutboxRepository),
-      container.get<IRetryPolicy>(TYPES.RetryPolicy),
-    ),
-  );
+  .toConstantValue(new OutboxService(container.get<IOutboxRepository>(TYPES.OutboxRepository), container.get<IRetryPolicy>(TYPES.RetryPolicy)));
 container
   .bind<IOutboxWorker>(TYPES.OutboxWorker)
-  .toConstantValue(
-    new OutboxWorker(
-      container.get<IOutboxService>(TYPES.OutboxService),
-      container.get<IPublisher>(TYPES.Publisher) as IOutboxPublisher,
-    ),
-  );
+  .toConstantValue(new OutboxWorker(container.get<IOutboxService>(TYPES.OutboxService), container.get<IPublisher>(TYPES.Publisher) as IOutboxPublisher));
 container
   .bind<IOutboxCleanupService>(TYPES.OutboxCleanupService)
-  .toConstantValue(
-    new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)),
-  );
+  .toConstantValue(new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)));
 container
   .bind<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker)
-  .toConstantValue(
-    new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)),
-  );
+  .toConstantValue(new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)));
 
 container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
 container.bind<IUserService>(TYPES.UserService).to(UserService);

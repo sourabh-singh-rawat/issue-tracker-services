@@ -2,10 +2,12 @@ export type {
   IIdentityProvider,
   Identity,
   IdentitySchemaId,
-  LoginIdentityInput,
-  LoginResult,
+  SignInIdentityInput,
+  SignInResult,
   RegisterIdentityInput,
+  ResendVerificationEmailInput,
   UpdateIdentityInput,
+  VerifyEmailInput,
 } from "@/integrations/identity/IIdentityProvider";
 export {
   IdentityAlreadyExistsError,

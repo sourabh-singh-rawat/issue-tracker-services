@@ -91,6 +91,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:9.16
     restart: unless-stopped
+    user: "0:0"
     entrypoint: /custom/docker-entrypoint.sh
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}

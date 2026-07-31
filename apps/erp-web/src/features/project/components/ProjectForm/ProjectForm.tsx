@@ -8,7 +8,7 @@ import { PrimaryButton, TextField, useSnackbar } from "@shared";
 
 export const ProjectForm = () => {
   const messageBar = useSnackbar();
-  const { mutateAsync: createProject } = useCreateProjectMutation();
+  const createProjectMutation = useCreateProjectMutation();
 
   const defaultValues: CreateProjectInput = useMemo(() => ({ name: "" }), []);
   const form = useForm({
@@ -18,7 +18,7 @@ export const ProjectForm = () => {
 
   const onSubmit: SubmitHandler<CreateProjectInput> = async ({ name }) => {
     try {
-      await createProject({
+      await createProjectMutation.mutateAsync({
         input: { name },
       });
       messageBar.success("Created project successfully");

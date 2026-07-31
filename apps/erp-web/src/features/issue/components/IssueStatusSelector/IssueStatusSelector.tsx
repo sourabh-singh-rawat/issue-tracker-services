@@ -30,13 +30,14 @@ export const IssueStatusSelector = <T extends FieldValues>({
   helperText,
 }: IssueStatusSelectorProps<T>) => {
   const isLoading = false;
-  const { data: statuses } = useFindStatusesQuery(
+  const statusesQuery = useFindStatusesQuery(
     { input: { projectId } },
     {
       select: (data) => data.findStatuses,
       enabled: Boolean(projectId),
     },
   );
+  const statuses = statusesQuery.data;
 
   return (
     <Grid2 container>

@@ -1,9 +1,5 @@
 import { STATUS_TYPE, UserNotFoundError } from "@pine/common";
-import {
-  createCloudEvent,
-  ProjectCreatedEvent,
-  ProjectUpdatedEvent,
-} from "@pine/events";
+import { createCloudEvent, ProjectCreatedEvent, ProjectUpdatedEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";

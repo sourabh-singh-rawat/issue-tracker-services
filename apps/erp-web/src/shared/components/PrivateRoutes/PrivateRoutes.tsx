@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Box, Container, Grid2, Toolbar, useTheme } from "@mui/material";
 import { useAuthStore } from "@features/auth";
 import { useLargeScreen } from "../../hooks";
-import { redirectToOidcLogin } from "../../../lib/auth";
+import { redirectToOidcSignIn } from "../../../lib/auth";
 import { AppLoader } from "../AppLoader";
 import { Navbar } from "../navigation/Navbar";
 import { Sidebar } from "../navigation/Sidebar";
@@ -19,7 +19,7 @@ export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
 
   useEffect(() => {
     if (!isLoading && !current) {
-      redirectToOidcLogin();
+      redirectToOidcSignIn();
     }
   }, [isLoading, current]);
 

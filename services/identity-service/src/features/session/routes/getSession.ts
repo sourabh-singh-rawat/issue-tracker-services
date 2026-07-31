@@ -3,10 +3,7 @@ import type { RouteOptions } from "fastify";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISessionService } from "@/features/session/services";
-import {
-  SessionResponseSchema,
-  type SessionResponse,
-} from "@/features/session/schemas";
+import { SessionResponseSchema, type SessionResponse } from "@/features/session/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
 
 export const getSession: RouteOptions<

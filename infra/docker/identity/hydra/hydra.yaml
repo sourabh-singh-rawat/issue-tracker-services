@@ -27,7 +27,7 @@ urls:
   self:
     issuer: http://127.0.0.1:4444
   consent: http://127.0.0.1:3000/consent
-  login: http://127.0.0.1:3000/login
+  login: http://127.0.0.1:3000/signin
   logout: http://127.0.0.1:3000/logout
   device:
     verification: http://127.0.0.1:3000/device/verify

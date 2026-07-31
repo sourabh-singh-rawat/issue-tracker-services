@@ -1,4 +1,4 @@
-import { FolderOutlined } from "@mui/icons-material";
+import FolderOutlined from "@mui/icons-material/FolderOutlined";
 import { Box, Grid2, IconButton } from "@mui/material";
 import { CustomBreadcrumbs } from "../CustomBreadcrumbs";
 
@@ -19,10 +19,7 @@ export const ViewLocation = ({ project }: LocationProps) => {
           </IconButton>
         </Grid2>
         <Grid2 sx={{ alignContent: "center" }}>
-          <CustomBreadcrumbs
-            isLoading={false}
-            items={[{ text: project.name, onClick() {} }]}
-          />
+          <CustomBreadcrumbs isLoading={false} items={[{ text: project.name, onClick() {} }]} />
         </Grid2>
       </Grid2>
     </Box>

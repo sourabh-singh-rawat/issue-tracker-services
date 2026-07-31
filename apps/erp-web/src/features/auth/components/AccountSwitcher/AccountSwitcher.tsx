@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Logout } from "@mui/icons-material";
+import Logout from "@mui/icons-material/Logout";
 import { useLogoutMutation } from "@generated/api/@tanstack/react-query.gen";
 import Avatar from "../../../../shared/components/Avatar";
-import { clearAuthenticated, redirectToOidcLogin } from "../../../../lib/auth";
+import { clearAuthenticated, redirectToOidcSignIn } from "../../../../lib/auth";
 import { useAuthStore } from "../../store";
 
 export const AccountSwitcher = () => {
@@ -24,17 +24,17 @@ export const AccountSwitcher = () => {
   const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const { mutateAsync: logout } = useLogoutMutation();
+  const logoutMutation = useLogoutMutation();
 
   const handleClick = (e: React.FormEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
   const handleLogout = async () => {
-    await logout({});
+    await logoutMutation.mutateAsync({});
     setCurrentUser({ current: null });
     clearAuthenticated();
-    redirectToOidcLogin();
+    redirectToOidcSignIn();
   };
 
   const label = current?.displayName || current?.email;

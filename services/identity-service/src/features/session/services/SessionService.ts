@@ -26,7 +26,8 @@ export class SessionService implements ISessionService {
     }
 
     const extra = introspection.extra ?? {};
-    const email = typeof extra.email === "string" && extra.email.length > 0 ? extra.email : undefined;
+    const email =
+      typeof extra.email === "string" && extra.email.length > 0 ? extra.email : undefined;
     const emailVerified =
       typeof extra.email_verified === "boolean"
         ? extra.email_verified

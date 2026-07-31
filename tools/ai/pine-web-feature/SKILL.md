@@ -49,6 +49,8 @@ Schema for codegen: `services/api-gateway/dist/supergraph.graphql` (must exist).
 ## Hard rules
 
 - Regenerated clients only — no hand-copied server types
+- **Use generated React Query hooks only** — `useXQuery` / `useXMutation` from `@generated/api/@tanstack/react-query.gen` or `@generated/gql`. Never `useQuery({ ...verifyEmailOptions(...) })` (or any `useQuery`/`useMutation` + `*Options`/`*Mutation` factory) in components. Factories are for prefetch/queryClient/tests only.
+- **Never destructure query/mutation results** — assign the hook return value and use properties (`const projectQuery = useFindProjectQuery(...); projectQuery.data`). Enforced by `pine/no-destructure-query-mutation` in oxlint.
 - Routes stay thin; UI lives in features
 - Prefer existing MUI + `shared` primitives over new kits
 - Build check: `pnpm exec turbo run build --filter=@pine/erp-web`

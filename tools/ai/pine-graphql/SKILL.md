@@ -51,13 +51,13 @@ Queries: `builder.queryFields`. Filters: `Find*Input` / `Find*Options`. Auth use
 
 ## Naming
 
-| Thing              | Style                                    |
-| ------------------ | ---------------------------------------- |
-| Field              | camelCase `createIssue` / `findProjects` |
-| GraphQL type       | PascalCase `CreateIssueInput`            |
-| Input/object files | PascalCase                               |
+| Thing              | Style                                           |
+| ------------------ | ----------------------------------------------- |
+| Field              | camelCase `createIssue` / `findProjects`        |
+| GraphQL type       | PascalCase `CreateIssueInput`                   |
+| Input/object files | PascalCase                                      |
 | Query modules      | camelCase, one field per file `findProjects.ts` |
-| Mutation modules   | camelCase, one field per file `createIssue.ts` |
+| Mutation modules   | camelCase, one field per file `createIssue.ts`  |
 
 Match the feature you’re editing.
 
