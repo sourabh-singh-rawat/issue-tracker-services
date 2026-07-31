@@ -368,6 +368,22 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
 
+  packages/identity-client:
+    dependencies:
+      '@fastify/cookie':
+        specifier: ^11.1.2
+        version: 11.1.2
+      fastify:
+        specifier: ^5.10.0
+        version: 5.10.0
+    devDependencies:
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+
   packages/observability:
     dependencies:
       '@fastify/otel':
@@ -564,6 +580,9 @@ importers:
       '@pine/http-core':
         specifier: workspace:^
         version: link:../../packages/http-core
+      '@pine/identity-client':
+        specifier: workspace:^
+        version: link:../../packages/identity-client
       '@pine/orm':
         specifier: workspace:^
         version: link:../../packages/orm
@@ -861,6 +880,9 @@ importers:
       '@pine/http-core':
         specifier: workspace:*
         version: link:../../packages/http-core
+      '@pine/identity-client':
+        specifier: workspace:*
+        version: link:../../packages/identity-client
       '@pine/outbox':
         specifier: workspace:*
         version: link:../../packages/outbox

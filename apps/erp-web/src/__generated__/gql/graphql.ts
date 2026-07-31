@@ -28,6 +28,18 @@ export type BrandObject = {
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
+export type CategoryObject = {
+  __typename?: 'CategoryObject';
+  code?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  parentCategoryId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
 export type ClientObject = {
   __typename?: 'ClientObject';
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -44,6 +56,14 @@ export type CreateBrandInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type CreateCategoryInput = {
+  code: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  parentCategoryId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateClientInput = {
@@ -105,10 +125,6 @@ export type FindIssuesInput = {
   parentIssueId: Scalars['String']['input'];
 };
 
-export type FindProjectsOptions = {
-  _?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type FindStatusesOptions = {
   projectId: Scalars['String']['input'];
 };
@@ -146,6 +162,7 @@ export type IssueObject = {
 export type Mutation = {
   __typename?: 'Mutation';
   createBrand?: Maybe<BrandObject>;
+  createCategory?: Maybe<CategoryObject>;
   createClient?: Maybe<ClientObject>;
   createIssue?: Maybe<Scalars['String']['output']>;
   createProduct?: Maybe<ProductObject>;
@@ -159,6 +176,7 @@ export type Mutation = {
   deleteUnit?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
   updateBrand?: Maybe<BrandObject>;
+  updateCategory?: Maybe<CategoryObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
   updateUnit?: Maybe<UnitObject>;
 };
@@ -166,6 +184,11 @@ export type Mutation = {
 
 export type MutationCreateBrandArgs = {
   input: CreateBrandInput;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  input: CreateCategoryInput;
 };
 
 
@@ -226,6 +249,11 @@ export type MutationDeleteUnitArgs = {
 
 export type MutationUpdateBrandArgs = {
   input: UpdateBrandInput;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  input: UpdateCategoryInput;
 };
 
 
@@ -314,11 +342,6 @@ export type QueryFindProjectIssuesArgs = {
 };
 
 
-export type QueryFindProjectsArgs = {
-  input?: InputMaybe<FindProjectsOptions>;
-};
-
-
 export type QueryFindStatusesArgs = {
   input: FindStatusesOptions;
 };
@@ -371,6 +394,15 @@ export type UpdateBrandInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCategoryInput = {
+  categoryId: Scalars['String']['input'];
+  code?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentCategoryId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateIssueInput = {

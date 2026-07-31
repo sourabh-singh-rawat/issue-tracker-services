@@ -25,6 +25,7 @@ import { IAdminService, AdminService } from "@/features/admin";
 import { ILoginService, LoginService } from "@/features/login";
 import { ILogoutService, LogoutService } from "@/features/logout";
 import { IMeService, MeService } from "@/features/me";
+import { ISessionService, SessionService } from "@/features/session";
 import { IOAuthService, OAuthService } from "@/features/oauth";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
 import {
@@ -94,5 +95,6 @@ container.bind<IRegistrationService>(TYPES.RegistrationService).to(RegistrationS
 container.bind<ILoginService>(TYPES.LoginService).to(LoginService);
 container.bind<ILogoutService>(TYPES.LogoutService).to(LogoutService);
 container.bind<IMeService>(TYPES.MeService).to(MeService);
+container.bind<ISessionService>(TYPES.SessionService).to(SessionService);
 container.bind<IOAuthService>(TYPES.OAuthService).to(OAuthService);
 container.bind<IAdminService>(TYPES.AdminService).to(AdminService);

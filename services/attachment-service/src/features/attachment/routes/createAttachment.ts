@@ -1,7 +1,8 @@
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
 import type { RouteOptions } from "fastify";
 import { StatusCodes } from "http-status-codes";
-import { requireAuth, setSession } from "@pine/security";
+import { authenticate } from "@pine/identity-client";
+import { requireAuth } from "@pine/security";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { AttachmentService } from "@/features/attachment/services";
@@ -35,10 +36,10 @@ export const createAttachment: RouteOptions<
       500: CreateAttachmentErrorSchema,
     },
   },
-  preHandler: [setSession, requireAuth],
+  preHandler: [authenticate, requireAuth],
   handler: async (request, reply) => {
     const { issueId } = request.params;
-    const userId = request.user.userId;
+    const userId = request.user!.id;
     const data = await request.file();
 
     if (!data) throw new Error("No data provided");

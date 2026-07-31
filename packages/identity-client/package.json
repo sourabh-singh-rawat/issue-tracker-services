@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/identity-client",
+  "version": "0.0.1",
+  "private": true,
+  "description": "HTTP client for the identity service (bearer/session authentication hooks)",
+  "license": "ISC",
+  "author": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.1.2",
+    "fastify": "^5.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "7.0.2"
+  }
+}

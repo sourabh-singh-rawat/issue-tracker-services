@@ -71,7 +71,7 @@ export type FindProjectQueryVariables = Exact<{
 
 export type FindProjectQuery = { findProject: { id: string | null, name: string | null } | null };
 
-export type FindProjectsQueryVariables = Exact<{ [key: string]: never }>;
+export type FindProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FindProjectsQuery = { findProjects: { rowCount: number | null, rows: Array<{ id: string | null, name: string | null }> | null } | null };

@@ -19,7 +19,7 @@ features/<domain>/graphql/
   index.ts              # side-effect imports ONLY (registration)
   inputs/CreateXInput.ts
   objects/XObject.ts
-  queries/find-*.ts
+  queries/findX.ts      # one file per field, camelCase
   mutations/createX.ts
 ```
 
@@ -40,7 +40,7 @@ builder.mutationFields((t) => ({
     resolve: async (_r, { input }, ctx) => {
       const svc = container.get<IXService>(TYPES.XService);
       return dataSource.transaction((manager) =>
-        svc.createX({ manager, userId: ctx.user!.userId, ...input }),
+        svc.createX({ manager, userId: ctx.user!.id, ...input }),
       );
     },
   }),
@@ -51,12 +51,13 @@ Queries: `builder.queryFields`. Filters: `Find*Input` / `Find*Options`. Auth use
 
 ## Naming
 
-| Thing              | Style                              |
-| ------------------ | ---------------------------------- |
-| Field              | camelCase `createIssue`            |
-| GraphQL type       | PascalCase `CreateIssueInput`      |
-| Input/object files | PascalCase                         |
-| Query modules      | often kebab `find-issues.query.ts` |
+| Thing              | Style                                    |
+| ------------------ | ---------------------------------------- |
+| Field              | camelCase `createIssue` / `findProjects` |
+| GraphQL type       | PascalCase `CreateIssueInput`            |
+| Input/object files | PascalCase                               |
+| Query modules      | camelCase, one field per file `findProjects.ts` |
+| Mutation modules   | camelCase, one field per file `createIssue.ts` |
 
 Match the feature you’re editing.
 

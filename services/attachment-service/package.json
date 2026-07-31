@@ -36,6 +36,7 @@
     "@pine/events": "workspace:^",
     "@pine/graphql-core": "workspace:^",
     "@pine/http-core": "workspace:^",
+    "@pine/identity-client": "workspace:^",
     "@pine/orm": "workspace:^",
     "@pine/security": "workspace:^",
     "@pothos/core": "^4.13.1",

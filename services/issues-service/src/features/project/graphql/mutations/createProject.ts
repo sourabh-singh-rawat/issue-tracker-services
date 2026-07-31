@@ -10,7 +10,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, { input }, ctx) => {
       const service = container.get<IProjectService>(TYPES.ProjectService);
-      const userId = ctx.user!.userId;
+      const userId = ctx.user!.id;
       return service.createProject({ userId, ...input });
     },
   }),

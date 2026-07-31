@@ -10,7 +10,7 @@ builder.mutationFields((t) => ({
       input: t.arg({ type: UpdateIssueInput, required: true }),
     },
     resolve: async (_root, { input }, ctx) => {
-      const userId = ctx.user!.userId;
+      const userId = ctx.user!.id;
       const service = container.get<IIssueService>(TYPES.IssueService);
       const { issueId } = input;
 

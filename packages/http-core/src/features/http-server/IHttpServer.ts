@@ -8,7 +8,7 @@ import type { ILogger } from "../logger";
 export interface AppContext {
   req: FastifyRequest;
   rep: FastifyReply;
-  user: { email: string; userId: string };
+  user?: { id: string; email?: string; authMethod: "access_token" | "session" };
 }
 
 export interface ServerConfigurationOptions {

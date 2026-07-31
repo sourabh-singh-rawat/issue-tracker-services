@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses, RejectConsentChallengeData, RejectConsentChallengeResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses, RejectConsentChallengeData, RejectConsentChallengeResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -52,6 +52,17 @@ export const logout = <ThrowOnError extends boolean = false>(options?: Options<L
 export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentUserData, ThrowOnError>): RequestResult<GetCurrentUserResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetCurrentUserResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/identity/me',
+    ...options
+});
+
+/**
+ * Resolve session identity
+ *
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const getSessionIdentity = <ThrowOnError extends boolean = false>(options?: Options<GetSessionIdentityData, ThrowOnError>): RequestResult<GetSessionIdentityResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetSessionIdentityResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/identity/session',
     ...options
 });
 

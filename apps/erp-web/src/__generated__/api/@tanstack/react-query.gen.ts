@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword, rejectConsentChallenge } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse, RejectConsentChallengeData, RejectConsentChallengeResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, loginWithEmailAndPassword, logout, type Options, registerWithEmailAndPassword, rejectConsentChallenge } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, LoginWithEmailAndPasswordData, LoginWithEmailAndPasswordResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse, RejectConsentChallengeData, RejectConsentChallengeResponse } from '../types.gen';
 
 /**
  * Login with email and password
@@ -118,6 +118,33 @@ export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => 
  * Return basic information about the current user by verifying the session cookie
  */
 export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
+
+export const getSessionIdentityQueryKey = (options?: Options<GetSessionIdentityData>) => createQueryKey('getSessionIdentity', options);
+
+/**
+ * Resolve session identity
+ *
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const getSessionIdentityOptions = (options?: Options<GetSessionIdentityData>) => queryOptions<GetSessionIdentityResponse, AxiosError<DefaultError>, GetSessionIdentityResponse, ReturnType<typeof getSessionIdentityQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getSessionIdentity({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getSessionIdentityQueryKey(options)
+});
+
+/**
+ * Resolve session identity
+ *
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const useGetSessionIdentityQuery = (options?: Options<GetSessionIdentityData>) => useQuery(getSessionIdentityOptions(options));
 
 export const authorizeQueryKey = (options: Options<AuthorizeData>) => createQueryKey('authorize', options);
 
