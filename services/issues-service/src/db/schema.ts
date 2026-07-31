@@ -29,7 +29,7 @@ export {
   type StatusOption,
   type NewStatusOption,
   StatusOptions,
-  type User,
-  type NewUser,
-  Users,
+  type Identity,
+  type NewIdentity,
+  Identities,
 } from "@/db/tables";

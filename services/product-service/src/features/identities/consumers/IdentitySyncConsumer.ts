@@ -32,15 +32,15 @@ export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerif
 
   async onMessage(message: JsMsg, payload: CloudEvent<IdentityEmailVerifiedData>) {
     const event = validateEvent(IdentityEmailVerifiedEvent, payload);
-    const { userId, email } = event.data!;
+    const { userId } = event.data!;
 
     await this.db.transaction(async (tx) => {
-      const exists = await this.identityRepository.existsById(userId);
+      const exists = await this.identityRepository.existsById(userId, { tx });
       if (exists) {
         return;
       }
 
-      await this.identityRepository.save({ id: userId, email }, { tx });
+      await this.identityRepository.save({ id: userId }, { tx });
     });
 
     message.ack();

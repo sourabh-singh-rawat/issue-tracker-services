@@ -36,7 +36,6 @@ describe("me route", () => {
 
     const getCurrentUser = vi.fn().mockResolvedValue({
       id: "identity-1",
-      email: "a@b.com",
     });
     get.mockReturnValue({ getCurrentUser });
 
@@ -53,13 +52,11 @@ describe("me route", () => {
     expect(response).toEqual({
       identity: {
         id: "identity-1",
-        email: "a@b.com",
       },
     });
     expect(send).toHaveBeenCalledWith({
       identity: {
         id: "identity-1",
-        email: "a@b.com",
       },
     });
   });

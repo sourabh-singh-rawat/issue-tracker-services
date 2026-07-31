@@ -1,11 +1,17 @@
+import { resolve } from "node:path";
 import { defineConfig } from "drizzle-kit";
-import { env } from "./src/bootstrap/env";
+
+try {
+  process.loadEnvFile(resolve(process.cwd(), "../../.env"));
+} catch {
+  // Env may already be provided by the shell or host.
+}
 
 export default defineConfig({
   schema: "./src/db/schema.ts",
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
-    url: env.PRODUCT_DATABASE_URL,
+    url: process.env.PRODUCT_DATABASE_URL!,
   },
 });

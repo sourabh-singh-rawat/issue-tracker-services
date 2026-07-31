@@ -1,9 +1,8 @@
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable } from "drizzle-orm/pg-core";
 import { auditColumns, idColumn } from "@/db/columns";
 
 export const Identities = pgTable("identities", {
   ...idColumn,
-  email: text("email").notNull().unique(),
   ...auditColumns,
 });
 

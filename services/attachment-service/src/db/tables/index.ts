@@ -3,4 +3,4 @@ export {
   type NewAttachment,
   Attachments,
 } from "@/db/tables/Attachments";
-export { type User, type NewUser, Users } from "@/db/tables/Users";
+export { type Identity, type NewIdentity, Identities } from "@/db/tables/Identities";

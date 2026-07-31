@@ -4,7 +4,7 @@ import "@/bootstrap/env";
 import { TYPES, broker, container, initializeDb } from "@/bootstrap";
 import { ProjectMemberInviteConsumer } from "@/features/project-email";
 import { UserRegisteredConsumer } from "@/features/user-email";
-import { IdentitySyncConsumer } from "@/features/user";
+import { IdentitySyncConsumer } from "@/features/identities";
 
 export { container, db } from "@/bootstrap";
 

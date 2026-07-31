@@ -1,5 +1,5 @@
 {
-  "id": "a9343f6c-f39c-4e5b-98f6-d6537640d1ea",
+  "id": "ff75ebee-0893-4886-a61f-c570191dd758",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -74,8 +74,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.identities": {
+      "name": "identities",
       "schema": "",
       "columns": {
         "id": {

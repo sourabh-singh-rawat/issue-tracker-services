@@ -4,7 +4,7 @@ export const TYPES = {
   Broker: Symbol.for("Broker"),
   Publisher: Symbol.for("Publisher"),
   Mailer: Symbol.for("Mailer"),
-  UserRepository: Symbol.for("IUserRepository"),
+  IdentityRepository: Symbol.for("IIdentityRepository"),
   EmailRepository: Symbol.for("IEmailRepository"),
   UserEmailService: Symbol.for("IUserEmailService"),
   ProjectEmailService: Symbol.for("IProjectEmailService"),

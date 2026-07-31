@@ -17,7 +17,11 @@ import {
   UserEmailService,
   UserRegisteredConsumer,
 } from "@/features/user-email";
-import { IUserRepository, UserRepository, IdentitySyncConsumer } from "@/features/user";
+import {
+  IIdentityRepository,
+  IdentityRepository,
+  IdentitySyncConsumer,
+} from "@/features/identities";
 import type { IMailer } from "@/integrations/email";
 
 export const container = new Container({ defaultScope: "Singleton" });
@@ -28,7 +32,7 @@ container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind<IPublisher>(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
 container.bind<IMailer>(TYPES.Mailer).toConstantValue(mailer);
 
-container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IEmailRepository>(TYPES.EmailRepository).to(EmailRepository);
 container.bind<IUserEmailService>(TYPES.UserEmailService).to(UserEmailService);
 container.bind<IProjectEmailService>(TYPES.ProjectEmailService).to(ProjectEmailService);

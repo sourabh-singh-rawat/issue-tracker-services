@@ -11,7 +11,11 @@ import {
   CoreAttachmentService,
   IAttachmentRepository,
 } from "@/features/attachment";
-import { IdentitySyncConsumer, IUserRepository, UserRepository } from "@/features/user";
+import {
+  IdentitySyncConsumer,
+  IIdentityRepository,
+  IdentityRepository,
+} from "@/features/identities";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -21,7 +25,7 @@ container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind(TYPES.RedisClient).toConstantValue(redisClient);
 container.bind(TYPES.ImageProcessingQueue).toConstantValue(imageProcessingQueue);
 
-container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container
   .bind<IAttachmentRepository>(TYPES.AttachmentRepository)
   .to(AttachmentRepository);

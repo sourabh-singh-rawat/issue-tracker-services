@@ -12,7 +12,7 @@ import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database } from "@/db";
-import type { IUserRepository } from "@/features/user/repositories";
+import type { IIdentityRepository } from "@/features/identities/repositories";
 
 @injectable()
 export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
@@ -25,8 +25,8 @@ export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerif
     private readonly broker: IBroker,
     @inject(TYPES.Database)
     private readonly db: Database,
-    @inject(TYPES.UserRepository)
-    private readonly userRepository: IUserRepository,
+    @inject(TYPES.IdentityRepository)
+    private readonly identityRepository: IIdentityRepository,
   ) {
     super(broker.client);
   }
@@ -36,10 +36,10 @@ export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerif
     const { userId } = event.data!;
 
     await this.db.transaction(async (tx) => {
-      const isAlreadyUser = await this.userRepository.existsById(userId, { tx });
-      if (isAlreadyUser) throw new UserAlreadyExists();
+      const exists = await this.identityRepository.existsById(userId, { tx });
+      if (exists) throw new UserAlreadyExists();
 
-      await this.userRepository.save({ id: userId }, { tx });
+      await this.identityRepository.save({ id: userId }, { tx });
     });
 
     message.ack();

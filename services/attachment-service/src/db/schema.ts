@@ -3,7 +3,7 @@ export {
   type Attachment,
   type NewAttachment,
   Attachments,
-  type User,
-  type NewUser,
-  Users,
+  type Identity,
+  type NewIdentity,
+  Identities,
 } from "@/db/tables";

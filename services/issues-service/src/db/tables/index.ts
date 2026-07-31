@@ -27,4 +27,4 @@ export {
 } from "@/db/tables/ProjectIssueActivities";
 export { type Project, type NewProject, Projects } from "@/db/tables/Projects";
 export { type StatusOption, type NewStatusOption, StatusOptions } from "@/db/tables/StatusOptions";
-export { type User, type NewUser, Users } from "@/db/tables/Users";
+export { type Identity, type NewIdentity, Identities } from "@/db/tables/Identities";

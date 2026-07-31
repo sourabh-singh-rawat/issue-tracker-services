@@ -6,6 +6,6 @@ export const TYPES = {
   ImageProcessingQueue: Symbol.for("ImageProcessingQueue"),
   AttachmentService: Symbol.for("AttachmentService"),
   AttachmentRepository: Symbol.for("IAttachmentRepository"),
-  UserRepository: Symbol.for("IUserRepository"),
+  IdentityRepository: Symbol.for("IIdentityRepository"),
   IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
 } as const;

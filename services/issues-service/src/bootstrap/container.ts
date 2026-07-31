@@ -23,12 +23,10 @@ import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigne
 import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
 import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
 import {
-  IUserRepository,
-  IUserService,
+  IIdentityRepository,
+  IdentityRepository,
   IdentitySyncConsumer,
-  UserRepository,
-  UserService,
-} from "@/features/user";
+} from "@/features/identities";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -51,8 +49,7 @@ container
   .bind<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker)
   .toConstantValue(new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)));
 
-container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
-container.bind<IUserService>(TYPES.UserService).to(UserService);
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IIssueRepository>(TYPES.IssueRepository).to(IssueRepository);
 container.bind<IIssueAssigneeRepository>(TYPES.IssueAssigneeRepository).to(IssueAssigneeRepository);
 container.bind<IIssueService>(TYPES.IssueService).to(IssueService);

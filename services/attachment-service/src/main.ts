@@ -15,7 +15,7 @@ import sharp from "sharp";
 import { TYPES, broker, container, db, initializeDb, logger, redisClient } from "@/bootstrap";
 import { env, listenPortFromUrl } from "@/bootstrap/env";
 import type { IAttachmentRepository } from "./features/attachment";
-import { IdentitySyncConsumer } from "./features/user";
+import { IdentitySyncConsumer } from "./features/identities";
 import { createContext } from "./graphql";
 import { schema } from "./graphql/schema";
 import { routes } from "./routes";

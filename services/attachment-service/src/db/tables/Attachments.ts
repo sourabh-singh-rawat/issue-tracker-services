@@ -1,6 +1,6 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { auditColumns, idColumn } from "@/db/columns";
-import { Users } from "@/db/tables/Users";
+import { Identities } from "@/db/tables/Identities";
 
 export const Attachments = pgTable("attachments", {
   ...idColumn,
@@ -12,7 +12,7 @@ export const Attachments = pgTable("attachments", {
   bucket: text("bucket").notNull(),
   ownerId: uuid("owner_id")
     .notNull()
-    .references(() => Users.id),
+    .references(() => Identities.id),
   issueId: uuid("issue_id").notNull(),
   ...auditColumns,
 });

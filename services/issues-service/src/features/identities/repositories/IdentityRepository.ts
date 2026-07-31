@@ -1,4 +1,4 @@
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { type Database, type Identity, Identities } from "@/db";
@@ -35,40 +35,6 @@ export class IdentityRepository implements IIdentityRepository {
     return created;
   }
 
-  async update(
-    id: string,
-    entity: Partial<Pick<Identity, "deletedAt">>,
-    options?: IdentityRepositoryOptions,
-  ): Promise<Identity> {
-    const client = this.client(options);
-    const now = new Date();
-
-    const [updated] = await client
-      .update(Identities)
-      .set({
-        ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
-        updatedAt: now,
-        version: sql`${Identities.version} + 1`,
-      })
-      .where(and(eq(Identities.id, id), isNull(Identities.deletedAt)))
-      .returning();
-
-    if (!updated) {
-      throw new Error(`Identity not found for update: ${id}`);
-    }
-
-    return updated;
-  }
-
-  async existsById(id: string, options?: IdentityRepositoryOptions): Promise<boolean> {
-    const identity = await this.findById(id, options);
-    return identity != null;
-  }
-
-  async softDelete(id: string, options?: IdentityRepositoryOptions) {
-    await this.update(id, { deletedAt: new Date() }, options);
-  }
-
   async findById(id: string, options?: IdentityRepositoryOptions): Promise<Identity | null> {
     const client = this.client(options);
     const [row] = await client
@@ -80,11 +46,8 @@ export class IdentityRepository implements IIdentityRepository {
     return row ?? null;
   }
 
-  async findAll() {
-    return this.db
-      .select()
-      .from(Identities)
-      .where(isNull(Identities.deletedAt))
-      .orderBy(desc(Identities.createdAt));
+  async existsById(id: string, options?: IdentityRepositoryOptions): Promise<boolean> {
+    const identity = await this.findById(id, options);
+    return identity != null;
   }
 }

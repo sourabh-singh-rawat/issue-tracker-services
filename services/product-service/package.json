@@ -24,10 +24,10 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts",
-    "db:generate": "tsx --env-file=../../.env ./node_modules/drizzle-kit/bin.cjs generate",
-    "db:migrate": "tsx --env-file=../../.env ./node_modules/drizzle-kit/bin.cjs migrate",
-    "db:push": "tsx --env-file=../../.env ./node_modules/drizzle-kit/bin.cjs push",
-    "db:studio": "tsx --env-file=../../.env ./node_modules/drizzle-kit/bin.cjs studio"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",

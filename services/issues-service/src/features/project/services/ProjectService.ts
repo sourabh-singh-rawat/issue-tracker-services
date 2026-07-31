@@ -6,7 +6,7 @@ import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Project } from "@/db";
 import type { IProjectRepository } from "@/features/project/repositories";
 import type { IStatusService } from "@/features/status/services/IStatusService";
-import type { IUserRepository } from "@/features/user/repositories";
+import type { IIdentityRepository } from "@/features/identities/repositories";
 import type {
   CreateProjectOptions,
   FindProjectOptions,
@@ -22,8 +22,8 @@ export class ProjectService implements IProjectService {
     private readonly db: Database,
     @inject(TYPES.ProjectRepository)
     private readonly projectRepository: IProjectRepository,
-    @inject(TYPES.UserRepository)
-    private readonly userRepository: IUserRepository,
+    @inject(TYPES.IdentityRepository)
+    private readonly identityRepository: IIdentityRepository,
     @inject(TYPES.StatusService)
     private readonly statusService: IStatusService,
     @inject(TYPES.OutboxService)
@@ -45,8 +45,8 @@ export class ProjectService implements IProjectService {
     const { name, userId } = options;
 
     return this.db.transaction(async (tx) => {
-      const user = await this.userRepository.findById(userId, { tx });
-      if (!user) throw new UserNotFoundError();
+      const identity = await this.identityRepository.findById(userId, { tx });
+      if (!identity) throw new UserNotFoundError();
 
       const savedProject = await this.projectRepository.save(
         {
