@@ -69,14 +69,12 @@ export type FindProjectQueryVariables = Exact<{
 }>;
 
 
-export type FindProjectQuery = { findProject: { id: string | null, name: string | null, workspaceId: string | null, workspace: { id: string | null, name: string | null } | null } | null };
+export type FindProjectQuery = { findProject: { id: string | null, name: string | null } | null };
 
-export type FindProjectsQueryVariables = Exact<{
-  input?: Types.FindProjectsOptions | null | undefined;
-}>;
+export type FindProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindProjectsQuery = { findProjects: { rowCount: number | null, rows: Array<{ id: string | null, name: string | null, workspaceId: string | null, workspace: { id: string | null, name: string | null } | null }> | null } | null };
+export type FindProjectsQuery = { findProjects: { rowCount: number | null, rows: Array<{ id: string | null, name: string | null }> | null } | null };
 
 export type FindStatusesQueryVariables = Exact<{
   input: Types.FindStatusesOptions;
@@ -84,23 +82,6 @@ export type FindStatusesQueryVariables = Exact<{
 
 
 export type FindStatusesQuery = { findStatuses: Array<{ id: string | null, name: string | null }> | null };
-
-export type CreateWorkspaceMutationVariables = Exact<{
-  input: Types.CreateWorkspaceInput;
-}>;
-
-
-export type CreateWorkspaceMutation = { createWorkspace: string | null };
-
-export type FindDefaultWorkspaceQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FindDefaultWorkspaceQuery = { findDefaultWorkspace: { createdById: string | null, description: string | null, id: string | null, name: string | null, status: string | null } | null };
-
-export type FindWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FindWorkspacesQuery = { findWorkspaces: Array<{ description: string | null, id: string | null, name: string | null, createdById: string | null, status: string | null }> | null };
 
 
 export class TypedDocumentString<TResult, TVariables>
@@ -345,11 +326,6 @@ export const FindProjectDocument = new TypedDocumentString(`
   findProject(id: $findProjectId) {
     id
     name
-    workspaceId
-    workspace {
-      id
-      name
-    }
   }
 }
     `);
@@ -375,16 +351,11 @@ useFindProjectQuery.document = FindProjectDocument;
 useFindProjectQuery.getKey = (variables: FindProjectQueryVariables) => ['FindProject', variables];
 
 export const FindProjectsDocument = new TypedDocumentString(`
-    query FindProjects($input: FindProjectsOptions) {
-  findProjects(input: $input) {
+    query FindProjects {
+  findProjects {
     rows {
       id
       name
-      workspaceId
-      workspace {
-        id
-        name
-      }
     }
     rowCount
   }
@@ -439,88 +410,3 @@ export const useFindStatusesQuery = <
 useFindStatusesQuery.document = FindStatusesDocument;
 
 useFindStatusesQuery.getKey = (variables: FindStatusesQueryVariables) => ['FindStatuses', variables];
-
-export const CreateWorkspaceDocument = new TypedDocumentString(`
-    mutation CreateWorkspace($input: CreateWorkspaceInput!) {
-  createWorkspace(input: $input)
-}
-    `);
-
-export const useCreateWorkspaceMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<CreateWorkspaceMutation, TError, CreateWorkspaceMutationVariables, TContext>) => {
-    
-    return useMutation<CreateWorkspaceMutation, TError, CreateWorkspaceMutationVariables, TContext>(
-      {
-    mutationKey: ['CreateWorkspace'],
-    mutationFn: (variables?: CreateWorkspaceMutationVariables) => graphQLFetcher<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>(CreateWorkspaceDocument, variables)(),
-    ...options
-  }
-    )};
-
-useCreateWorkspaceMutation.getKey = () => ['CreateWorkspace'];
-
-export const FindDefaultWorkspaceDocument = new TypedDocumentString(`
-    query FindDefaultWorkspace {
-  findDefaultWorkspace {
-    createdById
-    description
-    id
-    name
-    status
-  }
-}
-    `);
-
-export const useFindDefaultWorkspaceQuery = <
-      TData = FindDefaultWorkspaceQuery,
-      TError = unknown
-    >(
-      variables?: FindDefaultWorkspaceQueryVariables,
-      options?: Omit<UseQueryOptions<FindDefaultWorkspaceQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindDefaultWorkspaceQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindDefaultWorkspaceQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['FindDefaultWorkspace'] : ['FindDefaultWorkspace', variables],
-    queryFn: graphQLFetcher<FindDefaultWorkspaceQuery, FindDefaultWorkspaceQueryVariables>(FindDefaultWorkspaceDocument, variables),
-    ...options
-  }
-    )};
-
-useFindDefaultWorkspaceQuery.document = FindDefaultWorkspaceDocument;
-
-useFindDefaultWorkspaceQuery.getKey = (variables?: FindDefaultWorkspaceQueryVariables) => variables === undefined ? ['FindDefaultWorkspace'] : ['FindDefaultWorkspace', variables];
-
-export const FindWorkspacesDocument = new TypedDocumentString(`
-    query FindWorkspaces {
-  findWorkspaces {
-    description
-    id
-    name
-    createdById
-    status
-  }
-}
-    `);
-
-export const useFindWorkspacesQuery = <
-      TData = FindWorkspacesQuery,
-      TError = unknown
-    >(
-      variables?: FindWorkspacesQueryVariables,
-      options?: Omit<UseQueryOptions<FindWorkspacesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindWorkspacesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindWorkspacesQuery, TError, TData>(
-      {
-    queryKey: variables === undefined ? ['FindWorkspaces'] : ['FindWorkspaces', variables],
-    queryFn: graphQLFetcher<FindWorkspacesQuery, FindWorkspacesQueryVariables>(FindWorkspacesDocument, variables),
-    ...options
-  }
-    )};
-
-useFindWorkspacesQuery.document = FindWorkspacesDocument;
-
-useFindWorkspacesQuery.getKey = (variables?: FindWorkspacesQueryVariables) => variables === undefined ? ['FindWorkspaces'] : ['FindWorkspaces', variables];

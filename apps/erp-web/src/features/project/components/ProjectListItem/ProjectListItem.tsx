@@ -1,15 +1,14 @@
-import { FolderOutlined } from "@mui/icons-material";
+import FolderOutlined from "@mui/icons-material/FolderOutlined";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useNavigate } from "@tanstack/react-router";
 import { useProjectStore } from "../../store";
 
 interface ProjectListItemProps {
   projectId: string;
-  workspaceId: string;
   name: string;
 }
 
-export const ProjectListItem = ({ projectId, workspaceId, name }: ProjectListItemProps) => {
+export const ProjectListItem = ({ projectId, name }: ProjectListItemProps) => {
   const navigate = useNavigate();
   const setCurrentProject = useProjectStore((s) => s.setCurrentProject);
 
@@ -23,8 +22,8 @@ export const ProjectListItem = ({ projectId, workspaceId, name }: ProjectListIte
         } as any);
         localStorage.setItem("currentProject", JSON.stringify({ id: projectId, name }));
         navigate({
-          to: "/$workspaceId/v/l/$viewId",
-          params: { workspaceId, viewId: projectId },
+          to: "/v/l/$viewId",
+          params: { viewId: projectId },
         });
       }}
     >

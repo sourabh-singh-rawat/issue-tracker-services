@@ -25,9 +25,11 @@ export const TYPES = {
   HydraClient: Symbol.for("HydraClient"),
   OAuthProvider: Symbol.for("IOAuthProvider"),
   RegistrationService: Symbol.for("IRegistrationService"),
-  LoginService: Symbol.for("ILoginService"),
+  SignInService: Symbol.for("ISignInService"),
   LogoutService: Symbol.for("ILogoutService"),
   MeService: Symbol.for("IMeService"),
+  SessionService: Symbol.for("ISessionService"),
   OAuthService: Symbol.for("IOAuthService"),
   AdminService: Symbol.for("IAdminService"),
+  VerificationService: Symbol.for("IVerificationService"),
 } as const;

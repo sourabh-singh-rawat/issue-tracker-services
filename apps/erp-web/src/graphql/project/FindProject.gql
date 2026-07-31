@@ -2,10 +2,5 @@ query FindProject($findProjectId: String!) {
   findProject(id: $findProjectId) {
     id
     name
-    workspaceId
-    workspace {
-      id
-      name
-    }
   }
 }

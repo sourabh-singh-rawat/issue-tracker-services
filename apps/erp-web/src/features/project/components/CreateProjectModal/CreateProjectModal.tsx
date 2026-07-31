@@ -1,4 +1,4 @@
-import { Add } from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
 import { IconButton, useTheme } from "@mui/material";
 import React from "react";
 import Modal from "../../../../shared/components/Modal";
@@ -7,13 +7,11 @@ import ModalHeader from "../../../../shared/components/ModalHeader";
 import { ProjectForm } from "../ProjectForm";
 
 interface CreateProjectModalProps {
-  workspaceId: string;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateProjectModal = ({
-  workspaceId,
   open: controlledOpen,
   setOpen: controlledSetOpen,
 }: CreateProjectModalProps) => {
@@ -51,7 +49,7 @@ export const CreateProjectModal = ({
           handleClose={handleClose}
         />
         <ModalBody>
-          <ProjectForm workspaceId={workspaceId} />
+          <ProjectForm />
         </ModalBody>
       </Modal>
     </>

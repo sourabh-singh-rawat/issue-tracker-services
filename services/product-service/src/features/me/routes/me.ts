@@ -49,7 +49,6 @@ export const me: RouteOptions<Server, IncomingMessage, ServerResponse, { Reply: 
     const response: MeResponse = {
       identity: {
         id: identity.id,
-        email: identity.email,
       },
     };
 

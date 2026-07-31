@@ -32,3 +32,20 @@ Schema/type changes without touching `drizzle/` artifacts are fine. Shipping inc
 - Do not search or edit `infra/data/` or `node_modules/` for product work.
 - Use current packages only: `@pine/http-core`, `@pine/events` — not `server-core` / `event-bus`.
 - Load the matching skill under `tools/ai/` for orientation, features, events, GraphQL, web, release, docker, k8s, or observability.
+
+## Generated React Query hooks (web apps)
+
+**Always use the generated hooks.** Never compose `useQuery` / `useMutation` with `*Options` helpers from codegen.
+
+| Do | Don't |
+| --- | --- |
+| `useVerifyEmailQuery({ query: { … } })` | `useQuery({ ...verifyEmailOptions({ … }) })` |
+| `useGetConsentChallengeQuery({ query: { … } })` | `useQuery({ ...getConsentChallengeOptions({ … }) })` |
+| `useAcceptConsentChallengeMutation()` | `useMutation(acceptConsentChallengeMutation())` |
+| GraphQL: `useFindProjectQuery(vars, { enabled })` | Hand-rolled `useQuery` against the GQL client |
+
+- REST/OpenAPI: import `useXQuery` / `useXMutation` from `@generated/api/@tanstack/react-query.gen`.
+- GraphQL: import `useXQuery` / `useXMutation` from `@generated/gql`.
+- `*Options` / `*Mutation` factories are for non-hook use only (prefetch, queryClient, tests) — not for components.
+- Do not re-wrap generated options with TanStack's `useQuery` just to pass `enabled` or similar; use the generated hook API (and GraphQL's second-arg options object when available).
+- **Never destructure** query/mutation hook results. Assign the return value and read properties (`const userQuery = useGetCurrentUserQuery(); userQuery.data`). Enforced by oxlint `pine/no-destructure-query-mutation`.

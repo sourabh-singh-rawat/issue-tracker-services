@@ -71,20 +71,20 @@ Set the durable name **directly** on the consumer class (`readonly consumer = "�
 **Convention:** `<service>-<purpose>` (short service token, not the full package name)
 
 ```ts
-// features/identities/consumers/UserSyncConsumer.ts
-readonly consumer = "product-user-sync";
+// features/identities/consumers/IdentitySyncConsumer.ts
+readonly consumer = "product-identity-sync";
 ```
 
-| Service token  | Example durable name                 |
-| -------------- | ------------------------------------ |
-| `product`      | `product-user-sync`                  |
-| `inventory`    | `inventory-brand-sync`               |
-| `issues`       | `issues-user-sync`                   |
-| `attachment`   | `attachment-user-sync`               |
-| `notification` | `notification-user-registered`       |
+| Service token  | Example durable name           |
+| -------------- | ------------------------------ |
+| `product`      | `product-identity-sync`        |
+| `inventory`    | `inventory-brand-sync`         |
+| `issues`       | `issues-identity-sync`         |
+| `attachment`   | `attachment-identity-sync`     |
+| `notification` | `notification-user-registered` |
 
 - **service** = consuming service (who owns the durable cursor)
-- **purpose** = projection or side-effect intent (`user-sync`, `brand-sync`, `workspace-invite`, …), **not** one durable per event verb
+- **purpose** = projection or side-effect intent (`identity-sync`, `brand-sync`, `workspace-invite`, …), **not** one durable per event verb
 - Group related events on one durable when they sync the same entity (e.g. brand created + updated → `inventory-brand-sync` with `filter_subjects`)
 - One durable name per consumer class; never share across services
 

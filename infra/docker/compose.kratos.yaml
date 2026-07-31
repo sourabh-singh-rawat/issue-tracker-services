@@ -30,6 +30,9 @@ services:
       - LOG_LEVEL=debug
       - SECRETS_COOKIE=${KRATOS_SECRETS_COOKIE}
       - SECRETS_CIPHER=${KRATOS_SECRETS_CIPHER}
+      - COURIER_SMTP_CONNECTION_URI=${COURIER_SMTP_CONNECTION_URI}
+      - COURIER_SMTP_FROM_ADDRESS=${BREVO_EMAIL}
+      - COURIER_SMTP_FROM_NAME=${COURIER_SMTP_FROM_NAME:-Pine}
     command: serve -c /etc/config/kratos/kratos.yaml --dev --watch-courier
     ports:
       - "4433:4433"

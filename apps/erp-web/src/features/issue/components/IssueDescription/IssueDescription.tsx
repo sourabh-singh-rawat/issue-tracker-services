@@ -23,14 +23,14 @@ export const IssueDescription = ({ issueId, initialValue = "" }: IssueDescriptio
   const form = useForm();
   const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const { mutateAsync: UpdateIssue, isPending: isLoading } = useUpdateIssueMutation();
+  const updateIssueMutation = useUpdateIssueMutation();
 
   const handleClick = () => {
     setIsFocused(true);
   };
 
   const handleCancel = () => {
-    if (isLoading) return;
+    if (updateIssueMutation.isPending) return;
 
     setIsFocused(false);
     form.setValue("description", defaultValue);
@@ -39,9 +39,9 @@ export const IssueDescription = ({ issueId, initialValue = "" }: IssueDescriptio
   const onSubmit: SubmitHandler<Pick<UpdateIssueInput, "description">> = async ({
     description,
   }) => {
-    if (isLoading) return;
+    if (updateIssueMutation.isPending) return;
 
-    await UpdateIssue({ input: { issueId, description } });
+    await updateIssueMutation.mutateAsync({ input: { issueId, description } });
     snackbar.success("Description updated successfully");
     if (description) {
       setDefaultValue(description);

@@ -4,7 +4,7 @@ export const TYPES = {
   Broker: Symbol.for("Broker"),
   Publisher: Symbol.for("Publisher"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
-  UserSyncConsumer: Symbol.for("UserSyncConsumer"),
+  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
   MeService: Symbol.for("IMeService"),
   BrandRepository: Symbol.for("IBrandRepository"),
   BrandSyncConsumer: Symbol.for("BrandSyncConsumer"),

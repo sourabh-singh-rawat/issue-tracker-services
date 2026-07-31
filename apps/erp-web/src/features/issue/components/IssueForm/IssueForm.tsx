@@ -15,7 +15,7 @@ interface IssueFormProps {
 
 export const IssueForm = ({ projectId, parentIssueId }: IssueFormProps) => {
   const messageBar = useSnackbar();
-  const { mutateAsync: createIssue } = useCreateIssueMutation();
+  const createIssueMutation = useCreateIssueMutation();
 
   const form = useForm<CreateIssueInput>({
     defaultValues: {
@@ -44,7 +44,7 @@ export const IssueForm = ({ projectId, parentIssueId }: IssueFormProps) => {
     component,
   }) => {
     try {
-      await createIssue({
+      await createIssueMutation.mutateAsync({
         input: {
           parentIssueId: formParentIssueId,
           projectId: formProjectId,

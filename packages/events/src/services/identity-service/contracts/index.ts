@@ -1,2 +1,2 @@
 export { UserRegisteredEvent } from "./UserRegisteredEvent";
-export { UserEmailVerifiedEvent } from "./UserEmailVerifiedEvent";
+export { IdentityEmailVerifiedEvent } from "./IdentityEmailVerifiedEvent";

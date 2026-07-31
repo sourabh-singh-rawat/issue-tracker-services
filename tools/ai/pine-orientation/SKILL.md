@@ -39,7 +39,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 
 ## Apps / services / packages
 
-**Apps:** `erp-web` (primary product UI — issues + inventory), `identity-web` (login/signup/consent)
+**Apps:** `erp-web` (primary product UI — issues + inventory), `identity-web` (sign-in/registration/consent)
 
 **Services:** `identity-service`, `issues-service`, `inventory-service`, `product-service`, `attachment-service`, `notification-service`, `api-gateway`
 
@@ -50,7 +50,6 @@ Extract to `packages/*` only when **two** services need the same logic.
 | `@pine/events`        | NATS, CloudEvents, `publisher.send(event)`, consumers            |
 | `@pine/http-core`     | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
 | `@pine/graphql-core`  | Pothos `builder`, scalars                                        |
-| `@pine/orm`           | TypeORM helpers, `Audit`                                         |
 | `@pine/security`      | JWT, hashing, auth helpers                                       |
 | `@pine/observability` | OTEL bootstrap                                                   |
 
@@ -60,6 +59,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 | ------------------- | --------------------------------------------- |
 | `@pine/server-core` | `@pine/http-core`                             |
 | `@pine/event-bus`   | `@pine/events`                                |
+| `@pine/orm`         | Drizzle (`src/db/`, service repositories)     |
 | `@pine/comm`        | `notification-service/src/integrations/email` |
 | `@pine/forms`       | app `shared/ui` / feature components          |
 

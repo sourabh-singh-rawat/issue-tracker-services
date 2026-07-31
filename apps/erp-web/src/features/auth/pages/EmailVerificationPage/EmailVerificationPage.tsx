@@ -2,7 +2,7 @@ import MuiGrid from "@mui/material/Grid";
 import { useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useSnackbar } from "@shared";
-import { getIdentityWebLoginUrl } from "@shared/utils/identity-web";
+import { getIdentityWebSignInUrl } from "@shared/utils/identity-web";
 
 /**
  * Email verification landing page.
@@ -22,13 +22,13 @@ export function EmailVerificationPage() {
     }
 
     // Token-based email verification is currently completed server-side
-    // (identity / Kratos). Surface a friendly success and send users to identity-web login.
+    // (identity / Kratos). Surface a friendly success and send users to identity-web sign-in.
     messageBar.success("Email verification received");
     setPageMessage("Email verified. You will be redirected shortly");
 
     const timeout = setTimeout(() => {
       const redirectUrl =
-        import.meta.env.VITE_EMAIL_VERIFICATION_REDIRECT_URL || getIdentityWebLoginUrl();
+        import.meta.env.VITE_EMAIL_VERIFICATION_REDIRECT_URL || getIdentityWebSignInUrl();
       window.location.assign(redirectUrl);
     }, 2500);
 

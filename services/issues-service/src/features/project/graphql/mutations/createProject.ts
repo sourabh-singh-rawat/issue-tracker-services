@@ -1,5 +1,5 @@
 import { builder } from "@pine/graphql-core";
-import { TYPES, container, dataSource } from "@/bootstrap";
+import { TYPES, container } from "@/bootstrap";
 import { IProjectService } from "@/features/project";
 import { CreateProjectInput } from "../inputs/CreateProjectInput";
 
@@ -10,11 +10,8 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, { input }, ctx) => {
       const service = container.get<IProjectService>(TYPES.ProjectService);
-      const userId = ctx.user!.userId;
-
-      return await dataSource.transaction(async (manager) => {
-        return await service.createProject({ manager, userId, ...input });
-      });
+      const userId = ctx.user!.id;
+      return service.createProject({ userId, ...input });
     },
   }),
 }));

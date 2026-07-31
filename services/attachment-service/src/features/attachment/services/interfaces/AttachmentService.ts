@@ -1,6 +1,5 @@
 import { PaginatedOutput } from "@pine/common";
-import { ServiceOptions } from "@pine/orm";
-import { Attachment } from "../../entities";
+import type { Attachment, DbClient } from "@/db";
 
 export interface CreateAttachmentOptions {
   issueId: string;
@@ -10,8 +9,9 @@ export interface CreateAttachmentOptions {
   mimetype: string;
 }
 
-export interface DeleteAttachmentOptions extends ServiceOptions {
+export interface DeleteAttachmentOptions {
   id: string;
+  tx?: DbClient;
 }
 
 export interface AttachmentService {

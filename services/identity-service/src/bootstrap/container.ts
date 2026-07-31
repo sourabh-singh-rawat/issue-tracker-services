@@ -22,11 +22,13 @@ import { kratosClient } from "@/bootstrap/kratos-client";
 import { logger } from "@/bootstrap/logger";
 import { TYPES } from "@/bootstrap/container-types";
 import { IAdminService, AdminService } from "@/features/admin";
-import { ILoginService, LoginService } from "@/features/login";
+import { ISignInService, SignInService } from "@/features/signin";
 import { ILogoutService, LogoutService } from "@/features/logout";
 import { IMeService, MeService } from "@/features/me";
+import { ISessionService, SessionService } from "@/features/session";
 import { IOAuthService, OAuthService } from "@/features/oauth";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
+import { IVerificationService, VerificationService } from "@/features/verification";
 import {
   ClientGrantTypeRepository,
   ClientRedirectUriRepository,
@@ -91,8 +93,10 @@ container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IIdentityProvider>(TYPES.IdentityProvider).to(KratosIdentityProvider);
 container.bind<IOAuthProvider>(TYPES.OAuthProvider).to(HydraOAuthProvider);
 container.bind<IRegistrationService>(TYPES.RegistrationService).to(RegistrationService);
-container.bind<ILoginService>(TYPES.LoginService).to(LoginService);
+container.bind<ISignInService>(TYPES.SignInService).to(SignInService);
 container.bind<ILogoutService>(TYPES.LogoutService).to(LogoutService);
 container.bind<IMeService>(TYPES.MeService).to(MeService);
+container.bind<ISessionService>(TYPES.SessionService).to(SessionService);
 container.bind<IOAuthService>(TYPES.OAuthService).to(OAuthService);
 container.bind<IAdminService>(TYPES.AdminService).to(AdminService);
+container.bind<IVerificationService>(TYPES.VerificationService).to(VerificationService);

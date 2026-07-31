@@ -84,6 +84,16 @@ const main = async () => {
       },
       servers: [{ url: env.IDENTITY_SERVICE_URL }],
       tags: [{ name: "auth", description: "Authentication related end-points" }],
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+            description: "OAuth provider access token (Authorization: Bearer <token>)",
+          },
+        },
+      },
     },
   });
 

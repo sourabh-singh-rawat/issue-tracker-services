@@ -1,16 +1,18 @@
 #!/bin/sh
 set -e
 
-# Writable locations inside the container (do not mount over /pgadmin4;
-# that path owns the pgAdmin application in dpage/pgadmin4).
 CONFIG_DIR="${PGADMIN_CONFIG_DIR:-/var/lib/pgadmin}"
 PGPASS_FILE="${PGPASS_FILE:-${CONFIG_DIR}/pgpass}"
 SERVERS_JSON="${PGADMIN_SERVER_JSON_FILE:-${CONFIG_DIR}/servers.json}"
+PGADMIN_UID="${PGADMIN_UID:-5050}"
+PGADMIN_GID="${PGADMIN_GID:-0}"
 
 mkdir -p "$CONFIG_DIR"
 
-# Generate pgpass for pre-configured servers.
-# Ory: one host (ory-postgres), admin can open both kratos and hydra DBs.
+if [ "$(id -u)" = "0" ]; then
+  chown "$PGADMIN_UID:$PGADMIN_GID" "$CONFIG_DIR" 2>/dev/null || true
+fi
+
 cat > "$PGPASS_FILE" <<EOF
 identity-postgres:5432:*:identity:${POSTGRES_IDENTITY_PASSWORD}
 issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
@@ -24,8 +26,6 @@ EOF
 
 chmod 600 "$PGPASS_FILE"
 
-# Shared Ory server fragment: one Postgres instance, databases kratos + hydra.
-# Used identically in multi-db and single-db modes.
 ory_server_json() {
   id="$1"
   cat <<EOF
@@ -44,7 +44,6 @@ ory_server_json() {
 EOF
 }
 
-# Generate servers.json
 if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
   cat > "$SERVERS_JSON" <<EOF
 {
@@ -114,7 +113,6 @@ $(ory_server_json 7)
 }
 EOF
 else
-  # Default / single-db: app DBs on service "postgres"; Ory on shared ory-postgres
   cat > "$SERVERS_JSON" <<EOF
 {
   "Servers": {
@@ -137,5 +135,9 @@ fi
 export PGADMIN_SERVER_JSON_FILE="$SERVERS_JSON"
 export PGPASS_FILE="$PGPASS_FILE"
 
-# Hand off to the image's original entrypoint
+if [ "$(id -u)" = "0" ]; then
+  chown -R "$PGADMIN_UID:$PGADMIN_GID" "$CONFIG_DIR" 2>/dev/null || true
+  chmod 600 "$PGPASS_FILE"
+fi
+
 exec /entrypoint.sh

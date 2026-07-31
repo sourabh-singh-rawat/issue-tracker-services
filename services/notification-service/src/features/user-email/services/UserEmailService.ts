@@ -1,18 +1,18 @@
+import { EMAIL_STATUS, EMAIL_TYPE } from "@pine/common";
 import { createCloudEvent, type IPublisher, UserConfirmationEmailSentEvent } from "@pine/events";
-import { Typeorm } from "@pine/orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { Email } from "@/entities";
+import type { IEmailRepository } from "@/features/user-email/repositories";
 import type { EmailMessage, IMailer } from "@/integrations/email";
-import { IUserEmailService, SendEmailOptions } from "./IUserEmailService";
+import type { IUserEmailService, SendEmailOptions } from "./IUserEmailService";
 
 @injectable()
 export class UserEmailService implements IUserEmailService {
   private readonly senderEmail = "no-reply@issue-tracker.com";
 
   constructor(
-    @inject(TYPES.Orm)
-    private readonly orm: Typeorm,
+    @inject(TYPES.EmailRepository)
+    private readonly emailRepository: IEmailRepository,
     @inject(TYPES.Publisher)
     private readonly publisher: IPublisher,
     @inject(TYPES.Mailer)
@@ -38,19 +38,27 @@ export class UserEmailService implements IUserEmailService {
   }
 
   async sendEmail(payload: SendEmailOptions) {
-    const { email, userId, manager } = payload;
-    const EmailRepo = manager.getRepository(Email);
+    const { email, userId, tx } = payload;
     const html = this.buildRegistrationHtml(email);
     const message: EmailMessage = { title: "Please verify your email", html };
 
-    const savedEmail = await EmailRepo.save({
-      email,
-      html,
-      type: "User Registration",
-    });
+    const savedEmail = await this.emailRepository.save(
+      {
+        email,
+        html,
+        type: EMAIL_TYPE.USER_REGISTRATION,
+        status: EMAIL_STATUS.PENDING,
+      },
+      { tx },
+    );
+
     await this.mailer.send(this.senderEmail, email, message);
-    savedEmail.status = "Sent";
-    await EmailRepo.save(savedEmail);
+
+    await this.emailRepository.update(
+      savedEmail.id,
+      { status: EMAIL_STATUS.SENT },
+      { tx },
+    );
 
     const event = createCloudEvent({
       type: UserConfirmationEmailSentEvent.type,

@@ -1,14 +1,14 @@
 export const TYPES = {
-  DataSource: Symbol.for("DataSource"),
+  Database: Symbol.for("Database"),
   Logger: Symbol.for("Logger"),
   Broker: Symbol.for("Broker"),
   Publisher: Symbol.for("Publisher"),
-  Orm: Symbol.for("Orm"),
   Mailer: Symbol.for("Mailer"),
+  IdentityRepository: Symbol.for("IIdentityRepository"),
+  EmailRepository: Symbol.for("IEmailRepository"),
   UserEmailService: Symbol.for("IUserEmailService"),
   ProjectEmailService: Symbol.for("IProjectEmailService"),
-  WorkspaceEmailService: Symbol.for("IWorkspaceEmailService"),
   UserRegisteredConsumer: Symbol.for("UserRegisteredConsumer"),
+  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
   ProjectMemberInviteConsumer: Symbol.for("ProjectMemberInviteConsumer"),
-  WorkspaceInviteConsumer: Symbol.for("WorkspaceInviteConsumer"),
 } as const;

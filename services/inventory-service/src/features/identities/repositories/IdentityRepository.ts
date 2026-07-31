@@ -1,9 +1,9 @@
-import { uuidv7 } from "@pine/common";
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { type Database, type Identity, Identities } from "@/db";
-import {
+import type {
+  CreateIdentityEntity,
   IIdentityRepository,
   IdentityRepositoryOptions,
 } from "@/features/identities/repositories/IIdentityRepository";
@@ -17,7 +17,7 @@ export class IdentityRepository implements IIdentityRepository {
   }
 
   async save(
-    entity: Partial<Identity> & { email: string },
+    entity: CreateIdentityEntity,
     options?: IdentityRepositoryOptions,
   ): Promise<Identity> {
     const client = this.client(options);
@@ -26,8 +26,7 @@ export class IdentityRepository implements IIdentityRepository {
     const [created] = await client
       .insert(Identities)
       .values({
-        id: entity.id ?? uuidv7(),
-        email: entity.email,
+        id: entity.id,
         createdAt: now,
         version: 1,
       })
@@ -38,7 +37,7 @@ export class IdentityRepository implements IIdentityRepository {
 
   async update(
     id: string,
-    entity: Partial<Pick<Identity, "email" | "deletedAt">>,
+    entity: Partial<Pick<Identity, "deletedAt">>,
     options?: IdentityRepositoryOptions,
   ): Promise<Identity> {
     const client = this.client(options);
@@ -47,7 +46,6 @@ export class IdentityRepository implements IIdentityRepository {
     const [updated] = await client
       .update(Identities)
       .set({
-        ...(entity.email !== undefined ? { email: entity.email } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
         updatedAt: now,
         version: sql`${Identities.version} + 1`,
@@ -62,45 +60,21 @@ export class IdentityRepository implements IIdentityRepository {
     return updated;
   }
 
-  async existsById(id: string) {
-    const row = await this.db
-      .select({ id: Identities.id })
-      .from(Identities)
-      .where(and(eq(Identities.id, id), isNull(Identities.deletedAt)))
-      .limit(1);
-
-    return row.length > 0;
-  }
-
-  async existsByEmail(email: string) {
-    const row = await this.db
-      .select({ id: Identities.id })
-      .from(Identities)
-      .where(and(eq(Identities.email, email), isNull(Identities.deletedAt)))
-      .limit(1);
-
-    return row.length > 0;
+  async existsById(id: string, options?: IdentityRepositoryOptions): Promise<boolean> {
+    const identity = await this.findById(id, options);
+    return identity != null;
   }
 
   async softDelete(id: string, options?: IdentityRepositoryOptions) {
     await this.update(id, { deletedAt: new Date() }, options);
   }
 
-  async findById(id: string) {
-    const [row] = await this.db
+  async findById(id: string, options?: IdentityRepositoryOptions): Promise<Identity | null> {
+    const client = this.client(options);
+    const [row] = await client
       .select()
       .from(Identities)
       .where(and(eq(Identities.id, id), isNull(Identities.deletedAt)))
-      .limit(1);
-
-    return row ?? null;
-  }
-
-  async findByEmail(email: string) {
-    const [row] = await this.db
-      .select()
-      .from(Identities)
-      .where(and(eq(Identities.email, email), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row ?? null;

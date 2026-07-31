@@ -1,2 +1,3 @@
-export * from "./services";
 export * from "./consumers";
+export * from "./repositories";
+export * from "./services";

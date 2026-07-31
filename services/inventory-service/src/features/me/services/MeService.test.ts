@@ -6,7 +6,6 @@ describe("MeService", () => {
   it("returns the identity from the repository", async () => {
     const identity = {
       id: "identity-1",
-      email: "a@b.com",
       createdAt: new Date(),
       updatedAt: null,
       deletedAt: null,

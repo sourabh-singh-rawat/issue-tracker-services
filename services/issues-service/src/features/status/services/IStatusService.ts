@@ -1,10 +1,10 @@
 import { StatusType } from "@pine/common";
-import { ServiceOptions } from "@pine/orm";
-import { StatusOption } from "@/entities/Status";
+import type { DbClient, StatusOption } from "@/db";
 
-export interface CreateOptionsOptions extends ServiceOptions {
+export interface CreateOptionsOptions {
   projectId: string;
   statuses: { name: string; type: StatusType; orderIndex: number }[];
+  tx?: DbClient;
 }
 
 export interface FindStatusesOptions {

@@ -1,4 +1,6 @@
-import { ArchiveOutlined, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
+import ArchiveOutlined from "@mui/icons-material/ArchiveOutlined";
+import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlined from "@mui/icons-material/EditOutlined";
 import {
   GridActionsCellItem,
   GridColDef,

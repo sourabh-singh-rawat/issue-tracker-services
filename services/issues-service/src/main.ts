@@ -5,17 +5,18 @@ import { ApolloServer, BaseContext } from "@apollo/server";
 import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
 import { Environment } from "@pine/common";
 import { FastifyHttpServer } from "@pine/http-core";
+import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import fastify from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
-import { TYPES, broker, container, logger, orm } from "@/bootstrap";
-import { UserSyncConsumer } from "@/features/user";
+import { TYPES, broker, container, initializeDb, logger } from "@/bootstrap";
+import { IdentitySyncConsumer } from "@/features/identities";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 
 export type { IssuesContext } from "@/graphql";
-export { container, dataSource } from "@/bootstrap";
+export { container, db } from "@/bootstrap";
 
 const writeSchemaToDist = () => {
   const schemaPath = path.join(process.cwd(), "dist", "schema.graphql");
@@ -24,12 +25,18 @@ const writeSchemaToDist = () => {
 };
 
 const startConsumers = () => {
-  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
 };
 
 const main = async () => {
-  await orm.init();
+  await initializeDb();
   await broker.init();
+
+  const outboxWorker = container.get<IOutboxWorker>(TYPES.OutboxWorker);
+  outboxWorker.start();
+
+  const outboxCleanupWorker = container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker);
+  outboxCleanupWorker.start();
 
   writeSchemaToDist();
 

@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Box, Container, Grid2, Toolbar, useTheme } from "@mui/material";
 import { useAuthStore } from "@features/auth";
-import { useWorkspaceStore } from "@features/workspace";
 import { useLargeScreen } from "../../hooks";
-import { redirectToOidcLogin } from "../../../lib/auth";
+import { redirectToOidcSignIn } from "../../../lib/auth";
 import { AppLoader } from "../AppLoader";
 import { Navbar } from "../navigation/Navbar";
 import { Sidebar } from "../navigation/Sidebar";
@@ -17,11 +16,10 @@ export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
   const isLoading = useAuthStore((s) => s.isLoading);
   const theme = useTheme();
   const isLargeScreen = useLargeScreen();
-  const workspaceId = useWorkspaceStore((s) => s.current?.id);
 
   useEffect(() => {
     if (!isLoading && !current) {
-      redirectToOidcLogin();
+      redirectToOidcSignIn();
     }
   }, [isLoading, current]);
 
@@ -39,11 +37,9 @@ export const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
         disableGutters
       >
         <Toolbar variant="dense" disableGutters />
-        {workspaceId && (
-          <Grid2 container>
-            <Grid2 size={12}>{children}</Grid2>
-          </Grid2>
-        )}
+        <Grid2 container>
+          <Grid2 size={12}>{children}</Grid2>
+        </Grid2>
       </Container>
     </Box>
   );

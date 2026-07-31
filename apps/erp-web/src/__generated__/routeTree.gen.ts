@@ -14,14 +14,11 @@ import { Route as AuthenticatedRouteImport } from './../routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticated/index'
 import { Route as AuthenticatedMeRouteImport } from './../routes/_authenticated/me'
 import { Route as AuthenticatedInventoryRouteImport } from './../routes/_authenticated/inventory'
+import { Route as AuthenticatedHomeRouteImport } from './../routes/_authenticated/home'
 import { Route as noAuthEmailVerificationRouteImport } from './../routes/(no-auth)/email-verification'
-import { Route as AuthenticatedWorkspacesIdRouteImport } from './../routes/_authenticated/workspaces.$id'
 import { Route as AuthenticatedIIssueIdRouteImport } from './../routes/_authenticated/i.$issueId'
-import { Route as AuthenticatedWorkspaceIdHomeRouteImport } from './../routes/_authenticated/$workspaceId.home'
-import { Route as AuthenticatedWorkspacesIdSettingsRouteImport } from './../routes/_authenticated/workspaces.$id.settings'
-import { Route as AuthenticatedWorkspacesIdMembersRouteImport } from './../routes/_authenticated/workspaces.$id.members'
-import { Route as AuthenticatedWorkspaceIdVLViewIdRouteImport } from './../routes/_authenticated/$workspaceId.v.l.$viewId'
-import { Route as AuthenticatedWorkspaceIdVBViewIdRouteImport } from './../routes/_authenticated/$workspaceId.v.b.$viewId'
+import { Route as AuthenticatedVLViewIdRouteImport } from './../routes/_authenticated/v.l.$viewId'
+import { Route as AuthenticatedVBViewIdRouteImport } from './../routes/_authenticated/v.b.$viewId'
 
 const CallbackRoute = CallbackRouteImport.update({
   id: '/callback',
@@ -47,96 +44,66 @@ const AuthenticatedInventoryRoute = AuthenticatedInventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const noAuthEmailVerificationRoute = noAuthEmailVerificationRouteImport.update({
   id: '/(no-auth)/email-verification',
   path: '/email-verification',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedWorkspacesIdRoute =
-  AuthenticatedWorkspacesIdRouteImport.update({
-    id: '/workspaces/$id',
-    path: '/workspaces/$id',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedIIssueIdRoute = AuthenticatedIIssueIdRouteImport.update({
   id: '/i/$issueId',
   path: '/i/$issueId',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedWorkspaceIdHomeRoute =
-  AuthenticatedWorkspaceIdHomeRouteImport.update({
-    id: '/$workspaceId/home',
-    path: '/$workspaceId/home',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedWorkspacesIdSettingsRoute =
-  AuthenticatedWorkspacesIdSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => AuthenticatedWorkspacesIdRoute,
-  } as any)
-const AuthenticatedWorkspacesIdMembersRoute =
-  AuthenticatedWorkspacesIdMembersRouteImport.update({
-    id: '/members',
-    path: '/members',
-    getParentRoute: () => AuthenticatedWorkspacesIdRoute,
-  } as any)
-const AuthenticatedWorkspaceIdVLViewIdRoute =
-  AuthenticatedWorkspaceIdVLViewIdRouteImport.update({
-    id: '/$workspaceId/v/l/$viewId',
-    path: '/$workspaceId/v/l/$viewId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedWorkspaceIdVBViewIdRoute =
-  AuthenticatedWorkspaceIdVBViewIdRouteImport.update({
-    id: '/$workspaceId/v/b/$viewId',
-    path: '/$workspaceId/v/b/$viewId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
+const AuthenticatedVLViewIdRoute = AuthenticatedVLViewIdRouteImport.update({
+  id: '/v/l/$viewId',
+  path: '/v/l/$viewId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedVBViewIdRoute = AuthenticatedVBViewIdRouteImport.update({
+  id: '/v/b/$viewId',
+  path: '/v/b/$viewId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/callback': typeof CallbackRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
+  '/home': typeof AuthenticatedHomeRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/me': typeof AuthenticatedMeRoute
-  '/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
   '/i/$issueId': typeof AuthenticatedIIssueIdRoute
-  '/workspaces/$id': typeof AuthenticatedWorkspacesIdRouteWithChildren
-  '/workspaces/$id/members': typeof AuthenticatedWorkspacesIdMembersRoute
-  '/workspaces/$id/settings': typeof AuthenticatedWorkspacesIdSettingsRoute
-  '/$workspaceId/v/b/$viewId': typeof AuthenticatedWorkspaceIdVBViewIdRoute
-  '/$workspaceId/v/l/$viewId': typeof AuthenticatedWorkspaceIdVLViewIdRoute
+  '/v/b/$viewId': typeof AuthenticatedVBViewIdRoute
+  '/v/l/$viewId': typeof AuthenticatedVLViewIdRoute
 }
 export interface FileRoutesByTo {
   '/callback': typeof CallbackRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
+  '/home': typeof AuthenticatedHomeRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/me': typeof AuthenticatedMeRoute
   '/': typeof AuthenticatedIndexRoute
-  '/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
   '/i/$issueId': typeof AuthenticatedIIssueIdRoute
-  '/workspaces/$id': typeof AuthenticatedWorkspacesIdRouteWithChildren
-  '/workspaces/$id/members': typeof AuthenticatedWorkspacesIdMembersRoute
-  '/workspaces/$id/settings': typeof AuthenticatedWorkspacesIdSettingsRoute
-  '/$workspaceId/v/b/$viewId': typeof AuthenticatedWorkspaceIdVBViewIdRoute
-  '/$workspaceId/v/l/$viewId': typeof AuthenticatedWorkspaceIdVLViewIdRoute
+  '/v/b/$viewId': typeof AuthenticatedVBViewIdRoute
+  '/v/l/$viewId': typeof AuthenticatedVLViewIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/callback': typeof CallbackRoute
   '/(no-auth)/email-verification': typeof noAuthEmailVerificationRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/$workspaceId/home': typeof AuthenticatedWorkspaceIdHomeRoute
   '/_authenticated/i/$issueId': typeof AuthenticatedIIssueIdRoute
-  '/_authenticated/workspaces/$id': typeof AuthenticatedWorkspacesIdRouteWithChildren
-  '/_authenticated/workspaces/$id/members': typeof AuthenticatedWorkspacesIdMembersRoute
-  '/_authenticated/workspaces/$id/settings': typeof AuthenticatedWorkspacesIdSettingsRoute
-  '/_authenticated/$workspaceId/v/b/$viewId': typeof AuthenticatedWorkspaceIdVBViewIdRoute
-  '/_authenticated/$workspaceId/v/l/$viewId': typeof AuthenticatedWorkspaceIdVLViewIdRoute
+  '/_authenticated/v/b/$viewId': typeof AuthenticatedVBViewIdRoute
+  '/_authenticated/v/l/$viewId': typeof AuthenticatedVLViewIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -144,44 +111,35 @@ export interface FileRouteTypes {
     | '/'
     | '/callback'
     | '/email-verification'
+    | '/home'
     | '/inventory'
     | '/me'
-    | '/$workspaceId/home'
     | '/i/$issueId'
-    | '/workspaces/$id'
-    | '/workspaces/$id/members'
-    | '/workspaces/$id/settings'
-    | '/$workspaceId/v/b/$viewId'
-    | '/$workspaceId/v/l/$viewId'
+    | '/v/b/$viewId'
+    | '/v/l/$viewId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/callback'
     | '/email-verification'
+    | '/home'
     | '/inventory'
     | '/me'
     | '/'
-    | '/$workspaceId/home'
     | '/i/$issueId'
-    | '/workspaces/$id'
-    | '/workspaces/$id/members'
-    | '/workspaces/$id/settings'
-    | '/$workspaceId/v/b/$viewId'
-    | '/$workspaceId/v/l/$viewId'
+    | '/v/b/$viewId'
+    | '/v/l/$viewId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/callback'
     | '/(no-auth)/email-verification'
+    | '/_authenticated/home'
     | '/_authenticated/inventory'
     | '/_authenticated/me'
     | '/_authenticated/'
-    | '/_authenticated/$workspaceId/home'
     | '/_authenticated/i/$issueId'
-    | '/_authenticated/workspaces/$id'
-    | '/_authenticated/workspaces/$id/members'
-    | '/_authenticated/workspaces/$id/settings'
-    | '/_authenticated/$workspaceId/v/b/$viewId'
-    | '/_authenticated/$workspaceId/v/l/$viewId'
+    | '/_authenticated/v/b/$viewId'
+    | '/_authenticated/v/l/$viewId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -227,19 +185,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInventoryRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/(no-auth)/email-verification': {
       id: '/(no-auth)/email-verification'
       path: '/email-verification'
       fullPath: '/email-verification'
       preLoaderRoute: typeof noAuthEmailVerificationRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/workspaces/$id': {
-      id: '/_authenticated/workspaces/$id'
-      path: '/workspaces/$id'
-      fullPath: '/workspaces/$id'
-      preLoaderRoute: typeof AuthenticatedWorkspacesIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/i/$issueId': {
       id: '/_authenticated/i/$issueId'
@@ -248,82 +206,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIIssueIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/$workspaceId/home': {
-      id: '/_authenticated/$workspaceId/home'
-      path: '/$workspaceId/home'
-      fullPath: '/$workspaceId/home'
-      preLoaderRoute: typeof AuthenticatedWorkspaceIdHomeRouteImport
+    '/_authenticated/v/l/$viewId': {
+      id: '/_authenticated/v/l/$viewId'
+      path: '/v/l/$viewId'
+      fullPath: '/v/l/$viewId'
+      preLoaderRoute: typeof AuthenticatedVLViewIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/workspaces/$id/settings': {
-      id: '/_authenticated/workspaces/$id/settings'
-      path: '/settings'
-      fullPath: '/workspaces/$id/settings'
-      preLoaderRoute: typeof AuthenticatedWorkspacesIdSettingsRouteImport
-      parentRoute: typeof AuthenticatedWorkspacesIdRoute
-    }
-    '/_authenticated/workspaces/$id/members': {
-      id: '/_authenticated/workspaces/$id/members'
-      path: '/members'
-      fullPath: '/workspaces/$id/members'
-      preLoaderRoute: typeof AuthenticatedWorkspacesIdMembersRouteImport
-      parentRoute: typeof AuthenticatedWorkspacesIdRoute
-    }
-    '/_authenticated/$workspaceId/v/l/$viewId': {
-      id: '/_authenticated/$workspaceId/v/l/$viewId'
-      path: '/$workspaceId/v/l/$viewId'
-      fullPath: '/$workspaceId/v/l/$viewId'
-      preLoaderRoute: typeof AuthenticatedWorkspaceIdVLViewIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/$workspaceId/v/b/$viewId': {
-      id: '/_authenticated/$workspaceId/v/b/$viewId'
-      path: '/$workspaceId/v/b/$viewId'
-      fullPath: '/$workspaceId/v/b/$viewId'
-      preLoaderRoute: typeof AuthenticatedWorkspaceIdVBViewIdRouteImport
+    '/_authenticated/v/b/$viewId': {
+      id: '/_authenticated/v/b/$viewId'
+      path: '/v/b/$viewId'
+      fullPath: '/v/b/$viewId'
+      preLoaderRoute: typeof AuthenticatedVBViewIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
 }
-
-interface AuthenticatedWorkspacesIdRouteChildren {
-  AuthenticatedWorkspacesIdMembersRoute: typeof AuthenticatedWorkspacesIdMembersRoute
-  AuthenticatedWorkspacesIdSettingsRoute: typeof AuthenticatedWorkspacesIdSettingsRoute
-}
-
-const AuthenticatedWorkspacesIdRouteChildren: AuthenticatedWorkspacesIdRouteChildren =
-  {
-    AuthenticatedWorkspacesIdMembersRoute:
-      AuthenticatedWorkspacesIdMembersRoute,
-    AuthenticatedWorkspacesIdSettingsRoute:
-      AuthenticatedWorkspacesIdSettingsRoute,
-  }
-
-const AuthenticatedWorkspacesIdRouteWithChildren =
-  AuthenticatedWorkspacesIdRoute._addFileChildren(
-    AuthenticatedWorkspacesIdRouteChildren,
-  )
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedWorkspaceIdHomeRoute: typeof AuthenticatedWorkspaceIdHomeRoute
   AuthenticatedIIssueIdRoute: typeof AuthenticatedIIssueIdRoute
-  AuthenticatedWorkspacesIdRoute: typeof AuthenticatedWorkspacesIdRouteWithChildren
-  AuthenticatedWorkspaceIdVBViewIdRoute: typeof AuthenticatedWorkspaceIdVBViewIdRoute
-  AuthenticatedWorkspaceIdVLViewIdRoute: typeof AuthenticatedWorkspaceIdVLViewIdRoute
+  AuthenticatedVBViewIdRoute: typeof AuthenticatedVBViewIdRoute
+  AuthenticatedVLViewIdRoute: typeof AuthenticatedVLViewIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedWorkspaceIdHomeRoute: AuthenticatedWorkspaceIdHomeRoute,
   AuthenticatedIIssueIdRoute: AuthenticatedIIssueIdRoute,
-  AuthenticatedWorkspacesIdRoute: AuthenticatedWorkspacesIdRouteWithChildren,
-  AuthenticatedWorkspaceIdVBViewIdRoute: AuthenticatedWorkspaceIdVBViewIdRoute,
-  AuthenticatedWorkspaceIdVLViewIdRoute: AuthenticatedWorkspaceIdVLViewIdRoute,
+  AuthenticatedVBViewIdRoute: AuthenticatedVBViewIdRoute,
+  AuthenticatedVLViewIdRoute: AuthenticatedVLViewIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

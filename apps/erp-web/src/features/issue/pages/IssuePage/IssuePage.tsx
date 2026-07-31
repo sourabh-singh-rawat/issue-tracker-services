@@ -15,18 +15,18 @@ export const IssuePage = () => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { issueId } = useIssueParams();
-  const { data: issue } = useFindIssueQuery(
+  const issueQuery = useFindIssueQuery(
     { findIssueId: issueId! },
     {
       select: (data) => data.findIssue ?? null,
       enabled: Boolean(issueId),
     },
   );
-  const { mutateAsync: updateIssueMutation } = useUpdateIssueMutation();
+  const updateIssueMutation = useUpdateIssueMutation();
 
   const updateIssue = async (input: UpdateIssueInput) => {
     try {
-      const response = await updateIssueMutation({ input });
+      const response = await updateIssueMutation.mutateAsync({ input });
       snackbar.success(response.updateIssue ?? "Issue updated");
       return response;
     } catch (error) {
@@ -35,6 +35,7 @@ export const IssuePage = () => {
     }
   };
 
+  const issue = issueQuery.data;
   const projectId = issue?.project?.id ?? undefined;
   const issueName = issue?.name ?? undefined;
   const issueDescription = issue?.description ?? undefined;

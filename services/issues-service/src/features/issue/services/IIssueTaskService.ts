@@ -1,5 +1,5 @@
 import { ServiceResponse, TaskFormData } from "@pine/common";
-import { CheckListItem } from "@/entities/CheckListItem";
+import type { CheckListItem } from "@/db";
 
 export interface IIssueTaskService {
   createTask(userId: string, issueId: string, taskFormData: TaskFormData): Promise<void>;

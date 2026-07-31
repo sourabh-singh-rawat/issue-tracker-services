@@ -2,14 +2,20 @@ import { NotFoundError } from "@pine/common";
 import { Queue } from "bullmq";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { Attachment } from "../entities";
-import { AttachmentService, CreateAttachmentOptions, DeleteAttachmentOptions } from "./interfaces";
+import type { IAttachmentRepository } from "@/features/attachment/repositories";
+import {
+  AttachmentService,
+  CreateAttachmentOptions,
+  DeleteAttachmentOptions,
+} from "./interfaces";
 
 @injectable()
 export class CoreAttachmentService implements AttachmentService {
   constructor(
     @inject(TYPES.ImageProcessingQueue)
     private readonly imageProcessingQueue: Queue,
+    @inject(TYPES.AttachmentRepository)
+    private readonly attachmentRepository: IAttachmentRepository,
   ) {}
 
   async createAttachment(options: CreateAttachmentOptions) {
@@ -19,20 +25,14 @@ export class CoreAttachmentService implements AttachmentService {
   }
 
   async findAttachments(issueId: string) {
-    const [rows, rowCount] = await Attachment.findAndCount({
-      where: { issueId },
-    });
-
-    return { rows, rowCount };
+    return this.attachmentRepository.findByIssueId(issueId);
   }
 
   async deleteAttachment(options: DeleteAttachmentOptions) {
-    const { id, manager } = options;
-    const AttachmentRepo = manager.getRepository(Attachment);
-
-    const attachment = await AttachmentRepo.findOne({ where: { id } });
+    const { id, tx } = options;
+    const attachment = await this.attachmentRepository.findById(id, { tx });
     if (!attachment) throw new NotFoundError("Attachment");
 
-    await AttachmentRepo.delete({ id });
+    await this.attachmentRepository.deleteById(id, { tx });
   }
 }

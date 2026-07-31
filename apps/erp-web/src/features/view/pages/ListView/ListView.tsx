@@ -8,14 +8,14 @@ import { ViewLocation, ViewSwitcher } from "../../components";
 export const ListView = () => {
   const theme = useTheme();
   const { viewId: projectId } = useViewParams();
-  const { data: project } = useFindProjectQuery(
+  const projectQuery = useFindProjectQuery(
     { findProjectId: projectId! },
     {
       select: (data) => data.findProject,
       enabled: Boolean(projectId),
     },
   );
-  const { data: statuses = [] } = useFindStatusesQuery(
+  const statusesQuery = useFindStatusesQuery(
     { input: { projectId: projectId! } },
     {
       select: (data) =>
@@ -27,12 +27,14 @@ export const ListView = () => {
     },
   );
 
+  const project = projectQuery.data;
+  const statuses = statusesQuery.data ?? [];
+
   const projectView =
-    project?.id && project.name && project.workspace?.id && project.workspace.name
+    project?.id && project.name
       ? {
           id: project.id,
           name: project.name,
-          workspace: { id: project.workspace.id, name: project.workspace.name },
         }
       : null;
 

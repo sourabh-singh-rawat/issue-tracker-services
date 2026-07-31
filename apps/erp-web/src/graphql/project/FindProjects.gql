@@ -1,13 +1,8 @@
-query FindProjects($input: FindProjectsOptions) {
-  findProjects(input: $input) {
+query FindProjects {
+  findProjects {
     rows {
       id
       name
-      workspaceId
-      workspace {
-        id
-        name
-      }
     }
     rowCount
   }

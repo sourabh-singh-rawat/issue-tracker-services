@@ -24,12 +24,12 @@
       "persistent": true
     },
     "db:generate": {
-      "dependsOn": ["^db:generate"],
-      "outputs": []
+      "cache": false,
+      "dependsOn": ["^db:generate"]
     },
     "db:migrate": {
-      "dependsOn": ["^db:migrate"],
-      "outputs": []
+      "cache": false,
+      "dependsOn": ["^db:migrate"]
     }
   }
 }

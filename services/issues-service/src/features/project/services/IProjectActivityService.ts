@@ -1,6 +1,6 @@
 import { ServiceResponseInputs } from "@pine/common";
 import { ProjectData } from "@pine/events";
-import { ProjectIssueActivity } from "@/entities/ProjectIssueActivity";
+import type { ProjectIssueActivity } from "@/db";
 
 export interface IProjectActivityService {
   logCreatedProject(payload: ProjectData): Promise<void>;

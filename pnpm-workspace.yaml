@@ -17,7 +17,6 @@ allowBuilds:
   sharp: true
   simple-git-hooks: true
 
-# Only install versions published at least 24h ago (pnpm default).
 minimumReleaseAge: 1440
 
 overrides:

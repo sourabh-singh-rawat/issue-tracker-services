@@ -6,18 +6,11 @@ import type { CreateProjectInput } from "@generated/gql/graphql";
 import { useCreateProjectMutation } from "@generated/gql";
 import { PrimaryButton, TextField, useSnackbar } from "@shared";
 
-interface ProjectFormProps {
-  workspaceId: string;
-}
-
-export const ProjectForm = ({ workspaceId }: ProjectFormProps) => {
+export const ProjectForm = () => {
   const messageBar = useSnackbar();
-  const { mutateAsync: createProject } = useCreateProjectMutation();
+  const createProjectMutation = useCreateProjectMutation();
 
-  const defaultValues: CreateProjectInput = useMemo(
-    () => ({ name: "", workspaceId }),
-    [workspaceId],
-  );
+  const defaultValues: CreateProjectInput = useMemo(() => ({ name: "" }), []);
   const form = useForm({
     defaultValues,
     mode: "all",
@@ -25,11 +18,10 @@ export const ProjectForm = ({ workspaceId }: ProjectFormProps) => {
 
   const onSubmit: SubmitHandler<CreateProjectInput> = async ({ name }) => {
     try {
-      await createProject({
-        input: { name, workspaceId },
+      await createProjectMutation.mutateAsync({
+        input: { name },
       });
       messageBar.success("Created project successfully");
-      // Reload so the new project appears in the sidebar list
       window.location.reload();
     } catch (error) {
       messageBar.error(error instanceof Error ? error.message : "Failed to create project");

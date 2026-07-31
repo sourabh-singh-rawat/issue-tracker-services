@@ -54,23 +54,23 @@ export const IssueName = ({ issueId, initialValue = "" }: IssueNameProps) => {
   const form = useForm();
   const [defaultValue, setDefaultValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const { mutateAsync: UpdateIssue, isPending: isLoading } = useUpdateIssueMutation();
+  const updateIssueMutation = useUpdateIssueMutation();
 
   const handleClick = () => {
     setIsFocused(true);
   };
 
   const handleCancel = () => {
-    if (isLoading) return;
+    if (updateIssueMutation.isPending) return;
 
     setIsFocused(false);
     form.setValue("name", defaultValue);
   };
 
   const onSubmit: SubmitHandler<Pick<UpdateIssueInput, "name">> = async ({ name }) => {
-    if (isLoading) return;
+    if (updateIssueMutation.isPending) return;
 
-    await UpdateIssue({ input: { issueId, name } });
+    await updateIssueMutation.mutateAsync({ input: { issueId, name } });
     snackbar.success("Name updated successfully");
 
     if (name) setDefaultValue(name);

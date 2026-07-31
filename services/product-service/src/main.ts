@@ -12,7 +12,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
-import { UserSyncConsumer } from "@/features/identities";
+import { IdentitySyncConsumer } from "@/features/identities";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
@@ -92,7 +92,7 @@ const main = async () => {
   await server.start();
   writeOpenApiToDist(instance);
 
-  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
 };
 
 main().catch((error) => {
