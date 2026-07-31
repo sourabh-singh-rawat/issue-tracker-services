@@ -32,10 +32,7 @@ export const verifyEmail: RouteOptions<
   handler: async (req, reply) => {
     const service = container.get<IVerificationService>(TYPES.VerificationService);
 
-    await service.verifyEmail({
-      flowId: req.query.flow,
-      code: req.query.code,
-    });
+    await service.verifyEmail({ flowId: req.query.flow, code: req.query.code });
 
     const response: VerifyEmailResponse = {
       message: "Email verified successfully.",

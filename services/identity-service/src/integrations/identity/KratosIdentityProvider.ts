@@ -183,8 +183,13 @@ export class KratosIdentityProvider implements IIdentityProvider {
     }
   }
 
-  async verifyEmail(input: VerifyEmailInput): Promise<void> {
+  async verifyEmail(input: VerifyEmailInput): Promise<Identity> {
     try {
+      const { data: existingFlow } = await this.kratos.frontendApi.getVerificationFlow({
+        id: input.flowId,
+      });
+      const emailFromFlow = this.extractEmailFromVerificationFlow(existingFlow);
+
       const { data } = await this.kratos.frontendApi.updateVerificationFlow({
         flow: input.flowId,
         updateVerificationFlowBody: {
@@ -196,12 +201,65 @@ export class KratosIdentityProvider implements IIdentityProvider {
       if (data.state !== "passed_challenge") {
         throw new InvalidCredentialError("Email verification failed");
       }
+
+      const email = this.extractEmailFromVerificationFlow(data) ?? emailFromFlow;
+      if (!email) {
+        throw new IdentityProviderUnavailableError(
+          "Email verification succeeded but the verified address could not be resolved",
+        );
+      }
+
+      const { data: identities } = await this.kratos.identityApi.listIdentities({
+        credentialsIdentifier: email,
+        pageSize: 1,
+      });
+      const identity = identities[0];
+      if (!identity?.id) {
+        throw new IdentityNotFoundError();
+      }
+
+      const traits = (identity.traits ?? {}) as Record<string, unknown>;
+      const resolvedEmail = typeof traits.email === "string" ? traits.email : email;
+      const emailVerified = identity.verifiable_addresses?.some(
+        (address) => address.value === resolvedEmail && address.verified,
+      );
+
+      return {
+        id: identity.id,
+        email: resolvedEmail,
+        emailVerified: emailVerified ?? true,
+        traits,
+        createdAt: identity.created_at ? new Date(identity.created_at) : undefined,
+        updatedAt: identity.updated_at ? new Date(identity.updated_at) : undefined,
+      };
     } catch (error) {
-      if (error instanceof InvalidCredentialError) {
+      if (
+        error instanceof InvalidCredentialError ||
+        error instanceof IdentityNotFoundError ||
+        error instanceof IdentityProviderUnavailableError
+      ) {
         throw error;
       }
       this.rethrowAsApplicationError(error);
     }
+  }
+
+  private extractEmailFromVerificationFlow(flow: {
+    ui?: { nodes?: Array<{ attributes?: { name?: string; value?: unknown; node_type?: string } }> };
+  }): string | undefined {
+    const nodes = flow.ui?.nodes ?? [];
+    for (const node of nodes) {
+      const attributes = node.attributes;
+      if (
+        attributes?.node_type === "input" &&
+        attributes.name === "email" &&
+        typeof attributes.value === "string" &&
+        attributes.value.length > 0
+      ) {
+        return attributes.value;
+      }
+    }
+    return undefined;
   }
 
   async resendVerificationEmail(input: ResendVerificationEmailInput): Promise<void> {

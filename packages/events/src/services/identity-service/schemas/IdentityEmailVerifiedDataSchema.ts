@@ -1,6 +1,6 @@
 import Type from "typebox";
 
-export const UserEmailVerifiedDataSchema = Type.Object(
+export const IdentityEmailVerifiedDataSchema = Type.Object(
   {
     emailVerificationStatus: Type.Union([
       Type.Literal("Unverified"),
@@ -16,4 +16,4 @@ export const UserEmailVerifiedDataSchema = Type.Object(
   { additionalProperties: false },
 );
 
-export type UserEmailVerifiedData = Type.Static<typeof UserEmailVerifiedDataSchema>;
+export type IdentityEmailVerifiedData = Type.Static<typeof IdentityEmailVerifiedDataSchema>;

@@ -18,6 +18,7 @@ function createKratosMock(overrides?: {
   createNativeVerificationFlow?: ReturnType<typeof vi.fn>;
   updateVerificationFlow?: ReturnType<typeof vi.fn>;
   deleteIdentity?: ReturnType<typeof vi.fn>;
+  listIdentities?: ReturnType<typeof vi.fn>;
 }) {
   return {
     frontendApi: {
@@ -38,6 +39,7 @@ function createKratosMock(overrides?: {
     },
     identityApi: {
       deleteIdentity: overrides?.deleteIdentity ?? vi.fn().mockResolvedValue(undefined),
+      listIdentities: overrides?.listIdentities ?? vi.fn().mockResolvedValue({ data: [] }),
     },
   };
 }
@@ -501,22 +503,55 @@ describe("KratosIdentityProvider.deleteIdentity", () => {
 });
 
 describe("KratosIdentityProvider.verifyEmail", () => {
-  it("submits the verification code against the Kratos flow", async () => {
+  const emailNode = {
+    attributes: {
+      node_type: "input",
+      name: "email",
+      value: "a@b.com",
+    },
+  };
+
+  it("submits the verification code and returns the verified identity", async () => {
+    const getVerificationFlow = vi.fn().mockResolvedValue({
+      data: {
+        id: "flow-1",
+        state: "sent_email",
+        ui: { nodes: [emailNode] },
+      },
+    });
     const updateVerificationFlow = vi.fn().mockResolvedValue({
       data: {
         id: "flow-1",
         state: "passed_challenge",
+        ui: { nodes: [] },
       },
+    });
+    const listIdentities = vi.fn().mockResolvedValue({
+      data: [
+        {
+          id: "idp-1",
+          traits: { email: "a@b.com" },
+          verifiable_addresses: [{ value: "a@b.com", verified: true }],
+          created_at: "2024-01-01T00:00:00.000Z",
+          updated_at: "2024-01-02T00:00:00.000Z",
+        },
+      ],
     });
 
     const provider = new KratosIdentityProvider(
-      createKratosMock({ updateVerificationFlow }) as never,
+      createKratosMock({ getVerificationFlow, updateVerificationFlow, listIdentities }) as never,
     );
 
-    await expect(
-      provider.verifyEmail({ flowId: "flow-1", code: "123456" }),
-    ).resolves.toBeUndefined();
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "123456" })).resolves.toEqual({
+      id: "idp-1",
+      email: "a@b.com",
+      emailVerified: true,
+      traits: { email: "a@b.com" },
+      createdAt: new Date("2024-01-01T00:00:00.000Z"),
+      updatedAt: new Date("2024-01-02T00:00:00.000Z"),
+    });
 
+    expect(getVerificationFlow).toHaveBeenCalledWith({ id: "flow-1" });
     expect(updateVerificationFlow).toHaveBeenCalledWith({
       flow: "flow-1",
       updateVerificationFlowBody: {
@@ -524,15 +559,22 @@ describe("KratosIdentityProvider.verifyEmail", () => {
         code: "123456",
       },
     });
+    expect(listIdentities).toHaveBeenCalledWith({
+      credentialsIdentifier: "a@b.com",
+      pageSize: 1,
+    });
   });
 
   it("throws InvalidCredentialError when verification did not pass", async () => {
+    const getVerificationFlow = vi.fn().mockResolvedValue({
+      data: { id: "flow-1", state: "sent_email", ui: { nodes: [emailNode] } },
+    });
     const updateVerificationFlow = vi.fn().mockResolvedValue({
       data: { id: "flow-1", state: "sent_email" },
     });
 
     const provider = new KratosIdentityProvider(
-      createKratosMock({ updateVerificationFlow }) as never,
+      createKratosMock({ getVerificationFlow, updateVerificationFlow }) as never,
     );
 
     await expect(provider.verifyEmail({ flowId: "flow-1", code: "bad" })).rejects.toBeInstanceOf(
@@ -541,12 +583,15 @@ describe("KratosIdentityProvider.verifyEmail", () => {
   });
 
   it("throws InvalidCredentialError when Kratos returns 400", async () => {
+    const getVerificationFlow = vi.fn().mockResolvedValue({
+      data: { id: "flow-1", state: "sent_email", ui: { nodes: [emailNode] } },
+    });
     const updateVerificationFlow = vi.fn().mockRejectedValue({
       response: { status: 400 },
     });
 
     const provider = new KratosIdentityProvider(
-      createKratosMock({ updateVerificationFlow }) as never,
+      createKratosMock({ getVerificationFlow, updateVerificationFlow }) as never,
     );
 
     await expect(provider.verifyEmail({ flowId: "flow-1", code: "bad" })).rejects.toBeInstanceOf(
@@ -555,16 +600,37 @@ describe("KratosIdentityProvider.verifyEmail", () => {
   });
 
   it("throws IdentityProviderUnavailableError when Kratos is down", async () => {
+    const getVerificationFlow = vi.fn().mockResolvedValue({
+      data: { id: "flow-1", state: "sent_email", ui: { nodes: [emailNode] } },
+    });
     const updateVerificationFlow = vi.fn().mockRejectedValue({
       response: { status: 503 },
     });
 
     const provider = new KratosIdentityProvider(
-      createKratosMock({ updateVerificationFlow }) as never,
+      createKratosMock({ getVerificationFlow, updateVerificationFlow }) as never,
     );
 
     await expect(provider.verifyEmail({ flowId: "flow-1", code: "123456" })).rejects.toBeInstanceOf(
       IdentityProviderUnavailableError,
+    );
+  });
+
+  it("throws IdentityNotFoundError when the verified identity cannot be listed", async () => {
+    const getVerificationFlow = vi.fn().mockResolvedValue({
+      data: { id: "flow-1", state: "sent_email", ui: { nodes: [emailNode] } },
+    });
+    const updateVerificationFlow = vi.fn().mockResolvedValue({
+      data: { id: "flow-1", state: "passed_challenge", ui: { nodes: [] } },
+    });
+    const listIdentities = vi.fn().mockResolvedValue({ data: [] });
+
+    const provider = new KratosIdentityProvider(
+      createKratosMock({ getVerificationFlow, updateVerificationFlow, listIdentities }) as never,
+    );
+
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "123456" })).rejects.toBeInstanceOf(
+      IdentityNotFoundError,
     );
   });
 });

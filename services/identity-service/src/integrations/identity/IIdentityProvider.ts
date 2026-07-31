@@ -54,6 +54,6 @@ export interface IIdentityProvider {
   existsByEmail(email: string): Promise<boolean>;
   updateIdentity(id: string, input: UpdateIdentityInput): Promise<Identity>;
   deleteIdentity(id: string): Promise<void>;
-  verifyEmail(input: VerifyEmailInput): Promise<void>;
+  verifyEmail(input: VerifyEmailInput): Promise<Identity>;
   resendVerificationEmail(input: ResendVerificationEmailInput): Promise<void>;
 }
