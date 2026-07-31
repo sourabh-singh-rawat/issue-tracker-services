@@ -22,7 +22,6 @@
     "@opentelemetry/instrumentation-graphql": "^0.68.0",
     "@opentelemetry/instrumentation-http": "^0.221.0",
     "@opentelemetry/instrumentation-pg": "^0.72.0",
-    "@opentelemetry/instrumentation-typeorm": "^0.20.0",
     "@opentelemetry/resources": "^2.10.0",
     "@opentelemetry/sdk-node": "^0.221.0"
   },

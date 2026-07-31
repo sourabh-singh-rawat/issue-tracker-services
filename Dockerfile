@@ -32,7 +32,6 @@ RUN pnpm exec turbo run build \
     --filter=@pine/issues-service \
     --filter=@pine/common \
     --filter=@pine/events \
-    --filter=@pine/orm \
     --filter=@pine/security \
     --filter=@pine/http-core \
     --filter=@pine/graphql-core

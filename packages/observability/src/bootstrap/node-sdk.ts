@@ -5,7 +5,6 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
 import { GraphQLInstrumentation } from "@opentelemetry/instrumentation-graphql";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
 import { PgInstrumentation } from "@opentelemetry/instrumentation-pg";
-import { TypeormInstrumentation } from "@opentelemetry/instrumentation-typeorm";
 import { logs, metrics, NodeSDK, type NodeSDKConfiguration } from "@opentelemetry/sdk-node";
 
 export type CreateNodeSdkOptions = Partial<
@@ -24,7 +23,6 @@ export const createNodeSdk = (options: CreateNodeSdkOptions): NodeSDK => {
       new HttpInstrumentation(),
       new FastifyOtelInstrumentation({ registerOnInitialization: true }),
       new GraphQLInstrumentation(),
-      new TypeormInstrumentation(),
       new PgInstrumentation(),
     ],
     traceExporter: new OTLPTraceExporter(exporterConfig),

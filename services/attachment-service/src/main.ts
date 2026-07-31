@@ -12,9 +12,9 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import sharp from "sharp";
-import { TYPES, broker, container, dataSource, logger, redisClient } from "@/bootstrap";
+import { TYPES, broker, container, db, initializeDb, logger, redisClient } from "@/bootstrap";
 import { env, listenPortFromUrl } from "@/bootstrap/env";
-import { Attachment } from "./features/attachment";
+import type { IAttachmentRepository } from "./features/attachment";
 import { IdentitySyncConsumer } from "./features/user";
 import { createContext } from "./graphql";
 import { schema } from "./graphql/schema";
@@ -23,7 +23,7 @@ import { routes } from "./routes";
 export { builder, createContext } from "./graphql";
 export type { AttachmentContext } from "./graphql";
 export { schema } from "./graphql/schema";
-export { container, dataSource } from "@/bootstrap";
+export { container, db } from "@/bootstrap";
 
 const startServer = async () => {
   const instance = fastify();
@@ -103,9 +103,12 @@ export const startWorker = () => {
       const thumbnailLink = `attachments/${issueId}/${filename}-small`;
       const imageLink = `attachments/${issueId}/${filename}-large`;
 
-      const AttachmentRepo = dataSource.manager.getRepository(Attachment);
+      const attachmentRepository = container.get<IAttachmentRepository>(
+        TYPES.AttachmentRepository,
+      );
 
-      await AttachmentRepo.save({
+      await attachmentRepository.save({
+        id: uuidv7(),
         issueId,
         ownerId: userId,
         contentType,
@@ -132,7 +135,7 @@ export const startWorker = () => {
 };
 
 const main = async () => {
-  await dataSource.initialize();
+  await initializeDb();
   await broker.init();
 
   const schemaPath = path.join(process.cwd(), "dist", "schema.graphql");
