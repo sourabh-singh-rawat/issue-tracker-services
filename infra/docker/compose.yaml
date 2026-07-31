@@ -36,21 +36,6 @@ services:
           cpus: "0.10"
           memory: 128M
 
-  mailslurper:
-    image: oryd/mailslurper:latest-smtps
-    restart: unless-stopped
-    ports:
-      - "4436:4436"
-      - "4437:4437"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.25"
-          memory: 128M
-        reservations:
-          cpus: "0.05"
-          memory: 32M
-
   nats-exporter:
     image: natsio/prometheus-nats-exporter:0.20.1
     profiles: [observability]

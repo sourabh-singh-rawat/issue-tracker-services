@@ -42,7 +42,6 @@ Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default),
 | 6380        | Redis (`REDIS_URL`)           |
 | 4433 / 4434 | Kratos public / admin         |
 | 4444 / 4445 | Hydra public / admin          |
-| 4436 / 4437 | mailslurper                   |
 | 5555        | pgAdmin                       |
 | 4317        | Alloy OTLP (obs profile only) |
 
