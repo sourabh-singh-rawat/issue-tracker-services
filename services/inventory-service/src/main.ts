@@ -9,7 +9,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { BrandSyncConsumer } from "@/features/brands";
-import { UserSyncConsumer } from "@/features/identities";
+import { IdentitySyncConsumer } from "@/features/identities";
 import { ProductSyncConsumer } from "@/features/products";
 import { routes } from "@/routes";
 
@@ -65,7 +65,7 @@ const main = async () => {
   await server.start();
   writeOpenApiToDist(instance);
 
-  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
   void container.get<BrandSyncConsumer>(TYPES.BrandSyncConsumer).start();
   void container.get<ProductSyncConsumer>(TYPES.ProductSyncConsumer).start();
 };

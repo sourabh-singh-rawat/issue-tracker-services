@@ -15,9 +15,9 @@ import type { Database } from "@/db";
 import type { IUserRepository } from "@/features/user/repositories";
 
 @injectable()
-export class UserSyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
+export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = "issues-user-sync";
+  readonly consumer = "issues-identity-sync";
   readonly subjects = [IdentityEmailVerifiedEvent.type];
 
   constructor(

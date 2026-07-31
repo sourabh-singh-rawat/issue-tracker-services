@@ -2,15 +2,17 @@ import { UserNotFoundError } from "@pine/common";
 import { ProjectMemberData } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { User } from "@/entities";
+import type { IUserRepository } from "@/features/user";
 import type { EmailMessage, IMailer } from "@/integrations/email";
-import { IProjectEmailService } from "./IProjectEmailService";
+import type { IProjectEmailService } from "./IProjectEmailService";
 
 @injectable()
 export class ProjectEmailService implements IProjectEmailService {
   private readonly senderEmail = "no-reply@issue-tracker.com";
 
   constructor(
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: IUserRepository,
     @inject(TYPES.Mailer)
     private readonly mailer: IMailer,
   ) {}
@@ -18,7 +20,7 @@ export class ProjectEmailService implements IProjectEmailService {
   sendProjectInvitationEmail = async (payload: ProjectMemberData) => {
     const { projectId, role, createdBy } = payload;
 
-    const sender = await User.findOne({ where: { id: createdBy } });
+    const sender = await this.userRepository.findById(createdBy);
     if (!sender) throw new UserNotFoundError();
 
     const message: EmailMessage = {

@@ -11,7 +11,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import { TYPES, broker, container, initializeDb, logger } from "@/bootstrap";
-import { UserSyncConsumer } from "@/features/user";
+import { IdentitySyncConsumer } from "@/features/user";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 
@@ -25,7 +25,7 @@ const writeSchemaToDist = () => {
 };
 
 const startConsumers = () => {
-  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
 };
 
 const main = async () => {

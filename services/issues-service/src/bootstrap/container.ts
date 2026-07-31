@@ -22,7 +22,13 @@ import { logger } from "@/bootstrap/logger";
 import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigneeRepository, IssueRepository, IssueService } from "@/features/issue";
 import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
 import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
-import { IUserRepository, IUserService, UserRepository, UserService, UserSyncConsumer } from "@/features/user";
+import {
+  IUserRepository,
+  IUserService,
+  IdentitySyncConsumer,
+  UserRepository,
+  UserService,
+} from "@/features/user";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -54,4 +60,4 @@ container.bind<IStatusRepository>(TYPES.StatusRepository).to(StatusRepository);
 container.bind<IStatusService>(TYPES.StatusService).to(StatusService);
 container.bind<IProjectRepository>(TYPES.ProjectRepository).to(ProjectRepository);
 container.bind<IProjectService>(TYPES.ProjectService).to(ProjectService);
-container.bind<UserSyncConsumer>(TYPES.UserSyncConsumer).to(UserSyncConsumer);
+container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);

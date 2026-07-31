@@ -1,9 +1,9 @@
-import { EntityManager } from "typeorm";
+import type { DbClient } from "@/db";
 
 export interface SendEmailOptions {
   userId: string;
   email: string;
-  manager: EntityManager;
+  tx: DbClient;
 }
 
 export interface IUserEmailService {

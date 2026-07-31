@@ -18,5 +18,5 @@ export const TYPES = {
   ProjectService: Symbol.for("IProjectService"),
   StatusRepository: Symbol.for("IStatusRepository"),
   StatusService: Symbol.for("IStatusService"),
-  UserSyncConsumer: Symbol.for("UserSyncConsumer"),
+  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
 } as const;

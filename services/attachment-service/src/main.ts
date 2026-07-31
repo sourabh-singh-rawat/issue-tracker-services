@@ -15,7 +15,7 @@ import sharp from "sharp";
 import { TYPES, broker, container, dataSource, logger, redisClient } from "@/bootstrap";
 import { env, listenPortFromUrl } from "@/bootstrap/env";
 import { Attachment } from "./features/attachment";
-import { UserSyncConsumer } from "./features/user";
+import { IdentitySyncConsumer } from "./features/user";
 import { createContext } from "./graphql";
 import { schema } from "./graphql/schema";
 import { routes } from "./routes";
@@ -78,7 +78,7 @@ const startServer = async () => {
 };
 
 const startConsumers = () => {
-  void container.get<UserSyncConsumer>(TYPES.UserSyncConsumer).start();
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
 };
 
 export const startWorker = () => {

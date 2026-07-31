@@ -1,3 +1,4 @@
+import { UserAlreadyExists } from "@pine/common";
 import {
   type CloudEvent,
   type IBroker,
@@ -9,38 +10,36 @@ import {
 } from "@pine/events";
 import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
+import { DataSource } from "typeorm";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Database } from "@/db";
-import type { IIdentityRepository } from "@/features/identities/repositories";
+import { User } from "@/entities/User";
 
 @injectable()
-export class UserSyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
+export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = "product-user-sync";
+  readonly consumer = "attachment-identity-sync";
   readonly subjects = [IdentityEmailVerifiedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)
     private readonly broker: IBroker,
-    @inject(TYPES.Database)
-    private readonly db: Database,
-    @inject(TYPES.IdentityRepository)
-    private readonly identityRepository: IIdentityRepository,
+    @inject(TYPES.DataSource)
+    private readonly dataSource: DataSource,
   ) {
     super(broker.client);
   }
 
   async onMessage(message: JsMsg, payload: CloudEvent<IdentityEmailVerifiedData>) {
     const event = validateEvent(IdentityEmailVerifiedEvent, payload);
-    const { userId, email } = event.data!;
+    const { userId } = event.data!;
 
-    await this.db.transaction(async (tx) => {
-      const exists = await this.identityRepository.existsById(userId);
-      if (exists) {
-        return;
-      }
+    await this.dataSource.transaction(async (manager) => {
+      const UserRepo = manager.getRepository(User);
 
-      await this.identityRepository.save({ id: userId, email }, { tx });
+      const isAlreadyUser = await UserRepo.findOne({ where: { id: userId } });
+      if (isAlreadyUser) throw new UserAlreadyExists();
+
+      await UserRepo.save({ id: userId });
     });
 
     message.ack();

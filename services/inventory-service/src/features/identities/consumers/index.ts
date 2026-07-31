@@ -1,1 +1,1 @@
-export * from "@/features/identities/consumers/UserSyncConsumer";
+export * from "@/features/identities/consumers/IdentitySyncConsumer";

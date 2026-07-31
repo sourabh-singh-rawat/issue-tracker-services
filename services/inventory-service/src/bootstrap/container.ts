@@ -5,7 +5,11 @@ import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, BrandSyncConsumer, type IBrandRepository } from "@/features/brands";
-import { IIdentityRepository, IdentityRepository, UserSyncConsumer } from "@/features/identities";
+import {
+  IIdentityRepository,
+  IdentityRepository,
+  IdentitySyncConsumer,
+} from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
 import { IProductRepository, IProductUnitRepository, ProductRepository, ProductSyncConsumer, ProductUnitRepository } from "@/features/products";
 
@@ -17,7 +21,7 @@ container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind<IPublisher>(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
-container.bind<UserSyncConsumer>(TYPES.UserSyncConsumer).to(UserSyncConsumer);
+container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
 container.bind<IMeService>(TYPES.MeService).to(MeService);
 container.bind<IBrandRepository>(TYPES.BrandRepository).to(BrandRepository);
 container.bind<BrandSyncConsumer>(TYPES.BrandSyncConsumer).to(BrandSyncConsumer);

@@ -11,12 +11,12 @@ import { inject, injectable } from "inversify";
 import { JsMsg } from "nats";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database } from "@/db";
-import type { IIdentityRepository } from "@/features/identities/repositories";
+import type { IUserRepository } from "@/features/user/repositories";
 
 @injectable()
-export class UserSyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
+export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = "inventory-user-sync";
+  readonly consumer = "notification-identity-sync";
   readonly subjects = [IdentityEmailVerifiedEvent.type];
 
   constructor(
@@ -24,21 +24,23 @@ export class UserSyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedD
     private readonly broker: IBroker,
     @inject(TYPES.Database)
     private readonly db: Database,
-    @inject(TYPES.IdentityRepository)
-    private readonly identityRepository: IIdentityRepository,
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: IUserRepository,
   ) {
     super(broker.client);
   }
 
   async onMessage(message: JsMsg, payload: CloudEvent<IdentityEmailVerifiedData>) {
     const event = validateEvent(IdentityEmailVerifiedEvent, payload);
-    const { userId, email } = event.data!;
+    const { userId } = event.data!;
 
     await this.db.transaction(async (tx) => {
-      const exists = await this.identityRepository.existsById(userId);
-      if (exists) return;
+      const exists = await this.userRepository.existsById(userId, { tx });
+      if (exists) {
+        return;
+      }
 
-      await this.identityRepository.save({ id: userId, email }, { tx });
+      await this.userRepository.save({ id: userId }, { tx });
     });
 
     message.ack();
