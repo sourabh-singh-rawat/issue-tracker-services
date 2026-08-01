@@ -1,12 +1,8 @@
 {
-  // Infra (Docker Compose) is intentionally separate from debug launches.
-  // Run Task → "infra: up" once, then F5 → "dev" for app debug sessions.
-  // Product UI: apps/erp-web (:3001). Identity UI: apps/identity-web (:3000).
   "task.quickOpen.detail": true,
   "task.quickOpen.skip": false,
   "debug.openDebug": "openOnDebugBreak",
   "debug.internalConsoleOptions": "neverOpen",
-  // Align auto-attach / terminal-debug with launch.json source-map scoping.
   "debug.javascript.autoAttachFilter": "smart",
   "debug.javascript.terminalOptions": {
     "outFiles": [],
@@ -22,8 +18,6 @@
   },
   "terminal.integrated.tabs.hideCondition": "never",
 
-  // Performance: stop watching / searching heavy monorepo noise (Windows especially).
-  // infra/data is local Docker volumes (~thousands of files).
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
@@ -49,11 +43,9 @@
     "**/infra/data": true
   },
 
-  // TypeScript: prefer project service; cap memory for multi-package workspace.
   "typescript.tsserver.maxTsServerMemory": 4096,
   "typescript.disableAutomaticTypeAcquisition": true,
 
-  // Oxfmt (Oxc formatter)
   "oxc.enable.oxfmt": true,
   "oxc.fmt.configPath": ".oxfmtrc.json",
   "editor.formatOnSave": true,

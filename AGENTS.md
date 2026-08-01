@@ -25,6 +25,44 @@ When schema/table code changes require a migration:
 
 Schema/type changes without touching `drizzle/` artifacts are fine. Shipping incomplete schema work and leaving migration generation to the human is the intended workflow.
 
+## Branches, commits, and changesets
+
+When finishing work that should land as a PR:
+
+1. **Base off `development`** (or the branch the user names). Create a **new branch** for the work; do not commit on `development` / `main` unless asked.
+2. **One logical commit** on that branch for the change set (prefer a single clean commit over a noisy trail of fixups).
+3. **Add a Changeset** under `.changeset/` in the **same commit**. CI requires one on non-draft PRs into `development` (skip only with label `skip-changeset`).
+4. **Commit message and Changeset summary must match** and stay **concise** (same short line in both places).
+
+Changeset file shape:
+
+```markdown
+---
+"@pine/<package>": patch|minor|major
+---
+
+chore(scope): short summary matching the git commit subject
+```
+
+- Bump only packages whose published version should change. For docs-only / `.vscode` / tooling with no package version impact, use an empty frontmatter block (`---` / `---` with no package lines), same as existing repo examples.
+- Filename: short kebab-case slug, e.g. `.changeset/vscode-remove-json-comments.md`.
+- Do **not** commit unrelated dirt (e.g. accidental `**/__generated__/**` or local env). Stage only files for this change.
+
+Example flow:
+
+```bash
+git switch development
+git pull
+git switch -c chore/vscode-remove-json-comments
+# …edit…
+# add .changeset/<slug>.md with summary == commit subject
+git add <relevant paths> .changeset/<slug>.md
+git commit -m "$(cat <<'EOF'
+chore(vscode): remove comments from workspace JSON
+EOF
+)"
+```
+
 ## Other guardrails
 
 - Prefer filtered turbo builds/tests; full monorepo only when needed.

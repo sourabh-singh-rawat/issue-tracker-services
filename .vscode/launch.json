@@ -1,10 +1,5 @@
 {
   "version": "0.2.0",
-  // Debugger perf (monorepo + tsx):
-  // - outFiles: [] stops the default full-workspace **/*.js scan (very slow on Windows).
-  // - resolveSourceMapLocations limits map resolution to app/package sources.
-  // - skipFiles avoids stepping into deps / Node internals.
-  // Shared via each Node config below (compounds inherit from child configs).
   "compounds": [
     {
       "name": "dev",
@@ -13,8 +8,6 @@
         "order": 1
       },
       "stopAll": true,
-      // VS Code shows compound sessions newest-first (last started on top).
-      // List bottom→top of desired UI order so services land on top and schemas:watch at the bottom.
       "configurations": [
         "schemas:watch",
         "codegen: supergraph",
