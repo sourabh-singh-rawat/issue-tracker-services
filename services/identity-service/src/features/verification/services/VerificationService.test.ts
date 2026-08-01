@@ -14,7 +14,7 @@ describe("VerificationService", () => {
       verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
-      findByEmail: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      findByIdpId: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn().mockResolvedValue({
@@ -42,7 +42,7 @@ describe("VerificationService", () => {
       flowId: "flow-1",
       code: "123456",
     });
-    expect(identityRepository.findByEmail).toHaveBeenCalledWith("a@b.com");
+    expect(identityRepository.findByIdpId).toHaveBeenCalledWith("idp-1");
     expect(identityProfileRepository.findByIdentityId).toHaveBeenCalledWith("identity-1");
     expect(outboxService.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -57,7 +57,6 @@ describe("VerificationService", () => {
           data: {
             emailVerificationStatus: "Verified",
             userId: "identity-1",
-            email: "a@b.com",
             displayName: "Ada",
             photoUrl: "https://example.com/ada.png",
           },
@@ -69,12 +68,12 @@ describe("VerificationService", () => {
     expect(scheduled.payload.id).toEqual(scheduled.eventId);
   });
 
-  it("falls back to email as displayName when no profile exists", async () => {
+  it("omits displayName when no profile exists", async () => {
     const identityProvider = {
       verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
-      findByEmail: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      findByIdpId: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn().mockResolvedValue(null),
@@ -98,8 +97,6 @@ describe("VerificationService", () => {
           data: {
             emailVerificationStatus: "Verified",
             userId: "identity-1",
-            email: "a@b.com",
-            displayName: "a@b.com",
           },
         }),
       }),
@@ -111,7 +108,7 @@ describe("VerificationService", () => {
       verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
-      findByEmail: vi.fn().mockResolvedValue(null),
+      findByIdpId: vi.fn().mockResolvedValue(null),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn(),
@@ -138,7 +135,7 @@ describe("VerificationService", () => {
       verifyEmail: vi.fn().mockRejectedValue(new InvalidCredentialError()),
     };
     const identityRepository = {
-      findByEmail: vi.fn(),
+      findByIdpId: vi.fn(),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn(),
@@ -157,7 +154,7 @@ describe("VerificationService", () => {
     await expect(service.verifyEmail({ flowId: "flow-1", code: "bad" })).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
-    expect(identityRepository.findByEmail).not.toHaveBeenCalled();
+    expect(identityRepository.findByIdpId).not.toHaveBeenCalled();
     expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 

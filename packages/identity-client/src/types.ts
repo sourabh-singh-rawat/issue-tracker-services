@@ -2,7 +2,6 @@ export type AuthMethod = "access_token" | "session";
 
 export interface AuthenticatedUser {
   id: string;
-  email?: string;
   authMethod: AuthMethod;
 }
 

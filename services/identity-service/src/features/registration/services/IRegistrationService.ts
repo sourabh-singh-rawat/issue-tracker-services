@@ -1,3 +1,3 @@
 export interface IRegistrationService {
-  registerWithEmailAndPassword(email: string, password: string): Promise<void>;
+  register(email: string, username: string, password: string): Promise<void>;
 }

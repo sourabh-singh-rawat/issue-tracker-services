@@ -15,7 +15,7 @@ export const createContext: ApolloFastifyContextFunction<any> = async (req, rep)
         return {
           req,
           rep,
-          user: { id: token.userId, email: token.email, authMethod: "access_token" },
+          user: { id: token.userId, authMethod: "access_token" },
         };
       }
     } catch (error) {

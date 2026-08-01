@@ -13,7 +13,6 @@ export const createContext: ApolloFastifyContextFunction<IssuesContext> = async 
       rep,
       user: {
         id: req.user.id,
-        email: req.user.email,
         authMethod: req.user.authMethod,
       },
     };

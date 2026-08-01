@@ -3,6 +3,6 @@ import { UserRegisteredDataSchema } from "../schemas";
 
 export const UserRegisteredEvent = defineEvent({
   type: "identity.user.registered",
-  version: 1,
+  version: 2,
   schema: UserRegisteredDataSchema,
 });

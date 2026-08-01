@@ -17,7 +17,11 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
   }
 
   async save(
-    entity: Partial<IdentityProfile> & { identityId: string; displayName: string },
+    entity: Partial<IdentityProfile> & {
+      identityId: string;
+      firstName: string;
+      displayName: string;
+    },
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile> {
     const client = this.client(options);
@@ -28,6 +32,9 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
       .values({
         id: uuidv7(),
         identityId: entity.identityId,
+        firstName: entity.firstName,
+        middleName: entity.middleName ?? null,
+        lastName: entity.lastName ?? null,
         displayName: entity.displayName,
         description: entity.description ?? null,
         photoUrl: entity.photoUrl ?? null,
@@ -42,7 +49,16 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
   async update(
     id: string,
     entity: Partial<
-      Pick<IdentityProfile, "displayName" | "description" | "photoUrl" | "deletedAt">
+      Pick<
+        IdentityProfile,
+        | "firstName"
+        | "middleName"
+        | "lastName"
+        | "displayName"
+        | "description"
+        | "photoUrl"
+        | "deletedAt"
+      >
     >,
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile> {
@@ -52,6 +68,9 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
     const [updated] = await client
       .update(IdentityProfiles)
       .set({
+        ...(entity.firstName !== undefined ? { firstName: entity.firstName } : {}),
+        ...(entity.middleName !== undefined ? { middleName: entity.middleName } : {}),
+        ...(entity.lastName !== undefined ? { lastName: entity.lastName } : {}),
         ...(entity.displayName !== undefined ? { displayName: entity.displayName } : {}),
         ...(entity.description !== undefined ? { description: entity.description } : {}),
         ...(entity.photoUrl !== undefined ? { photoUrl: entity.photoUrl } : {}),

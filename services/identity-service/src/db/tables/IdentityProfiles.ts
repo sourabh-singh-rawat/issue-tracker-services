@@ -8,6 +8,9 @@ export const IdentityProfiles = pgTable("identity_profiles", {
   identityId: uuid("identity_id")
     .notNull()
     .references(() => Identities.id),
+  firstName: text("first_name").notNull(),
+  middleName: text("middle_name"),
+  lastName: text("last_name"),
   displayName: text("display_name").notNull(),
   description: text("description"),
   photoUrl: text("photo_url"),

@@ -1,6 +1,5 @@
 export type { AccessToken } from "./AccessToken";
 export {
-  hasEmailClaim,
   hasUserIdentity,
   hasVerificationClaims,
   isAccessToken,

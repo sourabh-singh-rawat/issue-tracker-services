@@ -39,6 +39,7 @@ export class KratosIdentityProvider implements IIdentityProvider {
           traits: {
             ...input.traits,
             email: input.email,
+            username: input.username,
           },
         },
       });

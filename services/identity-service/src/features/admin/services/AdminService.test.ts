@@ -22,8 +22,8 @@ describe("AdminService", () => {
     const identityRepository = {
       findById: vi.fn().mockResolvedValue({
         id: "identity-row-1",
-        email: "a@b.com",
         idpId: "idp-1",
+        idpProvider: "kratos",
       }),
       softDelete: vi.fn().mockResolvedValue(undefined),
     };
@@ -59,8 +59,8 @@ describe("AdminService", () => {
     const identityRepository = {
       findById: vi.fn().mockResolvedValue({
         id: "identity-row-1",
-        email: "a@b.com",
         idpId: "idp-1",
+        idpProvider: "kratos",
       }),
       softDelete: vi.fn().mockResolvedValue(undefined),
     };
@@ -88,45 +88,13 @@ describe("AdminService", () => {
     expect(db.transaction).not.toHaveBeenCalled();
   });
 
-  it("throws IdentityNotFoundError when the identity has no idpId", async () => {
-    const db = createDbMock();
-    const identityRepository = {
-      findById: vi.fn().mockResolvedValue({
-        id: "identity-row-1",
-        email: "a@b.com",
-      }),
-      softDelete: vi.fn().mockResolvedValue(undefined),
-    };
-    const identityProfileRepository = {
-      findByIdentityId: vi.fn().mockResolvedValue(null),
-      softDelete: vi.fn(),
-    };
-    const identityProvider = {
-      deleteIdentity: vi.fn(),
-    };
-
-    const service = new AdminService(
-      identityRepository as never,
-      identityProfileRepository as never,
-      identityProvider as never,
-      db as never,
-    );
-
-    await expect(service.deleteIdentity("identity-row-1")).rejects.toBeInstanceOf(
-      IdentityNotFoundError,
-    );
-
-    expect(identityProvider.deleteIdentity).not.toHaveBeenCalled();
-    expect(identityRepository.softDelete).not.toHaveBeenCalled();
-  });
-
   it("propagates IdentityNotFoundError from the IdP and does not soft-delete locally", async () => {
     const db = createDbMock();
     const identityRepository = {
       findById: vi.fn().mockResolvedValue({
         id: "identity-row-1",
-        email: "a@b.com",
         idpId: "idp-1",
+        idpProvider: "kratos",
       }),
       softDelete: vi.fn().mockResolvedValue(undefined),
     };
@@ -187,8 +155,8 @@ describe("AdminService", () => {
     const identityRepository = {
       findById: vi.fn().mockResolvedValue({
         id: "identity-row-1",
-        email: "a@b.com",
         idpId: "idp-1",
+        idpProvider: "kratos",
       }),
       softDelete: vi.fn(),
     };
@@ -218,8 +186,8 @@ describe("AdminService", () => {
 
   it("returns all identities from the repository", async () => {
     const identities = [
-      { id: "identity-row-1", email: "a@b.com" },
-      { id: "identity-row-2", email: "c@d.com" },
+      { id: "identity-row-1", idpId: "idp-1", idpProvider: "kratos" },
+      { id: "identity-row-2", idpId: "idp-2", idpProvider: "kratos" },
     ];
     const identityRepository = {
       findAll: vi.fn().mockResolvedValue(identities),

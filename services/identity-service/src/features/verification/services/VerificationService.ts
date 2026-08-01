@@ -31,7 +31,7 @@ export class VerificationService implements IVerificationService {
       code: input.code,
     });
 
-    const identity = await this.identityRepository.findByEmail(idpIdentity.email);
+    const identity = await this.identityRepository.findByIdpId(idpIdentity.id);
     if (!identity) {
       throw new UserNotFoundError();
     }
@@ -47,8 +47,7 @@ export class VerificationService implements IVerificationService {
       data: {
         emailVerificationStatus: EMAIL_VERIFICATION_STATUS.VERIFIED,
         userId: identity.id,
-        email: identity.email,
-        displayName: profile?.displayName ?? identity.email,
+        ...(profile?.displayName ? { displayName: profile.displayName } : {}),
         ...(profile?.photoUrl ? { photoUrl: profile.photoUrl } : {}),
       },
     });
