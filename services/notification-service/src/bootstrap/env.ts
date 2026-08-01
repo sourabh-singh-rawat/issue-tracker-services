@@ -5,8 +5,6 @@ export const EnvSchema = Type.Object({
   NODE_ENV: Type.String({ default: "development" }),
   NOTIFICATION_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
-  BREVO_EMAIL: Type.Optional(Type.String()),
-  BREVO_SECRET: Type.Optional(Type.String()),
 });
 
 export type Env = Type.Static<typeof EnvSchema>;
