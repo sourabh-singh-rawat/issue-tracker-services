@@ -15,7 +15,6 @@ allowBuilds:
   msgpackr-extract: true
   protobufjs: true
   sharp: true
-  simple-git-hooks: true
 
 minimumReleaseAge: 1440
 

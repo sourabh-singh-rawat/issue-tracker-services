@@ -59,7 +59,6 @@
     "create-release-branch": "node --no-warnings --experimental-strip-types tools/scripts/create-release-branch.ts",
     "release": "node --no-warnings --experimental-strip-types tools/scripts/release.ts",
     "concat": "tsx tools/scripts/concat.ts",
-    "prepare": "simple-git-hooks",
     "lint": "oxlint",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
@@ -76,13 +75,9 @@
     "oxfmt": "^0.60.0",
     "oxlint": "^1.75.0",
     "oxlint-tsgolint": "^7.0.2001",
-    "simple-git-hooks": "^2.13.1",
     "tsx": "4.23.1",
     "turbo": "^2.10.7",
     "typescript": "7.0.2"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm build"
   },
   "engines": {
     "node": ">=20.13.1",
