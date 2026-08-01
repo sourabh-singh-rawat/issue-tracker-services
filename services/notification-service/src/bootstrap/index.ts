@@ -4,4 +4,3 @@ export { TYPES } from "@/bootstrap/container-types";
 export { closeDb, db, initializeDb } from "@/bootstrap/db";
 export { env } from "@/bootstrap/env";
 export { logger } from "@/bootstrap/logger";
-export { mailer } from "@/bootstrap/mailer";

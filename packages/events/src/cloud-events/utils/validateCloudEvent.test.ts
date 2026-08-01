@@ -23,10 +23,10 @@ describe("validateCloudEvent", () => {
   it("accepts a well-formed event", () => {
     const value = {
       id: "evt-1",
-      source: "pine/notification-service",
+      source: "pine/identity-service",
       specversion: "1.0",
-      type: "user.confirmation-email-sent",
-      dataschema: "urn:pine:events:user.confirmation-email-sent",
+      type: "identity.user.registered",
+      dataschema: "urn:pine:events:identity.user.registered",
       data: { userId: "u-1" },
     };
 
@@ -38,7 +38,7 @@ describe("validateCloudEvent", () => {
     expect(() =>
       validateCloudEvent({
         id: "evt-1",
-        source: "pine/notification-service",
+        source: "pine/identity-service",
       }),
     ).toThrow(CloudEventValidationError);
 
@@ -49,10 +49,10 @@ describe("validateCloudEvent", () => {
     expect(() =>
       validateCloudEvent({
         id: "evt-1",
-        source: "pine/notification-service",
+        source: "pine/identity-service",
         specversion: "0.3",
-        type: "user.registered",
-        dataschema: "urn:pine:events:user.registered",
+        type: "identity.user.registered",
+        dataschema: "urn:pine:events:identity.user.registered",
       }),
     ).toThrow(CloudEventValidationError);
   });
