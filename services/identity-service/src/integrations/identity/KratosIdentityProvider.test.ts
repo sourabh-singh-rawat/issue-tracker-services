@@ -62,7 +62,7 @@ describe("KratosIdentityProvider.register", () => {
       createKratosMock({ updateRegistrationFlow }) as never,
     );
 
-    await expect(provider.register({ email: "a@b.com", password: "password" })).resolves.toEqual({
+    await expect(provider.register({ email: "a@b.com", username: "ada", password: "password" })).resolves.toEqual({
       id: "identity-1",
       email: "a@b.com",
       emailVerified: false,
@@ -76,7 +76,7 @@ describe("KratosIdentityProvider.register", () => {
       updateRegistrationFlowBody: {
         method: "password",
         password: "password",
-        traits: { email: "a@b.com" },
+        traits: { email: "a@b.com", username: "ada" },
       },
     });
   });
@@ -98,6 +98,7 @@ describe("KratosIdentityProvider.register", () => {
 
     await provider.register({
       email: "a@b.com",
+      username: "ada",
       password: "password",
       schemaId: "user",
       traits: { name: { first: "Ada" } },
@@ -111,7 +112,7 @@ describe("KratosIdentityProvider.register", () => {
       updateRegistrationFlowBody: {
         method: "password",
         password: "password",
-        traits: { name: { first: "Ada" }, email: "a@b.com" },
+        traits: { name: { first: "Ada" }, email: "a@b.com", username: "ada" },
       },
     });
   });
@@ -139,7 +140,7 @@ describe("KratosIdentityProvider.register", () => {
     );
 
     await expect(
-      provider.register({ email: "a@b.com", password: "password" }),
+      provider.register({ email: "a@b.com", username: "ada", password: "password" }),
     ).rejects.toBeInstanceOf(IdentityAlreadyExistsError);
   });
 
@@ -159,9 +160,9 @@ describe("KratosIdentityProvider.register", () => {
       createKratosMock({ updateRegistrationFlow }) as never,
     );
 
-    await expect(provider.register({ email: "a@b.com", password: "weak" })).rejects.toBeInstanceOf(
-      InvalidCredentialError,
-    );
+    await expect(
+      provider.register({ email: "a@b.com", username: "ada", password: "weak" }),
+    ).rejects.toBeInstanceOf(InvalidCredentialError);
   });
 
   it("throws IdentityProviderUnavailableError when the identity is missing", async () => {
@@ -174,7 +175,7 @@ describe("KratosIdentityProvider.register", () => {
     );
 
     await expect(
-      provider.register({ email: "a@b.com", password: "password" }),
+      provider.register({ email: "a@b.com", username: "ada", password: "password" }),
     ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
   });
 
@@ -188,7 +189,7 @@ describe("KratosIdentityProvider.register", () => {
     );
 
     await expect(
-      provider.register({ email: "a@b.com", password: "password" }),
+      provider.register({ email: "a@b.com", username: "ada", password: "password" }),
     ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
   });
 });

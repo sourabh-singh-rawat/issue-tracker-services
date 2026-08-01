@@ -5,9 +5,8 @@ import { IdentityProfiles } from "@/db/tables/IdentityProfiles";
 
 export const Identities = pgTable("identities", {
   ...idColumn,
-  email: text("email").notNull().unique(),
-  idpId: text("idp_id"),
-  idpProvider: text("idp_provider"),
+  idpId: text("idp_id").notNull().unique(),
+  idpProvider: text("idp_provider").notNull(),
   ...auditColumns,
 });
 

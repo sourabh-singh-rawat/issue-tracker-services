@@ -8,6 +8,13 @@
       "when": 1785514346978,
       "tag": "0000_majestic_rhino",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785586995351,
+      "tag": "0001_gray_arclight",
+      "breakpoints": true
     }
   ]
 }

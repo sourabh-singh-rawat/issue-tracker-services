@@ -239,6 +239,7 @@ export type ExchangeTokenResponse = ExchangeTokenResponses[keyof ExchangeTokenRe
 export type RegisterWithEmailAndPasswordData = {
     body: {
         email: string;
+        username: string;
         password: string;
     };
     path?: never;

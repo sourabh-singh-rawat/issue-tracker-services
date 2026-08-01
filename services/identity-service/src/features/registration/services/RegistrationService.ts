@@ -21,14 +21,13 @@ export class RegistrationService implements IRegistrationService {
     private readonly db: Database,
   ) {}
 
-  async registerWithEmailAndPassword(email: string, password: string): Promise<void> {
-    const idpIdentity = await this.identityProvider.register({ email, password });
+  async register(email: string, username: string, password: string): Promise<void> {
+    const idpIdentity = await this.identityProvider.register({ email, username, password });
 
     try {
       await this.db.transaction(async (tx) => {
         const identity: Identity = await this.identityRepository.save(
           {
-            email: idpIdentity.email,
             idpId: idpIdentity.id,
             idpProvider: IdentityProviderType.KRATOS,
           },
@@ -43,7 +42,6 @@ export class RegistrationService implements IRegistrationService {
           subject: identity.id,
           data: {
             userId: identity.id,
-            email: identity.email,
           },
         });
 

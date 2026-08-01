@@ -11,6 +11,7 @@ export type IdentitySchemaId = "user";
 
 export interface RegisterIdentityInput {
   email: string;
+  username: string;
   password: string;
   schemaId?: IdentitySchemaId;
   traits?: Record<string, unknown>;

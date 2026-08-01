@@ -6,7 +6,6 @@ import { IAdminService } from "@/features/admin/services/IAdminService";
 import type { IIdentityProfileRepository } from "@/features/identities/repositories/IIdentityProfileRepository";
 import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";
 import type { IIdentityProvider } from "@/integrations/identity";
-import { IdentityNotFoundError } from "@/integrations/identity";
 
 @injectable()
 export class AdminService implements IAdminService {
@@ -25,9 +24,7 @@ export class AdminService implements IAdminService {
     const identity = await this.identityRepository.findById(identityId);
     if (!identity) throw new UserNotFoundError();
 
-    const idpId = identity.idpId;
-    if (!idpId) throw new IdentityNotFoundError();
-    await this.identityProvider.deleteIdentity(idpId);
+    await this.identityProvider.deleteIdentity(identity.idpId);
 
     const profile = await this.identityProfileRepository.findByIdentityId(identityId);
     if (!profile) throw new UserProfileNotFoundError();

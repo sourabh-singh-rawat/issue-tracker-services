@@ -14,7 +14,7 @@ describe("RegistrationService", () => {
       deleteIdentity: vi.fn(),
     };
     const identityRepository = {
-      save: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      save: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
     };
     const outboxService = {
       schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
@@ -32,16 +32,16 @@ describe("RegistrationService", () => {
     );
 
     await expect(
-      service.registerWithEmailAndPassword("a@b.com", "password"),
+      service.register("a@b.com", "ada", "password"),
     ).resolves.toBeUndefined();
 
     expect(identityProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
+      username: "ada",
       password: "password",
     });
     expect(identityRepository.save).toHaveBeenCalledWith(
       {
-        email: "a@b.com",
         idpId: "idp-1",
         idpProvider: IdentityProviderType.KRATOS,
       },
@@ -62,7 +62,6 @@ describe("RegistrationService", () => {
           datacontenttype: "application/json",
           data: {
             userId: "identity-1",
-            email: "a@b.com",
           },
         }),
       }),
@@ -97,11 +96,12 @@ describe("RegistrationService", () => {
     );
 
     await expect(
-      service.registerWithEmailAndPassword("a@b.com", "password"),
+      service.register("a@b.com", "ada", "password"),
     ).rejects.toBeInstanceOf(IdentityAlreadyExistsError);
 
     expect(identityProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
+      username: "ada",
       password: "password",
     });
     expect(db.transaction).not.toHaveBeenCalled();
@@ -132,11 +132,12 @@ describe("RegistrationService", () => {
     );
 
     await expect(
-      service.registerWithEmailAndPassword("a@b.com", "password"),
+      service.register("a@b.com", "ada", "password"),
     ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
 
     expect(identityProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
+      username: "ada",
       password: "password",
     });
     expect(db.transaction).not.toHaveBeenCalled();
@@ -168,17 +169,17 @@ describe("RegistrationService", () => {
       db as never,
     );
 
-    await expect(service.registerWithEmailAndPassword("a@b.com", "password")).rejects.toBe(
+    await expect(service.register("a@b.com", "ada", "password")).rejects.toBe(
       saveError,
     );
 
     expect(identityProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
+      username: "ada",
       password: "password",
     });
     expect(identityRepository.save).toHaveBeenCalledWith(
       {
-        email: "a@b.com",
         idpId: "idp-1",
         idpProvider: IdentityProviderType.KRATOS,
       },
@@ -195,7 +196,7 @@ describe("RegistrationService", () => {
       deleteIdentity: vi.fn().mockResolvedValue(undefined),
     };
     const identityRepository = {
-      save: vi.fn().mockResolvedValue({ id: "identity-1", email: "a@b.com" }),
+      save: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
     };
     const outboxService = {
       schedule: vi.fn().mockRejectedValue(scheduleError),
@@ -212,7 +213,7 @@ describe("RegistrationService", () => {
       db as never,
     );
 
-    await expect(service.registerWithEmailAndPassword("a@b.com", "password")).rejects.toBe(
+    await expect(service.register("a@b.com", "ada", "password")).rejects.toBe(
       scheduleError,
     );
 

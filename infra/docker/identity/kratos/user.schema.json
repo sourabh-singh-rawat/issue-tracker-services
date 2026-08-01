@@ -7,10 +7,38 @@
     "traits": {
       "type": "object",
       "properties": {
+        "username": {
+          "title": "Username",
+          "description": "3–30 lowercase letters, numbers, '.' or '_'. Must start with a letter.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 30,
+          "pattern": "^(?=.{3,30}$)(?!.*[._]{2})[a-z](?:[a-z0-9]|[._](?=[a-z0-9]))*[a-z0-9]$",
+          "ory.sh/kratos": {
+            "credentials": {
+              "password": {
+                "identifier": true
+              }
+            }
+          }
+        },
+        "phone": {
+          "title": "Phone Number",
+          "description": "Phone number in E.164 format.",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "ory.sh/kratos": {
+            "credentials": {
+              "password": {
+                "identifier": true
+              }
+            }
+          }
+        },
         "email": {
+          "title": "Email Address",
           "type": "string",
           "format": "email",
-          "title": "E-Mail",
           "minLength": 3,
           "ory.sh/kratos": {
             "credentials": {
@@ -20,28 +48,14 @@
             },
             "verification": {
               "via": "email"
-            },
-            "recovery": {
-              "via": "email"
-            }
-          }
-        },
-        "name": {
-          "type": "object",
-          "properties": {
-            "first": {
-              "title": "First Name",
-              "type": "string"
-            },
-            "last": {
-              "title": "Last Name",
-              "type": "string"
             }
           }
         }
       },
-      "required": ["email"],
+      "required": ["username", "phone", "email"],
       "additionalProperties": false
     }
-  }
+  },
+  "required": ["traits"],
+  "additionalProperties": false
 }

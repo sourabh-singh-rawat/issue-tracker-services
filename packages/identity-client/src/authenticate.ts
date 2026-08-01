@@ -39,7 +39,6 @@ export const authenticateBearer = async (
 
   request.user = {
     id: identity.id,
-    email: identity.email,
     authMethod: "access_token",
   };
 };
@@ -64,7 +63,6 @@ export const authenticateSession = async (
 
   request.user = {
     id: identity.id,
-    email: identity.email,
     authMethod: "session",
   };
 };

@@ -18,8 +18,8 @@ export class IdentityService implements IIdentityService {
     return identity;
   }
 
-  async getIdentityByEmail(email: string) {
-    const identity = await this.identityRepository.findByEmail(email);
+  async getIdentityByIdpId(idpId: string) {
+    const identity = await this.identityRepository.findByIdpId(idpId);
     if (!identity) throw new UserNotFoundError();
 
     return identity;

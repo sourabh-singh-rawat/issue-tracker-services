@@ -32,7 +32,7 @@ export const registerWithEmailAndPassword: RouteOptions<
     const input = req.body;
     const service = container.get<IRegistrationService>(TYPES.RegistrationService);
 
-    await service.registerWithEmailAndPassword(input.email, input.password);
+    await service.register(input.email, input.username, input.password);
 
     const response: RegisterResponse = {
       message: "Your request has been received.",

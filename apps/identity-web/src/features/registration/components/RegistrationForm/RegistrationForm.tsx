@@ -13,11 +13,11 @@ export const RegistrationForm = () => {
   const registerMutation = useRegisterWithEmailAndPasswordMutation();
 
   const form = useForm({
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", username: "", password: "" },
     onSubmit: async ({ value }) => {
       try {
         await registerMutation.mutateAsync({
-          body: { email: value.email, password: value.password },
+          body: { email: value.email, username: value.username, password: value.password },
         });
         snackbar.success("Account created. Check your email to verify your address.");
       } catch (error) {
@@ -32,13 +32,31 @@ export const RegistrationForm = () => {
         <Grid container spacing={2}>
           <Grid size={12}>
             <FormItem name="email">
-              <TextInput label="Email" autoComplete="email" />
+              <TextInput
+                label="Email"
+                placeholder="you@example.com"
+                autoComplete="email"
+              />
+            </FormItem>
+          </Grid>
+
+          <Grid size={12}>
+            <FormItem name="username">
+              <TextInput
+                label="Username"
+                placeholder="jane.doe"
+                autoComplete="username"
+              />
             </FormItem>
           </Grid>
 
           <Grid size={12}>
             <FormItem name="password">
-              <PasswordInput label="Password" autoComplete="new-password" />
+              <PasswordInput
+                label="Password"
+                placeholder="Enter a strong password"
+                autoComplete="new-password"
+              />
             </FormItem>
           </Grid>
 

@@ -3,7 +3,6 @@ import { JWTPayload } from "jose";
 import { BaseToken } from "./BaseToken";
 
 export interface AccessToken extends BaseToken {
-  email: string;
   createdAt: Date | string;
   emailVerificationStatus: EmailVerificationStatus;
   displayName?: string;
@@ -29,7 +28,6 @@ function isAppMetadata(value: unknown): value is AccessToken["appMetadata"] {
 export function isAccessToken(payload: JWTPayload): payload is AccessToken {
   return (
     typeof payload.userId === "string" &&
-    typeof payload.email === "string" &&
     typeof payload.iss === "string" &&
     typeof payload.aud === "string" &&
     typeof payload.sub === "string" &&
@@ -42,18 +40,12 @@ export function isAccessToken(payload: JWTPayload): payload is AccessToken {
   );
 }
 
-export function hasUserIdentity(
-  payload: JWTPayload,
-): payload is JWTPayload & { userId: string; email: string } {
-  return typeof payload.userId === "string" && typeof payload.email === "string";
+export function hasUserIdentity(payload: JWTPayload): payload is JWTPayload & { userId: string } {
+  return typeof payload.userId === "string";
 }
 
 export function hasVerificationClaims(
   payload: JWTPayload,
 ): payload is JWTPayload & { userId: string; tokenId: string } {
   return typeof payload.userId === "string" && typeof payload.tokenId === "string";
-}
-
-export function hasEmailClaim(payload: JWTPayload): payload is JWTPayload & { email: string } {
-  return typeof payload.email === "string";
 }
