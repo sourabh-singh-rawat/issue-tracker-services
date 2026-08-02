@@ -1,0 +1,1 @@
+export { RoleAssignmentCreatedEvent } from "./RoleAssignmentCreatedEvent";

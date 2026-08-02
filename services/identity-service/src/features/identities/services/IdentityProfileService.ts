@@ -18,10 +18,10 @@ export class IdentityProfileService implements IIdentityProfileService {
   ) {}
 
   async createIdentityProfile(options: CreateIdentityProfileOptions) {
-    const { tx, firstName, middleName, lastName, displayName, identityId, description } = options;
+    const { tx, firstName, middleName, lastName, identityId, description } = options;
 
     await this.identityProfileRepository.save(
-      { firstName, middleName, lastName, displayName, identityId, description },
+      { firstName, middleName, lastName, identityId, description },
       { tx },
     );
   }
@@ -47,7 +47,6 @@ export class IdentityProfileService implements IIdentityProfileService {
       firstName: profile.firstName,
       middleName: profile.middleName,
       lastName: profile.lastName,
-      displayName: profile.displayName,
       description: profile.description,
       photoUrl: profile.photoUrl,
       createdAt: identity.createdAt,

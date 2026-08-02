@@ -12,6 +12,7 @@ import path from "node:path";
 import { lexicographicSortSchema, printSchema } from "graphql";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
+import type { IClientSeederService } from "@/features/clients";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
@@ -46,6 +47,9 @@ const main = async () => {
 
   await initializeDb();
   await broker.init();
+
+  const clientSeederService = container.get<IClientSeederService>(TYPES.ClientSeederService);
+  await clientSeederService.seed();
 
   const outboxWorker = container.get<IOutboxWorker>(TYPES.OutboxWorker);
   outboxWorker.start();

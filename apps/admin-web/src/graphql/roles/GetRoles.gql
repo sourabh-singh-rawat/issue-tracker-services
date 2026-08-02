@@ -1,0 +1,11 @@
+query GetRoles {
+  getRoles {
+    id
+    key
+    name
+    description
+    system
+    createdAt
+    updatedAt
+  }
+}

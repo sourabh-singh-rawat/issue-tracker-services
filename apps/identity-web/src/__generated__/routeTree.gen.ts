@@ -9,18 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
-import { Route as noAuthCallbackRouteImport } from './../routes/(no-auth)/callback'
 import { Route as noAuthConsentRouteImport } from './../routes/(no-auth)/consent'
 import { Route as noAuthRegistrationRouteImport } from './../routes/(no-auth)/registration'
 import { Route as noAuthResendVerificationRouteImport } from './../routes/(no-auth)/resend-verification'
 import { Route as noAuthSigninRouteImport } from './../routes/(no-auth)/signin'
 import { Route as noAuthVerificationRouteImport } from './../routes/(no-auth)/verification'
 
-const noAuthCallbackRoute = noAuthCallbackRouteImport.update({
-  id: '/(no-auth)/callback',
-  path: '/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const noAuthConsentRoute = noAuthConsentRouteImport.update({
   id: '/(no-auth)/consent',
   path: '/consent',
@@ -49,7 +43,6 @@ const noAuthVerificationRoute = noAuthVerificationRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/callback': typeof noAuthCallbackRoute
   '/consent': typeof noAuthConsentRoute
   '/registration': typeof noAuthRegistrationRoute
   '/resend-verification': typeof noAuthResendVerificationRoute
@@ -57,7 +50,6 @@ export interface FileRoutesByFullPath {
   '/verification': typeof noAuthVerificationRoute
 }
 export interface FileRoutesByTo {
-  '/callback': typeof noAuthCallbackRoute
   '/consent': typeof noAuthConsentRoute
   '/registration': typeof noAuthRegistrationRoute
   '/resend-verification': typeof noAuthResendVerificationRoute
@@ -66,7 +58,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(no-auth)/callback': typeof noAuthCallbackRoute
   '/(no-auth)/consent': typeof noAuthConsentRoute
   '/(no-auth)/registration': typeof noAuthRegistrationRoute
   '/(no-auth)/resend-verification': typeof noAuthResendVerificationRoute
@@ -76,7 +67,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/callback'
     | '/consent'
     | '/registration'
     | '/resend-verification'
@@ -84,7 +74,6 @@ export interface FileRouteTypes {
     | '/verification'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/callback'
     | '/consent'
     | '/registration'
     | '/resend-verification'
@@ -92,7 +81,6 @@ export interface FileRouteTypes {
     | '/verification'
   id:
     | '__root__'
-    | '/(no-auth)/callback'
     | '/(no-auth)/consent'
     | '/(no-auth)/registration'
     | '/(no-auth)/resend-verification'
@@ -101,7 +89,6 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  noAuthCallbackRoute: typeof noAuthCallbackRoute
   noAuthConsentRoute: typeof noAuthConsentRoute
   noAuthRegistrationRoute: typeof noAuthRegistrationRoute
   noAuthResendVerificationRoute: typeof noAuthResendVerificationRoute
@@ -111,13 +98,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(no-auth)/callback': {
-      id: '/(no-auth)/callback'
-      path: '/callback'
-      fullPath: '/callback'
-      preLoaderRoute: typeof noAuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(no-auth)/consent': {
       id: '/(no-auth)/consent'
       path: '/consent'
@@ -157,7 +137,6 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  noAuthCallbackRoute: noAuthCallbackRoute,
   noAuthConsentRoute: noAuthConsentRoute,
   noAuthRegistrationRoute: noAuthRegistrationRoute,
   noAuthResendVerificationRoute: noAuthResendVerificationRoute,

@@ -6,7 +6,6 @@ export interface CreateIdentityProfileOptions {
   firstName: string;
   middleName?: string;
   lastName?: string;
-  displayName: string;
   description?: string;
 }
 
@@ -20,7 +19,6 @@ export interface IIdentityProfileService {
     firstName: string;
     middleName?: string | null;
     lastName?: string | null;
-    displayName: string;
     description?: string | null;
     photoUrl?: string | null;
     createdAt: Date;

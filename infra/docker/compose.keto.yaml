@@ -1,0 +1,44 @@
+services:
+  keto-migrate:
+    image: oryd/keto:v26.2.0
+    environment:
+      - DSN=postgresql://keto:${POSTGRES_KETO_PASSWORD}@ory-postgres:5432/keto?sslmode=disable
+    volumes:
+      - ./authorization/keto:/etc/config/keto:ro
+    command: migrate -c /etc/config/keto/keto.yaml up -y
+    restart: on-failure
+    depends_on:
+      ory-postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.05"
+          memory: 32M
+
+  keto:
+    image: oryd/keto:v26.2.0
+    restart: unless-stopped
+    depends_on:
+      keto-migrate:
+        condition: service_completed_successfully
+    environment:
+      - DSN=postgresql://keto:${POSTGRES_KETO_PASSWORD}@ory-postgres:5432/keto?sslmode=disable
+      - LOG_LEVEL=debug
+    command: serve -c /etc/config/keto/keto.yaml
+    ports:
+      - "4466:4466"
+      - "4467:4467"
+    volumes:
+      - ./authorization/keto:/etc/config/keto:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+        reservations:
+          cpus: "0.10"
+          memory: 64M

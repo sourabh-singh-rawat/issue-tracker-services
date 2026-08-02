@@ -10,7 +10,7 @@ import { VerificationService } from "./VerificationService";
 
 describe("VerificationService", () => {
   it("verifies email via the identity provider and schedules IdentityEmailVerified in the outbox", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
@@ -19,7 +19,9 @@ describe("VerificationService", () => {
     const identityProfileRepository = {
       findByIdentityId: vi.fn().mockResolvedValue({
         identityId: "identity-1",
-        displayName: "Ada",
+        firstName: "Ada",
+        middleName: null,
+        lastName: "Lovelace",
         photoUrl: "https://example.com/ada.png",
       }),
     };
@@ -28,7 +30,7 @@ describe("VerificationService", () => {
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       identityRepository as never,
       identityProfileRepository as never,
       outboxService as never,
@@ -38,7 +40,7 @@ describe("VerificationService", () => {
       service.verifyEmail({ flowId: "flow-1", code: "123456" }),
     ).resolves.toBeUndefined();
 
-    expect(identityProvider.verifyEmail).toHaveBeenCalledWith({
+    expect(verificationProvider.verifyEmail).toHaveBeenCalledWith({
       flowId: "flow-1",
       code: "123456",
     });
@@ -57,7 +59,7 @@ describe("VerificationService", () => {
           data: {
             emailVerificationStatus: "Verified",
             userId: "identity-1",
-            displayName: "Ada",
+            displayName: "Ada Lovelace",
             photoUrl: "https://example.com/ada.png",
           },
         }),
@@ -69,7 +71,7 @@ describe("VerificationService", () => {
   });
 
   it("omits displayName when no profile exists", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
@@ -83,7 +85,7 @@ describe("VerificationService", () => {
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       identityRepository as never,
       identityProfileRepository as never,
       outboxService as never,
@@ -104,7 +106,7 @@ describe("VerificationService", () => {
   });
 
   it("throws UserNotFoundError when the local identity is missing", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
@@ -118,7 +120,7 @@ describe("VerificationService", () => {
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       identityRepository as never,
       identityProfileRepository as never,
       outboxService as never,
@@ -131,7 +133,7 @@ describe("VerificationService", () => {
   });
 
   it("propagates identity provider errors and does not schedule", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       verifyEmail: vi.fn().mockRejectedValue(new InvalidCredentialError()),
     };
     const identityRepository = {
@@ -145,7 +147,7 @@ describe("VerificationService", () => {
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       identityRepository as never,
       identityProfileRepository as never,
       outboxService as never,
@@ -159,12 +161,12 @@ describe("VerificationService", () => {
   });
 
   it("delegates resend verification email to the identity provider", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       resendVerificationEmail: vi.fn().mockResolvedValue(undefined),
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       {} as never,
       {} as never,
       {} as never,
@@ -172,18 +174,18 @@ describe("VerificationService", () => {
 
     await expect(service.resendVerificationEmail({ email: "a@b.com" })).resolves.toBeUndefined();
 
-    expect(identityProvider.resendVerificationEmail).toHaveBeenCalledWith({
+    expect(verificationProvider.resendVerificationEmail).toHaveBeenCalledWith({
       email: "a@b.com",
     });
   });
 
   it("swallows not-found errors when resending (anti-enumeration)", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       resendVerificationEmail: vi.fn().mockRejectedValue(new IdentityNotFoundError()),
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       {} as never,
       {} as never,
       {} as never,
@@ -195,12 +197,12 @@ describe("VerificationService", () => {
   });
 
   it("propagates provider unavailable errors when resending", async () => {
-    const identityProvider = {
+    const verificationProvider = {
       resendVerificationEmail: vi.fn().mockRejectedValue(new IdentityProviderUnavailableError()),
     };
 
     const service = new VerificationService(
-      identityProvider as never,
+      verificationProvider as never,
       {} as never,
       {} as never,
       {} as never,

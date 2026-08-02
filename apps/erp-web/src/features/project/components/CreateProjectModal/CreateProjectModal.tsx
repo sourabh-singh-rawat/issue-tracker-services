@@ -1,6 +1,6 @@
 import Add from "@mui/icons-material/Add";
 import { IconButton, useTheme } from "@mui/material";
-import React from "react";
+import React, { type MouseEvent } from "react";
 import Modal from "../../../../shared/components/Modal";
 import ModalBody from "../../../../shared/components/ModalBody";
 import ModalHeader from "../../../../shared/components/ModalHeader";
@@ -20,12 +20,14 @@ export const CreateProjectModal = ({
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = controlledSetOpen ?? setUncontrolledOpen;
 
-  const handleOpen = (e?: React.MouseEvent) => {
+  const handleOpen = (e?: MouseEvent) => {
     e?.stopPropagation();
     setOpen(true);
   };
-  const handleClose = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
+  const handleClose = (e?: MouseEvent | object) => {
+    if (e && "stopPropagation" in e && typeof e.stopPropagation === "function") {
+      e.stopPropagation();
+    }
     setOpen(false);
   };
 

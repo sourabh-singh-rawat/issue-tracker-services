@@ -5,22 +5,22 @@ import type {
   SignInWithEmailAndPasswordInput,
   SignInWithEmailAndPasswordResult,
 } from "@/features/signin/services/ISignInService";
-import type { IIdentityProvider } from "@/integrations/identity";
-import type { IOAuthProvider } from "@/integrations/oauth";
+import type { ISessionProvider } from "@/integrations/identity";
+import type { IOAuthFlowProvider } from "@/integrations/oauth";
 
 @injectable()
 export class SignInService implements ISignInService {
   constructor(
-    @inject(TYPES.IdentityProvider)
-    private readonly identityProvider: IIdentityProvider,
-    @inject(TYPES.OAuthProvider)
-    private readonly oauthProvider: IOAuthProvider,
+    @inject(TYPES.SessionProvider)
+    private readonly sessionProvider: ISessionProvider,
+    @inject(TYPES.OAuthFlowProvider)
+    private readonly oauthFlowProvider: IOAuthFlowProvider,
   ) {}
 
   async signInWithEmailAndPassword(
     input: SignInWithEmailAndPasswordInput,
   ): Promise<SignInWithEmailAndPasswordResult> {
-    const result = await this.identityProvider.signIn({
+    const result = await this.sessionProvider.signIn({
       email: input.email,
       password: input.password,
     });
@@ -29,7 +29,7 @@ export class SignInService implements ISignInService {
       return result;
     }
 
-    const { redirectTo } = await this.oauthProvider.acceptLoginRequest({
+    const { redirectTo } = await this.oauthFlowProvider.acceptLoginRequest({
       challenge: input.loginChallenge,
       subject: result.identity.id,
       identityProviderSessionId: result.sessionId,

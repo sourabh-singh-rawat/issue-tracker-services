@@ -3,17 +3,23 @@ export type {
   AcceptLoginInput,
   AuthorizeInput,
   ConsentChallenge,
-  ExchangeTokenInput,
-  IntrospectTokenResult,
-  IOAuthProvider,
+  IOAuthFlowProvider,
   LoginChallenge,
   OAuthClientInfo,
   OAuthRedirectResult,
-  RegisterOAuthClientInput,
-  RegisteredOAuthClient,
   RejectRequestInput,
+} from "@/integrations/oauth/IOAuthFlowProvider";
+export type {
+  ExchangeTokenInput,
+  IntrospectTokenResult,
+  IOAuthTokenProvider,
   TokenResult,
-} from "@/integrations/oauth/IOAuthProvider";
+} from "@/integrations/oauth/IOAuthTokenProvider";
+export type {
+  IOAuthClientProvider,
+  RegisteredOAuthClient,
+  RegisterOAuthClientInput,
+} from "@/integrations/oauth/IOAuthClientProvider";
 export {
   InvalidOAuthRequestError,
   OAuthErrorCodes,
@@ -22,4 +28,6 @@ export {
   type OAuthErrorCode,
 } from "@/integrations/oauth/errors";
 export { HydraClient } from "@/integrations/oauth/HydraClient";
-export { HydraOAuthProvider } from "@/integrations/oauth/HydraOAuthProvider";
+export { HydraOAuthFlowProvider } from "@/integrations/oauth/HydraOAuthFlowProvider";
+export { HydraOAuthTokenProvider } from "@/integrations/oauth/HydraOAuthTokenProvider";
+export { HydraOAuthClientProvider } from "@/integrations/oauth/HydraOAuthClientProvider";

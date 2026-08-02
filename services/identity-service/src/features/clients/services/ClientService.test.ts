@@ -1,114 +1,99 @@
 import { describe, expect, it, vi } from "vitest";
 import { ClientService } from "./ClientService";
 
-function createService(clientRepository: unknown, oauthProvider: unknown = {}) {
-  return new ClientService(
-    clientRepository as never,
-    {} as never,
-    {} as never,
-    {} as never,
-    {} as never,
-    {} as never,
-    oauthProvider as never,
-    {} as never,
-  );
+function createService(oauthProvider: unknown) {
+  return new ClientService(oauthProvider as never);
 }
 
-describe("ClientService.getClientById", () => {
-  it("returns null when the client does not exist", async () => {
-    const clientRepository = {
-      findDetailsById: vi.fn().mockResolvedValue(null),
-    };
+describe("ClientService.createClient", () => {
+  it("registers the client with the OAuth provider and maps the response", async () => {
+    const registerClient = vi.fn().mockResolvedValue({
+      clientId: "client-1",
+      name: "identity-web",
+      redirectUris: ["http://localhost:3000/callback"],
+      scopes: ["openid", "profile"],
+      grantTypes: ["authorization_code"],
+    });
+    const service = createService({ registerClient });
 
-    const service = createService(clientRepository);
+    await expect(
+      service.createClient({
+        name: "identity-web",
+        redirectUris: ["http://localhost:3000/callback"],
+        scopes: ["openid", "profile"],
+        grantTypes: ["authorization_code"],
+      }),
+    ).resolves.toEqual({
+      id: "client-1",
+      name: "identity-web",
+      redirectUris: ["http://localhost:3000/callback"],
+      scopes: ["openid", "profile"],
+      grantTypes: ["authorization_code"],
+    });
+
+    expect(registerClient).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "identity-web",
+        redirectUris: ["http://localhost:3000/callback"],
+        scopes: ["openid", "profile"],
+        grantTypes: ["authorization_code"],
+        clientId: expect.any(String),
+      }),
+    );
+  });
+});
+
+describe("ClientService.getClientById", () => {
+  it("returns null when the OAuth provider has no client", async () => {
+    const getClient = vi.fn().mockResolvedValue(null);
+    const service = createService({ getClient });
 
     await expect(service.getClientById("missing")).resolves.toBeNull();
-    expect(clientRepository.findDetailsById).toHaveBeenCalledWith("missing");
+    expect(getClient).toHaveBeenCalledWith("missing");
   });
 
-  it("returns client details from the repository join query", async () => {
-    const details = {
-      id: "client-1",
+  it("returns client details from the OAuth provider", async () => {
+    const getClient = vi.fn().mockResolvedValue({
+      clientId: "client-1",
       name: "inventory-web",
-      oauthProvider: "hydra",
-      providerClientId: "client-1",
-      createdAt: new Date("2026-01-01"),
-      updatedAt: null,
-      deletedAt: null,
-      version: 1,
       redirectUris: ["http://localhost/callback", "http://localhost/silent"],
       scopes: ["openid", "profile"],
       grantTypes: ["authorization_code"],
-    };
+    });
+    const service = createService({ getClient });
 
-    const clientRepository = {
-      findDetailsById: vi.fn().mockResolvedValue(details),
-    };
-
-    const service = createService(clientRepository);
-
-    await expect(service.getClientById("client-1")).resolves.toEqual(details);
-    expect(clientRepository.findDetailsById).toHaveBeenCalledWith("client-1");
+    await expect(service.getClientById("client-1")).resolves.toEqual({
+      id: "client-1",
+      name: "inventory-web",
+      redirectUris: ["http://localhost/callback", "http://localhost/silent"],
+      scopes: ["openid", "profile"],
+      grantTypes: ["authorization_code"],
+    });
+    expect(getClient).toHaveBeenCalledWith("client-1");
   });
 });
 
 describe("ClientService.deleteClientById", () => {
   it("throws when the client does not exist", async () => {
-    const clientRepository = {
-      findById: vi.fn().mockResolvedValue(null),
-      softDeleteWithRelations: vi.fn(),
-    };
-    const oauthProvider = {
-      deleteClient: vi.fn(),
-    };
-
-    const service = createService(clientRepository, oauthProvider);
+    const getClient = vi.fn().mockResolvedValue(null);
+    const deleteClient = vi.fn();
+    const service = createService({ getClient, deleteClient });
 
     await expect(service.deleteClientById("missing")).rejects.toThrow("Client not found: missing");
-    expect(clientRepository.findById).toHaveBeenCalledWith("missing");
-    expect(oauthProvider.deleteClient).not.toHaveBeenCalled();
-    expect(clientRepository.softDeleteWithRelations).not.toHaveBeenCalled();
+    expect(getClient).toHaveBeenCalledWith("missing");
+    expect(deleteClient).not.toHaveBeenCalled();
   });
 
-  it("deletes the OAuth client then soft-deletes local rows", async () => {
-    const clientRepository = {
-      findById: vi.fn().mockResolvedValue({
-        id: "client-1",
-        name: "inventory-web",
-        oauthProvider: "hydra",
-        providerClientId: "hydra-client-1",
-      }),
-      softDeleteWithRelations: vi.fn().mockResolvedValue(true),
-    };
-    const oauthProvider = {
-      deleteClient: vi.fn().mockResolvedValue(undefined),
-    };
-
-    const service = createService(clientRepository, oauthProvider);
+  it("deletes the client via the OAuth provider", async () => {
+    const getClient = vi.fn().mockResolvedValue({
+      clientId: "client-1",
+      name: "inventory-web",
+    });
+    const deleteClient = vi.fn().mockResolvedValue(undefined);
+    const service = createService({ getClient, deleteClient });
 
     await expect(service.deleteClientById("client-1")).resolves.toBeUndefined();
-    expect(oauthProvider.deleteClient).toHaveBeenCalledWith("hydra-client-1");
-    expect(clientRepository.softDeleteWithRelations).toHaveBeenCalledWith("client-1");
-  });
-
-  it("skips the OAuth provider when providerClientId is not set", async () => {
-    const clientRepository = {
-      findById: vi.fn().mockResolvedValue({
-        id: "client-1",
-        name: "legacy",
-        oauthProvider: null,
-        providerClientId: null,
-      }),
-      softDeleteWithRelations: vi.fn().mockResolvedValue(true),
-    };
-    const oauthProvider = {
-      deleteClient: vi.fn(),
-    };
-
-    const service = createService(clientRepository, oauthProvider);
-
-    await expect(service.deleteClientById("client-1")).resolves.toBeUndefined();
-    expect(oauthProvider.deleteClient).not.toHaveBeenCalled();
-    expect(clientRepository.softDeleteWithRelations).toHaveBeenCalledWith("client-1");
+    expect(getClient).toHaveBeenCalledWith("client-1");
+    expect(deleteClient).toHaveBeenCalledWith("client-1");
   });
 });

@@ -8,7 +8,6 @@ export interface IIdentityProfileRepository {
     entity: Partial<IdentityProfile> & {
       identityId: string;
       firstName: string;
-      displayName: string;
     },
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile>;
@@ -20,7 +19,6 @@ export interface IIdentityProfileRepository {
         | "firstName"
         | "middleName"
         | "lastName"
-        | "displayName"
         | "description"
         | "photoUrl"
         | "deletedAt"
