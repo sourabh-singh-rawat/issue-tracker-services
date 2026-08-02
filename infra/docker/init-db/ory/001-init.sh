@@ -2,10 +2,13 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" <<EOF
--- Kratos and Hydra share one Postgres instance with separate roles/DBs
+-- Kratos, Hydra, and Keto share one Postgres instance with separate roles/DBs
 CREATE ROLE kratos WITH LOGIN PASSWORD '${POSTGRES_KRATOS_PASSWORD}';
 CREATE DATABASE kratos OWNER kratos;
 
 CREATE ROLE hydra WITH LOGIN PASSWORD '${POSTGRES_HYDRA_PASSWORD}';
 CREATE DATABASE hydra OWNER hydra;
+
+CREATE ROLE keto WITH LOGIN PASSWORD '${POSTGRES_KETO_PASSWORD}';
+CREATE DATABASE keto OWNER keto;
 EOF

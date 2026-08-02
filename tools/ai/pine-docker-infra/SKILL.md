@@ -2,7 +2,7 @@
 name: pine-docker-infra
 description: >
   Local Docker Compose: Postgres, Ory, NATS, ports, single root env. Triggers: dev:infra,
-  Kratos, Hydra, compose, single-db, multi-db.
+  Kratos, Hydra, Keto, compose, single-db, multi-db.
 ---
 
 # Docker infra
@@ -26,12 +26,12 @@ Compose is always started with `--env-file .env` (see root `pnpm dev:infra*`).
 
 | Script                       | Stack                                         |
 | ---------------------------- | --------------------------------------------- |
-| `pnpm dev:infra` / `:down`   | compose + single-db + ory-db + kratos + hydra |
+| `pnpm dev:infra` / `:down`   | compose + single-db + ory-db + kratos + hydra + keto |
 | `dev:infra:multi-db`         | multi-db overlay                              |
 | `dev:infra:observability`    | + Alloy/Tempo/Loki/Grafana profile            |
-| `dev:infra:kratos` / `hydra` | Ory only                                      |
+| `dev:infra:kratos` / `hydra` / `keto` | Ory identity + OAuth + graph auth    |
 
-Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default), `compose.multi-db.yaml`, `compose.ory-db.yaml`, `compose.kratos.yaml`, `compose.hydra.yaml`.
+Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default), `compose.multi-db.yaml`, `compose.ory-db.yaml`, `compose.kratos.yaml`, `compose.hydra.yaml`, `compose.keto.yaml`.
 
 ## Ports (typical)
 
@@ -42,16 +42,19 @@ Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default),
 | 6380        | Redis (`REDIS_URL`)           |
 | 4433 / 4434 | Kratos public / admin         |
 | 4444 / 4445 | Hydra public / admin          |
+| 4466 / 4467 | Keto read / write             |
 | 5555        | pgAdmin                       |
 | 4317        | Alloy OTLP (obs profile only) |
 
 Confirm in active compose + root `.env.example`.
 
-## Ory
+## Ory (Kratos, Hydra, Keto)
 
-- Config: `infra/docker/identity/kratos/`, `identity/hydra/`
+- Config: `infra/docker/identity/kratos/`, `identity/hydra/`, `authorization/keto/`
 - `KRATOS_SECRETS_CIPHER` must be **32 chars**
-- App URLs: `KRATOS_*_URL`, `HYDRA_*_URL` in root `.env`
+- App URLs: `KRATOS_*_URL`, `HYDRA_*_URL`, `KETO_READ_URL` / `KETO_WRITE_URL` in root `.env`
+- Keto datastore: role/DB `keto` on **ory-postgres** (`POSTGRES_KETO_PASSWORD`)
+- Keto namespaces: `authorization/keto/keto.yaml` (aligned with `@pine/authorization` resources)
 - Kratos mail (verification/recovery): root `.env` only — never secrets in `kratos.yaml`
   - `BREVO_EMAIL` → `COURIER_SMTP_FROM_ADDRESS` (Brevo-verified sender)
   - `COURIER_SMTP_CONNECTION_URI` → Brevo SMTP relay URI
@@ -67,3 +70,4 @@ Confirm in active compose + root `.env.example`.
 3. Data under `infra/data/docker/*` — not source; don’t recurse for code
 4. DB reset = down + delete volume dir (confirm with user first)
 5. Port/password changes → update root `.env.example` (and local `.env`) only — no per-package env files
+6. Init scripts only apply on **fresh** volumes; after openfga→keto cutover, recreate ory-postgres volume (or create `keto` role/DB manually) if migrate fails

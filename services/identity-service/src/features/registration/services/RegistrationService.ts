@@ -6,13 +6,15 @@ import type { Database, Identity } from "@/db";
 import { IdentityProviderType } from "@/features/identities/constants";
 import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";
 import { IRegistrationService } from "@/features/registration/services/IRegistrationService";
-import type { IIdentityProvider } from "@/integrations/identity";
+import type { IIdentityAdminProvider, IRegistrationProvider } from "@/integrations/identity";
 
 @injectable()
 export class RegistrationService implements IRegistrationService {
   constructor(
-    @inject(TYPES.IdentityProvider)
-    private readonly identityProvider: IIdentityProvider,
+    @inject(TYPES.RegistrationProvider)
+    private readonly registrationProvider: IRegistrationProvider,
+    @inject(TYPES.IdentityAdminProvider)
+    private readonly identityAdminProvider: IIdentityAdminProvider,
     @inject(TYPES.IdentityRepository)
     private readonly identityRepository: IIdentityRepository,
     @inject(TYPES.OutboxService)
@@ -22,7 +24,7 @@ export class RegistrationService implements IRegistrationService {
   ) {}
 
   async register(email: string, username: string, password: string): Promise<void> {
-    const idpIdentity = await this.identityProvider.register({ email, username, password });
+    const idpIdentity = await this.registrationProvider.register({ email, username, password });
 
     try {
       await this.db.transaction(async (tx) => {
@@ -58,7 +60,7 @@ export class RegistrationService implements IRegistrationService {
         );
       });
     } catch (error) {
-      await this.identityProvider.deleteIdentity(idpIdentity.id);
+      await this.identityAdminProvider.deleteIdentity(idpIdentity.id);
       throw error;
     }
   }

@@ -10,13 +10,16 @@ import type {
   ResendVerificationEmailInput,
   VerifyEmailInput,
 } from "@/features/verification/services/IVerificationService";
-import { IdentityProviderUnavailableError, type IIdentityProvider } from "@/integrations/identity";
+import {
+  IdentityProviderUnavailableError,
+  type IVerificationProvider,
+} from "@/integrations/identity";
 
 @injectable()
 export class VerificationService implements IVerificationService {
   constructor(
-    @inject(TYPES.IdentityProvider)
-    private readonly identityProvider: IIdentityProvider,
+    @inject(TYPES.VerificationProvider)
+    private readonly verificationProvider: IVerificationProvider,
     @inject(TYPES.IdentityRepository)
     private readonly identityRepository: IIdentityRepository,
     @inject(TYPES.IdentityProfileRepository)
@@ -26,7 +29,7 @@ export class VerificationService implements IVerificationService {
   ) {}
 
   async verifyEmail(input: VerifyEmailInput): Promise<void> {
-    const idpIdentity = await this.identityProvider.verifyEmail({
+    const idpIdentity = await this.verificationProvider.verifyEmail({
       flowId: input.flowId,
       code: input.code,
     });
@@ -37,6 +40,9 @@ export class VerificationService implements IVerificationService {
     }
 
     const profile = await this.identityProfileRepository.findByIdentityId(identity.id);
+    const displayName = profile
+      ? [profile.firstName, profile.middleName, profile.lastName].filter(Boolean).join(" ")
+      : undefined;
 
     const event = createCloudEvent({
       type: IdentityEmailVerifiedEvent.type,
@@ -47,7 +53,7 @@ export class VerificationService implements IVerificationService {
       data: {
         emailVerificationStatus: EMAIL_VERIFICATION_STATUS.VERIFIED,
         userId: identity.id,
-        ...(profile?.displayName ? { displayName: profile.displayName } : {}),
+        ...(displayName ? { displayName } : {}),
         ...(profile?.photoUrl ? { photoUrl: profile.photoUrl } : {}),
       },
     });
@@ -64,7 +70,7 @@ export class VerificationService implements IVerificationService {
 
   async resendVerificationEmail(input: ResendVerificationEmailInput): Promise<void> {
     try {
-      await this.identityProvider.resendVerificationEmail({
+      await this.verificationProvider.resendVerificationEmail({
         email: input.email,
       });
     } catch (error) {

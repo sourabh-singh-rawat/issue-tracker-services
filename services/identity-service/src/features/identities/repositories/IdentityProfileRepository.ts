@@ -20,7 +20,6 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
     entity: Partial<IdentityProfile> & {
       identityId: string;
       firstName: string;
-      displayName: string;
     },
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile> {
@@ -35,7 +34,6 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
         firstName: entity.firstName,
         middleName: entity.middleName ?? null,
         lastName: entity.lastName ?? null,
-        displayName: entity.displayName,
         description: entity.description ?? null,
         photoUrl: entity.photoUrl ?? null,
         createdAt: now,
@@ -54,7 +52,6 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
         | "firstName"
         | "middleName"
         | "lastName"
-        | "displayName"
         | "description"
         | "photoUrl"
         | "deletedAt"
@@ -71,7 +68,6 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
         ...(entity.firstName !== undefined ? { firstName: entity.firstName } : {}),
         ...(entity.middleName !== undefined ? { middleName: entity.middleName } : {}),
         ...(entity.lastName !== undefined ? { lastName: entity.lastName } : {}),
-        ...(entity.displayName !== undefined ? { displayName: entity.displayName } : {}),
         ...(entity.description !== undefined ? { description: entity.description } : {}),
         ...(entity.photoUrl !== undefined ? { photoUrl: entity.photoUrl } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),

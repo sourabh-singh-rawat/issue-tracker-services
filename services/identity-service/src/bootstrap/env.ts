@@ -8,6 +8,8 @@ export const EnvSchema = Type.Object({
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
   IDENTITY_WEB_URL: Type.String({ default: "http://localhost:3000" }),
+  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  ADMIN_WEB_URL: Type.String({ default: "http://localhost:3002" }),
   KRATOS_PUBLIC_URL: Type.String({ default: "http://127.0.0.1:4433" }),
   KRATOS_ADMIN_URL: Type.String({ default: "http://127.0.0.1:4434" }),
   HYDRA_PUBLIC_URL: Type.String({ default: "http://127.0.0.1:4444" }),

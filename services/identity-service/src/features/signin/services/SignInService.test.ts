@@ -10,21 +10,21 @@ describe("SignInService", () => {
     expiresAt: new Date("2030-01-01T00:00:00.000Z"),
   };
 
-  it("signs in with the identity provider and returns the result when no login challenge is provided", async () => {
-    const identityProvider = {
+  it("signs in with the session provider and returns the result when no login challenge is provided", async () => {
+    const sessionProvider = {
       signIn: vi.fn().mockResolvedValue(signInResult),
     };
     const oauthProvider = {
       acceptLoginRequest: vi.fn(),
     };
 
-    const service = new SignInService(identityProvider as never, oauthProvider as never);
+    const service = new SignInService(sessionProvider as never, oauthProvider as never);
 
     await expect(
       service.signInWithEmailAndPassword({ email: "a@b.com", password: "password" }),
     ).resolves.toEqual(signInResult);
 
-    expect(identityProvider.signIn).toHaveBeenCalledWith({
+    expect(sessionProvider.signIn).toHaveBeenCalledWith({
       email: "a@b.com",
       password: "password",
     });
@@ -32,7 +32,7 @@ describe("SignInService", () => {
   });
 
   it("accepts the OAuth login request and returns redirectTo when a login challenge is provided", async () => {
-    const identityProvider = {
+    const sessionProvider = {
       signIn: vi.fn().mockResolvedValue(signInResult),
     };
     const oauthProvider = {
@@ -41,7 +41,7 @@ describe("SignInService", () => {
       }),
     };
 
-    const service = new SignInService(identityProvider as never, oauthProvider as never);
+    const service = new SignInService(sessionProvider as never, oauthProvider as never);
 
     await expect(
       service.signInWithEmailAndPassword({
@@ -54,7 +54,7 @@ describe("SignInService", () => {
       redirectTo: "http://127.0.0.1:4444/oauth2/auth?login_verifier=abc",
     });
 
-    expect(identityProvider.signIn).toHaveBeenCalledWith({
+    expect(sessionProvider.signIn).toHaveBeenCalledWith({
       email: "a@b.com",
       password: "password",
     });
@@ -65,42 +65,42 @@ describe("SignInService", () => {
     });
   });
 
-  it("propagates invalid credential errors from the identity provider", async () => {
-    const identityProvider = {
+  it("propagates invalid credential errors from the session provider", async () => {
+    const sessionProvider = {
       signIn: vi.fn().mockRejectedValue(new InvalidCredentialError()),
     };
     const oauthProvider = {
       acceptLoginRequest: vi.fn(),
     };
 
-    const service = new SignInService(identityProvider as never, oauthProvider as never);
+    const service = new SignInService(sessionProvider as never, oauthProvider as never);
 
     await expect(
       service.signInWithEmailAndPassword({ email: "a@b.com", password: "wrong" }),
     ).rejects.toBeInstanceOf(InvalidCredentialError);
 
-    expect(identityProvider.signIn).toHaveBeenCalledWith({
+    expect(sessionProvider.signIn).toHaveBeenCalledWith({
       email: "a@b.com",
       password: "wrong",
     });
     expect(oauthProvider.acceptLoginRequest).not.toHaveBeenCalled();
   });
 
-  it("propagates provider unavailable errors from the identity provider", async () => {
-    const identityProvider = {
+  it("propagates provider unavailable errors from the session provider", async () => {
+    const sessionProvider = {
       signIn: vi.fn().mockRejectedValue(new IdentityProviderUnavailableError()),
     };
     const oauthProvider = {
       acceptLoginRequest: vi.fn(),
     };
 
-    const service = new SignInService(identityProvider as never, oauthProvider as never);
+    const service = new SignInService(sessionProvider as never, oauthProvider as never);
 
     await expect(
       service.signInWithEmailAndPassword({ email: "a@b.com", password: "password" }),
     ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
 
-    expect(identityProvider.signIn).toHaveBeenCalledWith({
+    expect(sessionProvider.signIn).toHaveBeenCalledWith({
       email: "a@b.com",
       password: "password",
     });

@@ -1,4 +1,3 @@
-# Shared Postgres for Ory Kratos and Hydra (one instance, two DBs/users).
 services:
   ory-postgres:
     image: postgres:18.4
@@ -8,6 +7,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
       - POSTGRES_KRATOS_PASSWORD=${POSTGRES_KRATOS_PASSWORD}
       - POSTGRES_HYDRA_PASSWORD=${POSTGRES_HYDRA_PASSWORD}
+      - POSTGRES_KETO_PASSWORD=${POSTGRES_KETO_PASSWORD}
     volumes:
       - ../data/docker/pg-ory-data:/var/lib/postgresql
       - ./init-db/ory:/docker-entrypoint-initdb.d:ro

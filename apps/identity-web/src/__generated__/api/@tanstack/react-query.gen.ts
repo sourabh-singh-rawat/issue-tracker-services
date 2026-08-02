@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, registerWithEmailAndPassword, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -306,14 +306,14 @@ export const exchangeTokenMutation = (options?: Partial<Options<ExchangeTokenDat
 export const useExchangeTokenMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>>, 'mutationFn'>>) => useMutation({ ...exchangeTokenMutation(), ...mutationOptions });
 
 /**
- * Register with email and password
+ * Register
  *
  * Register a new user with email and password via the identity provider
  */
-export const registerWithEmailAndPasswordMutation = (options?: Partial<Options<RegisterWithEmailAndPasswordData>>): UseMutationOptions<RegisterWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<RegisterWithEmailAndPasswordData>> => {
-    const mutationOptions: UseMutationOptions<RegisterWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<RegisterWithEmailAndPasswordData>> = {
+export const registerMutation = (options?: Partial<Options<RegisterData>>): UseMutationOptions<RegisterResponse, AxiosError<DefaultError>, Options<RegisterData>> => {
+    const mutationOptions: UseMutationOptions<RegisterResponse, AxiosError<DefaultError>, Options<RegisterData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await registerWithEmailAndPassword({
+            const { data } = await register({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -325,11 +325,11 @@ export const registerWithEmailAndPasswordMutation = (options?: Partial<Options<R
 };
 
 /**
- * Register with email and password
+ * Register
  *
  * Register a new user with email and password via the identity provider
  */
-export const useRegisterWithEmailAndPasswordMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RegisterWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<RegisterWithEmailAndPasswordData>>, 'mutationFn'>>) => useMutation({ ...registerWithEmailAndPasswordMutation(), ...mutationOptions });
+export const useRegisterMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RegisterResponse, AxiosError<DefaultError>, Options<RegisterData>>, 'mutationFn'>>) => useMutation({ ...registerMutation(), ...mutationOptions });
 
 export const verifyEmailQueryKey = (options: Options<VerifyEmailData>) => createQueryKey('verifyEmail', options);
 

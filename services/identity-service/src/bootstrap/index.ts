@@ -6,3 +6,4 @@ export { env } from "@/bootstrap/env";
 export { hydraClient } from "@/bootstrap/hydra-client";
 export { kratosClient } from "@/bootstrap/kratos-client";
 export { logger } from "@/bootstrap/logger";
+export { oauthClients } from "@/bootstrap/oauth-clients";

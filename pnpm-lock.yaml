@@ -53,6 +53,103 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
 
+  apps/admin-web:
+    dependencies:
+      '@emotion/react':
+        specifier: ^11.14.0
+        version: 11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
+      '@emotion/styled':
+        specifier: ^11.14.1
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
+      '@hey-api/client-axios':
+        specifier: 0.9.1
+        version: 0.9.1(@hey-api/openapi-ts@0.99.0(magicast@0.5.3)(typescript@7.0.2))(axios@1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))
+      '@hey-api/vite-plugin':
+        specifier: ^0.3.2
+        version: 0.3.2(@hey-api/openapi-ts@0.99.0(magicast@0.5.3)(typescript@7.0.2))(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+      '@mui/icons-material':
+        specifier: 6.1.9
+        version: 6.1.9(@mui/material@9.2.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.17)(react@19.2.8)
+      '@mui/material':
+        specifier: 9.2.0
+        version: 9.2.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@pine/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@tanstack/react-form':
+        specifier: ^1.33.2
+        version: 1.33.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tanstack/react-query':
+        specifier: 5.101.4
+        version: 5.101.4(react@19.2.8)
+      '@tanstack/react-router':
+        specifier: 1.170.18
+        version: 1.170.18(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      axios:
+        specifier: ^1.18.1
+        version: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      graphql:
+        specifier: 16.14.2
+        version: 16.14.2
+      notistack:
+        specifier: ^3.0.2
+        version: 3.0.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react:
+        specifier: ^19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.2.8
+        version: 19.2.8(react@19.2.8)
+      zustand:
+        specifier: 5.0.14
+        version: 5.0.14(@types/react@19.2.17)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+    devDependencies:
+      '@graphql-codegen/add':
+        specifier: ^7.1.0
+        version: 7.1.0(graphql@16.14.2)
+      '@graphql-codegen/cli':
+        specifier: ^7.2.0
+        version: 7.2.0(@types/node@26.1.1)(graphql@16.14.2)(supports-color@7.2.0)(typescript@7.0.2)
+      '@graphql-codegen/typescript':
+        specifier: ^6.1.0
+        version: 6.1.0(graphql@16.14.2)
+      '@graphql-codegen/typescript-operations':
+        specifier: ^6.1.2
+        version: 6.1.2(graphql@16.14.2)
+      '@graphql-codegen/typescript-react-query':
+        specifier: ^7.0.5
+        version: 7.0.5(graphql@16.14.2)
+      '@hey-api/openapi-ts':
+        specifier: 0.99.0
+        version: 0.99.0(magicast@0.5.3)(typescript@7.0.2)
+      '@tanstack/react-query-devtools':
+        specifier: 5.101.4
+        version: 5.101.4(@tanstack/react-query@5.101.4(react@19.2.8))(react@19.2.8)
+      '@tanstack/react-router-devtools':
+        specifier: 1.167.0
+        version: 1.167.0(@tanstack/react-router@1.170.18(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@tanstack/router-core@1.171.15)(csstype@3.2.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tanstack/router-plugin':
+        specifier: 1.168.23
+        version: 1.168.23(@tanstack/react-router@1.170.18(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(esbuild@0.28.1)(rolldown@1.1.5)(supports-color@7.2.0)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      '@vitejs/plugin-react':
+        specifier: ^6.0.4
+        version: 6.0.4(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7(supports-color@7.2.0))(@babel/runtime@8.0.0)(rolldown@1.1.5)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0)))(babel-plugin-react-compiler@1.0.0)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vite:
+        specifier: ^8.1.5
+        version: 8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0)
+
   apps/erp-web:
     dependencies:
       '@emotion/react':
@@ -88,6 +185,9 @@ importers:
       '@pine/common':
         specifier: workspace:*
         version: link:../../packages/common
+      '@pine/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@tanstack/react-query':
         specifier: ^5.101.2
         version: 5.101.4(react@19.2.8)
@@ -267,6 +367,12 @@ importers:
       vite:
         specifier: ^8.1.5
         version: 8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0)
+
+  packages/authorization:
+    devDependencies:
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
 
   packages/common:
     dependencies:
@@ -477,6 +583,39 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
 
+  packages/ui:
+    devDependencies:
+      '@emotion/react':
+        specifier: ^11.14.0
+        version: 11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
+      '@emotion/styled':
+        specifier: ^11.14.1
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
+      '@mui/icons-material':
+        specifier: 6.1.9
+        version: 6.1.9(@mui/material@6.1.9(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.17)(react@19.2.8)
+      '@mui/material':
+        specifier: 6.1.9
+        version: 6.1.9(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tanstack/react-form':
+        specifier: ^1.33.2
+        version: 1.33.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      react:
+        specifier: ^19.2.7
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.8(react@19.2.8)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+
   services/api-gateway:
     dependencies:
       '@apollo/gateway':
@@ -625,6 +764,115 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+
+  services/authorization-service:
+    dependencies:
+      '@apollo/server':
+        specifier: ^5.5.1
+        version: 5.5.1(graphql@16.14.2)(supports-color@7.2.0)
+      '@as-integrations/fastify':
+        specifier: ^3.1.0
+        version: 3.1.0(@apollo/server@5.5.1(graphql@16.14.2)(supports-color@7.2.0))(fastify@5.10.0)
+      '@fastify/cookie':
+        specifier: ^11.1.2
+        version: 11.1.2
+      '@fastify/cors':
+        specifier: ^11.3.0
+        version: 11.3.0
+      '@fastify/swagger':
+        specifier: ^9.8.1
+        version: 9.8.1(supports-color@7.2.0)
+      '@ory/keto-client':
+        specifier: 26.2.0
+        version: 26.2.0(supports-color@7.2.0)
+      '@pine/authorization':
+        specifier: workspace:^
+        version: link:../../packages/authorization
+      '@pine/common':
+        specifier: workspace:^
+        version: link:../../packages/common
+      '@pine/errors':
+        specifier: workspace:^
+        version: link:../../packages/errors
+      '@pine/events':
+        specifier: workspace:^
+        version: link:../../packages/events
+      '@pine/graphql-core':
+        specifier: workspace:^
+        version: link:../../packages/graphql-core
+      '@pine/http-core':
+        specifier: workspace:^
+        version: link:../../packages/http-core
+      '@pine/identity-client':
+        specifier: workspace:^
+        version: link:../../packages/identity-client
+      '@pine/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
+      '@pine/outbox':
+        specifier: workspace:^
+        version: link:../../packages/outbox
+      '@pothos/core':
+        specifier: ^4.13.1
+        version: 4.13.1(graphql@16.14.2)
+      drizzle-orm:
+        specifier: 0.45.2
+        version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.22.0)
+      fastify:
+        specifier: ^5.10.0
+        version: 5.10.0
+      graphql:
+        specifier: 16.14.2
+        version: 16.14.2
+      graphql-scalars:
+        specifier: ^1.25.0
+        version: 1.25.0(graphql@16.14.2)
+      http-status-codes:
+        specifier: ^2.3.0
+        version: 2.3.0
+      inversify:
+        specifier: 8.2.2
+        version: 8.2.2(reflect-metadata@0.2.2)
+      nats:
+        specifier: ^2.29.3
+        version: 2.29.3
+      pg:
+        specifier: ^8.22.0
+        version: 8.22.0
+      pino:
+        specifier: ^10.3.1
+        version: 10.3.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
+    devDependencies:
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
+      '@vitest/coverage-v8':
+        specifier: ^4.1.10
+        version: 4.1.10(vitest@4.1.10)
+      drizzle-kit:
+        specifier: 0.31.8
+        version: 0.31.8(supports-color@7.2.0)
+      pino-pretty:
+        specifier: ^13.1.3
+        version: 13.1.3
+      tsx:
+        specifier: 4.23.1
+        version: 4.23.1
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
 
   services/identity-service:
     dependencies:
@@ -985,7 +1233,110 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^4.1.10
-        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+
+  services/organization-service:
+    dependencies:
+      '@apollo/server':
+        specifier: ^5.5.1
+        version: 5.5.1(graphql@16.14.2)(supports-color@7.2.0)
+      '@as-integrations/fastify':
+        specifier: ^3.1.0
+        version: 3.1.0(@apollo/server@5.5.1(graphql@16.14.2)(supports-color@7.2.0))(fastify@5.10.0)
+      '@fastify/cookie':
+        specifier: ^11.1.2
+        version: 11.1.2
+      '@fastify/cors':
+        specifier: ^11.3.0
+        version: 11.3.0
+      '@fastify/swagger':
+        specifier: ^9.8.1
+        version: 9.8.1(supports-color@7.2.0)
+      '@pine/common':
+        specifier: workspace:^
+        version: link:../../packages/common
+      '@pine/errors':
+        specifier: workspace:^
+        version: link:../../packages/errors
+      '@pine/events':
+        specifier: workspace:^
+        version: link:../../packages/events
+      '@pine/graphql-core':
+        specifier: workspace:^
+        version: link:../../packages/graphql-core
+      '@pine/http-core':
+        specifier: workspace:^
+        version: link:../../packages/http-core
+      '@pine/identity-client':
+        specifier: workspace:^
+        version: link:../../packages/identity-client
+      '@pine/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
+      '@pine/security':
+        specifier: workspace:^
+        version: link:../../packages/security
+      '@pothos/core':
+        specifier: ^4.13.1
+        version: 4.13.1(graphql@16.14.2)
+      drizzle-orm:
+        specifier: 0.45.2
+        version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.22.0)
+      fastify:
+        specifier: ^5.10.0
+        version: 5.10.0
+      graphql:
+        specifier: 16.14.2
+        version: 16.14.2
+      graphql-scalars:
+        specifier: ^1.25.0
+        version: 1.25.0(graphql@16.14.2)
+      http-status-codes:
+        specifier: ^2.3.0
+        version: 2.3.0
+      inversify:
+        specifier: 8.2.2
+        version: 8.2.2(reflect-metadata@0.2.2)
+      nats:
+        specifier: ^2.29.3
+        version: 2.29.3
+      pg:
+        specifier: ^8.22.0
+        version: 8.22.0
+      pino:
+        specifier: ^10.3.1
+        version: 10.3.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
+    devDependencies:
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
+      '@vitest/coverage-v8':
+        specifier: ^4.1.10
+        version: 4.1.10(vitest@4.1.10)
+      drizzle-kit:
+        specifier: 0.31.8
+        version: 0.31.8(supports-color@7.2.0)
+      pino-pretty:
+        specifier: ^13.1.3
+        version: 13.1.3
+      tsx:
+        specifier: 4.23.1
+        version: 4.23.1
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
 
   services/product-service:
     dependencies:
@@ -3667,6 +4018,9 @@ packages:
 
   '@ory/hydra-client@26.2.0':
     resolution: {integrity: sha512-0eWsELw9NQX8dJTP4aSFbgx1MvGusNz0UpwmoGCCLlDWBoD56khVOS96C0T6se2+Oy87/gF/RY0moZw4YVzfGQ==}
+
+  '@ory/keto-client@26.2.0':
+    resolution: {integrity: sha512-6xIl15OehWCV9nc8kIRlq63Pf0Tocbh90G0xbbQMA7SWML68kNwfeS4WKaLcDr43sX44QwHy3/NFmu2o4ZeFqg==}
 
   '@ory/kratos-client@26.2.0':
     resolution: {integrity: sha512-D/UBUqqwO0z7IOY1yzWaqisnwX8PHIcNGPskgiA1U5YAQPixgScE1yDCDl2e1GkVPAe9qU1LSRqi9cW/rW9pnQ==}
@@ -10597,6 +10951,14 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
+  '@mui/icons-material@6.1.9(@mui/material@9.2.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.17)(react@19.2.8)':
+    dependencies:
+      '@babel/runtime': 7.29.7
+      '@mui/material': 9.2.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react: 19.2.8
+    optionalDependencies:
+      '@types/react': 19.2.17
+
   '@mui/material@6.1.9(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@babel/runtime': 7.29.7
@@ -11219,6 +11581,13 @@ snapshots:
       '@opentelemetry/core': 2.10.0(@opentelemetry/api@1.9.1)
 
   '@ory/hydra-client@26.2.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+    dependencies:
+      axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
+  '@ory/keto-client@26.2.0(supports-color@7.2.0)':
     dependencies:
       axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
     transitivePeerDependencies:

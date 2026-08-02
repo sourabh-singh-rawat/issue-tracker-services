@@ -42,13 +42,11 @@ export type CategoryObject = {
 
 export type ClientObject = {
   __typename?: 'ClientObject';
-  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
   grantTypes?: Maybe<Array<Scalars['String']['output']>>;
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   redirectUris?: Maybe<Array<Scalars['String']['output']>>;
   scopes?: Maybe<Array<Scalars['String']['output']>>;
-  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type CreateBrandInput = {
@@ -73,6 +71,16 @@ export type CreateClientInput = {
   scopes?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type CreateIdentityInput = {
+  email: Scalars['String']['input'];
+  emailVerified: Scalars['Boolean']['input'];
+  firstName: Scalars['String']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  middleName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
 export type CreateIssueInput = {
   assigneeIds: Array<Scalars['String']['input']>;
   component?: InputMaybe<Scalars['String']['input']>;
@@ -85,6 +93,12 @@ export type CreateIssueInput = {
   projectId: Scalars['String']['input'];
   statusId: Scalars['ID']['input'];
   type: Scalars['String']['input'];
+};
+
+export type CreatePermissionInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  key: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type CreateProductInput = {
@@ -101,6 +115,13 @@ export type CreateProductInput = {
 
 export type CreateProjectInput = {
   name: Scalars['String']['input'];
+};
+
+export type CreateRoleInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  key: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  permissionKeys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CreateUnitInput = {
@@ -138,7 +159,6 @@ export type HelloXyz = {
 export type IdentityObject = {
   __typename?: 'IdentityObject';
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   idpId?: Maybe<Scalars['String']['output']>;
   idpProvider?: Maybe<Scalars['String']['output']>;
@@ -164,9 +184,12 @@ export type Mutation = {
   createBrand?: Maybe<BrandObject>;
   createCategory?: Maybe<CategoryObject>;
   createClient?: Maybe<ClientObject>;
+  createIdentity?: Maybe<IdentityObject>;
   createIssue?: Maybe<Scalars['String']['output']>;
+  createPermission?: Maybe<PermissionObject>;
   createProduct?: Maybe<ProductObject>;
   createProject?: Maybe<Scalars['String']['output']>;
+  createRole?: Maybe<RoleObject>;
   createUnit?: Maybe<UnitObject>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
   deleteBrand?: Maybe<Scalars['String']['output']>;
@@ -178,6 +201,8 @@ export type Mutation = {
   updateBrand?: Maybe<BrandObject>;
   updateCategory?: Maybe<CategoryObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
+  updatePermission?: Maybe<PermissionObject>;
+  updateRole?: Maybe<RoleObject>;
   updateUnit?: Maybe<UnitObject>;
 };
 
@@ -197,8 +222,18 @@ export type MutationCreateClientArgs = {
 };
 
 
+export type MutationCreateIdentityArgs = {
+  input: CreateIdentityInput;
+};
+
+
 export type MutationCreateIssueArgs = {
   input: CreateIssueInput;
+};
+
+
+export type MutationCreatePermissionArgs = {
+  input: CreatePermissionInput;
 };
 
 
@@ -209,6 +244,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateProjectArgs = {
   input: CreateProjectInput;
+};
+
+
+export type MutationCreateRoleArgs = {
+  input: CreateRoleInput;
 };
 
 
@@ -262,6 +302,16 @@ export type MutationUpdateIssueArgs = {
 };
 
 
+export type MutationUpdatePermissionArgs = {
+  input: UpdatePermissionInput;
+};
+
+
+export type MutationUpdateRoleArgs = {
+  input: UpdateRoleInput;
+};
+
+
 export type MutationUpdateUnitArgs = {
   input: UpdateUnitInput;
 };
@@ -276,6 +326,15 @@ export type PaginatedProjectObject = {
   __typename?: 'PaginatedProjectObject';
   rowCount?: Maybe<Scalars['Float']['output']>;
   rows?: Maybe<Array<ProjectObject>>;
+};
+
+export type PermissionObject = {
+  __typename?: 'PermissionObject';
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  key?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type ProductObject = {
@@ -302,6 +361,7 @@ export type ProjectObject = {
 
 export type Query = {
   __typename?: 'Query';
+  authorizationServiceHealth?: Maybe<Scalars['String']['output']>;
   findBrands?: Maybe<Array<BrandObject>>;
   findFiles?: Maybe<PaginatedFileOutput>;
   findIdentities?: Maybe<Array<IdentityObject>>;
@@ -314,7 +374,11 @@ export type Query = {
   findUnits?: Maybe<Array<UnitObject>>;
   getBrand?: Maybe<BrandObject>;
   getClient?: Maybe<ClientObject>;
+  getPermission?: Maybe<PermissionObject>;
+  getPermissions?: Maybe<Array<PermissionObject>>;
   getProduct?: Maybe<ProductObject>;
+  getRole?: Maybe<RoleObject>;
+  getRoles?: Maybe<Array<RoleObject>>;
   getUnit?: Maybe<UnitObject>;
   hello?: Maybe<HelloXyz>;
   hello2?: Maybe<Scalars['String']['output']>;
@@ -362,13 +426,35 @@ export type QueryGetClientArgs = {
 };
 
 
+export type QueryGetPermissionArgs = {
+  key: Scalars['String']['input'];
+};
+
+
 export type QueryGetProductArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetRoleArgs = {
   id: Scalars['String']['input'];
 };
 
 
 export type QueryGetUnitArgs = {
   id: Scalars['String']['input'];
+};
+
+export type RoleObject = {
+  __typename?: 'RoleObject';
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  key?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  permissions?: Maybe<Array<PermissionObject>>;
+  system?: Maybe<Scalars['Boolean']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type StatusObject = {
@@ -417,6 +503,19 @@ export type UpdateIssueInput = {
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdatePermissionInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  permissionKey: Scalars['String']['input'];
+};
+
+export type UpdateRoleInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  permissionKeys?: InputMaybe<Array<Scalars['String']['input']>>;
+  roleId: Scalars['String']['input'];
+};
+
 export type UpdateUnitInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -427,6 +526,7 @@ export type UpdateUnitInput = {
 
 export type Join__Graph =
   | 'ATTACHMENT'
+  | 'AUTHORIZATION_SERVICE'
   | 'IDENTITY_SERVICE'
   | 'ISSUES_SERVICE'
   | 'PRODUCT_SERVICE';

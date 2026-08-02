@@ -1,25 +1,25 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISessionService } from "@/features/session/services/ISessionService";
-import type { IIdentityProvider, Identity } from "@/integrations/identity";
+import type { ISessionProvider, Identity } from "@/integrations/identity";
 import { InvalidCredentialError } from "@/integrations/identity";
-import type { IOAuthProvider } from "@/integrations/oauth";
+import type { IOAuthTokenProvider } from "@/integrations/oauth";
 
 @injectable()
 export class SessionService implements ISessionService {
   constructor(
-    @inject(TYPES.IdentityProvider)
-    private readonly identityProvider: IIdentityProvider,
-    @inject(TYPES.OAuthProvider)
-    private readonly oauthProvider: IOAuthProvider,
+    @inject(TYPES.SessionProvider)
+    private readonly sessionProvider: ISessionProvider,
+    @inject(TYPES.OAuthTokenProvider)
+    private readonly oauthTokenProvider: IOAuthTokenProvider,
   ) {}
 
   async getSession(sessionToken: string): Promise<Identity> {
-    return this.identityProvider.getSession(sessionToken);
+    return this.sessionProvider.getSession(sessionToken);
   }
 
   async getSessionFromAccessToken(accessToken: string): Promise<Identity> {
-    const introspection = await this.oauthProvider.introspectToken(accessToken);
+    const introspection = await this.oauthTokenProvider.introspectToken(accessToken);
 
     if (!introspection.active || !introspection.subject) {
       throw new InvalidCredentialError("Invalid or inactive access token");

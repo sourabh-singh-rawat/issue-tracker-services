@@ -236,7 +236,7 @@ export type ExchangeTokenResponses = {
 
 export type ExchangeTokenResponse = ExchangeTokenResponses[keyof ExchangeTokenResponses];
 
-export type RegisterWithEmailAndPasswordData = {
+export type RegisterData = {
     body: {
         email: string;
         username: string;
@@ -244,10 +244,10 @@ export type RegisterWithEmailAndPasswordData = {
     };
     path?: never;
     query?: never;
-    url: '/identity/registerWithEmailAndPassword';
+    url: '/identity/register';
 };
 
-export type RegisterWithEmailAndPasswordResponses = {
+export type RegisterResponses = {
     /**
      * Default Response
      */
@@ -256,7 +256,7 @@ export type RegisterWithEmailAndPasswordResponses = {
     };
 };
 
-export type RegisterWithEmailAndPasswordResponse = RegisterWithEmailAndPasswordResponses[keyof RegisterWithEmailAndPasswordResponses];
+export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
 
 export type VerifyEmailData = {
     body?: never;

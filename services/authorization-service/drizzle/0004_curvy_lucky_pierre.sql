@@ -1,0 +1,4 @@
+DROP INDEX "role_assignments_global_uidx";--> statement-breakpoint
+DROP INDEX "role_assignments_scoped_uidx";--> statement-breakpoint
+CREATE UNIQUE INDEX "role_assignments_global_uidx" ON "role_assignments" USING btree ("role_id","subject_type","subject_id") WHERE "role_assignments"."scope_type" is null and "role_assignments"."scope_id" is null;--> statement-breakpoint
+CREATE UNIQUE INDEX "role_assignments_scoped_uidx" ON "role_assignments" USING btree ("role_id","subject_type","subject_id","scope_type","scope_id") WHERE "role_assignments"."scope_type" is not null and "role_assignments"."scope_id" is not null;

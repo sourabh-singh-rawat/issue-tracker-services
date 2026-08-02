@@ -1,0 +1,19 @@
+query GetRole($id: String!) {
+  getRole(id: $id) {
+    id
+    key
+    name
+    description
+    system
+    createdAt
+    updatedAt
+    capabilities {
+      id
+      type
+      key
+      name
+      description
+      isStatic
+    }
+  }
+}

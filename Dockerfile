@@ -29,6 +29,8 @@ RUN pnpm exec turbo run build \
     --filter=@pine/notification-service \
     --filter=@pine/identity-service \
     --filter=@pine/inventory-service \
+    --filter=@pine/organization-service \
+    --filter=@pine/authorization-service \
     --filter=@pine/issues-service \
     --filter=@pine/common \
     --filter=@pine/events \
@@ -67,6 +69,22 @@ COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
 CMD pnpm -F @pine/inventory-service start
+
+
+# Stage 3: Organization Service
+FROM base AS organization-service
+COPY --from=build /usr/src/app /usr/src/app
+USER node
+EXPOSE 4000
+CMD pnpm -F @pine/organization-service start
+
+
+# Stage 3: Authorization Service
+FROM base AS authorization-service
+COPY --from=build /usr/src/app /usr/src/app
+USER node
+EXPOSE 4000
+CMD pnpm -F @pine/authorization-service start
 
 
 # Stage 3: Issue Tracker Service

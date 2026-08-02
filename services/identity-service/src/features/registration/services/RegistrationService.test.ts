@@ -9,8 +9,10 @@ import { RegistrationService } from "./RegistrationService";
 
 describe("RegistrationService", () => {
   it("registers a new identity, saves locally, and schedules UserRegistered in the outbox", async () => {
-    const identityProvider = {
+    const registrationProvider = {
       register: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com" }),
+    };
+    const identityAdminProvider = {
       deleteIdentity: vi.fn(),
     };
     const identityRepository = {
@@ -25,17 +27,16 @@ describe("RegistrationService", () => {
     };
 
     const service = new RegistrationService(
-      identityProvider as never,
+      registrationProvider as never,
+      identityAdminProvider as never,
       identityRepository as never,
       outboxService as never,
       db as never,
     );
 
-    await expect(
-      service.register("a@b.com", "ada", "password"),
-    ).resolves.toBeUndefined();
+    await expect(service.register("a@b.com", "ada", "password")).resolves.toBeUndefined();
 
-    expect(identityProvider.register).toHaveBeenCalledWith({
+    expect(registrationProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
       username: "ada",
       password: "password",
@@ -74,8 +75,10 @@ describe("RegistrationService", () => {
   });
 
   it("throws when the identity already exists and does not save or schedule", async () => {
-    const identityProvider = {
+    const registrationProvider = {
       register: vi.fn().mockRejectedValue(new IdentityAlreadyExistsError()),
+    };
+    const identityAdminProvider = {
       deleteIdentity: vi.fn(),
     };
     const identityRepository = {
@@ -89,17 +92,18 @@ describe("RegistrationService", () => {
     };
 
     const service = new RegistrationService(
-      identityProvider as never,
+      registrationProvider as never,
+      identityAdminProvider as never,
       identityRepository as never,
       outboxService as never,
       db as never,
     );
 
-    await expect(
-      service.register("a@b.com", "ada", "password"),
-    ).rejects.toBeInstanceOf(IdentityAlreadyExistsError);
+    await expect(service.register("a@b.com", "ada", "password")).rejects.toBeInstanceOf(
+      IdentityAlreadyExistsError,
+    );
 
-    expect(identityProvider.register).toHaveBeenCalledWith({
+    expect(registrationProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
       username: "ada",
       password: "password",
@@ -110,8 +114,10 @@ describe("RegistrationService", () => {
   });
 
   it("throws when the identity provider is unavailable and does not save or schedule", async () => {
-    const identityProvider = {
+    const registrationProvider = {
       register: vi.fn().mockRejectedValue(new IdentityProviderUnavailableError()),
+    };
+    const identityAdminProvider = {
       deleteIdentity: vi.fn(),
     };
     const identityRepository = {
@@ -125,17 +131,18 @@ describe("RegistrationService", () => {
     };
 
     const service = new RegistrationService(
-      identityProvider as never,
+      registrationProvider as never,
+      identityAdminProvider as never,
       identityRepository as never,
       outboxService as never,
       db as never,
     );
 
-    await expect(
-      service.register("a@b.com", "ada", "password"),
-    ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
+    await expect(service.register("a@b.com", "ada", "password")).rejects.toBeInstanceOf(
+      IdentityProviderUnavailableError,
+    );
 
-    expect(identityProvider.register).toHaveBeenCalledWith({
+    expect(registrationProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
       username: "ada",
       password: "password",
@@ -147,8 +154,10 @@ describe("RegistrationService", () => {
 
   it("deletes the IdP identity and propagates the error when local persistence fails", async () => {
     const saveError = new Error("database unavailable");
-    const identityProvider = {
+    const registrationProvider = {
       register: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com" }),
+    };
+    const identityAdminProvider = {
       deleteIdentity: vi.fn().mockResolvedValue(undefined),
     };
     const identityRepository = {
@@ -163,17 +172,16 @@ describe("RegistrationService", () => {
     };
 
     const service = new RegistrationService(
-      identityProvider as never,
+      registrationProvider as never,
+      identityAdminProvider as never,
       identityRepository as never,
       outboxService as never,
       db as never,
     );
 
-    await expect(service.register("a@b.com", "ada", "password")).rejects.toBe(
-      saveError,
-    );
+    await expect(service.register("a@b.com", "ada", "password")).rejects.toBe(saveError);
 
-    expect(identityProvider.register).toHaveBeenCalledWith({
+    expect(registrationProvider.register).toHaveBeenCalledWith({
       email: "a@b.com",
       username: "ada",
       password: "password",
@@ -186,13 +194,15 @@ describe("RegistrationService", () => {
       { tx },
     );
     expect(outboxService.schedule).not.toHaveBeenCalled();
-    expect(identityProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
+    expect(identityAdminProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
   });
 
   it("deletes the IdP identity when outbox scheduling fails after IdP registration", async () => {
     const scheduleError = new Error("outbox unavailable");
-    const identityProvider = {
+    const registrationProvider = {
       register: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com" }),
+    };
+    const identityAdminProvider = {
       deleteIdentity: vi.fn().mockResolvedValue(undefined),
     };
     const identityRepository = {
@@ -207,18 +217,17 @@ describe("RegistrationService", () => {
     };
 
     const service = new RegistrationService(
-      identityProvider as never,
+      registrationProvider as never,
+      identityAdminProvider as never,
       identityRepository as never,
       outboxService as never,
       db as never,
     );
 
-    await expect(service.register("a@b.com", "ada", "password")).rejects.toBe(
-      scheduleError,
-    );
+    await expect(service.register("a@b.com", "ada", "password")).rejects.toBe(scheduleError);
 
     expect(identityRepository.save).toHaveBeenCalled();
     expect(outboxService.schedule).toHaveBeenCalledWith(expect.any(Object), { tx });
-    expect(identityProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
+    expect(identityAdminProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
   });
 });

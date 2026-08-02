@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useForm } from "@tanstack/react-form";
-import { useRegisterWithEmailAndPasswordMutation } from "@generated/api/@tanstack/react-query.gen";
+import { useRegisterMutation } from "@generated/api/@tanstack/react-query.gen";
 import { useRegistrationStore } from "@features/registration/stores";
 import { Form, FormItem, getErrorMessage, PasswordInput, TextInput, useSnackbar } from "@shared/ui";
 
@@ -10,7 +10,7 @@ export const RegistrationForm = () => {
   useRegistrationStore();
   const snackbar = useSnackbar();
 
-  const registerMutation = useRegisterWithEmailAndPasswordMutation();
+  const registerMutation = useRegisterMutation();
 
   const form = useForm({
     defaultValues: { email: "", username: "", password: "" },

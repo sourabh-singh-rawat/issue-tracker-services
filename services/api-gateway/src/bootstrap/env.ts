@@ -6,6 +6,7 @@ export const EnvSchema = Type.Object({
   API_GATEWAY_URL: Type.String({ default: "http://127.0.0.1:4000" }),
   IDENTITY_WEB_URL: Type.String({ default: "http://localhost:3000" }),
   ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  ADMIN_WEB_URL: Type.String({ default: "http://localhost:3002" }),
   IDENTITY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5000" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5003" }),
   INVENTORY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5002" }),

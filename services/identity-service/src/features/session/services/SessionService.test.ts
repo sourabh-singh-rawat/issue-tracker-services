@@ -1,23 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionService } from "@/features/session/services/SessionService";
-import type { IIdentityProvider, Identity } from "@/integrations/identity";
+import type { ISessionProvider, Identity } from "@/integrations/identity";
 import { InvalidCredentialError } from "@/integrations/identity";
-import type { IOAuthProvider } from "@/integrations/oauth";
+import type { IOAuthTokenProvider } from "@/integrations/oauth";
 
 describe("SessionService", () => {
   const getSession = vi.fn();
   const introspectToken = vi.fn();
-  const identityProvider = { getSession } as unknown as IIdentityProvider;
-  const oauthProvider = { introspectToken } as unknown as IOAuthProvider;
+  const sessionProvider = { getSession } as unknown as ISessionProvider;
+  const oauthTokenProvider = { introspectToken } as unknown as IOAuthTokenProvider;
   let service: SessionService;
 
   beforeEach(() => {
     getSession.mockReset();
     introspectToken.mockReset();
-    service = new SessionService(identityProvider, oauthProvider);
+    service = new SessionService(sessionProvider, oauthTokenProvider);
   });
 
-  it("returns the identity from the Kratos-backed identity provider", async () => {
+  it("returns the identity from the Kratos-backed session provider", async () => {
     const identity: Identity = {
       id: "id-1",
       email: "user@example.com",

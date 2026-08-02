@@ -13,12 +13,15 @@
         "codegen: supergraph",
         "erp-web",
         "identity-web",
+        "admin-web",
         "api-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
         "inventory-service",
         "issues-service",
+        "organization-service",
+        "authorization-service",
         "identity-service"
       ]
     },
@@ -35,12 +38,15 @@
         "codegen: supergraph",
         "erp-web",
         "identity-web",
+        "admin-web",
         "api-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
         "inventory-service",
         "issues-service",
+        "organization-service",
+        "authorization-service",
         "identity-service"
       ]
     },
@@ -57,12 +63,15 @@
         "codegen: supergraph",
         "erp-web",
         "identity-web",
+        "admin-web",
         "api-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
         "inventory-service",
         "issues-service",
+        "organization-service",
+        "authorization-service",
         "identity-service"
       ]
     }
@@ -177,6 +186,42 @@
       "presentation": { "group": "1-services", "order": 6 }
     },
     {
+      "name": "organization-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["organization-service"],
+      "console": "integratedTerminal",
+      "outFiles": [],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/services/**",
+        "${workspaceFolder}/packages/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "presentation": { "group": "1-services", "order": 7 }
+    },
+    {
+      "name": "authorization-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["authorization-service"],
+      "console": "integratedTerminal",
+      "outFiles": [],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/services/**",
+        "${workspaceFolder}/packages/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "presentation": { "group": "1-services", "order": 8 }
+    },
+    {
       "name": "api-gateway",
       "type": "node",
       "request": "launch",
@@ -192,7 +237,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 7 }
+      "presentation": { "group": "1-services", "order": 9 }
     },
     {
       "name": "identity-web",
@@ -231,6 +276,24 @@
       "presentation": { "group": "2-web", "order": 2 }
     },
     {
+      "name": "admin-web",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["admin-web"],
+      "console": "integratedTerminal",
+      "outFiles": [],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/apps/**",
+        "${workspaceFolder}/packages/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "presentation": { "group": "2-web", "order": 3 }
+    },
+    {
       "name": "erp-web + browser",
       "type": "node",
       "request": "launch",
@@ -246,13 +309,38 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "2-web", "order": 3 },
+      "presentation": { "group": "2-web", "order": 4 },
       "serverReadyAction": {
         "pattern": "Local:\\s+(https?://\\S+)",
         "uriFormat": "%s",
         "action": "debugWithChrome",
         "killOnServerStop": true,
         "webRoot": "${workspaceFolder}/apps/erp-web"
+      }
+    },
+    {
+      "name": "admin-web + browser",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["admin-web"],
+      "console": "integratedTerminal",
+      "outFiles": [],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/apps/**",
+        "${workspaceFolder}/packages/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "presentation": { "group": "2-web", "order": 5 },
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "webRoot": "${workspaceFolder}/apps/admin-web"
       }
     },
     {

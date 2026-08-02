@@ -10,7 +10,5 @@ ClientObject.implement({
     redirectUris: t.exposeStringList("redirectUris"),
     scopes: t.exposeStringList("scopes"),
     grantTypes: t.exposeStringList("grantTypes"),
-    createdAt: t.expose("createdAt", { type: "DateTimeISO" }),
-    updatedAt: t.expose("updatedAt", { type: "DateTimeISO", nullable: true }),
   }),
 });

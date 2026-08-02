@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, GetTokenSessionIdentityData, GetTokenSessionIdentityResponses, LogoutData, LogoutResponses, RegisterWithEmailAndPasswordData, RegisterWithEmailAndPasswordResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, GetTokenSessionIdentityData, GetTokenSessionIdentityResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -142,13 +142,13 @@ export const exchangeToken = <ThrowOnError extends boolean = false>(options: Opt
 });
 
 /**
- * Register with email and password
+ * Register
  *
  * Register a new user with email and password via the identity provider
  */
-export const registerWithEmailAndPassword = <ThrowOnError extends boolean = false>(options: Options<RegisterWithEmailAndPasswordData, ThrowOnError>): RequestResult<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError> => (options.client ?? client).post<RegisterWithEmailAndPasswordResponses, unknown, ThrowOnError>({
+export const register = <ThrowOnError extends boolean = false>(options: Options<RegisterData, ThrowOnError>): RequestResult<RegisterResponses, unknown, ThrowOnError> => (options.client ?? client).post<RegisterResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/identity/registerWithEmailAndPassword',
+    url: '/identity/register',
     ...options,
     headers: {
         'Content-Type': 'application/json',
