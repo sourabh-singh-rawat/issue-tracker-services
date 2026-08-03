@@ -7,6 +7,7 @@ export type CreateRoleEntity = {
   key: string;
   name: string;
   description?: string | null;
+  isSystem?: boolean;
 };
 
 export type UpdateRoleEntity = Partial<Pick<Role, "name" | "description">>;

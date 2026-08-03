@@ -1,18 +1,18 @@
-import type { Relationship, Resource } from "@pine/authorization";
+import type { GraphRelationship, GraphResource } from "@pine/authorization";
 
 export interface ListRelationshipsFilter {
-  object?: Resource;
+  object?: GraphResource;
   relation?: string;
-  subject?: Resource;
+  subject?: GraphResource;
 }
 
 export interface IAuthorizationGraphProvider {
-  createRelationship(relationship: Relationship): Promise<void>;
-  deleteRelationship(relationship: Relationship): Promise<void>;
-  listRelationships(filter?: ListRelationshipsFilter): Promise<Relationship[]>;
+  createRelationship(relationship: GraphRelationship): Promise<void>;
+  deleteRelationship(relationship: GraphRelationship): Promise<void>;
+  listRelationships(filter?: ListRelationshipsFilter): Promise<GraphRelationship[]>;
   checkPermission(
-    object: Resource,
+    object: GraphResource,
     relation: string,
-    subject: Resource,
+    subject: GraphResource,
   ): Promise<boolean>;
 }

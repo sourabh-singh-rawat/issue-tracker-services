@@ -18,8 +18,9 @@ import { getErrorMessage } from "@shared/ui";
 
 export type CapabilityOption = {
   key: string;
-  name: string | null;
-  description: string | null;
+  service: string | null;
+  resource: string | null;
+  action: string | null;
 };
 
 export type CapabilityMultiSelectProps = {
@@ -32,17 +33,20 @@ export type CapabilityMultiSelectProps = {
   disabled?: boolean;
 };
 
-function groupKeyForCapability(key: string): string {
-  const parts = key.split(".").filter(Boolean);
+function groupKeyForCapability(capability: CapabilityOption): string {
+  if (capability.service && capability.resource) {
+    return `${capability.service}:${capability.resource}`;
+  }
+  const parts = capability.key.split(":").filter(Boolean);
   if (parts.length <= 1) {
     return "Other";
   }
-  return parts.slice(0, -1).join(".");
+  return parts.slice(0, -1).join(":");
 }
 
 function formatGroupLabel(group: string): string {
   return group
-    .split(".")
+    .split(":")
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(" · ");
 }
@@ -66,7 +70,12 @@ export const CapabilityMultiSelect = ({
       return list;
     }
     return list.filter((capability) => {
-      const haystack = [capability.key, capability.name, capability.description]
+      const haystack = [
+        capability.key,
+        capability.service,
+        capability.resource,
+        capability.action,
+      ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
@@ -77,7 +86,7 @@ export const CapabilityMultiSelect = ({
   const grouped = useMemo(() => {
     const map = new Map<string, CapabilityOption[]>();
     for (const capability of filtered) {
-      const group = groupKeyForCapability(capability.key);
+      const group = groupKeyForCapability(capability);
       const existing = map.get(group);
       if (existing) {
         existing.push(capability);
@@ -86,7 +95,7 @@ export const CapabilityMultiSelect = ({
       }
     }
     for (const group of map.values()) {
-      group.sort((a, b) => (a.name ?? a.key).localeCompare(b.name ?? b.key));
+      group.sort((a, b) => a.key.localeCompare(b.key));
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
   }, [filtered]);
@@ -177,6 +186,8 @@ export const CapabilityMultiSelect = ({
                   {items.map((capability) => {
                     const key = capability.key;
                     const checked = selected.has(key);
+                    const primary =
+                      capability.action ?? capability.key.split(".").at(-1) ?? key;
                     return (
                       <ListItemButton
                         key={key}
@@ -204,30 +215,19 @@ export const CapabilityMultiSelect = ({
                         </ListItemIcon>
                         <ListItemText
                           id={`capability-option-${key}`}
-                          primary={capability.name ?? key}
+                          primary={primary}
                           secondary={
-                            <>
-                              <Typography
-                                component="span"
-                                variant="caption"
-                                sx={{
-                                  display: "block",
-                                  fontFamily: "monospace",
-                                  color: "text.secondary",
-                                }}
-                              >
-                                {key}
-                              </Typography>
-                              {capability.description ? (
-                                <Typography
-                                  component="span"
-                                  variant="caption"
-                                  color="text.secondary"
-                                >
-                                  {capability.description}
-                                </Typography>
-                              ) : null}
-                            </>
+                            <Typography
+                              component="span"
+                              variant="caption"
+                              sx={{
+                                display: "block",
+                                fontFamily: "monospace",
+                                color: "text.secondary",
+                              }}
+                            >
+                              {key}
+                            </Typography>
                           }
                           slotProps={{
                             primary: { variant: "body2", sx: { fontWeight: 500 } },

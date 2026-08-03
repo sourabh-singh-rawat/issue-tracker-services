@@ -7,6 +7,7 @@ const role = {
   key: "system.administrator",
   name: "System Administrator",
   description: null,
+  isSystem: true,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   updatedAt: null,
 };
@@ -14,11 +15,13 @@ const role = {
 const assignment = {
   id: "ra-1",
   roleId: "role-1",
-  subjectType: "user",
-  subjectId: "identity-1",
-  scopeType: null,
-  scopeId: null,
-  createdAt: new Date("2026-01-02T00:00:00.000Z"),
+  identityType: "user",
+  identityId: "identity-1",
+  assignedBy: null,
+  assignedAt: new Date("2026-01-02T00:00:00.000Z"),
+  expiresAt: null,
+  revokedAt: null,
+  reason: null,
 };
 
 const createService = (deps: {
@@ -55,8 +58,8 @@ describe("RoleAssignmentService", () => {
     });
 
     const result = await service.assignRole({
-      subjectType: "user",
-      subjectId: "identity-1",
+      identityType: "user",
+      identityId: "identity-1",
       roleId: "role-1",
     });
 
@@ -65,10 +68,11 @@ describe("RoleAssignmentService", () => {
     expect(roleAssignmentRepository.ensure).toHaveBeenCalledWith(
       {
         roleId: "role-1",
-        subjectType: "user",
-        subjectId: "identity-1",
-        scopeType: undefined,
-        scopeId: undefined,
+        identityType: "user",
+        identityId: "identity-1",
+        assignedBy: undefined,
+        expiresAt: undefined,
+        reason: undefined,
       },
       { tx: {} },
     );
@@ -85,11 +89,13 @@ describe("RoleAssignmentService", () => {
           data: {
             id: assignment.id,
             roleId: assignment.roleId,
-            subjectType: assignment.subjectType,
-            subjectId: assignment.subjectId,
-            scopeType: assignment.scopeType,
-            scopeId: assignment.scopeId,
-            createdAt: assignment.createdAt.toISOString(),
+            identityType: assignment.identityType,
+            identityId: assignment.identityId,
+            assignedBy: assignment.assignedBy,
+            assignedAt: assignment.assignedAt.toISOString(),
+            expiresAt: null,
+            revokedAt: null,
+            reason: assignment.reason,
           },
         }),
       }),
@@ -115,8 +121,8 @@ describe("RoleAssignmentService", () => {
     });
 
     const result = await service.assignRole({
-      subjectType: "user",
-      subjectId: "identity-1",
+      identityType: "user",
+      identityId: "identity-1",
       roleId: "role-1",
     });
 
@@ -143,8 +149,8 @@ describe("RoleAssignmentService", () => {
 
     await expect(
       service.assignRole({
-        subjectType: "user",
-        subjectId: "identity-1",
+        identityType: "user",
+        identityId: "identity-1",
         roleId: "missing",
       }),
     ).rejects.toBeInstanceOf(RoleNotFoundError);
@@ -154,7 +160,7 @@ describe("RoleAssignmentService", () => {
 
   it("returns the assignment when present", async () => {
     const roleAssignmentRepository = {
-      findBySubjectAndRole: vi.fn().mockResolvedValue(assignment),
+      findByIdentityAndRole: vi.fn().mockResolvedValue(assignment),
     };
 
     const service = createService({ roleAssignmentRepository });
@@ -162,11 +168,10 @@ describe("RoleAssignmentService", () => {
     const result = await service.getAssignment("user", "identity-1", "role-1");
 
     expect(result).toEqual(assignment);
-    expect(roleAssignmentRepository.findBySubjectAndRole).toHaveBeenCalledWith(
+    expect(roleAssignmentRepository.findByIdentityAndRole).toHaveBeenCalledWith(
       "user",
       "identity-1",
       "role-1",
-      undefined,
     );
   });
 });

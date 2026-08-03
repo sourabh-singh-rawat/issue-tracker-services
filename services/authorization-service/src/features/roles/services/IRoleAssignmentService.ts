@@ -2,18 +2,18 @@ import type { RoleAssignment } from "@/db";
 
 export type AssignRoleInput = {
   roleId: string;
-  subjectType: string;
-  subjectId: string;
-  scopeType?: string | null;
-  scopeId?: string | null;
+  identityType: string;
+  identityId: string;
+  assignedBy?: string | null;
+  expiresAt?: Date | null;
+  reason?: string | null;
 };
 
 export interface IRoleAssignmentService {
   assignRole(input: AssignRoleInput): Promise<RoleAssignment>;
   getAssignment(
-    subjectType: string,
-    subjectId: string,
+    identityType: string,
+    identityId: string,
     roleId: string,
-    scope?: { scopeType: string; scopeId: string } | null,
   ): Promise<RoleAssignment | null>;
 }

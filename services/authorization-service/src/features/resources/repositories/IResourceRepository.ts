@@ -3,15 +3,13 @@ import type { DbClient, Resource } from "@/db";
 export type ResourceRepositoryOptions = { tx: DbClient };
 
 export type CreateResourceEntity = {
-  type: string;
-  key: string;
   name: string;
   description?: string | null;
-  isStatic?: boolean;
+  isSystem?: boolean;
 };
 
 export type UpdateResourceEntity = Partial<
-  Pick<Resource, "name" | "description" | "isStatic">
+  Pick<Resource, "name" | "description" | "isSystem">
 >;
 
 export interface IResourceRepository {
@@ -21,13 +19,11 @@ export interface IResourceRepository {
     entity: UpdateResourceEntity,
     options?: ResourceRepositoryOptions,
   ): Promise<Resource>;
-  existsByKey(key: string): Promise<boolean>;
+  existsByName(name: string, excludeId?: string): Promise<boolean>;
   findById(id: string): Promise<Resource | null>;
-  findByKey(key: string): Promise<Resource | null>;
-  findByKeys(keys: string[]): Promise<Resource[]>;
-  findByType(type: string): Promise<Resource[]>;
+  findByName(name: string): Promise<Resource | null>;
   findAll(): Promise<Resource[]>;
-  upsertByKey(
+  upsertByName(
     entity: CreateResourceEntity,
     options?: ResourceRepositoryOptions,
   ): Promise<Resource>;

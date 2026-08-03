@@ -95,15 +95,16 @@ export const RoleDetail = () => {
             <Table size="small" aria-label="Role capabilities">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
                   <TableCell>Key</TableCell>
-                  <TableCell>Description</TableCell>
+                  <TableCell>Service</TableCell>
+                  <TableCell>Resource</TableCell>
+                  <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {capabilities.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={4}>
                       <Typography color="text.secondary">
                         This role has no capabilities assigned.
                       </Typography>
@@ -111,16 +112,15 @@ export const RoleDetail = () => {
                   </TableRow>
                 ) : (
                   capabilities.map((capability) => (
-                    <TableRow
-                      key={capability.id ?? capability.key ?? capability.name ?? undefined}
-                    >
-                      <TableCell>{capability.name ?? "—"}</TableCell>
+                    <TableRow key={capability.id ?? capability.key ?? undefined}>
                       <TableCell
                         sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}
                       >
                         {capability.key ?? "—"}
                       </TableCell>
-                      <TableCell>{capability.description ?? "—"}</TableCell>
+                      <TableCell>{capability.service ?? "—"}</TableCell>
+                      <TableCell>{capability.resource ?? "—"}</TableCell>
+                      <TableCell>{capability.action ?? "—"}</TableCell>
                     </TableRow>
                   ))
                 )}

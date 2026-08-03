@@ -4,10 +4,12 @@ export type RoleAssignmentRepositoryOptions = { tx: DbClient };
 
 export type CreateRoleAssignmentEntity = {
   roleId: string;
-  subjectType: string;
-  subjectId: string;
-  scopeType?: string | null;
-  scopeId?: string | null;
+  identityType: string;
+  identityId: string;
+  assignedBy?: string | null;
+  assignedAt?: Date;
+  expiresAt?: Date | null;
+  reason?: string | null;
 };
 
 export interface IRoleAssignmentRepository {
@@ -15,16 +17,15 @@ export interface IRoleAssignmentRepository {
     entity: CreateRoleAssignmentEntity,
     options?: RoleAssignmentRepositoryOptions,
   ): Promise<RoleAssignment>;
-  findBySubjectAndRole(
-    subjectType: string,
-    subjectId: string,
+  findByIdentityAndRole(
+    identityType: string,
+    identityId: string,
     roleId: string,
-    scope?: { scopeType: string; scopeId: string } | null,
     options?: RoleAssignmentRepositoryOptions,
   ): Promise<RoleAssignment | null>;
-  findBySubject(
-    subjectType: string,
-    subjectId: string,
+  findByIdentity(
+    identityType: string,
+    identityId: string,
     options?: RoleAssignmentRepositoryOptions,
   ): Promise<RoleAssignment[]>;
   ensure(

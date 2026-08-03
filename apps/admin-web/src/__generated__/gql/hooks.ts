@@ -11,7 +11,7 @@ import { useQuery, useMutation, type UseQueryOptions, type UseMutationOptions } 
 export type GetCapabilitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCapabilitiesQuery = { getCapabilities: Array<{ id: string | null, type: string | null, key: string | null, name: string | null, description: string | null, isStatic: boolean | null }> | null };
+export type GetCapabilitiesQuery = { getCapabilities: Array<{ id: string | null, key: string | null, service: string | null, resource: string | null, action: string | null }> | null };
 
 export type CreateOrganizationMutationVariables = Exact<{
   input: Types.CreateOrganizationInput;
@@ -44,7 +44,7 @@ export type GetRoleQueryVariables = Exact<{
 }>;
 
 
-export type GetRoleQuery = { getRole: { id: string | null, key: string | null, name: string | null, description: string | null, system: boolean | null, createdAt: unknown, updatedAt: unknown, capabilities: Array<{ id: string | null, type: string | null, key: string | null, name: string | null, description: string | null, isStatic: boolean | null }> | null } | null };
+export type GetRoleQuery = { getRole: { id: string | null, key: string | null, name: string | null, description: string | null, system: boolean | null, createdAt: unknown, updatedAt: unknown, capabilities: Array<{ id: string | null, key: string | null, service: string | null, resource: string | null, action: string | null }> | null } | null };
 
 export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -75,11 +75,10 @@ export const GetCapabilitiesDocument = new TypedDocumentString(`
     query GetCapabilities {
   getCapabilities {
     id
-    type
     key
-    name
-    description
-    isStatic
+    service
+    resource
+    action
   }
 }
     `);
@@ -229,11 +228,10 @@ export const GetRoleDocument = new TypedDocumentString(`
     updatedAt
     capabilities {
       id
-      type
       key
-      name
-      description
-      isStatic
+      service
+      resource
+      action
     }
   }
 }

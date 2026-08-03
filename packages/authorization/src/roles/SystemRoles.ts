@@ -1,12 +1,12 @@
 import {
-  organizationManagementCapabilities,
-  organizationManagementWithoutDeleteCapabilities,
-  roleManagementCapabilities,
-} from "../resources";
+  ORGANIZATIONS,
+  ROLES,
+} from "../capabilities";
 import {
   allCapabilityKeys,
   capabilityKeys,
   readCapabilityKeys,
+  withoutActions,
 } from "../utils";
 import type { RoleDefinition } from "./RoleDefinition";
 
@@ -24,17 +24,14 @@ export const SYSTEM_ROLES = {
     name: "Organization Owner",
     description:
       "Full control of an organization, including delete and role management",
-    capabilityKeys: capabilityKeys(
-      organizationManagementCapabilities(),
-      roleManagementCapabilities(),
-    ),
+    capabilityKeys: capabilityKeys(ORGANIZATIONS, ROLES),
   },
   ORGANIZATION_ADMINISTRATOR: {
     id: "01900000-0000-7000-8000-000000000003",
     key: "organization.administrator",
     name: "Organization Administrator",
     description: "Manage an organization without capability to delete it",
-    capabilityKeys: capabilityKeys(organizationManagementWithoutDeleteCapabilities()),
+    capabilityKeys: withoutActions(ORGANIZATIONS, "delete"),
   },
   READ_ONLY: {
     id: "01900000-0000-7000-8000-000000000004",

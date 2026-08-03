@@ -25,14 +25,17 @@ import {
   type IAuthorizationService,
 } from "@/features/authorization";
 import {
-  PermissionRepository,
-  type IPermissionRepository,
-  PermissionService,
-  type IPermissionService,
-} from "@/features/permissions";
+  CapabilityRepository,
+  type ICapabilityRepository,
+  CapabilityService,
+  type ICapabilityService,
+} from "@/features/capabilities";
 import {
-  ResourceRelationRepository,
-  type IResourceRelationRepository,
+  IdentityRepository,
+  type IIdentityRepository,
+  IdentitySyncConsumer,
+} from "@/features/identities";
+import {
   ResourceRepository,
   type IResourceRepository,
 } from "@/features/resources";
@@ -42,8 +45,8 @@ import {
   type IRoleAssignmentRepository,
   RoleAssignmentService,
   type IRoleAssignmentService,
-  RoleResourceRepository,
-  type IRoleResourceRepository,
+  RoleCapabilityRepository,
+  type IRoleCapabilityRepository,
   RoleRepository,
   type IRoleRepository,
   RoleService,
@@ -97,12 +100,13 @@ container.bind<KetoClient>(TYPES.KetoClient).toConstantValue(ketoClient);
 container
   .bind<IAuthorizationGraphProvider>(TYPES.AuthorizationGraphProvider)
   .to(KetoAuthorizationGraphProvider);
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
+container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
 container.bind<IResourceRepository>(TYPES.ResourceRepository).to(ResourceRepository);
-container
-  .bind<IResourceRelationRepository>(TYPES.ResourceRelationRepository)
-  .to(ResourceRelationRepository);
 container.bind<IRoleRepository>(TYPES.RoleRepository).to(RoleRepository);
-container.bind<IRoleResourceRepository>(TYPES.RoleResourceRepository).to(RoleResourceRepository);
+container
+  .bind<IRoleCapabilityRepository>(TYPES.RoleCapabilityRepository)
+  .to(RoleCapabilityRepository);
 container
   .bind<IRoleAssignmentRepository>(TYPES.RoleAssignmentRepository)
   .to(RoleAssignmentRepository);
@@ -113,6 +117,6 @@ container
   .bind<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer)
   .to(RoleAssignmentKetoSyncConsumer);
 container.bind<IRoleService>(TYPES.RoleService).to(RoleService);
-container.bind<IPermissionRepository>(TYPES.PermissionRepository).to(PermissionRepository);
-container.bind<IPermissionService>(TYPES.PermissionService).to(PermissionService);
+container.bind<ICapabilityRepository>(TYPES.CapabilityRepository).to(CapabilityRepository);
+container.bind<ICapabilityService>(TYPES.CapabilityService).to(CapabilityService);
 container.bind<IAuthorizationService>(TYPES.AuthorizationService).to(AuthorizationService);

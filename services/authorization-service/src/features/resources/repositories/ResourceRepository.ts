@@ -1,5 +1,5 @@
 import { uuidv7 } from "@pine/common";
-import { desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, ne } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { type Database, type Resource, Resources } from "@/db";
@@ -29,11 +29,9 @@ export class ResourceRepository implements IResourceRepository {
       .insert(Resources)
       .values({
         id: uuidv7(),
-        type: entity.type,
-        key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
-        isStatic: entity.isStatic ?? false,
+        isSystem: entity.isSystem ?? false,
         createdAt: now,
       })
       .returning();
@@ -54,7 +52,7 @@ export class ResourceRepository implements IResourceRepository {
       .set({
         ...(entity.name !== undefined ? { name: entity.name } : {}),
         ...(entity.description !== undefined ? { description: entity.description } : {}),
-        ...(entity.isStatic !== undefined ? { isStatic: entity.isStatic } : {}),
+        ...(entity.isSystem !== undefined ? { isSystem: entity.isSystem } : {}),
         updatedAt: now,
       })
       .where(eq(Resources.id, id))
@@ -67,11 +65,15 @@ export class ResourceRepository implements IResourceRepository {
     return updated;
   }
 
-  async existsByKey(key: string): Promise<boolean> {
+  async existsByName(name: string, excludeId?: string): Promise<boolean> {
     const row = await this.db
       .select({ id: Resources.id })
       .from(Resources)
-      .where(eq(Resources.key, key))
+      .where(
+        excludeId
+          ? and(eq(Resources.name, name), ne(Resources.id, excludeId))
+          : eq(Resources.name, name),
+      )
       .limit(1);
 
     return row.length > 0;
@@ -87,37 +89,21 @@ export class ResourceRepository implements IResourceRepository {
     return row ?? null;
   }
 
-  async findByKey(key: string): Promise<Resource | null> {
+  async findByName(name: string): Promise<Resource | null> {
     const [row] = await this.db
       .select()
       .from(Resources)
-      .where(eq(Resources.key, key))
+      .where(eq(Resources.name, name))
       .limit(1);
 
     return row ?? null;
-  }
-
-  async findByKeys(keys: string[]): Promise<Resource[]> {
-    if (keys.length === 0) {
-      return [];
-    }
-
-    return this.db.select().from(Resources).where(inArray(Resources.key, keys));
-  }
-
-  async findByType(type: string): Promise<Resource[]> {
-    return this.db
-      .select()
-      .from(Resources)
-      .where(eq(Resources.type, type))
-      .orderBy(desc(Resources.createdAt));
   }
 
   async findAll(): Promise<Resource[]> {
     return this.db.select().from(Resources).orderBy(desc(Resources.createdAt));
   }
 
-  async upsertByKey(
+  async upsertByName(
     entity: CreateResourceEntity,
     options?: ResourceRepositoryOptions,
   ): Promise<Resource> {
@@ -128,20 +114,16 @@ export class ResourceRepository implements IResourceRepository {
       .insert(Resources)
       .values({
         id: uuidv7(),
-        type: entity.type,
-        key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
-        isStatic: entity.isStatic ?? false,
+        isSystem: entity.isSystem ?? false,
         createdAt: now,
       })
       .onConflictDoUpdate({
-        target: Resources.key,
+        target: Resources.name,
         set: {
-          type: entity.type,
-          name: entity.name,
           description: entity.description ?? null,
-          isStatic: entity.isStatic ?? false,
+          isSystem: entity.isSystem ?? false,
           updatedAt: now,
         },
       })

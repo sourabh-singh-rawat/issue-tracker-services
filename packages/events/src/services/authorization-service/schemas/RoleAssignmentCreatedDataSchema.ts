@@ -4,11 +4,13 @@ export const RoleAssignmentCreatedDataSchema = Type.Object(
   {
     id: Type.String(),
     roleId: Type.String(),
-    subjectType: Type.String(),
-    subjectId: Type.String(),
-    scopeType: Type.Optional(Type.Union([Type.String(), Type.Null()])),
-    scopeId: Type.Optional(Type.Union([Type.String(), Type.Null()])),
-    createdAt: Type.String(),
+    identityType: Type.String(),
+    identityId: Type.String(),
+    assignedBy: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+    assignedAt: Type.String(),
+    expiresAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+    revokedAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+    reason: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   },
   { additionalProperties: false },
 );

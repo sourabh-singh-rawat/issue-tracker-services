@@ -2,55 +2,57 @@ import { describe, expect, it, vi } from "vitest";
 import { AuthorizationService } from "@/features/authorization/services/AuthorizationService";
 
 const createService = (
-  roleResourceRepository: unknown,
+  roleCapabilityRepository: unknown,
   authorizationGraphProvider: unknown = { checkPermission: vi.fn() },
 ) =>
   new AuthorizationService(
-    roleResourceRepository as never,
+    roleCapabilityRepository as never,
     authorizationGraphProvider as never,
   );
 
 describe("AuthorizationService", () => {
-  it("returns true when any role has any of the permissions", async () => {
-    const roleResourceRepository = {
-      existsByRoleKeysAndResourceKeys: vi.fn().mockResolvedValue(true),
+  it("returns true when any role has any of the capabilities", async () => {
+    const roleCapabilityRepository = {
+      existsByRoleKeysAndCapabilityKeys: vi.fn().mockResolvedValue(true),
     };
 
-    const service = createService(roleResourceRepository);
+    const service = createService(roleCapabilityRepository);
 
     await expect(
       service.hasCapability(
         ["system.administrator", "system.read-only"],
-        ["authorization.roles.create", "authorization.roles.read"],
+        ["authorization:roles:create", "authorization:roles:read"],
       ),
     ).resolves.toBe(true);
 
-    expect(roleResourceRepository.existsByRoleKeysAndResourceKeys).toHaveBeenCalledWith(
+    expect(roleCapabilityRepository.existsByRoleKeysAndCapabilityKeys).toHaveBeenCalledWith(
       ["system.administrator", "system.read-only"],
-      ["authorization.roles.create", "authorization.roles.read"],
+      ["authorization:roles:create", "authorization:roles:read"],
     );
   });
 
   it("returns false when no roles are provided", async () => {
-    const roleResourceRepository = {
-      existsByRoleKeysAndResourceKeys: vi.fn().mockResolvedValue(true),
+    const roleCapabilityRepository = {
+      existsByRoleKeysAndCapabilityKeys: vi.fn().mockResolvedValue(true),
     };
 
-    const service = createService(roleResourceRepository);
+    const service = createService(roleCapabilityRepository);
 
-    await expect(service.hasCapability([], ["authorization.roles.create"])).resolves.toBe(false);
-    expect(roleResourceRepository.existsByRoleKeysAndResourceKeys).not.toHaveBeenCalled();
+    await expect(service.hasCapability([], ["authorization:roles:create"])).resolves.toBe(
+      false,
+    );
+    expect(roleCapabilityRepository.existsByRoleKeysAndCapabilityKeys).not.toHaveBeenCalled();
   });
 
-  it("returns false when no permissions are provided", async () => {
-    const roleResourceRepository = {
-      existsByRoleKeysAndResourceKeys: vi.fn().mockResolvedValue(true),
+  it("returns false when no capability keys are provided", async () => {
+    const roleCapabilityRepository = {
+      existsByRoleKeysAndCapabilityKeys: vi.fn().mockResolvedValue(true),
     };
 
-    const service = createService(roleResourceRepository);
+    const service = createService(roleCapabilityRepository);
 
     await expect(service.hasCapability(["system.administrator"], [])).resolves.toBe(false);
-    expect(roleResourceRepository.existsByRoleKeysAndResourceKeys).not.toHaveBeenCalled();
+    expect(roleCapabilityRepository.existsByRoleKeysAndCapabilityKeys).not.toHaveBeenCalled();
   });
 
   it("delegates relationship checks to the authorization graph provider", async () => {

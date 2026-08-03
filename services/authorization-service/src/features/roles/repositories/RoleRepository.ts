@@ -29,6 +29,7 @@ export class RoleRepository implements IRoleRepository {
         key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
+        isSystem: entity.isSystem ?? false,
         createdAt: now,
       })
       .returning();
@@ -128,6 +129,7 @@ export class RoleRepository implements IRoleRepository {
         key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
+        isSystem: entity.isSystem ?? false,
         createdAt: now,
       })
       .onConflictDoUpdate({
@@ -136,6 +138,7 @@ export class RoleRepository implements IRoleRepository {
           key: entity.key,
           name: entity.name,
           description: entity.description ?? null,
+          isSystem: entity.isSystem ?? false,
           updatedAt: now,
         },
       })

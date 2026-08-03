@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { PermissionNotFoundError } from "@/features/permissions/errors";
+import { CapabilityNotFoundError } from "@/features/capabilities/errors";
 import {
   RoleKeyConflictError,
   RoleNameConflictError,
@@ -12,6 +12,7 @@ const role = {
   key: "custom.admin",
   name: "Admin",
   description: "Full access",
+  isSystem: false,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   updatedAt: null,
 };
@@ -19,19 +20,19 @@ const role = {
 const createService = (deps: {
   db?: unknown;
   roleRepository?: unknown;
-  roleResourceRepository?: unknown;
-  resourceRepository?: unknown;
+  roleCapabilityRepository?: unknown;
+  capabilityRepository?: unknown;
 }) =>
   new RoleService(
     (deps.db ?? {
       transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn({})),
     }) as never,
     (deps.roleRepository ?? {}) as never,
-    (deps.roleResourceRepository ?? {
+    (deps.roleCapabilityRepository ?? {
       saveMany: vi.fn(),
       syncForRole: vi.fn(),
     }) as never,
-    (deps.resourceRepository ?? { findByKeys: vi.fn().mockResolvedValue([]) }) as never,
+    (deps.capabilityRepository ?? { findByKeys: vi.fn().mockResolvedValue([]) }) as never,
   );
 
 describe("RoleService", () => {
@@ -41,26 +42,26 @@ describe("RoleService", () => {
       existsByName: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(role),
     };
-    const roleResourceRepository = {
+    const roleCapabilityRepository = {
       saveMany: vi.fn().mockResolvedValue([]),
     };
-    const resourceRepository = {
+    const capabilityRepository = {
       findByKeys: vi.fn().mockResolvedValue([
-        { id: "res-1", key: "authorization.capabilities.read" },
+        { id: "cap-1", key: "authorization:capability:read" },
       ]),
     };
 
     const service = createService({
       roleRepository,
-      roleResourceRepository,
-      resourceRepository,
+      roleCapabilityRepository,
+      capabilityRepository,
     });
 
     const result = await service.createRole({
       key: "custom.admin",
       name: "Admin",
       description: "Full access",
-      capabilityKeys: ["authorization.capabilities.read"],
+      capabilityKeys: ["authorization:capability:read"],
     });
 
     expect(result).toEqual(role);
@@ -72,12 +73,11 @@ describe("RoleService", () => {
       },
       { tx: {} },
     );
-    expect(roleResourceRepository.saveMany).toHaveBeenCalledWith(
+    expect(roleCapabilityRepository.saveMany).toHaveBeenCalledWith(
       [
         {
           roleId: role.id,
-          resourceId: "res-1",
-          relation: "has",
+          capabilityId: "cap-1",
         },
       ],
       { tx: {} },
@@ -119,7 +119,7 @@ describe("RoleService", () => {
         existsByName: vi.fn().mockResolvedValue(false),
         save: vi.fn(),
       },
-      resourceRepository: {
+      capabilityRepository: {
         findByKeys: vi.fn().mockResolvedValue([]),
       },
     });
@@ -128,9 +128,9 @@ describe("RoleService", () => {
       service.createRole({
         key: "custom.admin",
         name: "Admin",
-        capabilityKeys: ["missing.capability"],
+        capabilityKeys: ["missing:capability:key"],
       }),
-    ).rejects.toBeInstanceOf(PermissionNotFoundError);
+    ).rejects.toBeInstanceOf(CapabilityNotFoundError);
   });
 
   it("returns roles from the repository", async () => {

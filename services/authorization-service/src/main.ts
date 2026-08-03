@@ -12,6 +12,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
+import { IdentitySyncConsumer } from "@/features/identities";
 import { RoleAssignmentKetoSyncConsumer } from "@/features/roles";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
@@ -87,7 +88,7 @@ const main = async () => {
       servers: [{ url: env.AUTHORIZATION_SERVICE_URL }],
       tags: [
         { name: "roles", description: "Role end-points" },
-        { name: "permissions", description: "Capability resource end-points" },
+        { name: "capabilities", description: "Capability end-points" },
       ],
     },
   });
@@ -95,6 +96,7 @@ const main = async () => {
   await server.start();
   writeOpenApiToDist(instance);
 
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
   void container
     .get<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer)
     .start();

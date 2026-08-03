@@ -9,11 +9,10 @@ query GetRole($id: String!) {
     updatedAt
     capabilities {
       id
-      type
       key
-      name
-      description
-      isStatic
+      service
+      resource
+      action
     }
   }
 }

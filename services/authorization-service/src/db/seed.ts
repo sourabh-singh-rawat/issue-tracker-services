@@ -1,76 +1,66 @@
-import { ALL_CAPABILITIES, ALL_DYNAMIC_RESOURCES, ALL_SYSTEM_ROLES } from "@pine/authorization";
+import {
+  ALL_CAPABILITIES,
+  ALL_RESOURCES,
+  ALL_SYSTEM_ROLES,
+} from "@pine/authorization";
 import { uuidv7 } from "@pine/common";
 import { eq, inArray } from "drizzle-orm";
 import { closeDb, db, initializeDb } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
 import {
-  ResourceRelations,
+  Capabilities,
   Resources,
-  RoleResources,
+  RoleCapabilities,
   Roles,
   type Transaction,
 } from "@/db";
 
-const CAPABILITY_HAS_RELATION = "has";
-
 const seedResources = async (tx: Transaction): Promise<void> => {
-  const staticResources = [...ALL_DYNAMIC_RESOURCES, ...ALL_CAPABILITIES];
-
-  for (const resource of staticResources) {
+  for (const resource of ALL_RESOURCES) {
     await tx
       .insert(Resources)
       .values({
         id: uuidv7(),
-        type: resource.type,
-        key: resource.key,
         name: resource.name,
         description: resource.description,
-        isStatic: true,
+        isSystem: resource.isSystem,
       })
       .onConflictDoUpdate({
-        target: Resources.key,
+        target: Resources.name,
         set: {
-          type: resource.type,
-          name: resource.name,
           description: resource.description,
-          isStatic: true,
+          isSystem: resource.isSystem,
           updatedAt: new Date(),
         },
       });
   }
 
-  logger.info(`Seeded ${staticResources.length} static resource(s)`);
+  logger.info(`Seeded ${ALL_RESOURCES.length} system resource(s)`);
 };
 
-const seedResourceRelations = async (tx: Transaction): Promise<void> => {
-  const byType = new Map<string, Set<string>>();
-
-  for (const resource of [...ALL_DYNAMIC_RESOURCES, ...ALL_CAPABILITIES]) {
-    const keys = byType.get(resource.type) ?? new Set<string>();
-    for (const relationKey of Object.values(resource.relations)) {
-      keys.add(relationKey);
-    }
-    byType.set(resource.type, keys);
+const seedCapabilities = async (tx: Transaction): Promise<void> => {
+  for (const capability of ALL_CAPABILITIES) {
+    await tx
+      .insert(Capabilities)
+      .values({
+        id: uuidv7(),
+        key: capability.key,
+        service: capability.service,
+        resource: capability.resource,
+        action: capability.action,
+      })
+      .onConflictDoUpdate({
+        target: Capabilities.key,
+        set: {
+          service: capability.service,
+          resource: capability.resource,
+          action: capability.action,
+          updatedAt: new Date(),
+        },
+      });
   }
 
-  let count = 0;
-  for (const [resourceType, keys] of byType) {
-    for (const key of keys) {
-      await tx
-        .insert(ResourceRelations)
-        .values({
-          id: uuidv7(),
-          resourceType,
-          key,
-        })
-        .onConflictDoNothing({
-          target: [ResourceRelations.resourceType, ResourceRelations.key],
-        });
-      count += 1;
-    }
-  }
-
-  logger.info(`Seeded resource relations for ${byType.size} type(s) (${count} upsert attempt(s))`);
+  logger.info(`Seeded ${ALL_CAPABILITIES.length} capability(ies)`);
 };
 
 const seedRoles = async (tx: Transaction): Promise<void> => {
@@ -84,6 +74,7 @@ const seedRoles = async (tx: Transaction): Promise<void> => {
         key: role.key,
         name: role.name,
         description: role.description,
+        isSystem: true,
         createdAt: now,
       })
       .onConflictDoUpdate({
@@ -92,39 +83,39 @@ const seedRoles = async (tx: Transaction): Promise<void> => {
           key: role.key,
           name: role.name,
           description: role.description,
+          isSystem: true,
           updatedAt: now,
         },
       });
 
     const capabilityKeys = [...role.capabilityKeys];
 
-    await tx.delete(RoleResources).where(eq(RoleResources.roleId, role.id));
+    await tx.delete(RoleCapabilities).where(eq(RoleCapabilities.roleId, role.id));
 
     if (capabilityKeys.length === 0) {
       continue;
     }
 
-    const resources = await tx
-      .select({ id: Resources.id, key: Resources.key })
-      .from(Resources)
-      .where(inArray(Resources.key, capabilityKeys));
+    const capabilities = await tx
+      .select({ id: Capabilities.id, key: Capabilities.key })
+      .from(Capabilities)
+      .where(inArray(Capabilities.key, capabilityKeys));
 
-    const byKey = new Map(resources.map((r) => [r.key, r.id]));
+    const byKey = new Map(capabilities.map((c) => [c.key, c.id]));
     const mappings = capabilityKeys.map((key) => {
-      const resourceId = byKey.get(key);
-      if (!resourceId) {
+      const capabilityId = byKey.get(key);
+      if (!capabilityId) {
         throw new Error(
-          `Seed failed: capability resource not found for key=${key} (role=${role.key})`,
+          `Seed failed: capability not found for key=${key} (role=${role.key})`,
         );
       }
       return {
         roleId: role.id,
-        resourceId,
-        relation: CAPABILITY_HAS_RELATION,
+        capabilityId,
       };
     });
 
-    await tx.insert(RoleResources).values(mappings);
+    await tx.insert(RoleCapabilities).values(mappings);
   }
 
   logger.info(`Seeded ${ALL_SYSTEM_ROLES.length} system role(s)`);
@@ -135,7 +126,7 @@ const seed = async (): Promise<void> => {
 
   await db.transaction(async (tx) => {
     await seedResources(tx);
-    await seedResourceRelations(tx);
+    await seedCapabilities(tx);
     await seedRoles(tx);
   });
 
