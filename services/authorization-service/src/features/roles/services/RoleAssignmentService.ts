@@ -36,10 +36,11 @@ export class RoleAssignmentService implements IRoleAssignmentService {
       const { assignment, created } = await this.roleAssignmentRepository.ensure(
         {
           roleId: role.id,
-          subjectType: input.subjectType,
-          subjectId: input.subjectId,
-          scopeType: input.scopeType,
-          scopeId: input.scopeId,
+          identityType: input.identityType,
+          identityId: input.identityId,
+          assignedBy: input.assignedBy,
+          expiresAt: input.expiresAt,
+          reason: input.reason,
         },
         { tx },
       );
@@ -54,11 +55,13 @@ export class RoleAssignmentService implements IRoleAssignmentService {
           data: {
             id: assignment.id,
             roleId: assignment.roleId,
-            subjectType: assignment.subjectType,
-            subjectId: assignment.subjectId,
-            scopeType: assignment.scopeType,
-            scopeId: assignment.scopeId,
-            createdAt: assignment.createdAt.toISOString(),
+            identityType: assignment.identityType,
+            identityId: assignment.identityId,
+            assignedBy: assignment.assignedBy,
+            assignedAt: assignment.assignedAt.toISOString(),
+            expiresAt: assignment.expiresAt?.toISOString() ?? null,
+            revokedAt: assignment.revokedAt?.toISOString() ?? null,
+            reason: assignment.reason,
           },
         });
 
@@ -80,16 +83,14 @@ export class RoleAssignmentService implements IRoleAssignmentService {
   }
 
   async getAssignment(
-    subjectType: string,
-    subjectId: string,
+    identityType: string,
+    identityId: string,
     roleId: string,
-    scope?: { scopeType: string; scopeId: string } | null,
   ): Promise<RoleAssignment | null> {
-    return this.roleAssignmentRepository.findBySubjectAndRole(
-      subjectType,
-      subjectId,
+    return this.roleAssignmentRepository.findByIdentityAndRole(
+      identityType,
+      identityId,
       roleId,
-      scope,
     );
   }
 }

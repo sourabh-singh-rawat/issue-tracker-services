@@ -1,4 +1,4 @@
-import type { CapabilityKey } from "../resources";
+import type { CapabilityKey } from "../capabilities";
 
 export type RoleDefinition = {
   id: string;

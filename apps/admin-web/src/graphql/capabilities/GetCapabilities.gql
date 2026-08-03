@@ -1,10 +1,9 @@
 query GetCapabilities {
   getCapabilities {
     id
-    type
     key
-    name
-    description
-    isStatic
+    service
+    resource
+    action
   }
 }

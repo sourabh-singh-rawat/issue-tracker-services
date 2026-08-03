@@ -46,8 +46,9 @@ export const CreateRoleForm = ({ onSuccess, onCancel }: CreateRoleFormProps) => 
         )
         .map((capability) => ({
           key: capability.key,
-          name: capability.name,
-          description: capability.description,
+          service: capability.service ?? null,
+          resource: capability.resource ?? null,
+          action: capability.action ?? null,
         })),
   });
 

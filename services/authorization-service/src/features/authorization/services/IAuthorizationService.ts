@@ -1,6 +1,6 @@
-import type { Relationship } from "@pine/authorization";
+import type { GraphRelationship } from "@pine/authorization";
 
 export interface IAuthorizationService {
-  hasCapability(roles: string[], permissions: string[]): Promise<boolean>;
-  hasRelationship(relationship: Relationship): Promise<boolean>;
+  hasCapability(roles: string[], capabilityKeys: string[]): Promise<boolean>;
+  hasRelationship(relationship: GraphRelationship): Promise<boolean>;
 }

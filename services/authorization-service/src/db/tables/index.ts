@@ -1,8 +1,14 @@
 export {
-  type ResourceRelation,
-  type NewResourceRelation,
-  ResourceRelations,
-} from "@/db/tables/ResourceRelations";
+  type Capability,
+  type NewCapability,
+  Capabilities,
+  CapabilitiesRelations,
+} from "@/db/tables/Capabilities";
+export {
+  type Identity,
+  type NewIdentity,
+  Identities,
+} from "@/db/tables/Identities";
 export {
   type Resource,
   type NewResource,
@@ -16,9 +22,9 @@ export {
   RoleAssignmentsRelations,
 } from "@/db/tables/RoleAssignments";
 export {
-  type RoleResource,
-  type NewRoleResource,
-  RoleResources,
-  RoleResourcesRelations,
-} from "@/db/tables/RoleResources";
+  type RoleCapability,
+  type NewRoleCapability,
+  RoleCapabilities,
+  RoleCapabilitiesRelations,
+} from "@/db/tables/RoleCapabilities";
 export { type Role, type NewRole, Roles, RolesRelations } from "@/db/tables/Roles";

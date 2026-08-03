@@ -1,21 +1,22 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Role } from "@/db";
-import { PermissionNotFoundError } from "@/features/permissions/errors";
-import type { IResourceRepository } from "@/features/resources/repositories";
+import { CapabilityNotFoundError } from "@/features/capabilities/errors";
+import type { ICapabilityRepository } from "@/features/capabilities/repositories";
 import {
   RoleKeyConflictError,
   RoleNameConflictError,
   RoleNotFoundError,
 } from "@/features/roles/errors";
-import type { IRoleRepository, IRoleResourceRepository } from "@/features/roles/repositories";
+import type {
+  IRoleCapabilityRepository,
+  IRoleRepository,
+} from "@/features/roles/repositories";
 import type {
   CreateRoleInput,
   IRoleService,
   UpdateRoleInput,
 } from "@/features/roles/services/IRoleService";
-
-const DEFAULT_CAPABILITY_RELATION = "has";
 
 @injectable()
 export class RoleService implements IRoleService {
@@ -24,29 +25,29 @@ export class RoleService implements IRoleService {
     private readonly db: Database,
     @inject(TYPES.RoleRepository)
     private readonly roleRepository: IRoleRepository,
-    @inject(TYPES.RoleResourceRepository)
-    private readonly roleResourceRepository: IRoleResourceRepository,
-    @inject(TYPES.ResourceRepository)
-    private readonly resourceRepository: IResourceRepository,
+    @inject(TYPES.RoleCapabilityRepository)
+    private readonly roleCapabilityRepository: IRoleCapabilityRepository,
+    @inject(TYPES.CapabilityRepository)
+    private readonly capabilityRepository: ICapabilityRepository,
   ) {}
 
-  private async resolveResourceIdsByKeys(resourceKeys: string[]): Promise<string[]> {
-    if (resourceKeys.length === 0) {
+  private async resolveCapabilityIdsByKeys(capabilityKeys: string[]): Promise<string[]> {
+    if (capabilityKeys.length === 0) {
       return [];
     }
 
-    const resources = await this.resourceRepository.findByKeys(resourceKeys);
-    const foundKeys = new Set(resources.map((resource) => resource.key));
-    const missingKeys = resourceKeys.filter((key) => !foundKeys.has(key));
+    const capabilities = await this.capabilityRepository.findByKeys(capabilityKeys);
+    const foundKeys = new Set(capabilities.map((capability) => capability.key));
+    const missingKeys = capabilityKeys.filter((key) => !foundKeys.has(key));
 
     if (missingKeys.length > 0) {
-      throw new PermissionNotFoundError(
-        `Capability resource(s) not found: ${missingKeys.join(", ")}`,
+      throw new CapabilityNotFoundError(
+        `Capability(ies) not found: ${missingKeys.join(", ")}`,
       );
     }
 
-    const byKey = new Map(resources.map((resource) => [resource.key, resource.id]));
-    return resourceKeys.map((key) => byKey.get(key)!);
+    const byKey = new Map(capabilities.map((capability) => [capability.key, capability.id]));
+    return capabilityKeys.map((key) => byKey.get(key)!);
   }
 
   async createRole(input: CreateRoleInput): Promise<Role> {
@@ -61,7 +62,7 @@ export class RoleService implements IRoleService {
     }
 
     const capabilityKeys = [...new Set(input.capabilityKeys ?? [])];
-    const resourceIds = await this.resolveResourceIdsByKeys(capabilityKeys);
+    const capabilityIds = await this.resolveCapabilityIdsByKeys(capabilityKeys);
 
     return this.db.transaction(async (tx) => {
       const role = await this.roleRepository.save(
@@ -73,12 +74,11 @@ export class RoleService implements IRoleService {
         { tx },
       );
 
-      if (resourceIds.length > 0) {
-        await this.roleResourceRepository.saveMany(
-          resourceIds.map((resourceId) => ({
+      if (capabilityIds.length > 0) {
+        await this.roleCapabilityRepository.saveMany(
+          capabilityIds.map((capabilityId) => ({
             roleId: role.id,
-            resourceId,
-            relation: DEFAULT_CAPABILITY_RELATION,
+            capabilityId,
           })),
           { tx },
         );
@@ -117,9 +117,9 @@ export class RoleService implements IRoleService {
     const shouldSyncCapabilities = input.capabilityKeys !== undefined;
     const capabilityKeys = shouldSyncCapabilities ? [...new Set(input.capabilityKeys)] : [];
 
-    let resourceIds: string[] = [];
+    let capabilityIds: string[] = [];
     if (shouldSyncCapabilities) {
-      resourceIds = await this.resolveResourceIdsByKeys(capabilityKeys);
+      capabilityIds = await this.resolveCapabilityIdsByKeys(capabilityKeys);
     }
 
     const hasRoleFieldUpdates = input.name !== undefined || input.description !== undefined;
@@ -143,14 +143,7 @@ export class RoleService implements IRoleService {
       }
 
       if (shouldSyncCapabilities) {
-        await this.roleResourceRepository.syncForRole(
-          id,
-          resourceIds.map((resourceId) => ({
-            resourceId,
-            relation: DEFAULT_CAPABILITY_RELATION,
-          })),
-          { tx },
-        );
+        await this.roleCapabilityRepository.syncForRole(id, capabilityIds, { tx });
       }
 
       return role;

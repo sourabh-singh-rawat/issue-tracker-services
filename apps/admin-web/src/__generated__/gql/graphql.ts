@@ -30,13 +30,12 @@ export type BrandObject = {
 
 export type CapabilityObject = {
   __typename?: 'CapabilityObject';
+  action?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  isStatic?: Maybe<Scalars['Boolean']['output']>;
   key?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  resource?: Maybe<Scalars['String']['output']>;
+  service?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -69,9 +68,9 @@ export type CreateBrandInput = {
 };
 
 export type CreateCapabilityInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  key: Scalars['String']['input'];
-  name: Scalars['String']['input'];
+  action: Scalars['String']['input'];
+  resource: Scalars['String']['input'];
+  service: Scalars['String']['input'];
 };
 
 export type CreateCategoryInput = {
@@ -518,9 +517,10 @@ export type UpdateBrandInput = {
 };
 
 export type UpdateCapabilityInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
+  action?: InputMaybe<Scalars['String']['input']>;
   key: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+  resource?: InputMaybe<Scalars['String']['input']>;
+  service?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCategoryInput = {

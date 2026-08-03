@@ -1,4 +1,3 @@
-import { ROLE } from "@pine/authorization";
 import {
   type CloudEvent,
   type IBroker,
@@ -12,6 +11,9 @@ import { inject, injectable } from "inversify";
 import type { JsMsg } from "nats";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
+
+const ROLE_NAMESPACE = "role";
+const ROLE_ASSIGNEE_RELATION = "assignee";
 
 @injectable()
 export class RoleAssignmentKetoSyncConsumer extends Consumer<
@@ -32,12 +34,12 @@ export class RoleAssignmentKetoSyncConsumer extends Consumer<
 
   async onMessage(message: JsMsg, payload: CloudEvent<RoleAssignmentCreatedData>) {
     const event = validateEvent(RoleAssignmentCreatedEvent, payload);
-    const { subjectType, subjectId, roleId } = event.data!;
+    const { identityType, identityId, roleId } = event.data!;
 
     const relationship = {
-      object: { type: ROLE.key, id: roleId },
-      relation: ROLE.relations.assignee,
-      subject: { type: subjectType, id: subjectId },
+      object: { type: ROLE_NAMESPACE, id: roleId },
+      relation: ROLE_ASSIGNEE_RELATION,
+      subject: { type: identityType, id: identityId },
     };
 
     const existing = await this.authorizationGraphProvider.listRelationships({

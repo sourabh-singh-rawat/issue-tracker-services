@@ -1,5 +1,5 @@
 import { uuidv7 } from "@pine/common";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { type Database, type RoleAssignment, RoleAssignments } from "@/db";
@@ -17,19 +17,6 @@ export class RoleAssignmentRepository implements IRoleAssignmentRepository {
     return options?.tx ?? this.db;
   }
 
-  private scopeCondition(
-    scope?: { scopeType: string; scopeId: string } | null,
-  ) {
-    if (scope == null) {
-      return and(isNull(RoleAssignments.scopeType), isNull(RoleAssignments.scopeId));
-    }
-
-    return and(
-      eq(RoleAssignments.scopeType, scope.scopeType),
-      eq(RoleAssignments.scopeId, scope.scopeId),
-    );
-  }
-
   async save(
     entity: CreateRoleAssignmentEntity,
     options?: RoleAssignmentRepositoryOptions,
@@ -42,22 +29,23 @@ export class RoleAssignmentRepository implements IRoleAssignmentRepository {
       .values({
         id: uuidv7(),
         roleId: entity.roleId,
-        subjectType: entity.subjectType,
-        subjectId: entity.subjectId,
-        scopeType: entity.scopeType ?? null,
-        scopeId: entity.scopeId ?? null,
-        createdAt: now,
+        identityType: entity.identityType,
+        identityId: entity.identityId,
+        assignedBy: entity.assignedBy ?? null,
+        assignedAt: entity.assignedAt ?? now,
+        expiresAt: entity.expiresAt ?? null,
+        revokedAt: null,
+        reason: entity.reason ?? null,
       })
       .returning();
 
     return created;
   }
 
-  async findBySubjectAndRole(
-    subjectType: string,
-    subjectId: string,
+  async findByIdentityAndRole(
+    identityType: string,
+    identityId: string,
     roleId: string,
-    scope?: { scopeType: string; scopeId: string } | null,
     options?: RoleAssignmentRepositoryOptions,
   ): Promise<RoleAssignment | null> {
     const client = this.client(options);
@@ -66,10 +54,9 @@ export class RoleAssignmentRepository implements IRoleAssignmentRepository {
       .from(RoleAssignments)
       .where(
         and(
-          eq(RoleAssignments.subjectType, subjectType),
-          eq(RoleAssignments.subjectId, subjectId),
+          eq(RoleAssignments.identityType, identityType),
+          eq(RoleAssignments.identityId, identityId),
           eq(RoleAssignments.roleId, roleId),
-          this.scopeCondition(scope),
         ),
       )
       .limit(1);
@@ -77,9 +64,9 @@ export class RoleAssignmentRepository implements IRoleAssignmentRepository {
     return row ?? null;
   }
 
-  async findBySubject(
-    subjectType: string,
-    subjectId: string,
+  async findByIdentity(
+    identityType: string,
+    identityId: string,
     options?: RoleAssignmentRepositoryOptions,
   ): Promise<RoleAssignment[]> {
     const client = this.client(options);
@@ -89,8 +76,8 @@ export class RoleAssignmentRepository implements IRoleAssignmentRepository {
       .from(RoleAssignments)
       .where(
         and(
-          eq(RoleAssignments.subjectType, subjectType),
-          eq(RoleAssignments.subjectId, subjectId),
+          eq(RoleAssignments.identityType, identityType),
+          eq(RoleAssignments.identityId, identityId),
         ),
       );
   }
@@ -99,16 +86,10 @@ export class RoleAssignmentRepository implements IRoleAssignmentRepository {
     entity: CreateRoleAssignmentEntity,
     options?: RoleAssignmentRepositoryOptions,
   ): Promise<{ assignment: RoleAssignment; created: boolean }> {
-    const scope =
-      entity.scopeType != null && entity.scopeId != null
-        ? { scopeType: entity.scopeType, scopeId: entity.scopeId }
-        : null;
-
-    const existing = await this.findBySubjectAndRole(
-      entity.subjectType,
-      entity.subjectId,
+    const existing = await this.findByIdentityAndRole(
+      entity.identityType,
+      entity.identityId,
       entity.roleId,
-      scope,
       options,
     );
 

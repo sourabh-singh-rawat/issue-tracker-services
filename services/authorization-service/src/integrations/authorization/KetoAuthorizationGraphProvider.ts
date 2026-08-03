@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { ALL_RESOURCES, type Relationship, type Resource } from "@pine/authorization";
+import type { GraphRelationship, GraphResource } from "@pine/authorization";
 import { TYPES } from "@/bootstrap/container-types";
 import type {
   IAuthorizationGraphProvider,
@@ -7,9 +7,13 @@ import type {
 } from "@/integrations/authorization/IAuthorizationGraphProvider";
 import type { KetoClient } from "@/integrations/authorization/KetoClient";
 
-const toSubjectId = (resource: Resource): string => `${resource.type}:${resource.id}`;
+/** Keto namespaces used by this service (organization/role instances + capability grants). */
+const KETO_NAMESPACES = ["organization", "role", "capability"] as const;
 
-const parseSubjectId = (subjectId: string): Resource => {
+const toSubjectId = (resource: GraphResource): string =>
+  `${resource.type}:${resource.id}`;
+
+const parseSubjectId = (subjectId: string): GraphResource => {
   const separator = subjectId.indexOf(":");
   if (separator <= 0 || separator === subjectId.length - 1) {
     throw new Error(`Invalid Keto subject_id: ${subjectId}`);
@@ -25,7 +29,7 @@ const mapKetoRelationship = (row: {
   object?: string;
   relation?: string;
   subject_id?: string;
-}): Relationship => {
+}): GraphRelationship => {
   if (!row.namespace || !row.object || !row.relation || !row.subject_id) {
     throw new Error("Keto relationship response was incomplete");
   }
@@ -43,7 +47,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     private readonly keto: KetoClient,
   ) {}
 
-  async createRelationship(relationship: Relationship): Promise<void> {
+  async createRelationship(relationship: GraphRelationship): Promise<void> {
     await this.keto.relationshipWriteApi.createRelationship({
       createRelationshipBody: {
         namespace: relationship.object.type,
@@ -54,7 +58,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     });
   }
 
-  async deleteRelationship(relationship: Relationship): Promise<void> {
+  async deleteRelationship(relationship: GraphRelationship): Promise<void> {
     await this.keto.relationshipWriteApi.deleteRelationships({
       namespace: relationship.object.type,
       object: relationship.object.id,
@@ -63,14 +67,16 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     });
   }
 
-  async listRelationships(filter?: ListRelationshipsFilter): Promise<Relationship[]> {
+  async listRelationships(
+    filter?: ListRelationshipsFilter,
+  ): Promise<GraphRelationship[]> {
     const namespaces = filter?.object
       ? [filter.object.type]
-      : [...new Set(ALL_RESOURCES.map((resource) => resource.type))];
+      : [...KETO_NAMESPACES];
 
 
     const subjectId = filter?.subject ? toSubjectId(filter.subject) : undefined;
-    const results: Relationship[] = [];
+    const results: GraphRelationship[] = [];
 
     for (const namespace of namespaces) {
       const { data } = await this.keto.relationshipReadApi.getRelationships({
@@ -89,9 +95,9 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
   }
 
   async checkPermission(
-    object: Resource,
+    object: GraphResource,
     relation: string,
-    subject: Resource,
+    subject: GraphResource,
   ): Promise<boolean> {
     const { data } = await this.keto.permissionApi.checkPermission({
       namespace: object.type,
