@@ -2,7 +2,7 @@ packages:
   - apps/**
   - packages/**
   - services/**
-  - shared-ui/**
+  - tools/**
 allowBuilds:
   "@apollo/protobufjs": true
   "@apollo/rover": true

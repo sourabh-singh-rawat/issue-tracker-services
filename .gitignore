@@ -93,6 +93,8 @@ out
 dist
 dist-ssr
 *.local
+bin/
+obj/
 
 # Gatsby files
 .cache/
