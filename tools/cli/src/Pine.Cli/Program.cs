@@ -1,1 +1,4 @@
-﻿Console.WriteLine("Pine CLI");
+﻿using Cli.Features.Validate;
+
+var validate = new Validate();
+await validate.ExecuteAsync();
