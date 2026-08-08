@@ -25,7 +25,7 @@ export const listenPortFromUrl = (url: string): number => {
 
 const parseEnv = (): Env => {
   const withDefaults = Value.Default(EnvSchema, { ...process.env });
-  const cleaned = Value.Clean(EnvSchema, withDefaults) as Env;
+  const cleaned = Value.Clean(EnvSchema, withDefaults);
   return Value.Parse(EnvSchema, cleaned);
 };
 
