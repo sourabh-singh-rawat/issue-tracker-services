@@ -67,6 +67,20 @@ export class CapabilityRepository implements ICapabilityRepository {
     return updated;
   }
 
+  async delete(
+    key: string,
+    options?: CapabilityRepositoryOptions,
+  ): Promise<boolean> {
+    const client = this.client(options);
+
+    const deleted = await client
+      .delete(Capabilities)
+      .where(eq(Capabilities.key, key))
+      .returning({ id: Capabilities.id });
+
+    return deleted.length > 0;
+  }
+
   async existsByKey(key: string): Promise<boolean> {
     const row = await this.db
       .select({ id: Capabilities.id })

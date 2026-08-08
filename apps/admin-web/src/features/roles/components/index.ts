@@ -1,3 +1,4 @@
+export * from "./AddCapabilitiesModal";
 export * from "./CapabilityMultiSelect";
 export * from "./CreateRoleForm";
 export * from "./CreateRoleModal";

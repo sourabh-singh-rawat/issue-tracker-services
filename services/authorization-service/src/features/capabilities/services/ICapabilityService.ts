@@ -17,4 +17,5 @@ export interface ICapabilityService {
   getCapabilityByKey(key: string): Promise<Capability>;
   getCapabilities(): Promise<Capability[]>;
   updateCapability(key: string, input: UpdateCapabilityInput): Promise<Capability>;
+  deleteCapability(key: string): Promise<void>;
 }
