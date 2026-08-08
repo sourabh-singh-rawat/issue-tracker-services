@@ -96,9 +96,7 @@
         "capabilities_key_unique": {
           "name": "capabilities_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -352,9 +350,7 @@
         "resources_name_unique": {
           "name": "resources_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -491,12 +487,8 @@
           "name": "role_assignments_role_id_roles_id_fk",
           "tableFrom": "role_assignments",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -561,12 +553,8 @@
           "name": "role_capabilities_role_id_roles_id_fk",
           "tableFrom": "role_capabilities",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -574,12 +562,8 @@
           "name": "role_capabilities_capability_id_capabilities_id_fk",
           "tableFrom": "role_capabilities",
           "tableTo": "capabilities",
-          "columnsFrom": [
-            "capability_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["capability_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -587,10 +571,7 @@
       "compositePrimaryKeys": {
         "role_capabilities_pkey": {
           "name": "role_capabilities_pkey",
-          "columns": [
-            "role_id",
-            "capability_id"
-          ]
+          "columns": ["role_id", "capability_id"]
         }
       },
       "uniqueConstraints": {},
@@ -654,9 +635,7 @@
         "roles_key_unique": {
           "name": "roles_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},

@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "description": "Organization service — organizations and memberships",
   "keywords": [
-    "organization",
-    "membership"
+    "membership",
+    "organization"
   ],
   "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
   "bugs": {

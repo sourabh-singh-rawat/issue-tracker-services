@@ -17,9 +17,7 @@ const main = async () => {
   const systemAdmin = SYSTEM_ROLES.SYSTEM_ADMINISTRATOR;
 
   const roleRepository = container.get<IRoleRepository>(TYPES.RoleRepository);
-  const roleAssignmentService = container.get<IRoleAssignmentService>(
-    TYPES.RoleAssignmentService,
-  );
+  const roleAssignmentService = container.get<IRoleAssignmentService>(TYPES.RoleAssignmentService);
 
   const role = await roleRepository.findByKey(systemAdmin.key);
   if (!role) {

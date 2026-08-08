@@ -24,12 +24,12 @@ Compose is always started with `--env-file .env` (see root `pnpm dev:infra*`).
 
 ## Commands (prefer these)
 
-| Script                       | Stack                                         |
-| ---------------------------- | --------------------------------------------- |
-| `pnpm dev:infra` / `:down`   | compose + single-db + ory-db + kratos + hydra + keto |
-| `dev:infra:multi-db`         | multi-db overlay                              |
-| `dev:infra:observability`    | + Alloy/Tempo/Loki/Grafana profile            |
-| `dev:infra:kratos` / `hydra` / `keto` | Ory identity + OAuth + graph auth    |
+| Script                                | Stack                                                |
+| ------------------------------------- | ---------------------------------------------------- |
+| `pnpm dev:infra` / `:down`            | compose + single-db + ory-db + kratos + hydra + keto |
+| `dev:infra:multi-db`                  | multi-db overlay                                     |
+| `dev:infra:observability`             | + Alloy/Tempo/Loki/Grafana profile                   |
+| `dev:infra:kratos` / `hydra` / `keto` | Ory identity + OAuth + graph auth                    |
 
 Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default), `compose.multi-db.yaml`, `compose.ory-db.yaml`, `compose.kratos.yaml`, `compose.hydra.yaml`, `compose.keto.yaml`.
 

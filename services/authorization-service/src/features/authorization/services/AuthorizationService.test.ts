@@ -5,10 +5,7 @@ const createService = (
   roleCapabilityRepository: unknown,
   authorizationGraphProvider: unknown = { checkPermission: vi.fn() },
 ) =>
-  new AuthorizationService(
-    roleCapabilityRepository as never,
-    authorizationGraphProvider as never,
-  );
+  new AuthorizationService(roleCapabilityRepository as never, authorizationGraphProvider as never);
 
 describe("AuthorizationService", () => {
   it("returns true when any role has any of the capabilities", async () => {
@@ -38,9 +35,7 @@ describe("AuthorizationService", () => {
 
     const service = createService(roleCapabilityRepository);
 
-    await expect(service.hasCapability([], ["authorization:roles:create"])).resolves.toBe(
-      false,
-    );
+    await expect(service.hasCapability([], ["authorization:roles:create"])).resolves.toBe(false);
     expect(roleCapabilityRepository.existsByRoleKeysAndCapabilityKeys).not.toHaveBeenCalled();
   });
 

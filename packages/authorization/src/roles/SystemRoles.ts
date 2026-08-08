@@ -1,13 +1,5 @@
-import {
-  ORGANIZATIONS,
-  ROLES,
-} from "../capabilities";
-import {
-  allCapabilityKeys,
-  capabilityKeys,
-  readCapabilityKeys,
-  withoutActions,
-} from "../utils";
+import { ORGANIZATIONS, ROLES } from "../capabilities";
+import { allCapabilityKeys, capabilityKeys, readCapabilityKeys, withoutActions } from "../utils";
 import type { RoleDefinition } from "./RoleDefinition";
 
 export const SYSTEM_ROLES = {
@@ -22,8 +14,7 @@ export const SYSTEM_ROLES = {
     id: "01900000-0000-7000-8000-000000000002",
     key: "organization.owner",
     name: "Organization Owner",
-    description:
-      "Full control of an organization, including delete and role management",
+    description: "Full control of an organization, including delete and role management",
     capabilityKeys: capabilityKeys(ORGANIZATIONS, ROLES),
   },
   ORGANIZATION_ADMINISTRATOR: {

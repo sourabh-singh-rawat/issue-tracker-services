@@ -61,8 +61,7 @@ export const CreateRoleForm = ({ onSuccess, onCancel }: CreateRoleFormProps) => 
             key: value.key.trim(),
             name: value.name.trim(),
             description: value.description.trim() || undefined,
-            capabilityKeys:
-              value.capabilityKeys.length > 0 ? value.capabilityKeys : undefined,
+            capabilityKeys: value.capabilityKeys.length > 0 ? value.capabilityKeys : undefined,
           },
         });
 

@@ -46,9 +46,9 @@ describe("RoleService", () => {
       saveMany: vi.fn().mockResolvedValue([]),
     };
     const capabilityRepository = {
-      findByKeys: vi.fn().mockResolvedValue([
-        { id: "cap-1", key: "authorization:capability:read" },
-      ]),
+      findByKeys: vi
+        .fn()
+        .mockResolvedValue([{ id: "cap-1", key: "authorization:capability:read" }]),
     };
 
     const service = createService({
@@ -93,9 +93,9 @@ describe("RoleService", () => {
       },
     });
 
-    await expect(
-      service.createRole({ key: "custom.admin", name: "Admin" }),
-    ).rejects.toBeInstanceOf(RoleKeyConflictError);
+    await expect(service.createRole({ key: "custom.admin", name: "Admin" })).rejects.toBeInstanceOf(
+      RoleKeyConflictError,
+    );
   });
 
   it("throws when role name already exists", async () => {
@@ -107,9 +107,9 @@ describe("RoleService", () => {
       },
     });
 
-    await expect(
-      service.createRole({ key: "custom.admin", name: "Admin" }),
-    ).rejects.toBeInstanceOf(RoleNameConflictError);
+    await expect(service.createRole({ key: "custom.admin", name: "Admin" })).rejects.toBeInstanceOf(
+      RoleNameConflictError,
+    );
   });
 
   it("throws when a capability key is missing", async () => {

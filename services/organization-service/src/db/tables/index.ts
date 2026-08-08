@@ -16,9 +16,4 @@ export {
   Organizations,
   OrganizationsRelations,
 } from "@/db/tables/Organizations";
-export {
-  type Role,
-  type NewRole,
-  Roles,
-  RolesRelations,
-} from "@/db/tables/Roles";
+export { type Role, type NewRole, Roles, RolesRelations } from "@/db/tables/Roles";

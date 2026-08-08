@@ -24,7 +24,7 @@ services/<svc>/src/
 
 | Need                     | From                                                                           |
 | ------------------------ | ------------------------------------------------------------------------------ |
-| Server / routes / logger | `@pine/http` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger`      |
+| Server / routes / logger | `@pine/http` → `FastifyHttpServer`, `HttpRouteOptions`, `PinoLogger`           |
 | Bus                      | `@pine/events` → `NatsBroker`, `NatsPublisher`, `Consumer`, `createCloudEvent` |
 | Persistence              | Drizzle via service `src/db/` + feature repositories                           |
 | Enums / errors           | `@pine/common`, `@pine/errors`                                                 |

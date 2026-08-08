@@ -120,9 +120,9 @@ describe("KratosVerificationProvider.verifyEmail", () => {
 
     const provider = createProvider({ getVerificationFlow, updateVerificationFlow });
 
-    await expect(
-      provider.verifyEmail({ flowId: "flow-1", code: "123456" }),
-    ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "123456" })).rejects.toBeInstanceOf(
+      IdentityProviderUnavailableError,
+    );
   });
 
   it("throws IdentityNotFoundError when the verified identity cannot be listed", async () => {
@@ -140,9 +140,9 @@ describe("KratosVerificationProvider.verifyEmail", () => {
       listIdentities,
     });
 
-    await expect(
-      provider.verifyEmail({ flowId: "flow-1", code: "123456" }),
-    ).rejects.toBeInstanceOf(IdentityNotFoundError);
+    await expect(provider.verifyEmail({ flowId: "flow-1", code: "123456" })).rejects.toBeInstanceOf(
+      IdentityNotFoundError,
+    );
   });
 });
 

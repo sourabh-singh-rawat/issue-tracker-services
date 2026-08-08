@@ -14,10 +14,7 @@ export type UpdateCapabilityEntity = Partial<
 >;
 
 export interface ICapabilityRepository {
-  save(
-    entity: CreateCapabilityEntity,
-    options?: CapabilityRepositoryOptions,
-  ): Promise<Capability>;
+  save(entity: CreateCapabilityEntity, options?: CapabilityRepositoryOptions): Promise<Capability>;
   update(
     key: string,
     entity: UpdateCapabilityEntity,

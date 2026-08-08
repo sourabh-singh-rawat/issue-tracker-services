@@ -1,8 +1,4 @@
-import type {
-  Identity,
-  SignInIdentityInput,
-  SignInResult,
-} from "@/integrations/identity/types";
+import type { Identity, SignInIdentityInput, SignInResult } from "@/integrations/identity/types";
 
 export interface ISessionProvider {
   signIn(input: SignInIdentityInput): Promise<SignInResult>;

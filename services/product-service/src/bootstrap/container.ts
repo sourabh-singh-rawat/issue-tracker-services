@@ -24,11 +24,7 @@ import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
 import { CategoryRepository, type ICategoryRepository, CategoryService, type ICategoryService } from "@/features/categories";
-import {
-  IIdentityRepository,
-  IdentityRepository,
-  IdentitySyncConsumer,
-} from "@/features/identities";
+import { IIdentityRepository, IdentityRepository, IdentitySyncConsumer } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
 import {
   ProductRepository,

@@ -52,9 +52,7 @@ describe("HydraOAuthClientProvider.getClient", () => {
 describe("HydraOAuthClientProvider.deleteClient", () => {
   it("deletes the OAuth client via the admin API", async () => {
     const deleteOAuth2Client = vi.fn().mockResolvedValue(undefined);
-    const provider = new HydraOAuthClientProvider(
-      createHydraMock({ deleteOAuth2Client }) as never,
-    );
+    const provider = new HydraOAuthClientProvider(createHydraMock({ deleteOAuth2Client }) as never);
 
     await expect(provider.deleteClient("client-1")).resolves.toBeUndefined();
     expect(deleteOAuth2Client).toHaveBeenCalledWith({ id: "client-1" });
@@ -62,9 +60,7 @@ describe("HydraOAuthClientProvider.deleteClient", () => {
 
   it("ignores 404 when the client is already gone", async () => {
     const deleteOAuth2Client = vi.fn().mockRejectedValue({ response: { status: 404 } });
-    const provider = new HydraOAuthClientProvider(
-      createHydraMock({ deleteOAuth2Client }) as never,
-    );
+    const provider = new HydraOAuthClientProvider(createHydraMock({ deleteOAuth2Client }) as never);
 
     await expect(provider.deleteClient("missing")).resolves.toBeUndefined();
   });

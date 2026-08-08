@@ -7,10 +7,7 @@ export type CreateIdentityEntity = {
 };
 
 export interface IIdentityRepository {
-  save(
-    entity: CreateIdentityEntity,
-    options?: IdentityRepositoryOptions,
-  ): Promise<Identity>;
+  save(entity: CreateIdentityEntity, options?: IdentityRepositoryOptions): Promise<Identity>;
   update(
     id: string,
     entity: Partial<Pick<Identity, "deletedAt">>,

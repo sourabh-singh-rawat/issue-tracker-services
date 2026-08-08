@@ -1,13 +1,7 @@
 import { and, asc, eq, inArray, notInArray } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import {
-  Capabilities,
-  type Database,
-  type RoleCapability,
-  RoleCapabilities,
-  Roles,
-} from "@/db";
+import { Capabilities, type Database, type RoleCapability, RoleCapabilities, Roles } from "@/db";
 import type {
   CreateRoleCapabilityEntity,
   IRoleCapabilityRepository,
@@ -76,9 +70,7 @@ export class RoleCapabilityRepository implements IRoleCapabilityRepository {
       .from(RoleCapabilities)
       .innerJoin(Roles, eq(RoleCapabilities.roleId, Roles.id))
       .innerJoin(Capabilities, eq(RoleCapabilities.capabilityId, Capabilities.id))
-      .where(
-        and(inArray(Roles.key, roleKeys), inArray(Capabilities.key, capabilityKeys)),
-      )
+      .where(and(inArray(Roles.key, roleKeys), inArray(Capabilities.key, capabilityKeys)))
       .limit(1);
 
     return row !== undefined;

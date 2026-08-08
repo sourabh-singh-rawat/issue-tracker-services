@@ -50,9 +50,7 @@ export const Roles = () => {
       ) : null}
 
       {rolesQuery.isError ? (
-        <Alert severity="error">
-          {getErrorMessage(rolesQuery.error, "Failed to load roles")}
-        </Alert>
+        <Alert severity="error">{getErrorMessage(rolesQuery.error, "Failed to load roles")}</Alert>
       ) : null}
 
       {rolesQuery.isSuccess ? (

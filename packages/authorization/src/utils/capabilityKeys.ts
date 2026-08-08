@@ -4,9 +4,8 @@ type CapabilityGroup = Record<string, { key: string }>;
 
 type CapabilitySource = CapabilityGroup | readonly string[];
 
-const isCapabilityGroup = (
-  source: CapabilitySource,
-): source is CapabilityGroup => !Array.isArray(source);
+const isCapabilityGroup = (source: CapabilitySource): source is CapabilityGroup =>
+  !Array.isArray(source);
 
 const keysFromSource = (source: CapabilitySource): string[] => {
   if (isCapabilityGroup(source)) {
@@ -15,9 +14,7 @@ const keysFromSource = (source: CapabilitySource): string[] => {
   return [...source];
 };
 
-export const capabilityKeys = (
-  ...sources: readonly CapabilitySource[]
-): CapabilityKey[] => {
+export const capabilityKeys = (...sources: readonly CapabilitySource[]): CapabilityKey[] => {
   const keys: CapabilityKey[] = [];
   const seen = new Set<string>();
   for (const source of sources) {

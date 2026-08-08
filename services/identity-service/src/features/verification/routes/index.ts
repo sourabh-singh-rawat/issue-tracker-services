@@ -5,7 +5,4 @@ import { resendVerificationEmail } from "@/features/verification/routes/resendVe
 export * from "@/features/verification/routes/verifyEmail";
 export * from "@/features/verification/routes/resendVerificationEmail";
 
-export const verificationRoutes = [
-  verifyEmail,
-  resendVerificationEmail,
-] as unknown as HttpRoute[];
+export const verificationRoutes = [verifyEmail, resendVerificationEmail] as unknown as HttpRoute[];

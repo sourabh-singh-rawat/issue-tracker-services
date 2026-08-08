@@ -90,12 +90,8 @@
           "name": "delegations_permission_key_permissions_key_fk",
           "tableFrom": "delegations",
           "tableTo": "permissions",
-          "columnsFrom": [
-            "permission_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
+          "columnsFrom": ["permission_key"],
+          "columnsTo": ["key"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -198,12 +194,8 @@
           "name": "permission_grants_permission_key_permissions_key_fk",
           "tableFrom": "permission_grants",
           "tableTo": "permissions",
-          "columnsFrom": [
-            "permission_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
+          "columnsFrom": ["permission_key"],
+          "columnsTo": ["key"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -339,12 +331,8 @@
           "name": "role_assignments_role_id_roles_id_fk",
           "tableFrom": "role_assignments",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -354,10 +342,7 @@
         "role_assignments_identity_id_role_id_unique": {
           "name": "role_assignments_identity_id_role_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "identity_id",
-            "role_id"
-          ]
+          "columns": ["identity_id", "role_id"]
         }
       },
       "policies": {},
@@ -419,12 +404,8 @@
           "name": "role_permissions_role_id_roles_id_fk",
           "tableFrom": "role_permissions",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -432,12 +413,8 @@
           "name": "role_permissions_permission_key_permissions_key_fk",
           "tableFrom": "role_permissions",
           "tableTo": "permissions",
-          "columnsFrom": [
-            "permission_key"
-          ],
-          "columnsTo": [
-            "key"
-          ],
+          "columnsFrom": ["permission_key"],
+          "columnsTo": ["key"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -447,10 +424,7 @@
         "role_permissions_role_id_permission_key_unique": {
           "name": "role_permissions_role_id_permission_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "role_id",
-            "permission_key"
-          ]
+          "columns": ["role_id", "permission_key"]
         }
       },
       "policies": {},
@@ -526,16 +500,12 @@
         "roles_key_unique": {
           "name": "roles_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         },
         "roles_name_unique": {
           "name": "roles_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},

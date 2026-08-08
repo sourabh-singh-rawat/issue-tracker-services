@@ -22,18 +22,8 @@ export {
   ALL_CAPABILITIES,
 } from "./capabilities";
 
-export {
-  type RoleDefinition,
-  ALL_SYSTEM_ROLES,
-  SYSTEM_ROLES,
-  type SystemRoleKey,
-} from "./roles";
+export { type RoleDefinition, ALL_SYSTEM_ROLES, SYSTEM_ROLES, type SystemRoleKey } from "./roles";
 
 export type { GraphResource, GraphRelationship } from "./types";
 
-export {
-  capabilityKeys,
-  withoutActions,
-  allCapabilityKeys,
-  readCapabilityKeys,
-} from "./utils";
+export { capabilityKeys, withoutActions, allCapabilityKeys, readCapabilityKeys } from "./utils";

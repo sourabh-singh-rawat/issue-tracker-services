@@ -22,19 +22,8 @@ import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
 import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
-import {
-  IIdentityRepository,
-  IdentityRepository,
-  IdentitySyncConsumer,
-} from "@/features/identities";
-import {
-  IIssueAssigneeRepository,
-  IIssueRepository,
-  IIssueService,
-  IssueAssigneeRepository,
-  IssueRepository,
-  IssueService,
-} from "@/features/issue";
+import { IIdentityRepository, IdentityRepository, IdentitySyncConsumer } from "@/features/identities";
+import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigneeRepository, IssueRepository, IssueService } from "@/features/issue";
 import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
 import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
 

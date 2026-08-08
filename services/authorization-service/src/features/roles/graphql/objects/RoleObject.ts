@@ -26,9 +26,7 @@ RoleObject.implement({
           TYPES.CapabilityRepository,
         );
 
-        const capabilityKeys = await roleCapabilityRepository.findCapabilityKeysByRoleId(
-          role.id,
-        );
+        const capabilityKeys = await roleCapabilityRepository.findCapabilityKeysByRoleId(role.id);
         if (capabilityKeys.length === 0) {
           return [];
         }

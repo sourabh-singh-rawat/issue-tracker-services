@@ -78,12 +78,12 @@ EOF
 
 **Always use the generated hooks.** Never compose `useQuery` / `useMutation` with `*Options` helpers from codegen.
 
-| Do | Don't |
-| --- | --- |
-| `useVerifyEmailQuery({ query: { … } })` | `useQuery({ ...verifyEmailOptions({ … }) })` |
-| `useGetConsentChallengeQuery({ query: { … } })` | `useQuery({ ...getConsentChallengeOptions({ … }) })` |
-| `useAcceptConsentChallengeMutation()` | `useMutation(acceptConsentChallengeMutation())` |
-| GraphQL: `useFindProjectQuery(vars, { enabled })` | Hand-rolled `useQuery` against the GQL client |
+| Do                                                | Don't                                                |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| `useVerifyEmailQuery({ query: { … } })`           | `useQuery({ ...verifyEmailOptions({ … }) })`         |
+| `useGetConsentChallengeQuery({ query: { … } })`   | `useQuery({ ...getConsentChallengeOptions({ … }) })` |
+| `useAcceptConsentChallengeMutation()`             | `useMutation(acceptConsentChallengeMutation())`      |
+| GraphQL: `useFindProjectQuery(vars, { enabled })` | Hand-rolled `useQuery` against the GQL client        |
 
 - REST/OpenAPI: import `useXQuery` / `useXMutation` from `@generated/api/@tanstack/react-query.gen`.
 - GraphQL: import `useXQuery` / `useXMutation` from `@generated/gql`.

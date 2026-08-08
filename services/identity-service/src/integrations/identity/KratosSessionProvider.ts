@@ -4,11 +4,7 @@ import type { ISessionProvider } from "@/integrations/identity/ISessionProvider"
 import type { KratosClient } from "@/integrations/identity/KratosClient";
 import type { KratosErrorMapper } from "@/integrations/identity/KratosErrorMapper";
 import { mapKratosIdentity } from "@/integrations/identity/mapKratosIdentity";
-import type {
-  Identity,
-  SignInIdentityInput,
-  SignInResult,
-} from "@/integrations/identity/types";
+import type { Identity, SignInIdentityInput, SignInResult } from "@/integrations/identity/types";
 import {
   IdentityProviderUnavailableError,
   InvalidCredentialError,

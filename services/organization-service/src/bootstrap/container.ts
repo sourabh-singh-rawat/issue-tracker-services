@@ -7,12 +7,7 @@ import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
 import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
-import {
-  type IOrganizationRepository,
-  type IOrganizationService,
-  OrganizationRepository,
-  OrganizationService,
-} from "@/features/organizations";
+import { type IOrganizationRepository, type IOrganizationService, OrganizationRepository, OrganizationService } from "@/features/organizations";
 import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });
@@ -21,9 +16,7 @@ container.bind(TYPES.Database).toConstantValue(db);
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind<IPublisher>(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
-container
-  .bind<IOrganizationRepository>(TYPES.OrganizationRepository)
-  .to(OrganizationRepository);
+container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(

@@ -16,10 +16,7 @@ export class IdentityRepository implements IIdentityRepository {
     return options?.tx ?? this.db;
   }
 
-  async save(
-    entity: CreateIdentityEntity,
-    options?: IdentityRepositoryOptions,
-  ): Promise<Identity> {
+  async save(entity: CreateIdentityEntity, options?: IdentityRepositoryOptions): Promise<Identity> {
     const client = this.client(options);
     const now = new Date();
 

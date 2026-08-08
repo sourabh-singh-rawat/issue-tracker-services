@@ -7,38 +7,7 @@ import type {
 } from "@/integrations/authorization/IAuthorizationGraphProvider";
 import type { KetoClient } from "@/integrations/authorization/KetoClient";
 
-/** Keto namespaces used by this service (organization/role instances + capability grants). */
 const KETO_NAMESPACES = ["organization", "role", "capability"] as const;
-
-const toSubjectId = (resource: GraphResource): string =>
-  `${resource.type}:${resource.id}`;
-
-const parseSubjectId = (subjectId: string): GraphResource => {
-  const separator = subjectId.indexOf(":");
-  if (separator <= 0 || separator === subjectId.length - 1) {
-    throw new Error(`Invalid Keto subject_id: ${subjectId}`);
-  }
-  return {
-    type: subjectId.slice(0, separator),
-    id: subjectId.slice(separator + 1),
-  };
-};
-
-const mapKetoRelationship = (row: {
-  namespace?: string;
-  object?: string;
-  relation?: string;
-  subject_id?: string;
-}): GraphRelationship => {
-  if (!row.namespace || !row.object || !row.relation || !row.subject_id) {
-    throw new Error("Keto relationship response was incomplete");
-  }
-  return {
-    object: { type: row.namespace, id: row.object },
-    relation: row.relation,
-    subject: parseSubjectId(row.subject_id),
-  };
-};
 
 @injectable()
 export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvider {
@@ -53,7 +22,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
         namespace: relationship.object.type,
         object: relationship.object.id,
         relation: relationship.relation,
-        subject_id: toSubjectId(relationship.subject),
+        subject_id: this.toSubjectId(relationship.subject),
       },
     });
   }
@@ -63,19 +32,14 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
       namespace: relationship.object.type,
       object: relationship.object.id,
       relation: relationship.relation,
-      subjectId: toSubjectId(relationship.subject),
+      subjectId: this.toSubjectId(relationship.subject),
     });
   }
 
-  async listRelationships(
-    filter?: ListRelationshipsFilter,
-  ): Promise<GraphRelationship[]> {
-    const namespaces = filter?.object
-      ? [filter.object.type]
-      : [...KETO_NAMESPACES];
+  async listRelationships(filter?: ListRelationshipsFilter): Promise<GraphRelationship[]> {
+    const namespaces = filter?.object ? [filter.object.type] : [...KETO_NAMESPACES];
 
-
-    const subjectId = filter?.subject ? toSubjectId(filter.subject) : undefined;
+    const subjectId = filter?.subject ? this.toSubjectId(filter.subject) : undefined;
     const results: GraphRelationship[] = [];
 
     for (const namespace of namespaces) {
@@ -87,7 +51,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
       });
 
       for (const row of data.relation_tuples ?? []) {
-        results.push(mapKetoRelationship(row));
+        results.push(this.mapKetoRelationship(row));
       }
     }
 
@@ -103,8 +67,39 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
       namespace: object.type,
       object: object.id,
       relation,
-      subjectId: toSubjectId(subject),
+      subjectId: this.toSubjectId(subject),
     });
     return data.allowed === true;
+  }
+
+  private toSubjectId(resource: GraphResource): string {
+    return `${resource.type}:${resource.id}`;
+  }
+
+  private parseSubjectId(subjectId: string): GraphResource {
+    const separator = subjectId.indexOf(":");
+    if (separator <= 0 || separator === subjectId.length - 1) {
+      throw new Error(`Invalid Keto subject_id: ${subjectId}`);
+    }
+    return {
+      type: subjectId.slice(0, separator),
+      id: subjectId.slice(separator + 1),
+    };
+  }
+
+  private mapKetoRelationship(row: {
+    namespace?: string;
+    object?: string;
+    relation?: string;
+    subject_id?: string;
+  }): GraphRelationship {
+    if (!row.namespace || !row.object || !row.relation || !row.subject_id) {
+      throw new Error("Keto relationship response was incomplete");
+    }
+    return {
+      object: { type: row.namespace, id: row.object },
+      relation: row.relation,
+      subject: this.parseSubjectId(row.subject_id),
+    };
   }
 }
