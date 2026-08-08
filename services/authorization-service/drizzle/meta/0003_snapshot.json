@@ -202,10 +202,7 @@
         "resource_relations_type_key_unique": {
           "name": "resource_relations_type_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "resource_type",
-            "key"
-          ]
+          "columns": ["resource_type", "key"]
         }
       },
       "policies": {},
@@ -290,9 +287,7 @@
         "resources_key_unique": {
           "name": "resources_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -479,12 +474,8 @@
           "name": "role_assignments_role_id_roles_id_fk",
           "tableFrom": "role_assignments",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -555,12 +546,8 @@
           "name": "role_resources_role_id_roles_id_fk",
           "tableFrom": "role_resources",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -568,12 +555,8 @@
           "name": "role_resources_resource_id_resources_id_fk",
           "tableFrom": "role_resources",
           "tableTo": "resources",
-          "columnsFrom": [
-            "resource_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["resource_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -581,11 +564,7 @@
       "compositePrimaryKeys": {
         "role_resources_pkey": {
           "name": "role_resources_pkey",
-          "columns": [
-            "role_id",
-            "resource_id",
-            "relation"
-          ]
+          "columns": ["role_id", "resource_id", "relation"]
         }
       },
       "uniqueConstraints": {},
@@ -642,9 +621,7 @@
         "roles_key_unique": {
           "name": "roles_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},

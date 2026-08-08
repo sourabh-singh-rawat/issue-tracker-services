@@ -8,10 +8,7 @@ import {
   RoleNameConflictError,
   RoleNotFoundError,
 } from "@/features/roles/errors";
-import type {
-  IRoleCapabilityRepository,
-  IRoleRepository,
-} from "@/features/roles/repositories";
+import type { IRoleCapabilityRepository, IRoleRepository } from "@/features/roles/repositories";
 import type {
   CreateRoleInput,
   IRoleService,
@@ -41,9 +38,7 @@ export class RoleService implements IRoleService {
     const missingKeys = capabilityKeys.filter((key) => !foundKeys.has(key));
 
     if (missingKeys.length > 0) {
-      throw new CapabilityNotFoundError(
-        `Capability(ies) not found: ${missingKeys.join(", ")}`,
-      );
+      throw new CapabilityNotFoundError(`Capability(ies) not found: ${missingKeys.join(", ")}`);
     }
 
     const byKey = new Map(capabilities.map((capability) => [capability.key, capability.id]));

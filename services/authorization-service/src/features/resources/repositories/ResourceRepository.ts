@@ -18,10 +18,7 @@ export class ResourceRepository implements IResourceRepository {
     return options?.tx ?? this.db;
   }
 
-  async save(
-    entity: CreateResourceEntity,
-    options?: ResourceRepositoryOptions,
-  ): Promise<Resource> {
+  async save(entity: CreateResourceEntity, options?: ResourceRepositoryOptions): Promise<Resource> {
     const client = this.client(options);
     const now = new Date();
 
@@ -80,21 +77,13 @@ export class ResourceRepository implements IResourceRepository {
   }
 
   async findById(id: string): Promise<Resource | null> {
-    const [row] = await this.db
-      .select()
-      .from(Resources)
-      .where(eq(Resources.id, id))
-      .limit(1);
+    const [row] = await this.db.select().from(Resources).where(eq(Resources.id, id)).limit(1);
 
     return row ?? null;
   }
 
   async findByName(name: string): Promise<Resource | null> {
-    const [row] = await this.db
-      .select()
-      .from(Resources)
-      .where(eq(Resources.name, name))
-      .limit(1);
+    const [row] = await this.db.select().from(Resources).where(eq(Resources.name, name)).limit(1);
 
     return row ?? null;
   }

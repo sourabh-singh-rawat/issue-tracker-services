@@ -4,10 +4,7 @@ import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Identity } from "@/db";
-import {
-  IAdminService,
-  type CreateIdentityOptions,
-} from "@/features/admin/services/IAdminService";
+import { IAdminService, type CreateIdentityOptions } from "@/features/admin/services/IAdminService";
 import { IdentityProviderType } from "@/features/identities/constants";
 import type { IIdentityProfileRepository } from "@/features/identities/repositories/IIdentityProfileRepository";
 import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";

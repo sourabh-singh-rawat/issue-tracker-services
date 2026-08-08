@@ -11,7 +11,9 @@ import { VerificationService } from "./VerificationService";
 describe("VerificationService", () => {
   it("verifies email via the identity provider and schedules IdentityEmailVerified in the outbox", async () => {
     const verificationProvider = {
-      verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
+      verifyEmail: vi
+        .fn()
+        .mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
       findByIdpId: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
@@ -72,7 +74,9 @@ describe("VerificationService", () => {
 
   it("omits displayName when no profile exists", async () => {
     const verificationProvider = {
-      verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
+      verifyEmail: vi
+        .fn()
+        .mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
       findByIdpId: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
@@ -107,7 +111,9 @@ describe("VerificationService", () => {
 
   it("throws UserNotFoundError when the local identity is missing", async () => {
     const verificationProvider = {
-      verifyEmail: vi.fn().mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
+      verifyEmail: vi
+        .fn()
+        .mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
     const identityRepository = {
       findByIdpId: vi.fn().mockResolvedValue(null),

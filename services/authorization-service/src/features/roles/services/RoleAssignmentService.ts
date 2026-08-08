@@ -4,10 +4,7 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, RoleAssignment } from "@/db";
 import { RoleNotFoundError } from "@/features/roles/errors";
-import type {
-  IRoleAssignmentRepository,
-  IRoleRepository,
-} from "@/features/roles/repositories";
+import type { IRoleAssignmentRepository, IRoleRepository } from "@/features/roles/repositories";
 import type {
   AssignRoleInput,
   IRoleAssignmentService,
@@ -87,10 +84,6 @@ export class RoleAssignmentService implements IRoleAssignmentService {
     identityId: string,
     roleId: string,
   ): Promise<RoleAssignment | null> {
-    return this.roleAssignmentRepository.findByIdentityAndRole(
-      identityType,
-      identityId,
-      roleId,
-    );
+    return this.roleAssignmentRepository.findByIdentityAndRole(identityType, identityId, roleId);
   }
 }

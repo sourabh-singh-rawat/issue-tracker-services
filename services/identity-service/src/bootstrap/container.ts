@@ -32,12 +32,7 @@ import { ISessionService, SessionService } from "@/features/session";
 import { IOAuthService, OAuthService } from "@/features/oauth";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
 import { IVerificationService, VerificationService } from "@/features/verification";
-import {
-  ClientSeederService,
-  ClientService,
-  IClientSeederService,
-  IClientService,
-} from "@/features/clients";
+import { ClientSeederService, ClientService, IClientSeederService, IClientService } from "@/features/clients";
 import {
   IIdentityProfileRepository,
   IIdentityProfileService,
@@ -101,9 +96,7 @@ container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IClientSeederService>(TYPES.ClientSeederService).to(ClientSeederService);
 container.bind<IRegistrationProvider>(TYPES.RegistrationProvider).to(KratosRegistrationProvider);
 container.bind<ISessionProvider>(TYPES.SessionProvider).to(KratosSessionProvider);
-container
-  .bind<IIdentityAdminProvider>(TYPES.IdentityAdminProvider)
-  .to(KratosIdentityAdminProvider);
+container.bind<IIdentityAdminProvider>(TYPES.IdentityAdminProvider).to(KratosIdentityAdminProvider);
 container.bind<IVerificationProvider>(TYPES.VerificationProvider).to(KratosVerificationProvider);
 container.bind<IOAuthFlowProvider>(TYPES.OAuthFlowProvider).to(HydraOAuthFlowProvider);
 container.bind<IOAuthTokenProvider>(TYPES.OAuthTokenProvider).to(HydraOAuthTokenProvider);

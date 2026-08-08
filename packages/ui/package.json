@@ -5,11 +5,11 @@
   "private": true,
   "description": "Shared React UI primitives for Pine web apps (forms, modals, buttons)",
   "keywords": [
-    "ui",
-    "react",
-    "mui",
     "forms",
-    "tanstack-form"
+    "mui",
+    "react",
+    "tanstack-form",
+    "ui"
   ],
   "license": "ISC",
   "author": "",
@@ -26,15 +26,6 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && tsc"
   },
-  "peerDependencies": {
-    "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
-    "@mui/icons-material": ">=6.0.0",
-    "@mui/material": ">=6.0.0",
-    "@tanstack/react-form": "^1.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -46,5 +37,14 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "typescript": "7.0.2"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@mui/icons-material": ">=6.0.0",
+    "@mui/material": ">=6.0.0",
+    "@tanstack/react-form": "^1.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

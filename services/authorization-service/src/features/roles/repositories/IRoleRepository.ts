@@ -22,5 +22,8 @@ export interface IRoleRepository {
   findByKey(key: string): Promise<Role | null>;
   findByName(name: string): Promise<Role | null>;
   findAll(): Promise<Role[]>;
-  upsertById(entity: CreateRoleEntity & { id: string }, options?: RoleRepositoryOptions): Promise<Role>;
+  upsertById(
+    entity: CreateRoleEntity & { id: string },
+    options?: RoleRepositoryOptions,
+  ): Promise<Role>;
 }

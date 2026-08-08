@@ -3,11 +3,7 @@ import { Queue } from "bullmq";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IAttachmentRepository } from "@/features/attachment/repositories";
-import {
-  AttachmentService,
-  CreateAttachmentOptions,
-  DeleteAttachmentOptions,
-} from "./interfaces";
+import { AttachmentService, CreateAttachmentOptions, DeleteAttachmentOptions } from "./interfaces";
 
 @injectable()
 export class CoreAttachmentService implements AttachmentService {

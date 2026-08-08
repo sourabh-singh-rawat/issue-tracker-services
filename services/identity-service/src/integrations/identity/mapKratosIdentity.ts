@@ -8,10 +8,7 @@ type KratosIdentityLike = {
   updated_at?: string;
 };
 
-export function mapKratosIdentity(
-  identity: KratosIdentityLike,
-  fallbackEmail = "",
-): Identity {
+export function mapKratosIdentity(identity: KratosIdentityLike, fallbackEmail = ""): Identity {
   const traits = (identity.traits ?? {}) as Record<string, unknown>;
   const email = typeof traits.email === "string" ? traits.email : fallbackEmail;
   const emailVerified = identity.verifiable_addresses?.some(

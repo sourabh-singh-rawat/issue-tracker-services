@@ -6,11 +6,10 @@
   "description": "Shared authorization catalog — resources, capabilities, roles, and graph types",
   "keywords": [
     "authorization",
-    "resources",
     "capabilities",
+    "resources",
     "roles"
   ],
-
   "license": "ISC",
   "author": "",
   "main": "dist/index.js",

@@ -4,11 +4,7 @@ export {
   Capabilities,
   CapabilitiesRelations,
 } from "@/db/tables/Capabilities";
-export {
-  type Identity,
-  type NewIdentity,
-  Identities,
-} from "@/db/tables/Identities";
+export { type Identity, type NewIdentity, Identities } from "@/db/tables/Identities";
 export {
   type Resource,
   type NewResource,

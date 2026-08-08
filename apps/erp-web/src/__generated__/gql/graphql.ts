@@ -30,13 +30,12 @@ export type BrandObject = {
 
 export type CapabilityObject = {
   __typename?: 'CapabilityObject';
+  action?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  isStatic?: Maybe<Scalars['Boolean']['output']>;
   key?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  resource?: Maybe<Scalars['String']['output']>;
+  service?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -69,9 +68,9 @@ export type CreateBrandInput = {
 };
 
 export type CreateCapabilityInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  key: Scalars['String']['input'];
-  name: Scalars['String']['input'];
+  action: Scalars['String']['input'];
+  resource: Scalars['String']['input'];
+  service: Scalars['String']['input'];
 };
 
 export type CreateCategoryInput = {
@@ -213,6 +212,7 @@ export type Mutation = {
   createUnit?: Maybe<UnitObject>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
   deleteBrand?: Maybe<Scalars['String']['output']>;
+  deleteCapability?: Maybe<Scalars['String']['output']>;
   deleteClient?: Maybe<Scalars['String']['output']>;
   deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
@@ -290,6 +290,11 @@ export type MutationDeleteAttachmentArgs = {
 
 export type MutationDeleteBrandArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCapabilityArgs = {
+  key: Scalars['String']['input'];
 };
 
 
@@ -394,7 +399,6 @@ export type ProjectObject = {
 
 export type Query = {
   __typename?: 'Query';
-  authorizationServiceHealth?: Maybe<Scalars['String']['output']>;
   findBrands?: Maybe<Array<BrandObject>>;
   findFiles?: Maybe<PaginatedFileOutput>;
   findIdentities?: Maybe<Array<IdentityObject>>;
@@ -518,9 +522,10 @@ export type UpdateBrandInput = {
 };
 
 export type UpdateCapabilityInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
+  action?: InputMaybe<Scalars['String']['input']>;
   key: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+  resource?: InputMaybe<Scalars['String']['input']>;
+  service?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCategoryInput = {

@@ -4,305 +4,190 @@ export type ClientOptions = {
     baseURL: `${string}://${string}` | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5000' | 'http://127.0.0.1:5003' | (string & {});
 };
 
-export type SignInWithEmailAndPasswordData = {
-    body: {
-        email: string;
-        password: string;
-    };
+export type PostIdentitySigninData = {
+    body?: never;
     path?: never;
-    query?: {
-        login_challenge?: string;
-    };
+    query?: never;
     url: '/identity/signin';
 };
 
-export type SignInWithEmailAndPasswordResponses = {
+export type PostIdentitySigninResponses = {
     /**
      * Default Response
      */
-    200: {
-        data: {
-            identity: {
-                id: string;
-                email: string;
-                emailVerified?: boolean;
-            };
-            redirectTo?: string;
-        };
-    };
+    200: unknown;
 };
 
-export type SignInWithEmailAndPasswordResponse = SignInWithEmailAndPasswordResponses[keyof SignInWithEmailAndPasswordResponses];
-
-export type LogoutData = {
+export type PostIdentityLogoutData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/identity/logout';
 };
 
-export type LogoutResponses = {
+export type PostIdentityLogoutResponses = {
     /**
      * Default Response
      */
-    200: {
-        message: string;
-    };
+    200: unknown;
 };
 
-export type LogoutResponse = LogoutResponses[keyof LogoutResponses];
-
-export type GetCurrentUserData = {
+export type GetIdentityMeData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/identity/me';
 };
 
-export type GetCurrentUserResponses = {
+export type GetIdentityMeResponses = {
     /**
      * Default Response
      */
-    200: {
-        identity: {
-            id: string;
-            email: string;
-            emailVerified?: boolean;
-        };
-    };
+    200: unknown;
 };
 
-export type GetCurrentUserResponse = GetCurrentUserResponses[keyof GetCurrentUserResponses];
-
-export type GetSessionIdentityData = {
+export type GetIdentityGetSessionData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/identity/getSession';
 };
 
-export type GetSessionIdentityResponses = {
+export type GetIdentityGetSessionResponses = {
     /**
      * Default Response
      */
-    200: {
-        identity: {
-            id: string;
-            email?: string;
-            emailVerified?: boolean;
-        };
-    };
+    200: unknown;
 };
 
-export type GetSessionIdentityResponse = GetSessionIdentityResponses[keyof GetSessionIdentityResponses];
-
-export type GetTokenSessionIdentityData = {
+export type GetIdentityGetTokenSessionData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/identity/getTokenSession';
 };
 
-export type GetTokenSessionIdentityResponses = {
+export type GetIdentityGetTokenSessionResponses = {
     /**
      * Default Response
      */
-    200: {
-        identity: {
-            id: string;
-            email?: string;
-            emailVerified?: boolean;
-        };
-    };
+    200: unknown;
 };
 
-export type GetTokenSessionIdentityResponse = GetTokenSessionIdentityResponses[keyof GetTokenSessionIdentityResponses];
-
-export type AuthorizeData = {
+export type GetIdentityOauthAuthorizeData = {
     body?: never;
     path?: never;
-    query: {
-        response_type: 'code';
-        client_id: string;
-        redirect_uri: string;
-        scope: string;
-        state: string;
-        code_challenge?: string;
-        code_challenge_method?: 'S256' | 'plain';
-        nonce?: string;
-    };
+    query?: never;
     url: '/identity/oauth/authorize';
 };
 
-export type GetConsentChallengeData = {
+export type GetIdentityOauthAuthorizeResponses = {
+    /**
+     * Default Response
+     */
+    200: unknown;
+};
+
+export type GetIdentityOauthConsentData = {
     body?: never;
     path?: never;
-    query: {
-        consent_challenge: string;
-    };
+    query?: never;
     url: '/identity/oauth/consent';
 };
 
-export type GetConsentChallengeResponses = {
+export type GetIdentityOauthConsentResponses = {
     /**
      * Default Response
      */
-    200: {
-        challenge: string;
-        skip: boolean;
-        subject?: string;
-        client: {
-            id: string;
-            name?: string;
-            redirectUris?: Array<string>;
-        };
-        requestedScope: Array<string>;
-        requestUrl?: string;
-        loginChallenge?: string;
-        loginSessionId?: string;
-    };
+    200: unknown;
 };
 
-export type GetConsentChallengeResponse = GetConsentChallengeResponses[keyof GetConsentChallengeResponses];
-
-export type AcceptConsentChallengeData = {
-    body: {
-        grantScope: Array<string>;
-        remember?: boolean;
-        rememberFor?: number;
-    };
+export type PostIdentityOauthConsentAcceptData = {
+    body?: never;
     path?: never;
-    query: {
-        consent_challenge: string;
-    };
+    query?: never;
     url: '/identity/oauth/consent/accept';
 };
 
-export type AcceptConsentChallengeResponses = {
+export type PostIdentityOauthConsentAcceptResponses = {
     /**
      * Default Response
      */
-    200: {
-        redirectTo: string;
-    };
+    200: unknown;
 };
 
-export type AcceptConsentChallengeResponse = AcceptConsentChallengeResponses[keyof AcceptConsentChallengeResponses];
-
-export type RejectConsentChallengeData = {
-    body: {
-        error?: string;
-        errorDescription?: string;
-    };
+export type PostIdentityOauthConsentRejectData = {
+    body?: never;
     path?: never;
-    query: {
-        consent_challenge: string;
-    };
+    query?: never;
     url: '/identity/oauth/consent/reject';
 };
 
-export type RejectConsentChallengeResponses = {
+export type PostIdentityOauthConsentRejectResponses = {
     /**
      * Default Response
      */
-    200: {
-        redirectTo: string;
-    };
+    200: unknown;
 };
 
-export type RejectConsentChallengeResponse = RejectConsentChallengeResponses[keyof RejectConsentChallengeResponses];
-
-export type ExchangeTokenData = {
-    body: {
-        grant_type: 'authorization_code';
-        code: string;
-        client_id: string;
-        redirect_uri: string;
-        code_verifier: string;
-    };
+export type PostIdentityOauthTokenData = {
+    body?: never;
     path?: never;
     query?: never;
     url: '/identity/oauth/token';
 };
 
-export type ExchangeTokenResponses = {
+export type PostIdentityOauthTokenResponses = {
     /**
      * Default Response
      */
-    200: {
-        message: string;
-    };
+    200: unknown;
 };
 
-export type ExchangeTokenResponse = ExchangeTokenResponses[keyof ExchangeTokenResponses];
-
-export type RegisterData = {
-    body: {
-        email: string;
-        username: string;
-        password: string;
-    };
+export type PostIdentityRegisterData = {
+    body?: never;
     path?: never;
     query?: never;
     url: '/identity/register';
 };
 
-export type RegisterResponses = {
+export type PostIdentityRegisterResponses = {
     /**
      * Default Response
      */
-    200: {
-        message: string;
-    };
+    200: unknown;
 };
 
-export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
-
-export type VerifyEmailData = {
+export type GetIdentityVerifyEmailData = {
     body?: never;
     path?: never;
-    query: {
-        flow: string;
-        code: string;
-    };
+    query?: never;
     url: '/identity/verifyEmail';
 };
 
-export type VerifyEmailResponses = {
+export type GetIdentityVerifyEmailResponses = {
     /**
      * Default Response
      */
-    200: {
-        message: string;
-    };
+    200: unknown;
 };
 
-export type VerifyEmailResponse = VerifyEmailResponses[keyof VerifyEmailResponses];
-
-export type ResendVerificationEmailData = {
-    body: {
-        email: string;
-    };
+export type PostIdentityResendVerificationEmailData = {
+    body?: never;
     path?: never;
     query?: never;
     url: '/identity/resendVerificationEmail';
 };
 
-export type ResendVerificationEmailResponses = {
+export type PostIdentityResendVerificationEmailResponses = {
     /**
      * Default Response
      */
-    200: {
-        message: string;
-    };
+    200: unknown;
 };
 
-export type ResendVerificationEmailResponse = ResendVerificationEmailResponses[keyof ResendVerificationEmailResponses];
-
-export type CreateAttachmentData = {
-    body: {
-        file: Blob | File;
-    };
+export type PostAttachmentsByIssueIdData = {
+    body?: never;
     path: {
         issueId: string;
     };
@@ -310,30 +195,9 @@ export type CreateAttachmentData = {
     url: '/attachments/{issueId}';
 };
 
-export type CreateAttachmentErrors = {
+export type PostAttachmentsByIssueIdResponses = {
     /**
-     * Error response
+     * Default Response
      */
-    400: {
-        message: string;
-        statusCode?: number;
-        [key: string]: unknown;
-    };
-    /**
-     * Error response
-     */
-    500: {
-        message: string;
-        statusCode?: number;
-        [key: string]: unknown;
-    };
-};
-
-export type CreateAttachmentError = CreateAttachmentErrors[keyof CreateAttachmentErrors];
-
-export type CreateAttachmentResponses = {
-    /**
-     * Created successfully
-     */
-    201: unknown;
+    200: unknown;
 };

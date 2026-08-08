@@ -8,19 +8,9 @@ import { env } from "@/bootstrap/env";
 import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, BrandSyncConsumer, type IBrandRepository } from "@/features/brands";
-import {
-  IIdentityRepository,
-  IdentityRepository,
-  IdentitySyncConsumer,
-} from "@/features/identities";
+import { IIdentityRepository, IdentityRepository, IdentitySyncConsumer } from "@/features/identities";
 import { IMeService, MeService } from "@/features/me";
-import {
-  IProductRepository,
-  IProductUnitRepository,
-  ProductRepository,
-  ProductSyncConsumer,
-  ProductUnitRepository,
-} from "@/features/products";
+import { IProductRepository, IProductUnitRepository, ProductRepository, ProductSyncConsumer, ProductUnitRepository } from "@/features/products";
 import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });

@@ -16,12 +16,7 @@ export interface IIdentityProfileRepository {
     entity: Partial<
       Pick<
         IdentityProfile,
-        | "firstName"
-        | "middleName"
-        | "lastName"
-        | "description"
-        | "photoUrl"
-        | "deletedAt"
+        "firstName" | "middleName" | "lastName" | "description" | "photoUrl" | "deletedAt"
       >
     >,
     options?: IdentityProfileRepositoryOptions,

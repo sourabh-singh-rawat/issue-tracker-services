@@ -31,10 +31,7 @@ function requiredString(value: string, label: string): string | undefined {
   return undefined;
 }
 
-export const CreateOrganizationForm = ({
-  onSuccess,
-  onCancel,
-}: CreateOrganizationFormProps) => {
+export const CreateOrganizationForm = ({ onSuccess, onCancel }: CreateOrganizationFormProps) => {
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const createOrganizationMutation = useCreateOrganizationMutation();

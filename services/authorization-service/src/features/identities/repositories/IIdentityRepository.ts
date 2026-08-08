@@ -7,10 +7,7 @@ export type CreateIdentityEntity = {
 };
 
 export interface IIdentityRepository {
-  save(
-    entity: CreateIdentityEntity,
-    options?: IdentityRepositoryOptions,
-  ): Promise<Identity>;
+  save(entity: CreateIdentityEntity, options?: IdentityRepositoryOptions): Promise<Identity>;
   findById(id: string, options?: IdentityRepositoryOptions): Promise<Identity | null>;
   existsById(id: string, options?: IdentityRepositoryOptions): Promise<boolean>;
 }

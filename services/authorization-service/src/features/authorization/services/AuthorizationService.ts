@@ -19,10 +19,7 @@ export class AuthorizationService implements IAuthorizationService {
       return false;
     }
 
-    return this.roleCapabilityRepository.existsByRoleKeysAndCapabilityKeys(
-      roles,
-      capabilityKeys,
-    );
+    return this.roleCapabilityRepository.existsByRoleKeysAndCapabilityKeys(roles, capabilityKeys);
   }
 
   async hasRelationship(relationship: GraphRelationship): Promise<boolean> {

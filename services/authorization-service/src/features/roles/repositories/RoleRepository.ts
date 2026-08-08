@@ -63,11 +63,7 @@ export class RoleRepository implements IRoleRepository {
   }
 
   async existsById(id: string): Promise<boolean> {
-    const row = await this.db
-      .select({ id: Roles.id })
-      .from(Roles)
-      .where(eq(Roles.id, id))
-      .limit(1);
+    const row = await this.db.select({ id: Roles.id }).from(Roles).where(eq(Roles.id, id)).limit(1);
 
     return row.length > 0;
   }

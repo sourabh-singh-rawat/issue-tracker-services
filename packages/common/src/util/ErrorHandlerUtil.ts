@@ -10,8 +10,6 @@ export class ErrorHandlerUtil {
 
     const message = error instanceof Error ? error.message : "something went wrong";
 
-    return reply
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ errors: [{ message }] });
+    return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ errors: [{ message }] });
   }
 }

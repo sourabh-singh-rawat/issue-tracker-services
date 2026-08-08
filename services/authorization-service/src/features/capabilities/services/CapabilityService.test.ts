@@ -133,9 +133,9 @@ describe("CapabilityService", () => {
 
     const service = createService(capabilityRepository);
 
-    await expect(
-      service.updateCapability("missing", { action: "read" }),
-    ).rejects.toBeInstanceOf(CapabilityNotFoundError);
+    await expect(service.updateCapability("missing", { action: "read" })).rejects.toBeInstanceOf(
+      CapabilityNotFoundError,
+    );
     expect(capabilityRepository.update).not.toHaveBeenCalled();
   });
 
@@ -146,12 +146,8 @@ describe("CapabilityService", () => {
 
     const service = createService(capabilityRepository);
 
-    await expect(
-      service.deleteCapability("authorization:roles:create"),
-    ).resolves.toBeUndefined();
-    expect(capabilityRepository.delete).toHaveBeenCalledWith(
-      "authorization:roles:create",
-    );
+    await expect(service.deleteCapability("authorization:roles:create")).resolves.toBeUndefined();
+    expect(capabilityRepository.delete).toHaveBeenCalledWith("authorization:roles:create");
   });
 
   it("throws when deleting a missing capability", async () => {

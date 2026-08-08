@@ -45,9 +45,7 @@ export const RoleDetail = () => {
 
   const capabilityKeys = useMemo(
     () =>
-      capabilities
-        .map((capability) => capability.key)
-        .filter((key): key is string => Boolean(key)),
+      capabilities.map((capability) => capability.key).filter((key): key is string => Boolean(key)),
     [capabilities],
   );
 
@@ -56,9 +54,7 @@ export const RoleDetail = () => {
       return;
     }
 
-    const confirmed = window.confirm(
-      `Remove capability "${capabilityKey}" from this role?`,
-    );
+    const confirmed = window.confirm(`Remove capability "${capabilityKey}" from this role?`);
     if (!confirmed) {
       return;
     }
@@ -96,14 +92,10 @@ export const RoleDetail = () => {
         ) : null}
 
         {roleQuery.isError ? (
-          <Alert severity="error">
-            {getErrorMessage(roleQuery.error, "Failed to load role")}
-          </Alert>
+          <Alert severity="error">{getErrorMessage(roleQuery.error, "Failed to load role")}</Alert>
         ) : null}
 
-        {roleQuery.isSuccess && !role ? (
-          <Alert severity="warning">Role not found.</Alert>
-        ) : null}
+        {roleQuery.isSuccess && !role ? <Alert severity="warning">Role not found.</Alert> : null}
 
         {role ? (
           <>
@@ -129,9 +121,7 @@ export const RoleDetail = () => {
             >
               {role.key ?? "—"}
             </Typography>
-            <Typography color="text.secondary">
-              {role.description ?? "No description."}
-            </Typography>
+            <Typography color="text.secondary">{role.description ?? "No description."}</Typography>
           </>
         ) : null}
       </Box>
@@ -191,9 +181,7 @@ export const RoleDetail = () => {
 
                     return (
                       <TableRow key={capability.id ?? key}>
-                        <TableCell
-                          sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}
-                        >
+                        <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
                           {capability.key ?? "—"}
                         </TableCell>
                         <TableCell>{capability.service ?? "—"}</TableCell>

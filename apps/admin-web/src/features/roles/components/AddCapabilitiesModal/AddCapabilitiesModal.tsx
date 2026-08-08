@@ -1,8 +1,5 @@
 import Stack from "@mui/material/Stack";
-import {
-  useGetCapabilitiesQuery,
-  useUpdateRoleMutation,
-} from "@generated/gql";
+import { useGetCapabilitiesQuery, useUpdateRoleMutation } from "@generated/gql";
 import { Modal, ModalBody, ModalHeader, PrimaryButton, SecondaryButton } from "@pine/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState, type MouseEvent } from "react";
@@ -27,10 +24,7 @@ export const AddCapabilitiesModal = ({
   const updateRoleMutation = useUpdateRoleMutation();
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  const existingKeySet = useMemo(
-    () => new Set(existingCapabilityKeys),
-    [existingCapabilityKeys],
-  );
+  const existingKeySet = useMemo(() => new Set(existingCapabilityKeys), [existingCapabilityKeys]);
 
   const capabilitiesQuery = useGetCapabilitiesQuery(undefined, {
     enabled: open,

@@ -70,12 +70,7 @@ export const CapabilityMultiSelect = ({
       return list;
     }
     return list.filter((capability) => {
-      const haystack = [
-        capability.key,
-        capability.service,
-        capability.resource,
-        capability.action,
-      ]
+      const haystack = [capability.key, capability.service, capability.resource, capability.action]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
@@ -113,7 +108,11 @@ export const CapabilityMultiSelect = ({
 
   return (
     <Stack spacing={1}>
-      <Stack direction="row" spacing={1} sx={{ alignItems: "baseline", justifyContent: "space-between" }}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{ alignItems: "baseline", justifyContent: "space-between" }}
+      >
         <Box>
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
             Capabilities
@@ -153,9 +152,7 @@ export const CapabilityMultiSelect = ({
       ) : null}
 
       {isError ? (
-        <Alert severity="error">
-          {getErrorMessage(error, "Failed to load capabilities")}
-        </Alert>
+        <Alert severity="error">{getErrorMessage(error, "Failed to load capabilities")}</Alert>
       ) : null}
 
       {!isLoading && !isError ? (
@@ -186,8 +183,7 @@ export const CapabilityMultiSelect = ({
                   {items.map((capability) => {
                     const key = capability.key;
                     const checked = selected.has(key);
-                    const primary =
-                      capability.action ?? capability.key.split(".").at(-1) ?? key;
+                    const primary = capability.action ?? capability.key.split(".").at(-1) ?? key;
                     return (
                       <ListItemButton
                         key={key}

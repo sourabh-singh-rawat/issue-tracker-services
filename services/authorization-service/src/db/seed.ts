@@ -1,19 +1,9 @@
-import {
-  ALL_CAPABILITIES,
-  ALL_RESOURCES,
-  ALL_SYSTEM_ROLES,
-} from "@pine/authorization";
+import { ALL_CAPABILITIES, ALL_RESOURCES, ALL_SYSTEM_ROLES } from "@pine/authorization";
 import { uuidv7 } from "@pine/common";
 import { eq, inArray } from "drizzle-orm";
 import { closeDb, db, initializeDb } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
-import {
-  Capabilities,
-  Resources,
-  RoleCapabilities,
-  Roles,
-  type Transaction,
-} from "@/db";
+import { Capabilities, Resources, RoleCapabilities, Roles, type Transaction } from "@/db";
 
 const seedResources = async (tx: Transaction): Promise<void> => {
   for (const resource of ALL_RESOURCES) {
@@ -105,9 +95,7 @@ const seedRoles = async (tx: Transaction): Promise<void> => {
     const mappings = capabilityKeys.map((key) => {
       const capabilityId = byKey.get(key);
       if (!capabilityId) {
-        throw new Error(
-          `Seed failed: capability not found for key=${key} (role=${role.key})`,
-        );
+        throw new Error(`Seed failed: capability not found for key=${key} (role=${role.key})`);
       }
       return {
         roleId: role.id,

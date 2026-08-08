@@ -32,21 +32,13 @@ export const RegistrationForm = () => {
         <Grid container spacing={2}>
           <Grid size={12}>
             <FormItem name="email">
-              <TextInput
-                label="Email"
-                placeholder="you@example.com"
-                autoComplete="email"
-              />
+              <TextInput label="Email" placeholder="you@example.com" autoComplete="email" />
             </FormItem>
           </Grid>
 
           <Grid size={12}>
             <FormItem name="username">
-              <TextInput
-                label="Username"
-                placeholder="jane.doe"
-                autoComplete="username"
-              />
+              <TextInput label="Username" placeholder="jane.doe" autoComplete="username" />
             </FormItem>
           </Grid>
 

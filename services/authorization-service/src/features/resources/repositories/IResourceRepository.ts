@@ -8,9 +8,7 @@ export type CreateResourceEntity = {
   isSystem?: boolean;
 };
 
-export type UpdateResourceEntity = Partial<
-  Pick<Resource, "name" | "description" | "isSystem">
->;
+export type UpdateResourceEntity = Partial<Pick<Resource, "name" | "description" | "isSystem">>;
 
 export interface IResourceRepository {
   save(entity: CreateResourceEntity, options?: ResourceRepositoryOptions): Promise<Resource>;
