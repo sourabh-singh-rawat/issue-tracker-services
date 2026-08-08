@@ -1,4 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import { FastifyHttpServer, type IHttpServer } from "@pine/http";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -16,11 +17,13 @@ import {
 } from "@pine/outbox";
 import { Container } from "inversify";
 import { broker } from "@/bootstrap/broker";
+import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
+import { env } from "@/bootstrap/env";
+import { fastifyServer } from "@/bootstrap/fastify";
 import { hydraClient } from "@/bootstrap/hydra-client";
 import { kratosClient } from "@/bootstrap/kratos-client";
 import { logger } from "@/bootstrap/logger";
-import { TYPES } from "@/bootstrap/container-types";
 import { IAdminService, AdminService } from "@/features/admin";
 import { ISignInService, SignInService } from "@/features/signin";
 import { ILogoutService, LogoutService } from "@/features/logout";
@@ -64,6 +67,7 @@ import {
   IOAuthFlowProvider,
   IOAuthTokenProvider,
 } from "@/integrations/oauth";
+import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -112,3 +116,17 @@ container.bind<ISessionService>(TYPES.SessionService).to(SessionService);
 container.bind<IOAuthService>(TYPES.OAuthService).to(OAuthService);
 container.bind<IAdminService>(TYPES.AdminService).to(AdminService);
 container.bind<IVerificationService>(TYPES.VerificationService).to(VerificationService);
+
+container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
+  new FastifyHttpServer(fastifyServer, {
+    config: {
+      host: "0.0.0.0",
+      port: 5000,
+      environment: env.NODE_ENV,
+      version: 1,
+    },
+    cors: { credentials: true, origin: env.IDENTITY_WEB_URL },
+    cookie: { secret: env.JWT_SECRET },
+    routes,
+  }),
+);

@@ -39,7 +39,7 @@
     "@pine/common": "workspace:^",
     "@pine/events": "workspace:^",
     "@pine/graphql-core": "workspace:^",
-    "@pine/http-core": "workspace:^",
+    "@pine/http": "workspace:^",
     "@pine/identity-client": "workspace:^",
     "@pine/security": "workspace:^",
     "@pothos/core": "^4.13.1",

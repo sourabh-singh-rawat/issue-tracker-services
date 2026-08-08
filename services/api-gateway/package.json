@@ -13,10 +13,11 @@
   "dependencies": {
     "@apollo/gateway": "^2.14.3",
     "@apollo/server": "^5.5.1",
+    "@as-integrations/fastify": "^3.1.0",
     "@fastify/http-proxy": "^11.6.0",
     "@fastify/swagger": "^9.8.1",
     "@fastify/swagger-ui": "^5.2.6",
-    "@pine/http-core": "workspace:*",
+    "@pine/http": "workspace:*",
     "@pine/observability": "workspace:*",
     "fastify": "^5.10.0",
     "graphql": "16.14.2",

@@ -10,7 +10,7 @@
 ### Patch Changes
 
 - Updated dependencies [dfa43fd]
-  - @pine/http-core@0.2.1
+  - @pine/http@0.2.1
 
 ## 0.2.0
 
@@ -23,7 +23,7 @@
 ### Patch Changes
 
 - Updated dependencies [d05915a]
-  - @pine/http-core@0.2.0
+  - @pine/http@0.2.0
 
 ## 0.1.0
 

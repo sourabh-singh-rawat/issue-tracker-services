@@ -19,7 +19,7 @@ Repo-wide agent rules (including **never auto-generate DB migrations**): root [`
 
 ## Dead → live packages
 
-`server-core`→`http-core` · `event-bus`→`events` · `comm`→notification-service `integrations/email` · `forms`→app UI
+`server-core`→`http` · `event-bus`→`events` · `comm`→notification-service `integrations/email` · `forms`→app UI
 
 ## Missing skills (backlog)
 

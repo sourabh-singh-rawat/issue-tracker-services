@@ -35,7 +35,7 @@ RUN pnpm exec turbo run build \
     --filter=@pine/common \
     --filter=@pine/events \
     --filter=@pine/security \
-    --filter=@pine/http-core \
+    --filter=@pine/http \
     --filter=@pine/graphql-core
 
 

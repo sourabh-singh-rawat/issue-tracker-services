@@ -36,7 +36,7 @@
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
-    "@pine/http-core": "workspace:^",
+    "@pine/http": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/security": "workspace:^",
     "@vitest/coverage-v8": "^4.1.10",

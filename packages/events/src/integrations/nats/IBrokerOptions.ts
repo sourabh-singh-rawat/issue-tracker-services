@@ -1,4 +1,4 @@
-import { ILogger } from "@pine/http-core";
+import { ILogger } from "@pine/http";
 
 export interface IBrokerOptions {
   servers: string[];

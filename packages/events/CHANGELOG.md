@@ -4,12 +4,12 @@
 
 ### Minor Changes
 
-- d05915a: refactor: rename packages to events/http-core, add CloudEvents and Hydra OAuth
+- d05915a: refactor: rename packages to events/http, add CloudEvents and Hydra OAuth
 
 ### Patch Changes
 
 - Updated dependencies [d05915a]
-  - @pine/http-core@0.2.0
+  - @pine/http@0.2.0
 
 ## 0.0.1
 

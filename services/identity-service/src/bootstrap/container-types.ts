@@ -9,6 +9,7 @@ export const TYPES = {
   OutboxCleanupService: Symbol.for("IOutboxCleanupService"),
   OutboxCleanupWorker: Symbol.for("IOutboxCleanupWorker"),
   RetryPolicy: Symbol.for("IRetryPolicy"),
+  HttpServer: Symbol.for("IHttpServer"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
   IdentityProfileRepository: Symbol.for("IIdentityProfileRepository"),
   IdentityService: Symbol.for("IIdentityService"),

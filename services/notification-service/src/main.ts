@@ -1,19 +1,16 @@
 import "reflect-metadata";
-import "@/bootstrap/env";
 
-import { TYPES, broker, container, initializeDb } from "@/bootstrap";
+import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { IdentitySyncConsumer } from "@/features/identities";
 
 export { container, db } from "@/bootstrap";
 
-const startConsumers = () => {
-  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
-};
-
 const main = async () => {
   await initializeDb();
   await broker.init();
-  startConsumers();
+
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
+  logger.info("Notification service started");
 };
 
 main().catch((error) => {

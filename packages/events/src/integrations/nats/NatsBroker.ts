@@ -25,7 +25,7 @@ export class NatsBroker implements IBroker {
   async init() {
     const client = await connect({ servers: this.options.servers });
     this.client = client;
-    this.createStreams(this.options.streams);
+    await this.createStreams(this.options.streams);
 
     this.options.logger?.info(
       `✅ [Nats Jetstream] connected at ${client.info?.host}:${client.info?.port}`,
