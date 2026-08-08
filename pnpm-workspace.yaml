@@ -9,7 +9,6 @@ allowBuilds:
   "@firebase/util": true
   "@parcel/watcher": true
   "@swc/core": false
-  argon2: true
   core-js: true
   esbuild: true
   msgpackr-extract: true
