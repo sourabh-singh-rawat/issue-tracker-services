@@ -40,8 +40,8 @@ ory_server_json() {
       "Username": "postgres",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE",
-      "Comment": "Shared instance for Kratos (db: kratos) and Hydra (db: hydra)",
-      "DBRestriction": "kratos,hydra"
+      "Comment": "Shared instance for Kratos (db: kratos), Hydra (db: hydra), and Keto (db: keto)",
+      "DBRestriction": "kratos,hydra,keto"
     }
 EOF
 }
@@ -52,7 +52,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
   "Servers": {
     "1": {
       "Name": "Identity Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "identity-postgres",
       "Port": 5432,
       "MaintenanceDB": "identity",
@@ -62,7 +62,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "2": {
       "Name": "Issues Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "issues-postgres",
       "Port": 5432,
       "MaintenanceDB": "issues",
@@ -72,7 +72,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "3": {
       "Name": "Inventory Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "inventory-postgres",
       "Port": 5432,
       "MaintenanceDB": "inventory",
@@ -82,7 +82,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "4": {
       "Name": "Product Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "product-postgres",
       "Port": 5432,
       "MaintenanceDB": "product",
@@ -92,7 +92,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "5": {
       "Name": "Attachment Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "attachment-postgres",
       "Port": 5432,
       "MaintenanceDB": "attachment",
@@ -102,7 +102,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "6": {
       "Name": "Notification Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "notification-postgres",
       "Port": 5432,
       "MaintenanceDB": "notification",
@@ -112,7 +112,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "7": {
       "Name": "Organization Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "organization-postgres",
       "Port": 5432,
       "MaintenanceDB": "organization",
@@ -122,7 +122,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "8": {
       "Name": "Authorization Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "authz-postgres",
       "Port": 5432,
       "MaintenanceDB": "authz",
@@ -140,7 +140,7 @@ else
   "Servers": {
     "1": {
       "Name": "Single DB (Minimal)",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "postgres",
       "Port": 5432,
       "MaintenanceDB": "postgres",
