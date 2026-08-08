@@ -97,9 +97,7 @@ const main = async () => {
   writeOpenApiToDist(instance);
 
   void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
-  void container
-    .get<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer)
-    .start();
+  void container.get<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer).start();
 };
 
 main().catch((error) => {

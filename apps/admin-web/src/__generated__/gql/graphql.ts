@@ -212,6 +212,7 @@ export type Mutation = {
   createUnit?: Maybe<UnitObject>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
   deleteBrand?: Maybe<Scalars['String']['output']>;
+  deleteCapability?: Maybe<Scalars['String']['output']>;
   deleteClient?: Maybe<Scalars['String']['output']>;
   deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
@@ -289,6 +290,11 @@ export type MutationDeleteAttachmentArgs = {
 
 export type MutationDeleteBrandArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCapabilityArgs = {
+  key: Scalars['String']['input'];
 };
 
 
@@ -393,7 +399,6 @@ export type ProjectObject = {
 
 export type Query = {
   __typename?: 'Query';
-  authorizationServiceHealth?: Maybe<Scalars['String']['output']>;
   findBrands?: Maybe<Array<BrandObject>>;
   findFiles?: Maybe<PaginatedFileOutput>;
   findIdentities?: Maybe<Array<IdentityObject>>;

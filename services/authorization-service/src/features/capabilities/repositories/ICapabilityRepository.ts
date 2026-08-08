@@ -23,6 +23,7 @@ export interface ICapabilityRepository {
     entity: UpdateCapabilityEntity,
     options?: CapabilityRepositoryOptions,
   ): Promise<Capability>;
+  delete(key: string, options?: CapabilityRepositoryOptions): Promise<boolean>;
   existsByKey(key: string): Promise<boolean>;
   findByKey(key: string): Promise<Capability | null>;
   findByKeys(keys: string[]): Promise<Capability[]>;

@@ -138,4 +138,31 @@ describe("CapabilityService", () => {
     ).rejects.toBeInstanceOf(CapabilityNotFoundError);
     expect(capabilityRepository.update).not.toHaveBeenCalled();
   });
+
+  it("deletes a capability by key", async () => {
+    const capabilityRepository = {
+      delete: vi.fn().mockResolvedValue(true),
+    };
+
+    const service = createService(capabilityRepository);
+
+    await expect(
+      service.deleteCapability("authorization:roles:create"),
+    ).resolves.toBeUndefined();
+    expect(capabilityRepository.delete).toHaveBeenCalledWith(
+      "authorization:roles:create",
+    );
+  });
+
+  it("throws when deleting a missing capability", async () => {
+    const capabilityRepository = {
+      delete: vi.fn().mockResolvedValue(false),
+    };
+
+    const service = createService(capabilityRepository);
+
+    await expect(service.deleteCapability("missing")).rejects.toBeInstanceOf(
+      CapabilityNotFoundError,
+    );
+  });
 });

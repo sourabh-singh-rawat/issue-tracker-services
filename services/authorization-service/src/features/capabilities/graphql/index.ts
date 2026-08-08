@@ -5,3 +5,4 @@ import "@/features/capabilities/graphql/queries/getCapability";
 import "@/features/capabilities/graphql/queries/getCapabilities";
 import "@/features/capabilities/graphql/mutations/createCapability";
 import "@/features/capabilities/graphql/mutations/updateCapability";
+import "@/features/capabilities/graphql/mutations/deleteCapability";

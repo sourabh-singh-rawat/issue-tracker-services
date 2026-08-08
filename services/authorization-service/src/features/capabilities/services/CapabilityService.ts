@@ -75,4 +75,11 @@ export class CapabilityService implements ICapabilityService {
       action,
     });
   }
+
+  async deleteCapability(key: string): Promise<void> {
+    const deleted = await this.capabilityRepository.delete(key);
+    if (!deleted) {
+      throw new CapabilityNotFoundError(`Capability not found: ${key}`);
+    }
+  }
 }

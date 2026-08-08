@@ -51,6 +51,13 @@ export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetRolesQuery = { getRoles: Array<{ id: string | null, key: string | null, name: string | null, description: string | null, system: boolean | null, createdAt: unknown, updatedAt: unknown }> | null };
 
+export type UpdateRoleMutationVariables = Exact<{
+  input: Types.UpdateRoleInput;
+}>;
+
+
+export type UpdateRoleMutation = { updateRole: { id: string | null, key: string | null, name: string | null, description: string | null, system: boolean | null, createdAt: unknown, updatedAt: unknown, capabilities: Array<{ id: string | null, key: string | null, service: string | null, resource: string | null, action: string | null }> | null } | null };
+
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -290,3 +297,39 @@ export const useGetRolesQuery = <
 useGetRolesQuery.document = GetRolesDocument;
 
 useGetRolesQuery.getKey = (variables?: GetRolesQueryVariables) => variables === undefined ? ['GetRoles'] : ['GetRoles', variables];
+
+export const UpdateRoleDocument = new TypedDocumentString(`
+    mutation UpdateRole($input: UpdateRoleInput!) {
+  updateRole(input: $input) {
+    id
+    key
+    name
+    description
+    system
+    createdAt
+    updatedAt
+    capabilities {
+      id
+      key
+      service
+      resource
+      action
+    }
+  }
+}
+    `);
+
+export const useUpdateRoleMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UpdateRoleMutation, TError, UpdateRoleMutationVariables, TContext>) => {
+    
+    return useMutation<UpdateRoleMutation, TError, UpdateRoleMutationVariables, TContext>(
+      {
+    mutationKey: ['UpdateRole'],
+    mutationFn: (variables?: UpdateRoleMutationVariables) => graphQLFetcher<UpdateRoleMutation, UpdateRoleMutationVariables>(UpdateRoleDocument, variables)(),
+    ...options
+  }
+    )};
+
+useUpdateRoleMutation.getKey = () => ['UpdateRole'];
