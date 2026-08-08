@@ -54,6 +54,6 @@ Schema: `pnpm schemas:compose` · Client: `pnpm gen` (erp-web). Supergraph path:
 - Pre-commit runs **`pnpm build`** — commits need green build
 - Never hand-edit `__generated__/`
 - Skip `infra/data/`, `node_modules/`
-- Current packages: `@pine/http-core`, `@pine/events` — **not** `server-core` / `event-bus`
+- Current packages: `@pine/http`, `@pine/events` — **not** `server-core` / `event-bus`
 - After renames: fix root `Dockerfile` turbo filters
 - **Never generate or apply DB migrations on your own** (`db:generate`, `drizzle-kit generate`, hand-edit `drizzle/`, `db:migrate` / `db:push`). Change table TS only, then tell the user the exact generate command and wait unless they explicitly ask you to run it. See root `AGENTS.md`.

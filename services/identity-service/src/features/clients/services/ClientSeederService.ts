@@ -1,4 +1,4 @@
-import type { ILogger } from "@pine/http-core";
+import type { ILogger } from "@pine/http";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { oauthClients } from "@/bootstrap/oauth-clients";

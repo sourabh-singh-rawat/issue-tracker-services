@@ -3,6 +3,7 @@ export const TYPES = {
   Logger: Symbol.for("Logger"),
   Broker: Symbol.for("Broker"),
   Publisher: Symbol.for("Publisher"),
+  HttpServer: Symbol.for("IHttpServer"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
   IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
   MeService: Symbol.for("IMeService"),

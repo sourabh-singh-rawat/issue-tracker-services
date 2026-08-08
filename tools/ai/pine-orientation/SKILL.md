@@ -17,7 +17,7 @@ pnpm + Turborepo monorepo. Workspace: `apps/**`, `packages/**`, `services/**`.
 | Business rules / API                 | owning `services/<service>/src/features/`           |
 | Shared enum/DTO/error (2+ consumers) | `packages/common` (or other `@pine/*`)              |
 | Cross-service async                  | `@pine/events` → `pine-events`                      |
-| HTTP server / logger                 | `@pine/http-core`                                   |
+| HTTP server / logger                 | `@pine/http`                                   |
 | Local stack                          | `infra/docker` + root `pnpm dev:infra*`             |
 | Repo tooling scripts                 | `tools/scripts/` (release, schemas compose, concat) |
 | Agent skills                         | `tools/ai/*/SKILL.md`                               |
@@ -48,7 +48,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 | `@pine/common`        | enums, DTOs, errors, `uuidv7`                                    |
 | `@pine/errors`        | `ApplicationError`                                               |
 | `@pine/events`        | NATS, CloudEvents, `publisher.send(event)`, consumers            |
-| `@pine/http-core`     | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
+| `@pine/http`     | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
 | `@pine/graphql-core`  | Pothos `builder`, scalars                                        |
 | `@pine/security`      | JWT, hashing, auth helpers                                       |
 | `@pine/observability` | OTEL bootstrap                                                   |
@@ -57,7 +57,7 @@ Extract to `packages/*` only when **two** services need the same logic.
 
 | Dead                | Use                                           |
 | ------------------- | --------------------------------------------- |
-| `@pine/server-core` | `@pine/http-core`                             |
+| `@pine/server-core` | `@pine/http`                             |
 | `@pine/event-bus`   | `@pine/events`                                |
 | `@pine/orm`         | Drizzle (`src/db/`, service repositories)     |
 | `@pine/comm`        | `notification-service/src/integrations/email` |

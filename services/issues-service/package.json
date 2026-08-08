@@ -25,7 +25,7 @@
     "@pine/common": "workspace:*",
     "@pine/events": "workspace:*",
     "@pine/graphql-core": "workspace:*",
-    "@pine/http-core": "workspace:*",
+    "@pine/http": "workspace:*",
     "@pine/identity-client": "workspace:*",
     "@pine/outbox": "workspace:*",
     "@pine/security": "workspace:*",

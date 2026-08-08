@@ -39,7 +39,7 @@
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
     "@pine/graphql-core": "workspace:^",
-    "@pine/http-core": "workspace:^",
+    "@pine/http": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",

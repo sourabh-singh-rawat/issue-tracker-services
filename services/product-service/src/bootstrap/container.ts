@@ -1,4 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import { FastifyHttpServer, type IHttpServer } from "@pine/http";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -18,6 +19,8 @@ import { Container } from "inversify";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
+import { env } from "@/bootstrap/env";
+import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
 import { CategoryRepository, type ICategoryRepository, CategoryService, type ICategoryService } from "@/features/categories";
@@ -36,6 +39,7 @@ import {
   type IProductService,
 } from "@/features/products";
 import { UnitRepository, type IUnitRepository, UnitService, type IUnitService } from "@/features/units";
+import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -70,3 +74,17 @@ container.bind<IUnitService>(TYPES.UnitService).to(UnitService);
 container.bind<IProductRepository>(TYPES.ProductRepository).to(ProductRepository);
 container.bind<IProductUnitRepository>(TYPES.ProductUnitRepository).to(ProductUnitRepository);
 container.bind<IProductService>(TYPES.ProductService).to(ProductService);
+
+container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
+  new FastifyHttpServer(fastifyServer, {
+    config: {
+      host: "0.0.0.0",
+      port: 5004,
+      environment: env.NODE_ENV,
+      version: 1,
+    },
+    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    cookie: { secret: env.JWT_SECRET },
+    routes,
+  }),
+);

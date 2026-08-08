@@ -2,7 +2,9 @@ import Type from "typebox";
 import Value from "typebox/value";
 
 export const EnvSchema = Type.Object({
-  NODE_ENV: Type.String({ default: "development" }),
+  NODE_ENV: Type.Union([Type.Literal("development"), Type.Literal("production")], {
+    default: "development",
+  }),
   NOTIFICATION_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
 });

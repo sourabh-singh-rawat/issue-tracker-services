@@ -1,4 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import { FastifyHttpServer, type IHttpServer } from "@pine/http";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -18,15 +19,24 @@ import { Container } from "inversify";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
+import { env } from "@/bootstrap/env";
+import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
-import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigneeRepository, IssueRepository, IssueService } from "@/features/issue";
-import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
-import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
 import {
   IIdentityRepository,
   IdentityRepository,
   IdentitySyncConsumer,
 } from "@/features/identities";
+import {
+  IIssueAssigneeRepository,
+  IIssueRepository,
+  IIssueService,
+  IssueAssigneeRepository,
+  IssueRepository,
+  IssueService,
+} from "@/features/issue";
+import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
+import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -58,3 +68,17 @@ container.bind<IStatusService>(TYPES.StatusService).to(StatusService);
 container.bind<IProjectRepository>(TYPES.ProjectRepository).to(ProjectRepository);
 container.bind<IProjectService>(TYPES.ProjectService).to(ProjectService);
 container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
+
+container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
+  new FastifyHttpServer(fastifyServer, {
+    config: {
+      host: "0.0.0.0",
+      port: 5001,
+      environment: env.NODE_ENV,
+      version: 1,
+    },
+    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    cookie: { secret: env.JWT_SECRET },
+    routes: [],
+  }),
+);

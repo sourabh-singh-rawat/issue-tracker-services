@@ -10,4 +10,4 @@
 ### Patch Changes
 
 - Updated dependencies [dfa43fd]
-  - @pine/http-core@0.2.1
+  - @pine/http@0.2.1

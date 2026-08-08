@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@pine/http-core",
+  "name": "@pine/http",
   "version": "0.2.1",
   "description": "",
   "license": "ISC",
@@ -11,8 +11,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@apollo/server": "^5.5.1",
-    "@as-integrations/fastify": "^3.1.0",
     "@fastify/cookie": "^11.1.2",
     "@fastify/cors": "^11.3.0",
     "@fastify/swagger": "^9.8.1",

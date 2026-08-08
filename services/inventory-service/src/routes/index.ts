@@ -1,4 +1,4 @@
-import type { HttpRouteOptions } from "@pine/http-core";
+import type { HttpRoute } from "@pine/http";
 import { meRoutes } from "@/features/me";
 
-export const routes: HttpRouteOptions[] = [...meRoutes];
+export const routes: HttpRoute[] = [...meRoutes];

@@ -1,4 +1,4 @@
-import type { HttpRouteOptions } from "@pine/http-core";
+import type { HttpRoute } from "@pine/http";
 import { logoutRoutes } from "@/features/logout";
 import { meRoutes } from "@/features/me";
 import { oauthRoutes } from "@/features/oauth";
@@ -7,7 +7,7 @@ import { sessionRoutes } from "@/features/session";
 import { signinRoutes } from "@/features/signin";
 import { verificationRoutes } from "@/features/verification";
 
-export const routes: HttpRouteOptions[] = [
+export const routes: HttpRoute[] = [
   ...signinRoutes,
   ...logoutRoutes,
   ...meRoutes,

@@ -10,19 +10,19 @@
 
 - dfa43fd: feat(inventory): add inventory-service with gateway proxy, bootstrap env modules, and OAuth token cookies
 - Updated dependencies [dfa43fd]
-  - @pine/http-core@0.2.1
+  - @pine/http@0.2.1
 
 ## 0.1.0
 
 ### Minor Changes
 
-- d05915a: refactor: rename packages to events/http-core, add CloudEvents and Hydra OAuth
+- d05915a: refactor: rename packages to events/http, add CloudEvents and Hydra OAuth
 
 ### Patch Changes
 
 - Updated dependencies [d05915a]
   - @pine/events@0.1.0
-  - @pine/http-core@0.2.0
+  - @pine/http@0.2.0
   - @pine/orm@0.0.2
   - @pine/security@0.0.2
 

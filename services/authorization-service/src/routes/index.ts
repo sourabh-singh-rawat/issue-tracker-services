@@ -1,3 +1,3 @@
-import type { HttpRouteOptions } from "@pine/http-core";
+import type { HttpRoute } from "@pine/http";
 
-export const routes: HttpRouteOptions[] = [];
+export const routes: HttpRoute[] = [];
