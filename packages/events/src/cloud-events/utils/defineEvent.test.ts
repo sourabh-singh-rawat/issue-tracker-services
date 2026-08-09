@@ -24,9 +24,10 @@ describe("defineEvent + validateEvent / isEvent", () => {
     expect(IssueCreatedEvent).not.toHaveProperty("is");
   });
 
-  it("createCloudEvent builds a CloudEvent using the definition type", () => {
+  it("createCloudEvent builds a CloudEvent using the definition type and schema", () => {
     const event = createCloudEvent({
       type: IssueCreatedEvent.type,
+      schema: IssueCreatedEvent.schema,
       source: "pine/issues-service",
       data: validData,
     });
@@ -34,6 +35,7 @@ describe("defineEvent + validateEvent / isEvent", () => {
     expect(event.type).toBe("issues.issue.created");
     expect(event.source).toBe("pine/issues-service");
     expect(event.specversion).toBe("1.0");
+    expect(event.dataschema).toBe("urn:pine:events:issues.issue.created");
     expect(event.data).toEqual(validData);
     expect(event.datacontenttype).toBe("application/json");
   });
@@ -41,6 +43,7 @@ describe("defineEvent + validateEvent / isEvent", () => {
   it("isEvent acts as a type guard for envelope, type, and payload", () => {
     const event = createCloudEvent({
       type: IssueCreatedEvent.type,
+      schema: IssueCreatedEvent.schema,
       source: "pine/issues-service",
       data: validData,
     });
@@ -51,19 +54,19 @@ describe("defineEvent + validateEvent / isEvent", () => {
         IssueCreatedEvent,
         createCloudEvent({
           type: "issues.project.created",
+          schema: IssueCreatedEvent.schema,
           source: "pine/issues-service",
           data: validData,
         }),
       ),
     ).toBe(false);
-    expect(isEvent(IssueCreatedEvent, { type: "issues.issue.created" })).toBe(
-      false,
-    );
+    expect(isEvent(IssueCreatedEvent, { type: "issues.issue.created" })).toBe(false);
   });
 
   it("validateEvent returns a typed event and throws EventValidationError on mismatches", () => {
     const event = createCloudEvent({
       type: IssueCreatedEvent.type,
+      schema: IssueCreatedEvent.schema,
       source: "pine/issues-service",
       data: validData,
     });
@@ -75,6 +78,7 @@ describe("defineEvent + validateEvent / isEvent", () => {
         IssueCreatedEvent,
         createCloudEvent({
           type: "issues.project.created",
+          schema: IssueCreatedEvent.schema,
           source: "pine/issues-service",
           data: validData,
         }),
@@ -82,14 +86,12 @@ describe("defineEvent + validateEvent / isEvent", () => {
     ).toThrow(EventValidationError);
 
     expect(() =>
-      validateEvent(
-        IssueCreatedEvent,
-        createCloudEvent({
-          type: IssueCreatedEvent.type,
-          source: "pine/issues-service",
-          data: { id: "bad" },
-        }),
-      ),
+      createCloudEvent({
+        type: IssueCreatedEvent.type,
+        schema: IssueCreatedEvent.schema,
+        source: "pine/issues-service",
+        data: { id: "bad" },
+      }),
     ).toThrow(EventValidationError);
   });
 });

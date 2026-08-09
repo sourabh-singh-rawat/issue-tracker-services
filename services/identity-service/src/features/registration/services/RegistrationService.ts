@@ -1,48 +1,67 @@
-import { type IPublisher, createCloudEvent, SUBJECTS, UserRegisteredEvent } from "@pine/events";
+import { createCloudEvent, UserRegisteredEvent } from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { IRegistrationService } from "@/features/registration/services/IRegistrationService";
-import type { Identity } from "@/db";
+import type { Database, Identity } from "@/db";
 import { IdentityProviderType } from "@/features/identities/constants";
 import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";
-import type { IIdentityProvider } from "@/integrations/identity";
+import { IRegistrationService } from "@/features/registration/services/IRegistrationService";
+import type { IIdentityAdminProvider, IRegistrationProvider } from "@/integrations/identity";
 
 @injectable()
 export class RegistrationService implements IRegistrationService {
   constructor(
-    @inject(TYPES.IdentityProvider)
-    private readonly identityProvider: IIdentityProvider,
+    @inject(TYPES.RegistrationProvider)
+    private readonly registrationProvider: IRegistrationProvider,
+    @inject(TYPES.IdentityAdminProvider)
+    private readonly identityAdminProvider: IIdentityAdminProvider,
     @inject(TYPES.IdentityRepository)
     private readonly identityRepository: IIdentityRepository,
-    @inject(TYPES.Publisher)
-    private readonly publisher: IPublisher,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
+    @inject(TYPES.Database)
+    private readonly db: Database,
   ) {}
 
-  async registerWithEmailAndPassword(email: string, password: string): Promise<void> {
-    const idpIdentity = await this.identityProvider.register({ email, password });
+  async register(email: string, username: string, password: string): Promise<void> {
+    const idpIdentity = await this.registrationProvider.register({ email, username, password });
 
-    let identity: Identity;
     try {
-      identity = await this.identityRepository.save({
-        email: idpIdentity.email,
-        idpId: idpIdentity.id,
-        idpProvider: IdentityProviderType.KRATOS,
+      await this.db.transaction(async (tx) => {
+        const identity: Identity = await this.identityRepository.save(
+          {
+            idpId: idpIdentity.id,
+            idpProvider: IdentityProviderType.KRATOS,
+          },
+          { tx },
+        );
+
+        const event = createCloudEvent({
+          type: UserRegisteredEvent.type,
+          version: UserRegisteredEvent.version,
+          schema: UserRegisteredEvent.schema,
+          source: "pine/identity-service",
+          subject: identity.id,
+          data: {
+            userId: identity.id,
+          },
+        });
+
+        await this.outboxService.schedule(
+          {
+            eventId: event.id,
+            eventType: event.type,
+            eventVersion: UserRegisteredEvent.version,
+            aggregateType: "identity",
+            aggregateId: identity.id,
+            payload: event,
+          },
+          { tx },
+        );
       });
     } catch (error) {
-      await this.identityProvider.deleteIdentity(idpIdentity.id);
+      await this.identityAdminProvider.deleteIdentity(idpIdentity.id);
       throw error;
     }
-
-    const event = createCloudEvent({
-      type: UserRegisteredEvent.type,
-      source: "pine/identity-service",
-      subject: identity.id,
-      data: {
-        userId: identity.id,
-        email: identity.email,
-      },
-    });
-
-    await this.publisher.send(SUBJECTS.USER_REGISTERED, event);
   }
 }

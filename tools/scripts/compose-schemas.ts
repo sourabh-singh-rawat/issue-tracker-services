@@ -48,7 +48,7 @@ function resolvePackageBin(pkg: string, binName: string): string {
   const rel =
     typeof binField === "string"
       ? binField
-      : binField?.[binName] ?? binField?.[Object.keys(binField ?? {})[0] ?? ""];
+      : (binField?.[binName] ?? binField?.[Object.keys(binField ?? {})[0] ?? ""]);
   if (!rel) {
     throw new Error(`Package ${pkg} has no bin entry for ${binName}`);
   }
@@ -380,7 +380,9 @@ function startWatchers(mode: Mode): void {
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
 
-  log("Watch mode active. Start (or restart) api-gateway after a successful compose to load the new supergraph.");
+  log(
+    "Watch mode active. Start (or restart) api-gateway after a successful compose to load the new supergraph.",
+  );
 }
 
 async function main(): Promise<void> {

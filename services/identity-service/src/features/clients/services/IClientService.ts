@@ -1,5 +1,3 @@
-import type { Client } from "@/db";
-
 export type CreateClientInput = {
   name: string;
   redirectUris?: string[];
@@ -7,7 +5,9 @@ export type CreateClientInput = {
   grantTypes: string[];
 };
 
-export type ClientDetails = Client & {
+export type ClientDetails = {
+  id: string;
+  name: string;
   redirectUris: string[];
   scopes: string[];
   grantTypes: string[];

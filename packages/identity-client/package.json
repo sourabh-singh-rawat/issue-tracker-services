@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/identity-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HTTP client for the identity service (bearer/session authentication hooks)",
+  "license": "ISC",
+  "author": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "build": "pnpm clean && tsc"
+  },
+  "dependencies": {
+    "@pine/server": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "7.0.2"
+  }
+}

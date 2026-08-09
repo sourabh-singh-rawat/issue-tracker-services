@@ -1,5 +1,5 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ILogoutService } from "@/features/logout/services";
@@ -7,12 +7,7 @@ import { LogoutResponseSchema, type LogoutResponse } from "@/features/logout/sch
 import { InvalidCredentialError } from "@/integrations/identity";
 import { env } from "@/bootstrap/env";
 
-export const logout: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Reply: LogoutResponse }
-> = {
+export const logout: HttpRoute = {
   url: "/identity/logout",
   method: "POST",
   schema: {
@@ -24,8 +19,8 @@ export const logout: RouteOptions<
       200: LogoutResponseSchema,
     },
   },
-  handler: async (req, reply) => {
-    const sessionToken = req.cookies.session;
+  handler: async (request) => {
+    const sessionToken = request.cookies.session;
 
     if (!sessionToken) {
       throw new InvalidCredentialError("No active session");
@@ -34,16 +29,20 @@ export const logout: RouteOptions<
     const service = container.get<ILogoutService>(TYPES.LogoutService);
     await service.logout(sessionToken);
 
-    reply.clearCookie("session", {
-      path: "/",
-      sameSite: "lax",
-      secure: env.NODE_ENV === "production",
-    });
-
     const response: LogoutResponse = {
       message: "Logged out successfully.",
     };
 
-    return reply.send(response);
+    return {
+      ...json(response),
+      clearCookies: [
+        {
+          name: "session",
+          path: "/",
+          sameSite: "lax",
+          secure: env.NODE_ENV === "production",
+        },
+      ],
+    };
   },
 };

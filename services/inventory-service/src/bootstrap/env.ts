@@ -1,50 +1,30 @@
+import { ENVIRONMENT } from "@pine/common";
 import Type from "typebox";
 import Value from "typebox/value";
 
 export const EnvSchema = Type.Object({
-  NODE_ENV: Type.String({ default: "development" }),
+  NODE_ENV: Type.Union(
+    [
+      Type.Literal(ENVIRONMENT.DEVELOPMENT),
+      Type.Literal(ENVIRONMENT.PRODUCTION),
+      Type.Literal(ENVIRONMENT.TEST),
+    ],
+    { default: ENVIRONMENT.DEVELOPMENT },
+  ),
   INVENTORY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5002" }),
-  /** Full URL override (multi-db / remote). Prefer POSTGRES_INVENTORY_PASSWORD for single-db local. */
-  INVENTORY_DATABASE_URL: Type.Optional(Type.String({ minLength: 1 })),
-  POSTGRES_INVENTORY_PASSWORD: Type.Optional(Type.String({ minLength: 1 })),
+  INVENTORY_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
-  INVENTORY_WEB_URL: Type.String({ default: "http://localhost:3002" }),
+  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
   OTEL_EXPORTER_OTLP_ENDPOINT: Type.String({ default: "http://127.0.0.1:4317" }),
 });
 
-type RawEnv = Type.Static<typeof EnvSchema>;
-
-export type Env = Omit<RawEnv, "INVENTORY_DATABASE_URL" | "POSTGRES_INVENTORY_PASSWORD"> & {
-  INVENTORY_DATABASE_URL: string;
-};
-
-export const listenPortFromUrl = (url: string): number => {
-  const parsed = new URL(url);
-  if (parsed.port) return Number.parseInt(parsed.port, 10);
-  return parsed.protocol === "https:" ? 443 : 80;
-};
-
-const resolveDatabaseUrl = (raw: RawEnv): string => {
-  const explicit = raw.INVENTORY_DATABASE_URL?.trim();
-  if (explicit) return explicit;
-  const password = raw.POSTGRES_INVENTORY_PASSWORD?.trim();
-  if (!password) {
-    throw new Error(
-      "Set INVENTORY_DATABASE_URL or POSTGRES_INVENTORY_PASSWORD (single-db local default port 5432)",
-    );
-  }
-  return `postgres://inventory:${password}@localhost:5432/inventory`;
-};
+export type Env = Type.Static<typeof EnvSchema>;
 
 const parseEnv = (): Env => {
   const withDefaults = Value.Default(EnvSchema, { ...process.env });
-  const cleaned = Value.Clean(EnvSchema, withDefaults) as RawEnv;
-  const parsed = Value.Parse(EnvSchema, cleaned) as RawEnv;
-  return {
-    ...parsed,
-    INVENTORY_DATABASE_URL: resolveDatabaseUrl(parsed),
-  };
+  const cleaned = Value.Clean(EnvSchema, withDefaults);
+  return Value.Parse(EnvSchema, cleaned);
 };
 
 export const env = parseEnv();

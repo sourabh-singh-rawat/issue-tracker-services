@@ -1,0 +1,11 @@
+{{- $query := index (splitList "?" .VerificationURL) 1 -}}
+{{- $verifyURL := printf "http://localhost:3000/verification?%s" $query -}}
+Verify your account with the following code:
+
+{{ .VerificationCode }}
+
+or click the following link:
+
+<a href="{{ $verifyURL }}">{{ $verifyURL }}</a>
+
+If this was not you, do nothing. This code / link expires in {{ .ExpiresInMinutes }} minutes.

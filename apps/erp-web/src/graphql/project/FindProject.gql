@@ -1,0 +1,6 @@
+query FindProject($findProjectId: String!) {
+  findProject(id: $findProjectId) {
+    id
+    name
+  }
+}

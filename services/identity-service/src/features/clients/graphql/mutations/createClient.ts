@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { CreateClientInput } from "@/features/clients/graphql/inputs/CreateClientInput";
 import { ClientObject } from "@/features/clients/graphql/objects/ClientObject";

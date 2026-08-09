@@ -1,6 +1,6 @@
-import { asHttpRoute, type HttpRouteOptions } from "@pine/http-core";
+import type { HttpRoute } from "@pine/server";
 import { me } from "@/features/me/routes/me";
 
 export * from "@/features/me/routes/me";
 
-export const meRoutes: HttpRouteOptions[] = [asHttpRoute(me)];
+export const meRoutes: HttpRoute[] = [me];

@@ -1,30 +1,33 @@
 #!/bin/sh
 set -e
 
-# Writable locations inside the container (do not mount over /pgadmin4;
-# that path owns the pgAdmin application in dpage/pgadmin4).
 CONFIG_DIR="${PGADMIN_CONFIG_DIR:-/var/lib/pgadmin}"
 PGPASS_FILE="${PGPASS_FILE:-${CONFIG_DIR}/pgpass}"
 SERVERS_JSON="${PGADMIN_SERVER_JSON_FILE:-${CONFIG_DIR}/servers.json}"
+PGADMIN_UID="${PGADMIN_UID:-5050}"
+PGADMIN_GID="${PGADMIN_GID:-0}"
 
 mkdir -p "$CONFIG_DIR"
 
-# Generate pgpass for pre-configured servers.
-# Ory: one host (ory-postgres), admin can open both kratos and hydra DBs.
+if [ "$(id -u)" = "0" ]; then
+  chown "$PGADMIN_UID:$PGADMIN_GID" "$CONFIG_DIR" 2>/dev/null || true
+fi
+
 cat > "$PGPASS_FILE" <<EOF
 identity-postgres:5432:*:identity:${POSTGRES_IDENTITY_PASSWORD}
 issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
 inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
+product-postgres:5432:*:product:${POSTGRES_PRODUCT_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
-mail-postgres:5432:*:mail:${POSTGRES_MAIL_PASSWORD}
+notification-postgres:5432:*:notification:${POSTGRES_NOTIFICATION_PASSWORD}
+organization-postgres:5432:*:organization:${POSTGRES_ORGANIZATION_PASSWORD}
+authz-postgres:5432:*:authz:${POSTGRES_AUTHZ_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 EOF
 
 chmod 600 "$PGPASS_FILE"
 
-# Shared Ory server fragment: one Postgres instance, databases kratos + hydra.
-# Used identically in multi-db and single-db modes.
 ory_server_json() {
   id="$1"
   cat <<EOF
@@ -37,20 +40,19 @@ ory_server_json() {
       "Username": "postgres",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE",
-      "Comment": "Shared instance for Kratos (db: kratos) and Hydra (db: hydra)",
-      "DBRestriction": "kratos,hydra"
+      "Comment": "Shared instance for Kratos (db: kratos), Hydra (db: hydra), and Keto (db: keto)",
+      "DBRestriction": "kratos,hydra,keto"
     }
 EOF
 }
 
-# Generate servers.json
 if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
   cat > "$SERVERS_JSON" <<EOF
 {
   "Servers": {
     "1": {
       "Name": "Identity Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "identity-postgres",
       "Port": 5432,
       "MaintenanceDB": "identity",
@@ -60,7 +62,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "2": {
       "Name": "Issues Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "issues-postgres",
       "Port": 5432,
       "MaintenanceDB": "issues",
@@ -70,7 +72,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
     },
     "3": {
       "Name": "Inventory Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "inventory-postgres",
       "Port": 5432,
       "MaintenanceDB": "inventory",
@@ -79,8 +81,18 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "4": {
+      "Name": "Product Service DB",
+      "Group": "Pine",
+      "Host": "product-postgres",
+      "Port": 5432,
+      "MaintenanceDB": "product",
+      "Username": "product",
+      "SSLMode": "prefer",
+      "PassFile": "$PGPASS_FILE"
+    },
+    "5": {
       "Name": "Attachment Service DB",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "attachment-postgres",
       "Port": 5432,
       "MaintenanceDB": "attachment",
@@ -88,28 +100,47 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
-    "5": {
-      "Name": "Mail Service DB",
-      "Group": "Issue Tracker",
-      "Host": "mail-postgres",
+    "6": {
+      "Name": "Notification Service DB",
+      "Group": "Pine",
+      "Host": "notification-postgres",
       "Port": 5432,
-      "MaintenanceDB": "mail",
-      "Username": "mail",
+      "MaintenanceDB": "notification",
+      "Username": "notification",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
-$(ory_server_json 6)
+    "7": {
+      "Name": "Organization Service DB",
+      "Group": "Pine",
+      "Host": "organization-postgres",
+      "Port": 5432,
+      "MaintenanceDB": "organization",
+      "Username": "organization",
+      "SSLMode": "prefer",
+      "PassFile": "$PGPASS_FILE"
+    },
+    "8": {
+      "Name": "Authorization Service DB",
+      "Group": "Pine",
+      "Host": "authz-postgres",
+      "Port": 5432,
+      "MaintenanceDB": "authz",
+      "Username": "authz",
+      "SSLMode": "prefer",
+      "PassFile": "$PGPASS_FILE"
+    },
+$(ory_server_json 9)
   }
 }
 EOF
 else
-  # Default / single-db: app DBs on service "postgres"; Ory on shared ory-postgres
   cat > "$SERVERS_JSON" <<EOF
 {
   "Servers": {
     "1": {
       "Name": "Single DB (Minimal)",
-      "Group": "Issue Tracker",
+      "Group": "Pine",
       "Host": "postgres",
       "Port": 5432,
       "MaintenanceDB": "postgres",
@@ -126,5 +157,9 @@ fi
 export PGADMIN_SERVER_JSON_FILE="$SERVERS_JSON"
 export PGPASS_FILE="$PGPASS_FILE"
 
-# Hand off to the image's original entrypoint
+if [ "$(id -u)" = "0" ]; then
+  chown -R "$PGADMIN_UID:$PGADMIN_GID" "$CONFIG_DIR" 2>/dev/null || true
+  chmod 600 "$PGPASS_FILE"
+fi
+
 exec /entrypoint.sh

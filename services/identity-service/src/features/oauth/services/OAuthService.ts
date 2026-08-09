@@ -11,17 +11,19 @@ import type {
   IOAuthService,
   RejectConsentOptions,
 } from "@/features/oauth/services/IOAuthService";
-import type { IOAuthProvider } from "@/integrations/oauth";
+import type { IOAuthFlowProvider, IOAuthTokenProvider } from "@/integrations/oauth";
 
 @injectable()
 export class OAuthService implements IOAuthService {
   constructor(
-    @inject(TYPES.OAuthProvider)
-    private readonly oauthProvider: IOAuthProvider,
+    @inject(TYPES.OAuthFlowProvider)
+    private readonly oauthFlowProvider: IOAuthFlowProvider,
+    @inject(TYPES.OAuthTokenProvider)
+    private readonly oauthTokenProvider: IOAuthTokenProvider,
   ) {}
 
   async authorize(params: AuthorizeOptions): Promise<AuthorizeResult> {
-    const redirectTo = this.oauthProvider.getAuthorizationUrl({
+    const redirectTo = this.oauthFlowProvider.getAuthorizationUrl({
       clientId: params.clientId,
       redirectUri: params.redirectUri,
       responseType: params.responseType,
@@ -36,11 +38,11 @@ export class OAuthService implements IOAuthService {
   }
 
   async getConsentChallenge(challenge: string): Promise<ConsentChallengeResult> {
-    return this.oauthProvider.getConsentRequest(challenge);
+    return this.oauthFlowProvider.getConsentRequest(challenge);
   }
 
   async acceptConsent(params: AcceptConsentOptions): Promise<ConsentActionResult> {
-    return this.oauthProvider.acceptConsentRequest({
+    return this.oauthFlowProvider.acceptConsentRequest({
       challenge: params.challenge,
       grantScope: params.grantScope,
       remember: params.remember,
@@ -49,7 +51,7 @@ export class OAuthService implements IOAuthService {
   }
 
   async rejectConsent(params: RejectConsentOptions): Promise<ConsentActionResult> {
-    return this.oauthProvider.rejectConsentRequest({
+    return this.oauthFlowProvider.rejectConsentRequest({
       challenge: params.challenge,
       error: params.error,
       errorDescription: params.errorDescription,
@@ -57,7 +59,7 @@ export class OAuthService implements IOAuthService {
   }
 
   async exchangeToken(params: ExchangeTokenOptions): Promise<ExchangeTokenResult> {
-    return this.oauthProvider.exchangeToken({
+    return this.oauthTokenProvider.exchangeToken({
       grantType: params.grantType,
       clientId: params.clientId,
       code: params.code,

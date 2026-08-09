@@ -38,9 +38,7 @@ export function normalizeReleaseTag(input: string): string | null {
  * Parse a product release id into numeric parts.
  * Accepts tags (`v2026.08.01.1`), bare versions, or branch remainders.
  */
-export function parseReleaseVersionParts(
-  input: string,
-): ReleaseVersionParts | null {
+export function parseReleaseVersionParts(input: string): ReleaseVersionParts | null {
   const trimmed = input.trim();
   const match = trimmed.match(RELEASE_VERSION_RE);
   if (match === null) {
@@ -112,11 +110,7 @@ export function maxSequenceForDay(
     if (parts === null) {
       continue;
     }
-    if (
-      parts.year === day.year &&
-      parts.month === day.month &&
-      parts.day === day.day
-    ) {
+    if (parts.year === day.year && parts.month === day.month && parts.day === day.day) {
       max = Math.max(max, parts.sequence);
     }
   }

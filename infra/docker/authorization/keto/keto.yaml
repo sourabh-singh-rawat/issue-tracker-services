@@ -1,0 +1,26 @@
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+serve:
+  read:
+    host: 0.0.0.0
+    port: 4466
+  write:
+    host: 0.0.0.0
+    port: 4467
+
+namespaces:
+  - id: 0
+    name: system
+  - id: 1
+    name: organization
+  - id: 2
+    name: role
+  - id: 3
+    name: capability
+  - id: 4
+    name: authorization
+  - id: 5
+    name: product

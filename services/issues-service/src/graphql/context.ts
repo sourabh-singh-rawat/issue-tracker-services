@@ -1,27 +1,22 @@
-import { JwtToken, hasUserIdentity } from "@pine/security";
-import { GraphQLContext } from "@pine/graphql-core";
-import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
-import { env } from "@/env";
+import type { HttpRequest } from "@pine/server";
+import type { GraphQLContext } from "@pine/server";
+import { authenticate } from "@pine/identity-client";
 
 export type IssuesContext = GraphQLContext;
 
-export const createContext: ApolloFastifyContextFunction<IssuesContext> = async (req, rep) => {
-  const { accessToken } = req.cookies;
+export const createContext = async (request: HttpRequest): Promise<IssuesContext> => {
+  await authenticate(request);
 
-  if (accessToken) {
-    try {
-      const token = await JwtToken.verify(accessToken, env.JWT_SECRET);
-      if (hasUserIdentity(token)) {
-        return {
-          req,
-          rep,
-          user: { email: token.email, userId: token.userId },
-        };
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  return { req, rep };
+  return {
+    cookies: request.cookies,
+    headers: request.headers,
+    ...(request.user
+      ? {
+          user: {
+            id: request.user.id,
+            authMethod: request.user.authMethod,
+          },
+        }
+      : {}),
+  };
 };

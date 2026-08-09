@@ -1,5 +1,13 @@
 # @pine/common
 
+## 0.0.2
+
+### Patch Changes
+
+- 5b5506b: chore(fmt): format code
+- d175229: refactor(notification): remove email sending, events, and emails table
+- d206a7c: refactor: rename @pine/http-core to @pine/http
+
 ## 0.0.1
 
 ### Patch Changes

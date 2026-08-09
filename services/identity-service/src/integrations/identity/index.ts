@@ -1,12 +1,18 @@
 export type {
-  IIdentityProvider,
+  CreateIdentityInput,
   Identity,
   IdentitySchemaId,
-  LoginIdentityInput,
-  LoginResult,
   RegisterIdentityInput,
+  ResendVerificationEmailInput,
+  SignInIdentityInput,
+  SignInResult,
   UpdateIdentityInput,
-} from "@/integrations/identity/IIdentityProvider";
+  VerifyEmailInput,
+} from "@/integrations/identity/types";
+export type { IRegistrationProvider } from "@/integrations/identity/IRegistrationProvider";
+export type { ISessionProvider } from "@/integrations/identity/ISessionProvider";
+export type { IIdentityAdminProvider } from "@/integrations/identity/IIdentityAdminProvider";
+export type { IVerificationProvider } from "@/integrations/identity/IVerificationProvider";
 export {
   IdentityAlreadyExistsError,
   IdentityErrorCodes,
@@ -16,4 +22,8 @@ export {
   type IdentityErrorCode,
 } from "@/integrations/identity/errors";
 export { KratosClient } from "@/integrations/identity/KratosClient";
-export { KratosIdentityProvider } from "@/integrations/identity/KratosIdentityProvider";
+export { KratosErrorMapper } from "@/integrations/identity/KratosErrorMapper";
+export { KratosRegistrationProvider } from "@/integrations/identity/KratosRegistrationProvider";
+export { KratosSessionProvider } from "@/integrations/identity/KratosSessionProvider";
+export { KratosIdentityAdminProvider } from "@/integrations/identity/KratosIdentityAdminProvider";
+export { KratosVerificationProvider } from "@/integrations/identity/KratosVerificationProvider";

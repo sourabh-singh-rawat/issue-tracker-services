@@ -17,7 +17,7 @@ export class IdentityRepository implements IIdentityRepository {
   }
 
   async save(
-    entity: Partial<Identity> & { email: string },
+    entity: Partial<Identity> & { idpId: string; idpProvider: string },
     options?: IdentityRepositoryOptions,
   ): Promise<Identity> {
     const client = this.client(options);
@@ -27,9 +27,8 @@ export class IdentityRepository implements IIdentityRepository {
       .insert(Identities)
       .values({
         id: uuidv7(),
-        email: entity.email,
-        idpId: entity.idpId ?? null,
-        idpProvider: entity.idpProvider ?? null,
+        idpId: entity.idpId,
+        idpProvider: entity.idpProvider,
         createdAt: now,
         version: 1,
       })
@@ -40,7 +39,7 @@ export class IdentityRepository implements IIdentityRepository {
 
   async update(
     id: string,
-    entity: Partial<Pick<Identity, "email" | "idpId" | "idpProvider" | "deletedAt">>,
+    entity: Partial<Pick<Identity, "idpId" | "idpProvider" | "deletedAt">>,
     options?: IdentityRepositoryOptions,
   ): Promise<Identity> {
     const client = this.client(options);
@@ -49,7 +48,6 @@ export class IdentityRepository implements IIdentityRepository {
     const [updated] = await client
       .update(Identities)
       .set({
-        ...(entity.email !== undefined ? { email: entity.email } : {}),
         ...(entity.idpId !== undefined ? { idpId: entity.idpId } : {}),
         ...(entity.idpProvider !== undefined ? { idpProvider: entity.idpProvider } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
@@ -76,11 +74,11 @@ export class IdentityRepository implements IIdentityRepository {
     return row.length > 0;
   }
 
-  async existsByEmail(email: string) {
+  async existsByIdpId(idpId: string) {
     const row = await this.db
       .select({ id: Identities.id })
       .from(Identities)
-      .where(and(eq(Identities.email, email), isNull(Identities.deletedAt)))
+      .where(and(eq(Identities.idpId, idpId), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row.length > 0;
@@ -100,11 +98,11 @@ export class IdentityRepository implements IIdentityRepository {
     return row ?? null;
   }
 
-  async findByEmail(email: string) {
+  async findByIdpId(idpId: string) {
     const [row] = await this.db
       .select()
       .from(Identities)
-      .where(and(eq(Identities.email, email), isNull(Identities.deletedAt)))
+      .where(and(eq(Identities.idpId, idpId), isNull(Identities.deletedAt)))
       .limit(1);
 
     return row ?? null;

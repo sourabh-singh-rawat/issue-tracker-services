@@ -2,12 +2,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import {
-  getConsentChallengeOptions,
   useAcceptConsentChallengeMutation,
+  useGetConsentChallengeQuery,
 } from "@generated/api/@tanstack/react-query.gen";
 import { useConsentStore } from "@features/consent/stores";
 
@@ -17,22 +16,14 @@ export const ConsentForm = () => {
   const { consent_challenge: consentChallenge } = useSearch({ from: "/(no-auth)/consent" });
   const autoAcceptStarted = useRef(false);
 
-  const {
-    data: challenge,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    ...getConsentChallengeOptions({
-      query: { consent_challenge: consentChallenge ?? "" },
-    }),
-    enabled: Boolean(consentChallenge),
+  const consentChallengeQuery = useGetConsentChallengeQuery({
+    query: { consent_challenge: consentChallenge ?? "" },
   });
 
-  const { mutateAsync: acceptConsent, isPending: isAccepting } =
-    useAcceptConsentChallengeMutation();
+  const acceptConsentMutation = useAcceptConsentChallengeMutation();
 
   useEffect(() => {
+    const challenge = consentChallengeQuery.data;
     if (!challenge || autoAcceptStarted.current || !consentChallenge) {
       return;
     }
@@ -40,7 +31,7 @@ export const ConsentForm = () => {
     autoAcceptStarted.current = true;
 
     void (async () => {
-      const result = await acceptConsent({
+      const result = await acceptConsentMutation.mutateAsync({
         query: { consent_challenge: consentChallenge },
         body: {
           grantScope: challenge.requestedScope,
@@ -51,7 +42,7 @@ export const ConsentForm = () => {
 
       window.location.assign(result.redirectTo);
     })();
-  }, [acceptConsent, challenge, consentChallenge]);
+  }, [acceptConsentMutation.mutateAsync, consentChallengeQuery.data, consentChallenge]);
 
   if (!consentChallenge) {
     return (
@@ -61,11 +52,16 @@ export const ConsentForm = () => {
     );
   }
 
-  if (isError || (!isLoading && !challenge)) {
+  if (
+    consentChallengeQuery.isError ||
+    (!consentChallengeQuery.isLoading && !consentChallengeQuery.data)
+  ) {
     return (
       <Container maxWidth="sm">
         <Typography color="error">
-          {error instanceof Error ? error.message : "Unable to load consent request."}
+          {consentChallengeQuery.error instanceof Error
+            ? consentChallengeQuery.error.message
+            : "Unable to load consent request."}
         </Typography>
       </Container>
     );
@@ -76,7 +72,9 @@ export const ConsentForm = () => {
       <Stack spacing={2} sx={{ alignItems: "center", py: 4 }}>
         <CircularProgress size={32} />
         <Typography color="text.secondary">
-          {isLoading || isAccepting ? "Authorizing application…" : "Redirecting…"}
+          {consentChallengeQuery.isLoading || acceptConsentMutation.isPending
+            ? "Authorizing application…"
+            : "Redirecting…"}
         </Typography>
       </Stack>
     </Container>

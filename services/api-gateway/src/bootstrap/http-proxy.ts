@@ -26,6 +26,11 @@ const proxyRoutes: ProxyRoute[] = [
     upstream: env.INVENTORY_SERVICE_URL,
     proxyPayloads: true,
   },
+  {
+    prefix: "/products",
+    upstream: env.PRODUCT_SERVICE_URL,
+    proxyPayloads: true,
+  },
 ];
 
 const CORS_RESPONSE_HEADERS = [
@@ -77,8 +82,7 @@ export const registerHttpProxies = async (server: FastifyInstance): Promise<void
         bodyTimeout: 120_000,
       },
       replyOptions: {
-        rewriteHeaders: (headers, request) =>
-          rewriteProxyHeaders(headers, request, allowedOrigins),
+        rewriteHeaders: (headers, request) => rewriteProxyHeaders(headers, request, allowedOrigins),
       },
     });
   }

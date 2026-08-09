@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { ProjectObject } from "./ProjectObject";
 
 export const PaginatedProjectObject = builder
@@ -6,14 +6,6 @@ export const PaginatedProjectObject = builder
     rows: {
       id: string;
       name: string;
-      workspaceId: string;
-      workspace: {
-        id: string;
-        name: string;
-        description?: string | null;
-        createdById: string;
-        status: string;
-      };
     }[];
     rowCount: number;
   }>("PaginatedProjectObject")

@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 import "@/graphql/queries/helloQuery";
 import "@/graphql/mutations/helloMutation";

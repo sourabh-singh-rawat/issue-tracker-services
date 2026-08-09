@@ -1,23 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/security",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "",
   "license": "ISC",
   "author": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "build": "pnpm clean && tsc"
   },
   "dependencies": {
-    "@fastify/cookie": "^11.1.2",
-    "@fastify/cors": "^11.3.0",
     "@pine/common": "workspace:^",
-    "@pine/http-core": "workspace:^",
-    "argon2": "^0.45.1",
-    "awilix": "^13.0.5",
-    "fastify": "^5.10.0",
+    "@pine/server": "workspace:^",
     "jose": "^6.2.4",
     "pino": "^10.3.1"
   },

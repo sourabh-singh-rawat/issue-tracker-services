@@ -1,19 +1,16 @@
 import { PaginatedOutput, PagingOptions } from "@pine/common";
-import { ServiceOptions } from "@pine/orm";
-import { Project } from "@/entities/Project";
+import type { Project } from "@/db";
 
-export interface CreateProjectOptions extends ServiceOptions {
+export interface CreateProjectOptions {
   userId: string;
-  workspaceId: string;
   name: string;
 }
 
 export interface FindProjectsOptions extends PagingOptions {
   userId: string;
-  workspaceId?: string;
 }
 
-export interface UpdateProjectOptions extends ServiceOptions {
+export interface UpdateProjectOptions {
   id: string;
   name?: string;
 }

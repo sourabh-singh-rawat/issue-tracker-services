@@ -19,10 +19,7 @@ import {
   parseReleaseBranch,
 } from "./release-version.ts";
 
-const CHANGESET_IGNORED = new Set([
-  ".changeset/README.md",
-  ".changeset/config.json",
-]);
+const CHANGESET_IGNORED = new Set([".changeset/README.md", ".changeset/config.json"]);
 
 function isDirectory(p: string): boolean {
   try {
@@ -56,10 +53,7 @@ export type ValidationResult =
   | { readonly ok: true; readonly tag: string }
   | { readonly ok: false; readonly errors: readonly string[] };
 
-export function validateReleaseBranch(
-  cwd: string,
-  releaseBranch: string,
-): ValidationResult {
+export function validateReleaseBranch(cwd: string, releaseBranch: string): ValidationResult {
   const errors: string[] = [];
 
   const tag = parseReleaseBranch(releaseBranch);
@@ -85,9 +79,7 @@ export function validateReleaseBranch(
   return { ok: true, tag };
 }
 
-export async function main(
-  argv: readonly string[] = process.argv.slice(2),
-): Promise<number> {
+export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<number> {
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(`Usage: release-branch-check [${formatReleaseBranchExample()}]
 
@@ -131,9 +123,7 @@ function isMainModule(): boolean {
   try {
     return import.meta.url === pathToFileURL(entry).href;
   } catch {
-    return entry
-      .replace(/\\/g, "/")
-      .endsWith("/tools/scripts/release-branch-check.ts");
+    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/release-branch-check.ts");
   }
 }
 

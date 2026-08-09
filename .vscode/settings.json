@@ -1,13 +1,51 @@
 {
-  // Infra (Docker Compose) is intentionally separate from debug launches.
-  // Run Task → "infra: up" once, then F5 → "dev" for app debug sessions.
   "task.quickOpen.detail": true,
   "task.quickOpen.skip": false,
   "debug.openDebug": "openOnDebugBreak",
   "debug.internalConsoleOptions": "neverOpen",
+  "debug.javascript.autoAttachFilter": "smart",
+  "debug.javascript.terminalOptions": {
+    "outFiles": [],
+    "sourceMaps": true,
+    "resolveSourceMapLocations": [
+      "${workspaceFolder}/services/**",
+      "${workspaceFolder}/packages/**",
+      "${workspaceFolder}/apps/**",
+      "${workspaceFolder}/tools/**",
+      "!**/node_modules/**"
+    ],
+    "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+  },
   "terminal.integrated.tabs.hideCondition": "never",
 
-  // Oxfmt (Oxc formatter)
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.turbo/**": true,
+    "**/coverage/**": true,
+    "**/.pnpm-store/**": true,
+    "**/infra/data/**": true,
+    "**/*.tsbuildinfo": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    "**/coverage": true,
+    "**/infra/data": true,
+    "**/pnpm-lock.yaml": true,
+    "**/*.tsbuildinfo": true
+  },
+  "files.exclude": {
+    "**/.turbo": true,
+    "**/infra/data": true
+  },
+
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "typescript.disableAutomaticTypeAcquisition": true,
+
   "oxc.enable.oxfmt": true,
   "oxc.fmt.configPath": ".oxfmtrc.json",
   "editor.formatOnSave": true,
@@ -36,5 +74,10 @@
   "[jsonc]": {
     "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.formatOnSave": true
-  }
+  },
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true
+  },
+  "dotnet.formatting.organizeImportsOnFormat": true
 }

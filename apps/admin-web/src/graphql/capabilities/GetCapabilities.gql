@@ -1,0 +1,9 @@
+query GetCapabilities {
+  getCapabilities {
+    id
+    key
+    service
+    resource
+    action
+  }
+}

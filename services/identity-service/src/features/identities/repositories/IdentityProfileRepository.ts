@@ -17,7 +17,10 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
   }
 
   async save(
-    entity: Partial<IdentityProfile> & { identityId: string; displayName: string },
+    entity: Partial<IdentityProfile> & {
+      identityId: string;
+      firstName: string;
+    },
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile> {
     const client = this.client(options);
@@ -28,7 +31,9 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
       .values({
         id: uuidv7(),
         identityId: entity.identityId,
-        displayName: entity.displayName,
+        firstName: entity.firstName,
+        middleName: entity.middleName ?? null,
+        lastName: entity.lastName ?? null,
         description: entity.description ?? null,
         photoUrl: entity.photoUrl ?? null,
         createdAt: now,
@@ -42,7 +47,10 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
   async update(
     id: string,
     entity: Partial<
-      Pick<IdentityProfile, "displayName" | "description" | "photoUrl" | "deletedAt">
+      Pick<
+        IdentityProfile,
+        "firstName" | "middleName" | "lastName" | "description" | "photoUrl" | "deletedAt"
+      >
     >,
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile> {
@@ -52,7 +60,9 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
     const [updated] = await client
       .update(IdentityProfiles)
       .set({
-        ...(entity.displayName !== undefined ? { displayName: entity.displayName } : {}),
+        ...(entity.firstName !== undefined ? { firstName: entity.firstName } : {}),
+        ...(entity.middleName !== undefined ? { middleName: entity.middleName } : {}),
+        ...(entity.lastName !== undefined ? { lastName: entity.lastName } : {}),
         ...(entity.description !== undefined ? { description: entity.description } : {}),
         ...(entity.photoUrl !== undefined ? { photoUrl: entity.photoUrl } : {}),
         ...(entity.deletedAt !== undefined ? { deletedAt: entity.deletedAt } : {}),
@@ -98,9 +108,7 @@ export class IdentityProfileRepository implements IIdentityProfileRepository {
     const [row] = await client
       .select()
       .from(IdentityProfiles)
-      .where(
-        and(eq(IdentityProfiles.identityId, identityId), isNull(IdentityProfiles.deletedAt)),
-      )
+      .where(and(eq(IdentityProfiles.identityId, identityId), isNull(IdentityProfiles.deletedAt)))
       .limit(1);
 
     return row ?? null;

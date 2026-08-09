@@ -26,15 +26,16 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Prefer per-service targets below when optimizing layer cache further.
 RUN pnpm exec turbo run build \
     --filter=@pine/attachment-service \
-    --filter=@pine/mail-service \
+    --filter=@pine/notification-service \
     --filter=@pine/identity-service \
     --filter=@pine/inventory-service \
+    --filter=@pine/organization-service \
+    --filter=@pine/authorization-service \
     --filter=@pine/issues-service \
     --filter=@pine/common \
     --filter=@pine/events \
-    --filter=@pine/orm \
     --filter=@pine/security \
-    --filter=@pine/http-core \
+    --filter=@pine/http \
     --filter=@pine/graphql-core
 
 
@@ -46,12 +47,12 @@ EXPOSE 4000
 CMD pnpm -F @pine/attachment-service start
 
 
-# Stage 3: Email / Mail Service
-FROM base AS email
+# Stage 3: Notification Service
+FROM base AS notification-service
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/mail-service start
+CMD pnpm -F @pine/notification-service start
 
 
 # Stage 3: Identity Service
@@ -68,6 +69,22 @@ COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
 CMD pnpm -F @pine/inventory-service start
+
+
+# Stage 3: Organization Service
+FROM base AS organization-service
+COPY --from=build /usr/src/app /usr/src/app
+USER node
+EXPOSE 4000
+CMD pnpm -F @pine/organization-service start
+
+
+# Stage 3: Authorization Service
+FROM base AS authorization-service
+COPY --from=build /usr/src/app /usr/src/app
+USER node
+EXPOSE 4000
+CMD pnpm -F @pine/authorization-service start
 
 
 # Stage 3: Issue Tracker Service

@@ -1,8 +1,8 @@
 import { IssueStatus, ItemPriority, PagingOptions, ServiceResponse } from "@pine/common";
-import { ServiceOptions } from "@pine/orm";
-import { Issue } from "@/entities/Issue";
+import type { Issue } from "@/db";
+import type { IssueWithProject } from "@/features/issue/repositories";
 
-export interface CreateIssueOptions extends ServiceOptions {
+export interface CreateIssueOptions {
   userId: string;
   projectId: string;
   type: string;
@@ -27,7 +27,7 @@ export interface FindSubIssuesOptions extends PagingOptions {
   parentIssueId: string;
 }
 
-export interface UpdateIssueOptions extends ServiceOptions {
+export interface UpdateIssueOptions {
   userId: string;
   issueId: string;
   type?: string;
@@ -46,13 +46,13 @@ export interface FindProjectIssuesOptions {
   userId: string;
 }
 
-export interface DeleteIssueOptions extends ServiceOptions {
+export interface DeleteIssueOptions {
   id: string;
 }
 
 export interface IIssueService {
   createIssue(options: CreateIssueOptions): Promise<string>;
-  findIssue(options: FindIssueOptions): Promise<Issue | null>;
+  findIssue(options: FindIssueOptions): Promise<IssueWithProject | null>;
   findProjectIssues(options: FindProjectIssuesOptions): Promise<Issue[]>;
   findSubIssues(options: FindSubIssuesOptions): Promise<Issue[]>;
   getIssue(issueId: string): Promise<Issue | null>;

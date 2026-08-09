@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Identity } from "@/db";
 
 export const IdentityObject = builder.objectRef<Identity>("IdentityObject");
@@ -6,9 +6,8 @@ export const IdentityObject = builder.objectRef<Identity>("IdentityObject");
 IdentityObject.implement({
   fields: (t) => ({
     id: t.exposeString("id"),
-    email: t.exposeString("email"),
-    idpId: t.exposeString("idpId", { nullable: true }),
-    idpProvider: t.exposeString("idpProvider", { nullable: true }),
+    idpId: t.exposeString("idpId"),
+    idpProvider: t.exposeString("idpProvider"),
     createdAt: t.expose("createdAt", { type: "DateTimeISO" }),
     updatedAt: t.expose("updatedAt", { type: "DateTimeISO", nullable: true }),
   }),

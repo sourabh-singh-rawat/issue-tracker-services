@@ -1,9 +1,26 @@
 import type { Identity } from "@/db";
 
+export type CreateIdentityOptions = {
+  email: string;
+  username: string;
+  password: string;
+  emailVerified: boolean;
+  firstName: string;
+  middleName?: string;
+  lastName?: string;
+};
+
 export interface IAdminService {
   /**
-   * Soft-delete an identity and their profile after removing the IdP identity.
-   * Profile soft-delete and identity soft-delete run in one DB transaction.
+   * Create an identity via the IdP admin API, persist a local identity and
+   * profile, and schedule UserRegistered. Rolls back the IdP identity if local
+   * persistence fails.
+   */
+  createIdentity(options: CreateIdentityOptions): Promise<Identity>;
+
+  /**
+   * Load the local identity, delete it from the IdP, then soft-delete the local
+   * identity and profile (when present) in one DB transaction.
    */
   deleteIdentity(identityId: string): Promise<void>;
 

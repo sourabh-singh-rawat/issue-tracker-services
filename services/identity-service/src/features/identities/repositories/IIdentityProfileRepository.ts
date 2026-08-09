@@ -5,13 +5,19 @@ export type IdentityProfileRepositoryOptions = { tx: DbClient };
 
 export interface IIdentityProfileRepository {
   save(
-    entity: Partial<IdentityProfile> & { identityId: string; displayName: string },
+    entity: Partial<IdentityProfile> & {
+      identityId: string;
+      firstName: string;
+    },
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile>;
   update(
     id: string,
     entity: Partial<
-      Pick<IdentityProfile, "displayName" | "description" | "photoUrl" | "deletedAt">
+      Pick<
+        IdentityProfile,
+        "firstName" | "middleName" | "lastName" | "description" | "photoUrl" | "deletedAt"
+      >
     >,
     options?: IdentityProfileRepositoryOptions,
   ): Promise<IdentityProfile>;

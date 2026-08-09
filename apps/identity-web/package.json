@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/identity-web",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "gen": "pnpm gen:gql && pnpm gen:api",
@@ -24,6 +25,7 @@
     "@tanstack/react-router": "1.170.18",
     "axios": "^1.18.1",
     "graphql": "16.14.2",
+    "notistack": "^3.0.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "zustand": "5.0.14"

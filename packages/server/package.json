@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/server",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "build": "pnpm clean && tsc"
+  },
+  "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "@fastify/cookie": "^11.1.2",
+    "@fastify/cors": "^11.3.0",
+    "@fastify/multipart": "^10.1.0",
+    "@fastify/swagger": "^9.8.1",
+    "@pine/common": "workspace:*",
+    "@pothos/core": "^4.13.1",
+    "fastify": "^5.10.0",
+    "graphql": "16.14.2",
+    "graphql-scalars": "^1.25.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

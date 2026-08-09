@@ -18,10 +18,10 @@ export class IdentityProfileService implements IIdentityProfileService {
   ) {}
 
   async createIdentityProfile(options: CreateIdentityProfileOptions) {
-    const { tx, displayName, identityId, description } = options;
+    const { tx, firstName, middleName, lastName, identityId, description } = options;
 
     await this.identityProfileRepository.save(
-      { displayName, identityId, description },
+      { firstName, middleName, lastName, identityId, description },
       { tx },
     );
   }
@@ -33,8 +33,8 @@ export class IdentityProfileService implements IIdentityProfileService {
     return profile;
   }
 
-  async getIdentityProfileWithEmail(email: string) {
-    const identity = await this.identityRepository.findByEmail(email);
+  async getIdentityProfileByIdpId(idpId: string) {
+    const identity = await this.identityRepository.findByIdpId(idpId);
     if (!identity) throw new UserNotFoundError();
 
     const profile = await this.identityProfileRepository.findByIdentityId(identity.id);
@@ -42,10 +42,11 @@ export class IdentityProfileService implements IIdentityProfileService {
 
     return {
       identityId: identity.id,
-      email: identity.email,
       idpId: identity.idpId,
       idpProvider: identity.idpProvider,
-      displayName: profile.displayName,
+      firstName: profile.firstName,
+      middleName: profile.middleName,
+      lastName: profile.lastName,
       description: profile.description,
       photoUrl: profile.photoUrl,
       createdAt: identity.createdAt,

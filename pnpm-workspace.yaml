@@ -2,22 +2,19 @@ packages:
   - apps/**
   - packages/**
   - services/**
-  - shared-ui/**
+  - tools/**
 allowBuilds:
   "@apollo/protobufjs": true
   "@apollo/rover": true
-  '@firebase/util': true
+  "@firebase/util": true
   "@parcel/watcher": true
   "@swc/core": false
-  argon2: true
   core-js: true
   esbuild: true
   msgpackr-extract: true
   protobufjs: true
   sharp: true
-  simple-git-hooks: true
 
-# Only install versions published at least 24h ago (pnpm default).
 minimumReleaseAge: 1440
 
 overrides:

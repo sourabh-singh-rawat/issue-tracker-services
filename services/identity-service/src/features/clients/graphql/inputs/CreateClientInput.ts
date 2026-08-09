@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 export const CreateClientInput = builder.inputType("CreateClientInput", {
   fields: (t) => ({

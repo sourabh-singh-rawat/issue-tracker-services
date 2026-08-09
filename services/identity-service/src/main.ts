@@ -1,36 +1,19 @@
-import { env, listenPortFromUrl } from "@/bootstrap/env";
+import { env } from "@/bootstrap/env";
 import "reflect-metadata";
 
-import { ApolloServer, BaseContext } from "@apollo/server";
-import { fastifyApolloDrainPlugin } from "@as-integrations/fastify";
-import swagger from "@fastify/swagger";
+import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
-import { FastifyHttpServer } from "@pine/http-core";
-import fastify, { type FastifyInstance } from "fastify";
-import { mkdirSync, writeFileSync } from "node:fs";
-import path from "node:path";
-import { lexicographicSortSchema, printSchema } from "graphql";
-import { broker, initializeDb, logger } from "@/bootstrap";
-import { createContext } from "@/graphql";
-import { schema } from "@/graphql/schema";
-import { routes } from "@/routes";
+import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
+import { broker, container, initializeDb, TYPES } from "@/bootstrap";
+import { openApiOutputPath } from "@/bootstrap/container";
+import { writeSchemaToDist } from "@/bootstrap/graphql";
+import { logger } from "@/bootstrap/logger";
+import type { IClientSeederService } from "@/features/clients";
+
+export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
 export type { AuthContext } from "@/graphql";
 export { schema } from "@/graphql/schema";
-export { container, db } from "@/bootstrap";
-
-const writeSchemaToDist = () => {
-  const schemaPath = path.join(process.cwd(), "dist", "schema.graphql");
-  mkdirSync(path.dirname(schemaPath), { recursive: true });
-  writeFileSync(schemaPath, printSchema(lexicographicSortSchema(schema)));
-};
-
-const writeOpenApiToDist = (instance: FastifyInstance) => {
-  const openapi = instance.swagger({ yaml: false });
-  const openapiPath = path.join(process.cwd(), "dist", "openapi.json");
-  mkdirSync(path.dirname(openapiPath), { recursive: true });
-  writeFileSync(openapiPath, JSON.stringify(openapi, null, 2));
-};
 
 const main = async () => {
   const observability = initializeObservability({
@@ -44,44 +27,20 @@ const main = async () => {
   observability?.start();
 
   await initializeDb();
-  await broker.init();
 
   writeSchemaToDist();
 
-  const instance = fastify();
-  const apollo = new ApolloServer<BaseContext>({
-    schema,
-    plugins: [fastifyApolloDrainPlugin(instance)],
-  });
+  const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
+  await httpServer.start();
+  logger.info("Identity service listening on http://0.0.0.0:5000");
+  httpServer.writeOpenApi(openApiOutputPath);
 
-  const port = listenPortFromUrl(env.IDENTITY_SERVICE_URL);
+  await broker.init();
 
-  const server = new FastifyHttpServer({
-    server: instance,
-    config: { host: "0.0.0.0", port, environment: "development", version: 1 },
-    cors: { credentials: true, origin: env.IDENTITY_WEB_URL },
-    cookie: { secret: env.JWT_SECRET },
-    graphql: { apollo, path: "/graphql", createContext },
-    routes,
-    logger,
-  });
+  await container.get<IClientSeederService>(TYPES.ClientSeederService).seed();
 
-  await instance.register(swagger, {
-    openapi: {
-      openapi: "3.0.0",
-      info: {
-        title: "Identity Service",
-        version: "0.0.0",
-        description: "Authentication and identity APIs",
-        license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
-      },
-      servers: [{ url: env.IDENTITY_SERVICE_URL }],
-      tags: [{ name: "auth", description: "Authentication related end-points" }],
-    },
-  });
-
-  await server.start();
-  writeOpenApiToDist(instance);
+  void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
+  void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
 };
 
 main().catch((error) => {

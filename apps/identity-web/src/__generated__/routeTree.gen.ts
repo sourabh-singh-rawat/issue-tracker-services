@@ -9,80 +9,95 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
-import { Route as noAuthCallbackRouteImport } from './../routes/(no-auth)/callback'
 import { Route as noAuthConsentRouteImport } from './../routes/(no-auth)/consent'
-import { Route as noAuthLoginRouteImport } from './../routes/(no-auth)/login'
-import { Route as noAuthSignupRouteImport } from './../routes/(no-auth)/signup'
+import { Route as noAuthRegistrationRouteImport } from './../routes/(no-auth)/registration'
+import { Route as noAuthResendVerificationRouteImport } from './../routes/(no-auth)/resend-verification'
+import { Route as noAuthSigninRouteImport } from './../routes/(no-auth)/signin'
+import { Route as noAuthVerificationRouteImport } from './../routes/(no-auth)/verification'
 
-const noAuthCallbackRoute = noAuthCallbackRouteImport.update({
-  id: '/(no-auth)/callback',
-  path: '/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const noAuthConsentRoute = noAuthConsentRouteImport.update({
   id: '/(no-auth)/consent',
   path: '/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
-const noAuthLoginRoute = noAuthLoginRouteImport.update({
-  id: '/(no-auth)/login',
-  path: '/login',
+const noAuthRegistrationRoute = noAuthRegistrationRouteImport.update({
+  id: '/(no-auth)/registration',
+  path: '/registration',
   getParentRoute: () => rootRouteImport,
 } as any)
-const noAuthSignupRoute = noAuthSignupRouteImport.update({
-  id: '/(no-auth)/signup',
-  path: '/signup',
+const noAuthResendVerificationRoute =
+  noAuthResendVerificationRouteImport.update({
+    id: '/(no-auth)/resend-verification',
+    path: '/resend-verification',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const noAuthSigninRoute = noAuthSigninRouteImport.update({
+  id: '/(no-auth)/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const noAuthVerificationRoute = noAuthVerificationRouteImport.update({
+  id: '/(no-auth)/verification',
+  path: '/verification',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/callback': typeof noAuthCallbackRoute
   '/consent': typeof noAuthConsentRoute
-  '/login': typeof noAuthLoginRoute
-  '/signup': typeof noAuthSignupRoute
+  '/registration': typeof noAuthRegistrationRoute
+  '/resend-verification': typeof noAuthResendVerificationRoute
+  '/signin': typeof noAuthSigninRoute
+  '/verification': typeof noAuthVerificationRoute
 }
 export interface FileRoutesByTo {
-  '/callback': typeof noAuthCallbackRoute
   '/consent': typeof noAuthConsentRoute
-  '/login': typeof noAuthLoginRoute
-  '/signup': typeof noAuthSignupRoute
+  '/registration': typeof noAuthRegistrationRoute
+  '/resend-verification': typeof noAuthResendVerificationRoute
+  '/signin': typeof noAuthSigninRoute
+  '/verification': typeof noAuthVerificationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(no-auth)/callback': typeof noAuthCallbackRoute
   '/(no-auth)/consent': typeof noAuthConsentRoute
-  '/(no-auth)/login': typeof noAuthLoginRoute
-  '/(no-auth)/signup': typeof noAuthSignupRoute
+  '/(no-auth)/registration': typeof noAuthRegistrationRoute
+  '/(no-auth)/resend-verification': typeof noAuthResendVerificationRoute
+  '/(no-auth)/signin': typeof noAuthSigninRoute
+  '/(no-auth)/verification': typeof noAuthVerificationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/callback' | '/consent' | '/login' | '/signup'
+  fullPaths:
+    | '/consent'
+    | '/registration'
+    | '/resend-verification'
+    | '/signin'
+    | '/verification'
   fileRoutesByTo: FileRoutesByTo
-  to: '/callback' | '/consent' | '/login' | '/signup'
+  to:
+    | '/consent'
+    | '/registration'
+    | '/resend-verification'
+    | '/signin'
+    | '/verification'
   id:
     | '__root__'
-    | '/(no-auth)/callback'
     | '/(no-auth)/consent'
-    | '/(no-auth)/login'
-    | '/(no-auth)/signup'
+    | '/(no-auth)/registration'
+    | '/(no-auth)/resend-verification'
+    | '/(no-auth)/signin'
+    | '/(no-auth)/verification'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  noAuthCallbackRoute: typeof noAuthCallbackRoute
   noAuthConsentRoute: typeof noAuthConsentRoute
-  noAuthLoginRoute: typeof noAuthLoginRoute
-  noAuthSignupRoute: typeof noAuthSignupRoute
+  noAuthRegistrationRoute: typeof noAuthRegistrationRoute
+  noAuthResendVerificationRoute: typeof noAuthResendVerificationRoute
+  noAuthSigninRoute: typeof noAuthSigninRoute
+  noAuthVerificationRoute: typeof noAuthVerificationRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(no-auth)/callback': {
-      id: '/(no-auth)/callback'
-      path: '/callback'
-      fullPath: '/callback'
-      preLoaderRoute: typeof noAuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(no-auth)/consent': {
       id: '/(no-auth)/consent'
       path: '/consent'
@@ -90,28 +105,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof noAuthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(no-auth)/login': {
-      id: '/(no-auth)/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof noAuthLoginRouteImport
+    '/(no-auth)/registration': {
+      id: '/(no-auth)/registration'
+      path: '/registration'
+      fullPath: '/registration'
+      preLoaderRoute: typeof noAuthRegistrationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(no-auth)/signup': {
-      id: '/(no-auth)/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof noAuthSignupRouteImport
+    '/(no-auth)/resend-verification': {
+      id: '/(no-auth)/resend-verification'
+      path: '/resend-verification'
+      fullPath: '/resend-verification'
+      preLoaderRoute: typeof noAuthResendVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(no-auth)/signin': {
+      id: '/(no-auth)/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof noAuthSigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(no-auth)/verification': {
+      id: '/(no-auth)/verification'
+      path: '/verification'
+      fullPath: '/verification'
+      preLoaderRoute: typeof noAuthVerificationRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  noAuthCallbackRoute: noAuthCallbackRoute,
   noAuthConsentRoute: noAuthConsentRoute,
-  noAuthLoginRoute: noAuthLoginRoute,
-  noAuthSignupRoute: noAuthSignupRoute,
+  noAuthRegistrationRoute: noAuthRegistrationRoute,
+  noAuthResendVerificationRoute: noAuthResendVerificationRoute,
+  noAuthSigninRoute: noAuthSigninRoute,
+  noAuthVerificationRoute: noAuthVerificationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -7,12 +7,12 @@ description: >
 
 # Changesets & release
 
-| Concept | Value |
-|---------|--------|
-| PR notes | `.changeset/*.md` via `pnpm changeset` |
-| Product tag | `vYYYY.MM.DD.N` |
-| Release branch | `release/YYYY.MM.DD.N` |
-| Config | `.changeset/config.json` (`baseBranch: main`) |
+| Concept        | Value                                         |
+| -------------- | --------------------------------------------- |
+| PR notes       | `.changeset/*.md` via `pnpm changeset`        |
+| Product tag    | `vYYYY.MM.DD.N`                               |
+| Release branch | `release/YYYY.MM.DD.N`                        |
+| Config         | `.changeset/config.json` (`baseBranch: main`) |
 
 Scripts: `tools/scripts/changeset-required.ts`, `create-release-branch.ts`, `release-branch-check.ts`, `release.ts`.
 
@@ -27,10 +27,10 @@ pnpm changeset-required   # base: origin/development
 
 ```md
 ---
-"@pine/issues-web": minor
+"@pine/erp-web": minor
 ---
 
-feat(issues-web): one-line summary
+feat(erp-web): one-line summary
 ```
 
 - Zero or multiple new `.changeset/*.md` → fail

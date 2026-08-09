@@ -11,55 +11,57 @@ pnpm + Turborepo monorepo. Workspace: `apps/**`, `packages/**`, `services/**`.
 
 ## Where to edit
 
-| Change | Location |
-|--------|----------|
-| UI | `apps/<web>` |
-| Business rules / API | owning `services/<service>/src/features/` |
-| Shared enum/DTO/error (2+ consumers) | `packages/common` (or other `@pine/*`) |
-| Cross-service async | `@pine/events` → `pine-events` |
-| HTTP server / logger | `@pine/http-core` |
-| Local stack | `infra/docker` + root `pnpm dev:infra*` |
-| Repo tooling scripts | `tools/scripts/` (release, schemas compose, concat) |
-| Agent skills | `tools/ai/*/SKILL.md` |
+| Change                               | Location                                            |
+| ------------------------------------ | --------------------------------------------------- |
+| UI                                   | `apps/<web>`                                        |
+| Business rules / API                 | owning `services/<service>/src/features/`           |
+| Shared enum/DTO/error (2+ consumers) | `packages/common` (or other `@pine/*`)              |
+| Cross-service async                  | `@pine/events` → `pine-events`                      |
+| HTTP server / GraphQL / logger       | `@pine/server`                                        |
+| Local stack                          | `infra/docker` + root `pnpm dev:infra*`             |
+| Repo tooling scripts                 | `tools/scripts/` (release, schemas compose, concat) |
+| Agent skills                         | `tools/ai/*/SKILL.md`                               |
 
 Extract to `packages/*` only when **two** services need the same logic.
 
 ## Ownership
 
-| Domain | Owner |
-|--------|--------|
-| Auth / IdP / OAuth | `identity-service` + Ory (Kratos/Hydra) |
-| Workspaces / projects / issues / statuses | `issues-service` + `issues-web` |
-| Attachments | `attachment-service` |
-| Transactional email | `mail-service` (`integrations/email`, not a shared package) |
-| Federated GraphQL supergraph | `api-gateway` (`dist/supergraph.graphql`) |
-| Client GraphQL ops | `apps/*/src/graphql/**/*.gql` |
+| Domain                                    | Owner                                                               |
+| ----------------------------------------- | ------------------------------------------------------------------- |
+| Auth / IdP / OAuth                        | `identity-service` + Ory (Kratos/Hydra)                             |
+| Workspaces / projects / issues / statuses | `issues-service` + `erp-web`                                        |
+| Inventory UI                              | `inventory-service` + `erp-web`                                     |
+| Product catalog                           | `product-service` + `erp-web`                                       |
+| Attachments                               | `attachment-service`                                                |
+| Transactional email / notifications       | `notification-service` (`integrations/email`, not a shared package) |
+| Federated GraphQL supergraph              | `api-gateway` (`dist/supergraph.graphql`)                           |
+| Client GraphQL ops                        | `apps/*/src/graphql/**/*.gql`                                       |
 
 ## Apps / services / packages
 
-**Apps:** `issues-web` (primary UI), `identity-web`, `inventory-web`
+**Apps:** `erp-web` (primary product UI — issues + inventory), `identity-web` (sign-in/registration/consent)
 
-**Services:** `identity-service`, `issues-service`, `attachment-service`, `mail-service`, `api-gateway`
+**Services:** `identity-service`, `issues-service`, `inventory-service`, `product-service`, `attachment-service`, `notification-service`, `api-gateway`
 
-| Package | Import for |
-|---------|------------|
-| `@pine/common` | enums, DTOs, errors, `uuidv7` |
-| `@pine/errors` | `ApplicationError` |
-| `@pine/events` | NATS, `SUBJECTS`, subscribers |
-| `@pine/http-core` | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
-| `@pine/graphql-core` | Pothos `builder`, scalars |
-| `@pine/orm` | TypeORM helpers, `Audit` |
-| `@pine/security` | JWT, hashing, auth helpers |
-| `@pine/observability` | OTEL bootstrap |
+| Package               | Import for                                                       |
+| --------------------- | ---------------------------------------------------------------- |
+| `@pine/common`        | enums, DTOs, errors, `uuidv7`                                    |
+| `@pine/errors`        | `ApplicationError`                                               |
+| `@pine/events`        | NATS, CloudEvents, `publisher.send(event)`, consumers            |
+| `@pine/server`          | `FastifyHttpServer`, `PinoLogger`, Pothos `builder`, scalars     |
+| `@pine/security`      | JWT, hashing, auth helpers                                       |
+| `@pine/observability` | OTEL bootstrap                                                   |
 
 ## Dead packages (never import)
 
-| Dead | Use |
-|------|-----|
-| `@pine/server-core` | `@pine/http-core` |
-| `@pine/event-bus` | `@pine/events` |
-| `@pine/comm` | `mail-service/src/integrations/email` |
-| `@pine/forms` | app `shared/ui` / feature components |
+| Dead                  | Use                                           |
+| --------------------- | --------------------------------------------- |
+| `@pine/server-core`   | `@pine/server`                                  |
+| `@pine/event-bus`     | `@pine/events`                                |
+| `@pine/graphql-core`  | `@pine/server` (graphql-schema feature)         |
+| `@pine/orm`           | Drizzle (`src/db/`, service repositories)     |
+| `@pine/comm`          | `notification-service/src/integrations/email` |
+| `@pine/forms`         | app `shared/ui` / feature components          |
 
 Dockerfile turbo `--filter`s must use **current** names only.
 

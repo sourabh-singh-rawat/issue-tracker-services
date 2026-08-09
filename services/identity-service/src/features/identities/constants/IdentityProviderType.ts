@@ -3,5 +3,4 @@ export const IdentityProviderType = {
   AUTH0: "auth0",
 } as const;
 
-export type IdentityProviderType =
-  (typeof IdentityProviderType)[keyof typeof IdentityProviderType];
+export type IdentityProviderType = (typeof IdentityProviderType)[keyof typeof IdentityProviderType];

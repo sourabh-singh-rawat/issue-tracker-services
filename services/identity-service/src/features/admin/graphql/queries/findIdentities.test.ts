@@ -10,7 +10,7 @@ vi.mock("@/bootstrap", () => ({
   TYPES: { AdminService: Symbol.for("IAdminService") },
 }));
 
-vi.mock("@pine/graphql-core", () => ({
+vi.mock("@pine/server", () => ({
   builder: {
     queryFields,
   },
@@ -29,8 +29,8 @@ describe("findIdentities query", () => {
 
   it("returns all identities from AdminService", async () => {
     const identities = [
-      { id: "identity-1", email: "a@b.com" },
-      { id: "identity-2", email: "c@d.com" },
+      { id: "identity-1", idpId: "idp-1", idpProvider: "kratos" },
+      { id: "identity-2", idpId: "idp-2", idpProvider: "kratos" },
     ];
     const findIdentitiesFn = vi.fn().mockResolvedValue(identities);
     get.mockReturnValue({ findIdentities: findIdentitiesFn });

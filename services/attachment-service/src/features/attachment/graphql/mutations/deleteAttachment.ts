@@ -1,5 +1,5 @@
-import { builder } from "@pine/graphql-core";
-import { container, dataSource, TYPES } from "@/bootstrap";
+import { builder } from "@pine/server";
+import { container, db, TYPES } from "@/bootstrap";
 import type { AttachmentService } from "@/features/attachment";
 
 builder.mutationFields((t) => ({
@@ -8,8 +8,8 @@ builder.mutationFields((t) => ({
     resolve: async (_root, { id }) => {
       const service = container.get<AttachmentService>(TYPES.AttachmentService);
 
-      await dataSource.transaction(async (manager) => {
-        await service.deleteAttachment({ id, manager });
+      await db.transaction(async (tx) => {
+        await service.deleteAttachment({ id, tx });
       });
 
       return "Deleted successfully";

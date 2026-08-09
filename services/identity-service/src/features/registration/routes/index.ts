@@ -1,8 +1,6 @@
-import { asHttpRoute, type HttpRouteOptions } from "@pine/http-core";
-import { registerWithEmailAndPassword } from "@/features/registration/routes/registerWithEmailAndPassword";
+import type { HttpRoute } from "@pine/server";
+import { register } from "@/features/registration/routes/register";
 
-export * from "@/features/registration/routes/registerWithEmailAndPassword";
+export * from "@/features/registration/routes/register";
 
-export const registrationRoutes: HttpRouteOptions[] = [
-  asHttpRoute(registerWithEmailAndPassword),
-];
+export const registrationRoutes: HttpRoute[] = [register];

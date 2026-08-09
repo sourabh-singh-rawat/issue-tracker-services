@@ -1,13 +1,13 @@
 ---
 name: pine-web-feature
 description: >
-  React features in issues-web / identity-web: TanStack routes, .gql ops, codegen,
+  React features in erp-web / identity-web: TanStack routes, .gql ops, codegen,
   Zustand. Triggers: add page, route, CreateIssue.gql, gen:gql, gen:api.
 ---
 
 # Web feature
 
-Primary reference: `apps/issues-web`. Stack: React 19, Vite, MUI, TanStack Router/Query, Zustand, GraphQL codegen, Hey API.
+Primary reference: `apps/erp-web`. Stack: React 19, Vite, MUI, TanStack Router/Query, Zustand, GraphQL codegen, Hey API.
 
 No `@pine/forms` — use app `shared/` / feature components.
 
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/_authenticated/i/$issueId")({
 ```bash
 # after server schema + compose
 pnpm schemas:compose
-pnpm --filter @pine/issues-web gen        # gql + api
+pnpm --filter @pine/erp-web gen        # gql + api
 # or: gen:gql / gen:api
 ```
 
@@ -49,6 +49,8 @@ Schema for codegen: `services/api-gateway/dist/supergraph.graphql` (must exist).
 ## Hard rules
 
 - Regenerated clients only — no hand-copied server types
+- **Use generated React Query hooks only** — `useXQuery` / `useXMutation` from `@generated/api/@tanstack/react-query.gen` or `@generated/gql`. Never `useQuery({ ...verifyEmailOptions(...) })` (or any `useQuery`/`useMutation` + `*Options`/`*Mutation` factory) in components. Factories are for prefetch/queryClient/tests only.
+- **Never destructure query/mutation results** — assign the hook return value and use properties (`const projectQuery = useFindProjectQuery(...); projectQuery.data`). Enforced by `pine/no-destructure-query-mutation` in oxlint.
 - Routes stay thin; UI lives in features
 - Prefer existing MUI + `shared` primitives over new kits
-- Build check: `pnpm exec turbo run build --filter=@pine/issues-web`
+- Build check: `pnpm exec turbo run build --filter=@pine/erp-web`

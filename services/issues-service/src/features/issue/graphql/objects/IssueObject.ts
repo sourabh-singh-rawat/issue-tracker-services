@@ -1,8 +1,14 @@
-import { builder } from "@pine/graphql-core";
-import { Issue } from "@/entities/Issue";
+import { builder } from "@pine/server";
+import type { Issue, Project } from "@/db";
 import { ProjectObject } from "@/features/project/graphql/objects/ProjectObject";
 
-export const IssueObject = builder.objectRef<Issue>("IssueObject");
+type IssueObjectShape = Issue & {
+  project?: Project;
+  parentIssue?: Issue | null;
+  subIssues?: Issue[] | null;
+};
+
+export const IssueObject = builder.objectRef<IssueObjectShape>("IssueObject");
 
 IssueObject.implement({
   fields: (t) => ({
@@ -13,7 +19,12 @@ IssueObject.implement({
     priority: t.exposeString("priority"),
     project: t.field({
       type: ProjectObject,
-      resolve: (parent) => parent.project,
+      resolve: (parent) => {
+        if (!parent.project) {
+          throw new Error("Issue project relation not loaded");
+        }
+        return parent.project;
+      },
     }),
     parentIssue: t.field({
       type: IssueObject,

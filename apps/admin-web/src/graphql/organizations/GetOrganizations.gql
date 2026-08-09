@@ -1,0 +1,11 @@
+query GetOrganizations {
+  getOrganizations {
+    id
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}

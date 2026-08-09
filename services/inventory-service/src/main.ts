@@ -1,23 +1,16 @@
-import { env, listenPortFromUrl } from "@/bootstrap/env";
+import { env } from "@/bootstrap/env";
 import "reflect-metadata";
 
-import swagger from "@fastify/swagger";
+import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
-import { FastifyHttpServer } from "@pine/http-core";
-import fastify, { type FastifyInstance } from "fastify";
-import { mkdirSync, writeFileSync } from "node:fs";
-import path from "node:path";
-import { broker, initializeDb, logger } from "@/bootstrap";
-import { routes } from "@/routes";
+import { broker, container, initializeDb, TYPES } from "@/bootstrap";
+import { openApiOutputPath } from "@/bootstrap/container";
+import { logger } from "@/bootstrap/logger";
+import { BrandSyncConsumer } from "@/features/brands";
+import { IdentitySyncConsumer } from "@/features/identities";
+import { ProductSyncConsumer } from "@/features/products";
 
 export { container, db } from "@/bootstrap";
-
-const writeOpenApiToDist = (instance: FastifyInstance) => {
-  const openapi = instance.swagger({ yaml: false });
-  const openapiPath = path.join(process.cwd(), "dist", "openapi.json");
-  mkdirSync(path.dirname(openapiPath), { recursive: true });
-  writeFileSync(openapiPath, JSON.stringify(openapi, null, 2));
-};
 
 const main = async () => {
   const observability = initializeObservability({
@@ -31,36 +24,17 @@ const main = async () => {
   observability?.start();
 
   await initializeDb();
+
+  const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
+  await httpServer.start();
+  logger.info("Inventory service listening on http://0.0.0.0:5002");
+  httpServer.writeOpenApi(openApiOutputPath);
+
   await broker.init();
 
-  const instance = fastify();
-  const port = listenPortFromUrl(env.INVENTORY_SERVICE_URL);
-
-  const server = new FastifyHttpServer({
-    server: instance,
-    config: { host: "0.0.0.0", port, environment: "development", version: 1 },
-    cors: { credentials: true, origin: env.INVENTORY_WEB_URL },
-    cookie: { secret: env.JWT_SECRET },
-    routes,
-    logger,
-  });
-
-  await instance.register(swagger, {
-    openapi: {
-      openapi: "3.0.0",
-      info: {
-        title: "Inventory Service",
-        version: "0.0.0",
-        description: "Inventory APIs",
-        license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
-      },
-      servers: [{ url: env.INVENTORY_SERVICE_URL }],
-      tags: [{ name: "auth", description: "Authentication related end-points" }],
-    },
-  });
-
-  await server.start();
-  writeOpenApiToDist(instance);
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
+  void container.get<BrandSyncConsumer>(TYPES.BrandSyncConsumer).start();
+  void container.get<ProductSyncConsumer>(TYPES.ProductSyncConsumer).start();
 };
 
 main().catch((error) => {

@@ -27,10 +27,10 @@ spec:
                 port:
                   number: 4000
           - pathType: ImplementationSpecific
-            path: /api/v1/email/?(.*)
+            path: /api/v1/notification/?(.*)
             backend:
               service:
-                name: email-service
+                name: notification-service
                 port:
                   number: 4000
           - pathType: ImplementationSpecific

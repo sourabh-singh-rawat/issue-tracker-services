@@ -11,7 +11,7 @@ vi.mock("@/bootstrap", () => ({
   TYPES: { AdminService: Symbol.for("IAdminService") },
 }));
 
-vi.mock("@pine/graphql-core", () => ({
+vi.mock("@pine/server", () => ({
   builder: {
     mutationFields,
     inputType,
@@ -31,19 +31,13 @@ describe("deleteIdentity mutation", () => {
     get.mockReturnValue({ deleteIdentity: deleteIdentityFn });
 
     let resolve:
-      | ((
-          root: unknown,
-          args: { input: { identityId: string } },
-        ) => Promise<string>)
+      | ((root: unknown, args: { input: { identityId: string } }) => Promise<string>)
       | undefined;
 
     mutationFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
         string: (config: {
-          resolve: (
-            root: unknown,
-            args: { input: { identityId: string } },
-          ) => Promise<string>;
+          resolve: (root: unknown, args: { input: { identityId: string } }) => Promise<string>;
         }) => {
           resolve = config.resolve;
           return config;

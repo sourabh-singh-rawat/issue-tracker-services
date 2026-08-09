@@ -22,8 +22,8 @@ infra/k8s/
 
 ## Install order
 
-1. Dashboard (optional) → 2. Ingress → 3. Secrets → 4. PGO  
-5. Per-service Postgres → 6. NATS + nack → 7. Streams → 8. Consumers → 9. Microservices
+1. Dashboard (optional) → 2. Ingress → 3. Secrets → 4. PGO
+2. Per-service Postgres → 6. NATS + nack → 7. Streams → 8. Consumers → 9. Microservices
 
 Stream/consumer names must match `@pine/events` (`pine-events`).
 
@@ -39,7 +39,7 @@ container:
 jwtSecretRef: jwt-secret
 ```
 
-Env secrets come from PGO user secret naming `{release}-postgres-pguser-{release}-postgres` (+ optional JWT/SMTP refs). Values files still use some legacy names (`issue-tracker`, `email`) — map to current package names carefully.
+Env secrets come from PGO user secret naming `{release}-postgres-pguser-{release}-postgres` (+ optional JWT/SMTP refs). Values files still use some legacy names (`issue-tracker`) — map to current package names carefully (`notification-service` for notifications).
 
 ## New event on cluster
 

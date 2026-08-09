@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/Pine.Cli/">
+    <Project Path="Pine.Cli/cli.csproj" />
+  </Folder>
+</Solution>

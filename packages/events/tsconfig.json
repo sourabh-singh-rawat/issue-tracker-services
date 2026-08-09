@@ -107,11 +107,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*.ts"],
-  "exclude": [
-    "dist",
-    "src/**/*.test.ts",
-    "src/**/*.integration.ts",
-    "src/**/__mocks__/**"
-  ]
+  "exclude": ["dist", "src/**/*.test.ts", "src/**/*.integration.ts", "src/**/__mocks__/**"]
 }
-

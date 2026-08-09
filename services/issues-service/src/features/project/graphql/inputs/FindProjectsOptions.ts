@@ -1,7 +1,5 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 export const FindProjectsOptions = builder.inputType("FindProjectsOptions", {
-  fields: (t) => ({
-    workspaceId: t.string({ required: false }),
-  }),
+  fields: (t) => ({}),
 });

@@ -1,6 +1,6 @@
-import { asHttpRoute, type HttpRouteOptions } from "@pine/http-core";
+import type { HttpRoute } from "@pine/server";
 import { logout } from "@/features/logout/routes/logout";
 
 export * from "@/features/logout/routes/logout";
 
-export const logoutRoutes: HttpRouteOptions[] = [asHttpRoute(logout)];
+export const logoutRoutes: HttpRoute[] = [logout];

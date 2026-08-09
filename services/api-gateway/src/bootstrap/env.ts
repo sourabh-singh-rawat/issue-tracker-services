@@ -5,11 +5,12 @@ export const EnvSchema = Type.Object({
   NODE_ENV: Type.String({ default: "development" }),
   API_GATEWAY_URL: Type.String({ default: "http://127.0.0.1:4000" }),
   IDENTITY_WEB_URL: Type.String({ default: "http://localhost:3000" }),
-  ISSUES_WEB_URL: Type.String({ default: "http://localhost:3001" }),
-  INVENTORY_WEB_URL: Type.String({ default: "http://localhost:3002" }),
+  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  ADMIN_WEB_URL: Type.String({ default: "http://localhost:3002" }),
   IDENTITY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5000" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5003" }),
   INVENTORY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5002" }),
+  PRODUCT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5004" }),
   OTEL_EXPORTER_OTLP_ENDPOINT: Type.String({ default: "http://127.0.0.1:4317" }),
 });
 
@@ -24,7 +25,7 @@ export const listenPortFromUrl = (url: string): number => {
 
 const parseEnv = (): Env => {
   const withDefaults = Value.Default(EnvSchema, { ...process.env });
-  const cleaned = Value.Clean(EnvSchema, withDefaults) as Env;
+  const cleaned = Value.Clean(EnvSchema, withDefaults);
   return Value.Parse(EnvSchema, cleaned);
 };
 

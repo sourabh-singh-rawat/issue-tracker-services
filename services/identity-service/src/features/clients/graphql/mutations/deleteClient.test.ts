@@ -10,7 +10,7 @@ vi.mock("@/bootstrap", () => ({
   TYPES: { ClientService: Symbol.for("IClientService") },
 }));
 
-vi.mock("@pine/graphql-core", () => ({
+vi.mock("@pine/server", () => ({
   builder: {
     mutationFields,
   },
@@ -27,9 +27,7 @@ describe("deleteClient mutation", () => {
     const deleteClientById = vi.fn().mockResolvedValue(undefined);
     get.mockReturnValue({ deleteClientById });
 
-    let resolve:
-      | ((_root: unknown, args: { id: string }) => Promise<string>)
-      | undefined;
+    let resolve: ((_root: unknown, args: { id: string }) => Promise<string>) | undefined;
 
     mutationFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
@@ -56,14 +54,10 @@ describe("deleteClient mutation", () => {
   });
 
   it("propagates errors when the client does not exist", async () => {
-    const deleteClientById = vi
-      .fn()
-      .mockRejectedValue(new Error("Client not found: missing"));
+    const deleteClientById = vi.fn().mockRejectedValue(new Error("Client not found: missing"));
     get.mockReturnValue({ deleteClientById });
 
-    let resolve:
-      | ((_root: unknown, args: { id: string }) => Promise<string>)
-      | undefined;
+    let resolve: ((_root: unknown, args: { id: string }) => Promise<string>) | undefined;
 
     mutationFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
@@ -82,9 +76,7 @@ describe("deleteClient mutation", () => {
 
     await import("@/features/clients/graphql/mutations/deleteClient");
 
-    await expect(resolve!({}, { id: "missing" })).rejects.toThrow(
-      "Client not found: missing",
-    );
+    await expect(resolve!({}, { id: "missing" })).rejects.toThrow("Client not found: missing");
     expect(deleteClientById).toHaveBeenCalledWith("missing");
   });
 });

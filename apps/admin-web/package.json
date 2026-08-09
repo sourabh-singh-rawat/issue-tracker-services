@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/admin-web",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "gen": "pnpm gen:gql && pnpm gen:api",
+    "gen:gql": "graphql-codegen --config graphql-codegen.ts",
+    "gen:api": "pnpm dlx --package typescript@5.8.3 --package @hey-api/openapi-ts@0.99.0 openapi-ts --file openapi-codegen.ts",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@hey-api/client-axios": "0.9.1",
+    "@hey-api/vite-plugin": "^0.3.2",
+    "@mui/icons-material": "6.1.9",
+    "@mui/material": "9.2.0",
+    "@pine/ui": "workspace:*",
+    "@tanstack/react-form": "^1.33.2",
+    "@tanstack/react-query": "5.101.4",
+    "@tanstack/react-router": "1.170.18",
+    "axios": "^1.18.1",
+    "graphql": "16.14.2",
+    "notistack": "^3.0.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "zustand": "5.0.14"
+  },
+  "devDependencies": {
+    "@graphql-codegen/add": "^7.1.0",
+    "@graphql-codegen/cli": "^7.2.0",
+    "@graphql-codegen/typescript": "^6.1.0",
+    "@graphql-codegen/typescript-operations": "^6.1.2",
+    "@graphql-codegen/typescript-react-query": "^7.0.5",
+    "@hey-api/openapi-ts": "0.99.0",
+    "@tanstack/react-query-devtools": "5.101.4",
+    "@tanstack/react-router-devtools": "1.167.0",
+    "@tanstack/router-plugin": "1.168.23",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "typescript": "7.0.2",
+    "vite": "^8.1.5"
+  }
+}

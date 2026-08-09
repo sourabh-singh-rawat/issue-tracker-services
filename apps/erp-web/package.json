@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/erp-web",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Pine ERP web — issues, inventory, and related product UI",
+  "keywords": [
+    "client",
+    "erp",
+    "react"
+  ],
+  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "bugs": {
+    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+  },
+  "license": "ISC",
+  "author": "Sourabh Singh Rawat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+  },
+  "type": "module",
+  "main": "src/main.tsx",
+  "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "gen": "pnpm gen:gql && pnpm gen:api",
+    "gen:gql": "graphql-codegen --config graphql-codegen.ts",
+    "gen:api": "pnpm dlx --package typescript@5.8.3 --package @hey-api/openapi-ts@0.99.0 openapi-ts --file openapi-codegen.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@hey-api/client-axios": "0.9.1",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/base": "5.0.0-beta.63",
+    "@mui/icons-material": "6.1.9",
+    "@mui/material": "6.1.9",
+    "@mui/system": "6.1.9",
+    "@mui/x-data-grid": "^6.20.0",
+    "@mui/x-date-pickers": "^6.20.0",
+    "@pine/common": "workspace:*",
+    "@pine/ui": "workspace:*",
+    "@tanstack/react-query": "^5.101.2",
+    "@tanstack/react-router": "1.170.17",
+    "axios": "^1.18.1",
+    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.11",
+    "firebase": "^10.12.2",
+    "graphql": "^16.9.0",
+    "lodash": "^4.17.21",
+    "notistack": "^3.0.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-hook-form": "^7.51.5",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@graphql-codegen/add": "^7.1.0",
+    "@graphql-codegen/cli": "5.0.3",
+    "@graphql-codegen/typescript": "^6.1.0",
+    "@graphql-codegen/typescript-operations": "^6.1.0",
+    "@graphql-codegen/typescript-react-query": "^7.0.5",
+    "@hey-api/openapi-ts": "0.99.0",
+    "@tanstack/react-query-devtools": "^5.101.2",
+    "@tanstack/react-router-devtools": "^1.167.0",
+    "@tanstack/router-plugin": "1.168.19",
+    "@types/lodash": "^4.17.4",
+    "@types/node": "^20.12.13",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "typescript": "7.0.2",
+    "vite": "^8.1.5"
+  }
+}
