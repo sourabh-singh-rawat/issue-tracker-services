@@ -1,5 +1,17 @@
 # @pine/identity-web
 
+## 0.4.0
+
+### Minor Changes
+
+- 14a1fb5: Identity email verification and session APIs; migrate services to Drizzle with local identities tables; remove workspace multi-tenancy from issues and ERP web
+- 4b72801: refactor(identity): drop local email, add profile names, register with username
+
+### Patch Changes
+
+- de6a3b1: feat(authz): organizations, authorization, roles, keto, and admin-web
+- 0acc6d3: fix(identity): login returns 204/302 and OAuth redirect via response
+
 ## 0.3.0
 
 ### Minor Changes

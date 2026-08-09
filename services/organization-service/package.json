@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/organization-service",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Organization service — organizations and memberships",
   "keywords": [
     "membership",
