@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { FileOutput } from "./FileOutput";
 
 export const PaginatedFileOutput = builder

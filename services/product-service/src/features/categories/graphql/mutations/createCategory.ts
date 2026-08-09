@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { CreateCategoryInput } from "@/features/categories/graphql/inputs/CreateCategoryInput";
 import { CategoryObject } from "@/features/categories/graphql/objects/CategoryObject";

@@ -1,5 +1,5 @@
 {
-  "id": "069a6694-4db6-423c-bb5a-d9a520c747b6",
+  "id": "b70106d6-ffbe-4f3a-8829-5cbd3740783a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -73,7 +73,9 @@
         "brands_code_unique": {
           "name": "brands_code_unique",
           "nullsNotDistinct": false,
-          "columns": ["code"]
+          "columns": [
+            "code"
+          ]
         }
       },
       "policies": {},
@@ -288,12 +290,16 @@
         "products_code_unique": {
           "name": "products_code_unique",
           "nullsNotDistinct": false,
-          "columns": ["code"]
+          "columns": [
+            "code"
+          ]
         },
         "products_sku_unique": {
           "name": "products_sku_unique",
           "nullsNotDistinct": false,
-          "columns": ["sku"]
+          "columns": [
+            "sku"
+          ]
         }
       },
       "policies": {},
@@ -356,7 +362,9 @@
         "units_code_unique": {
           "name": "units_code_unique",
           "nullsNotDistinct": false,
-          "columns": ["code"]
+          "columns": [
+            "code"
+          ]
         }
       },
       "policies": {},

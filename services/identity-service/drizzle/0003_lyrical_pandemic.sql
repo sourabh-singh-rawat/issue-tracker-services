@@ -1,1 +1,0 @@
-ALTER TABLE "identity_profiles" DROP COLUMN "display_name";

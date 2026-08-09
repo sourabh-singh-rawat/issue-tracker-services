@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 import "@/features/capabilities/graphql";
 import "@/features/roles/graphql";

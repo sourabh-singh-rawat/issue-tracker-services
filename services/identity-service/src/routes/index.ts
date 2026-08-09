@@ -1,4 +1,4 @@
-import type { HttpRoute } from "@pine/http";
+import type { HttpRoute } from "@pine/server";
 import { logoutRoutes } from "@/features/logout";
 import { meRoutes } from "@/features/me";
 import { oauthRoutes } from "@/features/oauth";

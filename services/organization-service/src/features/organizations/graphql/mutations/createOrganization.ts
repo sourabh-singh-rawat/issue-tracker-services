@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { CreateOrganizationInput } from "@/features/organizations/graphql/inputs/CreateOrganizationInput";
 import { OrganizationObject } from "@/features/organizations/graphql/objects/OrganizationObject";

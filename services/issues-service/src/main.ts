@@ -1,10 +1,9 @@
 import "reflect-metadata";
 
-import type { IHttpServer } from "@pine/http";
+import type { IHttpServer } from "@pine/server";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, TYPES } from "@/bootstrap";
-import { fastifyServer } from "@/bootstrap/fastify";
-import { createGraphQL, writeSchemaToDist } from "@/bootstrap/graphql";
+import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
 import { IdentitySyncConsumer } from "@/features/identities";
 
@@ -17,8 +16,6 @@ const main = async () => {
   await initializeDb();
 
   writeSchemaToDist();
-
-  fastifyServer.route(await createGraphQL(fastifyServer));
 
   const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();

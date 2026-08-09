@@ -1,5 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { FastifyHttpServer, type IHttpServer } from "@pine/http";
+import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -16,14 +16,16 @@ import {
   type IRetryPolicy,
 } from "@pine/outbox";
 import { Container } from "inversify";
+import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
-import { fastifyServer } from "@/bootstrap/fastify";
 import { hydraClient } from "@/bootstrap/hydra-client";
 import { kratosClient } from "@/bootstrap/kratos-client";
 import { logger } from "@/bootstrap/logger";
+import { createContext } from "@/graphql";
+import { schema } from "@/graphql/schema";
 import { IAdminService, AdminService } from "@/features/admin";
 import { ISignInService, SignInService } from "@/features/signin";
 import { ILogoutService, LogoutService } from "@/features/logout";
@@ -111,7 +113,7 @@ container.bind<IAdminService>(TYPES.AdminService).to(AdminService);
 container.bind<IVerificationService>(TYPES.VerificationService).to(VerificationService);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
-  new FastifyHttpServer(fastifyServer, {
+  createHttpServer({
     config: {
       host: "0.0.0.0",
       port: 5000,
@@ -120,6 +122,31 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     },
     cors: { credentials: true, origin: env.IDENTITY_WEB_URL },
     cookie: { secret: env.JWT_SECRET },
+    openapi: {
+      info: {
+        title: "Identity Service",
+        version: "0.0.0",
+        description: "Authentication and identity APIs",
+        license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
+      },
+      servers: [{ url: env.IDENTITY_SERVICE_URL }],
+      tags: [{ name: "auth", description: "Authentication related end-points" }],
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description: "OAuth provider access token (Authorization: Bearer <token>)",
+        },
+      },
+    },
+    graphql: createGraphQLServer({
+      schema,
+      context: createContext,
+    }),
     routes,
   }),
 );
+
+export const openApiOutputPath = path.join(process.cwd(), "dist", "openapi.json");
+

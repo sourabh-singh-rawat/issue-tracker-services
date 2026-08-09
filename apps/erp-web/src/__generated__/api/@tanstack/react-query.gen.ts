@@ -4,13 +4,18 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { getIdentityGetSession, getIdentityGetTokenSession, getIdentityMe, getIdentityOauthAuthorize, getIdentityOauthConsent, getIdentityVerifyEmail, type Options, postAttachmentsByIssueId, postIdentityLogout, postIdentityOauthConsentAccept, postIdentityOauthConsentReject, postIdentityOauthToken, postIdentityRegister, postIdentityResendVerificationEmail, postIdentitySignin } from '../sdk.gen';
-import type { GetIdentityGetSessionData, GetIdentityGetTokenSessionData, GetIdentityMeData, GetIdentityOauthAuthorizeData, GetIdentityOauthConsentData, GetIdentityVerifyEmailData, PostAttachmentsByIssueIdData, PostIdentityLogoutData, PostIdentityOauthConsentAcceptData, PostIdentityOauthConsentRejectData, PostIdentityOauthTokenData, PostIdentityRegisterData, PostIdentityResendVerificationEmailData, PostIdentitySigninData } from '../types.gen';
+import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
-export const postIdentitySigninMutation = (options?: Partial<Options<PostIdentitySigninData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentitySigninData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentitySigninData>> = {
+/**
+ * Sign in with email and password
+ *
+ * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.
+ */
+export const signInWithEmailAndPasswordMutation = (options?: Partial<Options<SignInWithEmailAndPasswordData>>): UseMutationOptions<SignInWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<SignInWithEmailAndPasswordData>> => {
+    const mutationOptions: UseMutationOptions<SignInWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<SignInWithEmailAndPasswordData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentitySignin({
+            const { data } = await signInWithEmailAndPassword({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -21,12 +26,22 @@ export const postIdentitySigninMutation = (options?: Partial<Options<PostIdentit
     return mutationOptions;
 };
 
-export const usePostIdentitySigninMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentitySigninData>>, 'mutationFn'>>) => useMutation({ ...postIdentitySigninMutation(), ...mutationOptions });
+/**
+ * Sign in with email and password
+ *
+ * Authenticate a user with email and password via the identity provider. Sets the session cookie. When a login_challenge is present, returns redirectTo for the OAuth provider.
+ */
+export const useSignInWithEmailAndPasswordMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<SignInWithEmailAndPasswordResponse, AxiosError<DefaultError>, Options<SignInWithEmailAndPasswordData>>, 'mutationFn'>>) => useMutation({ ...signInWithEmailAndPasswordMutation(), ...mutationOptions });
 
-export const postIdentityLogoutMutation = (options?: Partial<Options<PostIdentityLogoutData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityLogoutData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityLogoutData>> = {
+/**
+ * Logout
+ *
+ * Invalidate the current session and clear the session cookie
+ */
+export const logoutMutation = (options?: Partial<Options<LogoutData>>): UseMutationOptions<LogoutResponse, AxiosError<DefaultError>, Options<LogoutData>> => {
+    const mutationOptions: UseMutationOptions<LogoutResponse, AxiosError<DefaultError>, Options<LogoutData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentityLogout({
+            const { data } = await logout({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -37,7 +52,12 @@ export const postIdentityLogoutMutation = (options?: Partial<Options<PostIdentit
     return mutationOptions;
 };
 
-export const usePostIdentityLogoutMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityLogoutData>>, 'mutationFn'>>) => useMutation({ ...postIdentityLogoutMutation(), ...mutationOptions });
+/**
+ * Logout
+ *
+ * Invalidate the current session and clear the session cookie
+ */
+export const useLogoutMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<LogoutResponse, AxiosError<DefaultError>, Options<LogoutData>>, 'mutationFn'>>) => useMutation({ ...logoutMutation(), ...mutationOptions });
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseURL' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -72,11 +92,16 @@ const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions
     return [params];
 };
 
-export const getIdentityMeQueryKey = (options?: Options<GetIdentityMeData>) => createQueryKey('getIdentityMe', options);
+export const getCurrentUserQueryKey = (options?: Options<GetCurrentUserData>) => createQueryKey('getCurrentUser', options);
 
-export const getIdentityMeOptions = (options?: Options<GetIdentityMeData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getIdentityMeQueryKey>>({
+/**
+ * Get current authenticated user
+ *
+ * Return basic information about the current user by verifying the session cookie
+ */
+export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => queryOptions<GetCurrentUserResponse, AxiosError<DefaultError>, GetCurrentUserResponse, ReturnType<typeof getCurrentUserQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getIdentityMe({
+        const { data } = await getCurrentUser({
             ...options,
             ...queryKey[0],
             signal,
@@ -84,16 +109,26 @@ export const getIdentityMeOptions = (options?: Options<GetIdentityMeData>) => qu
         });
         return data;
     },
-    queryKey: getIdentityMeQueryKey(options)
+    queryKey: getCurrentUserQueryKey(options)
 });
 
-export const useGetIdentityMeQuery = (options?: Options<GetIdentityMeData>) => useQuery(getIdentityMeOptions(options));
+/**
+ * Get current authenticated user
+ *
+ * Return basic information about the current user by verifying the session cookie
+ */
+export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
 
-export const getIdentityGetSessionQueryKey = (options?: Options<GetIdentityGetSessionData>) => createQueryKey('getIdentityGetSession', options);
+export const getSessionIdentityQueryKey = (options?: Options<GetSessionIdentityData>) => createQueryKey('getSessionIdentity', options);
 
-export const getIdentityGetSessionOptions = (options?: Options<GetIdentityGetSessionData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getIdentityGetSessionQueryKey>>({
+/**
+ * Resolve session identity
+ *
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const getSessionIdentityOptions = (options?: Options<GetSessionIdentityData>) => queryOptions<GetSessionIdentityResponse, AxiosError<DefaultError>, GetSessionIdentityResponse, ReturnType<typeof getSessionIdentityQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getIdentityGetSession({
+        const { data } = await getSessionIdentity({
             ...options,
             ...queryKey[0],
             signal,
@@ -101,16 +136,26 @@ export const getIdentityGetSessionOptions = (options?: Options<GetIdentityGetSes
         });
         return data;
     },
-    queryKey: getIdentityGetSessionQueryKey(options)
+    queryKey: getSessionIdentityQueryKey(options)
 });
 
-export const useGetIdentityGetSessionQuery = (options?: Options<GetIdentityGetSessionData>) => useQuery(getIdentityGetSessionOptions(options));
+/**
+ * Resolve session identity
+ *
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const useGetSessionIdentityQuery = (options?: Options<GetSessionIdentityData>) => useQuery(getSessionIdentityOptions(options));
 
-export const getIdentityGetTokenSessionQueryKey = (options?: Options<GetIdentityGetTokenSessionData>) => createQueryKey('getIdentityGetTokenSession', options);
+export const getTokenSessionIdentityQueryKey = (options?: Options<GetTokenSessionIdentityData>) => createQueryKey('getTokenSessionIdentity', options);
 
-export const getIdentityGetTokenSessionOptions = (options?: Options<GetIdentityGetTokenSessionData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getIdentityGetTokenSessionQueryKey>>({
+/**
+ * Resolve identity from OAuth access token
+ *
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const getTokenSessionIdentityOptions = (options?: Options<GetTokenSessionIdentityData>) => queryOptions<GetTokenSessionIdentityResponse, AxiosError<DefaultError>, GetTokenSessionIdentityResponse, ReturnType<typeof getTokenSessionIdentityQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getIdentityGetTokenSession({
+        const { data } = await getTokenSessionIdentity({
             ...options,
             ...queryKey[0],
             signal,
@@ -118,16 +163,26 @@ export const getIdentityGetTokenSessionOptions = (options?: Options<GetIdentityG
         });
         return data;
     },
-    queryKey: getIdentityGetTokenSessionQueryKey(options)
+    queryKey: getTokenSessionIdentityQueryKey(options)
 });
 
-export const useGetIdentityGetTokenSessionQuery = (options?: Options<GetIdentityGetTokenSessionData>) => useQuery(getIdentityGetTokenSessionOptions(options));
+/**
+ * Resolve identity from OAuth access token
+ *
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ */
+export const useGetTokenSessionIdentityQuery = (options?: Options<GetTokenSessionIdentityData>) => useQuery(getTokenSessionIdentityOptions(options));
 
-export const getIdentityOauthAuthorizeQueryKey = (options?: Options<GetIdentityOauthAuthorizeData>) => createQueryKey('getIdentityOauthAuthorize', options);
+export const authorizeQueryKey = (options: Options<AuthorizeData>) => createQueryKey('authorize', options);
 
-export const getIdentityOauthAuthorizeOptions = (options?: Options<GetIdentityOauthAuthorizeData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getIdentityOauthAuthorizeQueryKey>>({
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow. Redirects (302) to the OAuth provider authorization endpoint.
+ */
+export const authorizeOptions = (options: Options<AuthorizeData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof authorizeQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getIdentityOauthAuthorize({
+        const { data } = await authorize({
             ...options,
             ...queryKey[0],
             signal,
@@ -135,16 +190,26 @@ export const getIdentityOauthAuthorizeOptions = (options?: Options<GetIdentityOa
         });
         return data;
     },
-    queryKey: getIdentityOauthAuthorizeQueryKey(options)
+    queryKey: authorizeQueryKey(options)
 });
 
-export const useGetIdentityOauthAuthorizeQuery = (options?: Options<GetIdentityOauthAuthorizeData>) => useQuery(getIdentityOauthAuthorizeOptions(options));
+/**
+ * OAuth authorize
+ *
+ * Start the OAuth authorization code flow. Redirects (302) to the OAuth provider authorization endpoint.
+ */
+export const useAuthorizeQuery = (options: Options<AuthorizeData>) => useQuery(authorizeOptions(options));
 
-export const getIdentityOauthConsentQueryKey = (options?: Options<GetIdentityOauthConsentData>) => createQueryKey('getIdentityOauthConsent', options);
+export const getConsentChallengeQueryKey = (options: Options<GetConsentChallengeData>) => createQueryKey('getConsentChallenge', options);
 
-export const getIdentityOauthConsentOptions = (options?: Options<GetIdentityOauthConsentData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getIdentityOauthConsentQueryKey>>({
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const getConsentChallengeOptions = (options: Options<GetConsentChallengeData>) => queryOptions<GetConsentChallengeResponse, AxiosError<DefaultError>, GetConsentChallengeResponse, ReturnType<typeof getConsentChallengeQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getIdentityOauthConsent({
+        const { data } = await getConsentChallenge({
             ...options,
             ...queryKey[0],
             signal,
@@ -152,15 +217,25 @@ export const getIdentityOauthConsentOptions = (options?: Options<GetIdentityOaut
         });
         return data;
     },
-    queryKey: getIdentityOauthConsentQueryKey(options)
+    queryKey: getConsentChallengeQueryKey(options)
 });
 
-export const useGetIdentityOauthConsentQuery = (options?: Options<GetIdentityOauthConsentData>) => useQuery(getIdentityOauthConsentOptions(options));
+/**
+ * OAuth consent challenge
+ *
+ * Load OAuth consent challenge details by consent_challenge
+ */
+export const useGetConsentChallengeQuery = (options: Options<GetConsentChallengeData>) => useQuery(getConsentChallengeOptions(options));
 
-export const postIdentityOauthConsentAcceptMutation = (options?: Partial<Options<PostIdentityOauthConsentAcceptData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthConsentAcceptData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthConsentAcceptData>> = {
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const acceptConsentChallengeMutation = (options?: Partial<Options<AcceptConsentChallengeData>>): UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>> => {
+    const mutationOptions: UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentityOauthConsentAccept({
+            const { data } = await acceptConsentChallenge({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -171,12 +246,22 @@ export const postIdentityOauthConsentAcceptMutation = (options?: Partial<Options
     return mutationOptions;
 };
 
-export const usePostIdentityOauthConsentAcceptMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthConsentAcceptData>>, 'mutationFn'>>) => useMutation({ ...postIdentityOauthConsentAcceptMutation(), ...mutationOptions });
+/**
+ * Accept OAuth consent
+ *
+ * Accept an OAuth consent challenge with granted scopes
+ */
+export const useAcceptConsentChallengeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<AcceptConsentChallengeResponse, AxiosError<DefaultError>, Options<AcceptConsentChallengeData>>, 'mutationFn'>>) => useMutation({ ...acceptConsentChallengeMutation(), ...mutationOptions });
 
-export const postIdentityOauthConsentRejectMutation = (options?: Partial<Options<PostIdentityOauthConsentRejectData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthConsentRejectData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthConsentRejectData>> = {
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const rejectConsentChallengeMutation = (options?: Partial<Options<RejectConsentChallengeData>>): UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>> => {
+    const mutationOptions: UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentityOauthConsentReject({
+            const { data } = await rejectConsentChallenge({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -187,12 +272,22 @@ export const postIdentityOauthConsentRejectMutation = (options?: Partial<Options
     return mutationOptions;
 };
 
-export const usePostIdentityOauthConsentRejectMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthConsentRejectData>>, 'mutationFn'>>) => useMutation({ ...postIdentityOauthConsentRejectMutation(), ...mutationOptions });
+/**
+ * Reject OAuth consent
+ *
+ * Reject an OAuth consent challenge when the user denies access
+ */
+export const useRejectConsentChallengeMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RejectConsentChallengeResponse, AxiosError<DefaultError>, Options<RejectConsentChallengeData>>, 'mutationFn'>>) => useMutation({ ...rejectConsentChallengeMutation(), ...mutationOptions });
 
-export const postIdentityOauthTokenMutation = (options?: Partial<Options<PostIdentityOauthTokenData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthTokenData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthTokenData>> = {
+/**
+ * OAuth token
+ *
+ * Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies
+ */
+export const exchangeTokenMutation = (options?: Partial<Options<ExchangeTokenData>>): UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>> => {
+    const mutationOptions: UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentityOauthToken({
+            const { data } = await exchangeToken({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -203,12 +298,22 @@ export const postIdentityOauthTokenMutation = (options?: Partial<Options<PostIde
     return mutationOptions;
 };
 
-export const usePostIdentityOauthTokenMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityOauthTokenData>>, 'mutationFn'>>) => useMutation({ ...postIdentityOauthTokenMutation(), ...mutationOptions });
+/**
+ * OAuth token
+ *
+ * Exchange an authorization code for access (and optional refresh/id) tokens and set them as HTTP-only cookies
+ */
+export const useExchangeTokenMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ExchangeTokenResponse, AxiosError<DefaultError>, Options<ExchangeTokenData>>, 'mutationFn'>>) => useMutation({ ...exchangeTokenMutation(), ...mutationOptions });
 
-export const postIdentityRegisterMutation = (options?: Partial<Options<PostIdentityRegisterData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityRegisterData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityRegisterData>> = {
+/**
+ * Register
+ *
+ * Register a new user with email and password via the identity provider
+ */
+export const registerMutation = (options?: Partial<Options<RegisterData>>): UseMutationOptions<RegisterResponse, AxiosError<DefaultError>, Options<RegisterData>> => {
+    const mutationOptions: UseMutationOptions<RegisterResponse, AxiosError<DefaultError>, Options<RegisterData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentityRegister({
+            const { data } = await register({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -219,13 +324,23 @@ export const postIdentityRegisterMutation = (options?: Partial<Options<PostIdent
     return mutationOptions;
 };
 
-export const usePostIdentityRegisterMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityRegisterData>>, 'mutationFn'>>) => useMutation({ ...postIdentityRegisterMutation(), ...mutationOptions });
+/**
+ * Register
+ *
+ * Register a new user with email and password via the identity provider
+ */
+export const useRegisterMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<RegisterResponse, AxiosError<DefaultError>, Options<RegisterData>>, 'mutationFn'>>) => useMutation({ ...registerMutation(), ...mutationOptions });
 
-export const getIdentityVerifyEmailQueryKey = (options?: Options<GetIdentityVerifyEmailData>) => createQueryKey('getIdentityVerifyEmail', options);
+export const verifyEmailQueryKey = (options: Options<VerifyEmailData>) => createQueryKey('verifyEmail', options);
 
-export const getIdentityVerifyEmailOptions = (options?: Options<GetIdentityVerifyEmailData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getIdentityVerifyEmailQueryKey>>({
+/**
+ * Verify email with Kratos code
+ *
+ * Complete email verification using the one-time code from the Kratos verification email
+ */
+export const verifyEmailOptions = (options: Options<VerifyEmailData>) => queryOptions<VerifyEmailResponse, AxiosError<DefaultError>, VerifyEmailResponse, ReturnType<typeof verifyEmailQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getIdentityVerifyEmail({
+        const { data } = await verifyEmail({
             ...options,
             ...queryKey[0],
             signal,
@@ -233,15 +348,25 @@ export const getIdentityVerifyEmailOptions = (options?: Options<GetIdentityVerif
         });
         return data;
     },
-    queryKey: getIdentityVerifyEmailQueryKey(options)
+    queryKey: verifyEmailQueryKey(options)
 });
 
-export const useGetIdentityVerifyEmailQuery = (options?: Options<GetIdentityVerifyEmailData>) => useQuery(getIdentityVerifyEmailOptions(options));
+/**
+ * Verify email with Kratos code
+ *
+ * Complete email verification using the one-time code from the Kratos verification email
+ */
+export const useVerifyEmailQuery = (options: Options<VerifyEmailData>) => useQuery(verifyEmailOptions(options));
 
-export const postIdentityResendVerificationEmailMutation = (options?: Partial<Options<PostIdentityResendVerificationEmailData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityResendVerificationEmailData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityResendVerificationEmailData>> = {
+/**
+ * Resend verification email
+ *
+ * Request a new email verification code. Always returns success to avoid revealing whether the email is registered.
+ */
+export const resendVerificationEmailMutation = (options?: Partial<Options<ResendVerificationEmailData>>): UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>> => {
+    const mutationOptions: UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postIdentityResendVerificationEmail({
+            const { data } = await resendVerificationEmail({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -252,12 +377,22 @@ export const postIdentityResendVerificationEmailMutation = (options?: Partial<Op
     return mutationOptions;
 };
 
-export const usePostIdentityResendVerificationEmailMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostIdentityResendVerificationEmailData>>, 'mutationFn'>>) => useMutation({ ...postIdentityResendVerificationEmailMutation(), ...mutationOptions });
+/**
+ * Resend verification email
+ *
+ * Request a new email verification code. Always returns success to avoid revealing whether the email is registered.
+ */
+export const useResendVerificationEmailMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>>, 'mutationFn'>>) => useMutation({ ...resendVerificationEmailMutation(), ...mutationOptions });
 
-export const postAttachmentsByIssueIdMutation = (options?: Partial<Options<PostAttachmentsByIssueIdData>>): UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostAttachmentsByIssueIdData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostAttachmentsByIssueIdData>> = {
+/**
+ * Create a new issue attachment
+ *
+ * Create a new issue attachment
+ */
+export const createAttachmentMutation = (options?: Partial<Options<CreateAttachmentData>>): UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> => {
+    const mutationOptions: UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await postAttachmentsByIssueId({
+            const { data } = await createAttachment({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -268,4 +403,9 @@ export const postAttachmentsByIssueIdMutation = (options?: Partial<Options<PostA
     return mutationOptions;
 };
 
-export const usePostAttachmentsByIssueIdMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<DefaultError>, Options<PostAttachmentsByIssueIdData>>, 'mutationFn'>>) => useMutation({ ...postAttachmentsByIssueIdMutation(), ...mutationOptions });
+/**
+ * Create a new issue attachment
+ *
+ * Create a new issue attachment
+ */
+export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>>, 'mutationFn'>>) => useMutation({ ...createAttachmentMutation(), ...mutationOptions });

@@ -10,7 +10,7 @@
 ### Patch Changes
 
 - Updated dependencies [dfa43fd]
-  - @pine/http@0.2.1
+  - @pine/server@0.2.1
 
 ## 0.2.0
 
@@ -25,7 +25,7 @@
 
 - Updated dependencies [d05915a]
   - @pine/events@0.1.0
-  - @pine/http@0.2.0
+  - @pine/server@0.2.0
   - @pine/security@0.0.2
 
 ## 0.1.0
@@ -40,7 +40,7 @@
   - @pine/common@0.0.1
   - @pine/errors@0.1.0
   - @pine/events@0.0.1
-  - @pine/graphql-core@0.0.1
+  - @pine/server@0.0.1
   - @pine/observability@0.1.0
   - @pine/orm@0.0.1
   - @pine/security@0.0.1

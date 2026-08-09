@@ -1,5 +1,5 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { hasUserIdentity, JwtToken } from "@pine/security";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
@@ -9,7 +9,7 @@ import { MeResponseSchema } from "@/features/me/schemas";
 import type { IMeService } from "@/features/me/services";
 import { env } from "@/bootstrap/env";
 
-export const me: RouteOptions<Server, IncomingMessage, ServerResponse, { Reply: MeResponse }> = {
+export const me: HttpRoute = {
   url: "/inventory/me",
   method: "GET",
   schema: {
@@ -22,8 +22,8 @@ export const me: RouteOptions<Server, IncomingMessage, ServerResponse, { Reply: 
       200: MeResponseSchema,
     },
   },
-  handler: async (req, reply) => {
-    const accessToken = req.cookies.accessToken;
+  handler: async (request) => {
+    const accessToken = request.cookies.accessToken;
 
     if (!accessToken) {
       throw new InvalidCredentialError("No active session");
@@ -52,6 +52,6 @@ export const me: RouteOptions<Server, IncomingMessage, ServerResponse, { Reply: 
       },
     };
 
-    return reply.send(response);
+    return json(response);
   },
 };

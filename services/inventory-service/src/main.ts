@@ -1,12 +1,11 @@
 import { env } from "@/bootstrap/env";
 import "reflect-metadata";
 
-import type { IHttpServer } from "@pine/http";
+import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
 import { broker, container, initializeDb, TYPES } from "@/bootstrap";
-import { fastifyServer } from "@/bootstrap/fastify";
+import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
-import { registerSwagger, writeOpenApi } from "@/bootstrap/swagger";
 import { BrandSyncConsumer } from "@/features/brands";
 import { IdentitySyncConsumer } from "@/features/identities";
 import { ProductSyncConsumer } from "@/features/products";
@@ -26,12 +25,10 @@ const main = async () => {
 
   await initializeDb();
 
-  await registerSwagger(fastifyServer);
-
   const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();
   logger.info("Inventory service listening on http://0.0.0.0:5002");
-  writeOpenApi(fastifyServer);
+  httpServer.writeOpenApi(openApiOutputPath);
 
   await broker.init();
 

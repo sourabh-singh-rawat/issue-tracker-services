@@ -1,22 +1,22 @@
-import type { ApolloFastifyContextFunction } from "@as-integrations/fastify";
-import type { GraphQLContext } from "@pine/graphql-core";
+import type { HttpRequest } from "@pine/server";
+import type { GraphQLContext } from "@pine/server";
 import { authenticate } from "@pine/identity-client";
 
 export type AuthContext = GraphQLContext;
 
-export const createContext: ApolloFastifyContextFunction<AuthContext> = async (req, rep) => {
-  await authenticate(req, rep);
+export const createContext = async (request: HttpRequest): Promise<AuthContext> => {
+  await authenticate(request);
 
-  if (req.user) {
-    return {
-      req,
-      rep,
-      user: {
-        id: req.user.id,
-        authMethod: req.user.authMethod,
-      },
-    };
-  }
-
-  return { req, rep };
+  return {
+    cookies: request.cookies,
+    headers: request.headers,
+    ...(request.user
+      ? {
+          user: {
+            id: request.user.id,
+            authMethod: request.user.authMethod,
+          },
+        }
+      : {}),
+  };
 };

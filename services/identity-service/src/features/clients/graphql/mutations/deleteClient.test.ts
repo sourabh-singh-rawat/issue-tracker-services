@@ -10,7 +10,7 @@ vi.mock("@/bootstrap", () => ({
   TYPES: { ClientService: Symbol.for("IClientService") },
 }));
 
-vi.mock("@pine/graphql-core", () => ({
+vi.mock("@pine/server", () => ({
   builder: {
     mutationFields,
   },

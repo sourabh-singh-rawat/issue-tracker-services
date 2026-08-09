@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - Updated dependencies [d05915a]
-  - @pine/http@0.2.0
+  - @pine/server@0.2.0
 
 ## 0.0.1
 

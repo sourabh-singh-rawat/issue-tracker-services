@@ -1,13 +1,13 @@
 ---
 name: pine-graphql
 description: >
-  Pothos GraphQL via @pine/graphql-core: inputs/objects/resolvers, schema compose,
+  Pothos GraphQL via @pine/server: inputs/objects/resolvers, schema compose,
   supergraph. Triggers: CreateIssueInput, mutation, query, schemas:compose, supergraph.
 ---
 
 # GraphQL (Pothos)
 
-- Builder: `builder` from `@pine/graphql-core` (scalars: `DateTimeISO`, `UUID`, `EmailAddress`)
+- Builder: `builder` from `@pine/server` (scalars: `DateTimeISO`, `UUID`, `EmailAddress`)
 - Service emits `dist/schema.graphql` on start/build
 - Compose: `pnpm schemas:compose` → `services/api-gateway/dist/supergraph.graphql`
 - Clients: `apps/*/src/graphql/**/*.gql` + app `gen:gql` (`pine-web-feature`)

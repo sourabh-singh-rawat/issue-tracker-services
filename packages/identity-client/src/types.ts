@@ -14,9 +14,3 @@ export interface SessionIdentity {
 export interface GetSessionResponse {
   identity: SessionIdentity;
 }
-
-declare module "fastify" {
-  interface FastifyRequest {
-    user?: AuthenticatedUser;
-  }
-}

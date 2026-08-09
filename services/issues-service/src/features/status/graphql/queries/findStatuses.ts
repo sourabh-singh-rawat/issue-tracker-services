@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { TYPES, container } from "@/bootstrap";
 import { IStatusService } from "@/features/status";
 import { FindStatusesOptions } from "../inputs/FindStatusesOptions";

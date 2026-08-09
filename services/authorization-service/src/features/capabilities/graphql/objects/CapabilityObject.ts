@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Capability } from "@/db";
 
 export const CapabilityObject = builder.objectRef<Capability>("CapabilityObject");

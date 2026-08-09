@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Identity } from "@/db";
 
 export const IdentityObject = builder.objectRef<Identity>("IdentityObject");

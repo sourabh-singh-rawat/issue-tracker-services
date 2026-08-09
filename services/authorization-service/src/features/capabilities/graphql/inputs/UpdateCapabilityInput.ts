@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 export const UpdateCapabilityInput = builder.inputType("UpdateCapabilityInput", {
   fields: (t) => ({

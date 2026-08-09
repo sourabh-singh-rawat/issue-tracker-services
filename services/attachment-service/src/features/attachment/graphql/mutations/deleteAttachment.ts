@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, db, TYPES } from "@/bootstrap";
 import type { AttachmentService } from "@/features/attachment";
 

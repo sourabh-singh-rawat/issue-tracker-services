@@ -1,22 +1,36 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IOAuthService } from "@/features/oauth/services";
-import {
-  TokenBodySchema,
-  TokenResponseSchema,
-  type TokenBody,
-  type TokenResponse,
-} from "@/features/oauth/schemas";
+import { TokenBodySchema, TokenResponseSchema, type TokenResponse } from "@/features/oauth/schemas";
 import { env } from "@/bootstrap/env";
 
-export const token: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Body: TokenBody; Reply: TokenResponse }
-> = {
+function isTokenBody(body: unknown): body is {
+  grant_type: "authorization_code";
+  code: string;
+  client_id: string;
+  redirect_uri: string;
+  code_verifier: string;
+} {
+  if (body === null || typeof body !== "object") {
+    return false;
+  }
+  return (
+    "grant_type" in body &&
+    body.grant_type === "authorization_code" &&
+    "code" in body &&
+    typeof body.code === "string" &&
+    "client_id" in body &&
+    typeof body.client_id === "string" &&
+    "redirect_uri" in body &&
+    typeof body.redirect_uri === "string" &&
+    "code_verifier" in body &&
+    typeof body.code_verifier === "string"
+  );
+}
+
+export const token: HttpRoute = {
   url: "/identity/oauth/token",
   method: "POST",
   schema: {
@@ -30,14 +44,18 @@ export const token: RouteOptions<
       200: TokenResponseSchema,
     },
   },
-  handler: async (req, reply) => {
+  handler: async (request) => {
+    if (!isTokenBody(request.body)) {
+      throw new Error("Invalid token body");
+    }
+
     const service = container.get<IOAuthService>(TYPES.OAuthService);
     const result = await service.exchangeToken({
-      grantType: req.body.grant_type,
-      code: req.body.code,
-      clientId: req.body.client_id,
-      redirectUri: req.body.redirect_uri,
-      codeVerifier: req.body.code_verifier,
+      grantType: request.body.grant_type,
+      code: request.body.code,
+      clientId: request.body.client_id,
+      redirectUri: request.body.redirect_uri,
+      codeVerifier: request.body.code_verifier,
     });
 
     const tokenCookieOptions = {
@@ -52,26 +70,41 @@ export const token: RouteOptions<
         ? new Date(Date.now() + result.expiresIn * 1000)
         : undefined;
 
-    reply.setCookie("accessToken", result.accessToken, {
-      ...tokenCookieOptions,
-      ...(accessExpires ? { expires: accessExpires } : {}),
-    });
-
-    if (result.refreshToken) {
-      reply.setCookie("refreshToken", result.refreshToken, tokenCookieOptions);
-    }
-
-    if (result.idToken) {
-      reply.setCookie("idToken", result.idToken, {
+    const cookies = [
+      {
+        name: "accessToken",
+        value: result.accessToken,
         ...tokenCookieOptions,
         ...(accessExpires ? { expires: accessExpires } : {}),
-      });
-    }
+      },
+      ...(result.refreshToken
+        ? [
+            {
+              name: "refreshToken",
+              value: result.refreshToken,
+              ...tokenCookieOptions,
+            },
+          ]
+        : []),
+      ...(result.idToken
+        ? [
+            {
+              name: "idToken",
+              value: result.idToken,
+              ...tokenCookieOptions,
+              ...(accessExpires ? { expires: accessExpires } : {}),
+            },
+          ]
+        : []),
+    ];
 
     const response: TokenResponse = {
       message: "Tokens issued successfully.",
     };
 
-    return reply.send(response);
+    return {
+      ...json(response),
+      cookies,
+    };
   },
 };

@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { ClientDetails } from "@/features/clients/services/IClientService";
 
 export const ClientObject = builder.objectRef<ClientDetails>("ClientObject");

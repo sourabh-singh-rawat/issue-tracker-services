@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Product } from "@/db";
 
 export const ProductObject = builder.objectRef<Product>("ProductObject");

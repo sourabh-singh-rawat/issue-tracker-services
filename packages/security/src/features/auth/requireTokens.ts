@@ -1,15 +1,8 @@
 import { BadRequestError } from "@pine/common";
-import type { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
-import "@fastify/cookie";
+import type { HttpHook } from "@pine/server";
 
-export const requireTokens = (
-  request: FastifyRequest,
-  _reply: FastifyReply,
-  done: HookHandlerDoneFunction,
-) => {
+export const requireTokens: HttpHook = (request) => {
   if (!request.cookies.accessToken) {
     throw new BadRequestError("Bad request!");
   }
-
-  return done();
 };

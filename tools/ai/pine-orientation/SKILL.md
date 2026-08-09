@@ -17,7 +17,7 @@ pnpm + Turborepo monorepo. Workspace: `apps/**`, `packages/**`, `services/**`.
 | Business rules / API                 | owning `services/<service>/src/features/`           |
 | Shared enum/DTO/error (2+ consumers) | `packages/common` (or other `@pine/*`)              |
 | Cross-service async                  | `@pine/events` → `pine-events`                      |
-| HTTP server / logger                 | `@pine/http`                                        |
+| HTTP server / GraphQL / logger       | `@pine/server`                                        |
 | Local stack                          | `infra/docker` + root `pnpm dev:infra*`             |
 | Repo tooling scripts                 | `tools/scripts/` (release, schemas compose, concat) |
 | Agent skills                         | `tools/ai/*/SKILL.md`                               |
@@ -48,20 +48,20 @@ Extract to `packages/*` only when **two** services need the same logic.
 | `@pine/common`        | enums, DTOs, errors, `uuidv7`                                    |
 | `@pine/errors`        | `ApplicationError`                                               |
 | `@pine/events`        | NATS, CloudEvents, `publisher.send(event)`, consumers            |
-| `@pine/http`          | `FastifyHttpServer`, `PinoLogger`, `ILogger`, `HttpRouteOptions` |
-| `@pine/graphql-core`  | Pothos `builder`, scalars                                        |
+| `@pine/server`          | `FastifyHttpServer`, `PinoLogger`, Pothos `builder`, scalars     |
 | `@pine/security`      | JWT, hashing, auth helpers                                       |
 | `@pine/observability` | OTEL bootstrap                                                   |
 
 ## Dead packages (never import)
 
-| Dead                | Use                                           |
-| ------------------- | --------------------------------------------- |
-| `@pine/server-core` | `@pine/http`                                  |
-| `@pine/event-bus`   | `@pine/events`                                |
-| `@pine/orm`         | Drizzle (`src/db/`, service repositories)     |
-| `@pine/comm`        | `notification-service/src/integrations/email` |
-| `@pine/forms`       | app `shared/ui` / feature components          |
+| Dead                  | Use                                           |
+| --------------------- | --------------------------------------------- |
+| `@pine/server-core`   | `@pine/server`                                  |
+| `@pine/event-bus`     | `@pine/events`                                |
+| `@pine/graphql-core`  | `@pine/server` (graphql-schema feature)         |
+| `@pine/orm`           | Drizzle (`src/db/`, service repositories)     |
+| `@pine/comm`          | `notification-service/src/integrations/email` |
+| `@pine/forms`         | app `shared/ui` / feature components          |
 
 Dockerfile turbo `--filter`s must use **current** names only.
 

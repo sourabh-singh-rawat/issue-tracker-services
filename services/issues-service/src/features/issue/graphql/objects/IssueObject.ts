@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Issue, Project } from "@/db";
 import { ProjectObject } from "@/features/project/graphql/objects/ProjectObject";
 

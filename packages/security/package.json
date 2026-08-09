@@ -8,14 +8,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "build": "pnpm clean && tsc"
   },
   "dependencies": {
-    "@fastify/cookie": "^11.1.2",
-    "@fastify/cors": "^11.3.0",
     "@pine/common": "workspace:^",
-    "@pine/http": "workspace:^",
-    "fastify": "^5.10.0",
+    "@pine/server": "workspace:^",
     "jose": "^6.2.4",
     "pino": "^10.3.1"
   },

@@ -22,6 +22,7 @@
   "type": "module",
   "main": "src/main.tsx",
   "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",

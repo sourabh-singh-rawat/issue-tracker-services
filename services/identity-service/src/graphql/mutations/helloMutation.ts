@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 builder.mutationFields((t) => ({
   hello: t.string({
