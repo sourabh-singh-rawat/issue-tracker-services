@@ -22,6 +22,7 @@ const createService = (deps: {
   roleRepository?: unknown;
   roleCapabilityRepository?: unknown;
   capabilityRepository?: unknown;
+  outboxService?: unknown;
 }) =>
   new RoleService(
     (deps.db ?? {
@@ -33,7 +34,9 @@ const createService = (deps: {
       syncForRole: vi.fn(),
     }) as never,
     (deps.capabilityRepository ?? { findByKeys: vi.fn().mockResolvedValue([]) }) as never,
+    (deps.outboxService ?? { schedule: vi.fn().mockResolvedValue(undefined) }) as never,
   );
+
 
 describe("RoleService", () => {
   it("creates a role when key and name are unique", async () => {

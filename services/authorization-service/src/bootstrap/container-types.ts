@@ -17,6 +17,8 @@ export const TYPES = {
   RoleAssignmentRepository: Symbol.for("IRoleAssignmentRepository"),
   RoleAssignmentService: Symbol.for("IRoleAssignmentService"),
   RoleAssignmentKetoSyncConsumer: Symbol.for("RoleAssignmentKetoSyncConsumer"),
+  RoleCapabilityKetoSyncConsumer: Symbol.for("RoleCapabilityKetoSyncConsumer"),
+
   RoleService: Symbol.for("IRoleService"),
   ResourceRepository: Symbol.for("IResourceRepository"),
   CapabilityRepository: Symbol.for("ICapabilityRepository"),

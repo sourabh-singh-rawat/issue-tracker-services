@@ -7,7 +7,7 @@ import type {
 } from "@/integrations/authorization/IAuthorizationGraphProvider";
 import type { KetoClient } from "@/integrations/authorization/KetoClient";
 
-const KETO_NAMESPACES = ["organization", "role", "capability"] as const;
+const KETO_NAMESPACES = ["organization", "role", "capability", "authorization", "product"] as const;
 
 @injectable()
 export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvider {

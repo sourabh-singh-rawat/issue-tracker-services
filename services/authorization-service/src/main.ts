@@ -9,7 +9,7 @@ import { openApiOutputPath } from "@/bootstrap/container";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
 import { IdentitySyncConsumer } from "@/features/identities";
-import { RoleAssignmentKetoSyncConsumer } from "@/features/roles";
+import { RoleAssignmentKetoSyncConsumer, RoleCapabilityKetoSyncConsumer } from "@/features/roles";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -42,7 +42,9 @@ const main = async () => {
   void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
   void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
   void container.get<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer).start();
+  void container.get<RoleCapabilityKetoSyncConsumer>(TYPES.RoleCapabilityKetoSyncConsumer).start();
 };
+
 
 main().catch((error) => {
   console.log(error);
