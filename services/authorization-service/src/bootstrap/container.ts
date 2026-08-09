@@ -31,6 +31,7 @@ import { IdentityRepository, type IIdentityRepository, IdentitySyncConsumer } fr
 import { ResourceRepository, type IResourceRepository } from "@/features/resources";
 import {
   RoleAssignmentKetoSyncConsumer,
+  RoleCapabilityKetoSyncConsumer,
   RoleAssignmentRepository,
   type IRoleAssignmentRepository,
   RoleAssignmentService,
@@ -75,6 +76,8 @@ container.bind<IRoleCapabilityRepository>(TYPES.RoleCapabilityRepository).to(Rol
 container.bind<IRoleAssignmentRepository>(TYPES.RoleAssignmentRepository).to(RoleAssignmentRepository);
 container.bind<IRoleAssignmentService>(TYPES.RoleAssignmentService).to(RoleAssignmentService);
 container.bind<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer).to(RoleAssignmentKetoSyncConsumer);
+container.bind<RoleCapabilityKetoSyncConsumer>(TYPES.RoleCapabilityKetoSyncConsumer).to(RoleCapabilityKetoSyncConsumer);
+
 container.bind<IRoleService>(TYPES.RoleService).to(RoleService);
 container.bind<ICapabilityRepository>(TYPES.CapabilityRepository).to(CapabilityRepository);
 container.bind<ICapabilityService>(TYPES.CapabilityService).to(CapabilityService);

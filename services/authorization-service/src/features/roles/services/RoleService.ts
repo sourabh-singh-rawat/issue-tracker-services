@@ -1,3 +1,5 @@
+import { createCloudEvent, RoleCapabilityUpdatedEvent } from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Role } from "@/db";
@@ -26,7 +28,10 @@ export class RoleService implements IRoleService {
     private readonly roleCapabilityRepository: IRoleCapabilityRepository,
     @inject(TYPES.CapabilityRepository)
     private readonly capabilityRepository: ICapabilityRepository,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
   ) {}
+
 
   private async resolveCapabilityIdsByKeys(capabilityKeys: string[]): Promise<string[]> {
     if (capabilityKeys.length === 0) {
@@ -75,6 +80,30 @@ export class RoleService implements IRoleService {
             roleId: role.id,
             capabilityId,
           })),
+          { tx },
+        );
+
+        const event = createCloudEvent({
+          type: RoleCapabilityUpdatedEvent.type,
+          version: RoleCapabilityUpdatedEvent.version,
+          schema: RoleCapabilityUpdatedEvent.schema,
+          source: "pine/authorization-service",
+          subject: role.id,
+          data: {
+            roleId: role.id,
+            capabilityKeys,
+          },
+        });
+
+        await this.outboxService.schedule(
+          {
+            eventId: event.id,
+            eventType: event.type,
+            eventVersion: RoleCapabilityUpdatedEvent.version,
+            aggregateType: "role_capability",
+            aggregateId: role.id,
+            payload: event,
+          },
           { tx },
         );
       }
@@ -139,6 +168,30 @@ export class RoleService implements IRoleService {
 
       if (shouldSyncCapabilities) {
         await this.roleCapabilityRepository.syncForRole(id, capabilityIds, { tx });
+
+        const event = createCloudEvent({
+          type: RoleCapabilityUpdatedEvent.type,
+          version: RoleCapabilityUpdatedEvent.version,
+          schema: RoleCapabilityUpdatedEvent.schema,
+          source: "pine/authorization-service",
+          subject: role.id,
+          data: {
+            roleId: role.id,
+            capabilityKeys,
+          },
+        });
+
+        await this.outboxService.schedule(
+          {
+            eventId: event.id,
+            eventType: event.type,
+            eventVersion: RoleCapabilityUpdatedEvent.version,
+            aggregateType: "role_capability",
+            aggregateId: role.id,
+            payload: event,
+          },
+          { tx },
+        );
       }
 
       return role;

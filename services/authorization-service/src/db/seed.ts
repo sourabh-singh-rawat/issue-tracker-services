@@ -1,9 +1,13 @@
 import { ALL_CAPABILITIES, ALL_RESOURCES, ALL_SYSTEM_ROLES } from "@pine/authorization";
 import { uuidv7 } from "@pine/common";
+import { createCloudEvent, RoleCapabilityUpdatedEvent } from "@pine/events";
+import { ExponentialBackoffPolicy, OutboxRepository, OutboxService } from "@pine/outbox";
 import { eq, inArray } from "drizzle-orm";
 import { closeDb, db, initializeDb } from "@/bootstrap/db";
 import { logger } from "@/bootstrap/logger";
 import { Capabilities, Resources, RoleCapabilities, Roles, type Transaction } from "@/db";
+
+
 
 const seedResources = async (tx: Transaction): Promise<void> => {
   for (const resource of ALL_RESOURCES) {
@@ -104,6 +108,33 @@ const seedRoles = async (tx: Transaction): Promise<void> => {
     });
 
     await tx.insert(RoleCapabilities).values(mappings);
+
+    const event = createCloudEvent({
+      type: RoleCapabilityUpdatedEvent.type,
+      version: RoleCapabilityUpdatedEvent.version,
+      schema: RoleCapabilityUpdatedEvent.schema,
+      source: "pine/authorization-service",
+      subject: role.id,
+      data: {
+        roleId: role.id,
+        capabilityKeys,
+      },
+    });
+
+    const outboxRepository = new OutboxRepository(tx);
+    const outboxService = new OutboxService(outboxRepository, new ExponentialBackoffPolicy());
+
+    await outboxService.schedule(
+      {
+        eventId: event.id,
+        eventType: event.type,
+        eventVersion: RoleCapabilityUpdatedEvent.version,
+        aggregateType: "role_capability",
+        aggregateId: role.id,
+        payload: event,
+      },
+      { tx },
+    );
   }
 
   logger.info(`Seeded ${ALL_SYSTEM_ROLES.length} system role(s)`);

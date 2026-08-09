@@ -18,3 +18,9 @@ namespaces:
     name: organization
   - id: 2
     name: role
+  - id: 3
+    name: capability
+  - id: 4
+    name: authorization
+  - id: 5
+    name: product
