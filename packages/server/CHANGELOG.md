@@ -1,5 +1,23 @@
 # @pine/server
 
+## 1.0.0
+
+### Major Changes
+
+- 689a980: refactor: rename @pine/http to @pine/server and merge graphql-core
+
+### Minor Changes
+
+- d206a7c: refactor: rename @pine/http-core to @pine/http
+
+### Patch Changes
+
+- 4b72801: refactor(identity): drop local email, add profile names, register with username
+- Updated dependencies [5b5506b]
+- Updated dependencies [d175229]
+- Updated dependencies [d206a7c]
+  - @pine/common@0.0.2
+
 ## 0.2.1
 
 ### Patch Changes

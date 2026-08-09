@@ -1,5 +1,22 @@
 # @pine/api-gateway
 
+## 0.3.1
+
+### Patch Changes
+
+- 11abe4b: feat(product): add product-service with dedicated database, gateway proxy and bootstrap; add brand operations
+- de6a3b1: feat(authz): organizations, authorization, roles, keto, and admin-web
+- 9c0d187: feat(web): merge issues-web and inventory-web into a single erp-web app
+
+  Product UI lives in `@pine/erp-web` (port 3001) with OIDC PKCE auth and an inventory route shell. Backend CORS and invite URLs use `ERP_WEB_URL` instead of separate issues/inventory web origins.
+
+- d206a7c: refactor: rename @pine/http-core to @pine/http
+- 689a980: refactor: rename @pine/http to @pine/server and merge graphql-core
+- Updated dependencies [4b72801]
+- Updated dependencies [d206a7c]
+- Updated dependencies [689a980]
+  - @pine/server@1.0.0
+
 ## 0.3.0
 
 ### Minor Changes
