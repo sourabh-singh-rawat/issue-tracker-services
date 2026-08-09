@@ -1,10 +1,10 @@
 import {
   type CloudEvent,
   type IBroker,
-  type IdentityEmailVerifiedData,
+  type UserRegisteredData,
   Streams,
   Consumer,
-  IdentityEmailVerifiedEvent,
+  UserRegisteredEvent,
   validateEvent,
 } from "@pine/events";
 import { inject, injectable } from "inversify";
@@ -14,10 +14,10 @@ import type { Database } from "@/db";
 import type { IIdentityRepository } from "@/features/identities/repositories";
 
 @injectable()
-export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
+export class IdentitySyncConsumer extends Consumer<CloudEvent<UserRegisteredData>> {
   readonly stream = Streams.IDENTITY;
   readonly consumer = "authorization-identity-sync";
-  readonly subjects = [IdentityEmailVerifiedEvent.type];
+  readonly subjects = [UserRegisteredEvent.type];
 
   constructor(
     @inject(TYPES.Broker)
@@ -30,8 +30,8 @@ export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerif
     super(broker.client);
   }
 
-  async onMessage(message: JsMsg, payload: CloudEvent<IdentityEmailVerifiedData>) {
-    const event = validateEvent(IdentityEmailVerifiedEvent, payload);
+  async onMessage(message: JsMsg, payload: CloudEvent<UserRegisteredData>) {
+    const event = validateEvent(UserRegisteredEvent, payload);
     const { userId } = event.data!;
 
     await this.db.transaction(async (tx) => {

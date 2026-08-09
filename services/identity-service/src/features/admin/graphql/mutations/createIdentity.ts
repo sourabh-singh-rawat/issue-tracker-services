@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import type { IAdminService } from "@/features/admin/services";
 import { CreateIdentityInput } from "@/features/admin/graphql/inputs/CreateIdentityInput";

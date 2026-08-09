@@ -1,17 +1,12 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISessionService } from "@/features/session/services";
 import { SessionResponseSchema, type SessionResponse } from "@/features/session/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
 
-export const getSession: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Reply: SessionResponse }
-> = {
+export const getSession: HttpRoute = {
   url: "/identity/getSession",
   method: "GET",
   schema: {
@@ -24,8 +19,8 @@ export const getSession: RouteOptions<
       200: SessionResponseSchema,
     },
   },
-  handler: async (req, reply) => {
-    const sessionToken = req.cookies.session;
+  handler: async (request) => {
+    const sessionToken = request.cookies.session;
 
     if (!sessionToken) {
       throw new InvalidCredentialError("No active session");
@@ -42,6 +37,6 @@ export const getSession: RouteOptions<
       },
     };
 
-    return reply.send(response);
+    return json(response);
   },
 };

@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 const HelloType = builder.objectRef<{ message: string; message2: string }>("HelloXYZ");
 

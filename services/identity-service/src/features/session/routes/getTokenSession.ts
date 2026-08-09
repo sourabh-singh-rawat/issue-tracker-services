@@ -1,5 +1,5 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISessionService } from "@/features/session/services";
@@ -16,12 +16,7 @@ function extractBearerToken(authorizationHeader: string | undefined): string | n
   return token.length > 0 ? token : null;
 }
 
-export const getTokenSession: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Reply: SessionResponse }
-> = {
+export const getTokenSession: HttpRoute = {
   url: "/identity/getTokenSession",
   method: "GET",
   schema: {
@@ -35,8 +30,8 @@ export const getTokenSession: RouteOptions<
       200: SessionResponseSchema,
     },
   },
-  handler: async (req, reply) => {
-    const accessToken = extractBearerToken(req.headers.authorization);
+  handler: async (request) => {
+    const accessToken = extractBearerToken(request.headers.authorization);
 
     if (!accessToken) {
       throw new InvalidCredentialError("No access token");
@@ -53,6 +48,6 @@ export const getTokenSession: RouteOptions<
       },
     };
 
-    return reply.send(response);
+    return json(response);
   },
 };

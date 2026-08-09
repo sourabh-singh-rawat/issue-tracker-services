@@ -1,6 +1,6 @@
-import type { HttpRoute } from "@pine/http";
+import type { HttpRoute } from "@pine/server";
 import { me } from "@/features/me/routes/me";
 
 export * from "@/features/me/routes/me";
 
-export const meRoutes = [me] as unknown as HttpRoute[];
+export const meRoutes: HttpRoute[] = [me];

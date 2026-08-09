@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { UpdateRoleInput } from "@/features/roles/graphql/inputs/UpdateRoleInput";
 import { RoleObject } from "@/features/roles/graphql/objects/RoleObject";

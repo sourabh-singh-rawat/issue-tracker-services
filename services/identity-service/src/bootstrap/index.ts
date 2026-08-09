@@ -1,9 +1,8 @@
 export { broker } from "@/bootstrap/broker";
-export { container } from "@/bootstrap/container";
+export { container, openApiOutputPath } from "@/bootstrap/container";
 export { TYPES } from "@/bootstrap/container-types";
 export { closeDb, db, initializeDb } from "@/bootstrap/db";
 export { env } from "@/bootstrap/env";
-export { createFastify, fastifyServer } from "@/bootstrap/fastify";
 export { hydraClient } from "@/bootstrap/hydra-client";
 export { kratosClient } from "@/bootstrap/kratos-client";
 export { logger } from "@/bootstrap/logger";

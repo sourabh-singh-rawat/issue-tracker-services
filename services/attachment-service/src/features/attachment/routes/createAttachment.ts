@@ -1,5 +1,4 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
 import { StatusCodes } from "http-status-codes";
 import { authenticate } from "@pine/identity-client";
 import { requireAuth } from "@pine/security";
@@ -11,15 +10,9 @@ import {
   CreateAttachmentCreatedSchema,
   CreateAttachmentErrorSchema,
   CreateAttachmentParamsSchema,
-  type CreateAttachmentParams,
 } from "@/features/attachment/schemas";
 
-export const createAttachment: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Params: CreateAttachmentParams }
-> = {
+export const createAttachment: HttpRoute = {
   url: "/attachments/:issueId",
   method: "POST",
   schema: {
@@ -36,12 +29,19 @@ export const createAttachment: RouteOptions<
       500: CreateAttachmentErrorSchema,
     },
   },
-  preHandler: [authenticate, requireAuth],
-  handler: async (request, reply) => {
-    const { issueId } = request.params;
-    const userId = request.user!.id;
-    const data = await request.file();
+  hooks: [authenticate, requireAuth],
+  handler: async (request) => {
+    const issueId = request.params.issueId;
+    if (issueId === undefined) {
+      throw new Error("Missing issueId");
+    }
 
+    const userId = request.user?.id;
+    if (userId === undefined) {
+      throw new Error("Missing authenticated user");
+    }
+
+    const data = await request.file();
     if (!data) throw new Error("No data provided");
 
     const service = container.get<AttachmentService>(TYPES.AttachmentService);
@@ -53,6 +53,6 @@ export const createAttachment: RouteOptions<
       file: await data.toBuffer(),
     });
 
-    return reply.status(StatusCodes.CREATED).send();
+    return { status: StatusCodes.CREATED };
   },
 };

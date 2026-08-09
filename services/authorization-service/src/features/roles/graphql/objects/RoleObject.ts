@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import type { Role } from "@/db";
 import { CapabilityObject } from "@/features/capabilities/graphql/objects/CapabilityObject";

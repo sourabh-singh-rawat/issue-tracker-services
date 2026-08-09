@@ -1,5 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { FastifyHttpServer, type IHttpServer } from "@pine/http";
+import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -16,12 +16,14 @@ import {
   type IRetryPolicy,
 } from "@pine/outbox";
 import { Container } from "inversify";
+import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
-import { fastifyServer } from "@/bootstrap/fastify";
 import { logger } from "@/bootstrap/logger";
+import { createContext } from "@/graphql";
+import { schema } from "@/graphql/schema";
 import { BrandRepository, type IBrandRepository, BrandService, type IBrandService } from "@/features/brands";
 import { CategoryRepository, type ICategoryRepository, CategoryService, type ICategoryService } from "@/features/categories";
 import { IIdentityRepository, IdentityRepository, IdentitySyncConsumer } from "@/features/identities";
@@ -72,7 +74,7 @@ container.bind<IProductUnitRepository>(TYPES.ProductUnitRepository).to(ProductUn
 container.bind<IProductService>(TYPES.ProductService).to(ProductService);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
-  new FastifyHttpServer(fastifyServer, {
+  createHttpServer({
     config: {
       host: "0.0.0.0",
       port: 5004,
@@ -81,6 +83,23 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     },
     cors: { credentials: true, origin: env.ERP_WEB_URL },
     cookie: { secret: env.JWT_SECRET },
+    openapi: {
+      info: {
+        title: "Product Service",
+        version: "0.0.0",
+        description: "Product APIs",
+        license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
+      },
+      servers: [{ url: env.PRODUCT_SERVICE_URL }],
+      tags: [{ name: "auth", description: "Authentication related end-points" }],
+    },
+    graphql: createGraphQLServer({
+      schema,
+      context: createContext,
+    }),
     routes,
   }),
 );
+
+export const openApiOutputPath = path.join(process.cwd(), "dist", "openapi.json");
+

@@ -1,3 +1,4 @@
+import type { HttpRequest } from "@pine/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { get } = vi.hoisted(() => ({
@@ -20,6 +21,19 @@ import { TYPES } from "@/bootstrap/container-types";
 import { InvalidCredentialError } from "@/features/me/errors";
 import { me } from "@/features/me/routes/me";
 
+function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
+  return {
+    method: partial.method ?? "GET",
+    url: partial.url ?? "/inventory/me",
+    headers: partial.headers ?? {},
+    query: partial.query ?? {},
+    params: partial.params ?? {},
+    cookies: partial.cookies ?? {},
+    body: partial.body,
+    file: partial.file ?? (async () => undefined),
+  };
+}
+
 describe("me route", () => {
   beforeEach(() => {
     get.mockReset();
@@ -31,7 +45,7 @@ describe("me route", () => {
     vi.mocked(JwtToken.verify).mockResolvedValue({
       userId: "identity-1",
       email: "a@b.com",
-    } as never);
+    });
     vi.mocked(hasUserIdentity).mockReturnValue(true);
 
     const getCurrentUser = vi.fn().mockResolvedValue({
@@ -39,24 +53,20 @@ describe("me route", () => {
     });
     get.mockReturnValue({ getCurrentUser });
 
-    const send = vi.fn((payload) => payload);
-    const req = {
-      cookies: { accessToken: "token-1" },
-    };
-    const reply = { send };
-
-    const response = await me.handler!(req as never, reply as never);
+    const response = await me.handler(
+      httpRequest({
+        cookies: { accessToken: "token-1" },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.MeService);
     expect(getCurrentUser).toHaveBeenCalledWith("identity-1");
     expect(response).toEqual({
-      identity: {
-        id: "identity-1",
-      },
-    });
-    expect(send).toHaveBeenCalledWith({
-      identity: {
-        id: "identity-1",
+      status: 200,
+      body: {
+        identity: {
+          id: "identity-1",
+        },
       },
     });
   });
@@ -65,17 +75,10 @@ describe("me route", () => {
     const getCurrentUser = vi.fn();
     get.mockReturnValue({ getCurrentUser });
 
-    const send = vi.fn();
-    const req = {
-      cookies: {},
-    };
-    const reply = { send };
-
-    await expect(me.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
+    await expect(me.handler(httpRequest({ cookies: {} }))).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
 
     expect(getCurrentUser).not.toHaveBeenCalled();
-    expect(send).not.toHaveBeenCalled();
   });
 });

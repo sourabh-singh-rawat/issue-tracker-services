@@ -1,5 +1,5 @@
 import { ItemPriority } from "@pine/common";
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { TYPES, container } from "@/bootstrap";
 import { IIssueService } from "@/features/issue";
 import { UpdateIssueInput } from "../inputs/UpdateIssueInput";

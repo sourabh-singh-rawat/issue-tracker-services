@@ -1,20 +1,20 @@
+import type { HttpRequest } from "@pine/server";
+import type { GraphQLContext } from "@pine/server";
 import { JwtToken, hasUserIdentity } from "@pine/security";
-import { GraphQLContext } from "@pine/graphql-core";
-import { ApolloFastifyContextFunction } from "@as-integrations/fastify";
 import { env } from "@/bootstrap/env";
 
 export type AttachmentContext = GraphQLContext;
 
-export const createContext: ApolloFastifyContextFunction<any> = async (req, rep) => {
-  const { accessToken } = req.cookies;
+export const createContext = async (request: HttpRequest): Promise<AttachmentContext> => {
+  const accessToken = request.cookies.accessToken;
 
   if (accessToken) {
     try {
       const token = await JwtToken.verify(accessToken, env.JWT_SECRET);
       if (hasUserIdentity(token)) {
         return {
-          req,
-          rep,
+          cookies: request.cookies,
+          headers: request.headers,
           user: { id: token.userId, authMethod: "access_token" },
         };
       }
@@ -23,5 +23,8 @@ export const createContext: ApolloFastifyContextFunction<any> = async (req, rep)
     }
   }
 
-  return { req, rep };
+  return {
+    cookies: request.cookies,
+    headers: request.headers,
+  };
 };

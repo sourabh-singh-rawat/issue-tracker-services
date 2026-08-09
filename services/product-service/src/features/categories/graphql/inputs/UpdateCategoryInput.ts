@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 
 export const UpdateCategoryInput = builder.inputType("UpdateCategoryInput", {
   fields: (t) => ({

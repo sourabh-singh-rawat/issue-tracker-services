@@ -1,21 +1,30 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IRegistrationService } from "@/features/registration/services";
 import {
   RegisterBodySchema,
   RegisterResponseSchema,
-  type RegisterBody,
   type RegisterResponse,
 } from "@/features/registration/schemas";
 
-export const register: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Body: RegisterBody; Reply: RegisterResponse }
-> = {
+function isRegisterBody(
+  body: unknown,
+): body is { email: string; username: string; password: string } {
+  return (
+    body !== null &&
+    typeof body === "object" &&
+    "email" in body &&
+    typeof body.email === "string" &&
+    "username" in body &&
+    typeof body.username === "string" &&
+    "password" in body &&
+    typeof body.password === "string"
+  );
+}
+
+export const register: HttpRoute = {
   url: "/identity/register",
   method: "POST",
   schema: {
@@ -28,16 +37,19 @@ export const register: RouteOptions<
       200: RegisterResponseSchema,
     },
   },
-  handler: async (req, reply) => {
-    const input = req.body;
+  handler: async (request) => {
+    if (!isRegisterBody(request.body)) {
+      throw new Error("Invalid register body");
+    }
+
     const service = container.get<IRegistrationService>(TYPES.RegistrationService);
 
-    await service.register(input.email, input.username, input.password);
+    await service.register(request.body.email, request.body.username, request.body.password);
 
     const response: RegisterResponse = {
       message: "Your request has been received.",
     };
 
-    return reply.send(response);
+    return json(response);
   },
 };

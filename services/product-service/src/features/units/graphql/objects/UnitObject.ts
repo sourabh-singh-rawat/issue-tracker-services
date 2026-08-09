@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Unit } from "@/db";
 
 export const UnitObject = builder.objectRef<Unit>("UnitObject");

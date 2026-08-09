@@ -1,3 +1,4 @@
+import type { HttpRequest } from "@pine/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { get } = vi.hoisted(() => ({
@@ -20,6 +21,19 @@ import {
   OAuthRequestNotFoundError,
 } from "@/integrations/oauth/errors";
 
+function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
+  return {
+    method: partial.method ?? "GET",
+    url: partial.url ?? "/",
+    headers: partial.headers ?? {},
+    query: partial.query ?? {},
+    params: partial.params ?? {},
+    cookies: partial.cookies ?? {},
+    body: partial.body,
+    file: partial.file ?? (async () => undefined),
+  };
+}
+
 describe("authorize route", () => {
   beforeEach(() => {
     get.mockReset();
@@ -38,22 +52,20 @@ describe("authorize route", () => {
     const authorizeFn = vi.fn().mockResolvedValue({ redirectTo });
     get.mockReturnValue({ authorize: authorizeFn });
 
-    const redirect = vi.fn((url: string) => url);
-    const req = {
-      query: {
-        client_id: "issues-web",
-        redirect_uri: "http://localhost:3000/callback",
-        response_type: "code" as const,
-        scope: "openid offline",
-        state: "state-1",
-        code_challenge: "challenge",
-        code_challenge_method: "S256" as const,
-        nonce: "nonce-1",
-      },
-    };
-    const reply = { redirect };
-
-    const response = await authorize.handler!(req as never, reply as never);
+    const response = await authorize.handler(
+      httpRequest({
+        query: {
+          client_id: "issues-web",
+          redirect_uri: "http://localhost:3000/callback",
+          response_type: "code",
+          scope: "openid offline",
+          state: "state-1",
+          code_challenge: "challenge",
+          code_challenge_method: "S256",
+          nonce: "nonce-1",
+        },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.OAuthService);
     expect(authorizeFn).toHaveBeenCalledWith({
@@ -66,57 +78,52 @@ describe("authorize route", () => {
       codeChallengeMethod: "S256",
       nonce: "nonce-1",
     });
-    expect(redirect).toHaveBeenCalledWith(redirectTo);
-    expect(response).toBe(redirectTo);
+    expect(response).toEqual({
+      status: 302,
+      headers: { Location: redirectTo },
+    });
   });
 
   it("propagates InvalidOAuthRequestError from the OAuth service", async () => {
     const authorizeFn = vi.fn().mockRejectedValue(new InvalidOAuthRequestError());
     get.mockReturnValue({ authorize: authorizeFn });
 
-    const redirect = vi.fn();
-    const req = {
-      query: {
-        client_id: "issues-web",
-        redirect_uri: "http://localhost:3000/callback",
-        response_type: "code" as const,
-        scope: "openid",
-        state: "state-1",
-      },
-    };
-    const reply = { redirect };
-
-    await expect(authorize.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
-      InvalidOAuthRequestError,
-    );
-    expect(redirect).not.toHaveBeenCalled();
+    await expect(
+      authorize.handler(
+        httpRequest({
+          query: {
+            client_id: "issues-web",
+            redirect_uri: "http://localhost:3000/callback",
+            response_type: "code",
+            scope: "openid",
+            state: "state-1",
+          },
+        }),
+      ),
+    ).rejects.toBeInstanceOf(InvalidOAuthRequestError);
   });
 
   it("propagates OAuthProviderUnavailableError from the OAuth service", async () => {
     const authorizeFn = vi.fn().mockRejectedValue(new OAuthProviderUnavailableError());
     get.mockReturnValue({ authorize: authorizeFn });
 
-    const redirect = vi.fn();
-    const req = {
-      query: {
-        client_id: "issues-web",
-        redirect_uri: "http://localhost:3000/callback",
-        response_type: "code" as const,
-        scope: "openid",
-        state: "state-1",
-      },
-    };
-    const reply = { redirect };
-
-    await expect(authorize.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
-      OAuthProviderUnavailableError,
-    );
-    expect(redirect).not.toHaveBeenCalled();
+    await expect(
+      authorize.handler(
+        httpRequest({
+          query: {
+            client_id: "issues-web",
+            redirect_uri: "http://localhost:3000/callback",
+            response_type: "code",
+            scope: "openid",
+            state: "state-1",
+          },
+        }),
+      ),
+    ).rejects.toBeInstanceOf(OAuthProviderUnavailableError);
   });
 });
 
 describe("OAuth login challenge routes", () => {
-  // TODO: POST/GET /identity/oauth sign-in routes
   it.todo("returns the login challenge details for a valid login_challenge");
 
   it.todo("accepts a login challenge when the user is authenticated and returns redirectTo");
@@ -153,16 +160,18 @@ describe("OAuth consent challenge routes", () => {
     const getConsentChallenge = vi.fn().mockResolvedValue(challenge);
     get.mockReturnValue({ getConsentChallenge });
 
-    const send = vi.fn((payload) => payload);
-    const req = { query: { consent_challenge: "consent-challenge-1" } };
-    const reply = { send };
-
-    const response = await consent.handler!(req as never, reply as never);
+    const response = await consent.handler(
+      httpRequest({
+        query: { consent_challenge: "consent-challenge-1" },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.OAuthService);
     expect(getConsentChallenge).toHaveBeenCalledWith("consent-challenge-1");
-    expect(response).toEqual(challenge);
-    expect(send).toHaveBeenCalledWith(challenge);
+    expect(response).toEqual({
+      status: 200,
+      body: challenge,
+    });
   });
 
   it("accepts a consent challenge with granted scopes and returns redirectTo", async () => {
@@ -171,14 +180,13 @@ describe("OAuth consent challenge routes", () => {
     });
     get.mockReturnValue({ acceptConsent: acceptConsentFn });
 
-    const send = vi.fn((payload) => payload);
-    const req = {
-      query: { consent_challenge: "consent-challenge-1" },
-      body: { grantScope: ["openid", "offline"], remember: true, rememberFor: 3600 },
-    };
-    const reply = { send };
-
-    const response = await acceptConsent.handler!(req as never, reply as never);
+    const response = await acceptConsent.handler(
+      httpRequest({
+        method: "POST",
+        query: { consent_challenge: "consent-challenge-1" },
+        body: { grantScope: ["openid", "offline"], remember: true, rememberFor: 3600 },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.OAuthService);
     expect(acceptConsentFn).toHaveBeenCalledWith({
@@ -188,7 +196,10 @@ describe("OAuth consent challenge routes", () => {
       rememberFor: 3600,
     });
     expect(response).toEqual({
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?consent_verifier=abc",
+      status: 200,
+      body: {
+        redirectTo: "http://127.0.0.1:4444/oauth2/auth?consent_verifier=abc",
+      },
     });
     expect(acceptConsent.method).toBe("POST");
     expect(acceptConsent.url).toBe("/identity/oauth/consent/accept");
@@ -200,14 +211,13 @@ describe("OAuth consent challenge routes", () => {
     });
     get.mockReturnValue({ rejectConsent: rejectConsentFn });
 
-    const send = vi.fn((payload) => payload);
-    const req = {
-      query: { consent_challenge: "consent-challenge-1" },
-      body: { error: "access_denied", errorDescription: "User denied consent" },
-    };
-    const reply = { send };
-
-    const response = await rejectConsent.handler!(req as never, reply as never);
+    const response = await rejectConsent.handler(
+      httpRequest({
+        method: "POST",
+        query: { consent_challenge: "consent-challenge-1" },
+        body: { error: "access_denied", errorDescription: "User denied consent" },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.OAuthService);
     expect(rejectConsentFn).toHaveBeenCalledWith({
@@ -216,7 +226,10 @@ describe("OAuth consent challenge routes", () => {
       errorDescription: "User denied consent",
     });
     expect(response).toEqual({
-      redirectTo: "http://127.0.0.1:4444/oauth2/auth?error=access_denied",
+      status: 200,
+      body: {
+        redirectTo: "http://127.0.0.1:4444/oauth2/auth?error=access_denied",
+      },
     });
     expect(rejectConsent.method).toBe("POST");
     expect(rejectConsent.url).toBe("/identity/oauth/consent/reject");
@@ -226,14 +239,13 @@ describe("OAuth consent challenge routes", () => {
     const getConsentChallenge = vi.fn().mockRejectedValue(new OAuthRequestNotFoundError());
     get.mockReturnValue({ getConsentChallenge });
 
-    const send = vi.fn();
-    const req = { query: { consent_challenge: "missing" } };
-    const reply = { send };
-
-    await expect(consent.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
-      OAuthRequestNotFoundError,
-    );
-    expect(send).not.toHaveBeenCalled();
+    await expect(
+      consent.handler(
+        httpRequest({
+          query: { consent_challenge: "missing" },
+        }),
+      ),
+    ).rejects.toBeInstanceOf(OAuthRequestNotFoundError);
   });
 });
 
@@ -261,20 +273,18 @@ describe("token route", () => {
     });
     get.mockReturnValue({ exchangeToken });
 
-    const setCookie = vi.fn();
-    const send = vi.fn((payload) => payload);
-    const req = {
-      body: {
-        grant_type: "authorization_code",
-        code: "auth-code-1",
-        client_id: "inventory-web",
-        redirect_uri: "http://localhost:3001/callback",
-        code_verifier: "verifier-1",
-      },
-    };
-    const reply = { setCookie, send };
-
-    const response = await token.handler!(req as never, reply as never);
+    const response = await token.handler(
+      httpRequest({
+        method: "POST",
+        body: {
+          grant_type: "authorization_code",
+          code: "auth-code-1",
+          client_id: "inventory-web",
+          redirect_uri: "http://localhost:3001/callback",
+          code_verifier: "verifier-1",
+        },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.OAuthService);
     expect(exchangeToken).toHaveBeenCalledWith({
@@ -285,69 +295,64 @@ describe("token route", () => {
       codeVerifier: "verifier-1",
     });
 
-    expect(setCookie).toHaveBeenCalledWith(
-      "accessToken",
-      "access-1",
-      expect.objectContaining({
-        httpOnly: true,
-        path: "/",
-        sameSite: "lax",
-        secure: false,
-        expires: expect.any(Date),
-      }),
-    );
-    expect(setCookie).toHaveBeenCalledWith("refreshToken", "refresh-1", {
-      httpOnly: true,
-      path: "/",
-      sameSite: "lax",
-      secure: false,
-    });
-    expect(setCookie).toHaveBeenCalledWith(
-      "idToken",
-      "id-1",
-      expect.objectContaining({
-        httpOnly: true,
-        path: "/",
-        sameSite: "lax",
-        secure: false,
-        expires: expect.any(Date),
-      }),
-    );
-    expect(response).toEqual({
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
       message: "Tokens issued successfully.",
     });
-    expect(send).toHaveBeenCalledWith({
-      message: "Tokens issued successfully.",
-    });
+    expect(response.cookies).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "accessToken",
+          value: "access-1",
+          httpOnly: true,
+          path: "/",
+          sameSite: "lax",
+          secure: false,
+          expires: expect.any(Date),
+        }),
+        expect.objectContaining({
+          name: "refreshToken",
+          value: "refresh-1",
+          httpOnly: true,
+          path: "/",
+          sameSite: "lax",
+          secure: false,
+        }),
+        expect.objectContaining({
+          name: "idToken",
+          value: "id-1",
+          httpOnly: true,
+          path: "/",
+          sameSite: "lax",
+          secure: false,
+          expires: expect.any(Date),
+        }),
+      ]),
+    );
   });
 
   it("propagates InvalidOAuthRequestError from the OAuth service", async () => {
     const exchangeToken = vi.fn().mockRejectedValue(new InvalidOAuthRequestError());
     get.mockReturnValue({ exchangeToken });
 
-    const setCookie = vi.fn();
-    const send = vi.fn();
-    const req = {
-      body: {
-        grant_type: "authorization_code",
-        code: "bad-code",
-        client_id: "inventory-web",
-        redirect_uri: "http://localhost:3001/callback",
-        code_verifier: "verifier-1",
-      },
-    };
-    const reply = { setCookie, send };
-
-    await expect(token.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
-      InvalidOAuthRequestError,
-    );
-    expect(setCookie).not.toHaveBeenCalled();
-    expect(send).not.toHaveBeenCalled();
+    await expect(
+      token.handler(
+        httpRequest({
+          method: "POST",
+          body: {
+            grant_type: "authorization_code",
+            code: "bad-code",
+            client_id: "inventory-web",
+            redirect_uri: "http://localhost:3001/callback",
+            code_verifier: "verifier-1",
+          },
+        }),
+      ),
+    ).rejects.toBeInstanceOf(InvalidOAuthRequestError);
   });
 });
 
 describe("OAuth introspect/revoke routes", () => {
-  // TODO: POST /identity/oauth/introspect and /identity/oauth/revoke
   it.todo("introspects a bearer token and returns active status and claims");
 
   it.todo("revokes a token and returns success");

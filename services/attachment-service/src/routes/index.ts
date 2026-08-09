@@ -1,4 +1,4 @@
-import type { HttpRoute } from "@pine/http";
+import type { HttpRoute } from "@pine/server";
 import { attachmentRoutes } from "@/features/attachment";
 
 export const routes: HttpRoute[] = [...attachmentRoutes];

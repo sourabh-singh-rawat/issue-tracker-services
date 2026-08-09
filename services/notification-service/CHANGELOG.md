@@ -10,7 +10,7 @@
 
 - dfa43fd: feat(inventory): add inventory-service with gateway proxy, bootstrap env modules, and OAuth token cookies
 - Updated dependencies [dfa43fd]
-  - @pine/http@0.2.1
+  - @pine/server@0.2.1
 
 ## 0.1.0
 
@@ -22,7 +22,7 @@
 
 - Updated dependencies [d05915a]
   - @pine/events@0.1.0
-  - @pine/http@0.2.0
+  - @pine/server@0.2.0
   - @pine/orm@0.0.2
   - @pine/security@0.0.2
 

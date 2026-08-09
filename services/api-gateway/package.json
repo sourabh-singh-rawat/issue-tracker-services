@@ -8,6 +8,7 @@
   "author": "",
   "main": "src/main.ts",
   "scripts": {
+    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
     "dev": "tsx watch --env-file=../../.env src/main.ts"
   },
   "dependencies": {
@@ -17,7 +18,7 @@
     "@fastify/http-proxy": "^11.6.0",
     "@fastify/swagger": "^9.8.1",
     "@fastify/swagger-ui": "^5.2.6",
-    "@pine/http": "workspace:*",
+    "@pine/server": "workspace:*",
     "@pine/observability": "workspace:*",
     "fastify": "^5.10.0",
     "graphql": "16.14.2",

@@ -1,5 +1,5 @@
 {
-  "id": "4a86c57b-9213-4310-9b33-869ad7040f94",
+  "id": "e16bd95b-5350-4dcd-bbdb-c48a52449670",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -95,8 +95,12 @@
           "name": "attachments_owner_id_identities_id_fk",
           "tableFrom": "attachments",
           "tableTo": "identities",
-          "columnsFrom": ["owner_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

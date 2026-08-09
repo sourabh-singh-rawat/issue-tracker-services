@@ -1,5 +1,5 @@
 import { fastifyApolloHandler } from "@as-integrations/fastify";
-import { FastifyHttpServer } from "@pine/http";
+import { attachHttpServer } from "@pine/server";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import fastify from "fastify";
 import { env, listenPortFromUrl } from "./env";
@@ -9,6 +9,13 @@ import { graphqlServer } from "./graphql-server";
 import { registerHttpProxies } from "./http-proxy";
 import { registerSwagger } from "./swagger";
 
+function resolveEnvironment(value: string) {
+  if (value === "production" || value === "development" || value === "test") {
+    return value;
+  }
+  return "development";
+}
+
 export const createHttpServer = async () => {
   const server = fastify();
 
@@ -16,7 +23,19 @@ export const createHttpServer = async () => {
   await registerHttpProxies(server);
   await graphqlServer.start();
 
-  return new FastifyHttpServer(server, {
+  server.route({
+    url: "/graphql",
+    method: ["POST", "GET"],
+    schema: { hide: true },
+    handler: fastifyApolloHandler(graphqlServer, {
+      context: async (req: FastifyRequest, reply: FastifyReply): Promise<GatewayContext> => ({
+        cookie: req.headers.cookie,
+        reply,
+      }),
+    }),
+  });
+
+  return attachHttpServer(server, {
     cors: {
       credentials: true,
       origin: getCorsOrigins(),
@@ -24,21 +43,10 @@ export const createHttpServer = async () => {
     config: {
       host: "0.0.0.0",
       port: listenPortFromUrl(env.API_GATEWAY_URL),
-      environment: env.NODE_ENV as "development" | "production",
+      environment: resolveEnvironment(env.NODE_ENV),
       version: 1,
     },
-    routes: [
-      {
-        url: "/graphql",
-        method: ["POST", "GET"],
-        schema: { hide: true },
-        handler: fastifyApolloHandler(graphqlServer, {
-          context: async (req: FastifyRequest, reply: FastifyReply): Promise<GatewayContext> => ({
-            cookie: req.headers.cookie,
-            reply,
-          }),
-        }),
-      },
-    ],
+    routes: [],
   });
 };
+

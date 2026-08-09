@@ -1,5 +1,5 @@
-import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import type { RouteOptions } from "fastify";
+import type { HttpRoute } from "@pine/server";
+import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISignInService } from "@/features/signin/services";
@@ -7,18 +7,36 @@ import {
   SignInBodySchema,
   SignInQuerySchema,
   SignInResponseSchema,
-  type SignInBody,
-  type SignInQuery,
   type SignInResponse,
 } from "@/features/signin/schemas";
 import { env } from "@/bootstrap/env";
 
-export const signin: RouteOptions<
-  Server,
-  IncomingMessage,
-  ServerResponse,
-  { Body: SignInBody; Querystring: SignInQuery; Reply: SignInResponse }
-> = {
+function readQueryString(
+  query: Record<string, string | string[] | undefined>,
+  key: string,
+): string | undefined {
+  const value = query[key];
+  if (typeof value === "string") {
+    return value;
+  }
+  if (Array.isArray(value) && typeof value[0] === "string") {
+    return value[0];
+  }
+  return undefined;
+}
+
+function isSignInBody(body: unknown): body is { email: string; password: string } {
+  return (
+    body !== null &&
+    typeof body === "object" &&
+    "email" in body &&
+    typeof body.email === "string" &&
+    "password" in body &&
+    typeof body.password === "string"
+  );
+}
+
+export const signin: HttpRoute = {
   url: "/identity/signin",
   method: "POST",
   schema: {
@@ -33,21 +51,16 @@ export const signin: RouteOptions<
       200: SignInResponseSchema,
     },
   },
-  handler: async (req, reply) => {
-    const input = req.body;
+  handler: async (request) => {
+    if (!isSignInBody(request.body)) {
+      throw new Error("Invalid sign-in body");
+    }
+
     const service = container.get<ISignInService>(TYPES.SignInService);
     const result = await service.signInWithEmailAndPassword({
-      email: input.email,
-      password: input.password,
-      loginChallenge: req.query.login_challenge,
-    });
-
-    reply.setCookie("session", result.sessionToken, {
-      httpOnly: true,
-      path: "/",
-      sameSite: "lax",
-      secure: env.NODE_ENV === "production",
-      expires: result.expiresAt,
+      email: request.body.email,
+      password: request.body.password,
+      loginChallenge: readQueryString(request.query, "login_challenge"),
     });
 
     const response: SignInResponse = {
@@ -61,6 +74,19 @@ export const signin: RouteOptions<
       },
     };
 
-    return reply.status(200).send(response);
+    return {
+      ...json(response),
+      cookies: [
+        {
+          name: "session",
+          value: result.sessionToken,
+          httpOnly: true,
+          path: "/",
+          sameSite: "lax",
+          secure: env.NODE_ENV === "production",
+          expires: result.expiresAt,
+        },
+      ],
+    };
   },
 };

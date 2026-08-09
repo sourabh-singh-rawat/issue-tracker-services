@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1785620328697,
-      "tag": "0000_milky_thor_girl",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1785654024667,
-      "tag": "0001_clean_cardiac",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1785657160733,
-      "tag": "0002_silent_bromley",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1785667200000,
-      "tag": "0003_authorization_schema_refactor",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1785660434134,
-      "tag": "0004_curvy_lucky_pierre",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1786172959126,
-      "tag": "0005_demonic_mesmero",
+      "when": 1786199689738,
+      "tag": "0000_clammy_nextwave",
       "breakpoints": true
     }
   ]

@@ -1,13 +1,6 @@
 import { UnauthorizedError } from "@pine/common";
-import type { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
-import "./types";
+import type { HttpHook } from "@pine/server";
 
-export const requireAuth = (
-  request: FastifyRequest,
-  _reply: FastifyReply,
-  done: HookHandlerDoneFunction,
-) => {
+export const requireAuth: HttpHook = (request) => {
   if (!request.user) throw new UnauthorizedError();
-
-  return done();
 };

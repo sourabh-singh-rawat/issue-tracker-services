@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import type { Category } from "@/db";
 
 export const CategoryObject = builder.objectRef<Category>("CategoryObject");

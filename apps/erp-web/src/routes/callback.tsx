@@ -78,7 +78,6 @@ function CallbackPage() {
           },
         });
 
-        // Tokens are set as HTTP-only cookies by the identity service.
         markAuthenticated();
         clearOidcState();
         clearOidcCodeVerifier();

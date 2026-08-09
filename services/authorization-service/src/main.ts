@@ -1,14 +1,13 @@
 import { env } from "@/bootstrap/env";
 import "reflect-metadata";
 
-import type { IHttpServer } from "@pine/http";
+import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, TYPES } from "@/bootstrap";
-import { fastifyServer } from "@/bootstrap/fastify";
-import { createGraphQL, writeSchemaToDist } from "@/bootstrap/graphql";
+import { openApiOutputPath } from "@/bootstrap/container";
+import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
-import { registerSwagger, writeOpenApi } from "@/bootstrap/swagger";
 import { IdentitySyncConsumer } from "@/features/identities";
 import { RoleAssignmentKetoSyncConsumer } from "@/features/roles";
 
@@ -32,13 +31,10 @@ const main = async () => {
 
   writeSchemaToDist();
 
-  await registerSwagger(fastifyServer);
-  fastifyServer.route(await createGraphQL(fastifyServer));
-
   const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();
   logger.info("Authorization service listening on http://0.0.0.0:5006");
-  writeOpenApi(fastifyServer);
+  httpServer.writeOpenApi(openApiOutputPath);
 
   await broker.init();
 

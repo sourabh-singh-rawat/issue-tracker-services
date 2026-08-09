@@ -1,3 +1,4 @@
+import type { HttpRequest } from "@pine/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { get } = vi.hoisted(() => ({
@@ -12,6 +13,19 @@ import { TYPES } from "@/bootstrap/container-types";
 import { getSession } from "@/features/session/routes/getSession";
 import { InvalidCredentialError } from "@/integrations/identity";
 
+function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
+  return {
+    method: partial.method ?? "GET",
+    url: partial.url ?? "/identity/getSession",
+    headers: partial.headers ?? {},
+    query: partial.query ?? {},
+    params: partial.params ?? {},
+    cookies: partial.cookies ?? {},
+    body: partial.body,
+    file: partial.file ?? (async () => undefined),
+  };
+}
+
 describe("getSession route", () => {
   beforeEach(() => {
     get.mockReset();
@@ -25,21 +39,22 @@ describe("getSession route", () => {
     });
     get.mockReturnValue({ getSession: getSessionFn });
 
-    const send = vi.fn((payload) => payload);
-    const req = {
-      cookies: { session: "session-token-1" },
-    };
-    const reply = { send };
-
-    const response = await getSession.handler!(req as never, reply as never);
+    const response = await getSession.handler(
+      httpRequest({
+        cookies: { session: "session-token-1" },
+      }),
+    );
 
     expect(get).toHaveBeenCalledWith(TYPES.SessionService);
     expect(getSessionFn).toHaveBeenCalledWith("session-token-1");
     expect(response).toEqual({
-      identity: {
-        id: "identity-1",
-        email: "a@b.com",
-        emailVerified: true,
+      status: 200,
+      body: {
+        identity: {
+          id: "identity-1",
+          email: "a@b.com",
+          emailVerified: true,
+        },
       },
     });
   });
@@ -48,17 +63,10 @@ describe("getSession route", () => {
     const getSessionFn = vi.fn();
     get.mockReturnValue({ getSession: getSessionFn });
 
-    const send = vi.fn();
-    const req = {
-      cookies: {},
-    };
-    const reply = { send };
-
-    await expect(getSession.handler!(req as never, reply as never)).rejects.toBeInstanceOf(
+    await expect(getSession.handler(httpRequest({ cookies: {} }))).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
 
     expect(getSessionFn).not.toHaveBeenCalled();
-    expect(send).not.toHaveBeenCalled();
   });
 });

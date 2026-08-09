@@ -10,6 +10,9 @@
       ],
       "outputs": ["dist/**"]
     },
+    "clean": {
+      "cache": false
+    },
     "test": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "^$TURBO_DEFAULT$"]

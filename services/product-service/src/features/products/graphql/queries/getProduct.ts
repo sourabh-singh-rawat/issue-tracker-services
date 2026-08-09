@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { ProductObject } from "@/features/products/graphql/objects/ProductObject";
 import type { IProductService } from "@/features/products/services";

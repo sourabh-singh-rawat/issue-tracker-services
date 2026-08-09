@@ -1,5 +1,5 @@
 {
-  "id": "abe12df2-1523-4e94-988c-853fcfbb0338",
+  "id": "8304d66f-7414-48f3-a8c6-396b074f1b19",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -59,8 +59,12 @@
           "name": "membership_roles_membership_id_memberships_id_fk",
           "tableFrom": "membership_roles",
           "tableTo": "memberships",
-          "columnsFrom": ["membership_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "membership_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -68,8 +72,12 @@
           "name": "membership_roles_role_id_roles_id_fk",
           "tableFrom": "membership_roles",
           "tableTo": "roles",
-          "columnsFrom": ["role_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -79,7 +87,10 @@
         "membership_roles_membership_id_role_id_unique": {
           "name": "membership_roles_membership_id_role_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["membership_id", "role_id"]
+          "columns": [
+            "membership_id",
+            "role_id"
+          ]
         }
       },
       "policies": {},
@@ -141,8 +152,12 @@
           "name": "memberships_organization_id_organizations_id_fk",
           "tableFrom": "memberships",
           "tableTo": "organizations",
-          "columnsFrom": ["organization_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "organization_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -152,7 +167,10 @@
         "memberships_organization_id_identity_id_unique": {
           "name": "memberships_organization_id_identity_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["organization_id", "identity_id"]
+          "columns": [
+            "organization_id",
+            "identity_id"
+          ]
         }
       },
       "policies": {},
@@ -228,7 +246,9 @@
         "organizations_slug_unique": {
           "name": "organizations_slug_unique",
           "nullsNotDistinct": false,
-          "columns": ["slug"]
+          "columns": [
+            "slug"
+          ]
         }
       },
       "policies": {},

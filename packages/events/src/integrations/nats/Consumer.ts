@@ -39,16 +39,21 @@ export abstract class Consumer<T> {
   abstract onMessage(messagae: JsMsg, payload: T): Promise<void>;
 
   private ensureConsumer = async (): Promise<void> => {
-    const jetstreamManager = await this.jetstream.jetstreamManager();
+    const manager = await this.jetstream.jetstreamManager();
 
     try {
-      await jetstreamManager.consumers.info(this.stream, this.consumer);
+      const info = await manager.consumers.info(this.stream, this.consumer);
+
+      if (this.sameSubjects(info.config.filter_subjects ?? [], this.subjects)) return;
+      await manager.consumers.update(this.stream, this.consumer, {
+        filter_subjects: this.subjects,
+      });
     } catch (error) {
       if (!(error instanceof NatsError) || error.api_error?.code !== 404) {
         throw error;
       }
 
-      await jetstreamManager.consumers.add(this.stream, {
+      await manager.consumers.add(this.stream, {
         name: this.consumer,
         durable_name: this.consumer,
         deliver_policy: DeliverPolicy.All,
@@ -60,4 +65,8 @@ export abstract class Consumer<T> {
       });
     }
   };
+
+  private sameSubjects(a: string[], b: string[]) {
+    return a.length === b.length && a.every((subject) => b.includes(subject));
+  }
 }

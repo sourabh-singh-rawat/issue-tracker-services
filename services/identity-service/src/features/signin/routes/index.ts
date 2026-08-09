@@ -1,6 +1,6 @@
-import type { HttpRoute } from "@pine/http";
+import type { HttpRoute } from "@pine/server";
 import { signin } from "@/features/signin/routes/signin";
 
 export * from "@/features/signin/routes/signin";
 
-export const signinRoutes = [signin] as unknown as HttpRoute[];
+export const signinRoutes: HttpRoute[] = [signin];

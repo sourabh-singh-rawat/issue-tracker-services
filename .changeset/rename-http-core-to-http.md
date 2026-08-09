@@ -1,5 +1,5 @@
 ---
-"@pine/http": minor
+"@pine/server": minor
 "@pine/common": patch
 "@pine/events": patch
 "@pine/security": patch

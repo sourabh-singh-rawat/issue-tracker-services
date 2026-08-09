@@ -1,4 +1,4 @@
-import { builder } from "@pine/graphql-core";
+import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { UnitObject } from "@/features/units/graphql/objects/UnitObject";
 import type { IUnitService } from "@/features/units/services";

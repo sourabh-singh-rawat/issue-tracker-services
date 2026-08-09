@@ -16,6 +16,31 @@ interface MainProps {
 const isPublicPath = (pathname: string) =>
   pathname === "/email-verification" || pathname === "/callback";
 
+function getIdentityFromMeResponse(data: unknown): {
+  id: string;
+  email: string;
+  emailVerified?: boolean;
+} | null {
+  if (typeof data !== "object" || data === null || !("identity" in data)) {
+    return null;
+  }
+  const identity = data.identity;
+  if (typeof identity !== "object" || identity === null) {
+    return null;
+  }
+  if (!("id" in identity) || !("email" in identity)) {
+    return null;
+  }
+  if (typeof identity.id !== "string" || typeof identity.email !== "string") {
+    return null;
+  }
+  const emailVerified =
+    "emailVerified" in identity && typeof identity.emailVerified === "boolean"
+      ? identity.emailVerified
+      : undefined;
+  return { id: identity.id, email: identity.email, emailVerified };
+}
+
 export function Main({ children }: MainProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
@@ -28,13 +53,14 @@ export function Main({ children }: MainProps) {
   });
 
   useEffect(() => {
-    if (userQuery.data?.identity) {
+    const identity = getIdentityFromMeResponse(userQuery.data);
+    if (identity) {
       setCurrentUser({
         current: {
-          userId: userQuery.data.identity.id,
-          email: userQuery.data.identity.email,
-          emailVerified: userQuery.data.identity.emailVerified,
-          displayName: userQuery.data.identity.email,
+          userId: identity.id,
+          email: identity.email,
+          emailVerified: identity.emailVerified,
+          displayName: identity.email,
         },
         isLoading: false,
       });
