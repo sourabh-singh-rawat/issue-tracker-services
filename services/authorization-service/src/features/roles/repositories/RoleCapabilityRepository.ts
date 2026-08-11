@@ -1,4 +1,4 @@
-import { asc, eq, inArray, notInArray } from "drizzle-orm";
+import { and, asc, eq, notInArray } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { Capabilities, type Database, type RoleCapability, RoleCapabilities } from "@/db";
