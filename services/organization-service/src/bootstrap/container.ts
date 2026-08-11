@@ -1,3 +1,7 @@
+import {
+  HttpAuthorizationClient,
+  type IAuthorizationClient,
+} from "@pine/authorization";
 import { NatsPublisher, type IPublisher } from "@pine/events";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
@@ -18,6 +22,9 @@ container.bind(TYPES.Database).toConstantValue(db);
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind<IPublisher>(TYPES.Publisher).toConstantValue(new NatsPublisher(broker));
+container
+  .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
+  .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
 
