@@ -1,3 +1,3 @@
 export * from "./auth";
-export * from "./organizations";
+export * from "./tenants";
 export * from "./roles";

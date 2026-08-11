@@ -116,7 +116,9 @@ export type CreateOrganizationInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
+  parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
   slug: Scalars['String']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 export type CreateProductInput = {
@@ -140,6 +142,13 @@ export type CreateRoleInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   key: Scalars['String']['input'];
   name: Scalars['String']['input'];
+};
+
+export type CreateTenantInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
 };
 
 export type CreateUnitInput = {
@@ -209,6 +218,7 @@ export type Mutation = {
   createProduct?: Maybe<ProductObject>;
   createProject?: Maybe<Scalars['String']['output']>;
   createRole?: Maybe<RoleObject>;
+  createTenant?: Maybe<TenantObject>;
   createUnit?: Maybe<UnitObject>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
   deleteBrand?: Maybe<Scalars['String']['output']>;
@@ -217,6 +227,7 @@ export type Mutation = {
   deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
   deleteOrganization?: Maybe<Scalars['String']['output']>;
+  deleteTenant?: Maybe<Scalars['String']['output']>;
   deleteUnit?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
   updateBrand?: Maybe<BrandObject>;
@@ -278,6 +289,11 @@ export type MutationCreateRoleArgs = {
 };
 
 
+export type MutationCreateTenantArgs = {
+  input: CreateTenantInput;
+};
+
+
 export type MutationCreateUnitArgs = {
   input: CreateUnitInput;
 };
@@ -314,6 +330,11 @@ export type MutationDeleteIssueArgs = {
 
 
 export type MutationDeleteOrganizationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteTenantArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -359,7 +380,9 @@ export type OrganizationObject = {
   id?: Maybe<Scalars['String']['output']>;
   isActive?: Maybe<Scalars['Boolean']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  parentOrganizationId?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -417,11 +440,12 @@ export type Query = {
   getProduct?: Maybe<ProductObject>;
   getRole?: Maybe<RoleObject>;
   getRoles?: Maybe<Array<RoleObject>>;
+  getTenants?: Maybe<Array<TenantObject>>;
   getUnit?: Maybe<UnitObject>;
   hello?: Maybe<HelloXyz>;
   hello2?: Maybe<Scalars['String']['output']>;
-  organizationServiceHealth?: Maybe<Scalars['String']['output']>;
   productServiceHealth?: Maybe<Scalars['String']['output']>;
+  tenantServiceHealth?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -470,6 +494,12 @@ export type QueryGetClientArgs = {
 };
 
 
+export type QueryGetOrganizationsArgs = {
+  parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
+  tenantId: Scalars['String']['input'];
+};
+
+
 export type QueryGetProductArgs = {
   id: Scalars['String']['input'];
 };
@@ -500,6 +530,17 @@ export type StatusObject = {
   __typename?: 'StatusObject';
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+};
+
+export type TenantObject = {
+  __typename?: 'TenantObject';
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type UnitObject = {
@@ -569,8 +610,8 @@ export type Join__Graph =
   | 'AUTHORIZATION_SERVICE'
   | 'IDENTITY_SERVICE'
   | 'ISSUES_SERVICE'
-  | 'ORGANIZATION_SERVICE'
-  | 'PRODUCT_SERVICE';
+  | 'PRODUCT_SERVICE'
+  | 'TENANT_SERVICE';
 
 export type Link__Purpose =
   /** `EXECUTION` features provide metadata necessary for operation execution. */

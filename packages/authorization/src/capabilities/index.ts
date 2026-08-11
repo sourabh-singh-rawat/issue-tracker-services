@@ -2,6 +2,7 @@ export type { CapabilityDefinition } from "./CapabilityDefinition";
 export { defineCapability } from "./defineCapability";
 export { BRANDS } from "./Brands";
 export { PRODUCTS } from "./Products";
+export { TENANTS } from "./Tenants";
 export { ORGANIZATIONS } from "./Organizations";
 export { ROLES } from "./Roles";
 export { CAPABILITIES } from "./Capabilities";

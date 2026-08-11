@@ -8,7 +8,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 
 const NAV_ITEMS = [
   { to: "/roles", label: "Roles" },
-  { to: "/organizations", label: "Organizations" },
+  { to: "/tenants", label: "Tenants" },
 ] as const;
 
 export const Navbar = () => {

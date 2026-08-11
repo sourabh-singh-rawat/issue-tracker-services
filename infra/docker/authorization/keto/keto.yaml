@@ -15,7 +15,7 @@ namespaces:
   - id: 0
     name: system
   - id: 1
-    name: organization
+    name: tenant
   - id: 2
     name: role
   - id: 3
@@ -24,3 +24,5 @@ namespaces:
     name: authorization
   - id: 5
     name: product
+  - id: 6
+    name: organization

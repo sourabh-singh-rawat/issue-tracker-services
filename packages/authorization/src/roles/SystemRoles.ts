@@ -1,4 +1,4 @@
-import { ORGANIZATIONS, ROLES } from "../capabilities";
+import { ORGANIZATIONS, TENANTS, ROLES } from "../capabilities";
 import { allCapabilityKeys, capabilityKeys, readCapabilityKeys, withoutActions } from "../utils";
 import type { RoleDefinition } from "./RoleDefinition";
 
@@ -7,22 +7,25 @@ export const SYSTEM_ROLES = {
     id: "01900000-0000-7000-8000-000000000001",
     key: "system.administrator",
     name: "System Administrator",
-    description: "Full platform access — all authorization and organization capabilities",
+    description: "Full platform access — all authorization, tenant, and organization capabilities",
     capabilityKeys: allCapabilityKeys(),
   },
-  ORGANIZATION_OWNER: {
+  TENANT_OWNER: {
     id: "01900000-0000-7000-8000-000000000002",
-    key: "organization.owner",
-    name: "Organization Owner",
-    description: "Full control of an organization, including delete and role management",
-    capabilityKeys: capabilityKeys(ORGANIZATIONS, ROLES),
+    key: "tenant.owner",
+    name: "Tenant Owner",
+    description: "Full control of a tenant and its organizations, including delete and role management",
+    capabilityKeys: capabilityKeys(TENANTS, ORGANIZATIONS, ROLES),
   },
-  ORGANIZATION_ADMINISTRATOR: {
+  TENANT_ADMINISTRATOR: {
     id: "01900000-0000-7000-8000-000000000003",
-    key: "organization.administrator",
-    name: "Organization Administrator",
-    description: "Manage an organization without capability to delete it",
-    capabilityKeys: withoutActions(ORGANIZATIONS, "delete"),
+    key: "tenant.administrator",
+    name: "Tenant Administrator",
+    description: "Manage a tenant and its organizations without capability to delete them",
+    capabilityKeys: [
+      ...withoutActions(TENANTS, "delete"),
+      ...withoutActions(ORGANIZATIONS, "delete"),
+    ],
   },
   READ_ONLY: {
     id: "01900000-0000-7000-8000-000000000004",
@@ -35,8 +38,8 @@ export const SYSTEM_ROLES = {
 
 export const ALL_SYSTEM_ROLES: readonly RoleDefinition[] = [
   SYSTEM_ROLES.SYSTEM_ADMINISTRATOR,
-  SYSTEM_ROLES.ORGANIZATION_OWNER,
-  SYSTEM_ROLES.ORGANIZATION_ADMINISTRATOR,
+  SYSTEM_ROLES.TENANT_OWNER,
+  SYSTEM_ROLES.TENANT_ADMINISTRATOR,
   SYSTEM_ROLES.READ_ONLY,
 ];
 

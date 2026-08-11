@@ -2,6 +2,7 @@ import type { CapabilityDefinition } from "./CapabilityDefinition";
 import { BRANDS } from "./Brands";
 import { CAPABILITIES } from "./Capabilities";
 import { CAPABILITY_GRANTS } from "./CapabilityGrants";
+import { TENANTS } from "./Tenants";
 import { ORGANIZATIONS } from "./Organizations";
 import { PRODUCTS } from "./Products";
 import { ROLES } from "./Roles";
@@ -19,6 +20,10 @@ export const ALL_CAPABILITIES = [
   CAPABILITY_GRANTS.CREATE,
   CAPABILITY_GRANTS.UPDATE,
   CAPABILITY_GRANTS.DELETE,
+  TENANTS.READ,
+  TENANTS.CREATE,
+  TENANTS.UPDATE,
+  TENANTS.DELETE,
   ORGANIZATIONS.READ,
   ORGANIZATIONS.CREATE,
   ORGANIZATIONS.UPDATE,

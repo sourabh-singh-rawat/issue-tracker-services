@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './../routes/__root'
 import { Route as AuthenticatedRouteImport } from './../routes/_authenticated'
 import { Route as CallbackRouteImport } from './../routes/callback'
 import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticated/index'
-import { Route as AuthenticatedOrganizationsRouteImport } from './../routes/_authenticated/organizations'
 import { Route as AuthenticatedRolesRouteImport } from './../routes/_authenticated/roles'
+import { Route as AuthenticatedTenantsRouteImport } from './../routes/_authenticated/tenants'
 import { Route as AuthenticatedRolesRoleIdRouteImport } from './../routes/_authenticated/roles_.$roleId'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -30,15 +30,14 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedOrganizationsRoute =
-  AuthenticatedOrganizationsRouteImport.update({
-    id: '/organizations',
-    path: '/organizations',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedRolesRoute = AuthenticatedRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTenantsRoute = AuthenticatedTenantsRouteImport.update({
+  id: '/tenants',
+  path: '/tenants',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedRolesRoleIdRoute =
@@ -51,14 +50,14 @@ const AuthenticatedRolesRoleIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/callback': typeof CallbackRoute
-  '/organizations': typeof AuthenticatedOrganizationsRoute
   '/roles': typeof AuthenticatedRolesRoute
+  '/tenants': typeof AuthenticatedTenantsRoute
   '/roles/$roleId': typeof AuthenticatedRolesRoleIdRoute
 }
 export interface FileRoutesByTo {
   '/callback': typeof CallbackRoute
-  '/organizations': typeof AuthenticatedOrganizationsRoute
   '/roles': typeof AuthenticatedRolesRoute
+  '/tenants': typeof AuthenticatedTenantsRoute
   '/': typeof AuthenticatedIndexRoute
   '/roles/$roleId': typeof AuthenticatedRolesRoleIdRoute
 }
@@ -66,22 +65,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/callback': typeof CallbackRoute
-  '/_authenticated/organizations': typeof AuthenticatedOrganizationsRoute
   '/_authenticated/roles': typeof AuthenticatedRolesRoute
+  '/_authenticated/tenants': typeof AuthenticatedTenantsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/roles_/$roleId': typeof AuthenticatedRolesRoleIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/callback' | '/organizations' | '/roles' | '/roles/$roleId'
+  fullPaths: '/' | '/callback' | '/roles' | '/tenants' | '/roles/$roleId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/callback' | '/organizations' | '/roles' | '/' | '/roles/$roleId'
+  to: '/callback' | '/roles' | '/tenants' | '/' | '/roles/$roleId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/callback'
-    | '/_authenticated/organizations'
     | '/_authenticated/roles'
+    | '/_authenticated/tenants'
     | '/_authenticated/'
     | '/_authenticated/roles_/$roleId'
   fileRoutesById: FileRoutesById
@@ -114,18 +113,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/organizations': {
-      id: '/_authenticated/organizations'
-      path: '/organizations'
-      fullPath: '/organizations'
-      preLoaderRoute: typeof AuthenticatedOrganizationsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/roles': {
       id: '/_authenticated/roles'
       path: '/roles'
       fullPath: '/roles'
       preLoaderRoute: typeof AuthenticatedRolesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tenants': {
+      id: '/_authenticated/tenants'
+      path: '/tenants'
+      fullPath: '/tenants'
+      preLoaderRoute: typeof AuthenticatedTenantsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/roles_/$roleId': {
@@ -139,15 +138,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRoute
   AuthenticatedRolesRoute: typeof AuthenticatedRolesRoute
+  AuthenticatedTenantsRoute: typeof AuthenticatedTenantsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedRolesRoleIdRoute: typeof AuthenticatedRolesRoleIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRoute,
   AuthenticatedRolesRoute: AuthenticatedRolesRoute,
+  AuthenticatedTenantsRoute: AuthenticatedTenantsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedRolesRoleIdRoute: AuthenticatedRolesRoleIdRoute,
 }

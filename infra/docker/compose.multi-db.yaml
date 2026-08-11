@@ -143,15 +143,15 @@ services:
           cpus: "0.10"
           memory: 128M
 
-  organization-postgres:
+  tenant-postgres:
     image: postgres:18.4
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=organization
-      - POSTGRES_PASSWORD=${POSTGRES_ORGANIZATION_PASSWORD}
-      - POSTGRES_DB=organization
+      - POSTGRES_USER=tenant
+      - POSTGRES_PASSWORD=${POSTGRES_TENANT_PASSWORD}
+      - POSTGRES_DB=tenant
     volumes:
-      - ../data/docker/pg-organization-data:/var/lib/postgresql
+      - ../data/docker/pg-tenant-data:/var/lib/postgresql
     command:
       - postgres
       - -c

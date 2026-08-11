@@ -9,7 +9,7 @@ describe("AuthorizationService", () => {
     const service = new AuthorizationService(authorizationGraphProvider as never);
 
     const relationship = {
-      object: { type: "organization", id: "org-1" },
+      object: { type: "tenant", id: "tenant-1" },
       relation: "member",
       subject: { type: "user", id: "user-1" },
     };

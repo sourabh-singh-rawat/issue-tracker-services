@@ -20,7 +20,7 @@ inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
 product-postgres:5432:*:product:${POSTGRES_PRODUCT_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
 notification-postgres:5432:*:notification:${POSTGRES_NOTIFICATION_PASSWORD}
-organization-postgres:5432:*:organization:${POSTGRES_ORGANIZATION_PASSWORD}
+tenant-postgres:5432:*:tenant:${POSTGRES_TENANT_PASSWORD}
 authz-postgres:5432:*:authz:${POSTGRES_AUTHZ_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
@@ -111,12 +111,12 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "7": {
-      "Name": "Organization Service DB",
+      "Name": "Tenant Service DB",
       "Group": "Pine",
-      "Host": "organization-postgres",
+      "Host": "tenant-postgres",
       "Port": 5432,
-      "MaintenanceDB": "organization",
-      "Username": "organization",
+      "MaintenanceDB": "tenant",
+      "Username": "tenant",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },

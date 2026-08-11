@@ -29,7 +29,7 @@ RUN pnpm exec turbo run build \
     --filter=@pine/notification-service \
     --filter=@pine/identity-service \
     --filter=@pine/inventory-service \
-    --filter=@pine/organization-service \
+    --filter=@pine/tenant-service \
     --filter=@pine/authorization-service \
     --filter=@pine/issues-service \
     --filter=@pine/common \
@@ -71,12 +71,12 @@ EXPOSE 4000
 CMD pnpm -F @pine/inventory-service start
 
 
-# Stage 3: Organization Service
-FROM base AS organization-service
+# Stage 3: Tenant Service
+FROM base AS tenant-service
 COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
-CMD pnpm -F @pine/organization-service start
+CMD pnpm -F @pine/tenant-service start
 
 
 # Stage 3: Authorization Service

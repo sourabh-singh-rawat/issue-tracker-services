@@ -2,6 +2,7 @@ export type { ResourceDefinition } from "./resources";
 export {
   BRAND,
   PRODUCT,
+  TENANT,
   ORGANIZATION,
   ROLE,
   CAPABILITY,
@@ -15,6 +16,7 @@ export {
   defineCapability,
   BRANDS,
   PRODUCTS,
+  TENANTS,
   ORGANIZATIONS,
   ROLES,
   CAPABILITIES,

@@ -718,7 +718,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^4.1.10
-        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
 
   services/authorization-service:
     dependencies:
@@ -1109,7 +1109,89 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
 
-  services/organization-service:
+  services/product-service:
+    dependencies:
+      '@pine/common':
+        specifier: workspace:^
+        version: link:../../packages/common
+      '@pine/errors':
+        specifier: workspace:^
+        version: link:../../packages/errors
+      '@pine/events':
+        specifier: workspace:^
+        version: link:../../packages/events
+      '@pine/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
+      '@pine/outbox':
+        specifier: workspace:^
+        version: link:../../packages/outbox
+      '@pine/security':
+        specifier: workspace:^
+        version: link:../../packages/security
+      '@pine/server':
+        specifier: workspace:^
+        version: link:../../packages/server
+      '@pothos/core':
+        specifier: ^4.13.1
+        version: 4.13.1(graphql@16.14.2)
+      '@vitest/coverage-v8':
+        specifier: ^4.1.10
+        version: 4.1.10(vitest@4.1.10)
+      drizzle-orm:
+        specifier: 0.45.2
+        version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.22.0)
+      graphql:
+        specifier: 16.14.2
+        version: 16.14.2
+      graphql-scalars:
+        specifier: ^1.25.0
+        version: 1.25.0(graphql@16.14.2)
+      http-status-codes:
+        specifier: ^2.3.0
+        version: 2.3.0
+      inversify:
+        specifier: 8.2.2
+        version: 8.2.2(reflect-metadata@0.2.2)
+      nats:
+        specifier: ^2.29.3
+        version: 2.29.3
+      pg:
+        specifier: ^8.22.0
+        version: 8.22.0
+      pino:
+        specifier: ^10.3.1
+        version: 10.3.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      typebox:
+        specifier: 1.3.6
+        version: 1.3.6
+    devDependencies:
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
+      drizzle-kit:
+        specifier: 0.31.8
+        version: 0.31.8(supports-color@7.2.0)
+      pino-pretty:
+        specifier: ^13.1.3
+        version: 13.1.3
+      tsx:
+        specifier: 4.23.1
+        version: 4.23.1
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+
+  services/tenant-service:
     dependencies:
       '@pine/authorization':
         specifier: workspace:^
@@ -1178,88 +1260,6 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.1.10
         version: 4.1.10(vitest@4.1.10)
-      drizzle-kit:
-        specifier: 0.31.8
-        version: 0.31.8(supports-color@7.2.0)
-      pino-pretty:
-        specifier: ^13.1.3
-        version: 13.1.3
-      tsx:
-        specifier: 4.23.1
-        version: 4.23.1
-      typescript:
-        specifier: 7.0.2
-        version: 7.0.2
-      vitest:
-        specifier: ^4.1.10
-        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
-
-  services/product-service:
-    dependencies:
-      '@pine/common':
-        specifier: workspace:^
-        version: link:../../packages/common
-      '@pine/errors':
-        specifier: workspace:^
-        version: link:../../packages/errors
-      '@pine/events':
-        specifier: workspace:^
-        version: link:../../packages/events
-      '@pine/observability':
-        specifier: workspace:*
-        version: link:../../packages/observability
-      '@pine/outbox':
-        specifier: workspace:^
-        version: link:../../packages/outbox
-      '@pine/security':
-        specifier: workspace:^
-        version: link:../../packages/security
-      '@pine/server':
-        specifier: workspace:^
-        version: link:../../packages/server
-      '@pothos/core':
-        specifier: ^4.13.1
-        version: 4.13.1(graphql@16.14.2)
-      '@vitest/coverage-v8':
-        specifier: ^4.1.10
-        version: 4.1.10(vitest@4.1.10)
-      drizzle-orm:
-        specifier: 0.45.2
-        version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(pg@8.22.0)
-      graphql:
-        specifier: 16.14.2
-        version: 16.14.2
-      graphql-scalars:
-        specifier: ^1.25.0
-        version: 1.25.0(graphql@16.14.2)
-      http-status-codes:
-        specifier: ^2.3.0
-        version: 2.3.0
-      inversify:
-        specifier: 8.2.2
-        version: 8.2.2(reflect-metadata@0.2.2)
-      nats:
-        specifier: ^2.29.3
-        version: 2.29.3
-      pg:
-        specifier: ^8.22.0
-        version: 8.22.0
-      pino:
-        specifier: ^10.3.1
-        version: 10.3.1
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
-      typebox:
-        specifier: 1.3.6
-        version: 1.3.6
-    devDependencies:
-      '@types/node':
-        specifier: ^26.1.1
-        version: 26.1.1
-      '@types/pg':
-        specifier: ^8.20.0
-        version: 8.20.0
       drizzle-kit:
         specifier: 0.31.8
         version: 0.31.8(supports-color@7.2.0)
@@ -12221,7 +12221,7 @@ snapshots:
       obug: 2.1.4
       std-env: 4.2.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
 
   '@vitest/expect@4.1.10':
     dependencies:

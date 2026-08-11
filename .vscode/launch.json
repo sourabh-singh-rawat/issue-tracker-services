@@ -20,7 +20,7 @@
         "product-service",
         "inventory-service",
         "issues-service",
-        "organization-service",
+        "tenant-service",
         "authorization-service",
         "identity-service"
       ]
@@ -45,7 +45,7 @@
         "product-service",
         "inventory-service",
         "issues-service",
-        "organization-service",
+        "tenant-service",
         "authorization-service",
         "identity-service"
       ]
@@ -70,7 +70,7 @@
         "product-service",
         "inventory-service",
         "issues-service",
-        "organization-service",
+        "tenant-service",
         "authorization-service",
         "identity-service"
       ]
@@ -186,12 +186,12 @@
       "presentation": { "group": "1-services", "order": 6 }
     },
     {
-      "name": "organization-service",
+      "name": "tenant-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["organization-service"],
+      "runtimeArgs": ["tenant-service"],
       "console": "integratedTerminal",
       "outFiles": [],
       "sourceMaps": true,

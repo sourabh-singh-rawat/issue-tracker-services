@@ -2,11 +2,29 @@ import { SYSTEM_ROLES, USER } from "@pine/authorization";
 import { container, TYPES } from "@/bootstrap";
 import type { IRoleAssignmentService, IRoleRepository } from "@/features/roles";
 
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const resolveIdentityId = (): string => {
-  const identityId = process.argv[2]?.trim();
+  const fromEnv = process.env.GRANT_SUPER_ADMIN_IDENTITY_ID?.trim();
+  const positional = process.argv
+    .slice(2)
+    .map((arg) => arg.trim())
+    .filter((arg) => arg.length > 0 && arg !== "--" && !arg.startsWith("-"));
+
+  const identityId = fromEnv || positional[0];
   if (!identityId) {
-    throw new Error("Usage: grant-super-admin <identityId>");
+    throw new Error(
+      "Usage: grant-super-admin <identityId>  (or set GRANT_SUPER_ADMIN_IDENTITY_ID)",
+    );
   }
+
+  if (!UUID_PATTERN.test(identityId)) {
+    throw new Error(
+      `grant-super-admin: identityId must be a local identity UUID, got: ${identityId}`,
+    );
+  }
+
   return identityId;
 };
 
