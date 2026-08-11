@@ -1,5 +1,17 @@
 # @pine/organization-service
 
+## 0.2.0
+
+### Minor Changes
+
+- 1ca92d7: feat(organization): require capability checks on organization service methods
+
+### Patch Changes
+
+- Updated dependencies [07bb3bc]
+- Updated dependencies [1933c6c]
+  - @pine/authorization@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes
