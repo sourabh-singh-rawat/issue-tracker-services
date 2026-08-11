@@ -1,8 +1,6 @@
-import { SYSTEM_ROLES } from "@pine/authorization";
+import { SYSTEM_ROLES, USER } from "@pine/authorization";
 import { container, TYPES } from "@/bootstrap";
 import type { IRoleAssignmentService, IRoleRepository } from "@/features/roles";
-
-const IDENTITY_TYPE_USER = "user";
 
 const resolveIdentityId = (): string => {
   const identityId = process.argv[2]?.trim();
@@ -27,13 +25,13 @@ const main = async () => {
   }
 
   const existing = await roleAssignmentService.getAssignment(
-    IDENTITY_TYPE_USER,
+    USER.name,
     identityId,
     role.id,
   );
 
   await roleAssignmentService.assignRole({
-    identityType: IDENTITY_TYPE_USER,
+    identityType: USER.name,
     identityId,
     roleId: role.id,
     reason: "grant-super-admin CLI",
@@ -41,11 +39,11 @@ const main = async () => {
 
   if (existing) {
     console.log(
-      `grant-super-admin: already assigned role=${role.key} roleId=${role.id} identity=${IDENTITY_TYPE_USER}:${identityId}`,
+      `grant-super-admin: already assigned role=${role.key} roleId=${role.id} identity=${USER.name}:${identityId}`,
     );
   } else {
     console.log(
-      `grant-super-admin: assigned role=${role.key} roleId=${role.id} identity=${IDENTITY_TYPE_USER}:${identityId} (keto sync via outbox)`,
+      `grant-super-admin: assigned role=${role.key} roleId=${role.id} identity=${USER.name}:${identityId} (keto sync via outbox)`,
     );
   }
 };

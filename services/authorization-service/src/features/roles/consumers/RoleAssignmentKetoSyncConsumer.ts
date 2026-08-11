@@ -1,3 +1,4 @@
+import { ROLE, ROLE_ASSIGNEE } from "@pine/authorization";
 import {
   type CloudEvent,
   type IBroker,
@@ -11,9 +12,6 @@ import { inject, injectable } from "inversify";
 import type { JsMsg } from "nats";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
-
-const ROLE_NAMESPACE = "role";
-const ROLE_ASSIGNEE_RELATION = "assignee";
 
 @injectable()
 export class RoleAssignmentKetoSyncConsumer extends Consumer<
@@ -37,8 +35,8 @@ export class RoleAssignmentKetoSyncConsumer extends Consumer<
     const { identityType, identityId, roleId } = event.data!;
 
     const relationship = {
-      object: { type: ROLE_NAMESPACE, id: roleId },
-      relation: ROLE_ASSIGNEE_RELATION,
+      object: { type: ROLE.name, id: roleId },
+      relation: ROLE_ASSIGNEE,
       subject: { type: identityType, id: identityId },
     };
 

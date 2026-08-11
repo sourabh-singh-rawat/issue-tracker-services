@@ -5,3 +5,5 @@ apis:
     root: ../../services/identity-service/dist/openapi.json
   attachment@v1:
     root: ../../services/attachment-service/dist/openapi.json
+  authorization-service@v1:
+    root: ../../services/authorization-service/dist/openapi.json

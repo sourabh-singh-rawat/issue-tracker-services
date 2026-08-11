@@ -1,3 +1,4 @@
+import { CAPABILITY, CAPABILITY_HAS, ROLE, ROLE_ASSIGNEE } from "@pine/authorization";
 import {
   type CloudEvent,
   type IBroker,
@@ -11,9 +12,6 @@ import { inject, injectable } from "inversify";
 import type { JsMsg } from "nats";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
-
-const ROLE_NAMESPACE = "role";
-const CAPABILITY_MEMBER_RELATION = "member";
 
 @injectable()
 export class RoleCapabilityKetoSyncConsumer extends Consumer<
@@ -37,22 +35,25 @@ export class RoleCapabilityKetoSyncConsumer extends Consumer<
     const { roleId, capabilityKeys } = event.data!;
 
     for (const capabilityKey of capabilityKeys) {
-      const [namespace, object, relation] = capabilityKey.split(":");
-      if (!namespace || !object || !relation) {
+      const segments = capabilityKey.split(":");
+      if (segments.length !== 3 || segments.some((segment) => segment.length === 0)) {
         continue;
       }
 
       const relationship = {
-        object: { type: namespace, id: `${object}:${relation}` },
-        relation: CAPABILITY_MEMBER_RELATION,
-        subject: { type: ROLE_NAMESPACE, id: roleId },
+        object: { type: CAPABILITY.name, id: capabilityKey },
+        relation: CAPABILITY_HAS,
+        subjectSet: {
+          type: ROLE.name,
+          id: roleId,
+          relation: ROLE_ASSIGNEE,
+        },
       };
-
 
       const existing = await this.authorizationGraphProvider.listRelationships({
         object: relationship.object,
         relation: relationship.relation,
-        subject: relationship.subject,
+        subjectSet: relationship.subjectSet,
       });
 
       if (existing.length === 0) {

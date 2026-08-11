@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
+import type { IIdentityService } from "@/features/identities/services/IIdentityService";
 import type { ISessionService } from "@/features/session/services/ISessionService";
 import type { ISessionProvider, Identity } from "@/integrations/identity";
 import { InvalidCredentialError } from "@/integrations/identity";
@@ -12,10 +13,19 @@ export class SessionService implements ISessionService {
     private readonly sessionProvider: ISessionProvider,
     @inject(TYPES.OAuthTokenProvider)
     private readonly oauthTokenProvider: IOAuthTokenProvider,
+    @inject(TYPES.IdentityService)
+    private readonly identityService: IIdentityService,
   ) {}
 
   async getSession(sessionToken: string): Promise<Identity> {
-    return this.sessionProvider.getSession(sessionToken);
+    const idpIdentity = await this.sessionProvider.getSession(sessionToken);
+    const identity = await this.identityService.getIdentityByIdpId(idpIdentity.id);
+
+    return {
+      id: identity.id,
+      email: idpIdentity.email,
+      emailVerified: idpIdentity.emailVerified,
+    };
   }
 
   async getSessionFromAccessToken(accessToken: string): Promise<Identity> {
@@ -24,6 +34,8 @@ export class SessionService implements ISessionService {
     if (!introspection.active || !introspection.subject) {
       throw new InvalidCredentialError("Invalid or inactive access token");
     }
+
+    const identity = await this.identityService.getIdentityById(introspection.subject);
 
     const extra = introspection.extra ?? {};
     const email =
@@ -36,7 +48,7 @@ export class SessionService implements ISessionService {
           : undefined;
 
     return {
-      id: introspection.subject,
+      id: identity.id,
       email: email ?? "",
       emailVerified,
     };

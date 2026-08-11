@@ -31,7 +31,13 @@ const proxyRoutes: ProxyRoute[] = [
     upstream: env.PRODUCT_SERVICE_URL,
     proxyPayloads: true,
   },
+  {
+    prefix: "/authorization",
+    upstream: env.AUTHORIZATION_SERVICE_URL,
+    proxyPayloads: true,
+  },
 ];
+
 
 const CORS_RESPONSE_HEADERS = [
   "access-control-allow-origin",
