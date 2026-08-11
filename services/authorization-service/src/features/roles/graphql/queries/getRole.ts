@@ -9,9 +9,9 @@ builder.queryFields((t) => ({
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: async (_root, { id }) => {
+    resolve: async (_root, { id }, ctx) => {
       const service = container.get<IRoleService>(TYPES.RoleService);
-      return service.getRoleById(id);
+      return service.getRoleById(id, ctx.user!.id);
     },
   }),
 }));

@@ -1,3 +1,4 @@
+import { ROLES, requireCapability, type IAuthorizationClient } from "@pine/authorization";
 import { createCloudEvent, RoleCapabilityUpdatedEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
@@ -30,27 +31,13 @@ export class RoleService implements IRoleService {
     private readonly capabilityRepository: ICapabilityRepository,
     @inject(TYPES.OutboxService)
     private readonly outboxService: IOutboxService,
+    @inject(TYPES.AuthorizationClient)
+    private readonly authorizationClient: IAuthorizationClient,
   ) {}
 
+  async createRole(input: CreateRoleInput, userId: string): Promise<Role> {
+    await requireCapability(this.authorizationClient, userId, ROLES.CREATE.key);
 
-  private async resolveCapabilityIdsByKeys(capabilityKeys: string[]): Promise<string[]> {
-    if (capabilityKeys.length === 0) {
-      return [];
-    }
-
-    const capabilities = await this.capabilityRepository.findByKeys(capabilityKeys);
-    const foundKeys = new Set(capabilities.map((capability) => capability.key));
-    const missingKeys = capabilityKeys.filter((key) => !foundKeys.has(key));
-
-    if (missingKeys.length > 0) {
-      throw new CapabilityNotFoundError(`Capability(ies) not found: ${missingKeys.join(", ")}`);
-    }
-
-    const byKey = new Map(capabilities.map((capability) => [capability.key, capability.id]));
-    return capabilityKeys.map((key) => byKey.get(key)!);
-  }
-
-  async createRole(input: CreateRoleInput): Promise<Role> {
     const keyExists = await this.roleRepository.existsByKey(input.key);
     if (keyExists) {
       throw new RoleKeyConflictError(`Role key already exists: ${input.key}`);
@@ -112,7 +99,9 @@ export class RoleService implements IRoleService {
     });
   }
 
-  async getRoleById(id: string): Promise<Role> {
+  async getRoleById(id: string, userId: string): Promise<Role> {
+    await requireCapability(this.authorizationClient, userId, ROLES.READ.key);
+
     const role = await this.roleRepository.findById(id);
     if (!role) {
       throw new RoleNotFoundError(`Role not found: ${id}`);
@@ -121,11 +110,15 @@ export class RoleService implements IRoleService {
     return role;
   }
 
-  async getRoles(): Promise<Role[]> {
+  async getRoles(userId: string): Promise<Role[]> {
+    await requireCapability(this.authorizationClient, userId, ROLES.READ.key);
+
     return this.roleRepository.findAll();
   }
 
-  async updateRole(id: string, input: UpdateRoleInput): Promise<Role> {
+  async updateRole(id: string, input: UpdateRoleInput, userId: string): Promise<Role> {
+    await requireCapability(this.authorizationClient, userId, ROLES.UPDATE.key);
+
     const existing = await this.roleRepository.findById(id);
     if (!existing) {
       throw new RoleNotFoundError(`Role not found: ${id}`);
@@ -195,6 +188,29 @@ export class RoleService implements IRoleService {
       }
 
       return role;
+    });
+  }
+
+  private async resolveCapabilityIdsByKeys(capabilityKeys: string[]): Promise<string[]> {
+    if (capabilityKeys.length === 0) {
+      return [];
+    }
+
+    const capabilities = await this.capabilityRepository.findByKeys(capabilityKeys);
+    const foundKeys = new Set(capabilities.map((capability) => capability.key));
+    const missingKeys = capabilityKeys.filter((key) => !foundKeys.has(key));
+
+    if (missingKeys.length > 0) {
+      throw new CapabilityNotFoundError(`Capability(ies) not found: ${missingKeys.join(", ")}`);
+    }
+
+    const byKey = new Map(capabilities.map((capability) => [capability.key, capability.id]));
+    return capabilityKeys.map((key) => {
+      const capabilityId = byKey.get(key);
+      if (capabilityId === undefined) {
+        throw new CapabilityNotFoundError(`Capability(ies) not found: ${key}`);
+      }
+      return capabilityId;
     });
   }
 }

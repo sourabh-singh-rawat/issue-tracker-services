@@ -6,9 +6,9 @@ import type { IRoleService } from "@/features/roles/services";
 builder.queryFields((t) => ({
   getRoles: t.field({
     type: [RoleObject],
-    resolve: async () => {
+    resolve: async (_root, _args, ctx) => {
       const service = container.get<IRoleService>(TYPES.RoleService);
-      return service.getRoles();
+      return service.getRoles(ctx.user!.id);
     },
   }),
 }));

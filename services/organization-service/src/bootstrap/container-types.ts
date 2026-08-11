@@ -4,6 +4,7 @@ export const TYPES = {
   Broker: Symbol.for("Broker"),
   Publisher: Symbol.for("Publisher"),
   HttpServer: Symbol.for("IHttpServer"),
+  AuthorizationClient: Symbol.for("IAuthorizationClient"),
   OrganizationRepository: Symbol.for("IOrganizationRepository"),
   OrganizationService: Symbol.for("IOrganizationService"),
 } as const;

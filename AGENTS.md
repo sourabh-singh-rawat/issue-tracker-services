@@ -71,6 +71,7 @@ EOF
 - Use current packages only: `@pine/server`, `@pine/events` — not `server-core` / `event-bus`.
 - Load the matching skill under `tools/ai/` for orientation, features, events, GraphQL, web, release, docker, k8s, or observability.
 - **No comments in code.** Do not add `//`, `/* */`, or JSDoc unless the user explicitly asks. Prefer clear names and structure over explanatory comments.
+- **Arrow functions only.** Use `const name = (…) => { … }` / `const name = async (…) => { … }` — never `function` declarations. On classes, use arrow property methods (`method = async (…) => { … }`); constructors stay as `constructor`. Interfaces/types express callables as properties (`name: (arg: T) => R`), not method syntax.
 - **Public members first.** In classes and modules, put the constructor and public methods/functions above private/protected helpers. Keep the public surface at the top of the type or file.
 - **Never use `as` or `any`.** Ban TypeScript type assertions (`value as Foo`, `as const`, `as unknown as T`, etc.) and the `any` type (`: any`, `as any`, `<any>`, `Array<any>`, etc.). Fix types properly with generics, narrowing, unions, `unknown` + type guards, `satisfies`, or correct library typings. Do not silence type errors with casts.
 

@@ -10,15 +10,18 @@ builder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: CreateRoleInput, required: true }),
     },
-    resolve: async (_root, { input }) => {
+    resolve: async (_root, { input }, ctx) => {
       const service = container.get<IRoleService>(TYPES.RoleService);
 
-      return service.createRole({
-        key: input.key,
-        name: input.name,
-        description: input.description ?? undefined,
-        capabilityKeys: input.capabilityKeys ?? undefined,
-      });
+      return service.createRole(
+        {
+          key: input.key,
+          name: input.name,
+          description: input.description ?? undefined,
+          capabilityKeys: input.capabilityKeys ?? undefined,
+        },
+        ctx.user!.id,
+      );
     },
   }),
 }));

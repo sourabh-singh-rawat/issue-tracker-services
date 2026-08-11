@@ -14,7 +14,6 @@ export interface IRoleCapabilityRepository {
   ): Promise<RoleCapability[]>;
   findByRoleId(roleId: string): Promise<RoleCapability[]>;
   findCapabilityKeysByRoleId(roleId: string): Promise<string[]>;
-  existsByRoleKeysAndCapabilityKeys(roleKeys: string[], capabilityKeys: string[]): Promise<boolean>;
   syncForRole(
     roleId: string,
     capabilityIds: string[],

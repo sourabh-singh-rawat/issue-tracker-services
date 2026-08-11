@@ -1,3 +1,7 @@
+import {
+  HttpAuthorizationClient,
+  type IAuthorizationClient,
+} from "@pine/authorization";
 import { NatsPublisher, type IPublisher } from "@pine/events";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
@@ -82,6 +86,9 @@ container.bind<IRoleService>(TYPES.RoleService).to(RoleService);
 container.bind<ICapabilityRepository>(TYPES.CapabilityRepository).to(CapabilityRepository);
 container.bind<ICapabilityService>(TYPES.CapabilityService).to(CapabilityService);
 container.bind<IAuthorizationService>(TYPES.AuthorizationService).to(AuthorizationService);
+container
+  .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
+  .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({
@@ -102,9 +109,11 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       },
       servers: [{ url: env.AUTHORIZATION_SERVICE_URL }],
       tags: [
+        { name: "authorization", description: "Authorization check end-points" },
         { name: "roles", description: "Role end-points" },
         { name: "capabilities", description: "Capability end-points" },
       ],
+
     },
     graphql: createGraphQLServer({
       schema,
