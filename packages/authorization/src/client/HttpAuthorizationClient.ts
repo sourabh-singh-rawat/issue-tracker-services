@@ -12,7 +12,7 @@ export class HttpAuthorizationClient implements IAuthorizationClient {
     this.baseUrl = options.baseUrl.replace(/\/$/, "");
   }
 
-  async checkRelationship(input: CheckRelationshipInput): Promise<boolean> {
+  checkRelationship = async (input: CheckRelationshipInput): Promise<boolean> => {
     const url = `${this.baseUrl}/authorization/checkRelationship`;
 
     const response = await fetch(url, {
@@ -34,7 +34,7 @@ export class HttpAuthorizationClient implements IAuthorizationClient {
     }
 
     return body.allowed;
-  }
+  };
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>

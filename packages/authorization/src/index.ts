@@ -37,9 +37,11 @@ export {
 } from "./utils";
 
 export type { IAuthorizationClient } from "./client";
-export { HttpAuthorizationClient } from "./client";
+export { HttpAuthorizationClient, requireCapability } from "./client";
 export type {
   CheckRelationshipInput,
   CheckRelationshipResponse,
   HttpAuthorizationClientOptions,
 } from "./client";
+
+export { InsufficientPermissionError } from "./errors";
