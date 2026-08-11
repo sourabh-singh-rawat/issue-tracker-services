@@ -1,5 +1,18 @@
 # @pine/authorization-service
 
+## 0.2.0
+
+### Minor Changes
+
+- 07bb3bc: feat(authz): keto subject-set grants, role capability checks, and local session identity ids
+
+### Patch Changes
+
+- 1933c6c: feat(authz): share requireCapability and InsufficientPermissionError
+- Updated dependencies [07bb3bc]
+- Updated dependencies [1933c6c]
+  - @pine/authorization@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @pine/identity-service
 
+## 0.4.1
+
+### Patch Changes
+
+- 07bb3bc: feat(authz): keto subject-set grants, role capability checks, and local session identity ids
+
 ## 0.4.0
 
 ### Minor Changes

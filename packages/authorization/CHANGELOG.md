@@ -1,5 +1,12 @@
 # @pine/authorization
 
+## 0.2.0
+
+### Minor Changes
+
+- 07bb3bc: feat(authz): keto subject-set grants, role capability checks, and local session identity ids
+- 1933c6c: feat(authz): share requireCapability and InsufficientPermissionError
+
 ## 0.1.0
 
 ### Minor Changes

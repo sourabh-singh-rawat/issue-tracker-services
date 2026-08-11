@@ -1,5 +1,11 @@
 # @pine/api-gateway
 
+## 0.3.2
+
+### Patch Changes
+
+- 07bb3bc: feat(authz): keto subject-set grants, role capability checks, and local session identity ids
+
 ## 0.3.1
 
 ### Patch Changes
