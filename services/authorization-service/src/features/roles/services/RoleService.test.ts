@@ -1,7 +1,7 @@
+import { InsufficientPermissionError } from "@pine/authorization";
 import { describe, expect, it, vi } from "vitest";
 import { CapabilityNotFoundError } from "@/features/capabilities/errors";
 import {
-  InsufficientPermissionError,
   RoleKeyConflictError,
   RoleNameConflictError,
   RoleNotFoundError,

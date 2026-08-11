@@ -1,10 +1,4 @@
-import {
-  CAPABILITY,
-  CAPABILITY_HAS,
-  ROLES,
-  USER,
-  type IAuthorizationClient,
-} from "@pine/authorization";
+import { ROLES, requireCapability, type IAuthorizationClient } from "@pine/authorization";
 import { createCloudEvent, RoleCapabilityUpdatedEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
@@ -13,7 +7,6 @@ import type { Database, Role } from "@/db";
 import { CapabilityNotFoundError } from "@/features/capabilities/errors";
 import type { ICapabilityRepository } from "@/features/capabilities/repositories";
 import {
-  InsufficientPermissionError,
   RoleKeyConflictError,
   RoleNameConflictError,
   RoleNotFoundError,
@@ -43,7 +36,7 @@ export class RoleService implements IRoleService {
   ) {}
 
   async createRole(input: CreateRoleInput, userId: string): Promise<Role> {
-    await this.requireCapability(userId, ROLES.CREATE.key);
+    await requireCapability(this.authorizationClient, userId, ROLES.CREATE.key);
 
     const keyExists = await this.roleRepository.existsByKey(input.key);
     if (keyExists) {
@@ -107,7 +100,7 @@ export class RoleService implements IRoleService {
   }
 
   async getRoleById(id: string, userId: string): Promise<Role> {
-    await this.requireCapability(userId, ROLES.READ.key);
+    await requireCapability(this.authorizationClient, userId, ROLES.READ.key);
 
     const role = await this.roleRepository.findById(id);
     if (!role) {
@@ -118,13 +111,13 @@ export class RoleService implements IRoleService {
   }
 
   async getRoles(userId: string): Promise<Role[]> {
-    await this.requireCapability(userId, ROLES.READ.key);
+    await requireCapability(this.authorizationClient, userId, ROLES.READ.key);
 
     return this.roleRepository.findAll();
   }
 
   async updateRole(id: string, input: UpdateRoleInput, userId: string): Promise<Role> {
-    await this.requireCapability(userId, ROLES.UPDATE.key);
+    await requireCapability(this.authorizationClient, userId, ROLES.UPDATE.key);
 
     const existing = await this.roleRepository.findById(id);
     if (!existing) {
@@ -196,18 +189,6 @@ export class RoleService implements IRoleService {
 
       return role;
     });
-  }
-
-  private async requireCapability(userId: string, capabilityKey: string): Promise<void> {
-    const allowed = await this.authorizationClient.checkRelationship({
-      object: { type: CAPABILITY.name, id: capabilityKey },
-      relation: CAPABILITY_HAS,
-      subject: { type: USER.name, id: userId },
-    });
-
-    if (!allowed) {
-      throw new InsufficientPermissionError(`Missing capability: ${capabilityKey}`);
-    }
   }
 
   private async resolveCapabilityIdsByKeys(capabilityKeys: string[]): Promise<string[]> {

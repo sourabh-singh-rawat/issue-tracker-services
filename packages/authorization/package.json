@@ -24,6 +24,9 @@
     "clean": "node ../../tools/scripts/rm-rf.mjs dist",
     "build": "pnpm clean && tsc"
   },
+  "dependencies": {
+    "@pine/errors": "workspace:^"
+  },
   "devDependencies": {
     "@types/node": "^26.1.1",
     "typescript": "7.0.2"
