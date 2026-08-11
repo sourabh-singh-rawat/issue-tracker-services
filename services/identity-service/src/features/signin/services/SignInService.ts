@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
+import type { IIdentityService } from "@/features/identities/services/IIdentityService";
 import type {
   ISignInService,
   SignInWithEmailAndPasswordInput,
@@ -15,6 +16,8 @@ export class SignInService implements ISignInService {
     private readonly sessionProvider: ISessionProvider,
     @inject(TYPES.OAuthFlowProvider)
     private readonly oauthFlowProvider: IOAuthFlowProvider,
+    @inject(TYPES.IdentityService)
+    private readonly identityService: IIdentityService,
   ) {}
 
   async signInWithEmailAndPassword(
@@ -25,18 +28,28 @@ export class SignInService implements ISignInService {
       password: input.password,
     });
 
+    const identity = await this.identityService.getIdentityByIdpId(result.identity.id);
+    const resolved = {
+      ...result,
+      identity: {
+        id: identity.id,
+        email: result.identity.email,
+        emailVerified: result.identity.emailVerified,
+      },
+    };
+
     if (!input.loginChallenge) {
-      return result;
+      return resolved;
     }
 
     const { redirectTo } = await this.oauthFlowProvider.acceptLoginRequest({
       challenge: input.loginChallenge,
-      subject: result.identity.id,
+      subject: identity.id,
       identityProviderSessionId: result.sessionId,
     });
 
     return {
-      ...result,
+      ...resolved,
       redirectTo,
     };
   }

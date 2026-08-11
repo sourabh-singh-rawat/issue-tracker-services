@@ -24,6 +24,22 @@ export {
 
 export { type RoleDefinition, ALL_SYSTEM_ROLES, SYSTEM_ROLES, type SystemRoleKey } from "./roles";
 
-export type { GraphResource, GraphRelationship } from "./types";
+export type { GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
 
-export { capabilityKeys, withoutActions, allCapabilityKeys, readCapabilityKeys } from "./utils";
+export { USER } from "./identities";
+export { CAPABILITY_HAS, ROLE_ASSIGNEE } from "./relations";
+
+export {
+  capabilityKeys,
+  withoutActions,
+  allCapabilityKeys,
+  readCapabilityKeys,
+} from "./utils";
+
+export type { IAuthorizationClient } from "./client";
+export { HttpAuthorizationClient } from "./client";
+export type {
+  CheckRelationshipInput,
+  CheckRelationshipResponse,
+  HttpAuthorizationClientOptions,
+} from "./client";

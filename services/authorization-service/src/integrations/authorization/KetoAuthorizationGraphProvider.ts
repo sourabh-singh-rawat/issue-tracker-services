@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import type { GraphRelationship, GraphResource } from "@pine/authorization";
+import type { GraphRelationship, GraphResource, GraphSubjectSet } from "@pine/authorization";
 import { TYPES } from "@/bootstrap/container-types";
 import type {
   IAuthorizationGraphProvider,
@@ -17,29 +17,40 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
   ) {}
 
   async createRelationship(relationship: GraphRelationship): Promise<void> {
+    const subjectFields = this.toKetoSubjectFields(relationship);
+
     await this.keto.relationshipWriteApi.createRelationship({
       createRelationshipBody: {
         namespace: relationship.object.type,
         object: relationship.object.id,
         relation: relationship.relation,
-        subject_id: this.toSubjectId(relationship.subject),
+        ...subjectFields,
       },
     });
   }
 
   async deleteRelationship(relationship: GraphRelationship): Promise<void> {
+    const subjectFields = this.toKetoSubjectQuery(relationship);
+
     await this.keto.relationshipWriteApi.deleteRelationships({
       namespace: relationship.object.type,
       object: relationship.object.id,
       relation: relationship.relation,
-      subjectId: this.toSubjectId(relationship.subject),
+      ...subjectFields,
     });
   }
 
   async listRelationships(filter?: ListRelationshipsFilter): Promise<GraphRelationship[]> {
     const namespaces = filter?.object ? [filter.object.type] : [...KETO_NAMESPACES];
 
+    if (filter?.subject && filter.subjectSet) {
+      throw new Error("ListRelationshipsFilter must not set both subject and subjectSet");
+    }
+
     const subjectId = filter?.subject ? this.toSubjectId(filter.subject) : undefined;
+    const subjectSetNamespace = filter?.subjectSet?.type;
+    const subjectSetObject = filter?.subjectSet?.id;
+    const subjectSetRelation = filter?.subjectSet?.relation;
     const results: GraphRelationship[] = [];
 
     for (const namespace of namespaces) {
@@ -48,6 +59,9 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
         object: filter?.object?.id,
         relation: filter?.relation,
         subjectId,
+        subjectSetNamespace,
+        subjectSetObject,
+        subjectSetRelation,
       });
 
       for (const row of data.relation_tuples ?? []) {
@@ -76,6 +90,62 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     return `${resource.type}:${resource.id}`;
   }
 
+  private toKetoSubjectFields(relationship: GraphRelationship): {
+    subject_id?: string;
+    subject_set?: { namespace: string; object: string; relation: string };
+  } {
+    const hasSubject = relationship.subject !== undefined;
+    const hasSubjectSet = relationship.subjectSet !== undefined;
+
+    if (hasSubject === hasSubjectSet) {
+      throw new Error("GraphRelationship requires exactly one of subject or subjectSet");
+    }
+
+    if (relationship.subjectSet !== undefined) {
+      return {
+        subject_set: {
+          namespace: relationship.subjectSet.type,
+          object: relationship.subjectSet.id,
+          relation: relationship.subjectSet.relation,
+        },
+      };
+    }
+
+    if (relationship.subject === undefined) {
+      throw new Error("GraphRelationship requires exactly one of subject or subjectSet");
+    }
+
+    return { subject_id: this.toSubjectId(relationship.subject) };
+  }
+
+  private toKetoSubjectQuery(relationship: GraphRelationship): {
+    subjectId?: string;
+    subjectSetNamespace?: string;
+    subjectSetObject?: string;
+    subjectSetRelation?: string;
+  } {
+    const hasSubject = relationship.subject !== undefined;
+    const hasSubjectSet = relationship.subjectSet !== undefined;
+
+    if (hasSubject === hasSubjectSet) {
+      throw new Error("GraphRelationship requires exactly one of subject or subjectSet");
+    }
+
+    if (relationship.subjectSet !== undefined) {
+      return {
+        subjectSetNamespace: relationship.subjectSet.type,
+        subjectSetObject: relationship.subjectSet.id,
+        subjectSetRelation: relationship.subjectSet.relation,
+      };
+    }
+
+    if (relationship.subject === undefined) {
+      throw new Error("GraphRelationship requires exactly one of subject or subjectSet");
+    }
+
+    return { subjectId: this.toSubjectId(relationship.subject) };
+  }
+
   private parseSubjectId(subjectId: string): GraphResource {
     const separator = subjectId.indexOf(":");
     if (separator <= 0 || separator === subjectId.length - 1) {
@@ -92,14 +162,63 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     object?: string;
     relation?: string;
     subject_id?: string;
+    subject_set?: {
+      namespace?: string;
+      object?: string;
+      relation?: string;
+    };
   }): GraphRelationship {
-    if (!row.namespace || !row.object || !row.relation || !row.subject_id) {
+    if (!row.namespace || !row.object || !row.relation) {
       throw new Error("Keto relationship response was incomplete");
     }
+
+    const hasSubjectId = row.subject_id !== undefined && row.subject_id.length > 0;
+    const subjectSet = this.mapSubjectSet(row.subject_set);
+
+    if (hasSubjectId === (subjectSet !== undefined)) {
+      throw new Error("Keto relationship response must have exactly one of subject_id or subject_set");
+    }
+
+    if (subjectSet !== undefined) {
+      return {
+        object: { type: row.namespace, id: row.object },
+        relation: row.relation,
+        subjectSet,
+      };
+    }
+
+    if (row.subject_id === undefined) {
+      throw new Error("Keto relationship response was incomplete");
+    }
+
     return {
       object: { type: row.namespace, id: row.object },
       relation: row.relation,
       subject: this.parseSubjectId(row.subject_id),
+    };
+  }
+
+  private mapSubjectSet(
+    subjectSet:
+      | {
+          namespace?: string;
+          object?: string;
+          relation?: string;
+        }
+      | undefined,
+  ): GraphSubjectSet | undefined {
+    if (subjectSet === undefined) {
+      return undefined;
+    }
+
+    if (!subjectSet.namespace || !subjectSet.object || !subjectSet.relation) {
+      throw new Error("Keto subject_set response was incomplete");
+    }
+
+    return {
+      type: subjectSet.namespace,
+      id: subjectSet.object,
+      relation: subjectSet.relation,
     };
   }
 }

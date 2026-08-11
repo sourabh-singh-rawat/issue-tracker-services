@@ -1,7 +1,7 @@
-import { and, asc, eq, inArray, notInArray } from "drizzle-orm";
+import { and, asc, eq, notInArray } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { Capabilities, type Database, type RoleCapability, RoleCapabilities, Roles } from "@/db";
+import { Capabilities, type Database, type RoleCapability, RoleCapabilities } from "@/db";
 import type {
   CreateRoleCapabilityEntity,
   IRoleCapabilityRepository,
@@ -55,25 +55,6 @@ export class RoleCapabilityRepository implements IRoleCapabilityRepository {
       .orderBy(asc(Capabilities.key));
 
     return rows.map((row) => row.key);
-  }
-
-  async existsByRoleKeysAndCapabilityKeys(
-    roleKeys: string[],
-    capabilityKeys: string[],
-  ): Promise<boolean> {
-    if (roleKeys.length === 0 || capabilityKeys.length === 0) {
-      return false;
-    }
-
-    const [row] = await this.db
-      .select({ roleId: RoleCapabilities.roleId })
-      .from(RoleCapabilities)
-      .innerJoin(Roles, eq(RoleCapabilities.roleId, Roles.id))
-      .innerJoin(Capabilities, eq(RoleCapabilities.capabilityId, Capabilities.id))
-      .where(and(inArray(Roles.key, roleKeys), inArray(Capabilities.key, capabilityKeys)))
-      .limit(1);
-
-    return row !== undefined;
   }
 
   async syncForRole(

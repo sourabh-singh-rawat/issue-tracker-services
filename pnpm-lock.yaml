@@ -370,6 +370,9 @@ importers:
 
   packages/authorization:
     devDependencies:
+      '@types/node':
+        specifier: ^26.1.1
+        version: 26.1.1
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -739,6 +742,9 @@ importers:
       '@pine/outbox':
         specifier: workspace:^
         version: link:../../packages/outbox
+      '@pine/security':
+        specifier: workspace:^
+        version: link:../../packages/security
       '@pine/server':
         specifier: workspace:^
         version: link:../../packages/server

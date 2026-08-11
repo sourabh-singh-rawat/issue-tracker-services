@@ -14,8 +14,8 @@ export type UpdateRoleInput = {
 };
 
 export interface IRoleService {
-  createRole(input: CreateRoleInput): Promise<Role>;
-  getRoleById(id: string): Promise<Role>;
-  getRoles(): Promise<Role[]>;
-  updateRole(id: string, input: UpdateRoleInput): Promise<Role>;
+  createRole(input: CreateRoleInput, userId: string): Promise<Role>;
+  getRoleById(id: string, userId: string): Promise<Role>;
+  getRoles(userId: string): Promise<Role[]>;
+  updateRole(id: string, input: UpdateRoleInput, userId: string): Promise<Role>;
 }

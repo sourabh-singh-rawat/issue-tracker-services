@@ -1,16 +1,17 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { IMeService } from "@/features/me/services/IMeService";
-import type { ISessionProvider, Identity } from "@/integrations/identity";
+import type { ISessionService } from "@/features/session/services/ISessionService";
+import type { Identity } from "@/integrations/identity";
 
 @injectable()
 export class MeService implements IMeService {
   constructor(
-    @inject(TYPES.SessionProvider)
-    private readonly sessionProvider: ISessionProvider,
+    @inject(TYPES.SessionService)
+    private readonly sessionService: ISessionService,
   ) {}
 
   async getCurrentUser(sessionToken: string): Promise<Identity> {
-    return this.sessionProvider.getSession(sessionToken);
+    return this.sessionService.getSession(sessionToken);
   }
 }

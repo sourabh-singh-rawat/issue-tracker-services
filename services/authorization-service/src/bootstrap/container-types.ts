@@ -24,6 +24,7 @@ export const TYPES = {
   CapabilityRepository: Symbol.for("ICapabilityRepository"),
   CapabilityService: Symbol.for("ICapabilityService"),
   AuthorizationService: Symbol.for("IAuthorizationService"),
+  AuthorizationClient: Symbol.for("IAuthorizationClient"),
   KetoClient: Symbol.for("KetoClient"),
   AuthorizationGraphProvider: Symbol.for("IAuthorizationGraphProvider"),
 } as const;

@@ -3,7 +3,7 @@
   "name": "@pine/authorization",
   "version": "0.1.0",
   "private": true,
-  "description": "Shared authorization catalog — resources, capabilities, roles, and graph types",
+  "description": "Shared authorization catalog and service-to-service client for relationship checks",
   "keywords": [
     "authorization",
     "capabilities",
@@ -25,6 +25,8 @@
     "build": "pnpm clean && tsc"
   },
   "devDependencies": {
+    "@types/node": "^26.1.1",
     "typescript": "7.0.2"
   }
 }
+

@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -409,3 +409,29 @@ export const createAttachmentMutation = (options?: Partial<Options<CreateAttachm
  * Create a new issue attachment
  */
 export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>>, 'mutationFn'>>) => useMutation({ ...createAttachmentMutation(), ...mutationOptions });
+
+/**
+ * Check a graph relationship
+ *
+ * Verify whether a subject has a relation to an object in the authorization graph (Ory Keto). Capability checks use object type capability, relation has, and object id as the capability key (e.g. product:brand:create).
+ */
+export const checkRelationshipMutation = (options?: Partial<Options<CheckRelationshipData>>): UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>> => {
+    const mutationOptions: UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await checkRelationship({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Check a graph relationship
+ *
+ * Verify whether a subject has a relation to an object in the authorization graph (Ory Keto). Capability checks use object type capability, relation has, and object id as the capability key (e.g. product:brand:create).
+ */
+export const useCheckRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>>, 'mutationFn'>>) => useMutation({ ...checkRelationshipMutation(), ...mutationOptions });
