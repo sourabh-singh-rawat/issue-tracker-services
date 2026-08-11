@@ -6,9 +6,9 @@ import type { IOrganizationService } from "@/features/organizations/services";
 builder.queryFields((t) => ({
   getOrganizations: t.field({
     type: [OrganizationObject],
-    resolve: async () => {
+    resolve: async (_root, _args, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
-      return service.listOrganizations();
+      return service.listOrganizations(ctx.user!.id);
     },
   }),
 }));

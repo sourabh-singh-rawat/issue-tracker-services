@@ -31,6 +31,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@pine/authorization": "workspace:^",
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",

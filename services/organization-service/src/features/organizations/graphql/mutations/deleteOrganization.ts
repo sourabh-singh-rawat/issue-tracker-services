@@ -7,9 +7,9 @@ builder.mutationFields((t) => ({
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: async (_root, { id }) => {
+    resolve: async (_root, { id }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
-      await service.deleteOrganization(id);
+      await service.deleteOrganization(id, ctx.user!.id);
       return "Organization deleted successfully.";
     },
   }),

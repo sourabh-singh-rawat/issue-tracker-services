@@ -10,15 +10,18 @@ builder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: CreateOrganizationInput, required: true }),
     },
-    resolve: async (_root, { input }) => {
+    resolve: async (_root, { input }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
 
-      return service.createOrganization({
-        name: input.name,
-        slug: input.slug,
-        description: input.description ?? undefined,
-        isActive: input.isActive ?? undefined,
-      });
+      return service.createOrganization(
+        {
+          name: input.name,
+          slug: input.slug,
+          description: input.description ?? undefined,
+          isActive: input.isActive ?? undefined,
+        },
+        ctx.user!.id,
+      );
     },
   }),
 }));
