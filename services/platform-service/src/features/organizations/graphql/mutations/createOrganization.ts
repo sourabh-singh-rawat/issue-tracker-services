@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { CreateOrganizationInput } from "@/features/organizations/graphql/inputs/CreateOrganizationInput";
 import { OrganizationObject } from "@/features/organizations/graphql/objects/OrganizationObject";
@@ -12,7 +12,7 @@ builder.mutationFields((t) => ({
       input: t.arg({ type: CreateOrganizationInput, required: true }),
     },
     resolve: async (_root, { input }, ctx) => {
-      const service = getContainer().get<IOrganizationService>(TYPES.OrganizationService);
+      const service = container.get<IOrganizationService>(TYPES.OrganizationService);
 
       return service.createOrganization(
         {

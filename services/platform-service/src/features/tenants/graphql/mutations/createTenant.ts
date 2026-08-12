@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { CreateTenantInput } from "@/features/tenants/graphql/inputs/CreateTenantInput";
 import { TenantObject } from "@/features/tenants/graphql/objects/TenantObject";
@@ -12,7 +12,7 @@ builder.mutationFields((t) => ({
       input: t.arg({ type: CreateTenantInput, required: true }),
     },
     resolve: async (_root, { input }, ctx) => {
-      const service = getContainer().get<ITenantService>(TYPES.TenantService);
+      const service = container.get<ITenantService>(TYPES.TenantService);
 
       return service.createTenant(
         {

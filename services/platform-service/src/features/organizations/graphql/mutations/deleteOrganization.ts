@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IOrganizationService } from "@/features/organizations/services";
 
@@ -9,7 +9,7 @@ builder.mutationFields((t) => ({
       id: t.arg.string({ required: true }),
     },
     resolve: async (_root, { id }, ctx) => {
-      const service = getContainer().get<IOrganizationService>(TYPES.OrganizationService);
+      const service = container.get<IOrganizationService>(TYPES.OrganizationService);
       await service.deleteOrganization(id, ctx.user!.id);
       return id;
     },

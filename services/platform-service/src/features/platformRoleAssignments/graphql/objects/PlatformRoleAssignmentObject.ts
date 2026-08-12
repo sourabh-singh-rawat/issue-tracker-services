@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { PlatformRoleAssignment } from "@/db";
 import { PlatformRoleObject } from "@/features/platformRoles/graphql/objects/PlatformRoleObject";
@@ -24,7 +24,7 @@ PlatformRoleAssignmentObject.implement({
       type: PlatformRoleObject,
       nullable: true,
       resolve: async (assignment) => {
-        const repository = getContainer().get<IPlatformRoleRepository>(
+        const repository = container.get<IPlatformRoleRepository>(
           TYPES.PlatformRoleRepository,
         );
         return repository.findById(assignment.platformRoleId);

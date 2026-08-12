@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { OrganizationObject } from "@/features/organizations/graphql/objects/OrganizationObject";
 import type { IOrganizationService } from "@/features/organizations/services";
@@ -12,7 +12,7 @@ builder.queryFields((t) => ({
       parentOrganizationId: t.arg.string({ required: false }),
     },
     resolve: async (_root, args, ctx) => {
-      const service = getContainer().get<IOrganizationService>(TYPES.OrganizationService);
+      const service = container.get<IOrganizationService>(TYPES.OrganizationService);
 
       return service.listOrganizations(
         {

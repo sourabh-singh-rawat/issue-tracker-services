@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { PlatformRoleAssignmentObject } from "@/features/platformRoleAssignments/graphql/objects/PlatformRoleAssignmentObject";
 import type { IPlatformRoleAssignmentService } from "@/features/platformRoleAssignments/services";
@@ -12,7 +12,7 @@ builder.queryFields((t) => ({
       identityId: t.arg.string({ required: false }),
     },
     resolve: async (_root, args, ctx) => {
-      const service = getContainer().get<IPlatformRoleAssignmentService>(
+      const service = container.get<IPlatformRoleAssignmentService>(
         TYPES.PlatformRoleAssignmentService,
       );
       return service.listPlatformRoleAssignments(

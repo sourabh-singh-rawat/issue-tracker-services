@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { UpdatePlatformRoleAssignmentInput } from "@/features/platformRoleAssignments/graphql/inputs/UpdatePlatformRoleAssignmentInput";
 import { PlatformRoleAssignmentObject } from "@/features/platformRoleAssignments/graphql/objects/PlatformRoleAssignmentObject";
@@ -12,7 +12,7 @@ builder.mutationFields((t) => ({
       input: t.arg({ type: UpdatePlatformRoleAssignmentInput, required: true }),
     },
     resolve: async (_root, { input }, ctx) => {
-      const service = getContainer().get<IPlatformRoleAssignmentService>(
+      const service = container.get<IPlatformRoleAssignmentService>(
         TYPES.PlatformRoleAssignmentService,
       );
 

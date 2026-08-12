@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { UpdateCapabilityInput } from "@/features/capabilities/graphql/inputs/UpdateCapabilityInput";
 import { CapabilityObject } from "@/features/capabilities/graphql/objects/CapabilityObject";
@@ -12,7 +12,7 @@ builder.mutationFields((t) => ({
       input: t.arg({ type: UpdateCapabilityInput, required: true }),
     },
     resolve: async (_root, { input }) => {
-      const service = getContainer().get<ICapabilityService>(TYPES.CapabilityService);
+      const service = container.get<ICapabilityService>(TYPES.CapabilityService);
       return service.updateCapability(input.key, {
         service: input.service ?? undefined,
         resource: input.resource ?? undefined,

@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ICapabilityService } from "@/features/capabilities/services";
 
@@ -9,7 +9,7 @@ builder.mutationFields((t) => ({
       key: t.arg.string({ required: true }),
     },
     resolve: async (_root, { key }) => {
-      const service = getContainer().get<ICapabilityService>(TYPES.CapabilityService);
+      const service = container.get<ICapabilityService>(TYPES.CapabilityService);
       await service.deleteCapability(key);
       return "Capability deleted successfully.";
     },

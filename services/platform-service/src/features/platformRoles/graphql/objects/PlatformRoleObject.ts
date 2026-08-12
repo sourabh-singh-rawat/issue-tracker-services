@@ -1,5 +1,5 @@
 import { builder } from "@pine/server";
-import { getContainer } from "@/bootstrap/container-access";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { PlatformRole } from "@/db";
 import { CapabilityObject } from "@/features/capabilities/graphql/objects/CapabilityObject";
@@ -19,7 +19,7 @@ PlatformRoleObject.implement({
     capabilities: t.field({
       type: [CapabilityObject],
       resolve: async (role) => {
-        const service = getContainer().get<IPlatformRoleService>(TYPES.PlatformRoleService);
+        const service = container.get<IPlatformRoleService>(TYPES.PlatformRoleService);
         return service.getCapabilitiesForPlatformRole(role);
       },
     }),

@@ -22,7 +22,6 @@ import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/s
 import { Container } from "inversify";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
-import { setContainer } from "@/bootstrap/container-access";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
@@ -56,7 +55,6 @@ import { createContext } from "@/graphql";
 import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });
-setContainer(container);
 
 const publisher = new NatsPublisher(broker);
 
