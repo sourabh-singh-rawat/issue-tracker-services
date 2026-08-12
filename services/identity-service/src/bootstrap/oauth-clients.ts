@@ -13,9 +13,9 @@ export const oauthClients: OAuthClientSeedConfig[] = [
     tokenEndpointAuthMethod: "none",
   },
   {
-    clientId: "admin-web",
-    name: "Admin Web",
-    redirectUris: [`${env.ADMIN_WEB_URL}/callback`],
+    clientId: "platform-web",
+    name: "Platform Web",
+    redirectUris: [`${env.VITE_PLATFORM_WEB_URL}/callback`],
     grantTypes: ["authorization_code", "refresh_token"],
     scopes: ["openid", "offline", "email"],
     tokenEndpointAuthMethod: "none",

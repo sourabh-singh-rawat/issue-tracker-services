@@ -50,8 +50,8 @@ const main = (): void => {
   console.log("setup: running database migrations");
   run(["db:migrate"]);
 
-  console.log("setup: seeding authorization-service");
-  run(["--filter", "@pine/authorization-service", "db:seed"]);
+  console.log("setup: seeding platform-service");
+  run(["--filter", "@pine/platform-service", "db:seed"]);
 
   console.log("setup: bootstrapping admin identity");
   const bootstrapOutput = run(
@@ -63,9 +63,9 @@ const main = (): void => {
   const identityId = parseIdentityId(bootstrapOutput);
   console.log(`setup: admin identity id=${identityId}`);
 
-  console.log("setup: granting system administrator role");
-  run(["--filter", "@pine/authorization-service", "cli:grant-super-admin"], {
-    env: { GRANT_SUPER_ADMIN_IDENTITY_ID: identityId },
+  console.log("setup: granting platform admin role");
+  run(["--filter", "@pine/platform-service", "cli:grant-platform-admin"], {
+    env: { GRANT_PLATFORM_ADMIN_IDENTITY_ID: identityId },
   });
 
   console.log("setup: completed");

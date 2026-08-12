@@ -167,30 +167,6 @@ services:
           cpus: "0.10"
           memory: 128M
 
-  authz-postgres:
-    image: postgres:18.4
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=authz
-      - POSTGRES_PASSWORD=${POSTGRES_AUTHZ_PASSWORD}
-      - POSTGRES_DB=authz
-    volumes:
-      - ../data/docker/pg-authz-data:/var/lib/postgresql
-    command:
-      - postgres
-      - -c
-      - max_connections=50
-    ports:
-      - 5440:5432
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 256M
-        reservations:
-          cpus: "0.10"
-          memory: 128M
-
   # Register per-service Postgres servers (plus Ory) in pgAdmin
   pgadmin:
     environment:

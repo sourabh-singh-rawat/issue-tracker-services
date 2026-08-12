@@ -3,18 +3,15 @@ import "reflect-metadata";
 
 import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
-import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
-import { broker, container, initializeDb, TYPES } from "@/bootstrap";
+import { broker, container, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
-import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
-import { IdentitySyncConsumer } from "@/features/identities";
-import { RoleAssignmentKetoSyncConsumer, RoleCapabilityKetoSyncConsumer } from "@/features/roles";
+import {
+  PlatformRoleAssignmentSyncConsumer,
+  PlatformRoleCapabilitySyncConsumer,
+} from "@/features/platform";
 
-export { container, db } from "@/bootstrap";
-export { builder, createContext } from "@/graphql";
-export type { AuthContext } from "@/graphql";
-export { schema } from "@/graphql/schema";
+export { container } from "@/bootstrap";
 
 const main = async () => {
   const observability = initializeObservability({
@@ -27,10 +24,6 @@ const main = async () => {
   });
   observability?.start();
 
-  await initializeDb();
-
-  writeSchemaToDist();
-
   const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();
   logger.info("Authorization service listening on http://0.0.0.0:5006");
@@ -38,13 +31,13 @@ const main = async () => {
 
   await broker.init();
 
-  void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
-  void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
-  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
-  void container.get<RoleAssignmentKetoSyncConsumer>(TYPES.RoleAssignmentKetoSyncConsumer).start();
-  void container.get<RoleCapabilityKetoSyncConsumer>(TYPES.RoleCapabilityKetoSyncConsumer).start();
+  void container
+    .get<PlatformRoleCapabilitySyncConsumer>(TYPES.PlatformRoleCapabilitySyncConsumer)
+    .start();
+  void container
+    .get<PlatformRoleAssignmentSyncConsumer>(TYPES.PlatformRoleAssignmentSyncConsumer)
+    .start();
 };
-
 
 main().catch((error) => {
   console.log(error);

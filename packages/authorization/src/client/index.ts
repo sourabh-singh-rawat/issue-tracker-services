@@ -4,5 +4,7 @@ export { requireCapability } from "./requireCapability";
 export type {
   CheckRelationshipInput,
   CheckRelationshipResponse,
+  EnsureRelationshipResponse,
+  DeleteRelationshipResponse,
   HttpAuthorizationClientOptions,
 } from "./types";

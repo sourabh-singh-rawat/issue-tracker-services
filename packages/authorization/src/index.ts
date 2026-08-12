@@ -5,6 +5,8 @@ export {
   TENANT,
   ORGANIZATION,
   ROLE,
+  PLATFORM_ROLE as PLATFORM_ROLE_RESOURCE,
+  PLATFORM_ROLE_ASSIGNMENT as PLATFORM_ROLE_ASSIGNMENT_RESOURCE,
   CAPABILITY,
   CAPABILITY_GRANT,
   RESOURCES,
@@ -19,12 +21,14 @@ export {
   TENANTS,
   ORGANIZATIONS,
   ROLES,
+  PLATFORM_ROLE,
+  PLATFORM_ROLE_ASSIGNMENT,
   CAPABILITIES,
   CAPABILITY_GRANTS,
   ALL_CAPABILITIES,
 } from "./capabilities";
 
-export { type RoleDefinition, ALL_SYSTEM_ROLES, SYSTEM_ROLES, type SystemRoleKey } from "./roles";
+export { type RoleDefinition, ALL_PLATFORM_ROLES, PLATFORM_ROLES, type PlatformRoleKey } from "./roles";
 
 export type { GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
 
@@ -43,6 +47,8 @@ export { HttpAuthorizationClient, requireCapability } from "./client";
 export type {
   CheckRelationshipInput,
   CheckRelationshipResponse,
+  EnsureRelationshipResponse,
+  DeleteRelationshipResponse,
   HttpAuthorizationClientOptions,
 } from "./client";
 

@@ -1,0 +1,11 @@
+query GetPlatformRoles {
+  getPlatformRoles {
+    id
+    key
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+  }
+}

@@ -13,7 +13,7 @@ Root cwd. Node ≥20.13.1; pnpm from root `packageManager`.
 
 ```bash
 pnpm dev:infra          # down: dev:infra:down
-pnpm setup              # migrate → authz seed → bootstrap admin → grant super-admin
+pnpm setup              # migrate → authz seed → bootstrap admin → grant platform admin
 pnpm schemas:compose    # or schemas:watch
 pnpm dev:apps
 ```

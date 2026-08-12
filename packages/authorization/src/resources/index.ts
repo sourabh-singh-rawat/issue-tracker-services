@@ -4,6 +4,8 @@ export { PRODUCT } from "./Product";
 export { TENANT } from "./Tenant";
 export { ORGANIZATION } from "./Organization";
 export { ROLE } from "./Role";
+export { PLATFORM_ROLE } from "./PlatformRole";
+export { PLATFORM_ROLE_ASSIGNMENT } from "./PlatformRoleAssignment";
 export { CAPABILITY } from "./Capability";
 export { CAPABILITY_GRANT } from "./CapabilityGrant";
 export { RESOURCES, ALL_RESOURCES } from "./AllResources";

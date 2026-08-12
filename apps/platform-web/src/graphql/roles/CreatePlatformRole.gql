@@ -1,0 +1,11 @@
+mutation CreatePlatformRole($input: CreatePlatformRoleInput!) {
+  createPlatformRole(input: $input) {
+    id
+    key
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+  }
+}

@@ -162,7 +162,7 @@
     },
     {
       "label": "dev:apps",
-      "detail": "Turbo run dev for erp-web, identity-web, admin-web, and backend services (no debugger, no Docker).",
+      "detail": "Turbo run dev for erp-web, identity-web, platform-web, and backend services (no debugger, no Docker).",
       "type": "shell",
       "command": "pnpm dev:apps",
       "options": {
@@ -197,10 +197,10 @@
       "group": "none"
     },
     {
-      "label": "admin-web",
-      "detail": "Start admin-web only (admin UI on :3002).",
+      "label": "platform-web",
+      "detail": "Start platform-web only (platform admin UI on :3002).",
       "type": "shell",
-      "command": "pnpm admin-web",
+      "command": "pnpm platform-web",
       "options": {
         "cwd": "${workspaceFolder}"
       },
