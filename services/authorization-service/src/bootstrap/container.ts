@@ -15,7 +15,9 @@ import { AuthorizationService, type IAuthorizationService } from "@/features/aut
 import {
   PlatformMemberSyncConsumer,
   PlatformRoleCapabilitySyncConsumer,
+  TenantMemberSyncConsumer,
 } from "@/features/platform";
+
 import {
   KetoAuthorizationGraphProvider,
   type IAuthorizationGraphProvider,
@@ -41,6 +43,10 @@ container
 container
   .bind<PlatformMemberSyncConsumer>(TYPES.PlatformMemberSyncConsumer)
   .to(PlatformMemberSyncConsumer);
+container
+  .bind<TenantMemberSyncConsumer>(TYPES.TenantMemberSyncConsumer)
+  .to(TenantMemberSyncConsumer);
+
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({

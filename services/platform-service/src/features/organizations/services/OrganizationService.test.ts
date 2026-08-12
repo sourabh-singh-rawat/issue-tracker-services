@@ -104,7 +104,7 @@ describe("OrganizationService", () => {
       service.listOrganizations({ tenantId: "tenant-1" }, userId),
     ).resolves.toEqual([organization]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "organization:organization:read" },
+      object: { type: "capability", id: "tenant:organization:read" },
       relation: "has",
       subject: { type: "user", id: userId },
     });
@@ -130,7 +130,7 @@ describe("OrganizationService", () => {
       organization,
     );
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "organization:organization:read" },
+      object: { type: "capability", id: "tenant:organization:read" },
       relation: "has",
       subject: { type: "user", id: userId },
     });
@@ -239,7 +239,7 @@ describe("OrganizationService", () => {
     ).resolves.toEqual(organization);
 
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "organization:organization:create" },
+      object: { type: "capability", id: "tenant:organization:create" },
       relation: "has",
       subject: { type: "user", id: userId },
     });
@@ -420,7 +420,7 @@ describe("OrganizationService", () => {
 
     await expect(service.deleteOrganization("org-1", userId)).resolves.toBeUndefined();
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "organization:organization:delete" },
+      object: { type: "capability", id: "tenant:organization:delete" },
       relation: "has",
       subject: { type: "user", id: userId },
     });

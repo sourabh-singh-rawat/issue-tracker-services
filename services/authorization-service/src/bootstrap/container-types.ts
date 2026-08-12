@@ -8,4 +8,6 @@ export const TYPES = {
   AuthorizationGraphProvider: Symbol.for("IAuthorizationGraphProvider"),
   PlatformRoleCapabilitySyncConsumer: Symbol.for("PlatformRoleCapabilitySyncConsumer"),
   PlatformMemberSyncConsumer: Symbol.for("PlatformMemberSyncConsumer"),
+  TenantMemberSyncConsumer: Symbol.for("TenantMemberSyncConsumer"),
 } as const;
+

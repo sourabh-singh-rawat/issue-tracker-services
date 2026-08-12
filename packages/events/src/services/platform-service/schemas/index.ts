@@ -14,3 +14,15 @@ export {
   TenantCreatedDataSchema,
   type TenantCreatedData,
 } from "./TenantCreatedDataSchema";
+export {
+  TenantRoleCapabilitiesUpdatedDataSchema,
+  type TenantRoleCapabilitiesUpdatedData,
+} from "./TenantRoleCapabilitiesUpdatedDataSchema";
+export {
+  TenantMemberCreatedDataSchema,
+  type TenantMemberCreatedData,
+} from "./TenantMemberCreatedDataSchema";
+export {
+  TenantMemberDeletedDataSchema,
+  type TenantMemberDeletedData,
+} from "./TenantMemberDeletedDataSchema";

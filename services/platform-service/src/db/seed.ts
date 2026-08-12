@@ -14,10 +14,13 @@ import {
   OrganizationRoles,
   PlatformRoles,
   Roles,
+  TenantMembers,
   TenantRoles,
   type Transaction,
 } from "@/db";
-import { schedulePlatformRoleCapabilitiesUpdated } from "@/integrations/authorization/platformRoleGraph";
+import { scheduleTenantMemberCreated } from "@/features/tenantMembers/services/TenantMemberService";
+import { scheduleTenantRoleCapabilitiesUpdated } from "@/features/tenantRoles/services/TenantRoleService";
+import { schedulePlatformRoleCapabilitiesUpdated } from "@/features/platformRoles/services/PlatformRoleService";
 
 const seedCapabilities = async (tx: Transaction): Promise<void> => {
   for (const capability of ALL_CAPABILITIES) {
@@ -167,6 +170,31 @@ const seedGraphEvents = async (
   logger.info(
     `Scheduled capability graph sync for ${ALL_PLATFORM_ROLES.length} platform system role(s)`,
   );
+
+  const tenantSystemRoles = await tx
+    .select({ id: Roles.id, key: Roles.key })
+    .from(Roles)
+    .innerJoin(TenantRoles, eq(TenantRoles.roleId, Roles.id))
+    .where(and(eq(Roles.isSystem, true), isNull(Roles.deletedAt)));
+
+  for (const role of tenantSystemRoles) {
+    await scheduleTenantRoleCapabilitiesUpdated(outboxService, role.id, role.key, { tx });
+  }
+
+  logger.info(
+    `Scheduled capability graph sync for ${tenantSystemRoles.length} tenant system role(s)`,
+  );
+
+  const tenantMembers = await tx
+    .select()
+    .from(TenantMembers)
+    .where(isNull(TenantMembers.deletedAt));
+
+  for (const member of tenantMembers) {
+    await scheduleTenantMemberCreated(outboxService, member, { tx });
+  }
+
+  logger.info(`Scheduled graph sync for ${tenantMembers.length} tenant member(s)`);
 };
 
 const seed = async (): Promise<void> => {

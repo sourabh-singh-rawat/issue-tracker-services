@@ -6,10 +6,8 @@ import { closeDb, container, initializeDb, TYPES } from "@/bootstrap";
 import type { Database } from "@/db";
 import type { IPlatformMemberRepository } from "@/features/platformMembers";
 import type { IPlatformRoleRepository } from "@/features/platformRoles";
-import {
-  schedulePlatformMemberCreated,
-  schedulePlatformRoleCapabilitiesUpdated,
-} from "@/integrations/authorization/platformRoleGraph";
+import { schedulePlatformMemberCreated } from "@/features/platformMembers/services/PlatformMemberService";
+import { schedulePlatformRoleCapabilitiesUpdated } from "@/features/platformRoles/services/PlatformRoleService";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

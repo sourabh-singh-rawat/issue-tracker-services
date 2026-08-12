@@ -2,11 +2,11 @@ import { ROLE, ROLE_ASSIGNEE, USER } from "@pine/authorization";
 import {
   type CloudEvent,
   type IBroker,
-  type PlatformMemberCreatedData,
-  type PlatformMemberDeletedData,
+  type TenantMemberCreatedData,
+  type TenantMemberDeletedData,
   Consumer,
-  PlatformMemberCreatedEvent,
-  PlatformMemberDeletedEvent,
+  TenantMemberCreatedEvent,
+  TenantMemberDeletedEvent,
   Streams,
   validateEvent,
 } from "@pine/events";
@@ -16,12 +16,12 @@ import { TYPES } from "@/bootstrap/container-types";
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
 
 @injectable()
-export class PlatformMemberSyncConsumer extends Consumer<
-  CloudEvent<PlatformMemberCreatedData | PlatformMemberDeletedData>
+export class TenantMemberSyncConsumer extends Consumer<
+  CloudEvent<TenantMemberCreatedData | TenantMemberDeletedData>
 > {
   readonly stream = Streams.PLATFORM;
-  readonly consumer = "authorization-platform-member-sync";
-  readonly subjects = [PlatformMemberCreatedEvent.type, PlatformMemberDeletedEvent.type];
+  readonly consumer = "authorization-tenant-member-sync";
+  readonly subjects = [TenantMemberCreatedEvent.type, TenantMemberDeletedEvent.type];
 
   constructor(
     @inject(TYPES.Broker)
@@ -34,10 +34,10 @@ export class PlatformMemberSyncConsumer extends Consumer<
 
   async onMessage(
     message: JsMsg,
-    payload: CloudEvent<PlatformMemberCreatedData | PlatformMemberDeletedData>,
+    payload: CloudEvent<TenantMemberCreatedData | TenantMemberDeletedData>,
   ): Promise<void> {
-    if (payload.type === PlatformMemberCreatedEvent.type) {
-      const event = validateEvent(PlatformMemberCreatedEvent, payload);
+    if (payload.type === TenantMemberCreatedEvent.type) {
+      const event = validateEvent(TenantMemberCreatedEvent, payload);
       const data = event.data;
       if (!data) {
         message.ack();
@@ -45,7 +45,7 @@ export class PlatformMemberSyncConsumer extends Consumer<
       }
 
       const relationship = {
-        object: { type: ROLE.name, id: data.platformRoleId },
+        object: { type: ROLE.name, id: data.tenantRoleId },
         relation: ROLE_ASSIGNEE,
         subject: { type: USER.name, id: data.identityId },
       };
@@ -64,8 +64,8 @@ export class PlatformMemberSyncConsumer extends Consumer<
       return;
     }
 
-    if (payload.type === PlatformMemberDeletedEvent.type) {
-      const event = validateEvent(PlatformMemberDeletedEvent, payload);
+    if (payload.type === TenantMemberDeletedEvent.type) {
+      const event = validateEvent(TenantMemberDeletedEvent, payload);
       const data = event.data;
       if (!data) {
         message.ack();
@@ -73,7 +73,7 @@ export class PlatformMemberSyncConsumer extends Consumer<
       }
 
       const relationship = {
-        object: { type: ROLE.name, id: data.platformRoleId },
+        object: { type: ROLE.name, id: data.tenantRoleId },
         relation: ROLE_ASSIGNEE,
         subject: { type: USER.name, id: data.identityId },
       };

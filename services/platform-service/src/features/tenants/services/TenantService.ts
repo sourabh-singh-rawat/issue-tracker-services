@@ -24,6 +24,8 @@ import {
 } from "@/features/tenants/errors";
 import type { ITenantRepository } from "@/features/tenants/repositories";
 import type { CreateTenantInput, ITenantService } from "@/features/tenants/services/ITenantService";
+import { scheduleTenantMemberCreated } from "@/features/tenantMembers/services/TenantMemberService";
+import { scheduleTenantRoleCapabilitiesUpdated } from "@/features/tenantRoles/services/TenantRoleService";
 
 @injectable()
 export class TenantService implements ITenantService {
@@ -68,6 +70,12 @@ export class TenantService implements ITenantService {
 
       const systemRoles = await this.tenantRoleRepository.seedSystemRoles(tenant.id, { tx });
 
+      for (const role of systemRoles) {
+        await scheduleTenantRoleCapabilitiesUpdated(this.outboxService, role.id, role.key, {
+          tx,
+        });
+      }
+
       const ownerRole = systemRoles.find((role) => role.key === TENANT_ROLES.TENANT_OWNER.key);
       if (!ownerRole) {
         throw new TenantRoleNotFoundError(
@@ -75,7 +83,7 @@ export class TenantService implements ITenantService {
         );
       }
 
-      await this.tenantMemberRepository.save(
+      const ownerMember = await this.tenantMemberRepository.save(
         {
           tenantId: tenant.id,
           roleId: ownerRole.id,
@@ -84,6 +92,8 @@ export class TenantService implements ITenantService {
         },
         { tx },
       );
+
+      await scheduleTenantMemberCreated(this.outboxService, ownerMember, { tx });
 
       const event: CloudEvent<TenantCreatedData> = createCloudEvent({
         type: TenantCreatedEvent.type,

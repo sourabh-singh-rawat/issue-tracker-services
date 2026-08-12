@@ -90,7 +90,7 @@ describe("OrganizationRoleService", () => {
 
     await expect(service.listOrganizationRoles("org-1", userId)).resolves.toEqual([ownerRole]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "organization:organization:read" },
+      object: { type: "capability", id: "tenant:organization:read" },
       relation: "has",
       subject: { type: "user", id: userId },
     });

@@ -9,7 +9,9 @@ import { logger } from "@/bootstrap/logger";
 import {
   PlatformMemberSyncConsumer,
   PlatformRoleCapabilitySyncConsumer,
+  TenantMemberSyncConsumer,
 } from "@/features/platform";
+
 
 export { container } from "@/bootstrap";
 
@@ -37,6 +39,7 @@ const main = async () => {
   void container
     .get<PlatformMemberSyncConsumer>(TYPES.PlatformMemberSyncConsumer)
     .start();
+  void container.get<TenantMemberSyncConsumer>(TYPES.TenantMemberSyncConsumer).start();
 };
 
 main().catch((error) => {

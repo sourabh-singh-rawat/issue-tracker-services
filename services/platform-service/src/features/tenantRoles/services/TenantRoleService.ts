@@ -4,6 +4,11 @@ import {
   requireCapability,
   type IAuthorizationClient,
 } from "@pine/authorization";
+import {
+  createCloudEvent,
+  TenantRoleCapabilitiesUpdatedEvent,
+} from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Capability, DbClient, TenantRole } from "@/db";
@@ -13,6 +18,42 @@ import type { ITenantRepository } from "@/features/tenants/repositories";
 import { TenantRoleNotFoundError } from "@/features/tenantRoles/errors";
 import type { ITenantRoleRepository } from "@/features/tenantRoles/repositories";
 import type { ITenantRoleService } from "@/features/tenantRoles/services/ITenantRoleService";
+
+export const scheduleTenantRoleCapabilitiesUpdated = async (
+  outboxService: IOutboxService,
+  roleId: string,
+  roleKey: string,
+  options?: { tx: DbClient },
+): Promise<void> => {
+  const capabilityKeys = [...tenantRoleCapabilityKeys({ key: roleKey })];
+  if (capabilityKeys.length === 0) {
+    return;
+  }
+
+  const event = createCloudEvent({
+    type: TenantRoleCapabilitiesUpdatedEvent.type,
+    version: TenantRoleCapabilitiesUpdatedEvent.version,
+    schema: TenantRoleCapabilitiesUpdatedEvent.schema,
+    source: "pine/platform-service",
+    subject: roleId,
+    data: {
+      roleId,
+      capabilityKeys,
+    },
+  });
+
+  await outboxService.schedule(
+    {
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: TenantRoleCapabilitiesUpdatedEvent.version,
+      aggregateType: "tenant_role",
+      aggregateId: roleId,
+      payload: event,
+    },
+    options,
+  );
+};
 
 @injectable()
 export class TenantRoleService implements ITenantRoleService {
@@ -25,6 +66,8 @@ export class TenantRoleService implements ITenantRoleService {
     private readonly capabilityRepository: ICapabilityRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
   ) {}
 
   async getTenantRoleById(id: string, userId: string): Promise<TenantRole> {
@@ -51,7 +94,7 @@ export class TenantRoleService implements ITenantRoleService {
       return existing;
     }
 
-    return this.tenantRoleRepository.seedSystemRoles(tenantId);
+    return this.seedSystemRoles(tenantId);
   }
 
   async getCapabilitiesForTenantRole(role: TenantRole): Promise<Capability[]> {
@@ -77,6 +120,10 @@ export class TenantRoleService implements ITenantRoleService {
     tenantId: string,
     options?: { tx: DbClient },
   ): Promise<TenantRole[]> {
-    return this.tenantRoleRepository.seedSystemRoles(tenantId, options);
+    const roles = await this.tenantRoleRepository.seedSystemRoles(tenantId, options);
+    for (const role of roles) {
+      await scheduleTenantRoleCapabilitiesUpdated(this.outboxService, role.id, role.key, options);
+    }
+    return roles;
   }
 }

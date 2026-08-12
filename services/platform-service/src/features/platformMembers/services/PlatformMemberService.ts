@@ -3,10 +3,15 @@ import {
   requireCapability,
   type IAuthorizationClient,
 } from "@pine/authorization";
+import {
+  createCloudEvent,
+  PlatformMemberCreatedEvent,
+  PlatformMemberDeletedEvent,
+} from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Database, PlatformMember } from "@/db";
+import type { Database, DbClient, PlatformMember } from "@/db";
 import {
   PlatformMemberConflictError,
   PlatformMemberNotFoundError,
@@ -20,11 +25,73 @@ import type {
 } from "@/features/platformMembers/services/IPlatformMemberService";
 import { PlatformRoleNotFoundError } from "@/features/platformRoles/errors";
 import type { IPlatformRoleRepository } from "@/features/platformRoles/repositories";
-import {
-  schedulePlatformMemberCreated,
-  schedulePlatformMemberDeleted,
-  schedulePlatformRoleCapabilitiesUpdated,
-} from "@/integrations/authorization/platformRoleGraph";
+import { schedulePlatformRoleCapabilitiesUpdated } from "@/features/platformRoles/services/PlatformRoleService";
+
+export const schedulePlatformMemberCreated = async (
+  outboxService: IOutboxService,
+  assignment: PlatformMember,
+  options?: { tx: DbClient },
+): Promise<void> => {
+  const event = createCloudEvent({
+    type: PlatformMemberCreatedEvent.type,
+    version: PlatformMemberCreatedEvent.version,
+    schema: PlatformMemberCreatedEvent.schema,
+    source: "pine/platform-service",
+    subject: assignment.id,
+    data: {
+      id: assignment.id,
+      platformRoleId: assignment.platformRoleId,
+      identityId: assignment.identityId,
+      assignedBy: assignment.assignedBy,
+      assignedAt: assignment.assignedAt.toISOString(),
+      expiresAt: assignment.expiresAt?.toISOString() ?? null,
+      reason: assignment.reason,
+    },
+  });
+
+  await outboxService.schedule(
+    {
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: PlatformMemberCreatedEvent.version,
+      aggregateType: "platform_member",
+      aggregateId: assignment.id,
+      payload: event,
+    },
+    options,
+  );
+};
+
+export const schedulePlatformMemberDeleted = async (
+  outboxService: IOutboxService,
+  assignment: Pick<PlatformMember, "id" | "platformRoleId" | "identityId">,
+  options?: { tx: DbClient },
+): Promise<void> => {
+  const event = createCloudEvent({
+    type: PlatformMemberDeletedEvent.type,
+    version: PlatformMemberDeletedEvent.version,
+    schema: PlatformMemberDeletedEvent.schema,
+    source: "pine/platform-service",
+    subject: assignment.id,
+    data: {
+      id: assignment.id,
+      platformRoleId: assignment.platformRoleId,
+      identityId: assignment.identityId,
+    },
+  });
+
+  await outboxService.schedule(
+    {
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: PlatformMemberDeletedEvent.version,
+      aggregateType: "platform_member",
+      aggregateId: assignment.id,
+      payload: event,
+    },
+    options,
+  );
+};
 
 @injectable()
 export class PlatformMemberService implements IPlatformMemberService {

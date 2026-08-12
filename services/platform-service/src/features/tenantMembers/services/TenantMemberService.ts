@@ -3,9 +3,15 @@ import {
   requireCapability,
   type IAuthorizationClient,
 } from "@pine/authorization";
+import {
+  createCloudEvent,
+  TenantMemberCreatedEvent,
+  TenantMemberDeletedEvent,
+} from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { TenantMember } from "@/db";
+import type { DbClient, TenantMember } from "@/db";
 import {
   TenantMemberConflictError,
   TenantMemberNotFoundError,
@@ -22,6 +28,72 @@ import type { ITenantRepository } from "@/features/tenants/repositories";
 import { TenantRoleNotFoundError } from "@/features/tenantRoles/errors";
 import type { ITenantRoleRepository } from "@/features/tenantRoles/repositories";
 
+export const scheduleTenantMemberCreated = async (
+  outboxService: IOutboxService,
+  assignment: TenantMember,
+  options?: { tx: DbClient },
+): Promise<void> => {
+  const event = createCloudEvent({
+    type: TenantMemberCreatedEvent.type,
+    version: TenantMemberCreatedEvent.version,
+    schema: TenantMemberCreatedEvent.schema,
+    source: "pine/platform-service",
+    subject: assignment.id,
+    data: {
+      id: assignment.id,
+      tenantRoleId: assignment.roleId,
+      identityId: assignment.identityId,
+      assignedBy: assignment.assignedBy,
+      assignedAt: assignment.assignedAt.toISOString(),
+      expiresAt: assignment.expiresAt?.toISOString() ?? null,
+      reason: assignment.reason,
+    },
+  });
+
+  await outboxService.schedule(
+    {
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: TenantMemberCreatedEvent.version,
+      aggregateType: "tenant_member",
+      aggregateId: assignment.id,
+      payload: event,
+    },
+    options,
+  );
+};
+
+export const scheduleTenantMemberDeleted = async (
+  outboxService: IOutboxService,
+  assignment: Pick<TenantMember, "id" | "roleId" | "identityId">,
+  options?: { tx: DbClient },
+): Promise<void> => {
+  const event = createCloudEvent({
+    type: TenantMemberDeletedEvent.type,
+    version: TenantMemberDeletedEvent.version,
+    schema: TenantMemberDeletedEvent.schema,
+    source: "pine/platform-service",
+    subject: assignment.id,
+    data: {
+      id: assignment.id,
+      tenantRoleId: assignment.roleId,
+      identityId: assignment.identityId,
+    },
+  });
+
+  await outboxService.schedule(
+    {
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: TenantMemberDeletedEvent.version,
+      aggregateType: "tenant_member",
+      aggregateId: assignment.id,
+      payload: event,
+    },
+    options,
+  );
+};
+
 @injectable()
 export class TenantMemberService implements ITenantMemberService {
   constructor(
@@ -33,6 +105,8 @@ export class TenantMemberService implements ITenantMemberService {
     private readonly tenantRepository: ITenantRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
   ) {}
 
   async createTenantMember(
@@ -62,7 +136,7 @@ export class TenantMemberService implements ITenantMemberService {
       );
     }
 
-    return this.tenantMemberRepository.save({
+    const assignment = await this.tenantMemberRepository.save({
       tenantId: input.tenantId,
       roleId: input.roleId,
       identityId: input.identityId,
@@ -70,6 +144,9 @@ export class TenantMemberService implements ITenantMemberService {
       expiresAt: input.expiresAt,
       reason: input.reason,
     });
+
+    await scheduleTenantMemberCreated(this.outboxService, assignment);
+    return assignment;
   }
 
   async getTenantMemberById(id: string, userId: string): Promise<TenantMember> {
@@ -150,5 +227,7 @@ export class TenantMemberService implements ITenantMemberService {
     if (!deleted) {
       throw new TenantMemberNotFoundError(`Tenant member not found: ${id}`);
     }
+
+    await scheduleTenantMemberDeleted(this.outboxService, existing);
   }
 }
