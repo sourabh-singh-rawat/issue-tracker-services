@@ -9,6 +9,7 @@ export type CreateTenantInput = {
 
 export interface ITenantService {
   createTenant(input: CreateTenantInput, userId: string): Promise<Tenant>;
+  getTenantById(id: string, userId: string): Promise<Tenant>;
   listTenants(userId: string): Promise<Tenant[]>;
   deleteTenant(id: string, userId: string): Promise<void>;
 }

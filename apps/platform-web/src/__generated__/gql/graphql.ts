@@ -492,12 +492,14 @@ export type Query = {
   getCapabilities?: Maybe<Array<CapabilityObject>>;
   getCapability?: Maybe<CapabilityObject>;
   getClient?: Maybe<ClientObject>;
+  getOrganization?: Maybe<OrganizationObject>;
   getOrganizations?: Maybe<Array<OrganizationObject>>;
   getPlatformRole?: Maybe<PlatformRoleObject>;
   getPlatformRoleAssignment?: Maybe<PlatformRoleAssignmentObject>;
   getPlatformRoleAssignments?: Maybe<Array<PlatformRoleAssignmentObject>>;
   getPlatformRoles?: Maybe<Array<PlatformRoleObject>>;
   getProduct?: Maybe<ProductObject>;
+  getTenant?: Maybe<TenantObject>;
   getTenants?: Maybe<Array<TenantObject>>;
   getUnit?: Maybe<UnitObject>;
   hello?: Maybe<HelloXyz>;
@@ -552,6 +554,11 @@ export type QueryGetClientArgs = {
 };
 
 
+export type QueryGetOrganizationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryGetOrganizationsArgs = {
   parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
   tenantId: Scalars['String']['input'];
@@ -575,6 +582,11 @@ export type QueryGetPlatformRoleAssignmentsArgs = {
 
 
 export type QueryGetProductArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetTenantArgs = {
   id: Scalars['String']['input'];
 };
 

@@ -87,6 +87,17 @@ export class TenantService implements ITenantService {
     });
   }
 
+  async getTenantById(id: string, userId: string): Promise<Tenant> {
+    await requireCapability(this.authorizationClient, userId, TENANTS.READ.key);
+
+    const tenant = await this.tenantRepository.findById(id);
+    if (!tenant) {
+      throw new TenantNotFoundError(`Tenant not found: ${id}`);
+    }
+
+    return tenant;
+  }
+
   async listTenants(userId: string): Promise<Tenant[]> {
     await requireCapability(this.authorizationClient, userId, TENANTS.READ.key);
 

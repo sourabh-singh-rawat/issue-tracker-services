@@ -1,0 +1,11 @@
+query GetTenant($id: String!) {
+  getTenant(id: $id) {
+    id
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}

@@ -89,6 +89,59 @@ describe("OrganizationService", () => {
     });
   });
 
+  it("gets an organization by id", async () => {
+    const organizationRepository = {
+      findById: vi.fn().mockResolvedValue(organization),
+    };
+    const authorizationClient = {
+      checkRelationship: vi.fn().mockResolvedValue(true),
+      ensureRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const service = createService({ organizationRepository, authorizationClient });
+
+    await expect(service.getOrganizationById(organization.id, userId)).resolves.toEqual(
+      organization,
+    );
+    expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
+      object: { type: "capability", id: "organization:organization:read" },
+      relation: "has",
+      subject: { type: "user", id: userId },
+    });
+    expect(organizationRepository.findById).toHaveBeenCalledWith(organization.id);
+  });
+
+  it("rejects get when the caller lacks permission", async () => {
+    const organizationRepository = {
+      findById: vi.fn(),
+    };
+    const authorizationClient = {
+      checkRelationship: vi.fn().mockResolvedValue(false),
+      ensureRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const service = createService({ organizationRepository, authorizationClient });
+
+    await expect(service.getOrganizationById(organization.id, userId)).rejects.toBeInstanceOf(
+      InsufficientPermissionError,
+    );
+    expect(organizationRepository.findById).not.toHaveBeenCalled();
+  });
+
+  it("rejects get when organization is missing", async () => {
+    const organizationRepository = {
+      findById: vi.fn().mockResolvedValue(null),
+    };
+
+    const service = createService({ organizationRepository });
+
+    await expect(service.getOrganizationById("missing", userId)).rejects.toBeInstanceOf(
+      OrganizationNotFoundError,
+    );
+  });
+
   it("rejects list when the caller lacks permission", async () => {
     const organizationRepository = {
       findMany: vi.fn(),
