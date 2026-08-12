@@ -82,6 +82,17 @@ export class OrganizationService implements IOrganizationService {
     });
   }
 
+  async getOrganizationById(id: string, userId: string): Promise<Organization> {
+    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.READ.key);
+
+    const organization = await this.organizationRepository.findById(id);
+    if (!organization) {
+      throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+
+    return organization;
+  }
+
   async listOrganizations(
     input: ListOrganizationsInput,
     userId: string,

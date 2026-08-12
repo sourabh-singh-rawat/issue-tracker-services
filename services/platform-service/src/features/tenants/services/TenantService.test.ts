@@ -67,6 +67,57 @@ describe("TenantService", () => {
     expect(tenantRepository.findAll).toHaveBeenCalledOnce();
   });
 
+  it("gets a tenant by id", async () => {
+    const tenantRepository = {
+      findById: vi.fn().mockResolvedValue(tenant),
+    };
+    const authorizationClient = {
+      checkRelationship: vi.fn().mockResolvedValue(true),
+      ensureRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const service = createService({ tenantRepository, authorizationClient });
+
+    await expect(service.getTenantById(tenant.id, userId)).resolves.toEqual(tenant);
+    expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
+      object: { type: "capability", id: "platform:tenant:read" },
+      relation: "has",
+      subject: { type: "user", id: userId },
+    });
+    expect(tenantRepository.findById).toHaveBeenCalledWith(tenant.id);
+  });
+
+  it("rejects get by id when user lacks read capability", async () => {
+    const tenantRepository = {
+      findById: vi.fn(),
+    };
+    const authorizationClient = {
+      checkRelationship: vi.fn().mockResolvedValue(false),
+      ensureRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const service = createService({ tenantRepository, authorizationClient });
+
+    await expect(service.getTenantById(tenant.id, userId)).rejects.toBeInstanceOf(
+      InsufficientPermissionError,
+    );
+    expect(tenantRepository.findById).not.toHaveBeenCalled();
+  });
+
+  it("throws TenantNotFoundError when getting a missing tenant", async () => {
+    const tenantRepository = {
+      findById: vi.fn().mockResolvedValue(null),
+    };
+
+    const service = createService({ tenantRepository });
+
+    await expect(service.getTenantById("missing", userId)).rejects.toBeInstanceOf(
+      TenantNotFoundError,
+    );
+  });
+
   it("rejects list when user lacks read capability", async () => {
     const tenantRepository = {
       findAll: vi.fn(),

@@ -13,6 +13,28 @@ export type GetCapabilitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCapabilitiesQuery = { getCapabilities: Array<{ id: string | null, key: string | null, service: string | null, resource: string | null, action: string | null }> | null };
 
+export type CreateOrganizationMutationVariables = Exact<{
+  input: Types.CreateOrganizationInput;
+}>;
+
+
+export type CreateOrganizationMutation = { createOrganization: { id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
+
+export type GetOrganizationQueryVariables = Exact<{
+  id: string;
+}>;
+
+
+export type GetOrganizationQuery = { getOrganization: { id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
+
+export type GetOrganizationsQueryVariables = Exact<{
+  tenantId: string;
+  parentOrganizationId?: string | null | undefined;
+}>;
+
+
+export type GetOrganizationsQuery = { getOrganizations: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown }> | null };
+
 export type CreatePlatformRoleMutationVariables = Exact<{
   input: Types.CreatePlatformRoleInput;
 }>;
@@ -59,6 +81,13 @@ export type DeleteTenantMutationVariables = Exact<{
 
 
 export type DeleteTenantMutation = { deleteTenant: string | null };
+
+export type GetTenantQueryVariables = Exact<{
+  id: string;
+}>;
+
+
+export type GetTenantQuery = { getTenant: { id: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
 
 export type GetTenantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -116,6 +145,112 @@ export const useGetCapabilitiesQuery = <
 useGetCapabilitiesQuery.document = GetCapabilitiesDocument;
 
 useGetCapabilitiesQuery.getKey = (variables?: GetCapabilitiesQueryVariables) => variables === undefined ? ['GetCapabilities'] : ['GetCapabilities', variables];
+
+export const CreateOrganizationDocument = new TypedDocumentString(`
+    mutation CreateOrganization($input: CreateOrganizationInput!) {
+  createOrganization(input: $input) {
+    id
+    tenantId
+    parentOrganizationId
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `);
+
+export const useCreateOrganizationMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateOrganizationMutation, TError, CreateOrganizationMutationVariables, TContext>) => {
+    
+    return useMutation<CreateOrganizationMutation, TError, CreateOrganizationMutationVariables, TContext>(
+      {
+    mutationKey: ['CreateOrganization'],
+    mutationFn: (variables?: CreateOrganizationMutationVariables) => graphQLFetcher<CreateOrganizationMutation, CreateOrganizationMutationVariables>(CreateOrganizationDocument, variables)(),
+    ...options
+  }
+    )};
+
+useCreateOrganizationMutation.getKey = () => ['CreateOrganization'];
+
+export const GetOrganizationDocument = new TypedDocumentString(`
+    query GetOrganization($id: String!) {
+  getOrganization(id: $id) {
+    id
+    tenantId
+    parentOrganizationId
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `);
+
+export const useGetOrganizationQuery = <
+      TData = GetOrganizationQuery,
+      TError = unknown
+    >(
+      variables: GetOrganizationQueryVariables,
+      options?: Omit<UseQueryOptions<GetOrganizationQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetOrganizationQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetOrganizationQuery, TError, TData>(
+      {
+    queryKey: ['GetOrganization', variables],
+    queryFn: graphQLFetcher<GetOrganizationQuery, GetOrganizationQueryVariables>(GetOrganizationDocument, variables),
+    ...options
+  }
+    )};
+
+useGetOrganizationQuery.document = GetOrganizationDocument;
+
+useGetOrganizationQuery.getKey = (variables: GetOrganizationQueryVariables) => ['GetOrganization', variables];
+
+export const GetOrganizationsDocument = new TypedDocumentString(`
+    query GetOrganizations($tenantId: String!, $parentOrganizationId: String) {
+  getOrganizations(
+    tenantId: $tenantId
+    parentOrganizationId: $parentOrganizationId
+  ) {
+    id
+    tenantId
+    parentOrganizationId
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `);
+
+export const useGetOrganizationsQuery = <
+      TData = GetOrganizationsQuery,
+      TError = unknown
+    >(
+      variables: GetOrganizationsQueryVariables,
+      options?: Omit<UseQueryOptions<GetOrganizationsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetOrganizationsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetOrganizationsQuery, TError, TData>(
+      {
+    queryKey: ['GetOrganizations', variables],
+    queryFn: graphQLFetcher<GetOrganizationsQuery, GetOrganizationsQueryVariables>(GetOrganizationsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetOrganizationsQuery.document = GetOrganizationsDocument;
+
+useGetOrganizationsQuery.getKey = (variables: GetOrganizationsQueryVariables) => ['GetOrganizations', variables];
 
 export const CreatePlatformRoleDocument = new TypedDocumentString(`
     mutation CreatePlatformRole($input: CreatePlatformRoleInput!) {
@@ -320,6 +455,40 @@ export const useDeleteTenantMutation = <
     )};
 
 useDeleteTenantMutation.getKey = () => ['DeleteTenant'];
+
+export const GetTenantDocument = new TypedDocumentString(`
+    query GetTenant($id: String!) {
+  getTenant(id: $id) {
+    id
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `);
+
+export const useGetTenantQuery = <
+      TData = GetTenantQuery,
+      TError = unknown
+    >(
+      variables: GetTenantQueryVariables,
+      options?: Omit<UseQueryOptions<GetTenantQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetTenantQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetTenantQuery, TError, TData>(
+      {
+    queryKey: ['GetTenant', variables],
+    queryFn: graphQLFetcher<GetTenantQuery, GetTenantQueryVariables>(GetTenantDocument, variables),
+    ...options
+  }
+    )};
+
+useGetTenantQuery.document = GetTenantDocument;
+
+useGetTenantQuery.getKey = (variables: GetTenantQueryVariables) => ['GetTenant', variables];
 
 export const GetTenantsDocument = new TypedDocumentString(`
     query GetTenants {

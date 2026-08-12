@@ -15,11 +15,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { useDeleteTenantMutation, useGetTenantsQuery } from "@generated/gql";
+import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { getErrorMessage, useSnackbar } from "@shared/ui";
 import { CreateTenantModal } from "../CreateTenantModal";
 
 export const Tenants = () => {
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const tenantsQuery = useGetTenantsQuery(undefined, {
@@ -84,10 +86,9 @@ export const Tenants = () => {
           <Table size="small" aria-label="Tenants">
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Slug</TableCell>
-                <TableCell>Description</TableCell>
+                <TableCell>ID</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell align="right" width={72}>
                   Actions
@@ -97,21 +98,34 @@ export const Tenants = () => {
             <TableBody>
               {tenants.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={5}>
                     <Typography color="text.secondary">No tenants found.</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
                 tenants.map((tenant) => (
-                  <TableRow key={tenant.id ?? tenant.slug ?? undefined}>
-                    <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                      {tenant.id ?? "—"}
-                    </TableCell>
+                  <TableRow
+                    key={tenant.id ?? tenant.slug ?? undefined}
+                    hover
+                    sx={tenant.id ? { cursor: "pointer" } : undefined}
+                    onClick={() => {
+                      if (!tenant.id) {
+                        return;
+                      }
+                      void navigate({
+                        to: "/tenants/$tenantId",
+                        params: { tenantId: tenant.id },
+                        search: { tab: "overview" },
+                      });
+                    }}
+                  >
                     <TableCell>{tenant.name ?? "—"}</TableCell>
                     <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
                       {tenant.slug ?? "—"}
                     </TableCell>
-                    <TableCell>{tenant.description ?? "—"}</TableCell>
+                    <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
+                      {tenant.id ?? "—"}
+                    </TableCell>
                     <TableCell>
                       <Chip
                         size="small"
@@ -129,7 +143,8 @@ export const Tenants = () => {
                           (deleteTenantMutation.isPending &&
                             deleteTenantMutation.variables?.id === tenant.id)
                         }
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation();
                           void handleDelete(tenant.id, tenant.name);
                         }}
                       >
