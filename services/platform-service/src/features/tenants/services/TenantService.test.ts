@@ -60,7 +60,7 @@ describe("TenantService", () => {
 
     await expect(service.listTenants(userId)).resolves.toEqual([tenant]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:tenant:read" },
+      object: { type: "capability", id: "platform:tenant:read" },
       relation: "has",
       subject: { type: "user", id: userId },
     });
@@ -121,7 +121,7 @@ describe("TenantService", () => {
     ).resolves.toEqual(tenant);
 
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:tenant:create" },
+      object: { type: "capability", id: "platform:tenant:create" },
       relation: "has",
       subject: { type: "user", id: userId },
     });
@@ -247,7 +247,7 @@ describe("TenantService", () => {
 
     await expect(service.deleteTenant("org-1", userId)).resolves.toBeUndefined();
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:tenant:suspend" },
+      object: { type: "capability", id: "platform:tenant:suspend" },
       relation: "has",
       subject: { type: "user", id: userId },
     });

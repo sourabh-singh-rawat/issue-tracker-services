@@ -1,9 +1,9 @@
 import { defineCapability } from "./defineCapability";
 
 export const TENANTS = {
-  READ: defineCapability("tenant", "tenant", "read"),
-  CREATE: defineCapability("tenant", "tenant", "create"),
-  SUSPEND: defineCapability("tenant", "tenant", "suspend"),
-  CONFIGURE: defineCapability("tenant", "tenant", "configure"),
-  ASSIGN_ADMIN: defineCapability("tenant", "tenant", "assignadmin"),
+  READ: defineCapability("platform", "tenant", "read"),
+  CREATE: defineCapability("platform", "tenant", "create"),
+  SUSPEND: defineCapability("platform", "tenant", "suspend"),
+  CONFIGURE: defineCapability("platform", "tenant", "configure"),
+  ASSIGN_ADMIN: defineCapability("platform", "tenant", "assignadmin"),
 } as const;
