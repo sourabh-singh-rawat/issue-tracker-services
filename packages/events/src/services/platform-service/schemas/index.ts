@@ -1,11 +1,11 @@
 export {
-  PlatformRoleAssignmentCreatedDataSchema,
-  type PlatformRoleAssignmentCreatedData,
-} from "./PlatformRoleAssignmentCreatedDataSchema";
+  PlatformMemberCreatedDataSchema,
+  type PlatformMemberCreatedData,
+} from "./PlatformMemberCreatedDataSchema";
 export {
-  PlatformRoleAssignmentDeletedDataSchema,
-  type PlatformRoleAssignmentDeletedData,
-} from "./PlatformRoleAssignmentDeletedDataSchema";
+  PlatformMemberDeletedDataSchema,
+  type PlatformMemberDeletedData,
+} from "./PlatformMemberDeletedDataSchema";
 export {
   PlatformRoleCapabilitiesUpdatedDataSchema,
   type PlatformRoleCapabilitiesUpdatedData,

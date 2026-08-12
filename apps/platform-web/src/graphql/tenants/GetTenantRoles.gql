@@ -1,0 +1,19 @@
+query GetTenantRoles($tenantId: String!) {
+  getTenantRoles(tenantId: $tenantId) {
+    id
+    tenantId
+    key
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    capabilities {
+      id
+      key
+      service
+      resource
+      action
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import {
   PLATFORM_ROLE,
-  PLATFORM_ROLE_ASSIGNMENT,
+  PLATFORM_MEMBER,
   TENANTS,
 } from "../capabilities";
 import { capabilityKeys } from "../utils";
@@ -13,7 +13,7 @@ export const PLATFORM_ROLES = {
     name: "Platform Admin",
     description:
       "Platform administrator with tenant and platform role management capabilities",
-    capabilityKeys: capabilityKeys(TENANTS, PLATFORM_ROLE, PLATFORM_ROLE_ASSIGNMENT),
+    capabilityKeys: capabilityKeys(TENANTS, PLATFORM_ROLE, PLATFORM_MEMBER),
   },
 } as const satisfies Record<string, RoleDefinition>;
 

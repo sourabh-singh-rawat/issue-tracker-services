@@ -1,11 +1,15 @@
 import {
+  ORGANIZATION_ROLES,
   ORGANIZATIONS,
   requireCapability,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Organization } from "@/db";
+import type { Database, Organization } from "@/db";
+import type { IOrganizationMemberRepository } from "@/features/organizationMembers/repositories";
+import { OrganizationRoleNotFoundError } from "@/features/organizationRoles/errors";
+import type { IOrganizationRoleRepository } from "@/features/organizationRoles/repositories";
 import {
   InvalidParentOrganizationError,
   OrganizationNameConflictError,
@@ -26,10 +30,16 @@ export class OrganizationService implements IOrganizationService {
   constructor(
     @inject(TYPES.OrganizationRepository)
     private readonly organizationRepository: IOrganizationRepository,
+    @inject(TYPES.OrganizationRoleRepository)
+    private readonly organizationRoleRepository: IOrganizationRoleRepository,
+    @inject(TYPES.OrganizationMemberRepository)
+    private readonly organizationMemberRepository: IOrganizationMemberRepository,
     @inject(TYPES.TenantRepository)
     private readonly tenantRepository: ITenantRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.Database)
+    private readonly db: Database,
   ) {}
 
   async createOrganization(
@@ -72,13 +82,44 @@ export class OrganizationService implements IOrganizationService {
       );
     }
 
-    return this.organizationRepository.save({
-      tenantId: input.tenantId,
-      parentOrganizationId: input.parentOrganizationId,
-      name: input.name,
-      slug: input.slug,
-      description: input.description,
-      isActive: input.isActive,
+    return this.db.transaction(async (tx) => {
+      const organization = await this.organizationRepository.save(
+        {
+          tenantId: input.tenantId,
+          parentOrganizationId: input.parentOrganizationId,
+          name: input.name,
+          slug: input.slug,
+          description: input.description,
+          isActive: input.isActive,
+        },
+        { tx },
+      );
+
+      const systemRoles = await this.organizationRoleRepository.seedSystemRoles(
+        organization.id,
+        { tx },
+      );
+
+      const ownerRole = systemRoles.find(
+        (role) => role.key === ORGANIZATION_ROLES.ORGANIZATION_OWNER.key,
+      );
+      if (!ownerRole) {
+        throw new OrganizationRoleNotFoundError(
+          `Organization owner role not found for organization: ${organization.id}`,
+        );
+      }
+
+      await this.organizationMemberRepository.save(
+        {
+          organizationId: organization.id,
+          roleId: ownerRole.id,
+          identityId: userId,
+          assignedBy: userId,
+        },
+        { tx },
+      );
+
+      return organization;
     });
   }
 

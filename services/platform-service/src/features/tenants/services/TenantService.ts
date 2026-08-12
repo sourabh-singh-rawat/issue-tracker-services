@@ -1,4 +1,9 @@
-import { TENANTS, requireCapability, type IAuthorizationClient } from "@pine/authorization";
+import {
+  TENANTS,
+  TENANT_ROLES,
+  requireCapability,
+  type IAuthorizationClient,
+} from "@pine/authorization";
 import {
   CloudEvent,
   createCloudEvent,
@@ -9,6 +14,9 @@ import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Tenant } from "@/db";
+import type { ITenantMemberRepository } from "@/features/tenantMembers/repositories";
+import { TenantRoleNotFoundError } from "@/features/tenantRoles/errors";
+import type { ITenantRoleRepository } from "@/features/tenantRoles/repositories";
 import {
   TenantNameConflictError,
   TenantNotFoundError,
@@ -22,6 +30,10 @@ export class TenantService implements ITenantService {
   constructor(
     @inject(TYPES.TenantRepository)
     private readonly tenantRepository: ITenantRepository,
+    @inject(TYPES.TenantRoleRepository)
+    private readonly tenantRoleRepository: ITenantRoleRepository,
+    @inject(TYPES.TenantMemberRepository)
+    private readonly tenantMemberRepository: ITenantMemberRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
     @inject(TYPES.OutboxService)
@@ -50,6 +62,25 @@ export class TenantService implements ITenantService {
           slug: input.slug,
           description: input.description,
           isActive: input.isActive,
+        },
+        { tx },
+      );
+
+      const systemRoles = await this.tenantRoleRepository.seedSystemRoles(tenant.id, { tx });
+
+      const ownerRole = systemRoles.find((role) => role.key === TENANT_ROLES.TENANT_OWNER.key);
+      if (!ownerRole) {
+        throw new TenantRoleNotFoundError(
+          `Tenant owner role not found for tenant: ${tenant.id}`,
+        );
+      }
+
+      await this.tenantMemberRepository.save(
+        {
+          tenantId: tenant.id,
+          roleId: ownerRole.id,
+          identityId: userId,
+          assignedBy: userId,
         },
         { tx },
       );

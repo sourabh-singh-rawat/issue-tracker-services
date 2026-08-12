@@ -121,7 +121,7 @@ export type CreateOrganizationInput = {
   tenantId: Scalars['String']['input'];
 };
 
-export type CreatePlatformRoleAssignmentInput = {
+export type CreatePlatformMemberInput = {
   expiresAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
   identityId: Scalars['String']['input'];
   platformRoleId: Scalars['String']['input'];
@@ -221,8 +221,8 @@ export type Mutation = {
   createIdentity?: Maybe<IdentityObject>;
   createIssue?: Maybe<Scalars['String']['output']>;
   createOrganization?: Maybe<OrganizationObject>;
+  createPlatformMember?: Maybe<PlatformMemberObject>;
   createPlatformRole?: Maybe<PlatformRoleObject>;
-  createPlatformRoleAssignment?: Maybe<PlatformRoleAssignmentObject>;
   createProduct?: Maybe<ProductObject>;
   createProject?: Maybe<Scalars['String']['output']>;
   createTenant?: Maybe<TenantObject>;
@@ -234,8 +234,8 @@ export type Mutation = {
   deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
   deleteOrganization?: Maybe<Scalars['String']['output']>;
+  deletePlatformMember?: Maybe<Scalars['String']['output']>;
   deletePlatformRole?: Maybe<Scalars['String']['output']>;
-  deletePlatformRoleAssignment?: Maybe<Scalars['String']['output']>;
   deleteTenant?: Maybe<Scalars['String']['output']>;
   deleteUnit?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
@@ -243,8 +243,8 @@ export type Mutation = {
   updateCapability?: Maybe<CapabilityObject>;
   updateCategory?: Maybe<CategoryObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
+  updatePlatformMember?: Maybe<PlatformMemberObject>;
   updatePlatformRole?: Maybe<PlatformRoleObject>;
-  updatePlatformRoleAssignment?: Maybe<PlatformRoleAssignmentObject>;
   updateUnit?: Maybe<UnitObject>;
 };
 
@@ -284,13 +284,13 @@ export type MutationCreateOrganizationArgs = {
 };
 
 
-export type MutationCreatePlatformRoleArgs = {
-  input: CreatePlatformRoleInput;
+export type MutationCreatePlatformMemberArgs = {
+  input: CreatePlatformMemberInput;
 };
 
 
-export type MutationCreatePlatformRoleAssignmentArgs = {
-  input: CreatePlatformRoleAssignmentInput;
+export type MutationCreatePlatformRoleArgs = {
+  input: CreatePlatformRoleInput;
 };
 
 
@@ -349,12 +349,12 @@ export type MutationDeleteOrganizationArgs = {
 };
 
 
-export type MutationDeletePlatformRoleArgs = {
+export type MutationDeletePlatformMemberArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type MutationDeletePlatformRoleAssignmentArgs = {
+export type MutationDeletePlatformRoleArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -389,13 +389,13 @@ export type MutationUpdateIssueArgs = {
 };
 
 
-export type MutationUpdatePlatformRoleArgs = {
-  input: UpdatePlatformRoleInput;
+export type MutationUpdatePlatformMemberArgs = {
+  input: UpdatePlatformMemberInput;
 };
 
 
-export type MutationUpdatePlatformRoleAssignmentArgs = {
-  input: UpdatePlatformRoleAssignmentInput;
+export type MutationUpdatePlatformRoleArgs = {
+  input: UpdatePlatformRoleInput;
 };
 
 
@@ -428,8 +428,8 @@ export type PaginatedProjectObject = {
   rows?: Maybe<Array<ProjectObject>>;
 };
 
-export type PlatformRoleAssignmentObject = {
-  __typename?: 'PlatformRoleAssignmentObject';
+export type PlatformMemberObject = {
+  __typename?: 'PlatformMemberObject';
   assignedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   assignedBy?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -492,12 +492,14 @@ export type Query = {
   getCapabilities?: Maybe<Array<CapabilityObject>>;
   getCapability?: Maybe<CapabilityObject>;
   getClient?: Maybe<ClientObject>;
+  getOrganization?: Maybe<OrganizationObject>;
   getOrganizations?: Maybe<Array<OrganizationObject>>;
+  getPlatformMember?: Maybe<PlatformMemberObject>;
+  getPlatformMembers?: Maybe<Array<PlatformMemberObject>>;
   getPlatformRole?: Maybe<PlatformRoleObject>;
-  getPlatformRoleAssignment?: Maybe<PlatformRoleAssignmentObject>;
-  getPlatformRoleAssignments?: Maybe<Array<PlatformRoleAssignmentObject>>;
   getPlatformRoles?: Maybe<Array<PlatformRoleObject>>;
   getProduct?: Maybe<ProductObject>;
+  getTenant?: Maybe<TenantObject>;
   getTenants?: Maybe<Array<TenantObject>>;
   getUnit?: Maybe<UnitObject>;
   hello?: Maybe<HelloXyz>;
@@ -552,9 +554,25 @@ export type QueryGetClientArgs = {
 };
 
 
+export type QueryGetOrganizationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryGetOrganizationsArgs = {
   parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
   tenantId: Scalars['String']['input'];
+};
+
+
+export type QueryGetPlatformMemberArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetPlatformMembersArgs = {
+  identityId?: InputMaybe<Scalars['String']['input']>;
+  platformRoleId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -563,18 +581,12 @@ export type QueryGetPlatformRoleArgs = {
 };
 
 
-export type QueryGetPlatformRoleAssignmentArgs = {
+export type QueryGetProductArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type QueryGetPlatformRoleAssignmentsArgs = {
-  identityId?: InputMaybe<Scalars['String']['input']>;
-  platformRoleId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryGetProductArgs = {
+export type QueryGetTenantArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -647,7 +659,7 @@ export type UpdateIssueInput = {
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdatePlatformRoleAssignmentInput = {
+export type UpdatePlatformMemberInput = {
   expiresAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
   id: Scalars['String']['input'];
   reason?: InputMaybe<Scalars['String']['input']>;

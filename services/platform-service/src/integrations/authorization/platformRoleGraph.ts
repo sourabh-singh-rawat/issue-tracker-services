@@ -1,18 +1,20 @@
 import { ALL_PLATFORM_ROLES } from "@pine/authorization";
 import {
   createCloudEvent,
-  PlatformRoleAssignmentCreatedEvent,
-  PlatformRoleAssignmentDeletedEvent,
+  PlatformMemberCreatedEvent,
+  PlatformMemberDeletedEvent,
   PlatformRoleCapabilitiesUpdatedEvent,
 } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
-import type { DbClient, PlatformRoleAssignment } from "@/db";
+import type { DbClient, PlatformMember } from "@/db";
 
 const capabilityKeysForRole = (roleId: string, roleKey: string): readonly string[] => {
-  const definition = ALL_PLATFORM_ROLES.find(
-    (role) => role.id === roleId || role.key === roleKey,
-  );
-  return definition?.capabilityKeys ?? [];
+  for (const definition of ALL_PLATFORM_ROLES) {
+    if (definition.id === roleId || definition.key === roleKey) {
+      return definition.capabilityKeys;
+    }
+  }
+  return [];
 };
 
 export const schedulePlatformRoleCapabilitiesUpdated = async (
@@ -51,15 +53,15 @@ export const schedulePlatformRoleCapabilitiesUpdated = async (
   );
 };
 
-export const schedulePlatformRoleAssignmentCreated = async (
+export const schedulePlatformMemberCreated = async (
   outboxService: IOutboxService,
-  assignment: PlatformRoleAssignment,
+  assignment: PlatformMember,
   options?: { tx: DbClient },
 ): Promise<void> => {
   const event = createCloudEvent({
-    type: PlatformRoleAssignmentCreatedEvent.type,
-    version: PlatformRoleAssignmentCreatedEvent.version,
-    schema: PlatformRoleAssignmentCreatedEvent.schema,
+    type: PlatformMemberCreatedEvent.type,
+    version: PlatformMemberCreatedEvent.version,
+    schema: PlatformMemberCreatedEvent.schema,
     source: "pine/platform-service",
     subject: assignment.id,
     data: {
@@ -77,8 +79,8 @@ export const schedulePlatformRoleAssignmentCreated = async (
     {
       eventId: event.id,
       eventType: event.type,
-      eventVersion: PlatformRoleAssignmentCreatedEvent.version,
-      aggregateType: "platform_role_assignment",
+      eventVersion: PlatformMemberCreatedEvent.version,
+      aggregateType: "platform_member",
       aggregateId: assignment.id,
       payload: event,
     },
@@ -86,15 +88,15 @@ export const schedulePlatformRoleAssignmentCreated = async (
   );
 };
 
-export const schedulePlatformRoleAssignmentDeleted = async (
+export const schedulePlatformMemberDeleted = async (
   outboxService: IOutboxService,
-  assignment: Pick<PlatformRoleAssignment, "id" | "platformRoleId" | "identityId">,
+  assignment: Pick<PlatformMember, "id" | "platformRoleId" | "identityId">,
   options?: { tx: DbClient },
 ): Promise<void> => {
   const event = createCloudEvent({
-    type: PlatformRoleAssignmentDeletedEvent.type,
-    version: PlatformRoleAssignmentDeletedEvent.version,
-    schema: PlatformRoleAssignmentDeletedEvent.schema,
+    type: PlatformMemberDeletedEvent.type,
+    version: PlatformMemberDeletedEvent.version,
+    schema: PlatformMemberDeletedEvent.schema,
     source: "pine/platform-service",
     subject: assignment.id,
     data: {
@@ -108,8 +110,8 @@ export const schedulePlatformRoleAssignmentDeleted = async (
     {
       eventId: event.id,
       eventType: event.type,
-      eventVersion: PlatformRoleAssignmentDeletedEvent.version,
-      aggregateType: "platform_role_assignment",
+      eventVersion: PlatformMemberDeletedEvent.version,
+      aggregateType: "platform_member",
       aggregateId: assignment.id,
       payload: event,
     },

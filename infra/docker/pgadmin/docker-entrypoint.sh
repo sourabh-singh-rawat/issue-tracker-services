@@ -20,7 +20,7 @@ inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
 product-postgres:5432:*:product:${POSTGRES_PRODUCT_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
 notification-postgres:5432:*:notification:${POSTGRES_NOTIFICATION_PASSWORD}
-tenant-postgres:5432:*:tenant:${POSTGRES_TENANT_PASSWORD}
+platform-postgres:5432:*:platform:${POSTGRES_PLATFORM_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
 EOF
@@ -110,12 +110,12 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "7": {
-      "Name": "Tenant Service DB",
+      "Name": "Platform Service DB",
       "Group": "Pine",
-      "Host": "tenant-postgres",
+      "Host": "platform-postgres",
       "Port": 5432,
-      "MaintenanceDB": "tenant",
-      "Username": "tenant",
+      "MaintenanceDB": "platform",
+      "Username": "platform",
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },

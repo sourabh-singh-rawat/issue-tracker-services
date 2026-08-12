@@ -22,10 +22,12 @@ import type {
 } from "@/features/platformRoles/services/IPlatformRoleService";
 
 const capabilityKeysForPlatformRole = (role: PlatformRole): readonly string[] => {
-  const definition = ALL_PLATFORM_ROLES.find(
-    (platformRole) => platformRole.id === role.id || platformRole.key === role.key,
-  );
-  return definition?.capabilityKeys ?? [];
+  for (const definition of ALL_PLATFORM_ROLES) {
+    if (definition.id === role.id || definition.key === role.key) {
+      return definition.capabilityKeys;
+    }
+  }
+  return [];
 };
 
 @injectable()

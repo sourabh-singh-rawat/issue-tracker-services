@@ -45,13 +45,35 @@ const childOrganization = {
 
 const userId = "user-1";
 
+const ownerRole = {
+  id: "role-owner-1",
+  organizationId: "org-1",
+  key: "organization.owner",
+  name: "Organization Owner",
+  description: null,
+  isSystem: true,
+  version: 1,
+  createdAt: new Date("2026-01-01T00:00:00.000Z"),
+  updatedAt: null,
+  deletedAt: null,
+};
+
 const createService = (deps: {
   organizationRepository?: unknown;
+  organizationRoleRepository?: unknown;
+  organizationMemberRepository?: unknown;
   tenantRepository?: unknown;
   authorizationClient?: unknown;
+  db?: unknown;
 }) =>
   new OrganizationService(
     (deps.organizationRepository ?? {}) as never,
+    (deps.organizationRoleRepository ?? {
+      seedSystemRoles: vi.fn().mockResolvedValue([ownerRole]),
+    }) as never,
+    (deps.organizationMemberRepository ?? {
+      save: vi.fn().mockResolvedValue({ id: "member-1" }),
+    }) as never,
     (deps.tenantRepository ?? {
       findById: vi.fn().mockResolvedValue(tenant),
     }) as never,
@@ -59,6 +81,9 @@ const createService = (deps: {
       checkRelationship: vi.fn().mockResolvedValue(true),
       ensureRelationship: vi.fn().mockResolvedValue(undefined),
       deleteRelationship: vi.fn().mockResolvedValue(undefined),
+    }) as never,
+    (deps.db ?? {
+      transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn({})),
     }) as never,
   );
 
@@ -176,11 +201,17 @@ describe("OrganizationService", () => {
     expect(organizationRepository.findMany).not.toHaveBeenCalled();
   });
 
-  it("creates a root organization when slug and name are unique", async () => {
+  it("creates a root organization, seeds system roles, and assigns creator as owner", async () => {
     const organizationRepository = {
       existsBySlugInTenant: vi.fn().mockResolvedValue(false),
       existsByNameInTenant: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(organization),
+    };
+    const organizationRoleRepository = {
+      seedSystemRoles: vi.fn().mockResolvedValue([ownerRole]),
+    };
+    const organizationMemberRepository = {
+      save: vi.fn().mockResolvedValue({ id: "member-1" }),
     };
     const authorizationClient = {
       checkRelationship: vi.fn().mockResolvedValue(true),
@@ -188,7 +219,12 @@ describe("OrganizationService", () => {
       deleteRelationship: vi.fn().mockResolvedValue(undefined),
     };
 
-    const service = createService({ organizationRepository, authorizationClient });
+    const service = createService({
+      organizationRepository,
+      organizationRoleRepository,
+      organizationMemberRepository,
+      authorizationClient,
+    });
 
     await expect(
       service.createOrganization(
@@ -207,25 +243,51 @@ describe("OrganizationService", () => {
       relation: "has",
       subject: { type: "user", id: userId },
     });
-    expect(organizationRepository.save).toHaveBeenCalledWith({
-      tenantId: "tenant-1",
-      parentOrganizationId: undefined,
-      name: "Acme Corp",
-      slug: "acme",
-      description: "Primary organization",
-      isActive: undefined,
+    expect(organizationRepository.save).toHaveBeenCalledWith(
+      {
+        tenantId: "tenant-1",
+        parentOrganizationId: undefined,
+        name: "Acme Corp",
+        slug: "acme",
+        description: "Primary organization",
+        isActive: undefined,
+      },
+      { tx: {} },
+    );
+    expect(organizationRoleRepository.seedSystemRoles).toHaveBeenCalledWith("org-1", {
+      tx: {},
     });
+    expect(organizationMemberRepository.save).toHaveBeenCalledWith(
+      {
+        organizationId: "org-1",
+        roleId: "role-owner-1",
+        identityId: userId,
+        assignedBy: userId,
+      },
+      { tx: {} },
+    );
   });
 
   it("creates a child organization when parent is in the same tenant", async () => {
+    const childOwnerRole = { ...ownerRole, id: "role-owner-2", organizationId: "org-2" };
     const organizationRepository = {
       findById: vi.fn().mockResolvedValue(organization),
       existsBySlugInTenant: vi.fn().mockResolvedValue(false),
       existsByNameInTenant: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(childOrganization),
     };
+    const organizationRoleRepository = {
+      seedSystemRoles: vi.fn().mockResolvedValue([childOwnerRole]),
+    };
+    const organizationMemberRepository = {
+      save: vi.fn().mockResolvedValue({ id: "member-2" }),
+    };
 
-    const service = createService({ organizationRepository });
+    const service = createService({
+      organizationRepository,
+      organizationRoleRepository,
+      organizationMemberRepository,
+    });
 
     await expect(
       service.createOrganization(
@@ -240,14 +302,29 @@ describe("OrganizationService", () => {
     ).resolves.toEqual(childOrganization);
 
     expect(organizationRepository.findById).toHaveBeenCalledWith("org-1");
-    expect(organizationRepository.save).toHaveBeenCalledWith({
-      tenantId: "tenant-1",
-      parentOrganizationId: "org-1",
-      name: "Acme Division",
-      slug: "acme-division",
-      description: undefined,
-      isActive: undefined,
+    expect(organizationRepository.save).toHaveBeenCalledWith(
+      {
+        tenantId: "tenant-1",
+        parentOrganizationId: "org-1",
+        name: "Acme Division",
+        slug: "acme-division",
+        description: undefined,
+        isActive: undefined,
+      },
+      { tx: {} },
+    );
+    expect(organizationRoleRepository.seedSystemRoles).toHaveBeenCalledWith("org-2", {
+      tx: {},
     });
+    expect(organizationMemberRepository.save).toHaveBeenCalledWith(
+      {
+        organizationId: "org-2",
+        roleId: "role-owner-2",
+        identityId: userId,
+        assignedBy: userId,
+      },
+      { tx: {} },
+    );
   });
 
   it("rejects create when parent organization is missing or in another tenant", async () => {

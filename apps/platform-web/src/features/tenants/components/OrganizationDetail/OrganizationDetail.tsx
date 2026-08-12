@@ -14,8 +14,9 @@ import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { getErrorMessage } from "@shared/ui";
 import type { SyntheticEvent } from "react";
 import { OrganizationMembers } from "./OrganizationMembers";
+import { OrganizationRoles } from "./OrganizationRoles";
 
-type OrganizationDetailTab = "overview" | "members";
+type OrganizationDetailTab = "overview" | "members" | "roles";
 
 const formatDateTime = (value: unknown): string => {
   if (value == null) {
@@ -32,11 +33,12 @@ const formatDateTime = (value: unknown): string => {
 };
 
 const isOrganizationDetailTab = (value: unknown): value is OrganizationDetailTab =>
-  value === "overview" || value === "members";
+  value === "overview" || value === "members" || value === "roles";
 
 const organizationDetailTabs: ReadonlyArray<{ value: OrganizationDetailTab; label: string }> = [
   { value: "overview", label: "Overview" },
   { value: "members", label: "Members" },
+  { value: "roles", label: "Roles" },
 ];
 
 export const OrganizationDetail = () => {
@@ -200,6 +202,8 @@ export const OrganizationDetail = () => {
           ) : null}
 
           {tab === "members" ? <OrganizationMembers organizationId={organizationId} /> : null}
+
+          {tab === "roles" ? <OrganizationRoles organizationId={organizationId} /> : null}
         </Box>
       ) : null}
     </Container>

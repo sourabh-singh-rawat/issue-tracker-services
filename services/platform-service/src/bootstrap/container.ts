@@ -33,11 +33,21 @@ import {
   OrganizationService,
 } from "@/features/organizations";
 import {
-  type IPlatformRoleAssignmentRepository,
-  type IPlatformRoleAssignmentService,
-  PlatformRoleAssignmentRepository,
-  PlatformRoleAssignmentService,
-} from "@/features/platformRoleAssignments";
+  type IOrganizationMemberRepository,
+  OrganizationMemberRepository,
+} from "@/features/organizationMembers";
+import {
+  type IOrganizationRoleRepository,
+  type IOrganizationRoleService,
+  OrganizationRoleRepository,
+  OrganizationRoleService,
+} from "@/features/organizationRoles";
+import {
+  type IPlatformMemberRepository,
+  type IPlatformMemberService,
+  PlatformMemberRepository,
+  PlatformMemberService,
+} from "@/features/platformMembers";
 import {
   type IPlatformRoleRepository,
   type IPlatformRoleService,
@@ -51,6 +61,18 @@ import {
   CapabilityService,
 } from "@/features/capabilities";
 import { type ITenantRepository, type ITenantService, TenantRepository, TenantService } from "@/features/tenants";
+import {
+  type ITenantMemberRepository,
+  type ITenantMemberService,
+  TenantMemberRepository,
+  TenantMemberService,
+} from "@/features/tenantMembers";
+import {
+  type ITenantRoleRepository,
+  type ITenantRoleService,
+  TenantRoleRepository,
+  TenantRoleService,
+} from "@/features/tenantRoles";
 import { createContext } from "@/graphql";
 import { routes } from "@/routes";
 
@@ -97,16 +119,29 @@ container
   .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
 container.bind<ITenantService>(TYPES.TenantService).to(TenantService);
+container.bind<ITenantRoleRepository>(TYPES.TenantRoleRepository).to(TenantRoleRepository);
+container.bind<ITenantRoleService>(TYPES.TenantRoleService).to(TenantRoleService);
+container.bind<ITenantMemberRepository>(TYPES.TenantMemberRepository).to(TenantMemberRepository);
+container.bind<ITenantMemberService>(TYPES.TenantMemberService).to(TenantMemberService);
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
+container
+  .bind<IOrganizationRoleRepository>(TYPES.OrganizationRoleRepository)
+  .to(OrganizationRoleRepository);
+container
+  .bind<IOrganizationRoleService>(TYPES.OrganizationRoleService)
+  .to(OrganizationRoleService);
+container
+  .bind<IOrganizationMemberRepository>(TYPES.OrganizationMemberRepository)
+  .to(OrganizationMemberRepository);
 container.bind<IPlatformRoleRepository>(TYPES.PlatformRoleRepository).to(PlatformRoleRepository);
 container.bind<IPlatformRoleService>(TYPES.PlatformRoleService).to(PlatformRoleService);
 container
-  .bind<IPlatformRoleAssignmentRepository>(TYPES.PlatformRoleAssignmentRepository)
-  .to(PlatformRoleAssignmentRepository);
+  .bind<IPlatformMemberRepository>(TYPES.PlatformMemberRepository)
+  .to(PlatformMemberRepository);
 container
-  .bind<IPlatformRoleAssignmentService>(TYPES.PlatformRoleAssignmentService)
-  .to(PlatformRoleAssignmentService);
+  .bind<IPlatformMemberService>(TYPES.PlatformMemberService)
+  .to(PlatformMemberService);
 container.bind<ICapabilityRepository>(TYPES.CapabilityRepository).to(CapabilityRepository);
 container.bind<ICapabilityService>(TYPES.CapabilityService).to(CapabilityService);
 
@@ -127,14 +162,16 @@ export const bindHttpServer = async (): Promise<void> => {
         info: {
           title: "Platform Service",
           version: "0.0.0",
-          description: "Tenant, organization, membership, and capability catalog APIs",
+          description: "Tenant, organization, platform member, and capability catalog APIs",
           license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
         },
         servers: [{ url: env.PLATFORM_SERVICE_URL }],
         tags: [
           { name: "tenants", description: "Tenant end-points" },
+          { name: "tenant-members", description: "Tenant member end-points" },
           { name: "organizations", description: "Organization end-points" },
-          { name: "memberships", description: "Membership end-points" },
+          { name: "platform-members", description: "Platform member end-points" },
+          { name: "organization-members", description: "Organization member end-points" },
           { name: "capabilities", description: "Capability catalog end-points" },
         ],
       },
