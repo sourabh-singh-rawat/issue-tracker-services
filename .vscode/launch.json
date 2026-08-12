@@ -13,14 +13,14 @@
         "codegen: supergraph",
         "erp-web",
         "identity-web",
-        "admin-web",
+        "platform-web",
         "api-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
         "inventory-service",
         "issues-service",
-        "organization-service",
+        "platform-service",
         "authorization-service",
         "identity-service"
       ]
@@ -38,14 +38,14 @@
         "codegen: supergraph",
         "erp-web",
         "identity-web",
-        "admin-web",
+        "platform-web",
         "api-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
         "inventory-service",
         "issues-service",
-        "organization-service",
+        "platform-service",
         "authorization-service",
         "identity-service"
       ]
@@ -63,14 +63,14 @@
         "codegen: supergraph",
         "erp-web",
         "identity-web",
-        "admin-web",
+        "platform-web",
         "api-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
         "inventory-service",
         "issues-service",
-        "organization-service",
+        "platform-service",
         "authorization-service",
         "identity-service"
       ]
@@ -186,12 +186,12 @@
       "presentation": { "group": "1-services", "order": 6 }
     },
     {
-      "name": "organization-service",
+      "name": "platform-service",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["organization-service"],
+      "runtimeArgs": ["platform-service"],
       "console": "integratedTerminal",
       "outFiles": [],
       "sourceMaps": true,
@@ -276,12 +276,12 @@
       "presentation": { "group": "2-web", "order": 2 }
     },
     {
-      "name": "admin-web",
+      "name": "platform-web",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["admin-web"],
+      "runtimeArgs": ["platform-web"],
       "console": "integratedTerminal",
       "outFiles": [],
       "sourceMaps": true,
@@ -319,12 +319,12 @@
       }
     },
     {
-      "name": "admin-web + browser",
+      "name": "platform-web + browser",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["admin-web"],
+      "runtimeArgs": ["platform-web"],
       "console": "integratedTerminal",
       "outFiles": [],
       "sourceMaps": true,
@@ -340,7 +340,7 @@
         "uriFormat": "%s",
         "action": "debugWithChrome",
         "killOnServerStop": true,
-        "webRoot": "${workspaceFolder}/apps/admin-web"
+        "webRoot": "${workspaceFolder}/apps/platform-web"
       }
     },
     {

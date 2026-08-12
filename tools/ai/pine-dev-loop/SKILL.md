@@ -13,9 +13,12 @@ Root cwd. Node ≥20.13.1; pnpm from root `packageManager`.
 
 ```bash
 pnpm dev:infra          # down: dev:infra:down
+pnpm setup              # migrate → authz seed → bootstrap admin → grant platform admin
 pnpm schemas:compose    # or schemas:watch
 pnpm dev:apps
 ```
+
+`pnpm setup` runs `tools/scripts/setup.ts`. Needs infra up and `BOOTSTRAP_ADMIN_*` in root `.env`.
 
 | Infra variant           | Script                                 |
 | ----------------------- | -------------------------------------- |

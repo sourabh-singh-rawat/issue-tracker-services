@@ -143,45 +143,21 @@ services:
           cpus: "0.10"
           memory: 128M
 
-  organization-postgres:
+  tenant-postgres:
     image: postgres:18.4
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=organization
-      - POSTGRES_PASSWORD=${POSTGRES_ORGANIZATION_PASSWORD}
-      - POSTGRES_DB=organization
+      - POSTGRES_USER=tenant
+      - POSTGRES_PASSWORD=${POSTGRES_TENANT_PASSWORD}
+      - POSTGRES_DB=tenant
     volumes:
-      - ../data/docker/pg-organization-data:/var/lib/postgresql
+      - ../data/docker/pg-tenant-data:/var/lib/postgresql
     command:
       - postgres
       - -c
       - max_connections=50
     ports:
       - 5439:5432
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 256M
-        reservations:
-          cpus: "0.10"
-          memory: 128M
-
-  authz-postgres:
-    image: postgres:18.4
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=authz
-      - POSTGRES_PASSWORD=${POSTGRES_AUTHZ_PASSWORD}
-      - POSTGRES_DB=authz
-    volumes:
-      - ../data/docker/pg-authz-data:/var/lib/postgresql
-    command:
-      - postgres
-      - -c
-      - max_connections=50
-    ports:
-      - 5440:5432
     deploy:
       resources:
         limits:

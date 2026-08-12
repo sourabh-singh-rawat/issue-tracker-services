@@ -15,14 +15,17 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
 
   return {
     width: open ? openDrawerWidth : closedDrawerWidth,
+    flexShrink: 0,
     [theme.breakpoints.down("sm")]: {
       width: closedDrawerWidth,
     },
     "& .MuiPaper-root": {
       border: "none",
       backgroundColor: theme.palette.background.paper,
+      position: "relative",
     },
     "& .MuiDrawer-paper": {
+      position: "relative",
       borderRight: `1px solid ${theme.palette.divider}`,
       transition: theme.transitions.create(["width"], {
         easing: theme.transitions.easing.sharp,
@@ -42,7 +45,7 @@ const Drawer = styled(MuiDrawer)(({ open, theme }) => {
   };
 });
 
-export function Sidebar() {
+export const Sidebar = () => {
   const isLargeScreen = useLargeScreen();
   const [open, setOpen] = useState(false);
 
@@ -59,4 +62,4 @@ export function Sidebar() {
       <MuiDivider />
     </Drawer>
   );
-}
+};

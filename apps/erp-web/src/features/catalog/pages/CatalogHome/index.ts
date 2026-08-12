@@ -1,0 +1,1 @@
+export { CatalogHomePage } from "./CatalogHomePage";

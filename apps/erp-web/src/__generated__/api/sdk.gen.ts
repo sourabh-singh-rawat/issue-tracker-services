@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CheckRelationshipData, CheckRelationshipResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, GetTokenSessionIdentityData, GetTokenSessionIdentityResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CheckRelationshipData, CheckRelationshipResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, DeleteRelationshipData, DeleteRelationshipResponses, EnsureRelationshipData, EnsureRelationshipResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, GetTokenSessionIdentityData, GetTokenSessionIdentityResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -205,6 +205,36 @@ export const createAttachment = <ThrowOnError extends boolean = false>(options: 
 export const checkRelationship = <ThrowOnError extends boolean = false>(options: Options<CheckRelationshipData, ThrowOnError>): RequestResult<CheckRelationshipResponses, unknown, ThrowOnError> => (options.client ?? client).post<CheckRelationshipResponses, unknown, ThrowOnError>({
     responseType: 'json',
     url: '/authorization/checkRelationship',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Ensure a graph relationship exists
+ *
+ * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant capabilities and role assignees.
+ */
+export const ensureRelationship = <ThrowOnError extends boolean = false>(options: Options<EnsureRelationshipData, ThrowOnError>): RequestResult<EnsureRelationshipResponses, unknown, ThrowOnError> => (options.client ?? client).post<EnsureRelationshipResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/authorization/ensureRelationship',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete a graph relationship
+ *
+ * Idempotently delete a relationship from the authorization graph (Ory Keto).
+ */
+export const deleteRelationship = <ThrowOnError extends boolean = false>(options: Options<DeleteRelationshipData, ThrowOnError>): RequestResult<DeleteRelationshipResponses, unknown, ThrowOnError> => (options.client ?? client).post<DeleteRelationshipResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/authorization/deleteRelationship',
     ...options,
     headers: {
         'Content-Type': 'application/json',

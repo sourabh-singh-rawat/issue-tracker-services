@@ -5,11 +5,14 @@ describe("AuthorizationService", () => {
   it("delegates relationship checks to the authorization graph provider", async () => {
     const authorizationGraphProvider = {
       checkPermission: vi.fn().mockResolvedValue(true),
+      listRelationships: vi.fn(),
+      createRelationship: vi.fn(),
+      deleteRelationship: vi.fn(),
     };
-    const service = new AuthorizationService(authorizationGraphProvider as never);
+    const service = new AuthorizationService(authorizationGraphProvider);
 
     const relationship = {
-      object: { type: "organization", id: "org-1" },
+      object: { type: "tenant", id: "tenant-1" },
       relation: "member",
       subject: { type: "user", id: "user-1" },
     };
@@ -20,5 +23,42 @@ describe("AuthorizationService", () => {
       relationship.relation,
       relationship.subject,
     );
+  });
+
+  it("creates a relationship when none exists", async () => {
+    const authorizationGraphProvider = {
+      checkPermission: vi.fn(),
+      listRelationships: vi.fn().mockResolvedValue([]),
+      createRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn(),
+    };
+    const service = new AuthorizationService(authorizationGraphProvider);
+
+    const relationship = {
+      object: { type: "capability", id: "platform:tenant:create" },
+      relation: "has",
+      subjectSet: { type: "role", id: "role-1", relation: "assignee" },
+    };
+
+    await expect(service.ensureRelationship(relationship)).resolves.toEqual({ created: true });
+    expect(authorizationGraphProvider.createRelationship).toHaveBeenCalledWith(relationship);
+  });
+
+  it("skips create when relationship already exists", async () => {
+    const relationship = {
+      object: { type: "role", id: "role-1" },
+      relation: "assignee",
+      subject: { type: "user", id: "user-1" },
+    };
+    const authorizationGraphProvider = {
+      checkPermission: vi.fn(),
+      listRelationships: vi.fn().mockResolvedValue([relationship]),
+      createRelationship: vi.fn(),
+      deleteRelationship: vi.fn(),
+    };
+    const service = new AuthorizationService(authorizationGraphProvider);
+
+    await expect(service.ensureRelationship(relationship)).resolves.toEqual({ created: false });
+    expect(authorizationGraphProvider.createRelationship).not.toHaveBeenCalled();
   });
 });

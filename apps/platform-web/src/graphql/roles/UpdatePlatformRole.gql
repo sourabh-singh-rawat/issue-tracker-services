@@ -1,0 +1,11 @@
+mutation UpdatePlatformRole($input: UpdatePlatformRoleInput!) {
+  updatePlatformRole(input: $input) {
+    id
+    key
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+  }
+}

@@ -1,0 +1,18 @@
+query GetPlatformRole($id: String!) {
+  getPlatformRole(id: $id) {
+    id
+    key
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    capabilities {
+      id
+      key
+      service
+      resource
+      action
+    }
+  }
+}

@@ -1,6 +1,0 @@
-export * from "./AddCapabilitiesModal";
-export * from "./CapabilityMultiSelect";
-export * from "./CreateRoleForm";
-export * from "./CreateRoleModal";
-export * from "./RoleDetail";
-export * from "./Roles";
