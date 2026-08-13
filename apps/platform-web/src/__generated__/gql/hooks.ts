@@ -42,6 +42,14 @@ export type GetOrganizationsQueryVariables = Exact<{
 
 export type GetOrganizationsQuery = { getOrganizations: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown }> | null };
 
+export type UpdateOrganizationMutationVariables = Exact<{
+  id: string;
+  input: Types.UpdateOrganizationInput;
+}>;
+
+
+export type UpdateOrganizationMutation = { updateOrganization: { id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
+
 export type CreatePlatformRoleMutationVariables = Exact<{
   input: Types.CreatePlatformRoleInput;
 }>;
@@ -314,6 +322,37 @@ export const useGetOrganizationsQuery = <
 useGetOrganizationsQuery.document = GetOrganizationsDocument;
 
 useGetOrganizationsQuery.getKey = (variables: GetOrganizationsQueryVariables) => ['GetOrganizations', variables];
+
+export const UpdateOrganizationDocument = new TypedDocumentString(`
+    mutation UpdateOrganization($id: String!, $input: UpdateOrganizationInput!) {
+  updateOrganization(id: $id, input: $input) {
+    id
+    tenantId
+    parentOrganizationId
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `);
+
+export const useUpdateOrganizationMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UpdateOrganizationMutation, TError, UpdateOrganizationMutationVariables, TContext>) => {
+    
+    return useMutation<UpdateOrganizationMutation, TError, UpdateOrganizationMutationVariables, TContext>(
+      {
+    mutationKey: ['UpdateOrganization'],
+    mutationFn: (variables?: UpdateOrganizationMutationVariables) => graphQLFetcher<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>(UpdateOrganizationDocument, variables)(),
+    ...options
+  }
+    )};
+
+useUpdateOrganizationMutation.getKey = () => ['UpdateOrganization'];
 
 export const CreatePlatformRoleDocument = new TypedDocumentString(`
     mutation CreatePlatformRole($input: CreatePlatformRoleInput!) {

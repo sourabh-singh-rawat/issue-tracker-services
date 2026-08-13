@@ -4,14 +4,22 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { useGetOrganizationQuery } from "@generated/gql";
+import {
+  useGetOrganizationQuery,
+  useGetOrganizationsQuery,
+  useUpdateOrganizationMutation,
+} from "@generated/gql";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
-import { getErrorMessage } from "@shared/ui";
+import { getErrorMessage, useSnackbar } from "@shared/ui";
 import type { SyntheticEvent } from "react";
 import { OrganizationMembers } from "./OrganizationMembers";
 import { OrganizationRoles } from "./OrganizationRoles";
@@ -40,6 +48,89 @@ const organizationDetailTabs: ReadonlyArray<{ value: OrganizationDetailTab; labe
   { value: "members", label: "Members" },
   { value: "roles", label: "Roles" },
 ];
+
+type ParentOrganizationFieldProps = {
+  organizationId: string;
+  tenantId: string;
+  parentOrganizationId: string | null;
+};
+
+const ParentOrganizationField = ({
+  organizationId,
+  tenantId,
+  parentOrganizationId,
+}: ParentOrganizationFieldProps) => {
+  const snackbar = useSnackbar();
+  const queryClient = useQueryClient();
+  const updateOrganizationMutation = useUpdateOrganizationMutation();
+  const organizationsQuery = useGetOrganizationsQuery(
+    { tenantId },
+    {
+      select: (data) => data.getOrganizations ?? [],
+      enabled: Boolean(tenantId),
+    },
+  );
+
+  const parentOptions = (organizationsQuery.data ?? []).filter(
+    (organization) => organization.id && organization.id !== organizationId,
+  );
+  const currentParentOrganizationId = parentOrganizationId ?? "";
+
+  const handleParentChange = async (nextParentOrganizationId: string) => {
+    if (nextParentOrganizationId === currentParentOrganizationId) {
+      return;
+    }
+
+    try {
+      await updateOrganizationMutation.mutateAsync({
+        id: organizationId,
+        input: {
+          parentOrganizationId: nextParentOrganizationId || null,
+        },
+      });
+      await queryClient.invalidateQueries({ queryKey: ["GetOrganization"] });
+      await queryClient.invalidateQueries({ queryKey: ["GetOrganizations"] });
+      snackbar.success("Parent organization updated");
+    } catch (error) {
+      snackbar.error(getErrorMessage(error, "Failed to update parent organization"));
+    }
+  };
+
+  return (
+    <Box>
+      <Typography variant="overline" color="text.secondary">
+        Parent organization
+      </Typography>
+      <FormControl fullWidth size="small" sx={{ mt: 0.5 }}>
+        <Select
+          id="parentOrganizationId"
+          name="parentOrganizationId"
+          value={currentParentOrganizationId}
+          displayEmpty
+          onChange={(event) => {
+            void handleParentChange(event.target.value);
+          }}
+          disabled={organizationsQuery.isPending || updateOrganizationMutation.isPending}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {parentOptions.map((organization) => {
+            const id = organization.id;
+            if (!id) {
+              return null;
+            }
+            return (
+              <MenuItem key={id} value={id}>
+                {organization.name ?? organization.slug ?? id}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+    </Box>
+  );
+};
 
 export const OrganizationDetail = () => {
   const { tenantId, organizationId } = useParams({
@@ -162,14 +253,14 @@ export const OrganizationDetail = () => {
                       {organization.tenantId ?? "—"}
                     </Typography>
                   </Box>
-                  <Box>
-                    <Typography variant="overline" color="text.secondary">
-                      Parent organization ID
-                    </Typography>
-                    <Typography sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                      {organization.parentOrganizationId ?? "—"}
-                    </Typography>
-                  </Box>
+                  {organization.id && organization.tenantId ? (
+                    <ParentOrganizationField
+                      key={`${organization.id}:${organization.parentOrganizationId ?? ""}`}
+                      organizationId={organization.id}
+                      tenantId={organization.tenantId}
+                      parentOrganizationId={organization.parentOrganizationId ?? null}
+                    />
+                  ) : null}
                   <Box>
                     <Typography variant="overline" color="text.secondary">
                       Slug

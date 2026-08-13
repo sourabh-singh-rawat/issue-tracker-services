@@ -406,6 +406,64 @@ describe("OrganizationService", () => {
     expect(organizationRepository.save).not.toHaveBeenCalled();
   });
 
+  it("updates the parent organization", async () => {
+    const updated = { ...childOrganization, parentOrganizationId: null };
+    const organizationRepository = {
+      findById: vi.fn().mockResolvedValue(childOrganization),
+      update: vi.fn().mockResolvedValue(updated),
+    };
+    const authorizationClient = {
+      checkRelationship: vi.fn().mockResolvedValue(true),
+      ensureRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const service = createService({ organizationRepository, authorizationClient });
+
+    await expect(
+      service.updateOrganization("org-2", { parentOrganizationId: null }, userId),
+    ).resolves.toEqual(updated);
+    expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
+      object: { type: "capability", id: "tenant:organization:update" },
+      relation: "has",
+      subject: { type: "user", id: userId },
+    });
+    expect(organizationRepository.update).toHaveBeenCalledWith("org-2", {
+      parentOrganizationId: null,
+    });
+  });
+
+  it("rejects update when the parent would create a cycle", async () => {
+    const organizationRepository = {
+      findById: vi
+        .fn()
+        .mockResolvedValueOnce(organization)
+        .mockResolvedValueOnce(childOrganization),
+      update: vi.fn(),
+    };
+
+    const service = createService({ organizationRepository });
+
+    await expect(
+      service.updateOrganization("org-1", { parentOrganizationId: "org-2" }, userId),
+    ).rejects.toBeInstanceOf(InvalidParentOrganizationError);
+    expect(organizationRepository.update).not.toHaveBeenCalled();
+  });
+
+  it("rejects update when the organization is missing", async () => {
+    const organizationRepository = {
+      findById: vi.fn().mockResolvedValue(null),
+      update: vi.fn(),
+    };
+
+    const service = createService({ organizationRepository });
+
+    await expect(
+      service.updateOrganization("missing", { parentOrganizationId: null }, userId),
+    ).rejects.toBeInstanceOf(OrganizationNotFoundError);
+    expect(organizationRepository.update).not.toHaveBeenCalled();
+  });
+
   it("soft-deletes an organization", async () => {
     const organizationRepository = {
       softDelete: vi.fn().mockResolvedValue(true),

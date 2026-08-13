@@ -253,6 +253,7 @@ export type Mutation = {
   updateCapability?: Maybe<CapabilityObject>;
   updateCategory?: Maybe<CategoryObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
+  updateOrganization?: Maybe<OrganizationObject>;
   updatePlatformMember?: Maybe<PlatformMemberObject>;
   updatePlatformRole?: Maybe<PlatformRoleObject>;
   updateTenantMember?: Maybe<TenantMemberObject>;
@@ -407,6 +408,12 @@ export type MutationUpdateCategoryArgs = {
 
 export type MutationUpdateIssueArgs = {
   input: UpdateIssueInput;
+};
+
+
+export type MutationUpdateOrganizationArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateOrganizationInput;
 };
 
 
@@ -763,6 +770,10 @@ export type UpdateIssueInput = {
   priority?: InputMaybe<Scalars['String']['input']>;
   statusId?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateOrganizationInput = {
+  parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdatePlatformMemberInput = {

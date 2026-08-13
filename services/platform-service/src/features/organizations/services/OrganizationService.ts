@@ -21,6 +21,7 @@ import type {
   CreateOrganizationInput,
   IOrganizationService,
   ListOrganizationsInput,
+  UpdateOrganizationInput,
 } from "@/features/organizations/services/IOrganizationService";
 import { TenantNotFoundError } from "@/features/tenants/errors";
 import type { ITenantRepository } from "@/features/tenants/repositories";
@@ -151,12 +152,79 @@ export class OrganizationService implements IOrganizationService {
     });
   }
 
+  async updateOrganization(
+    id: string,
+    input: UpdateOrganizationInput,
+    userId: string,
+  ): Promise<Organization> {
+    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.UPDATE.key);
+
+    const organization = await this.organizationRepository.findById(id);
+    if (!organization) {
+      throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+
+    if (input.parentOrganizationId !== undefined) {
+      await this.assertValidParentOrganization(organization, input.parentOrganizationId);
+    }
+
+    const updated = await this.organizationRepository.update(id, {
+      parentOrganizationId: input.parentOrganizationId,
+    });
+    if (!updated) {
+      throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+
+    return updated;
+  }
+
   async deleteOrganization(id: string, userId: string): Promise<void> {
     await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.DELETE.key);
 
     const deleted = await this.organizationRepository.softDelete(id);
     if (!deleted) {
       throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+  }
+
+  private async assertValidParentOrganization(
+    organization: Organization,
+    parentOrganizationId: string | null,
+  ): Promise<void> {
+    if (!parentOrganizationId) {
+      return;
+    }
+
+    if (parentOrganizationId === organization.id) {
+      throw new InvalidParentOrganizationError(
+        `Organization cannot be its own parent: ${organization.id}`,
+      );
+    }
+
+    const parent = await this.organizationRepository.findById(parentOrganizationId);
+    if (!parent || parent.tenantId !== organization.tenantId) {
+      throw new InvalidParentOrganizationError(
+        `Parent organization not found in tenant: ${parentOrganizationId}`,
+      );
+    }
+
+    let ancestorId = parent.parentOrganizationId;
+    const seen = new Set<string>([parent.id]);
+    while (ancestorId) {
+      if (ancestorId === organization.id) {
+        throw new InvalidParentOrganizationError(
+          `Parent organization would create a cycle: ${parentOrganizationId}`,
+        );
+      }
+      if (seen.has(ancestorId)) {
+        break;
+      }
+      seen.add(ancestorId);
+      const ancestor = await this.organizationRepository.findById(ancestorId);
+      if (!ancestor) {
+        break;
+      }
+      ancestorId = ancestor.parentOrganizationId;
     }
   }
 }
