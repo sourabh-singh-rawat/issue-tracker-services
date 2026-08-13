@@ -1,19 +1,14 @@
 import type { CapabilityDefinition } from "./CapabilityDefinition";
 import { BRANDS } from "./Brands";
-import { CAPABILITIES } from "./Capabilities";
 import { CAPABILITY_GRANTS } from "./CapabilityGrants";
 import { TENANTS } from "./Tenants";
 import { ORGANIZATIONS } from "./Organizations";
 import { PLATFORM_ROLE } from "./PlatformRoles";
-import { PLATFORM_ROLE_ASSIGNMENT } from "./PlatformRoleAssignments";
+import { PLATFORM_MEMBER } from "./PlatformMembers";
 import { PRODUCTS } from "./Products";
 import { ROLES } from "./Roles";
 
 export const ALL_CAPABILITIES = [
-  CAPABILITIES.READ,
-  CAPABILITIES.CREATE,
-  CAPABILITIES.UPDATE,
-  CAPABILITIES.DELETE,
   ROLES.READ,
   ROLES.CREATE,
   ROLES.UPDATE,
@@ -35,10 +30,10 @@ export const ALL_CAPABILITIES = [
   PLATFORM_ROLE.CREATE,
   PLATFORM_ROLE.UPDATE,
   PLATFORM_ROLE.DELETE,
-  PLATFORM_ROLE_ASSIGNMENT.READ,
-  PLATFORM_ROLE_ASSIGNMENT.CREATE,
-  PLATFORM_ROLE_ASSIGNMENT.UPDATE,
-  PLATFORM_ROLE_ASSIGNMENT.DELETE,
+  PLATFORM_MEMBER.READ,
+  PLATFORM_MEMBER.CREATE,
+  PLATFORM_MEMBER.UPDATE,
+  PLATFORM_MEMBER.DELETE,
   PRODUCTS.READ,
   PRODUCTS.CREATE,
   PRODUCTS.UPDATE,

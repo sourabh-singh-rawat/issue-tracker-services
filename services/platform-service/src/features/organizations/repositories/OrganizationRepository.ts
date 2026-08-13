@@ -8,6 +8,7 @@ import type {
   IOrganizationRepository,
   ListOrganizationsFilter,
   OrganizationRepositoryOptions,
+  UpdateOrganizationEntity,
 } from "@/features/organizations/repositories/IOrganizationRepository";
 
 @injectable()
@@ -37,6 +38,29 @@ export class OrganizationRepository implements IOrganizationRepository {
       .returning();
 
     return created;
+  }
+
+  async update(
+    id: string,
+    entity: UpdateOrganizationEntity,
+    options?: OrganizationRepositoryOptions,
+  ): Promise<Organization | null> {
+    const client = this.client(options);
+    const now = new Date();
+
+    const [updated] = await client
+      .update(Organizations)
+      .set({
+        ...(entity.parentOrganizationId !== undefined
+          ? { parentOrganizationId: entity.parentOrganizationId }
+          : {}),
+        updatedAt: now,
+        version: sql`${Organizations.version} + 1`,
+      })
+      .where(and(eq(Organizations.id, id), isNull(Organizations.deletedAt)))
+      .returning();
+
+    return updated ?? null;
   }
 
   async findById(id: string): Promise<Organization | null> {

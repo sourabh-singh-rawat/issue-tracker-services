@@ -1,5 +1,9 @@
 import { InsufficientPermissionError } from "@pine/authorization";
-import { TenantCreatedEvent } from "@pine/events";
+import {
+  TenantCreatedEvent,
+  TenantMemberCreatedEvent,
+  TenantRoleCapabilitiesUpdatedEvent,
+} from "@pine/events";
 import { describe, expect, it, vi } from "vitest";
 import {
   TenantNameConflictError,
@@ -9,11 +13,24 @@ import {
 import { TenantService } from "@/features/tenants/services/TenantService";
 
 const tenant = {
-  id: "org-1",
+  id: "tenant-1",
   name: "Acme Corp",
   slug: "acme",
   description: "Primary tenant",
   isActive: true,
+  version: 1,
+  createdAt: new Date("2026-01-01T00:00:00.000Z"),
+  updatedAt: null,
+  deletedAt: null,
+};
+
+const ownerRole = {
+  id: "role-owner-1",
+  tenantId: "tenant-1",
+  key: "tenant.owner",
+  name: "Tenant Owner",
+  description: null,
+  isSystem: true,
   version: 1,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   updatedAt: null,
@@ -28,12 +45,20 @@ const createDbMock = (tx: unknown = { tx: true }) => ({
 
 const createService = (deps: {
   tenantRepository?: unknown;
+  tenantRoleRepository?: unknown;
+  tenantMemberRepository?: unknown;
   authorizationClient?: unknown;
   outboxService?: unknown;
   db?: unknown;
 }) =>
   new TenantService(
     (deps.tenantRepository ?? {}) as never,
+    (deps.tenantRoleRepository ?? {
+      seedSystemRoles: vi.fn().mockResolvedValue([ownerRole]),
+    }) as never,
+    (deps.tenantMemberRepository ?? {
+      save: vi.fn().mockResolvedValue({ id: "member-1" }),
+    }) as never,
     (deps.authorizationClient ?? {
       checkRelationship: vi.fn().mockResolvedValue(true),
       ensureRelationship: vi.fn().mockResolvedValue(undefined),
@@ -136,13 +161,31 @@ describe("TenantService", () => {
     expect(tenantRepository.findAll).not.toHaveBeenCalled();
   });
 
-  it("creates a tenant and schedules TenantCreated in the outbox", async () => {
+  it("creates a tenant, seeds system roles, assigns owner, and schedules TenantCreated", async () => {
     const tx = { tx: true };
     const db = createDbMock(tx);
     const tenantRepository = {
       existsBySlug: vi.fn().mockResolvedValue(false),
       existsByName: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(tenant),
+    };
+    const tenantRoleRepository = {
+      seedSystemRoles: vi.fn().mockResolvedValue([ownerRole]),
+    };
+    const tenantMemberRepository = {
+      save: vi.fn().mockResolvedValue({
+        id: "member-1",
+        tenantId: tenant.id,
+        roleId: ownerRole.id,
+        identityId: userId,
+        assignedBy: userId,
+        assignedAt: new Date("2026-01-01T00:00:00.000Z"),
+        expiresAt: null,
+        reason: null,
+        createdAt: new Date("2026-01-01T00:00:00.000Z"),
+        updatedAt: null,
+        deletedAt: null,
+      }),
     };
     const authorizationClient = {
       checkRelationship: vi.fn().mockResolvedValue(true),
@@ -155,6 +198,8 @@ describe("TenantService", () => {
 
     const service = createService({
       tenantRepository,
+      tenantRoleRepository,
+      tenantMemberRepository,
       authorizationClient,
       outboxService,
       db,
@@ -186,6 +231,52 @@ describe("TenantService", () => {
         description: "Primary tenant",
         isActive: undefined,
       },
+      { tx },
+    );
+    expect(tenantRoleRepository.seedSystemRoles).toHaveBeenCalledWith(tenant.id, { tx });
+    expect(tenantMemberRepository.save).toHaveBeenCalledWith(
+      {
+        tenantId: tenant.id,
+        roleId: ownerRole.id,
+        identityId: userId,
+        assignedBy: userId,
+      },
+      { tx },
+    );
+    expect(outboxService.schedule).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: TenantRoleCapabilitiesUpdatedEvent.type,
+        aggregateType: "tenant_role",
+        aggregateId: ownerRole.id,
+        payload: expect.objectContaining({
+          type: TenantRoleCapabilitiesUpdatedEvent.type,
+          subject: ownerRole.id,
+          data: expect.objectContaining({
+            roleId: ownerRole.id,
+            capabilityKeys: expect.arrayContaining([
+              "tenant:organization:read",
+              "tenant:organization:create",
+              "tenant:organization:update",
+              "tenant:organization:delete",
+            ]),
+          }),
+        }),
+      }),
+      { tx },
+    );
+    expect(outboxService.schedule).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: TenantMemberCreatedEvent.type,
+        aggregateType: "tenant_member",
+        aggregateId: "member-1",
+        payload: expect.objectContaining({
+          type: TenantMemberCreatedEvent.type,
+          data: expect.objectContaining({
+            tenantRoleId: ownerRole.id,
+            identityId: userId,
+          }),
+        }),
+      }),
       { tx },
     );
     expect(outboxService.schedule).toHaveBeenCalledWith(
@@ -296,13 +387,13 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.deleteTenant("org-1", userId)).resolves.toBeUndefined();
+    await expect(service.deleteTenant("tenant-1", userId)).resolves.toBeUndefined();
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       object: { type: "capability", id: "platform:tenant:suspend" },
       relation: "has",
       subject: { type: "user", id: userId },
     });
-    expect(tenantRepository.softDelete).toHaveBeenCalledWith("org-1");
+    expect(tenantRepository.softDelete).toHaveBeenCalledWith("tenant-1");
   });
 
   it("rejects delete when user lacks delete capability", async () => {
@@ -317,7 +408,7 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.deleteTenant("org-1", userId)).rejects.toBeInstanceOf(
+    await expect(service.deleteTenant("tenant-1", userId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(tenantRepository.softDelete).not.toHaveBeenCalled();

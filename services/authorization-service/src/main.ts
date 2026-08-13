@@ -7,9 +7,11 @@ import { broker, container, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
 import {
-  PlatformRoleAssignmentSyncConsumer,
+  PlatformMemberSyncConsumer,
   PlatformRoleCapabilitySyncConsumer,
+  TenantMemberSyncConsumer,
 } from "@/features/platform";
+
 
 export { container } from "@/bootstrap";
 
@@ -35,8 +37,9 @@ const main = async () => {
     .get<PlatformRoleCapabilitySyncConsumer>(TYPES.PlatformRoleCapabilitySyncConsumer)
     .start();
   void container
-    .get<PlatformRoleAssignmentSyncConsumer>(TYPES.PlatformRoleAssignmentSyncConsumer)
+    .get<PlatformMemberSyncConsumer>(TYPES.PlatformMemberSyncConsumer)
     .start();
+  void container.get<TenantMemberSyncConsumer>(TYPES.TenantMemberSyncConsumer).start();
 };
 
 main().catch((error) => {

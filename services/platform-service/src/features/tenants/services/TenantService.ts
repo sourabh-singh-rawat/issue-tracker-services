@@ -1,4 +1,9 @@
-import { TENANTS, requireCapability, type IAuthorizationClient } from "@pine/authorization";
+import {
+  TENANTS,
+  TENANT_ROLES,
+  requireCapability,
+  type IAuthorizationClient,
+} from "@pine/authorization";
 import {
   CloudEvent,
   createCloudEvent,
@@ -9,6 +14,9 @@ import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Tenant } from "@/db";
+import type { ITenantMemberRepository } from "@/features/tenantMembers/repositories";
+import { TenantRoleNotFoundError } from "@/features/tenantRoles/errors";
+import type { ITenantRoleRepository } from "@/features/tenantRoles/repositories";
 import {
   TenantNameConflictError,
   TenantNotFoundError,
@@ -16,12 +24,18 @@ import {
 } from "@/features/tenants/errors";
 import type { ITenantRepository } from "@/features/tenants/repositories";
 import type { CreateTenantInput, ITenantService } from "@/features/tenants/services/ITenantService";
+import { scheduleTenantMemberCreated } from "@/features/tenantMembers/services/TenantMemberService";
+import { scheduleTenantRoleCapabilitiesUpdated } from "@/features/tenantRoles/services/TenantRoleService";
 
 @injectable()
 export class TenantService implements ITenantService {
   constructor(
     @inject(TYPES.TenantRepository)
     private readonly tenantRepository: ITenantRepository,
+    @inject(TYPES.TenantRoleRepository)
+    private readonly tenantRoleRepository: ITenantRoleRepository,
+    @inject(TYPES.TenantMemberRepository)
+    private readonly tenantMemberRepository: ITenantMemberRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
     @inject(TYPES.OutboxService)
@@ -53,6 +67,33 @@ export class TenantService implements ITenantService {
         },
         { tx },
       );
+
+      const systemRoles = await this.tenantRoleRepository.seedSystemRoles(tenant.id, { tx });
+
+      for (const role of systemRoles) {
+        await scheduleTenantRoleCapabilitiesUpdated(this.outboxService, role.id, role.key, {
+          tx,
+        });
+      }
+
+      const ownerRole = systemRoles.find((role) => role.key === TENANT_ROLES.TENANT_OWNER.key);
+      if (!ownerRole) {
+        throw new TenantRoleNotFoundError(
+          `Tenant owner role not found for tenant: ${tenant.id}`,
+        );
+      }
+
+      const ownerMember = await this.tenantMemberRepository.save(
+        {
+          tenantId: tenant.id,
+          roleId: ownerRole.id,
+          identityId: userId,
+          assignedBy: userId,
+        },
+        { tx },
+      );
+
+      await scheduleTenantMemberCreated(this.outboxService, ownerMember, { tx });
 
       const event: CloudEvent<TenantCreatedData> = createCloudEvent({
         type: TenantCreatedEvent.type,

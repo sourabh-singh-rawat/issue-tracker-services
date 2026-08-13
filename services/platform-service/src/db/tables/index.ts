@@ -4,18 +4,6 @@ export {
   Capabilities,
 } from "@/db/tables/Capabilities";
 export {
-  type Membership,
-  type NewMembership,
-  Memberships,
-  MembershipsRelations,
-} from "@/db/tables/Memberships";
-export {
-  type MembershipRole,
-  type NewMembershipRole,
-  MembershipRoles,
-  MembershipRolesRelations,
-} from "@/db/tables/MembershipRoles";
-export {
   type Tenant,
   type NewTenant,
   Tenants,
@@ -31,12 +19,40 @@ export { type Role, type NewRole, Roles, RolesRelations } from "@/db/tables/Role
 export {
   type PlatformRole,
   type NewPlatformRole,
+  type PlatformRoleLink,
+  type NewPlatformRoleLink,
   PlatformRoles,
   PlatformRolesRelations,
 } from "@/db/tables/PlatformRoles";
 export {
-  type PlatformRoleAssignment,
-  type NewPlatformRoleAssignment,
-  PlatformRoleAssignments,
-  PlatformRoleAssignmentsRelations,
-} from "@/db/tables/PlatformRoleAssignments";
+  type TenantRole,
+  type TenantRoleLink,
+  type NewTenantRoleLink,
+  TenantRoles,
+  TenantRolesRelations,
+} from "@/db/tables/TenantRoles";
+export {
+  type OrganizationRole,
+  type OrganizationRoleLink,
+  type NewOrganizationRoleLink,
+  OrganizationRoles,
+  OrganizationRolesRelations,
+} from "@/db/tables/OrganizationRoles";
+export {
+  type PlatformMember,
+  type NewPlatformMember,
+  PlatformMembers,
+  PlatformMembersRelations,
+} from "@/db/tables/PlatformMembers";
+export {
+  type TenantMember,
+  type NewTenantMember,
+  TenantMembers,
+  TenantMembersRelations,
+} from "@/db/tables/TenantMembers";
+export {
+  type OrganizationMember,
+  type NewOrganizationMember,
+  OrganizationMembers,
+  OrganizationMembersRelations,
+} from "@/db/tables/OrganizationMembers";

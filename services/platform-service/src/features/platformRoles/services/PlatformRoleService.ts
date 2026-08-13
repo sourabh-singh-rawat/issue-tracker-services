@@ -4,9 +4,14 @@ import {
   requireCapability,
   type IAuthorizationClient,
 } from "@pine/authorization";
+import {
+  createCloudEvent,
+  PlatformRoleCapabilitiesUpdatedEvent,
+} from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Capability, PlatformRole } from "@/db";
+import type { Capability, DbClient, PlatformRole } from "@/db";
 import type { ICapabilityRepository } from "@/features/capabilities/repositories";
 import {
   PlatformRoleKeyConflictError,
@@ -21,11 +26,52 @@ import type {
   UpdatePlatformRoleInput,
 } from "@/features/platformRoles/services/IPlatformRoleService";
 
-const capabilityKeysForPlatformRole = (role: PlatformRole): readonly string[] => {
-  const definition = ALL_PLATFORM_ROLES.find(
-    (platformRole) => platformRole.id === role.id || platformRole.key === role.key,
+const capabilityKeysForPlatformRole = (role: {
+  id: string;
+  key: string;
+}): readonly string[] => {
+  for (const definition of ALL_PLATFORM_ROLES) {
+    if (definition.id === role.id || definition.key === role.key) {
+      return definition.capabilityKeys;
+    }
+  }
+  return [];
+};
+
+export const schedulePlatformRoleCapabilitiesUpdated = async (
+  outboxService: IOutboxService,
+  roleId: string,
+  roleKey: string,
+  options?: { tx: DbClient },
+): Promise<void> => {
+  const capabilityKeys = [...capabilityKeysForPlatformRole({ id: roleId, key: roleKey })];
+  if (capabilityKeys.length === 0) {
+    return;
+  }
+
+  const event = createCloudEvent({
+    type: PlatformRoleCapabilitiesUpdatedEvent.type,
+    version: PlatformRoleCapabilitiesUpdatedEvent.version,
+    schema: PlatformRoleCapabilitiesUpdatedEvent.schema,
+    source: "pine/platform-service",
+    subject: roleId,
+    data: {
+      roleId,
+      capabilityKeys,
+    },
+  });
+
+  await outboxService.schedule(
+    {
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: PlatformRoleCapabilitiesUpdatedEvent.version,
+      aggregateType: "platform_role",
+      aggregateId: roleId,
+      payload: event,
+    },
+    options,
   );
-  return definition?.capabilityKeys ?? [];
 };
 
 @injectable()

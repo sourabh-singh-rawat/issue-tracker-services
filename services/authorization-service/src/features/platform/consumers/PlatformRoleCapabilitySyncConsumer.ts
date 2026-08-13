@@ -3,8 +3,10 @@ import {
   type CloudEvent,
   type IBroker,
   type PlatformRoleCapabilitiesUpdatedData,
+  type TenantRoleCapabilitiesUpdatedData,
   Consumer,
   PlatformRoleCapabilitiesUpdatedEvent,
+  TenantRoleCapabilitiesUpdatedEvent,
   Streams,
   validateEvent,
 } from "@pine/events";
@@ -15,11 +17,14 @@ import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
 
 @injectable()
 export class PlatformRoleCapabilitySyncConsumer extends Consumer<
-  CloudEvent<PlatformRoleCapabilitiesUpdatedData>
+  CloudEvent<PlatformRoleCapabilitiesUpdatedData | TenantRoleCapabilitiesUpdatedData>
 > {
   readonly stream = Streams.PLATFORM;
   readonly consumer = "authorization-platform-role-capability-sync";
-  readonly subjects = [PlatformRoleCapabilitiesUpdatedEvent.type];
+  readonly subjects = [
+    PlatformRoleCapabilitiesUpdatedEvent.type,
+    TenantRoleCapabilitiesUpdatedEvent.type,
+  ];
 
   constructor(
     @inject(TYPES.Broker)
@@ -32,9 +37,12 @@ export class PlatformRoleCapabilitySyncConsumer extends Consumer<
 
   async onMessage(
     message: JsMsg,
-    payload: CloudEvent<PlatformRoleCapabilitiesUpdatedData>,
+    payload: CloudEvent<PlatformRoleCapabilitiesUpdatedData | TenantRoleCapabilitiesUpdatedData>,
   ): Promise<void> {
-    const event = validateEvent(PlatformRoleCapabilitiesUpdatedEvent, payload);
+    const event =
+      payload.type === TenantRoleCapabilitiesUpdatedEvent.type
+        ? validateEvent(TenantRoleCapabilitiesUpdatedEvent, payload)
+        : validateEvent(PlatformRoleCapabilitiesUpdatedEvent, payload);
     const data = event.data;
     if (!data) {
       message.ack();

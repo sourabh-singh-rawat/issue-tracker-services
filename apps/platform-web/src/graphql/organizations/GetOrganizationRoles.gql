@@ -1,0 +1,19 @@
+query GetOrganizationRoles($organizationId: String!) {
+  getOrganizationRoles(organizationId: $organizationId) {
+    id
+    organizationId
+    key
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    capabilities {
+      id
+      key
+      service
+      resource
+      action
+    }
+  }
+}

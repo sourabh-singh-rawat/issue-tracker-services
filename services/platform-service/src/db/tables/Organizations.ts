@@ -9,6 +9,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { auditColumns, idColumn } from "@/db/columns";
+import { OrganizationMembers } from "@/db/tables/OrganizationMembers";
+import { OrganizationRoles } from "@/db/tables/OrganizationRoles";
 import { Tenants } from "@/db/tables/Tenants";
 
 export const Organizations = pgTable(
@@ -43,6 +45,8 @@ export const OrganizationsRelations = relations(Organizations, ({ one, many }) =
   childOrganizations: many(Organizations, {
     relationName: "organizationHierarchy",
   }),
+  organizationRoles: many(OrganizationRoles),
+  organizationMembers: many(OrganizationMembers),
 }));
 
 export type Organization = typeof Organizations.$inferSelect;

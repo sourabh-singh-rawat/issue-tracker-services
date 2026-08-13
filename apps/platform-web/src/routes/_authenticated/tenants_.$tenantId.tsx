@@ -1,9 +1,9 @@
 import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
-export type TenantDetailTab = "overview" | "organizations";
+export type TenantDetailTab = "overview" | "members" | "roles" | "organizations";
 
 const isTenantDetailTab = (value: unknown): value is TenantDetailTab =>
-  value === "overview" || value === "organizations";
+  value === "overview" || value === "members" || value === "roles" || value === "organizations";
 
 export const Route = createFileRoute("/_authenticated/tenants_/$tenantId")({
   validateSearch: (search: Record<string, unknown>): { tab: TenantDetailTab } => ({

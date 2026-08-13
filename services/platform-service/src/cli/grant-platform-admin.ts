@@ -4,12 +4,10 @@ import { PLATFORM_ROLES } from "@pine/authorization";
 import type { IOutboxService } from "@pine/outbox";
 import { closeDb, container, initializeDb, TYPES } from "@/bootstrap";
 import type { Database } from "@/db";
-import type { IPlatformRoleAssignmentRepository } from "@/features/platformRoleAssignments";
+import type { IPlatformMemberRepository } from "@/features/platformMembers";
 import type { IPlatformRoleRepository } from "@/features/platformRoles";
-import {
-  schedulePlatformRoleAssignmentCreated,
-  schedulePlatformRoleCapabilitiesUpdated,
-} from "@/integrations/authorization/platformRoleGraph";
+import { schedulePlatformMemberCreated } from "@/features/platformMembers/services/PlatformMemberService";
+import { schedulePlatformRoleCapabilitiesUpdated } from "@/features/platformRoles/services/PlatformRoleService";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -47,8 +45,8 @@ const main = async (): Promise<void> => {
   const platformRoleRepository = container.get<IPlatformRoleRepository>(
     TYPES.PlatformRoleRepository,
   );
-  const platformRoleAssignmentRepository =
-    container.get<IPlatformRoleAssignmentRepository>(TYPES.PlatformRoleAssignmentRepository);
+  const platformMemberRepository =
+    container.get<IPlatformMemberRepository>(TYPES.PlatformMemberRepository);
   const outboxService = container.get<IOutboxService>(TYPES.OutboxService);
 
   const role = await platformRoleRepository.findByKey(platformAdmin.key);
@@ -58,7 +56,7 @@ const main = async (): Promise<void> => {
     );
   }
 
-  const existing = await platformRoleAssignmentRepository.findByRoleAndIdentity(
+  const existing = await platformMemberRepository.findByRoleAndIdentity(
     role.id,
     identityId,
   );
@@ -68,7 +66,7 @@ const main = async (): Promise<void> => {
       await schedulePlatformRoleCapabilitiesUpdated(outboxService, role.id, role.key, {
         tx,
       });
-      await schedulePlatformRoleAssignmentCreated(outboxService, existing, { tx });
+      await schedulePlatformMemberCreated(outboxService, existing, { tx });
     });
 
     console.log(
@@ -78,7 +76,7 @@ const main = async (): Promise<void> => {
   }
 
   await db.transaction(async (tx) => {
-    const assignment = await platformRoleAssignmentRepository.save(
+    const assignment = await platformMemberRepository.save(
       {
         platformRoleId: role.id,
         identityId,
@@ -91,7 +89,7 @@ const main = async (): Promise<void> => {
     await schedulePlatformRoleCapabilitiesUpdated(outboxService, role.id, role.key, {
       tx,
     });
-    await schedulePlatformRoleAssignmentCreated(outboxService, assignment, { tx });
+    await schedulePlatformMemberCreated(outboxService, assignment, { tx });
   });
 
   console.log(

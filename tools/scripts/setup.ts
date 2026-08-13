@@ -6,15 +6,18 @@ import { fileURLToPath } from "node:url";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const isWindows = process.platform === "win32";
+const infraDataDir = path.join(rootDir, "infra", "data");
+const rmRfScript = path.join(rootDir, "tools", "scripts", "rm-rf.mjs");
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const run = (
+  command: string,
   args: readonly string[],
   options: { captureStdout?: boolean; env?: NodeJS.ProcessEnv } = {},
 ): string => {
-  const result = spawnSync("pnpm", [...args], {
+  const result = spawnSync(command, [...args], {
     cwd: rootDir,
     env: { ...process.env, ...options.env },
     encoding: "utf8",
@@ -35,6 +38,11 @@ const run = (
   return result.stdout ?? "";
 };
 
+const runPnpm = (
+  args: readonly string[],
+  options: { captureStdout?: boolean; env?: NodeJS.ProcessEnv } = {},
+): string => run("pnpm", args, options);
+
 const parseIdentityId = (output: string): string => {
   const match = output.match(/^IDENTITY_ID=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*$/im);
   const identityId = match?.[1]?.trim();
@@ -47,14 +55,23 @@ const parseIdentityId = (output: string): string => {
 };
 
 const main = (): void => {
+  console.log("setup: stopping infra");
+  runPnpm(["dev:infra:down"]);
+
+  console.log("setup: removing infra/data");
+  run(process.execPath, [rmRfScript, infraDataDir]);
+
+  console.log("setup: starting infra");
+  runPnpm(["dev:infra"]);
+
   console.log("setup: running database migrations");
-  run(["db:migrate"]);
+  runPnpm(["db:migrate"]);
 
   console.log("setup: seeding platform-service");
-  run(["--filter", "@pine/platform-service", "db:seed"]);
+  runPnpm(["--filter", "@pine/platform-service", "db:seed"]);
 
   console.log("setup: bootstrapping admin identity");
-  const bootstrapOutput = run(
+  const bootstrapOutput = runPnpm(
     ["--filter", "@pine/identity-service", "cli:bootstrap-admin"],
     { captureStdout: true },
   );
@@ -64,7 +81,7 @@ const main = (): void => {
   console.log(`setup: admin identity id=${identityId}`);
 
   console.log("setup: granting platform admin role");
-  run(["--filter", "@pine/platform-service", "cli:grant-platform-admin"], {
+  runPnpm(["--filter", "@pine/platform-service", "cli:grant-platform-admin"], {
     env: { GRANT_PLATFORM_ADMIN_IDENTITY_ID: identityId },
   });
 

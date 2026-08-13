@@ -13,9 +13,11 @@ import { ketoClient } from "@/bootstrap/keto-client";
 import { logger } from "@/bootstrap/logger";
 import { AuthorizationService, type IAuthorizationService } from "@/features/authorization";
 import {
-  PlatformRoleAssignmentSyncConsumer,
+  PlatformMemberSyncConsumer,
   PlatformRoleCapabilitySyncConsumer,
+  TenantMemberSyncConsumer,
 } from "@/features/platform";
+
 import {
   KetoAuthorizationGraphProvider,
   type IAuthorizationGraphProvider,
@@ -39,8 +41,12 @@ container
   .bind<PlatformRoleCapabilitySyncConsumer>(TYPES.PlatformRoleCapabilitySyncConsumer)
   .to(PlatformRoleCapabilitySyncConsumer);
 container
-  .bind<PlatformRoleAssignmentSyncConsumer>(TYPES.PlatformRoleAssignmentSyncConsumer)
-  .to(PlatformRoleAssignmentSyncConsumer);
+  .bind<PlatformMemberSyncConsumer>(TYPES.PlatformMemberSyncConsumer)
+  .to(PlatformMemberSyncConsumer);
+container
+  .bind<TenantMemberSyncConsumer>(TYPES.TenantMemberSyncConsumer)
+  .to(TenantMemberSyncConsumer);
+
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({

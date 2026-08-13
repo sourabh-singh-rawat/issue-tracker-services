@@ -2,7 +2,12 @@ import { uuidv7 } from "@pine/common";
 import { and, desc, eq, isNull, ne, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import { type Database, type PlatformRole, PlatformRoles } from "@/db";
+import {
+  type Database,
+  type PlatformRole,
+  PlatformRoles,
+  Roles,
+} from "@/db";
 import type {
   CreatePlatformRoleEntity,
   IPlatformRoleRepository,
@@ -20,11 +25,12 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
   ): Promise<PlatformRole> {
     const client = this.client(options);
     const now = new Date();
+    const id = uuidv7();
 
     const [created] = await client
-      .insert(PlatformRoles)
+      .insert(Roles)
       .values({
-        id: uuidv7(),
+        id,
         key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
@@ -33,6 +39,11 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
         version: 1,
       })
       .returning();
+
+    await client.insert(PlatformRoles).values({
+      id: uuidv7(),
+      roleId: created.id,
+    });
 
     return created;
   }
@@ -45,25 +56,45 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
     const client = this.client(options);
     const now = new Date();
 
+    const existing = await this.findById(id, options);
+    if (!existing) {
+      return null;
+    }
+
     const [updated] = await client
-      .update(PlatformRoles)
+      .update(Roles)
       .set({
         ...(entity.name !== undefined ? { name: entity.name } : {}),
         ...(entity.description !== undefined ? { description: entity.description } : {}),
         updatedAt: now,
-        version: sql`${PlatformRoles.version} + 1`,
+        version: sql`${Roles.version} + 1`,
       })
-      .where(and(eq(PlatformRoles.id, id), isNull(PlatformRoles.deletedAt)))
+      .where(and(eq(Roles.id, id), isNull(Roles.deletedAt)))
       .returning();
 
     return updated ?? null;
   }
 
-  async findById(id: string): Promise<PlatformRole | null> {
-    const [row] = await this.db
-      .select()
-      .from(PlatformRoles)
-      .where(and(eq(PlatformRoles.id, id), isNull(PlatformRoles.deletedAt)))
+  async findById(
+    id: string,
+    options?: PlatformRoleRepositoryOptions,
+  ): Promise<PlatformRole | null> {
+    const client = this.client(options);
+    const [row] = await client
+      .select({
+        id: Roles.id,
+        key: Roles.key,
+        name: Roles.name,
+        description: Roles.description,
+        isSystem: Roles.isSystem,
+        createdAt: Roles.createdAt,
+        updatedAt: Roles.updatedAt,
+        deletedAt: Roles.deletedAt,
+        version: Roles.version,
+      })
+      .from(Roles)
+      .innerJoin(PlatformRoles, eq(PlatformRoles.roleId, Roles.id))
+      .where(and(eq(Roles.id, id), isNull(Roles.deletedAt)))
       .limit(1);
 
     return row ?? null;
@@ -71,9 +102,20 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
 
   async findByKey(key: string): Promise<PlatformRole | null> {
     const [row] = await this.db
-      .select()
-      .from(PlatformRoles)
-      .where(and(eq(PlatformRoles.key, key), isNull(PlatformRoles.deletedAt)))
+      .select({
+        id: Roles.id,
+        key: Roles.key,
+        name: Roles.name,
+        description: Roles.description,
+        isSystem: Roles.isSystem,
+        createdAt: Roles.createdAt,
+        updatedAt: Roles.updatedAt,
+        deletedAt: Roles.deletedAt,
+        version: Roles.version,
+      })
+      .from(Roles)
+      .innerJoin(PlatformRoles, eq(PlatformRoles.roleId, Roles.id))
+      .where(and(eq(Roles.key, key), isNull(Roles.deletedAt)))
       .limit(1);
 
     return row ?? null;
@@ -82,16 +124,13 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
   async existsByKey(key: string, excludeId?: string): Promise<boolean> {
     const condition =
       excludeId === undefined
-        ? and(eq(PlatformRoles.key, key), isNull(PlatformRoles.deletedAt))
-        : and(
-            eq(PlatformRoles.key, key),
-            isNull(PlatformRoles.deletedAt),
-            ne(PlatformRoles.id, excludeId),
-          );
+        ? and(eq(Roles.key, key), isNull(Roles.deletedAt))
+        : and(eq(Roles.key, key), isNull(Roles.deletedAt), ne(Roles.id, excludeId));
 
     const row = await this.db
-      .select({ id: PlatformRoles.id })
-      .from(PlatformRoles)
+      .select({ id: Roles.id })
+      .from(Roles)
+      .innerJoin(PlatformRoles, eq(PlatformRoles.roleId, Roles.id))
       .where(condition)
       .limit(1);
 
@@ -101,16 +140,13 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
   async existsByName(name: string, excludeId?: string): Promise<boolean> {
     const condition =
       excludeId === undefined
-        ? and(eq(PlatformRoles.name, name), isNull(PlatformRoles.deletedAt))
-        : and(
-            eq(PlatformRoles.name, name),
-            isNull(PlatformRoles.deletedAt),
-            ne(PlatformRoles.id, excludeId),
-          );
+        ? and(eq(Roles.name, name), isNull(Roles.deletedAt))
+        : and(eq(Roles.name, name), isNull(Roles.deletedAt), ne(Roles.id, excludeId));
 
     const row = await this.db
-      .select({ id: PlatformRoles.id })
-      .from(PlatformRoles)
+      .select({ id: Roles.id })
+      .from(Roles)
+      .innerJoin(PlatformRoles, eq(PlatformRoles.roleId, Roles.id))
       .where(condition)
       .limit(1);
 
@@ -119,10 +155,21 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
 
   async findAll(): Promise<PlatformRole[]> {
     return this.db
-      .select()
-      .from(PlatformRoles)
-      .where(isNull(PlatformRoles.deletedAt))
-      .orderBy(desc(PlatformRoles.createdAt));
+      .select({
+        id: Roles.id,
+        key: Roles.key,
+        name: Roles.name,
+        description: Roles.description,
+        isSystem: Roles.isSystem,
+        createdAt: Roles.createdAt,
+        updatedAt: Roles.updatedAt,
+        deletedAt: Roles.deletedAt,
+        version: Roles.version,
+      })
+      .from(Roles)
+      .innerJoin(PlatformRoles, eq(PlatformRoles.roleId, Roles.id))
+      .where(isNull(Roles.deletedAt))
+      .orderBy(desc(Roles.createdAt));
   }
 
   async softDelete(
@@ -132,15 +179,20 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
     const client = this.client(options);
     const now = new Date();
 
+    const existing = await this.findById(id, options);
+    if (!existing) {
+      return false;
+    }
+
     const deleted = await client
-      .update(PlatformRoles)
+      .update(Roles)
       .set({
         deletedAt: now,
         updatedAt: now,
-        version: sql`${PlatformRoles.version} + 1`,
+        version: sql`${Roles.version} + 1`,
       })
-      .where(and(eq(PlatformRoles.id, id), isNull(PlatformRoles.deletedAt)))
-      .returning({ id: PlatformRoles.id });
+      .where(and(eq(Roles.id, id), isNull(Roles.deletedAt)))
+      .returning({ id: Roles.id });
 
     return deleted.length > 0;
   }

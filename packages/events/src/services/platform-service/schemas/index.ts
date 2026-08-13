@@ -1,11 +1,11 @@
 export {
-  PlatformRoleAssignmentCreatedDataSchema,
-  type PlatformRoleAssignmentCreatedData,
-} from "./PlatformRoleAssignmentCreatedDataSchema";
+  PlatformMemberCreatedDataSchema,
+  type PlatformMemberCreatedData,
+} from "./PlatformMemberCreatedDataSchema";
 export {
-  PlatformRoleAssignmentDeletedDataSchema,
-  type PlatformRoleAssignmentDeletedData,
-} from "./PlatformRoleAssignmentDeletedDataSchema";
+  PlatformMemberDeletedDataSchema,
+  type PlatformMemberDeletedData,
+} from "./PlatformMemberDeletedDataSchema";
 export {
   PlatformRoleCapabilitiesUpdatedDataSchema,
   type PlatformRoleCapabilitiesUpdatedData,
@@ -14,3 +14,15 @@ export {
   TenantCreatedDataSchema,
   type TenantCreatedData,
 } from "./TenantCreatedDataSchema";
+export {
+  TenantRoleCapabilitiesUpdatedDataSchema,
+  type TenantRoleCapabilitiesUpdatedData,
+} from "./TenantRoleCapabilitiesUpdatedDataSchema";
+export {
+  TenantMemberCreatedDataSchema,
+  type TenantMemberCreatedData,
+} from "./TenantMemberCreatedDataSchema";
+export {
+  TenantMemberDeletedDataSchema,
+  type TenantMemberDeletedData,
+} from "./TenantMemberDeletedDataSchema";

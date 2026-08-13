@@ -1,11 +1,15 @@
 import {
+  ORGANIZATION_ROLES,
   ORGANIZATIONS,
   requireCapability,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Organization } from "@/db";
+import type { Database, Organization } from "@/db";
+import type { IOrganizationMemberRepository } from "@/features/organizationMembers/repositories";
+import { OrganizationRoleNotFoundError } from "@/features/organizationRoles/errors";
+import type { IOrganizationRoleRepository } from "@/features/organizationRoles/repositories";
 import {
   InvalidParentOrganizationError,
   OrganizationNameConflictError,
@@ -17,6 +21,7 @@ import type {
   CreateOrganizationInput,
   IOrganizationService,
   ListOrganizationsInput,
+  UpdateOrganizationInput,
 } from "@/features/organizations/services/IOrganizationService";
 import { TenantNotFoundError } from "@/features/tenants/errors";
 import type { ITenantRepository } from "@/features/tenants/repositories";
@@ -26,10 +31,16 @@ export class OrganizationService implements IOrganizationService {
   constructor(
     @inject(TYPES.OrganizationRepository)
     private readonly organizationRepository: IOrganizationRepository,
+    @inject(TYPES.OrganizationRoleRepository)
+    private readonly organizationRoleRepository: IOrganizationRoleRepository,
+    @inject(TYPES.OrganizationMemberRepository)
+    private readonly organizationMemberRepository: IOrganizationMemberRepository,
     @inject(TYPES.TenantRepository)
     private readonly tenantRepository: ITenantRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.Database)
+    private readonly db: Database,
   ) {}
 
   async createOrganization(
@@ -72,13 +83,44 @@ export class OrganizationService implements IOrganizationService {
       );
     }
 
-    return this.organizationRepository.save({
-      tenantId: input.tenantId,
-      parentOrganizationId: input.parentOrganizationId,
-      name: input.name,
-      slug: input.slug,
-      description: input.description,
-      isActive: input.isActive,
+    return this.db.transaction(async (tx) => {
+      const organization = await this.organizationRepository.save(
+        {
+          tenantId: input.tenantId,
+          parentOrganizationId: input.parentOrganizationId,
+          name: input.name,
+          slug: input.slug,
+          description: input.description,
+          isActive: input.isActive,
+        },
+        { tx },
+      );
+
+      const systemRoles = await this.organizationRoleRepository.seedSystemRoles(
+        organization.id,
+        { tx },
+      );
+
+      const ownerRole = systemRoles.find(
+        (role) => role.key === ORGANIZATION_ROLES.ORGANIZATION_OWNER.key,
+      );
+      if (!ownerRole) {
+        throw new OrganizationRoleNotFoundError(
+          `Organization owner role not found for organization: ${organization.id}`,
+        );
+      }
+
+      await this.organizationMemberRepository.save(
+        {
+          organizationId: organization.id,
+          roleId: ownerRole.id,
+          identityId: userId,
+          assignedBy: userId,
+        },
+        { tx },
+      );
+
+      return organization;
     });
   }
 
@@ -110,12 +152,79 @@ export class OrganizationService implements IOrganizationService {
     });
   }
 
+  async updateOrganization(
+    id: string,
+    input: UpdateOrganizationInput,
+    userId: string,
+  ): Promise<Organization> {
+    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.UPDATE.key);
+
+    const organization = await this.organizationRepository.findById(id);
+    if (!organization) {
+      throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+
+    if (input.parentOrganizationId !== undefined) {
+      await this.assertValidParentOrganization(organization, input.parentOrganizationId);
+    }
+
+    const updated = await this.organizationRepository.update(id, {
+      parentOrganizationId: input.parentOrganizationId,
+    });
+    if (!updated) {
+      throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+
+    return updated;
+  }
+
   async deleteOrganization(id: string, userId: string): Promise<void> {
     await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.DELETE.key);
 
     const deleted = await this.organizationRepository.softDelete(id);
     if (!deleted) {
       throw new OrganizationNotFoundError(`Organization not found: ${id}`);
+    }
+  }
+
+  private async assertValidParentOrganization(
+    organization: Organization,
+    parentOrganizationId: string | null,
+  ): Promise<void> {
+    if (!parentOrganizationId) {
+      return;
+    }
+
+    if (parentOrganizationId === organization.id) {
+      throw new InvalidParentOrganizationError(
+        `Organization cannot be its own parent: ${organization.id}`,
+      );
+    }
+
+    const parent = await this.organizationRepository.findById(parentOrganizationId);
+    if (!parent || parent.tenantId !== organization.tenantId) {
+      throw new InvalidParentOrganizationError(
+        `Parent organization not found in tenant: ${parentOrganizationId}`,
+      );
+    }
+
+    let ancestorId = parent.parentOrganizationId;
+    const seen = new Set<string>([parent.id]);
+    while (ancestorId) {
+      if (ancestorId === organization.id) {
+        throw new InvalidParentOrganizationError(
+          `Parent organization would create a cycle: ${parentOrganizationId}`,
+        );
+      }
+      if (seen.has(ancestorId)) {
+        break;
+      }
+      seen.add(ancestorId);
+      const ancestor = await this.organizationRepository.findById(ancestorId);
+      if (!ancestor) {
+        break;
+      }
+      ancestorId = ancestor.parentOrganizationId;
     }
   }
 }

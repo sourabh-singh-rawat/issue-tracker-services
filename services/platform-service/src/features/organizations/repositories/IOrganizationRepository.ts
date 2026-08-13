@@ -11,6 +11,10 @@ export type CreateOrganizationEntity = {
   isActive?: boolean;
 };
 
+export type UpdateOrganizationEntity = {
+  parentOrganizationId?: string | null;
+};
+
 export type ListOrganizationsFilter = {
   tenantId: string;
   parentOrganizationId?: string | null;
@@ -21,6 +25,11 @@ export interface IOrganizationRepository {
     entity: CreateOrganizationEntity,
     options?: OrganizationRepositoryOptions,
   ): Promise<Organization>;
+  update(
+    id: string,
+    entity: UpdateOrganizationEntity,
+    options?: OrganizationRepositoryOptions,
+  ): Promise<Organization | null>;
   findById(id: string): Promise<Organization | null>;
   existsBySlugInTenant(tenantId: string, slug: string): Promise<boolean>;
   existsByNameInTenant(tenantId: string, name: string): Promise<boolean>;

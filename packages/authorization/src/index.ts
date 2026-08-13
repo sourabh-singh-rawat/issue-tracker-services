@@ -6,7 +6,7 @@ export {
   ORGANIZATION,
   ROLE,
   PLATFORM_ROLE as PLATFORM_ROLE_RESOURCE,
-  PLATFORM_ROLE_ASSIGNMENT as PLATFORM_ROLE_ASSIGNMENT_RESOURCE,
+  PLATFORM_MEMBER as PLATFORM_MEMBER_RESOURCE,
   CAPABILITY,
   CAPABILITY_GRANT,
   RESOURCES,
@@ -22,13 +22,32 @@ export {
   ORGANIZATIONS,
   ROLES,
   PLATFORM_ROLE,
-  PLATFORM_ROLE_ASSIGNMENT,
-  CAPABILITIES,
+  PLATFORM_MEMBER,
   CAPABILITY_GRANTS,
   ALL_CAPABILITIES,
 } from "./capabilities";
 
-export { type RoleDefinition, ALL_PLATFORM_ROLES, PLATFORM_ROLES, type PlatformRoleKey } from "./roles";
+export {
+  type RoleDefinition,
+  ALL_PLATFORM_ROLES,
+  PLATFORM_ROLES,
+  type PlatformRoleKey,
+  ALL_TENANT_ROLES,
+  TENANT_ROLES,
+  type TenantRoleKey,
+  ALL_ORGANIZATION_ROLES,
+  ORGANIZATION_ROLES,
+  type OrganizationRoleKey,
+  ALL_SYSTEM_ROLES,
+  findPlatformRoleDefinition,
+  findTenantRoleDefinition,
+  findOrganizationRoleDefinition,
+  findSystemRoleDefinition,
+  platformRoleCapabilityKeys,
+  tenantRoleCapabilityKeys,
+  organizationRoleCapabilityKeys,
+  systemRoleCapabilityKeys,
+} from "./roles";
 
 export type { GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
 

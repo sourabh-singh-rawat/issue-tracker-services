@@ -31,6 +31,16 @@ export const TenantOrganizations = ({ tenantId }: TenantOrganizationsProps) => {
   );
 
   const organizations = organizationsQuery.data ?? [];
+  const organizationNameById = new Map<string, string>();
+  for (const organization of organizations) {
+    if (!organization.id) {
+      continue;
+    }
+    organizationNameById.set(
+      organization.id,
+      organization.name ?? organization.slug ?? organization.id,
+    );
+  }
 
   return (
     <Stack spacing={2}>
@@ -99,8 +109,11 @@ export const TenantOrganizations = ({ tenantId }: TenantOrganizationsProps) => {
                     <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
                       {organization.id ?? "—"}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                      {organization.parentOrganizationId ?? "—"}
+                    <TableCell>
+                      {organization.parentOrganizationId
+                        ? (organizationNameById.get(organization.parentOrganizationId) ??
+                          organization.parentOrganizationId)
+                        : "—"}
                     </TableCell>
                     <TableCell>
                       <Chip
