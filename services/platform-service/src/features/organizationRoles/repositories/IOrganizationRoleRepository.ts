@@ -7,7 +7,6 @@ export type CreateOrganizationRoleEntity = {
   key: string;
   name: string;
   description?: string | null;
-  isSystem?: boolean;
 };
 
 export interface IOrganizationRoleRepository {
@@ -33,8 +32,4 @@ export interface IOrganizationRoleRepository {
     key: string,
     options?: OrganizationRoleRepositoryOptions,
   ) => Promise<boolean>;
-  seedSystemRoles: (
-    organizationId: string,
-    options?: OrganizationRoleRepositoryOptions,
-  ) => Promise<OrganizationRole[]>;
 }

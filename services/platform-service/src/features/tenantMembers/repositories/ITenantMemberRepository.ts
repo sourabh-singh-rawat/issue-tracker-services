@@ -38,6 +38,7 @@ export interface ITenantMemberRepository {
     tenantId: string,
     roleId: string,
     identityId: string,
+    options?: TenantMemberRepositoryOptions,
   ) => Promise<TenantMember | null>;
   findMany: (filter?: ListTenantMembersFilter) => Promise<TenantMember[]>;
   softDelete: (

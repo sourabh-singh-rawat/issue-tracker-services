@@ -12,8 +12,8 @@ export {
   findTenantRoleDefinition,
   findOrganizationRoleDefinition,
   findSystemRoleDefinition,
-  platformRoleCapabilityKeys,
-  tenantRoleCapabilityKeys,
-  organizationRoleCapabilityKeys,
-  systemRoleCapabilityKeys,
+  platformRolePermissionKeys,
+  tenantRolePermissionKeys,
+  organizationRolePermissionKeys,
+  systemRolePermissionKeys,
 } from "./findSystemRoleDefinition";

@@ -1,6 +1,14 @@
-import type { GraphRelationship } from "../types";
+export type ResourceReference = {
+  namespace: string;
+  id: string;
+};
 
-export type CheckRelationshipInput = GraphRelationship;
+export type CheckRelationshipInput = {
+  namespace: string;
+  object: string;
+  relation: string;
+  subject: string;
+};
 
 export interface CheckRelationshipResponse {
   allowed: boolean;

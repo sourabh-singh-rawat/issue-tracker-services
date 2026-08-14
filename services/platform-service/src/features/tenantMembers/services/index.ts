@@ -1,5 +1,6 @@
 export type {
   CreateTenantMemberInput,
+  CreateTenantMemberOptions,
   ITenantMemberService,
   ListTenantMembersInput,
   UpdateTenantMemberInput,

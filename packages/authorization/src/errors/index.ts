@@ -1,1 +1,2 @@
 export { InsufficientPermissionError } from "./InsufficientPermissionError";
+export { InvalidPermissionKeyError } from "./InvalidPermissionKeyError";

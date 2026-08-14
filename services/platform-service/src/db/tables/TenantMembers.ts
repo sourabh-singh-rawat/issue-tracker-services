@@ -11,9 +11,7 @@ export const TenantMembers = pgTable(
     tenantId: uuid("tenant_id")
       .notNull()
       .references(() => Tenants.id),
-    roleId: uuid("role_id")
-      .notNull()
-      .references(() => TenantRoles.roleId),
+    roleId: uuid("role_id").notNull(),
     identityId: uuid("identity_id").notNull(),
     assignedBy: uuid("assigned_by"),
     assignedAt: timestamp("assigned_at", { withTimezone: true }).notNull().defaultNow(),

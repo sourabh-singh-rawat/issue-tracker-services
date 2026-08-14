@@ -1,18 +1,24 @@
 import {
-  ALL_PLATFORM_ROLES,
-  PLATFORM_ROLE,
-  requireCapability,
+  PLATFORM_RESOURCE,
+  findPlatformRoleDefinition,
+  platformRolePermissionKeys,
+  requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import {
   createCloudEvent,
-  PlatformRoleCapabilitiesUpdatedEvent,
+  PlatformRolePermissionsUpdatedEvent,
 } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Capability, DbClient, PlatformRole } from "@/db";
-import type { ICapabilityRepository } from "@/features/capabilities/repositories";
+import type { DbClient, PlatformRole } from "@/db";
+import { catalogPermissionsFromKeys } from "@/features/roles/catalogPermissions";
+import {
+  isCustomStoredRole,
+  platformSystemRoles,
+  toPlatformSystemRole,
+} from "@/features/roles/systemRoles";
 import {
   PlatformRoleKeyConflictError,
   PlatformRoleNameConflictError,
@@ -26,38 +32,26 @@ import type {
   UpdatePlatformRoleInput,
 } from "@/features/platformRoles/services/IPlatformRoleService";
 
-const capabilityKeysForPlatformRole = (role: {
-  id: string;
-  key: string;
-}): readonly string[] => {
-  for (const definition of ALL_PLATFORM_ROLES) {
-    if (definition.id === role.id || definition.key === role.key) {
-      return definition.capabilityKeys;
-    }
-  }
-  return [];
-};
-
-export const schedulePlatformRoleCapabilitiesUpdated = async (
+export const schedulePlatformRolePermissionsUpdated = async (
   outboxService: IOutboxService,
   roleId: string,
   roleKey: string,
   options?: { tx: DbClient },
 ): Promise<void> => {
-  const capabilityKeys = [...capabilityKeysForPlatformRole({ id: roleId, key: roleKey })];
-  if (capabilityKeys.length === 0) {
+  const permissionKeys = [...platformRolePermissionKeys({ id: roleId, key: roleKey })];
+  if (permissionKeys.length === 0) {
     return;
   }
 
   const event = createCloudEvent({
-    type: PlatformRoleCapabilitiesUpdatedEvent.type,
-    version: PlatformRoleCapabilitiesUpdatedEvent.version,
-    schema: PlatformRoleCapabilitiesUpdatedEvent.schema,
+    type: PlatformRolePermissionsUpdatedEvent.type,
+    version: PlatformRolePermissionsUpdatedEvent.version,
+    schema: PlatformRolePermissionsUpdatedEvent.schema,
     source: "pine/platform-service",
     subject: roleId,
     data: {
       roleId,
-      capabilityKeys,
+      permissionKeys,
     },
   });
 
@@ -65,7 +59,7 @@ export const schedulePlatformRoleCapabilitiesUpdated = async (
     {
       eventId: event.id,
       eventType: event.type,
-      eventVersion: PlatformRoleCapabilitiesUpdatedEvent.version,
+      eventVersion: PlatformRolePermissionsUpdatedEvent.version,
       aggregateType: "platform_role",
       aggregateId: roleId,
       payload: event,
@@ -79,8 +73,6 @@ export class PlatformRoleService implements IPlatformRoleService {
   constructor(
     @inject(TYPES.PlatformRoleRepository)
     private readonly platformRoleRepository: IPlatformRoleRepository,
-    @inject(TYPES.CapabilityRepository)
-    private readonly capabilityRepository: ICapabilityRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
   ) {}
@@ -89,7 +81,14 @@ export class PlatformRoleService implements IPlatformRoleService {
     input: CreatePlatformRoleInput,
     userId: string,
   ): Promise<PlatformRole> {
-    await requireCapability(this.authorizationClient, userId, PLATFORM_ROLE.CREATE.key);
+    await requirePermission(this.authorizationClient, userId, "manage_admins", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: input.platformId,
+    });
+
+    if (findPlatformRoleDefinition({ key: input.key })) {
+      throw new PlatformRoleKeyConflictError(`Platform role key already exists: ${input.key}`);
+    }
 
     const keyExists = await this.platformRoleRepository.existsByKey(input.key);
     if (keyExists) {
@@ -110,58 +109,62 @@ export class PlatformRoleService implements IPlatformRoleService {
     });
   }
 
-  async getPlatformRoleById(id: string, userId: string): Promise<PlatformRole> {
-    await requireCapability(this.authorizationClient, userId, PLATFORM_ROLE.READ.key);
+  async getPlatformRoleById(
+    id: string,
+    platformId: string,
+    userId: string,
+  ): Promise<PlatformRole> {
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
+
+    const definition = findPlatformRoleDefinition({ id });
+    if (definition) {
+      return toPlatformSystemRole(definition);
+    }
 
     const role = await this.platformRoleRepository.findById(id);
-    if (!role) {
+    if (!role || !isCustomStoredRole(role)) {
       throw new PlatformRoleNotFoundError(`Platform role not found: ${id}`);
     }
 
     return role;
   }
 
-  async listPlatformRoles(userId: string): Promise<PlatformRole[]> {
-    await requireCapability(this.authorizationClient, userId, PLATFORM_ROLE.READ.key);
+  async listPlatformRoles(platformId: string, userId: string): Promise<PlatformRole[]> {
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
-    return this.platformRoleRepository.findAll();
+    const custom = (await this.platformRoleRepository.findAll()).filter(isCustomStoredRole);
+    return [...platformSystemRoles(), ...custom];
   }
 
-  async getCapabilitiesForPlatformRole(role: PlatformRole): Promise<Capability[]> {
-    const keys = [...capabilityKeysForPlatformRole(role)];
-    if (keys.length === 0) {
-      return [];
-    }
-
-    const capabilities = await this.capabilityRepository.findByKeys(keys);
-    const byKey = new Map(capabilities.map((capability) => [capability.key, capability]));
-
-    const ordered: Capability[] = [];
-    for (const key of keys) {
-      const capability = byKey.get(key);
-      if (capability) {
-        ordered.push(capability);
-      }
-    }
-    return ordered;
-  }
+  getPermissionsForPlatformRole = (role: PlatformRole) =>
+    catalogPermissionsFromKeys(platformRolePermissionKeys(role));
 
   async updatePlatformRole(
     id: string,
     input: UpdatePlatformRoleInput,
+    platformId: string,
     userId: string,
   ): Promise<PlatformRole> {
-    await requireCapability(this.authorizationClient, userId, PLATFORM_ROLE.UPDATE.key);
+    await requirePermission(this.authorizationClient, userId, "manage_admins", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
-    const existing = await this.platformRoleRepository.findById(id);
-    if (!existing) {
-      throw new PlatformRoleNotFoundError(`Platform role not found: ${id}`);
-    }
-
-    if (existing.isSystem) {
+    if (findPlatformRoleDefinition({ id })) {
       throw new PlatformRoleSystemProtectedError(
         `System platform role cannot be updated: ${id}`,
       );
+    }
+
+    const existing = await this.platformRoleRepository.findById(id);
+    if (!existing || !isCustomStoredRole(existing)) {
+      throw new PlatformRoleNotFoundError(`Platform role not found: ${id}`);
     }
 
     if (input.name !== undefined && input.name !== existing.name) {
@@ -189,18 +192,21 @@ export class PlatformRoleService implements IPlatformRoleService {
     return updated;
   }
 
-  async deletePlatformRole(id: string, userId: string): Promise<void> {
-    await requireCapability(this.authorizationClient, userId, PLATFORM_ROLE.DELETE.key);
+  async deletePlatformRole(id: string, platformId: string, userId: string): Promise<void> {
+    await requirePermission(this.authorizationClient, userId, "manage_admins", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
-    const existing = await this.platformRoleRepository.findById(id);
-    if (!existing) {
-      throw new PlatformRoleNotFoundError(`Platform role not found: ${id}`);
-    }
-
-    if (existing.isSystem) {
+    if (findPlatformRoleDefinition({ id })) {
       throw new PlatformRoleSystemProtectedError(
         `System platform role cannot be deleted: ${id}`,
       );
+    }
+
+    const existing = await this.platformRoleRepository.findById(id);
+    if (!existing || !isCustomStoredRole(existing)) {
+      throw new PlatformRoleNotFoundError(`Platform role not found: ${id}`);
     }
 
     const deleted = await this.platformRoleRepository.softDelete(id);

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "noLib": true,
+    "noEmit": true,
+    "types": [],
+    "strictPropertyInitialization": false
+  },
+  "include": ["./**/*.ts", "./**/*.d.ts"]
+}

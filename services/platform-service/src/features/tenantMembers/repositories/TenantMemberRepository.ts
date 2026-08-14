@@ -77,8 +77,10 @@ export class TenantMemberRepository implements ITenantMemberRepository {
     tenantId: string,
     roleId: string,
     identityId: string,
+    options?: TenantMemberRepositoryOptions,
   ): Promise<TenantMember | null> {
-    const [row] = await this.db
+    const client = this.client(options);
+    const [row] = await client
       .select()
       .from(TenantMembers)
       .where(

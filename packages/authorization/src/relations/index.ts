@@ -1,2 +1,4 @@
-export const CAPABILITY_HAS = "has";
-export const ROLE_ASSIGNEE = "assignee";
+export const PERMISSION_HAS = "has";
+export const ROLE_MEMBER = "member";
+export const PLATFORM_TENANT = "tenant";
+export const TENANT_PLATFORM = "platform";

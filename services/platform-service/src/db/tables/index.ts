@@ -1,8 +1,8 @@
 export {
-  type Capability,
-  type NewCapability,
-  Capabilities,
-} from "@/db/tables/Capabilities";
+  type Identity,
+  type NewIdentity,
+  Identities,
+} from "@/db/tables/Identities";
 export {
   type Tenant,
   type NewTenant,

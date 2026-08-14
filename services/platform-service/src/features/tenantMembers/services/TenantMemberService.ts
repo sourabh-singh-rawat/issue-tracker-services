@@ -1,6 +1,7 @@
 import {
-  TENANTS,
-  requireCapability,
+  TENANT,
+  findTenantRoleDefinition,
+  requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import {
@@ -19,6 +20,7 @@ import {
 import type { ITenantMemberRepository } from "@/features/tenantMembers/repositories";
 import type {
   CreateTenantMemberInput,
+  CreateTenantMemberOptions,
   ITenantMemberService,
   ListTenantMembersInput,
   UpdateTenantMemberInput,
@@ -63,37 +65,6 @@ export const scheduleTenantMemberCreated = async (
   );
 };
 
-export const scheduleTenantMemberDeleted = async (
-  outboxService: IOutboxService,
-  assignment: Pick<TenantMember, "id" | "roleId" | "identityId">,
-  options?: { tx: DbClient },
-): Promise<void> => {
-  const event = createCloudEvent({
-    type: TenantMemberDeletedEvent.type,
-    version: TenantMemberDeletedEvent.version,
-    schema: TenantMemberDeletedEvent.schema,
-    source: "pine/platform-service",
-    subject: assignment.id,
-    data: {
-      id: assignment.id,
-      tenantRoleId: assignment.roleId,
-      identityId: assignment.identityId,
-    },
-  });
-
-  await outboxService.schedule(
-    {
-      eventId: event.id,
-      eventType: event.type,
-      eventVersion: TenantMemberDeletedEvent.version,
-      aggregateType: "tenant_member",
-      aggregateId: assignment.id,
-      payload: event,
-    },
-    options,
-  );
-};
-
 @injectable()
 export class TenantMemberService implements ITenantMemberService {
   constructor(
@@ -112,23 +83,35 @@ export class TenantMemberService implements ITenantMemberService {
   async createTenantMember(
     input: CreateTenantMemberInput,
     userId: string,
+    options?: CreateTenantMemberOptions,
   ): Promise<TenantMember> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.ASSIGN_ADMIN.key);
+    const txOptions = options?.tx !== undefined ? { tx: options.tx } : undefined;
 
-    const tenant = await this.tenantRepository.findById(input.tenantId);
-    if (!tenant) {
-      throw new TenantNotFoundError(`Tenant not found: ${input.tenantId}`);
+    if (!options?.skipAuthorization) {
+      await requirePermission(this.authorizationClient, userId, "assign_admin", {
+        namespace: TENANT.name,
+        id: input.tenantId,
+      });
+
+      const tenant = await this.tenantRepository.findById(input.tenantId);
+      if (!tenant) {
+        throw new TenantNotFoundError(`Tenant not found: ${input.tenantId}`);
+      }
     }
 
-    const role = await this.tenantRoleRepository.findById(input.roleId);
-    if (!role || role.tenantId !== input.tenantId) {
-      throw new TenantRoleNotFoundError(`Tenant role not found: ${input.roleId}`);
+    const catalogRole = findTenantRoleDefinition({ id: input.roleId });
+    if (!catalogRole) {
+      const role = await this.tenantRoleRepository.findById(input.roleId);
+      if (!role || role.tenantId !== input.tenantId) {
+        throw new TenantRoleNotFoundError(`Tenant role not found: ${input.roleId}`);
+      }
     }
 
     const existing = await this.tenantMemberRepository.findByTenantRoleAndIdentity(
       input.tenantId,
       input.roleId,
       input.identityId,
+      txOptions,
     );
     if (existing) {
       throw new TenantMemberConflictError(
@@ -136,26 +119,32 @@ export class TenantMemberService implements ITenantMemberService {
       );
     }
 
-    const assignment = await this.tenantMemberRepository.save({
-      tenantId: input.tenantId,
-      roleId: input.roleId,
-      identityId: input.identityId,
-      assignedBy: userId,
-      expiresAt: input.expiresAt,
-      reason: input.reason,
-    });
+    const assignment = await this.tenantMemberRepository.save(
+      {
+        tenantId: input.tenantId,
+        roleId: input.roleId,
+        identityId: input.identityId,
+        assignedBy: userId,
+        expiresAt: input.expiresAt,
+        reason: input.reason,
+      },
+      txOptions,
+    );
 
-    await scheduleTenantMemberCreated(this.outboxService, assignment);
+    await scheduleTenantMemberCreated(this.outboxService, assignment, txOptions);
     return assignment;
   }
 
   async getTenantMemberById(id: string, userId: string): Promise<TenantMember> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.READ.key);
-
     const member = await this.tenantMemberRepository.findById(id);
     if (!member) {
       throw new TenantMemberNotFoundError(`Tenant member not found: ${id}`);
     }
+
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: TENANT.name,
+      id: member.tenantId,
+    });
 
     return member;
   }
@@ -164,19 +153,23 @@ export class TenantMemberService implements ITenantMemberService {
     input: ListTenantMembersInput,
     userId: string,
   ): Promise<TenantMember[]> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.READ.key);
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: TENANT.name,
+      id: input.tenantId,
+    });
 
-    if (input.tenantId !== undefined) {
-      const tenant = await this.tenantRepository.findById(input.tenantId);
-      if (!tenant) {
-        throw new TenantNotFoundError(`Tenant not found: ${input.tenantId}`);
-      }
+    const tenant = await this.tenantRepository.findById(input.tenantId);
+    if (!tenant) {
+      throw new TenantNotFoundError(`Tenant not found: ${input.tenantId}`);
     }
 
     if (input.roleId !== undefined) {
-      const role = await this.tenantRoleRepository.findById(input.roleId);
-      if (!role) {
-        throw new TenantRoleNotFoundError(`Tenant role not found: ${input.roleId}`);
+      const catalogRole = findTenantRoleDefinition({ id: input.roleId });
+      if (!catalogRole) {
+        const role = await this.tenantRoleRepository.findById(input.roleId);
+        if (!role) {
+          throw new TenantRoleNotFoundError(`Tenant role not found: ${input.roleId}`);
+        }
       }
     }
 
@@ -192,12 +185,15 @@ export class TenantMemberService implements ITenantMemberService {
     input: UpdateTenantMemberInput,
     userId: string,
   ): Promise<TenantMember> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.ASSIGN_ADMIN.key);
-
     const existing = await this.tenantMemberRepository.findById(id);
     if (!existing) {
       throw new TenantMemberNotFoundError(`Tenant member not found: ${id}`);
     }
+
+    await requirePermission(this.authorizationClient, userId, "assign_admin", {
+      namespace: TENANT.name,
+      id: existing.tenantId,
+    });
 
     if (input.expiresAt === undefined && input.reason === undefined) {
       return existing;
@@ -216,18 +212,41 @@ export class TenantMemberService implements ITenantMemberService {
   }
 
   async deleteTenantMember(id: string, userId: string): Promise<void> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.ASSIGN_ADMIN.key);
-
     const existing = await this.tenantMemberRepository.findById(id);
     if (!existing) {
       throw new TenantMemberNotFoundError(`Tenant member not found: ${id}`);
     }
+
+    await requirePermission(this.authorizationClient, userId, "assign_admin", {
+      namespace: TENANT.name,
+      id: existing.tenantId,
+    });
 
     const deleted = await this.tenantMemberRepository.softDelete(id);
     if (!deleted) {
       throw new TenantMemberNotFoundError(`Tenant member not found: ${id}`);
     }
 
-    await scheduleTenantMemberDeleted(this.outboxService, existing);
+    const event = createCloudEvent({
+      type: TenantMemberDeletedEvent.type,
+      version: TenantMemberDeletedEvent.version,
+      schema: TenantMemberDeletedEvent.schema,
+      source: "pine/platform-service",
+      subject: existing.id,
+      data: {
+        id: existing.id,
+        tenantRoleId: existing.roleId,
+        identityId: existing.identityId,
+      },
+    });
+
+    await this.outboxService.schedule({
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: TenantMemberDeletedEvent.version,
+      aggregateType: "tenant_member",
+      aggregateId: existing.id,
+      payload: event,
+    });
   }
 }

@@ -1,22 +1,22 @@
 import {
-  TENANTS,
+  PLATFORM_RESOURCE,
+  TENANT,
   TENANT_ROLES,
-  requireCapability,
+  requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import {
   CloudEvent,
   createCloudEvent,
   TenantCreatedEvent,
+  TenantDeletedEvent,
   type TenantCreatedData,
 } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Tenant } from "@/db";
-import type { ITenantMemberRepository } from "@/features/tenantMembers/repositories";
-import { TenantRoleNotFoundError } from "@/features/tenantRoles/errors";
-import type { ITenantRoleRepository } from "@/features/tenantRoles/repositories";
+import type { ITenantMemberService } from "@/features/tenantMembers/services";
 import {
   TenantNameConflictError,
   TenantNotFoundError,
@@ -24,18 +24,14 @@ import {
 } from "@/features/tenants/errors";
 import type { ITenantRepository } from "@/features/tenants/repositories";
 import type { CreateTenantInput, ITenantService } from "@/features/tenants/services/ITenantService";
-import { scheduleTenantMemberCreated } from "@/features/tenantMembers/services/TenantMemberService";
-import { scheduleTenantRoleCapabilitiesUpdated } from "@/features/tenantRoles/services/TenantRoleService";
 
 @injectable()
 export class TenantService implements ITenantService {
   constructor(
     @inject(TYPES.TenantRepository)
     private readonly tenantRepository: ITenantRepository,
-    @inject(TYPES.TenantRoleRepository)
-    private readonly tenantRoleRepository: ITenantRoleRepository,
-    @inject(TYPES.TenantMemberRepository)
-    private readonly tenantMemberRepository: ITenantMemberRepository,
+    @inject(TYPES.TenantMemberService)
+    private readonly tenantMemberService: ITenantMemberService,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
     @inject(TYPES.OutboxService)
@@ -45,7 +41,10 @@ export class TenantService implements ITenantService {
   ) {}
 
   async createTenant(input: CreateTenantInput, userId: string): Promise<Tenant> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.CREATE.key);
+    await requirePermission(this.authorizationClient, userId, "create_tenant", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: input.platformId,
+    });
 
     const slugExists = await this.tenantRepository.existsBySlug(input.slug);
     if (slugExists) {
@@ -68,32 +67,15 @@ export class TenantService implements ITenantService {
         { tx },
       );
 
-      const systemRoles = await this.tenantRoleRepository.seedSystemRoles(tenant.id, { tx });
-
-      for (const role of systemRoles) {
-        await scheduleTenantRoleCapabilitiesUpdated(this.outboxService, role.id, role.key, {
-          tx,
-        });
-      }
-
-      const ownerRole = systemRoles.find((role) => role.key === TENANT_ROLES.TENANT_OWNER.key);
-      if (!ownerRole) {
-        throw new TenantRoleNotFoundError(
-          `Tenant owner role not found for tenant: ${tenant.id}`,
-        );
-      }
-
-      const ownerMember = await this.tenantMemberRepository.save(
+      await this.tenantMemberService.createTenantMember(
         {
           tenantId: tenant.id,
-          roleId: ownerRole.id,
+          roleId: TENANT_ROLES.TENANT_OWNER.id,
           identityId: userId,
-          assignedBy: userId,
         },
-        { tx },
+        userId,
+        { tx, skipAuthorization: true },
       );
-
-      await scheduleTenantMemberCreated(this.outboxService, ownerMember, { tx });
 
       const event: CloudEvent<TenantCreatedData> = createCloudEvent({
         type: TenantCreatedEvent.type,
@@ -103,6 +85,7 @@ export class TenantService implements ITenantService {
         subject: tenant.id,
         data: {
           id: tenant.id,
+          platformId: input.platformId,
           name: tenant.name,
           slug: tenant.slug,
           isActive: tenant.isActive,
@@ -129,7 +112,10 @@ export class TenantService implements ITenantService {
   }
 
   async getTenantById(id: string, userId: string): Promise<Tenant> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.READ.key);
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: TENANT.name,
+      id,
+    });
 
     const tenant = await this.tenantRepository.findById(id);
     if (!tenant) {
@@ -139,18 +125,50 @@ export class TenantService implements ITenantService {
     return tenant;
   }
 
-  async listTenants(userId: string): Promise<Tenant[]> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.READ.key);
+  async listTenants(platformId: string, userId: string): Promise<Tenant[]> {
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
     return this.tenantRepository.findAll();
   }
 
-  async deleteTenant(id: string, userId: string): Promise<void> {
-    await requireCapability(this.authorizationClient, userId, TENANTS.SUSPEND.key);
+  async deleteTenant(id: string, platformId: string, userId: string): Promise<void> {
+    await requirePermission(this.authorizationClient, userId, "suspend", {
+      namespace: TENANT.name,
+      id,
+    });
 
-    const deleted = await this.tenantRepository.softDelete(id);
-    if (!deleted) {
-      throw new TenantNotFoundError(`Tenant not found: ${id}`);
-    }
+    await this.db.transaction(async (tx) => {
+      const deleted = await this.tenantRepository.softDelete(id, { tx });
+      if (!deleted) {
+        throw new TenantNotFoundError(`Tenant not found: ${id}`);
+      }
+
+      const event = createCloudEvent({
+        type: TenantDeletedEvent.type,
+        version: TenantDeletedEvent.version,
+        schema: TenantDeletedEvent.schema,
+        source: "pine/platform-service",
+        subject: id,
+        data: {
+          id,
+          platformId,
+        },
+      });
+
+      await this.outboxService.schedule(
+        {
+          eventId: event.id,
+          eventType: event.type,
+          eventVersion: TenantDeletedEvent.version,
+          aggregateType: "tenant",
+          aggregateId: id,
+          payload: event,
+        },
+        { tx },
+      );
+    });
   }
 }

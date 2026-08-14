@@ -18,7 +18,7 @@ export const ensureRelationship: HttpRoute = {
     tags: ["authorization"],
     summary: "Ensure a graph relationship exists",
     description:
-      "Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant capabilities and role assignees.",
+      "Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant permissions and role members.",
     operationId: "ensureRelationship",
     body: GraphRelationshipBodySchema,
     response: {

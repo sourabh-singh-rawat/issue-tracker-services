@@ -9,10 +9,11 @@ builder.queryFields((t) => ({
     type: PlatformRoleObject,
     args: {
       id: t.arg.string({ required: true }),
+      platformId: t.arg.string({ required: true }),
     },
-    resolve: async (_root, { id }, ctx) => {
+    resolve: async (_root, { id, platformId }, ctx) => {
       const service = container.get<IPlatformRoleService>(TYPES.PlatformRoleService);
-      return service.getPlatformRoleById(id, ctx.user!.id);
+      return service.getPlatformRoleById(id, platformId, ctx.user!.id);
     },
   }),
 }));

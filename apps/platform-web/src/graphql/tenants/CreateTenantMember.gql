@@ -1,0 +1,20 @@
+mutation CreateTenantMember($input: CreateTenantMemberInput!) {
+  createTenantMember(input: $input) {
+    id
+    tenantId
+    roleId
+    identityId
+    assignedBy
+    assignedAt
+    expiresAt
+    reason
+    createdAt
+    updatedAt
+    tenantRole {
+      id
+      key
+      name
+      isSystem
+    }
+  }
+}

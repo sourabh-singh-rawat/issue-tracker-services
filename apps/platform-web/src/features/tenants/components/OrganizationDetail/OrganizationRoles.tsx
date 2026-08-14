@@ -60,7 +60,7 @@ export const OrganizationRoles = ({ organizationId }: OrganizationRolesProps) =>
                 <TableCell>Name</TableCell>
                 <TableCell>Key</TableCell>
                 <TableCell>Description</TableCell>
-                <TableCell>Capabilities</TableCell>
+                <TableCell>Permissions</TableCell>
                 <TableCell>Type</TableCell>
               </TableRow>
             </TableHead>
@@ -74,16 +74,16 @@ export const OrganizationRoles = ({ organizationId }: OrganizationRolesProps) =>
                   <TableCell>{role.description}</TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, maxWidth: 360 }}>
-                      {(role.capabilities ?? []).length === 0 ? (
+                      {(role.permissions ?? []).length === 0 ? (
                         <Typography color="text.secondary" variant="body2">
                           —
                         </Typography>
                       ) : (
-                        (role.capabilities ?? []).map((capability) => (
+                        (role.permissions ?? []).map((permission) => (
                           <Chip
-                            key={capability.id ?? capability.key}
+                            key={permission.key}
                             size="small"
-                            label={capability.key}
+                            label={permission.key}
                             variant="outlined"
                             sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}
                           />

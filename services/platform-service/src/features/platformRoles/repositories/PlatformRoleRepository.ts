@@ -34,7 +34,7 @@ export class PlatformRoleRepository implements IPlatformRoleRepository {
         key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
-        isSystem: entity.isSystem ?? false,
+        isSystem: false,
         createdAt: now,
         version: 1,
       })

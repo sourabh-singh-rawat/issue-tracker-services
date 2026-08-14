@@ -7,9 +7,12 @@ import type { IPlatformRoleService } from "@/features/platformRoles/services";
 builder.queryFields((t) => ({
   getPlatformRoles: t.field({
     type: [PlatformRoleObject],
-    resolve: async (_root, _args, ctx) => {
+    args: {
+      platformId: t.arg.string({ required: true }),
+    },
+    resolve: async (_root, { platformId }, ctx) => {
       const service = container.get<IPlatformRoleService>(TYPES.PlatformRoleService);
-      return service.listPlatformRoles(ctx.user!.id);
+      return service.listPlatformRoles(platformId, ctx.user!.id);
     },
   }),
 }));

@@ -18,6 +18,7 @@ builder.mutationFields((t) => ({
 
       return service.createPlatformMember(
         {
+          platformId: input.platformId,
           platformRoleId: input.platformRoleId,
           identityId: input.identityId,
           expiresAt: input.expiresAt ?? undefined,

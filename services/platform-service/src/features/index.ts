@@ -1,3 +1,4 @@
+export * from "@/features/identities";
 export * from "@/features/tenants";
 export * from "@/features/tenantRoles";
 export * from "@/features/tenantMembers";
@@ -6,4 +7,3 @@ export * from "@/features/organizationRoles";
 export * from "@/features/organizationMembers";
 export * from "@/features/platformRoles";
 export * from "@/features/platformMembers";
-export * from "@/features/capabilities";

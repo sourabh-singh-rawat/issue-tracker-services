@@ -1,4 +1,4 @@
-import type { TenantMember } from "@/db";
+import type { DbClient, TenantMember } from "@/db";
 
 export type CreateTenantMemberInput = {
   tenantId: string;
@@ -14,15 +14,21 @@ export type UpdateTenantMemberInput = {
 };
 
 export type ListTenantMembersInput = {
-  tenantId?: string;
+  tenantId: string;
   roleId?: string;
   identityId?: string;
+};
+
+export type CreateTenantMemberOptions = {
+  tx?: DbClient;
+  skipAuthorization?: boolean;
 };
 
 export interface ITenantMemberService {
   createTenantMember: (
     input: CreateTenantMemberInput,
     userId: string,
+    options?: CreateTenantMemberOptions,
   ) => Promise<TenantMember>;
   getTenantMemberById: (id: string, userId: string) => Promise<TenantMember>;
   listTenantMembers: (

@@ -7,12 +7,10 @@ query GetPlatformRole($id: String!) {
     isSystem
     createdAt
     updatedAt
-    capabilities {
-      id
+    permissions {
       key
-      service
-      resource
-      action
+      namespace
+      permission
     }
   }
 }

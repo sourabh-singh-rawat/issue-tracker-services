@@ -6,9 +6,7 @@ import { PlatformRoles } from "@/db/tables/PlatformRoles";
 export const PlatformMembers = pgTable("platform_members",
   {
     ...idColumn,
-    platformRoleId: uuid("platform_role_id")
-      .notNull()
-      .references(() => PlatformRoles.roleId),
+    platformRoleId: uuid("platform_role_id").notNull(),
     identityId: uuid("identity_id").notNull(),
     assignedBy: uuid("assigned_by"),
     assignedAt: timestamp("assigned_at", { withTimezone: true }).notNull().defaultNow(),

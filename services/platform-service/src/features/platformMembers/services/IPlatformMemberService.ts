@@ -1,6 +1,7 @@
 import type { PlatformMember } from "@/db";
 
 export type CreatePlatformMemberInput = {
+  platformId: string;
   platformRoleId: string;
   identityId: string;
   expiresAt?: Date | null;
@@ -13,6 +14,7 @@ export type UpdatePlatformMemberInput = {
 };
 
 export type ListPlatformMembersInput = {
+  platformId: string;
   platformRoleId?: string;
   identityId?: string;
 };
@@ -24,6 +26,7 @@ export interface IPlatformMemberService {
   ) => Promise<PlatformMember>;
   getPlatformMemberById: (
     id: string,
+    platformId: string,
     userId: string,
   ) => Promise<PlatformMember>;
   listPlatformMembers: (
@@ -33,7 +36,8 @@ export interface IPlatformMemberService {
   updatePlatformMember: (
     id: string,
     input: UpdatePlatformMemberInput,
+    platformId: string,
     userId: string,
   ) => Promise<PlatformMember>;
-  deletePlatformMember: (id: string, userId: string) => Promise<void>;
+  deletePlatformMember: (id: string, platformId: string, userId: string) => Promise<void>;
 }

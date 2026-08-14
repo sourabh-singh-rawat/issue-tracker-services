@@ -1,4 +1,4 @@
-import { ROLE, ROLE_ASSIGNEE, USER } from "@pine/authorization";
+import { IDENTITY, ROLE, ROLE_MEMBER } from "@pine/authorization";
 import {
   type CloudEvent,
   type IBroker,
@@ -46,8 +46,8 @@ export class PlatformMemberSyncConsumer extends Consumer<
 
       const relationship = {
         object: { type: ROLE.name, id: data.platformRoleId },
-        relation: ROLE_ASSIGNEE,
-        subject: { type: USER.name, id: data.identityId },
+        relation: ROLE_MEMBER,
+        subject: { type: IDENTITY.name, id: data.identityId },
       };
 
       const existing = await this.authorizationGraphProvider.listRelationships({
@@ -74,8 +74,8 @@ export class PlatformMemberSyncConsumer extends Consumer<
 
       const relationship = {
         object: { type: ROLE.name, id: data.platformRoleId },
-        relation: ROLE_ASSIGNEE,
-        subject: { type: USER.name, id: data.identityId },
+        relation: ROLE_MEMBER,
+        subject: { type: IDENTITY.name, id: data.identityId },
       };
 
       const existing = await this.authorizationGraphProvider.listRelationships({

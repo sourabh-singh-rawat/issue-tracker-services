@@ -26,6 +26,7 @@ export const TYPES = {
   PlatformRoleService: Symbol.for("IPlatformRoleService"),
   PlatformMemberRepository: Symbol.for("IPlatformMemberRepository"),
   PlatformMemberService: Symbol.for("IPlatformMemberService"),
-  CapabilityRepository: Symbol.for("ICapabilityRepository"),
-  CapabilityService: Symbol.for("ICapabilityService"),
+  IdentityRepository: Symbol.for("IIdentityRepository"),
+  IdentityService: Symbol.for("IIdentityService"),
+  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
 } as const;

@@ -55,11 +55,12 @@ import {
   PlatformRoleService,
 } from "@/features/platformRoles";
 import {
-  type ICapabilityRepository,
-  type ICapabilityService,
-  CapabilityRepository,
-  CapabilityService,
-} from "@/features/capabilities";
+  type IIdentityRepository,
+  type IIdentityService,
+  IdentityRepository,
+  IdentityService,
+  IdentitySyncConsumer,
+} from "@/features/identities";
 import { type ITenantRepository, type ITenantService, TenantRepository, TenantService } from "@/features/tenants";
 import {
   type ITenantMemberRepository,
@@ -142,8 +143,9 @@ container
 container
   .bind<IPlatformMemberService>(TYPES.PlatformMemberService)
   .to(PlatformMemberService);
-container.bind<ICapabilityRepository>(TYPES.CapabilityRepository).to(CapabilityRepository);
-container.bind<ICapabilityService>(TYPES.CapabilityService).to(CapabilityService);
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
+container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
+container.bind(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");
@@ -162,7 +164,7 @@ export const bindHttpServer = async (): Promise<void> => {
         info: {
           title: "Platform Service",
           version: "0.0.0",
-          description: "Tenant, organization, platform member, and capability catalog APIs",
+          description: "Tenant, organization, and platform member APIs",
           license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
         },
         servers: [{ url: env.PLATFORM_SERVICE_URL }],
@@ -172,7 +174,6 @@ export const bindHttpServer = async (): Promise<void> => {
           { name: "organizations", description: "Organization end-points" },
           { name: "platform-members", description: "Platform member end-points" },
           { name: "organization-members", description: "Organization member end-points" },
-          { name: "capabilities", description: "Capability catalog end-points" },
         ],
       },
       graphql: createGraphQLServer({

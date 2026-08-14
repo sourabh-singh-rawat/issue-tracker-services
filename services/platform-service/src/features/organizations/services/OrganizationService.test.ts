@@ -1,4 +1,4 @@
-import { InsufficientPermissionError } from "@pine/authorization";
+import { InsufficientPermissionError, ORGANIZATION_ROLES } from "@pine/authorization";
 import { describe, expect, it, vi } from "vitest";
 import {
   InvalidParentOrganizationError,
@@ -45,22 +45,8 @@ const childOrganization = {
 
 const userId = "user-1";
 
-const ownerRole = {
-  id: "role-owner-1",
-  organizationId: "org-1",
-  key: "organization.owner",
-  name: "Organization Owner",
-  description: null,
-  isSystem: true,
-  version: 1,
-  createdAt: new Date("2026-01-01T00:00:00.000Z"),
-  updatedAt: null,
-  deletedAt: null,
-};
-
 const createService = (deps: {
   organizationRepository?: unknown;
-  organizationRoleRepository?: unknown;
   organizationMemberRepository?: unknown;
   tenantRepository?: unknown;
   authorizationClient?: unknown;
@@ -68,9 +54,6 @@ const createService = (deps: {
 }) =>
   new OrganizationService(
     (deps.organizationRepository ?? {}) as never,
-    (deps.organizationRoleRepository ?? {
-      seedSystemRoles: vi.fn().mockResolvedValue([ownerRole]),
-    }) as never,
     (deps.organizationMemberRepository ?? {
       save: vi.fn().mockResolvedValue({ id: "member-1" }),
     }) as never,
@@ -104,9 +87,10 @@ describe("OrganizationService", () => {
       service.listOrganizations({ tenantId: "tenant-1" }, userId),
     ).resolves.toEqual([organization]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:organization:read" },
-      relation: "has",
-      subject: { type: "user", id: userId },
+      namespace: "tenant",
+      object: "tenant-1",
+      relation: "read",
+      subject: `identity:${userId}`,
     });
     expect(organizationRepository.findMany).toHaveBeenCalledWith({
       tenantId: "tenant-1",
@@ -130,9 +114,10 @@ describe("OrganizationService", () => {
       organization,
     );
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:organization:read" },
-      relation: "has",
-      subject: { type: "user", id: userId },
+      namespace: "organization",
+      object: organization.id,
+      relation: "read",
+      subject: `identity:${userId}`,
     });
     expect(organizationRepository.findById).toHaveBeenCalledWith(organization.id);
   });
@@ -201,14 +186,11 @@ describe("OrganizationService", () => {
     expect(organizationRepository.findMany).not.toHaveBeenCalled();
   });
 
-  it("creates a root organization, seeds system roles, and assigns creator as owner", async () => {
+  it("creates a root organization and assigns creator as catalog owner", async () => {
     const organizationRepository = {
       existsBySlugInTenant: vi.fn().mockResolvedValue(false),
       existsByNameInTenant: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(organization),
-    };
-    const organizationRoleRepository = {
-      seedSystemRoles: vi.fn().mockResolvedValue([ownerRole]),
     };
     const organizationMemberRepository = {
       save: vi.fn().mockResolvedValue({ id: "member-1" }),
@@ -221,7 +203,6 @@ describe("OrganizationService", () => {
 
     const service = createService({
       organizationRepository,
-      organizationRoleRepository,
       organizationMemberRepository,
       authorizationClient,
     });
@@ -239,9 +220,10 @@ describe("OrganizationService", () => {
     ).resolves.toEqual(organization);
 
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:organization:create" },
-      relation: "has",
-      subject: { type: "user", id: userId },
+      namespace: "tenant",
+      object: "tenant-1",
+      relation: "create_organization",
+      subject: `identity:${userId}`,
     });
     expect(organizationRepository.save).toHaveBeenCalledWith(
       {
@@ -254,13 +236,10 @@ describe("OrganizationService", () => {
       },
       { tx: {} },
     );
-    expect(organizationRoleRepository.seedSystemRoles).toHaveBeenCalledWith("org-1", {
-      tx: {},
-    });
     expect(organizationMemberRepository.save).toHaveBeenCalledWith(
       {
         organizationId: "org-1",
-        roleId: "role-owner-1",
+        roleId: ORGANIZATION_ROLES.ORGANIZATION_OWNER.id,
         identityId: userId,
         assignedBy: userId,
       },
@@ -269,15 +248,11 @@ describe("OrganizationService", () => {
   });
 
   it("creates a child organization when parent is in the same tenant", async () => {
-    const childOwnerRole = { ...ownerRole, id: "role-owner-2", organizationId: "org-2" };
     const organizationRepository = {
       findById: vi.fn().mockResolvedValue(organization),
       existsBySlugInTenant: vi.fn().mockResolvedValue(false),
       existsByNameInTenant: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(childOrganization),
-    };
-    const organizationRoleRepository = {
-      seedSystemRoles: vi.fn().mockResolvedValue([childOwnerRole]),
     };
     const organizationMemberRepository = {
       save: vi.fn().mockResolvedValue({ id: "member-2" }),
@@ -285,7 +260,6 @@ describe("OrganizationService", () => {
 
     const service = createService({
       organizationRepository,
-      organizationRoleRepository,
       organizationMemberRepository,
     });
 
@@ -313,13 +287,10 @@ describe("OrganizationService", () => {
       },
       { tx: {} },
     );
-    expect(organizationRoleRepository.seedSystemRoles).toHaveBeenCalledWith("org-2", {
-      tx: {},
-    });
     expect(organizationMemberRepository.save).toHaveBeenCalledWith(
       {
         organizationId: "org-2",
-        roleId: "role-owner-2",
+        roleId: ORGANIZATION_ROLES.ORGANIZATION_OWNER.id,
         identityId: userId,
         assignedBy: userId,
       },
@@ -424,9 +395,10 @@ describe("OrganizationService", () => {
       service.updateOrganization("org-2", { parentOrganizationId: null }, userId),
     ).resolves.toEqual(updated);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:organization:update" },
-      relation: "has",
-      subject: { type: "user", id: userId },
+      namespace: "organization",
+      object: "org-2",
+      relation: "update",
+      subject: `identity:${userId}`,
     });
     expect(organizationRepository.update).toHaveBeenCalledWith("org-2", {
       parentOrganizationId: null,
@@ -478,9 +450,10 @@ describe("OrganizationService", () => {
 
     await expect(service.deleteOrganization("org-1", userId)).resolves.toBeUndefined();
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "tenant:organization:delete" },
-      relation: "has",
-      subject: { type: "user", id: userId },
+      namespace: "organization",
+      object: "org-1",
+      relation: "delete",
+      subject: `identity:${userId}`,
     });
     expect(organizationRepository.softDelete).toHaveBeenCalledWith("org-1");
   });

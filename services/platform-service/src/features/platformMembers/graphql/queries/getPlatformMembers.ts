@@ -8,6 +8,7 @@ builder.queryFields((t) => ({
   getPlatformMembers: t.field({
     type: [PlatformMemberObject],
     args: {
+      platformId: t.arg.string({ required: true }),
       platformRoleId: t.arg.string({ required: false }),
       identityId: t.arg.string({ required: false }),
     },
@@ -17,6 +18,7 @@ builder.queryFields((t) => ({
       );
       return service.listPlatformMembers(
         {
+          platformId: args.platformId,
           platformRoleId: args.platformRoleId ?? undefined,
           identityId: args.identityId ?? undefined,
         },

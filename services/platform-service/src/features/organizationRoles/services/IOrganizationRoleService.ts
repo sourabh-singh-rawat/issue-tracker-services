@@ -1,4 +1,5 @@
-import type { Capability, DbClient, OrganizationRole } from "@/db";
+import type { OrganizationRole } from "@/db";
+import type { CatalogPermission } from "@/features/roles/catalogPermissions";
 
 export interface IOrganizationRoleService {
   getOrganizationRoleById: (id: string, userId: string) => Promise<OrganizationRole>;
@@ -6,9 +7,5 @@ export interface IOrganizationRoleService {
     organizationId: string,
     userId: string,
   ) => Promise<OrganizationRole[]>;
-  getCapabilitiesForOrganizationRole: (role: OrganizationRole) => Promise<Capability[]>;
-  seedSystemRoles: (
-    organizationId: string,
-    options?: { tx: DbClient },
-  ) => Promise<OrganizationRole[]>;
+  getPermissionsForOrganizationRole: (role: OrganizationRole) => CatalogPermission[];
 }

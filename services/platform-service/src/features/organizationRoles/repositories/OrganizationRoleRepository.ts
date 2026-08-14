@@ -1,4 +1,3 @@
-import { ALL_ORGANIZATION_ROLES } from "@pine/authorization";
 import { uuidv7 } from "@pine/common";
 import { and, asc, eq, isNull } from "drizzle-orm";
 import { inject, injectable } from "inversify";
@@ -34,7 +33,7 @@ export class OrganizationRoleRepository implements IOrganizationRoleRepository {
         key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
-        isSystem: entity.isSystem ?? false,
+        isSystem: false,
         createdAt: now,
         version: 1,
       })
@@ -144,39 +143,6 @@ export class OrganizationRoleRepository implements IOrganizationRoleRepository {
   ): Promise<boolean> {
     const existing = await this.findByOrganizationIdAndKey(organizationId, key, options);
     return existing !== null;
-  }
-
-  async seedSystemRoles(
-    organizationId: string,
-    options?: OrganizationRoleRepositoryOptions,
-  ): Promise<OrganizationRole[]> {
-    const seeded: OrganizationRole[] = [];
-
-    for (const definition of ALL_ORGANIZATION_ROLES) {
-      const existing = await this.findByOrganizationIdAndKey(
-        organizationId,
-        definition.key,
-        options,
-      );
-      if (existing) {
-        seeded.push(existing);
-        continue;
-      }
-
-      const role = await this.save(
-        {
-          organizationId,
-          key: definition.key,
-          name: definition.name,
-          description: definition.description,
-          isSystem: true,
-        },
-        options,
-      );
-      seeded.push(role);
-    }
-
-    return seeded;
   }
 
   private client(options?: OrganizationRoleRepositoryOptions) {

@@ -3,6 +3,8 @@ import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { TenantMember } from "@/db";
 import { TenantRoleObject } from "@/features/tenantRoles/graphql/objects/TenantRoleObject";
+import { findTenantRoleDefinition } from "@pine/authorization";
+import { toTenantSystemRole } from "@/features/roles/systemRoles";
 import type { ITenantRoleRepository } from "@/features/tenantRoles/repositories";
 
 export const TenantMemberObject = builder.objectRef<TenantMember>("TenantMemberObject");
@@ -23,6 +25,11 @@ TenantMemberObject.implement({
       type: TenantRoleObject,
       nullable: true,
       resolve: async (member) => {
+        const definition = findTenantRoleDefinition({ id: member.roleId });
+        if (definition) {
+          return toTenantSystemRole(definition, member.tenantId);
+        }
+
         const repository = container.get<ITenantRoleRepository>(TYPES.TenantRoleRepository);
         return repository.findById(member.roleId);
       },

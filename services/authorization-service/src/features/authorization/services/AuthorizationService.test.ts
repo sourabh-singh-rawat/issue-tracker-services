@@ -11,18 +11,15 @@ describe("AuthorizationService", () => {
     };
     const service = new AuthorizationService(authorizationGraphProvider);
 
-    const relationship = {
-      object: { type: "tenant", id: "tenant-1" },
+    const input = {
+      namespace: "tenant",
+      object: "tenant-1",
       relation: "member",
-      subject: { type: "user", id: "user-1" },
+      subject: "identity:user-1",
     };
 
-    await expect(service.hasRelationship(relationship)).resolves.toBe(true);
-    expect(authorizationGraphProvider.checkPermission).toHaveBeenCalledWith(
-      relationship.object,
-      relationship.relation,
-      relationship.subject,
-    );
+    await expect(service.hasRelationship(input)).resolves.toBe(true);
+    expect(authorizationGraphProvider.checkPermission).toHaveBeenCalledWith(input);
   });
 
   it("creates a relationship when none exists", async () => {
@@ -35,9 +32,9 @@ describe("AuthorizationService", () => {
     const service = new AuthorizationService(authorizationGraphProvider);
 
     const relationship = {
-      object: { type: "capability", id: "platform:tenant:create" },
+      object: { type: "permission", id: "platform:create_tenant" },
       relation: "has",
-      subjectSet: { type: "role", id: "role-1", relation: "assignee" },
+      subjectSet: { type: "role", id: "role-1", relation: "member" },
     };
 
     await expect(service.ensureRelationship(relationship)).resolves.toEqual({ created: true });
@@ -47,8 +44,8 @@ describe("AuthorizationService", () => {
   it("skips create when relationship already exists", async () => {
     const relationship = {
       object: { type: "role", id: "role-1" },
-      relation: "assignee",
-      subject: { type: "user", id: "user-1" },
+      relation: "member",
+      subject: { type: "identity", id: "user-1" },
     };
     const authorizationGraphProvider = {
       checkPermission: vi.fn(),

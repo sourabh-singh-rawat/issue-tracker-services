@@ -9,12 +9,13 @@ builder.queryFields((t) => ({
     type: PlatformMemberObject,
     args: {
       id: t.arg.string({ required: true }),
+      platformId: t.arg.string({ required: true }),
     },
-    resolve: async (_root, { id }, ctx) => {
+    resolve: async (_root, { id, platformId }, ctx) => {
       const service = container.get<IPlatformMemberService>(
         TYPES.PlatformMemberService,
       );
-      return service.getPlatformMemberById(id, ctx.user!.id);
+      return service.getPlatformMemberById(id, platformId, ctx.user!.id);
     },
   }),
 }));

@@ -22,6 +22,7 @@ builder.mutationFields((t) => ({
           expiresAt: input.expiresAt ?? undefined,
           reason: input.reason ?? undefined,
         },
+        input.platformId,
         ctx.user!.id,
       );
     },

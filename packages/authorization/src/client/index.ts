@@ -1,7 +1,8 @@
 export type { IAuthorizationClient } from "./IAuthorizationClient";
 export { HttpAuthorizationClient } from "./HttpAuthorizationClient";
-export { requireCapability } from "./requireCapability";
+export { requirePermission } from "./requirePermission";
 export type {
+  ResourceReference,
   CheckRelationshipInput,
   CheckRelationshipResponse,
   EnsureRelationshipResponse,

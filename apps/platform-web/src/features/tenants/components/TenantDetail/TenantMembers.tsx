@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { useGetTenantMembersQuery } from "@generated/gql";
 import { getErrorMessage } from "@shared/ui";
+import { CreateTenantMemberModal } from "../CreateTenantMemberModal";
 
 type TenantMembersProps = {
   tenantId: string;
@@ -44,10 +45,13 @@ export const TenantMembers = ({ tenantId }: TenantMembersProps) => {
 
   return (
     <Stack spacing={2}>
-      <Typography color="text.secondary">
-        Members that belong to this tenant. The creator is assigned the tenant owner role when the
-        tenant is created.
-      </Typography>
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center", justifyContent: "space-between" }}>
+        <Typography color="text.secondary">
+          Members that belong to this tenant. The creator is assigned the tenant owner role when the
+          tenant is created.
+        </Typography>
+        <CreateTenantMemberModal tenantId={tenantId} />
+      </Stack>
 
       {membersQuery.isPending ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>

@@ -20,6 +20,7 @@ builder.mutationFields((t) => ({
           name: input.name ?? undefined,
           description: input.description ?? undefined,
         },
+        input.platformId,
         ctx.user!.id,
       );
     },

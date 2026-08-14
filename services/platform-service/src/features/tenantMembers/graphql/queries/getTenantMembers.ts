@@ -8,7 +8,7 @@ builder.queryFields((t) => ({
   getTenantMembers: t.field({
     type: [TenantMemberObject],
     args: {
-      tenantId: t.arg.string({ required: false }),
+      tenantId: t.arg.string({ required: true }),
       roleId: t.arg.string({ required: false }),
       identityId: t.arg.string({ required: false }),
     },
@@ -16,7 +16,7 @@ builder.queryFields((t) => ({
       const service = container.get<ITenantMemberService>(TYPES.TenantMemberService);
       return service.listTenantMembers(
         {
-          tenantId: args.tenantId ?? undefined,
+          tenantId: args.tenantId,
           roleId: args.roleId ?? undefined,
           identityId: args.identityId ?? undefined,
         },

@@ -3,6 +3,8 @@ import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { PlatformMember } from "@/db";
 import { PlatformRoleObject } from "@/features/platformRoles/graphql/objects/PlatformRoleObject";
+import { findPlatformRoleDefinition } from "@pine/authorization";
+import { toPlatformSystemRole } from "@/features/roles/systemRoles";
 import type { IPlatformRoleRepository } from "@/features/platformRoles/repositories";
 
 export const PlatformMemberObject = builder.objectRef<PlatformMember>(
@@ -24,6 +26,11 @@ PlatformMemberObject.implement({
       type: PlatformRoleObject,
       nullable: true,
       resolve: async (assignment) => {
+        const definition = findPlatformRoleDefinition({ id: assignment.platformRoleId });
+        if (definition) {
+          return toPlatformSystemRole(definition);
+        }
+
         const repository = container.get<IPlatformRoleRepository>(
           TYPES.PlatformRoleRepository,
         );

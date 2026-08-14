@@ -11,9 +11,7 @@ export const OrganizationMembers = pgTable(
     organizationId: uuid("organization_id")
       .notNull()
       .references(() => Organizations.id),
-    roleId: uuid("role_id")
-      .notNull()
-      .references(() => OrganizationRoles.roleId),
+    roleId: uuid("role_id").notNull(),
     identityId: uuid("identity_id").notNull(),
     assignedBy: uuid("assigned_by"),
     assignedAt: timestamp("assigned_at", { withTimezone: true }).notNull().defaultNow(),

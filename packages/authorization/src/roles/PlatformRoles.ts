@@ -1,9 +1,7 @@
-import {
-  PLATFORM_ROLE,
-  PLATFORM_MEMBER,
-  TENANTS,
-} from "../capabilities";
-import { capabilityKeys } from "../utils";
+import { PLATFORM_PERMISSIONS, TENANT_PERMISSIONS } from "../permissions";
+import { PLATFORM } from "../resources/Platform";
+import { TENANT } from "../resources/Tenant";
+import { permissionKeys } from "../utils";
 import type { RoleDefinition } from "./RoleDefinition";
 
 export const PLATFORM_ROLES = {
@@ -12,8 +10,11 @@ export const PLATFORM_ROLES = {
     key: "platform.admin",
     name: "Platform Admin",
     description:
-      "Platform administrator with tenant and platform role management capabilities",
-    capabilityKeys: capabilityKeys(TENANTS, PLATFORM_ROLE, PLATFORM_MEMBER),
+      "Platform administrator with tenant and platform role management permissions",
+    permissionKeys: [
+      ...permissionKeys(PLATFORM.name, PLATFORM_PERMISSIONS),
+      ...permissionKeys(TENANT.name, TENANT_PERMISSIONS),
+    ],
   },
 } as const satisfies Record<string, RoleDefinition>;
 

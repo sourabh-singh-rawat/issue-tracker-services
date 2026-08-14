@@ -6,7 +6,6 @@ export type CreatePlatformRoleEntity = {
   key: string;
   name: string;
   description?: string | null;
-  isSystem?: boolean;
 };
 
 export type UpdatePlatformRoleEntity = {

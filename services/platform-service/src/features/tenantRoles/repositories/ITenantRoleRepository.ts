@@ -7,7 +7,6 @@ export type CreateTenantRoleEntity = {
   key: string;
   name: string;
   description?: string | null;
-  isSystem?: boolean;
 };
 
 export interface ITenantRoleRepository {
@@ -33,8 +32,4 @@ export interface ITenantRoleRepository {
     key: string,
     options?: TenantRoleRepositoryOptions,
   ) => Promise<boolean>;
-  seedSystemRoles: (
-    tenantId: string,
-    options?: TenantRoleRepositoryOptions,
-  ) => Promise<TenantRole[]>;
 }

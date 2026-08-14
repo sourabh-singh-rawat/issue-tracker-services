@@ -8,6 +8,7 @@ import { bindHttpServer, broker, container, initializeDb, TYPES } from "@/bootst
 import { openApiOutputPath } from "@/bootstrap/container";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
+import { IdentitySyncConsumer } from "@/features/identities";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -37,6 +38,7 @@ const main = async () => {
 
   void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
   void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
+  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
 };
 
 main().catch((error) => {

@@ -63,7 +63,7 @@ export const CreateRoleModal = ({
               setOpen(false);
               if (roleId) {
                 void navigate({
-                  to: "/roles/$roleId",
+                  to: "/platform-roles/$roleId",
                   params: { roleId },
                 });
               }

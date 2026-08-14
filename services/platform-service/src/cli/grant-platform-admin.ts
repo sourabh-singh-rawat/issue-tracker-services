@@ -5,9 +5,8 @@ import type { IOutboxService } from "@pine/outbox";
 import { closeDb, container, initializeDb, TYPES } from "@/bootstrap";
 import type { Database } from "@/db";
 import type { IPlatformMemberRepository } from "@/features/platformMembers";
-import type { IPlatformRoleRepository } from "@/features/platformRoles";
 import { schedulePlatformMemberCreated } from "@/features/platformMembers/services/PlatformMemberService";
-import { schedulePlatformRoleCapabilitiesUpdated } from "@/features/platformRoles/services/PlatformRoleService";
+import { schedulePlatformRolePermissionsUpdated } from "@/features/platformRoles/services/PlatformRoleService";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -42,19 +41,11 @@ const main = async (): Promise<void> => {
   await initializeDb();
 
   const db = container.get<Database>(TYPES.Database);
-  const platformRoleRepository = container.get<IPlatformRoleRepository>(
-    TYPES.PlatformRoleRepository,
-  );
   const platformMemberRepository =
     container.get<IPlatformMemberRepository>(TYPES.PlatformMemberRepository);
   const outboxService = container.get<IOutboxService>(TYPES.OutboxService);
 
-  const role = await platformRoleRepository.findByKey(platformAdmin.key);
-  if (!role) {
-    throw new Error(
-      `Platform admin role not found (key=${platformAdmin.key}). Run db:seed first.`,
-    );
-  }
+  const role = platformAdmin;
 
   const existing = await platformMemberRepository.findByRoleAndIdentity(
     role.id,
@@ -63,7 +54,7 @@ const main = async (): Promise<void> => {
 
   if (existing) {
     await db.transaction(async (tx) => {
-      await schedulePlatformRoleCapabilitiesUpdated(outboxService, role.id, role.key, {
+      await schedulePlatformRolePermissionsUpdated(outboxService, role.id, role.key, {
         tx,
       });
       await schedulePlatformMemberCreated(outboxService, existing, { tx });
@@ -86,7 +77,7 @@ const main = async (): Promise<void> => {
       { tx },
     );
 
-    await schedulePlatformRoleCapabilitiesUpdated(outboxService, role.id, role.key, {
+    await schedulePlatformRolePermissionsUpdated(outboxService, role.id, role.key, {
       tx,
     });
     await schedulePlatformMemberCreated(outboxService, assignment, { tx });

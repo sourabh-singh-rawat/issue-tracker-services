@@ -1,6 +1,7 @@
 import {
-  PLATFORM_MEMBER,
-  requireCapability,
+  PLATFORM_RESOURCE,
+  findPlatformRoleDefinition,
+  requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import {
@@ -25,7 +26,7 @@ import type {
 } from "@/features/platformMembers/services/IPlatformMemberService";
 import { PlatformRoleNotFoundError } from "@/features/platformRoles/errors";
 import type { IPlatformRoleRepository } from "@/features/platformRoles/repositories";
-import { schedulePlatformRoleCapabilitiesUpdated } from "@/features/platformRoles/services/PlatformRoleService";
+import { schedulePlatformRolePermissionsUpdated } from "@/features/platformRoles/services/PlatformRoleService";
 
 export const schedulePlatformMemberCreated = async (
   outboxService: IOutboxService,
@@ -112,14 +113,24 @@ export class PlatformMemberService implements IPlatformMemberService {
     input: CreatePlatformMemberInput,
     userId: string,
   ): Promise<PlatformMember> {
-    await requireCapability(
-      this.authorizationClient,
-      userId,
-      PLATFORM_MEMBER.CREATE.key,
-    );
+    await requirePermission(this.authorizationClient, userId, "manage_admins", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: input.platformId,
+    });
 
-    const role = await this.platformRoleRepository.findById(input.platformRoleId);
-    if (!role) {
+    const catalogRole = findPlatformRoleDefinition({ id: input.platformRoleId });
+    const storedRole = catalogRole
+      ? null
+      : await this.platformRoleRepository.findById(input.platformRoleId);
+    if (!catalogRole && !storedRole) {
+      throw new PlatformRoleNotFoundError(
+        `Platform role not found: ${input.platformRoleId}`,
+      );
+    }
+
+    const roleId = catalogRole?.id ?? storedRole?.id;
+    const roleKey = catalogRole?.key ?? storedRole?.key;
+    if (!roleId || !roleKey) {
       throw new PlatformRoleNotFoundError(
         `Platform role not found: ${input.platformRoleId}`,
       );
@@ -147,10 +158,10 @@ export class PlatformMemberService implements IPlatformMemberService {
         { tx },
       );
 
-      await schedulePlatformRoleCapabilitiesUpdated(
+      await schedulePlatformRolePermissionsUpdated(
         this.outboxService,
-        role.id,
-        role.key,
+        roleId,
+        roleKey,
         { tx },
       );
       await schedulePlatformMemberCreated(this.outboxService, assignment, { tx });
@@ -161,13 +172,13 @@ export class PlatformMemberService implements IPlatformMemberService {
 
   async getPlatformMemberById(
     id: string,
+    platformId: string,
     userId: string,
   ): Promise<PlatformMember> {
-    await requireCapability(
-      this.authorizationClient,
-      userId,
-      PLATFORM_MEMBER.READ.key,
-    );
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
     const assignment = await this.platformMemberRepository.findById(id);
     if (!assignment) {
@@ -183,18 +194,20 @@ export class PlatformMemberService implements IPlatformMemberService {
     input: ListPlatformMembersInput,
     userId: string,
   ): Promise<PlatformMember[]> {
-    await requireCapability(
-      this.authorizationClient,
-      userId,
-      PLATFORM_MEMBER.READ.key,
-    );
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: input.platformId,
+    });
 
     if (input.platformRoleId !== undefined) {
-      const role = await this.platformRoleRepository.findById(input.platformRoleId);
-      if (!role) {
-        throw new PlatformRoleNotFoundError(
-          `Platform role not found: ${input.platformRoleId}`,
-        );
+      const catalogRole = findPlatformRoleDefinition({ id: input.platformRoleId });
+      if (!catalogRole) {
+        const role = await this.platformRoleRepository.findById(input.platformRoleId);
+        if (!role) {
+          throw new PlatformRoleNotFoundError(
+            `Platform role not found: ${input.platformRoleId}`,
+          );
+        }
       }
     }
 
@@ -207,13 +220,13 @@ export class PlatformMemberService implements IPlatformMemberService {
   async updatePlatformMember(
     id: string,
     input: UpdatePlatformMemberInput,
+    platformId: string,
     userId: string,
   ): Promise<PlatformMember> {
-    await requireCapability(
-      this.authorizationClient,
-      userId,
-      PLATFORM_MEMBER.UPDATE.key,
-    );
+    await requirePermission(this.authorizationClient, userId, "manage_admins", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
     const existing = await this.platformMemberRepository.findById(id);
     if (!existing) {
@@ -240,12 +253,11 @@ export class PlatformMemberService implements IPlatformMemberService {
     return updated;
   }
 
-  async deletePlatformMember(id: string, userId: string): Promise<void> {
-    await requireCapability(
-      this.authorizationClient,
-      userId,
-      PLATFORM_MEMBER.DELETE.key,
-    );
+  async deletePlatformMember(id: string, platformId: string, userId: string): Promise<void> {
+    await requirePermission(this.authorizationClient, userId, "manage_admins", {
+      namespace: PLATFORM_RESOURCE.name,
+      id: platformId,
+    });
 
     const existing = await this.platformMemberRepository.findById(id);
     if (!existing) {

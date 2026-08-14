@@ -39,6 +39,7 @@ const assignment = {
 };
 
 const userId = "user-1";
+const platformId = "platform-1";
 
 const allowAuth = () => ({
   checkRelationship: vi.fn().mockResolvedValue(true),
@@ -103,7 +104,6 @@ const createService = (deps: {
 describe("PlatformMemberService", () => {
   it("creates an assignment when role exists and pair is unique", async () => {
     const platformRoleRepository = emptyRoleRepo();
-    platformRoleRepository.findById = vi.fn().mockResolvedValue(role);
 
     const platformMemberRepository = emptyAssignmentRepo();
     platformMemberRepository.findByRoleAndIdentity = vi
@@ -121,6 +121,7 @@ describe("PlatformMemberService", () => {
     await expect(
       service.createPlatformMember(
         {
+          platformId,
           platformRoleId: role.id,
           identityId: assignment.identityId,
           reason: "bootstrap",
@@ -154,7 +155,7 @@ describe("PlatformMemberService", () => {
 
     await expect(
       service.createPlatformMember(
-        { platformRoleId: "missing", identityId: assignment.identityId },
+        { platformId, platformRoleId: "missing", identityId: assignment.identityId },
         userId,
       ),
     ).rejects.toBeInstanceOf(PlatformRoleNotFoundError);
@@ -177,7 +178,7 @@ describe("PlatformMemberService", () => {
 
     await expect(
       service.createPlatformMember(
-        { platformRoleId: role.id, identityId: assignment.identityId },
+        { platformId, platformRoleId: role.id, identityId: assignment.identityId },
         userId,
       ),
     ).rejects.toBeInstanceOf(PlatformMemberConflictError);
@@ -193,7 +194,7 @@ describe("PlatformMemberService", () => {
     });
 
     await expect(
-      service.listPlatformMembers({ identityId: assignment.identityId }, userId),
+      service.listPlatformMembers({ platformId, identityId: assignment.identityId }, userId),
     ).resolves.toEqual([assignment]);
   });
 
@@ -206,7 +207,7 @@ describe("PlatformMemberService", () => {
     });
 
     await expect(
-      service.listPlatformMembers({}, userId),
+      service.listPlatformMembers({ platformId }, userId),
     ).rejects.toBeInstanceOf(InsufficientPermissionError);
     expect(platformMemberRepository.findMany).not.toHaveBeenCalled();
   });
@@ -223,7 +224,7 @@ describe("PlatformMemberService", () => {
     });
 
     await expect(
-      service.updatePlatformMember(assignment.id, { reason: "updated" }, userId),
+      service.updatePlatformMember(assignment.id, { reason: "updated" }, platformId, userId),
     ).resolves.toEqual(updated);
   });
 
@@ -237,7 +238,7 @@ describe("PlatformMemberService", () => {
     });
 
     await expect(
-      service.updatePlatformMember("missing", { reason: "x" }, userId),
+      service.updatePlatformMember("missing", { reason: "x" }, platformId, userId),
     ).rejects.toBeInstanceOf(PlatformMemberNotFoundError);
   });
 
@@ -254,7 +255,7 @@ describe("PlatformMemberService", () => {
     });
 
     await expect(
-      service.deletePlatformMember(assignment.id, userId),
+      service.deletePlatformMember(assignment.id, platformId, userId),
     ).resolves.toBeUndefined();
     expect(platformMemberRepository.softDelete).toHaveBeenCalledWith(assignment.id, {
       tx: {},

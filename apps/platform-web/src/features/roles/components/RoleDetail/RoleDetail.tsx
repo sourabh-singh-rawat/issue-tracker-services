@@ -27,7 +27,7 @@ import { useEffect } from "react";
 import { getErrorMessage, useSnackbar } from "@shared/ui";
 
 export const RoleDetail = () => {
-  const { roleId } = useParams({ from: "/_authenticated/roles_/$roleId" });
+  const { roleId } = useParams({ from: "/_authenticated/platform-roles_/$roleId" });
   const navigate = useNavigate();
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
@@ -43,7 +43,7 @@ export const RoleDetail = () => {
   );
 
   const role = roleQuery.data;
-  const capabilities = role?.capabilities ?? [];
+  const permissions = role?.permissions ?? [];
   const isCustomRole = Boolean(role && !role.isSystem);
 
   const form = useForm({
@@ -96,7 +96,7 @@ export const RoleDetail = () => {
       await deleteRoleMutation.mutateAsync({ id: roleId });
       await queryClient.invalidateQueries({ queryKey: ["GetPlatformRoles"] });
       snackbar.success("Platform role deleted successfully");
-      void navigate({ to: "/roles" });
+      void navigate({ to: "/platform-roles" });
     } catch (error) {
       snackbar.error(getErrorMessage(error, "Failed to delete platform role"));
     }
@@ -105,7 +105,7 @@ export const RoleDetail = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 3 }}>
-        <Button component={Link} to="/roles" size="small" sx={{ mb: 2, px: 0 }}>
+        <Button component={Link} to="/platform-roles" size="small" sx={{ mb: 2, px: 0 }}>
           ← Back to platform roles
         </Button>
 
@@ -254,36 +254,34 @@ export const RoleDetail = () => {
       {role ? (
         <>
           <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>
-            Capabilities
+            Permissions
           </Typography>
           <TableContainer component={Paper} variant="outlined">
-            <Table size="small" aria-label="Platform role capabilities">
+            <Table size="small" aria-label="Platform role permissions">
               <TableHead>
                 <TableRow>
                   <TableCell>Key</TableCell>
-                  <TableCell>Service</TableCell>
-                  <TableCell>Resource</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableCell>Namespace</TableCell>
+                  <TableCell>Permission</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {capabilities.length === 0 ? (
+                {permissions.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4}>
+                    <TableCell colSpan={3}>
                       <Typography color="text.secondary">
-                        This platform role has no capabilities assigned.
+                        This platform role has no permissions assigned.
                       </Typography>
                     </TableCell>
                   </TableRow>
                 ) : (
-                  capabilities.map((capability) => (
-                    <TableRow key={capability.id ?? capability.key ?? undefined}>
+                  permissions.map((permission) => (
+                    <TableRow key={permission.key}>
                       <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                        {capability.key ?? "—"}
+                        {permission.key}
                       </TableCell>
-                      <TableCell>{capability.service ?? "—"}</TableCell>
-                      <TableCell>{capability.resource ?? "—"}</TableCell>
-                      <TableCell>{capability.action ?? "—"}</TableCell>
+                      <TableCell>{permission.namespace}</TableCell>
+                      <TableCell>{permission.permission}</TableCell>
                     </TableRow>
                   ))
                 )}

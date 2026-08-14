@@ -1,6 +1,10 @@
-import { InsufficientPermissionError, PLATFORM_ROLES } from "@pine/authorization";
+import {
+  InsufficientPermissionError,
+  PLATFORM_ROLES,
+  parsePermission,
+} from "@pine/authorization";
+import { platformSystemRoles } from "@/features/roles/systemRoles";
 import { describe, expect, it, vi } from "vitest";
-import type { ICapabilityRepository } from "@/features/capabilities/repositories";
 import {
   PlatformRoleKeyConflictError,
   PlatformRoleNameConflictError,
@@ -31,6 +35,7 @@ const systemRole = {
 };
 
 const userId = "user-1";
+const platformId = "platform-1";
 
 const allowAuth = () => ({
   checkRelationship: vi.fn().mockResolvedValue(true),
@@ -44,24 +49,12 @@ const denyAuth = () => ({
   deleteRelationship: vi.fn().mockResolvedValue(undefined),
 });
 
-const emptyCapabilityRepository = (): ICapabilityRepository => ({
-  save: vi.fn(),
-  update: vi.fn(),
-  delete: vi.fn(),
-  existsByKey: vi.fn(),
-  findByKey: vi.fn(),
-  findByKeys: vi.fn().mockResolvedValue([]),
-  findAll: vi.fn(),
-});
-
 const createService = (deps: {
   platformRoleRepository: IPlatformRoleRepository;
-  capabilityRepository?: ICapabilityRepository;
   authorizationClient?: ReturnType<typeof allowAuth>;
 }) =>
   new PlatformRoleService(
     deps.platformRoleRepository,
-    deps.capabilityRepository ?? emptyCapabilityRepository(),
     deps.authorizationClient ?? allowAuth(),
   );
 
@@ -80,11 +73,15 @@ describe("PlatformRoleService", () => {
     const authorizationClient = allowAuth();
     const service = createService({ platformRoleRepository, authorizationClient });
 
-    await expect(service.listPlatformRoles(userId)).resolves.toEqual([role]);
+    await expect(service.listPlatformRoles(platformId, userId)).resolves.toEqual([
+      ...platformSystemRoles(),
+      role,
+    ]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "platform:platform_role:read" },
-      relation: "has",
-      subject: { type: "user", id: userId },
+      namespace: "platform",
+      object: platformId,
+      relation: "read",
+      subject: `identity:${userId}`,
     });
   });
 
@@ -104,7 +101,7 @@ describe("PlatformRoleService", () => {
       authorizationClient: denyAuth(),
     });
 
-    await expect(service.listPlatformRoles(userId)).rejects.toBeInstanceOf(
+    await expect(service.listPlatformRoles(platformId, userId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(platformRoleRepository.findAll).not.toHaveBeenCalled();
@@ -126,6 +123,7 @@ describe("PlatformRoleService", () => {
     await expect(
       service.createPlatformRole(
         {
+          platformId,
           key: role.key,
           name: role.name,
           description: role.description,
@@ -154,7 +152,7 @@ describe("PlatformRoleService", () => {
     const service = createService({ platformRoleRepository });
 
     await expect(
-      service.createPlatformRole({ key: role.key, name: role.name }, userId),
+      service.createPlatformRole({ platformId, key: role.key, name: role.name }, userId),
     ).rejects.toBeInstanceOf(PlatformRoleKeyConflictError);
     expect(platformRoleRepository.save).not.toHaveBeenCalled();
   });
@@ -173,7 +171,7 @@ describe("PlatformRoleService", () => {
     const service = createService({ platformRoleRepository });
 
     await expect(
-      service.createPlatformRole({ key: role.key, name: role.name }, userId),
+      service.createPlatformRole({ platformId, key: role.key, name: role.name }, userId),
     ).rejects.toBeInstanceOf(PlatformRoleNameConflictError);
   });
 
@@ -190,7 +188,7 @@ describe("PlatformRoleService", () => {
     };
     const service = createService({ platformRoleRepository });
 
-    await expect(service.getPlatformRoleById(role.id, userId)).resolves.toEqual(role);
+    await expect(service.getPlatformRoleById(role.id, platformId, userId)).resolves.toEqual(role);
   });
 
   it("rejects get when role is missing", async () => {
@@ -206,7 +204,7 @@ describe("PlatformRoleService", () => {
     };
     const service = createService({ platformRoleRepository });
 
-    await expect(service.getPlatformRoleById("missing", userId)).rejects.toBeInstanceOf(
+    await expect(service.getPlatformRoleById("missing", platformId, userId)).rejects.toBeInstanceOf(
       PlatformRoleNotFoundError,
     );
   });
@@ -226,13 +224,13 @@ describe("PlatformRoleService", () => {
     const service = createService({ platformRoleRepository });
 
     await expect(
-      service.updatePlatformRole(role.id, { name: "Updated Operator" }, userId),
+      service.updatePlatformRole(role.id, { name: "Updated Operator" }, platformId, userId),
     ).resolves.toEqual(updated);
   });
 
   it("rejects update of system platform roles", async () => {
     const platformRoleRepository: IPlatformRoleRepository = {
-      findById: vi.fn().mockResolvedValue(systemRole),
+      findById: vi.fn(),
       existsByName: vi.fn(),
       update: vi.fn(),
       findAll: vi.fn(),
@@ -244,8 +242,14 @@ describe("PlatformRoleService", () => {
     const service = createService({ platformRoleRepository });
 
     await expect(
-      service.updatePlatformRole(systemRole.id, { name: "Nope" }, userId),
+      service.updatePlatformRole(
+        PLATFORM_ROLES.PLATFORM_ADMIN.id,
+        { name: "Nope" },
+        platformId,
+        userId,
+      ),
     ).rejects.toBeInstanceOf(PlatformRoleSystemProtectedError);
+    expect(platformRoleRepository.findById).not.toHaveBeenCalled();
     expect(platformRoleRepository.update).not.toHaveBeenCalled();
   });
 
@@ -262,13 +266,13 @@ describe("PlatformRoleService", () => {
     };
     const service = createService({ platformRoleRepository });
 
-    await expect(service.deletePlatformRole(role.id, userId)).resolves.toBeUndefined();
+    await expect(service.deletePlatformRole(role.id, platformId, userId)).resolves.toBeUndefined();
     expect(platformRoleRepository.softDelete).toHaveBeenCalledWith(role.id);
   });
 
   it("rejects delete of system platform roles", async () => {
     const platformRoleRepository: IPlatformRoleRepository = {
-      findById: vi.fn().mockResolvedValue(systemRole),
+      findById: vi.fn(),
       softDelete: vi.fn(),
       findAll: vi.fn(),
       save: vi.fn(),
@@ -279,30 +283,14 @@ describe("PlatformRoleService", () => {
     };
     const service = createService({ platformRoleRepository });
 
-    await expect(service.deletePlatformRole(systemRole.id, userId)).rejects.toBeInstanceOf(
-      PlatformRoleSystemProtectedError,
-    );
+    await expect(
+      service.deletePlatformRole(PLATFORM_ROLES.PLATFORM_ADMIN.id, platformId, userId),
+    ).rejects.toBeInstanceOf(PlatformRoleSystemProtectedError);
+    expect(platformRoleRepository.findById).not.toHaveBeenCalled();
     expect(platformRoleRepository.softDelete).not.toHaveBeenCalled();
   });
 
-  it("returns ordered catalog capabilities for a system platform role", async () => {
-    const keys = [...PLATFORM_ROLES.PLATFORM_ADMIN.capabilityKeys];
-    const catalog = keys.map((key, index) => {
-      const [service, resource, action] = key.split(":");
-      return {
-        id: `cap-${index}`,
-        key,
-        service: service ?? "",
-        resource: resource ?? "",
-        action: action ?? "",
-        createdAt: new Date("2026-01-01T00:00:00.000Z"),
-        updatedAt: null,
-      };
-    });
-    const capabilityRepository: ICapabilityRepository = {
-      ...emptyCapabilityRepository(),
-      findByKeys: vi.fn().mockResolvedValue([...catalog].reverse()),
-    };
+  it("returns system role definition permissions for a platform admin role", () => {
     const service = createService({
       platformRoleRepository: {
         findAll: vi.fn(),
@@ -314,15 +302,21 @@ describe("PlatformRoleService", () => {
         existsByName: vi.fn(),
         softDelete: vi.fn(),
       },
-      capabilityRepository,
     });
 
-    await expect(service.getCapabilitiesForPlatformRole(systemRole)).resolves.toEqual(catalog);
-    expect(capabilityRepository.findByKeys).toHaveBeenCalledWith(keys);
+    expect(service.getPermissionsForPlatformRole(systemRole)).toEqual(
+      PLATFORM_ROLES.PLATFORM_ADMIN.permissionKeys.map((key) => {
+        const parsed = parsePermission(key);
+        return {
+          key,
+          namespace: parsed.namespace,
+          permission: parsed.permission,
+        };
+      }),
+    );
   });
 
-  it("returns no capabilities for custom platform roles without a definition", async () => {
-    const capabilityRepository = emptyCapabilityRepository();
+  it("returns no permissions for custom platform roles without a definition", () => {
     const service = createService({
       platformRoleRepository: {
         findAll: vi.fn(),
@@ -334,10 +328,8 @@ describe("PlatformRoleService", () => {
         existsByName: vi.fn(),
         softDelete: vi.fn(),
       },
-      capabilityRepository,
     });
 
-    await expect(service.getCapabilitiesForPlatformRole(role)).resolves.toEqual([]);
-    expect(capabilityRepository.findByKeys).not.toHaveBeenCalled();
+    expect(service.getPermissionsForPlatformRole(role)).toEqual([]);
   });
 });

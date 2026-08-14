@@ -16,6 +16,7 @@ builder.mutationFields((t) => ({
 
       return service.createPlatformRole(
         {
+          platformId: input.platformId,
           key: input.key,
           name: input.name,
           description: input.description ?? undefined,

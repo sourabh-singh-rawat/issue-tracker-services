@@ -2,7 +2,7 @@ import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import type { TenantRole } from "@/db";
-import { CapabilityObject } from "@/features/capabilities/graphql/objects/CapabilityObject";
+import { PermissionObject } from "@/graphql/objects/PermissionObject";
 import type { ITenantRoleService } from "@/features/tenantRoles/services";
 
 export const TenantRoleObject = builder.objectRef<TenantRole>("TenantRoleObject");
@@ -17,11 +17,11 @@ TenantRoleObject.implement({
     isSystem: t.exposeBoolean("isSystem"),
     createdAt: t.expose("createdAt", { type: "DateTimeISO" }),
     updatedAt: t.expose("updatedAt", { type: "DateTimeISO", nullable: true }),
-    capabilities: t.field({
-      type: [CapabilityObject],
-      resolve: async (role) => {
+    permissions: t.field({
+      type: [PermissionObject],
+      resolve: (role) => {
         const service = container.get<ITenantRoleService>(TYPES.TenantRoleService);
-        return service.getCapabilitiesForTenantRole(role);
+        return service.getPermissionsForTenantRole(role);
       },
     }),
   }),

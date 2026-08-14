@@ -1,9 +1,9 @@
 export { OutboxMessages } from "@pine/outbox";
 export { auditColumns, idColumn } from "@/db/columns";
 export {
-  type Capability,
-  type NewCapability,
-  Capabilities,
+  type Identity,
+  type NewIdentity,
+  Identities,
   type Tenant,
   type NewTenant,
   Tenants,

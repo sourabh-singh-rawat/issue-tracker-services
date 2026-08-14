@@ -1,4 +1,3 @@
-import { ALL_TENANT_ROLES } from "@pine/authorization";
 import { uuidv7 } from "@pine/common";
 import { and, asc, eq, isNull } from "drizzle-orm";
 import { inject, injectable } from "inversify";
@@ -29,7 +28,7 @@ export class TenantRoleRepository implements ITenantRoleRepository {
         key: entity.key,
         name: entity.name,
         description: entity.description ?? null,
-        isSystem: entity.isSystem ?? false,
+        isSystem: false,
         createdAt: now,
         version: 1,
       })
@@ -137,35 +136,6 @@ export class TenantRoleRepository implements ITenantRoleRepository {
   ): Promise<boolean> {
     const existing = await this.findByTenantIdAndKey(tenantId, key, options);
     return existing !== null;
-  }
-
-  async seedSystemRoles(
-    tenantId: string,
-    options?: TenantRoleRepositoryOptions,
-  ): Promise<TenantRole[]> {
-    const seeded: TenantRole[] = [];
-
-    for (const definition of ALL_TENANT_ROLES) {
-      const existing = await this.findByTenantIdAndKey(tenantId, definition.key, options);
-      if (existing) {
-        seeded.push(existing);
-        continue;
-      }
-
-      const role = await this.save(
-        {
-          tenantId,
-          key: definition.key,
-          name: definition.name,
-          description: definition.description,
-          isSystem: true,
-        },
-        options,
-      );
-      seeded.push(role);
-    }
-
-    return seeded;
   }
 
   private client(options?: TenantRoleRepositoryOptions) {

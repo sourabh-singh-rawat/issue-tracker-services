@@ -1,15 +1,14 @@
 import {
+  ORGANIZATION,
   ORGANIZATION_ROLES,
-  ORGANIZATIONS,
-  requireCapability,
+  TENANT,
+  requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Organization } from "@/db";
 import type { IOrganizationMemberRepository } from "@/features/organizationMembers/repositories";
-import { OrganizationRoleNotFoundError } from "@/features/organizationRoles/errors";
-import type { IOrganizationRoleRepository } from "@/features/organizationRoles/repositories";
 import {
   InvalidParentOrganizationError,
   OrganizationNameConflictError,
@@ -31,8 +30,6 @@ export class OrganizationService implements IOrganizationService {
   constructor(
     @inject(TYPES.OrganizationRepository)
     private readonly organizationRepository: IOrganizationRepository,
-    @inject(TYPES.OrganizationRoleRepository)
-    private readonly organizationRoleRepository: IOrganizationRoleRepository,
     @inject(TYPES.OrganizationMemberRepository)
     private readonly organizationMemberRepository: IOrganizationMemberRepository,
     @inject(TYPES.TenantRepository)
@@ -47,7 +44,10 @@ export class OrganizationService implements IOrganizationService {
     input: CreateOrganizationInput,
     userId: string,
   ): Promise<Organization> {
-    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.CREATE.key);
+    await requirePermission(this.authorizationClient, userId, "create_organization", {
+      namespace: TENANT.name,
+      id: input.tenantId,
+    });
 
     const tenant = await this.tenantRepository.findById(input.tenantId);
     if (!tenant) {
@@ -96,24 +96,10 @@ export class OrganizationService implements IOrganizationService {
         { tx },
       );
 
-      const systemRoles = await this.organizationRoleRepository.seedSystemRoles(
-        organization.id,
-        { tx },
-      );
-
-      const ownerRole = systemRoles.find(
-        (role) => role.key === ORGANIZATION_ROLES.ORGANIZATION_OWNER.key,
-      );
-      if (!ownerRole) {
-        throw new OrganizationRoleNotFoundError(
-          `Organization owner role not found for organization: ${organization.id}`,
-        );
-      }
-
       await this.organizationMemberRepository.save(
         {
           organizationId: organization.id,
-          roleId: ownerRole.id,
+          roleId: ORGANIZATION_ROLES.ORGANIZATION_OWNER.id,
           identityId: userId,
           assignedBy: userId,
         },
@@ -125,7 +111,10 @@ export class OrganizationService implements IOrganizationService {
   }
 
   async getOrganizationById(id: string, userId: string): Promise<Organization> {
-    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.READ.key);
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: ORGANIZATION.name,
+      id,
+    });
 
     const organization = await this.organizationRepository.findById(id);
     if (!organization) {
@@ -139,7 +128,10 @@ export class OrganizationService implements IOrganizationService {
     input: ListOrganizationsInput,
     userId: string,
   ): Promise<Organization[]> {
-    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.READ.key);
+    await requirePermission(this.authorizationClient, userId, "read", {
+      namespace: TENANT.name,
+      id: input.tenantId,
+    });
 
     const tenant = await this.tenantRepository.findById(input.tenantId);
     if (!tenant) {
@@ -157,7 +149,10 @@ export class OrganizationService implements IOrganizationService {
     input: UpdateOrganizationInput,
     userId: string,
   ): Promise<Organization> {
-    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.UPDATE.key);
+    await requirePermission(this.authorizationClient, userId, "update", {
+      namespace: ORGANIZATION.name,
+      id,
+    });
 
     const organization = await this.organizationRepository.findById(id);
     if (!organization) {
@@ -179,7 +174,10 @@ export class OrganizationService implements IOrganizationService {
   }
 
   async deleteOrganization(id: string, userId: string): Promise<void> {
-    await requireCapability(this.authorizationClient, userId, ORGANIZATIONS.DELETE.key);
+    await requirePermission(this.authorizationClient, userId, "delete", {
+      namespace: ORGANIZATION.name,
+      id,
+    });
 
     const deleted = await this.organizationRepository.softDelete(id);
     if (!deleted) {
