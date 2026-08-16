@@ -1,5 +1,13 @@
 # @pine/server
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [617eacc]
+- Updated dependencies [1dd2bfb]
+  - @pine/common@0.0.3
+
 ## 1.0.0
 
 ### Major Changes
