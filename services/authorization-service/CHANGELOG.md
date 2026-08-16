@@ -1,5 +1,24 @@
 # @pine/authorization-service
 
+## 0.3.0
+
+### Minor Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- b0911f8: feat(platform): members and roles for platform, tenant, and organization
+
+### Patch Changes
+
+- Updated dependencies [6960ceb]
+- Updated dependencies [617eacc]
+- Updated dependencies [b0911f8]
+- Updated dependencies [1dd2bfb]
+  - @pine/authorization@0.3.0
+  - @pine/events@0.3.0
+  - @pine/common@0.0.3
+  - @pine/security@0.1.1
+  - @pine/server@1.0.1
+
 ## 0.2.0
 
 ### Minor Changes

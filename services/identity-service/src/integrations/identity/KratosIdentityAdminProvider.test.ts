@@ -68,6 +68,24 @@ describe("KratosIdentityAdminProvider.existsByEmail", () => {
   });
 });
 
+describe("KratosIdentityAdminProvider.findIdpIdByEmail", () => {
+  it("returns the Kratos identity id when a match exists", async () => {
+    const listIdentities = vi.fn().mockResolvedValue({
+      data: [{ id: "idp-1" }],
+    });
+    const provider = createProvider({ listIdentities });
+
+    await expect(provider.findIdpIdByEmail("a@b.com")).resolves.toBe("idp-1");
+  });
+
+  it("returns null when no identity matches", async () => {
+    const listIdentities = vi.fn().mockResolvedValue({ data: [] });
+    const provider = createProvider({ listIdentities });
+
+    await expect(provider.findIdpIdByEmail("missing@b.com")).resolves.toBe(null);
+  });
+});
+
 describe("KratosIdentityAdminProvider.createIdentity", () => {
   it("creates the identity via the Kratos admin API with a verified email", async () => {
     const createIdentity = vi.fn().mockResolvedValue({

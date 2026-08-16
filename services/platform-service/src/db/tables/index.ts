@@ -1,0 +1,17 @@
+export {
+  type Identity,
+  type NewIdentity,
+  Identities,
+} from "@/db/tables/Identities";
+export {
+  type Tenant,
+  type NewTenant,
+  Tenants,
+  TenantsRelations,
+} from "@/db/tables/Tenants";
+export {
+  type Organization,
+  type NewOrganization,
+  Organizations,
+  OrganizationsRelations,
+} from "@/db/tables/Organizations";

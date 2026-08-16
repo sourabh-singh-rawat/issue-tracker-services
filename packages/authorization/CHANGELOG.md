@@ -1,5 +1,16 @@
 # @pine/authorization
 
+## 0.3.0
+
+### Minor Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- b0911f8: feat(platform): members and roles for platform, tenant, and organization
+
+### Patch Changes
+
+- 6960ceb: fix(authz): namespace tenant capabilities under platform
+
 ## 0.2.0
 
 ### Minor Changes

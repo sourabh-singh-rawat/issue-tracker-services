@@ -1,5 +1,18 @@
 # @pine/attachment-service
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [617eacc]
+- Updated dependencies [b0911f8]
+- Updated dependencies [1dd2bfb]
+  - @pine/events@0.3.0
+  - @pine/common@0.0.3
+  - @pine/security@0.1.1
+  - @pine/server@1.0.1
+  - @pine/identity-client@0.1.1
+
 ## 0.4.0
 
 ### Minor Changes

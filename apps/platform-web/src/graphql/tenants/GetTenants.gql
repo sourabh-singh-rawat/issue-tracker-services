@@ -1,0 +1,11 @@
+query GetTenants($platformId: String!) {
+  getTenants(platformId: $platformId) {
+    id
+    name
+    slug
+    description
+    isActive
+    createdAt
+    updatedAt
+  }
+}

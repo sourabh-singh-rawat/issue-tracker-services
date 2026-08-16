@@ -9,6 +9,7 @@
     "mui",
     "react",
     "tanstack-form",
+    "tanstack-table",
     "ui"
   ],
   "license": "ISC",
@@ -32,6 +33,7 @@
     "@mui/icons-material": "6.1.9",
     "@mui/material": "6.1.9",
     "@tanstack/react-form": "^1.33.2",
+    "@tanstack/react-table": "^8.21.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "react": "^19.2.7",
@@ -44,6 +46,7 @@
     "@mui/icons-material": ">=6.0.0",
     "@mui/material": ">=6.0.0",
     "@tanstack/react-form": "^1.0.0",
+    "@tanstack/react-table": "^8.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }

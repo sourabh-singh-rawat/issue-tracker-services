@@ -1,0 +1,12 @@
+import "@/features/tenants/graphql/objects/TenantObject";
+import "@/features/tenants/graphql/objects/TenantMemberObject";
+import "@/features/tenants/graphql/inputs/CreateTenantInput";
+import "@/features/tenants/graphql/inputs/CreateTenantMemberInput";
+import "@/features/tenants/graphql/queries/getTenant";
+import "@/features/tenants/graphql/queries/getTenants";
+import "@/features/tenants/graphql/queries/getTenantMember";
+import "@/features/tenants/graphql/queries/getTenantMembers";
+import "@/features/tenants/graphql/mutations/createTenant";
+import "@/features/tenants/graphql/mutations/deleteTenant";
+import "@/features/tenants/graphql/mutations/createTenantMember";
+import "@/features/tenants/graphql/mutations/deleteTenantMember";

@@ -1,4 +1,6 @@
+import type { GraphNamespace } from "./GraphNamespace";
+
 export interface GraphResource {
-  type: string;
+  namespace: GraphNamespace;
   id: string;
 }

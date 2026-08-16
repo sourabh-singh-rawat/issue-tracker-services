@@ -1,5 +1,11 @@
 # @pine/api-gateway
 
+## 0.3.3
+
+### Patch Changes
+
+- @pine/server@1.0.1
+
 ## 0.3.2
 
 ### Patch Changes

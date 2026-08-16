@@ -1,0 +1,29 @@
+export type GraphNamespace =
+  | "identity"
+  | "platform"
+  | "tenant"
+  | "organization"
+  | "product"
+  | "brand"
+  | "role"
+  | "permission";
+
+export const GRAPH_NAMESPACES: readonly GraphNamespace[] = [
+  "identity",
+  "platform",
+  "tenant",
+  "organization",
+  "product",
+  "brand",
+  "role",
+  "permission",
+];
+
+export const isGraphNamespace = (value: string): value is GraphNamespace => {
+  for (const namespace of GRAPH_NAMESPACES) {
+    if (namespace === value) {
+      return true;
+    }
+  }
+  return false;
+};

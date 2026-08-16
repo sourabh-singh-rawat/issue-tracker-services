@@ -1,43 +1,162 @@
-import { ORGANIZATIONS, ROLES } from "../capabilities";
-import { allCapabilityKeys, capabilityKeys, readCapabilityKeys, withoutActions } from "../utils";
+import {
+  BRAND_PERMISSIONS,
+  ORGANIZATION_PERMISSIONS,
+  PERMISSION_GRANT_PERMISSIONS,
+  PLATFORM_PERMISSIONS,
+  PRODUCT_PERMISSIONS,
+  ROLE_PERMISSIONS,
+  TENANT_PERMISSIONS,
+} from "../permissions";
+import { permissionKeys, withoutActions } from "../utils";
 import type { RoleDefinition } from "./RoleDefinition";
 
-export const SYSTEM_ROLES = {
-  SYSTEM_ADMINISTRATOR: {
+export const PLATFORM_ROLES: Record<string, RoleDefinition> = {
+  PLATFORM_ADMIN: {
     id: "01900000-0000-7000-8000-000000000001",
-    key: "system.administrator",
-    name: "System Administrator",
-    description: "Full platform access — all authorization and organization capabilities",
-    capabilityKeys: allCapabilityKeys(),
+    key: "platform.admin",
+    name: "Platform Admin",
+    description:
+      "Platform administrator with tenant and platform role management permissions",
+    relation: "admin",
+    permissionKeys: [
+      ...permissionKeys("platform", PLATFORM_PERMISSIONS),
+      ...permissionKeys("tenant", TENANT_PERMISSIONS),
+    ],
   },
+  PLATFORM_MEMBER: {
+    id: "01900000-0000-7000-8000-000000000008",
+    key: "platform.member",
+    name: "Platform Member",
+    description: "Read access to the platform and its tenants",
+    relation: "member",
+    permissionKeys: [
+      ...permissionKeys("platform", ["read"]),
+      ...permissionKeys("tenant", ["read"]),
+    ],
+  },
+};
+
+export const TENANT_ROLES: Record<string, RoleDefinition> = {
+  TENANT_OWNER: {
+    id: "01900000-0000-7000-8000-000000000005",
+    key: "tenant.owner",
+    name: "Tenant Owner",
+    description:
+      "Full control of a tenant, including organizations, roles, grants, and membership",
+    relation: "owner",
+    permissionKeys: [
+      ...permissionKeys("tenant", TENANT_PERMISSIONS),
+      ...permissionKeys("organization", ORGANIZATION_PERMISSIONS),
+      ...permissionKeys("role", ROLE_PERMISSIONS),
+      ...permissionKeys("permission", PERMISSION_GRANT_PERMISSIONS),
+    ],
+  },
+  TENANT_ADMIN: {
+    id: "01900000-0000-7000-8000-000000000006",
+    key: "tenant.admin",
+    name: "Tenant Admin",
+    description:
+      "Manages tenant settings, membership, organizations, and grants without suspending the tenant or defining roles",
+    relation: "admin",
+    permissionKeys: [
+      ...permissionKeys(
+        "tenant",
+        withoutActions(TENANT_PERMISSIONS, "suspend", "delete", "assign_owner"),
+      ),
+      ...permissionKeys("organization", withoutActions(ORGANIZATION_PERMISSIONS, "delete")),
+      ...permissionKeys("role", ["read"]),
+      ...permissionKeys("permission", PERMISSION_GRANT_PERMISSIONS),
+    ],
+  },
+  TENANT_MEMBER: {
+    id: "01900000-0000-7000-8000-000000000007",
+    key: "tenant.member",
+    name: "Tenant Member",
+    description: "Read access to tenant resources, organizations, and roles",
+    relation: "member",
+    permissionKeys: [
+      ...permissionKeys("tenant", ["read"]),
+      ...permissionKeys("organization", ["read"]),
+      ...permissionKeys("role", ["read"]),
+    ],
+  },
+};
+
+export const ORGANIZATION_ROLES: Record<string, RoleDefinition> = {
   ORGANIZATION_OWNER: {
     id: "01900000-0000-7000-8000-000000000002",
     key: "organization.owner",
     name: "Organization Owner",
-    description: "Full control of an organization, including delete and role management",
-    capabilityKeys: capabilityKeys(ORGANIZATIONS, ROLES),
+    description:
+      "Full control of an organization, including roles, grants, products, and brands",
+    relation: "owner",
+    permissionKeys: [
+      ...permissionKeys("organization", ORGANIZATION_PERMISSIONS),
+      ...permissionKeys("role", ROLE_PERMISSIONS),
+      ...permissionKeys("permission", PERMISSION_GRANT_PERMISSIONS),
+      ...permissionKeys("product", PRODUCT_PERMISSIONS),
+      ...permissionKeys("brand", BRAND_PERMISSIONS),
+    ],
   },
-  ORGANIZATION_ADMINISTRATOR: {
+  ORGANIZATION_ADMIN: {
     id: "01900000-0000-7000-8000-000000000003",
-    key: "organization.administrator",
-    name: "Organization Administrator",
-    description: "Manage an organization without capability to delete it",
-    capabilityKeys: withoutActions(ORGANIZATIONS, "delete"),
+    key: "organization.admin",
+    name: "Organization Admin",
+    description:
+      "Manages organization settings, grants, products, and brands without deleting the organization or defining roles",
+    relation: "admin",
+    permissionKeys: [
+      ...permissionKeys(
+        "organization",
+        withoutActions(ORGANIZATION_PERMISSIONS, "delete"),
+      ),
+      ...permissionKeys("role", ["read"]),
+      ...permissionKeys("permission", PERMISSION_GRANT_PERMISSIONS),
+      ...permissionKeys("product", PRODUCT_PERMISSIONS),
+      ...permissionKeys("brand", BRAND_PERMISSIONS),
+    ],
   },
-  READ_ONLY: {
+  ORGANIZATION_MEMBER: {
     id: "01900000-0000-7000-8000-000000000004",
-    key: "system.read-only",
-    name: "Read Only",
-    description: "Read-only access across cataloged resources",
-    capabilityKeys: readCapabilityKeys(),
+    key: "organization.member",
+    name: "Organization Member",
+    description: "Read access to organization resources, products, brands, and roles",
+    relation: "member",
+    permissionKeys: [
+      ...permissionKeys("organization", ["read"]),
+      ...permissionKeys("product", ["read"]),
+      ...permissionKeys("brand", ["read"]),
+      ...permissionKeys("role", ["read"]),
+    ],
   },
-} as const satisfies Record<string, RoleDefinition>;
+};
 
-export const ALL_SYSTEM_ROLES: readonly RoleDefinition[] = [
-  SYSTEM_ROLES.SYSTEM_ADMINISTRATOR,
-  SYSTEM_ROLES.ORGANIZATION_OWNER,
-  SYSTEM_ROLES.ORGANIZATION_ADMINISTRATOR,
-  SYSTEM_ROLES.READ_ONLY,
+export const ALL_PLATFORM_ROLES: readonly RoleDefinition[] = [
+  PLATFORM_ROLES.PLATFORM_ADMIN,
+  PLATFORM_ROLES.PLATFORM_MEMBER,
 ];
 
-export type SystemRoleKey = (typeof ALL_SYSTEM_ROLES)[number]["key"];
+export const ALL_TENANT_ROLES: readonly RoleDefinition[] = [
+  TENANT_ROLES.TENANT_OWNER,
+  TENANT_ROLES.TENANT_ADMIN,
+  TENANT_ROLES.TENANT_MEMBER,
+];
+
+export const ALL_ORGANIZATION_ROLES: readonly RoleDefinition[] = [
+  ORGANIZATION_ROLES.ORGANIZATION_OWNER,
+  ORGANIZATION_ROLES.ORGANIZATION_ADMIN,
+  ORGANIZATION_ROLES.ORGANIZATION_MEMBER,
+];
+
+export const ALL_SYSTEM_ROLES: readonly RoleDefinition[] = [
+  ...ALL_PLATFORM_ROLES,
+  ...ALL_TENANT_ROLES,
+  ...ALL_ORGANIZATION_ROLES,
+];
+
+export type PlatformRoleKey = "platform.admin" | "platform.member";
+export type TenantRoleKey = "tenant.owner" | "tenant.admin" | "tenant.member";
+export type OrganizationRoleKey =
+  | "organization.owner"
+  | "organization.admin"
+  | "organization.member";

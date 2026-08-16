@@ -15,6 +15,7 @@ import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticat
 import { Route as AuthenticatedMeRouteImport } from './../routes/_authenticated/me'
 import { Route as AuthenticatedInventoryRouteImport } from './../routes/_authenticated/inventory'
 import { Route as AuthenticatedHomeRouteImport } from './../routes/_authenticated/home'
+import { Route as AuthenticatedCatalogRouteImport } from './../routes/_authenticated/catalog'
 import { Route as noAuthEmailVerificationRouteImport } from './../routes/(no-auth)/email-verification'
 import { Route as AuthenticatedIIssueIdRouteImport } from './../routes/_authenticated/i.$issueId'
 import { Route as AuthenticatedVLViewIdRouteImport } from './../routes/_authenticated/v.l.$viewId'
@@ -49,6 +50,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCatalogRoute = AuthenticatedCatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const noAuthEmailVerificationRoute = noAuthEmailVerificationRouteImport.update({
   id: '/(no-auth)/email-verification',
   path: '/email-verification',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/callback': typeof CallbackRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
+  '/catalog': typeof AuthenticatedCatalogRoute
   '/home': typeof AuthenticatedHomeRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/me': typeof AuthenticatedMeRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/callback': typeof CallbackRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
+  '/catalog': typeof AuthenticatedCatalogRoute
   '/home': typeof AuthenticatedHomeRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/me': typeof AuthenticatedMeRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/callback': typeof CallbackRoute
   '/(no-auth)/email-verification': typeof noAuthEmailVerificationRoute
+  '/_authenticated/catalog': typeof AuthenticatedCatalogRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/'
     | '/callback'
     | '/email-verification'
+    | '/catalog'
     | '/home'
     | '/inventory'
     | '/me'
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
   to:
     | '/callback'
     | '/email-verification'
+    | '/catalog'
     | '/home'
     | '/inventory'
     | '/me'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/callback'
     | '/(no-auth)/email-verification'
+    | '/_authenticated/catalog'
     | '/_authenticated/home'
     | '/_authenticated/inventory'
     | '/_authenticated/me'
@@ -192,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/catalog': {
+      id: '/_authenticated/catalog'
+      path: '/catalog'
+      fullPath: '/catalog'
+      preLoaderRoute: typeof AuthenticatedCatalogRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/(no-auth)/email-verification': {
       id: '/(no-auth)/email-verification'
       path: '/email-verification'
@@ -224,6 +243,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCatalogRoute: typeof AuthenticatedCatalogRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
@@ -234,6 +254,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCatalogRoute: AuthenticatedCatalogRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedMeRoute: AuthenticatedMeRoute,

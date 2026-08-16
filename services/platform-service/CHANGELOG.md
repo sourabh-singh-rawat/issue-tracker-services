@@ -1,0 +1,76 @@
+# @pine/platform-service
+
+## 0.3.0
+
+### Minor Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- b0911f8: feat(platform): members and roles for platform, tenant, and organization
+- 1dd2bfb: refactor(platform): platform-web, platform-service, and erp app rail
+- f1cb277: feat(tenants): tenant and organization detail with create org
+
+### Patch Changes
+
+- 6960ceb: fix(authz): namespace tenant capabilities under platform
+- Updated dependencies [6960ceb]
+- Updated dependencies [617eacc]
+- Updated dependencies [b0911f8]
+- Updated dependencies [1dd2bfb]
+  - @pine/authorization@0.3.0
+  - @pine/events@0.3.0
+  - @pine/common@0.0.3
+  - @pine/outbox@0.1.1
+  - @pine/security@0.1.1
+  - @pine/server@1.0.1
+  - @pine/identity-client@0.1.1
+
+## 0.2.0
+
+### Minor Changes
+
+- 1ca92d7: feat(tenant): require capability checks on tenant service methods
+
+### Patch Changes
+
+- Updated dependencies [07bb3bc]
+- Updated dependencies [1933c6c]
+  - @pine/authorization@0.2.0
+
+## 0.1.0
+
+### Minor Changes
+
+- de6a3b1: feat(authz): tenants, authorization, roles, keto, and admin-web
+
+### Patch Changes
+
+- 5b5506b: chore(fmt): format code
+- d206a7c: refactor: rename @pine/http-core to @pine/http
+- 689a980: refactor: rename @pine/http to @pine/server and merge graphql-core
+- Updated dependencies [de6a3b1]
+- Updated dependencies [2cd5736]
+- Updated dependencies [d67c1e1]
+- Updated dependencies [8ae018c]
+- Updated dependencies [5b5506b]
+- Updated dependencies [14a1fb5]
+- Updated dependencies [4b72801]
+- Updated dependencies [84ae79f]
+- Updated dependencies [d175229]
+- Updated dependencies [fff12b7]
+- Updated dependencies [04d33c3]
+- Updated dependencies [7c958b1]
+- Updated dependencies [d206a7c]
+- Updated dependencies [689a980]
+- Updated dependencies [5bd9a1a]
+- Updated dependencies [179562a]
+  - @pine/events@0.2.0
+  - @pine/common@0.0.2
+  - @pine/identity-client@0.1.0
+  - @pine/security@0.1.0
+  - @pine/server@1.0.0
+
+## 0.0.0
+
+### Minor Changes
+
+- feat(tenant): scaffold tenant-service with tenants and memberships tables

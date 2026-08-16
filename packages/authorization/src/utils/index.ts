@@ -1,6 +1,6 @@
 export {
-  capabilityKeys,
+  permissionKeys,
   withoutActions,
-  allCapabilityKeys,
-  readCapabilityKeys,
-} from "./capabilityKeys";
+  allPermissionKeys,
+  readPermissionKeys,
+} from "./permissionKeys";

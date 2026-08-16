@@ -39,18 +39,20 @@ describe("checkRelationship route", () => {
     const response = await checkRelationship.handler(
       httpRequest({
         body: {
-          object: { type: "capability", id: "product:brand:create" },
+          namespace: "permission",
+          object: "brand:create",
           relation: "has",
-          subject: { type: "user", id: "user-1" },
+          subject: "identity:user-1",
         },
       }),
     );
 
     expect(get).toHaveBeenCalledWith(TYPES.AuthorizationService);
     expect(hasRelationship).toHaveBeenCalledWith({
-      object: { type: "capability", id: "product:brand:create" },
+      namespace: "permission",
+      object: "brand:create",
       relation: "has",
-      subject: { type: "user", id: "user-1" },
+      subject: "identity:user-1",
     });
     expect(response).toEqual({
       status: 200,
@@ -65,9 +67,10 @@ describe("checkRelationship route", () => {
     const response = await checkRelationship.handler(
       httpRequest({
         body: {
-          object: { type: "capability", id: "product:brand:create" },
+          namespace: "permission",
+          object: "brand:create",
           relation: "has",
-          subject: { type: "user", id: "user-1" },
+          subject: "identity:user-1",
         },
       }),
     );
@@ -101,7 +104,8 @@ describe("checkRelationship route", () => {
       checkRelationship.handler(
         httpRequest({
           body: {
-            object: { type: "capability", id: "product:brand:create" },
+            namespace: "permission",
+            object: "brand:create",
             relation: "has",
           },
         }),

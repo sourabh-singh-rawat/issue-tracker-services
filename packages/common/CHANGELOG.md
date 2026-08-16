@@ -1,5 +1,12 @@
 # @pine/common
 
+## 0.0.3
+
+### Patch Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- 1dd2bfb: refactor(platform): platform-web, platform-service, and erp app rail
+
 ## 0.0.2
 
 ### Patch Changes

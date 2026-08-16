@@ -25,12 +25,18 @@ export class KratosIdentityAdminProvider implements IIdentityAdminProvider {
   }
 
   async existsByEmail(email: string): Promise<boolean> {
+    const idpId = await this.findIdpIdByEmail(email);
+    return idpId !== null;
+  }
+
+  async findIdpIdByEmail(email: string): Promise<string | null> {
     const { data } = await this.kratos.identityApi.listIdentities({
       credentialsIdentifier: email,
       pageSize: 1,
     });
 
-    return data.length > 0;
+    const id = data[0]?.id;
+    return typeof id === "string" && id.length > 0 ? id : null;
   }
 
   async createIdentity(input: CreateIdentityInput): Promise<Identity> {

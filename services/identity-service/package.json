@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/identity-service",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Identity service — authentication and authorization",
   "keywords": [
     "authentication",
@@ -38,10 +38,10 @@
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
-    "@pine/server": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",
+    "@pine/server": "workspace:^",
     "@pothos/core": "^4.13.1",
     "@vitest/coverage-v8": "^4.1.10",
     "axios": "^1.18.1",

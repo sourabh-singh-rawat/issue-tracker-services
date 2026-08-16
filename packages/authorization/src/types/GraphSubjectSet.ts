@@ -1,5 +1,7 @@
+import type { GraphNamespace } from "./GraphNamespace";
+
 export interface GraphSubjectSet {
-  type: string;
+  namespace: GraphNamespace;
   id: string;
   relation: string;
 }

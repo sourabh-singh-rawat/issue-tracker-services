@@ -13,9 +13,13 @@ Root cwd. Node ≥20.13.1; pnpm from root `packageManager`.
 
 ```bash
 pnpm dev:infra          # down: dev:infra:down
+pnpm setup              # restart compose + wipe infra/data, then migrate → seed → bootstrap admin
+pnpm setup:skip-docker  # same seed path, leave docker compose as-is
 pnpm schemas:compose    # or schemas:watch
 pnpm dev:apps
 ```
+
+`pnpm setup` / `pnpm setup:restart` run `tools/scripts/setup.ts --restart` (compose down, wipe `infra/data`, compose up). `pnpm setup:skip-docker` skips those docker steps. Seed path needs infra reachable and `BOOTSTRAP_ADMIN_*` in root `.env`.
 
 | Infra variant           | Script                                 |
 | ----------------------- | -------------------------------------- |

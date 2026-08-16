@@ -18,7 +18,7 @@ export const checkRelationship: HttpRoute = {
     tags: ["authorization"],
     summary: "Check a graph relationship",
     description:
-      "Verify whether a subject has a relation to an object in the authorization graph (Ory Keto). Capability checks use object type capability, relation has, and object id as the capability key (e.g. product:brand:create).",
+      "Check a Keto permission: namespace, object, relation, and subject (subject_id, e.g. identity:<id>).",
     operationId: "checkRelationship",
     body: CheckRelationshipBodySchema,
     response: {
@@ -32,11 +32,7 @@ export const checkRelationship: HttpRoute = {
     }
 
     const service = container.get<IAuthorizationService>(TYPES.AuthorizationService);
-    const allowed = await service.hasRelationship({
-      object: body.object,
-      relation: body.relation,
-      subject: body.subject,
-    });
+    const allowed = await service.hasRelationship(body);
 
     const response: CheckRelationshipResponse = { allowed };
     return json(response);

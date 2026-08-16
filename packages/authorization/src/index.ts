@@ -1,47 +1,100 @@
-export type { ResourceDefinition } from "./resources";
+export type { Resource, ResourceKey } from "./resources";
+export { RESOURCES, isResource, parseResource, tryParseResource } from "./resources";
+
+export type {
+  Permission,
+  PermissionKey,
+  PlatformPermission,
+  TenantPermission,
+  OrganizationPermission,
+  ProductPermission,
+  BrandPermission,
+  RolePermission,
+  PermissionGrantPermission,
+} from "./permissions";
 export {
-  BRAND,
-  PRODUCT,
-  ORGANIZATION,
-  ROLE,
-  CAPABILITY,
-  CAPABILITY_GRANT,
-  RESOURCES,
-  ALL_RESOURCES,
-} from "./resources";
-
-export type { CapabilityDefinition, CapabilityKey } from "./capabilities";
-export {
-  defineCapability,
-  BRANDS,
-  PRODUCTS,
-  ORGANIZATIONS,
-  ROLES,
-  CAPABILITIES,
-  CAPABILITY_GRANTS,
-  ALL_CAPABILITIES,
-} from "./capabilities";
-
-export { type RoleDefinition, ALL_SYSTEM_ROLES, SYSTEM_ROLES, type SystemRoleKey } from "./roles";
-
-export type { GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
-
-export { USER } from "./identities";
-export { CAPABILITY_HAS, ROLE_ASSIGNEE } from "./relations";
+  permissionKey,
+  parsePermission,
+  tryParsePermission,
+  PLATFORM_PERMISSIONS,
+  TENANT_PERMISSIONS,
+  ORGANIZATION_PERMISSIONS,
+  PRODUCT_PERMISSIONS,
+  BRAND_PERMISSIONS,
+  ROLE_PERMISSIONS,
+  PERMISSION_GRANT_PERMISSIONS,
+  ALL_PERMISSIONS,
+} from "./permissions";
 
 export {
-  capabilityKeys,
+  type RoleDefinition,
+  ALL_PLATFORM_ROLES,
+  PLATFORM_ROLES,
+  type PlatformRoleKey,
+  ALL_TENANT_ROLES,
+  TENANT_ROLES,
+  type TenantRoleKey,
+  ALL_ORGANIZATION_ROLES,
+  ORGANIZATION_ROLES,
+  type OrganizationRoleKey,
+  ALL_SYSTEM_ROLES,
+  findPlatformRoleDefinition,
+  findTenantRoleDefinition,
+  findOrganizationRoleDefinition,
+  findSystemRoleDefinition,
+  platformRolePermissionKeys,
+  tenantRolePermissionKeys,
+  organizationRolePermissionKeys,
+  systemRolePermissionKeys,
+} from "./roles";
+
+export type { GraphNamespace, GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
+export { GRAPH_NAMESPACES, isGraphNamespace } from "./types";
+
+export { IDENTITY } from "./identities";
+export {
+  ADMIN,
+  BRAND_PRODUCT,
+  MEMBER,
+  ORGANIZATION_TENANT,
+  OWNER,
+  PERMISSION_HAS,
+  PLATFORM_OBJECT_ID,
+  PLATFORM_TENANT,
+  PRODUCT_ORGANIZATION,
+  ROLE_MEMBER,
+  TENANT_PLATFORM,
+  organizationOwnerRelationship,
+  organizationTenantRelationship,
+  platformAdminRelationship,
+  platformMemberRelationship,
+  platformTenantRelationship,
+  tenantAdminRelationship,
+  tenantMemberRelationship,
+  tenantOwnerRelationship,
+  tenantPlatformRelationship,
+} from "./relations";
+
+export {
+  permissionKeys,
   withoutActions,
-  allCapabilityKeys,
-  readCapabilityKeys,
+  allPermissionKeys,
+  readPermissionKeys,
 } from "./utils";
 
 export type { IAuthorizationClient } from "./client";
-export { HttpAuthorizationClient, requireCapability } from "./client";
+export { HttpAuthorizationClient, requirePermission } from "./client";
 export type {
   CheckRelationshipInput,
   CheckRelationshipResponse,
+  EnsureRelationshipResponse,
+  DeleteRelationshipResponse,
   HttpAuthorizationClientOptions,
+  ListRelationshipsInput,
 } from "./client";
 
-export { InsufficientPermissionError } from "./errors";
+export {
+  InsufficientPermissionError,
+  InvalidPermissionKeyError,
+  InvalidResourceKeyError,
+} from "./errors";
