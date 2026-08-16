@@ -1,5 +1,19 @@
 # @pine/erp-web
 
+## 0.5.0
+
+### Minor Changes
+
+- 1dd2bfb: refactor(platform): platform-web, platform-service, and erp app rail
+
+### Patch Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- b0911f8: feat(platform): members and roles for platform, tenant, and organization
+- Updated dependencies [617eacc]
+- Updated dependencies [1dd2bfb]
+  - @pine/common@0.0.3
+
 ## 0.4.0
 
 ### Minor Changes

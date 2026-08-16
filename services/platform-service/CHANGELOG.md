@@ -1,5 +1,29 @@
 # @pine/platform-service
 
+## 0.3.0
+
+### Minor Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- b0911f8: feat(platform): members and roles for platform, tenant, and organization
+- 1dd2bfb: refactor(platform): platform-web, platform-service, and erp app rail
+- f1cb277: feat(tenants): tenant and organization detail with create org
+
+### Patch Changes
+
+- 6960ceb: fix(authz): namespace tenant capabilities under platform
+- Updated dependencies [6960ceb]
+- Updated dependencies [617eacc]
+- Updated dependencies [b0911f8]
+- Updated dependencies [1dd2bfb]
+  - @pine/authorization@0.3.0
+  - @pine/events@0.3.0
+  - @pine/common@0.0.3
+  - @pine/outbox@0.1.1
+  - @pine/security@0.1.1
+  - @pine/server@1.0.1
+  - @pine/identity-client@0.1.1
+
 ## 0.2.0
 
 ### Minor Changes

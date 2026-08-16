@@ -1,5 +1,19 @@
 # @pine/events
 
+## 0.3.0
+
+### Minor Changes
+
+- 617eacc: feat(platform): identities and graph membership relations
+- b0911f8: feat(platform): members and roles for platform, tenant, and organization
+
+### Patch Changes
+
+- Updated dependencies [617eacc]
+- Updated dependencies [1dd2bfb]
+  - @pine/common@0.0.3
+  - @pine/server@1.0.1
+
 ## 0.2.0
 
 ### Minor Changes
