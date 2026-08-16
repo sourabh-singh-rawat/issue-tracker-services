@@ -4,7 +4,9 @@ import type { HttpResponse } from "./HttpResponse";
 
 export type HttpHandler = (request: HttpRequest) => Promise<HttpResponse>;
 
-export type HttpHook = (request: HttpRequest) => Promise<void> | void;
+export type HttpRequestHook = (request: HttpRequest) => Promise<void> | void;
+
+export type HttpHook = HttpRequestHook;
 
 export type HttpRoute = {
   url: string;

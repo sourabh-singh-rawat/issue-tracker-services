@@ -1,9 +1,10 @@
 import type { HttpRoute } from "@pine/server";
 import { StatusCodes } from "http-status-codes";
-import { authenticate } from "@pine/identity-client";
+import { HttpIdentityClient } from "@pine/identity";
 import { requireAuth } from "@pine/security";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
+import { env } from "@/bootstrap/env";
 import type { AttachmentService } from "@/features/attachment/services";
 import {
   CreateAttachmentBodySchema,
@@ -11,6 +12,8 @@ import {
   CreateAttachmentErrorSchema,
   CreateAttachmentParamsSchema,
 } from "@/features/attachment/schemas";
+
+const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
 
 export const createAttachment: HttpRoute = {
   url: "/attachments/:issueId",
@@ -29,7 +32,7 @@ export const createAttachment: HttpRoute = {
       500: CreateAttachmentErrorSchema,
     },
   },
-  hooks: [authenticate, requireAuth],
+  hooks: [(request) => identityClient.resolveRequestUser(request), requireAuth],
   handler: async (request) => {
     const issueId = request.params.issueId;
     if (issueId === undefined) {

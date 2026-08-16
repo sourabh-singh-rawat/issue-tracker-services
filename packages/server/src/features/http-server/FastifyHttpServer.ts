@@ -3,29 +3,31 @@ import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
 import swagger from "@fastify/swagger";
 import { ErrorHandlerUtil } from "@pine/common";
-import fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
+import fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { isHttpMethod } from "../../constants";
 import type { IGraphQLServer } from "../graphql-server/IGraphQLServer";
+import { FastifyHttpRequestAdapter } from "./FastifyHttpRequestAdapter";
+import type { IHttpServer } from "./IHttpServer";
 import type {
   CookieOptions,
   CorsOptions,
-  HttpClearCookie,
-  HttpRequest,
-  HttpResponse,
-  HttpResponseCookie,
-  HttpRoute,
   HttpServerOptions,
-  HttpUploadedFile,
-  IHttpServer,
   MultipartOptions,
   OpenApiOptions,
+} from "./schemas";
+import type {
+  HttpClearCookie,
+  HttpResponse,
+  HttpResponseCookie,
+  HttpHooks,
+  HttpRoute,
 } from "./types";
 
 export class FastifyHttpServer implements IHttpServer {
   private readonly server: FastifyInstance;
   private readonly options: HttpServerOptions;
+  private readonly requestAdapter = new FastifyHttpRequestAdapter();
   private openApiEnabled = false;
   private graphqlServer: IGraphQLServer | undefined;
 
@@ -35,12 +37,13 @@ export class FastifyHttpServer implements IHttpServer {
   }
 
   async start() {
-    const { cors, cookie, multipart, openapi, routes, graphql, config } = this.options;
+    const { cors, cookie, multipart, openapi, routes, graphql, hooks, config } = this.options;
 
     if (cors) await this.registerCors(cors);
     if (cookie) await this.registerCookie(cookie);
     if (multipart) await this.registerMultipart(multipart);
     if (openapi) await this.registerOpenApi(openapi);
+    if (hooks) this.registerHooks(hooks);
     if (routes) this.registerRoutes(routes);
     if (graphql) await this.registerGraphql(graphql);
 
@@ -56,6 +59,7 @@ export class FastifyHttpServer implements IHttpServer {
       await this.graphqlServer.stop();
       this.graphqlServer = undefined;
     }
+
     await this.server.close();
   }
 
@@ -92,12 +96,12 @@ export class FastifyHttpServer implements IHttpServer {
   }
 
   private async registerMultipart(options: MultipartOptions | boolean) {
-    if (typeof options === "boolean") {
-      if (options) {
-        await this.server.register(multipart);
-      }
+    if (options === true) {
+      await this.server.register(multipart);
       return;
     }
+
+    if (options === false) return false;
 
     await this.server.register(multipart, {
       limits: {
@@ -123,9 +127,7 @@ export class FastifyHttpServer implements IHttpServer {
         components:
           options.securitySchemes === undefined
             ? undefined
-            : {
-                securitySchemes: options.securitySchemes,
-              },
+            : { securitySchemes: options.securitySchemes },
       },
     });
     this.openApiEnabled = true;
@@ -140,11 +142,23 @@ export class FastifyHttpServer implements IHttpServer {
       method: ["POST", "GET"],
       schema: { hide: true },
       handler: async (request, reply) => {
-        const httpRequest = this.toHttpRequest(request);
+        const httpRequest = this.requestAdapter.toHttpRequest(request);
         const response = await graphqlServer.handleRequest(httpRequest);
         return this.sendHttpResponse(reply, response);
       },
     });
+  }
+
+  private registerHooks(hooks: HttpHooks) {
+    if (hooks.onRequest) {
+      this.server.addHook("onRequest", async (request) => {
+        const httpRequest = this.requestAdapter.toHttpRequest(request);
+
+        for (const hook of hooks.onRequest ?? []) {
+          await hook(httpRequest);
+        }
+      });
+    }
   }
 
   private registerErrorHandler() {
@@ -160,13 +174,9 @@ export class FastifyHttpServer implements IHttpServer {
         method: route.method,
         ...(route.schema !== undefined ? { schema: route.schema } : {}),
         handler: async (request, reply) => {
-          const httpRequest = this.toHttpRequest(request);
+          const httpRequest = this.requestAdapter.toHttpRequest(request);
 
-          if (route.hooks) {
-            for (const hook of route.hooks) {
-              await hook(httpRequest);
-            }
-          }
+          if (route.hooks) for (const hook of route.hooks) await hook(httpRequest);
 
           const response = await route.handler(httpRequest);
           return this.sendHttpResponse(reply, response);
@@ -175,59 +185,17 @@ export class FastifyHttpServer implements IHttpServer {
     }
   }
 
-  private toHttpRequest(request: FastifyRequest): HttpRequest {
-    const headers: Record<string, string | undefined> = {};
-    for (const [key, value] of Object.entries(request.headers)) {
-      headers[key] = Array.isArray(value) ? value[0] : value;
-    }
-
-    if (!isHttpMethod(request.method)) {
-      throw new Error(`Unsupported HTTP method: ${request.method}`);
-    }
-
-    return {
-      method: request.method,
-      url: request.url,
-      headers,
-      query: this.toQueryRecord(request.query),
-      params: this.toParamsRecord(request.params),
-      cookies: this.toCookies(request),
-      body: request.body,
-      file: async (): Promise<HttpUploadedFile | undefined> => {
-        if (typeof request.file !== "function") {
-          return undefined;
-        }
-        const data = await request.file();
-        if (!data) return undefined;
-
-        return {
-          fieldname: data.fieldname,
-          filename: data.filename,
-          mimetype: data.mimetype,
-          encoding: data.encoding,
-          toBuffer: () => data.toBuffer(),
-        };
-      },
-    };
-  }
-
   private async sendHttpResponse(reply: FastifyReply, response: HttpResponse) {
     if (response.headers) {
-      for (const [key, value] of Object.entries(response.headers)) {
-        reply.header(key, value);
-      }
+      for (const [key, value] of Object.entries(response.headers)) reply.header(key, value);
     }
 
     if (response.cookies) {
-      for (const item of response.cookies) {
-        this.setCookie(reply, item);
-      }
+      for (const item of response.cookies) this.setCookie(reply, item);
     }
 
     if (response.clearCookies) {
-      for (const item of response.clearCookies) {
-        this.clearCookie(reply, item);
-      }
+      for (const item of response.clearCookies) this.clearCookie(reply, item);
     }
 
     return reply.status(response.status).send(response.body);
@@ -241,50 +209,5 @@ export class FastifyHttpServer implements IHttpServer {
   private clearCookie(reply: FastifyReply, item: HttpClearCookie) {
     const { name, ...options } = item;
     reply.clearCookie(name, options);
-  }
-
-  private toCookies(request: FastifyRequest): Record<string, string | undefined> {
-    const cookies = request.cookies;
-    if (cookies === null || typeof cookies !== "object") {
-      return {};
-    }
-
-    const result: Record<string, string | undefined> = {};
-    for (const [key, value] of Object.entries(cookies)) {
-      if (value === undefined || typeof value === "string") {
-        result[key] = value;
-      }
-    }
-    return result;
-  }
-
-  private toQueryRecord(value: unknown): Record<string, string | string[] | undefined> {
-    if (value === null || typeof value !== "object" || Array.isArray(value)) {
-      return {};
-    }
-
-    const result: Record<string, string | string[] | undefined> = {};
-    for (const [key, entry] of Object.entries(value)) {
-      if (entry === undefined || typeof entry === "string") {
-        result[key] = entry;
-        continue;
-      }
-      if (Array.isArray(entry) && entry.every((item) => typeof item === "string")) {
-        result[key] = entry;
-      }
-    }
-    return result;
-  }
-
-  private toParamsRecord(value: unknown): Record<string, string | undefined> {
-    if (value === null || typeof value !== "object" || Array.isArray(value)) {
-      return {};
-    }
-
-    const result: Record<string, string | undefined> = {};
-    for (const [key, entry] of Object.entries(value)) {
-      if (entry === undefined || typeof entry === "string") result[key] = entry;
-    }
-    return result;
   }
 }

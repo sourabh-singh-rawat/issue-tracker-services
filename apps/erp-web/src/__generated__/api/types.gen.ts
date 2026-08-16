@@ -74,49 +74,49 @@ export type GetCurrentUserResponses = {
 
 export type GetCurrentUserResponse = GetCurrentUserResponses[keyof GetCurrentUserResponses];
 
-export type GetSessionIdentityData = {
+export type GetIdentityFromSessionData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/identity/getSession';
+    url: '/identity/getIdentityFromSession';
 };
 
-export type GetSessionIdentityResponses = {
+export type GetIdentityFromSessionResponses = {
     /**
      * Default Response
      */
     200: {
         identity: {
             id: string;
-            email?: string;
-            emailVerified?: boolean;
+            email: string;
+            emailVerified: boolean;
         };
     };
 };
 
-export type GetSessionIdentityResponse = GetSessionIdentityResponses[keyof GetSessionIdentityResponses];
+export type GetIdentityFromSessionResponse = GetIdentityFromSessionResponses[keyof GetIdentityFromSessionResponses];
 
-export type GetTokenSessionIdentityData = {
+export type GetIdentityFromAccessTokenData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/identity/getTokenSession';
+    url: '/identity/getIdentityFromAccessToken';
 };
 
-export type GetTokenSessionIdentityResponses = {
+export type GetIdentityFromAccessTokenResponses = {
     /**
      * Default Response
      */
     200: {
         identity: {
             id: string;
-            email?: string;
-            emailVerified?: boolean;
+            email: string;
+            emailVerified: boolean;
         };
     };
 };
 
-export type GetTokenSessionIdentityResponse = GetTokenSessionIdentityResponses[keyof GetTokenSessionIdentityResponses];
+export type GetIdentityFromAccessTokenResponse = GetIdentityFromAccessTokenResponses[keyof GetIdentityFromAccessTokenResponses];
 
 export type AuthorizeData = {
     body?: never;

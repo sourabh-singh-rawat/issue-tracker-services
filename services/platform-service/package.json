@@ -39,7 +39,7 @@
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
-    "@pine/identity-client": "workspace:^",
+    "@pine/identity": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",
