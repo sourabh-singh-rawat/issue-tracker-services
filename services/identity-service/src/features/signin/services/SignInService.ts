@@ -28,11 +28,11 @@ export class SignInService implements ISignInService {
       password: input.password,
     });
 
-    const identity = await this.identityService.getIdentityByIdpId(result.identity.id);
+    const identityId = await this.identityService.getIdByExternalId(result.identity.id);
     const resolved = {
       ...result,
       identity: {
-        id: identity.id,
+        id: identityId,
         email: result.identity.email,
         emailVerified: result.identity.emailVerified,
       },
@@ -44,7 +44,7 @@ export class SignInService implements ISignInService {
 
     const { redirectTo } = await this.oauthFlowProvider.acceptLoginRequest({
       challenge: input.loginChallenge,
-      subject: identity.id,
+      subject: identityId,
       identityProviderSessionId: result.sessionId,
     });
 

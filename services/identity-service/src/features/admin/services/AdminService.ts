@@ -3,11 +3,15 @@ import { createCloudEvent, UserRegisteredEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { Database, Identity } from "@/db";
+import type { Database } from "@/db";
 import { IAdminService, type CreateIdentityOptions } from "@/features/admin/services/IAdminService";
 import { IdentityProviderType } from "@/features/identities/constants";
-import type { IIdentityProfileRepository } from "@/features/identities/repositories/IIdentityProfileRepository";
+import {
+  type PublicIdentity,
+  toPublicIdentity,
+} from "@/features/identities/services/IIdentityService";
 import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";
+import type { IProfileRepository } from "@/features/profiles/repositories/IProfileRepository";
 import type { IIdentityAdminProvider } from "@/integrations/identity";
 
 @injectable()
@@ -15,8 +19,8 @@ export class AdminService implements IAdminService {
   constructor(
     @inject(TYPES.IdentityRepository)
     private readonly identityRepository: IIdentityRepository,
-    @inject(TYPES.IdentityProfileRepository)
-    private readonly identityProfileRepository: IIdentityProfileRepository,
+    @inject(TYPES.ProfileRepository)
+    private readonly profileRepository: IProfileRepository,
     @inject(TYPES.IdentityAdminProvider)
     private readonly identityAdminProvider: IIdentityAdminProvider,
     @inject(TYPES.OutboxService)
@@ -25,7 +29,7 @@ export class AdminService implements IAdminService {
     private readonly db: Database,
   ) {}
 
-  async createIdentity(options: CreateIdentityOptions): Promise<Identity> {
+  async createIdentity(options: CreateIdentityOptions): Promise<PublicIdentity> {
     const idpIdentity = await this.identityAdminProvider.createIdentity({
       email: options.email,
       username: options.username,
@@ -43,7 +47,7 @@ export class AdminService implements IAdminService {
           { tx },
         );
 
-        await this.identityProfileRepository.save(
+        await this.profileRepository.save(
           {
             identityId: identity.id,
             firstName: options.firstName,
@@ -76,7 +80,7 @@ export class AdminService implements IAdminService {
           { tx },
         );
 
-        return identity;
+        return toPublicIdentity(identity);
       });
     } catch (error) {
       await this.identityAdminProvider.deleteIdentity(idpIdentity.id);
@@ -90,17 +94,18 @@ export class AdminService implements IAdminService {
 
     await this.identityAdminProvider.deleteIdentity(identity.idpId);
 
-    const profile = await this.identityProfileRepository.findByIdentityId(identityId);
+    const profile = await this.profileRepository.findByIdentityId(identityId);
 
     await this.db.transaction(async (tx) => {
       if (profile) {
-        await this.identityProfileRepository.softDelete(profile.id, { tx });
+        await this.profileRepository.softDelete(profile.id, { tx });
       }
       await this.identityRepository.softDelete(identityId, { tx });
     });
   }
 
-  async findIdentities(): Promise<Identity[]> {
-    return this.identityRepository.findAll();
+  async findIdentities(): Promise<PublicIdentity[]> {
+    const identities = await this.identityRepository.findAll();
+    return identities.map(toPublicIdentity);
   }
 }

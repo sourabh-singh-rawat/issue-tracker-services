@@ -5,8 +5,8 @@ export {
   IdentitiesRelations,
 } from "@/db/tables/Identities";
 export {
-  type IdentityProfile,
-  type NewIdentityProfile,
-  IdentityProfiles,
-  IdentityProfilesRelations,
-} from "@/db/tables/IdentityProfiles";
+  type Profile,
+  type NewProfile,
+  Profiles,
+  ProfilesRelations,
+} from "@/db/tables/Profiles";

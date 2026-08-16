@@ -1,10 +1,10 @@
-import { EMAIL_VERIFICATION_STATUS, UserNotFoundError } from "@pine/common";
+import { EMAIL_VERIFICATION_STATUS } from "@pine/common";
 import { createCloudEvent, IdentityEmailVerifiedEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
-import type { IIdentityProfileRepository } from "@/features/identities/repositories/IIdentityProfileRepository";
-import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";
+import type { IIdentityService } from "@/features/identities/services/IIdentityService";
+import type { IProfileRepository } from "@/features/profiles/repositories/IProfileRepository";
 import type {
   IVerificationService,
   ResendVerificationEmailInput,
@@ -20,10 +20,10 @@ export class VerificationService implements IVerificationService {
   constructor(
     @inject(TYPES.VerificationProvider)
     private readonly verificationProvider: IVerificationProvider,
-    @inject(TYPES.IdentityRepository)
-    private readonly identityRepository: IIdentityRepository,
-    @inject(TYPES.IdentityProfileRepository)
-    private readonly identityProfileRepository: IIdentityProfileRepository,
+    @inject(TYPES.IdentityService)
+    private readonly identityService: IIdentityService,
+    @inject(TYPES.ProfileRepository)
+    private readonly profileRepository: IProfileRepository,
     @inject(TYPES.OutboxService)
     private readonly outboxService: IOutboxService,
   ) {}
@@ -34,12 +34,9 @@ export class VerificationService implements IVerificationService {
       code: input.code,
     });
 
-    const identity = await this.identityRepository.findByIdpId(idpIdentity.id);
-    if (!identity) {
-      throw new UserNotFoundError();
-    }
+    const identityId = await this.identityService.getIdByExternalId(idpIdentity.id);
 
-    const profile = await this.identityProfileRepository.findByIdentityId(identity.id);
+    const profile = await this.profileRepository.findByIdentityId(identityId);
     const displayName = profile
       ? [profile.firstName, profile.middleName, profile.lastName].filter(Boolean).join(" ")
       : undefined;
@@ -49,10 +46,10 @@ export class VerificationService implements IVerificationService {
       version: IdentityEmailVerifiedEvent.version,
       schema: IdentityEmailVerifiedEvent.schema,
       source: "pine/identity-service",
-      subject: identity.id,
+      subject: identityId,
       data: {
         emailVerificationStatus: EMAIL_VERIFICATION_STATUS.VERIFIED,
-        userId: identity.id,
+        userId: identityId,
         ...(displayName ? { displayName } : {}),
         ...(profile?.photoUrl ? { photoUrl: profile.photoUrl } : {}),
       },
@@ -63,7 +60,7 @@ export class VerificationService implements IVerificationService {
       eventType: event.type,
       eventVersion: IdentityEmailVerifiedEvent.version,
       aggregateType: "identity",
-      aggregateId: identity.id,
+      aggregateId: identityId,
       payload: event,
     });
   }

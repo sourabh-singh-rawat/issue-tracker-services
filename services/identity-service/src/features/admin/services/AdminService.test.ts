@@ -62,8 +62,8 @@ describe("AdminService.createIdentity", () => {
 
     expect(result).toEqual({
       id: "identity-1",
-      idpId: "idp-1",
-      idpProvider: IdentityProviderType.KRATOS,
+      createdAt: undefined,
+      updatedAt: undefined,
     });
     expect(identityAdminProvider.createIdentity).toHaveBeenCalledWith({
       email: "admin@pine.local",
@@ -375,7 +375,10 @@ describe("AdminService", () => {
       createDbMock() as never,
     );
 
-    await expect(service.findIdentities()).resolves.toEqual(identities);
+    await expect(service.findIdentities()).resolves.toEqual([
+      { id: "identity-row-1", createdAt: undefined, updatedAt: undefined },
+      { id: "identity-row-2", createdAt: undefined, updatedAt: undefined },
+    ]);
     expect(identityRepository.findAll).toHaveBeenCalledOnce();
   });
 });

@@ -1,12 +1,12 @@
 export { auditColumns, idColumn } from "@/db/columns";
 export {
   type Identity,
-  type IdentityProfile,
+  type Profile,
   type NewIdentity,
-  type NewIdentityProfile,
+  type NewProfile,
   Identities,
   IdentitiesRelations,
-  IdentityProfiles,
-  IdentityProfilesRelations,
+  Profiles,
+  ProfilesRelations,
 } from "@/db/tables";
 export type { Database, DbClient, Transaction } from "@/db/types";

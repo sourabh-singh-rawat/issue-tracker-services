@@ -19,10 +19,10 @@ export class SessionService implements ISessionService {
 
   async getSession(sessionToken: string): Promise<Identity> {
     const idpIdentity = await this.sessionProvider.getSession(sessionToken);
-    const identity = await this.identityService.getIdentityByIdpId(idpIdentity.id);
+    const identityId = await this.identityService.getIdByExternalId(idpIdentity.id);
 
     return {
-      id: identity.id,
+      id: identityId,
       email: idpIdentity.email,
       emailVerified: idpIdentity.emailVerified ?? false,
     };
@@ -35,7 +35,7 @@ export class SessionService implements ISessionService {
       throw new InvalidCredentialError("Invalid or inactive access token");
     }
 
-    const identity = await this.identityService.getIdentityById(introspection.subject);
+    const identity = await this.identityService.getById(introspection.subject);
 
     const extra = introspection.extra ?? {};
     const email =

@@ -36,15 +36,17 @@ import { IRegistrationService, RegistrationService } from "@/features/registrati
 import { IVerificationService, VerificationService } from "@/features/verification";
 import { ClientSeederService, ClientService, IClientSeederService, IClientService } from "@/features/clients";
 import {
-  IIdentityProfileRepository,
-  IIdentityProfileService,
   IIdentityRepository,
   IIdentityService,
-  IdentityProfileRepository,
-  IdentityProfileService,
   IdentityRepository,
   IdentityService,
 } from "@/features/identities";
+import {
+  IProfileRepository,
+  IProfileService,
+  ProfileRepository,
+  ProfileService,
+} from "@/features/profiles";
 import {
   IIdentityAdminProvider,
   IRegistrationProvider,
@@ -91,9 +93,9 @@ container.bind(TYPES.HydraClient).toConstantValue(hydraClient);
 container.bind(TYPES.KratosErrorMapper).to(KratosErrorMapper);
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
-container.bind<IIdentityProfileRepository>(TYPES.IdentityProfileRepository).to(IdentityProfileRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
-container.bind<IIdentityProfileService>(TYPES.IdentityProfileService).to(IdentityProfileService);
+container.bind<IProfileRepository>(TYPES.ProfileRepository).to(ProfileRepository);
+container.bind<IProfileService>(TYPES.ProfileService).to(ProfileService);
 container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IClientSeederService>(TYPES.ClientSeederService).to(ClientSeederService);
 container.bind<IRegistrationProvider>(TYPES.RegistrationProvider).to(KratosRegistrationProvider);
