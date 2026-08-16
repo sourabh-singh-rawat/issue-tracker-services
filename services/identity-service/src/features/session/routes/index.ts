@@ -1,8 +1,8 @@
 import type { HttpRoute } from "@pine/server";
-import { getSession } from "@/features/session/routes/getSession";
-import { getTokenSession } from "@/features/session/routes/getTokenSession";
+import { getIdentityFromSession } from "@/features/session/routes/getIdentityFromSession";
+import { getIdentityFromAccessToken } from "@/features/session/routes/getIdentityFromAccessToken";
 
-export * from "@/features/session/routes/getSession";
-export * from "@/features/session/routes/getTokenSession";
+export * from "@/features/session/routes/getIdentityFromSession";
+export * from "@/features/session/routes/getIdentityFromAccessToken";
 
-export const sessionRoutes: HttpRoute[] = [getSession, getTokenSession];
+export const sessionRoutes: HttpRoute[] = [getIdentityFromSession, getIdentityFromAccessToken];

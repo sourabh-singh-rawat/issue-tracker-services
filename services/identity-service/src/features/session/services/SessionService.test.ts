@@ -94,7 +94,7 @@ describe("SessionService", () => {
     await expect(service.getSessionFromAccessToken("access-token-2")).resolves.toEqual({
       id: "identity-2",
       email: "",
-      emailVerified: undefined,
+      emailVerified: false,
     });
   });
 

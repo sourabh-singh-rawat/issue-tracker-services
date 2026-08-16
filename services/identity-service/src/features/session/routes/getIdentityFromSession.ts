@@ -3,20 +3,23 @@ import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { ISessionService } from "@/features/session/services";
-import { SessionResponseSchema, type SessionResponse } from "@/features/session/schemas";
+import {
+  GetIdentityFromSessionResponseSchema,
+  type GetIdentityFromSessionResponse,
+} from "@/features/session/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
 
-export const getSession: HttpRoute = {
-  url: "/identity/getSession",
+export const getIdentityFromSession: HttpRoute = {
+  url: "/identity/getIdentityFromSession",
   method: "GET",
   schema: {
     tags: ["auth"],
     summary: "Resolve session identity",
     description:
-      "Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.",
-    operationId: "getSessionIdentity",
+      "Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity.",
+    operationId: "getIdentityFromSession",
     response: {
-      200: SessionResponseSchema,
+      200: GetIdentityFromSessionResponseSchema,
     },
   },
   handler: async (request) => {
@@ -29,11 +32,11 @@ export const getSession: HttpRoute = {
     const service = container.get<ISessionService>(TYPES.SessionService);
     const identity = await service.getSession(sessionToken);
 
-    const response: SessionResponse = {
+    const response: GetIdentityFromSessionResponse = {
       identity: {
         id: identity.id,
         email: identity.email,
-        emailVerified: identity.emailVerified,
+        emailVerified: identity.emailVerified ?? false,
       },
     };
 

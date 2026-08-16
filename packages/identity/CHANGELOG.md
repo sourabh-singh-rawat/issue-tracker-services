@@ -1,4 +1,4 @@
-# @pine/identity-client
+# @pine/identity
 
 ## 0.1.1
 

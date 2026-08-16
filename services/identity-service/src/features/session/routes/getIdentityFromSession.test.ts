@@ -10,13 +10,13 @@ vi.mock("@/bootstrap", () => ({
 }));
 
 import { TYPES } from "@/bootstrap/container-types";
-import { getTokenSession } from "@/features/session/routes/getTokenSession";
+import { getIdentityFromSession } from "@/features/session/routes/getIdentityFromSession";
 import { InvalidCredentialError } from "@/integrations/identity";
 
-function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
+const httpRequest = (partial: Partial<HttpRequest>): HttpRequest => {
   return {
     method: partial.method ?? "GET",
-    url: partial.url ?? "/identity/getTokenSession",
+    url: partial.url ?? "/identity/getIdentityFromSession",
     headers: partial.headers ?? {},
     query: partial.query ?? {},
     params: partial.params ?? {},
@@ -24,29 +24,29 @@ function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
     body: partial.body,
     file: partial.file ?? (async () => undefined),
   };
-}
+};
 
-describe("getTokenSession route", () => {
+describe("getIdentityFromSession route", () => {
   beforeEach(() => {
     get.mockReset();
   });
 
-  it("returns the identity for a valid bearer access token", async () => {
-    const getSessionFromAccessToken = vi.fn().mockResolvedValue({
+  it("returns the identity for a valid session cookie", async () => {
+    const getSessionFn = vi.fn().mockResolvedValue({
       id: "identity-1",
       email: "a@b.com",
       emailVerified: true,
     });
-    get.mockReturnValue({ getSessionFromAccessToken });
+    get.mockReturnValue({ getSession: getSessionFn });
 
-    const response = await getTokenSession.handler(
+    const response = await getIdentityFromSession.handler(
       httpRequest({
-        headers: { authorization: "Bearer access-token-1" },
+        cookies: { session: "session-token-1" },
       }),
     );
 
     expect(get).toHaveBeenCalledWith(TYPES.SessionService);
-    expect(getSessionFromAccessToken).toHaveBeenCalledWith("access-token-1");
+    expect(getSessionFn).toHaveBeenCalledWith("session-token-1");
     expect(response).toEqual({
       status: 200,
       body: {
@@ -59,14 +59,14 @@ describe("getTokenSession route", () => {
     });
   });
 
-  it("throws InvalidCredentialError when the Authorization header is missing", async () => {
-    const getSessionFromAccessToken = vi.fn();
-    get.mockReturnValue({ getSessionFromAccessToken });
+  it("throws InvalidCredentialError when the session cookie is missing", async () => {
+    const getSessionFn = vi.fn();
+    get.mockReturnValue({ getSession: getSessionFn });
 
-    await expect(getTokenSession.handler(httpRequest({ headers: {} }))).rejects.toBeInstanceOf(
+    await expect(getIdentityFromSession.handler(httpRequest({ cookies: {} }))).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
 
-    expect(getSessionFromAccessToken).not.toHaveBeenCalled();
+    expect(getSessionFn).not.toHaveBeenCalled();
   });
 });

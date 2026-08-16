@@ -24,7 +24,7 @@ export class SessionService implements ISessionService {
     return {
       id: identity.id,
       email: idpIdentity.email,
-      emailVerified: idpIdentity.emailVerified,
+      emailVerified: idpIdentity.emailVerified ?? false,
     };
   }
 
@@ -50,7 +50,7 @@ export class SessionService implements ISessionService {
     return {
       id: identity.id,
       email: email ?? "",
-      emailVerified,
+      emailVerified: emailVerified ?? false,
     };
   }
 }
