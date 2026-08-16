@@ -7,17 +7,21 @@ export {
   type PlatformMemberDeletedData,
 } from "./PlatformMemberDeletedDataSchema";
 export {
-  PlatformRoleCapabilitiesUpdatedDataSchema,
-  type PlatformRoleCapabilitiesUpdatedData,
-} from "./PlatformRoleCapabilitiesUpdatedDataSchema";
+  PlatformRolePermissionsUpdatedDataSchema,
+  type PlatformRolePermissionsUpdatedData,
+} from "./PlatformRolePermissionsUpdatedDataSchema";
 export {
   TenantCreatedDataSchema,
   type TenantCreatedData,
 } from "./TenantCreatedDataSchema";
 export {
-  TenantRoleCapabilitiesUpdatedDataSchema,
-  type TenantRoleCapabilitiesUpdatedData,
-} from "./TenantRoleCapabilitiesUpdatedDataSchema";
+  TenantDeletedDataSchema,
+  type TenantDeletedData,
+} from "./TenantDeletedDataSchema";
+export {
+  TenantRolePermissionsUpdatedDataSchema,
+  type TenantRolePermissionsUpdatedData,
+} from "./TenantRolePermissionsUpdatedDataSchema";
 export {
   TenantMemberCreatedDataSchema,
   type TenantMemberCreatedData,

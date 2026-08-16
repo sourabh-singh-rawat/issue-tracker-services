@@ -1,0 +1,6 @@
+query GetIdentities($platformId: String!) {
+  getIdentities(platformId: $platformId) {
+    id
+    displayName
+  }
+}

@@ -4,7 +4,8 @@ services:
     environment:
       - DSN=postgresql://keto:${POSTGRES_KETO_PASSWORD}@ory-postgres:5432/keto?sslmode=disable
     volumes:
-      - ./authorization/keto:/etc/config/keto:ro
+      - ./authorization/keto/keto.yaml:/etc/config/keto/keto.yaml:ro
+      - ../../services/authorization-service/src/integrations/authorization/ory-keto/opl:/etc/config/keto/opl:ro
     command: migrate -c /etc/config/keto/keto.yaml up -y
     restart: on-failure
     depends_on:
@@ -33,7 +34,8 @@ services:
       - "4466:4466"
       - "4467:4467"
     volumes:
-      - ./authorization/keto:/etc/config/keto:ro
+      - ./authorization/keto/keto.yaml:/etc/config/keto/keto.yaml:ro
+      - ../../services/authorization-service/src/integrations/authorization/ory-keto/opl:/etc/config/keto/opl:ro
     deploy:
       resources:
         limits:

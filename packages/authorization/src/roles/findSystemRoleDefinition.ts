@@ -1,6 +1,8 @@
-import { ALL_ORGANIZATION_ROLES } from "./OrganizationRoles";
-import { ALL_PLATFORM_ROLES } from "./PlatformRoles";
-import { ALL_TENANT_ROLES } from "./TenantRoles";
+import {
+  ALL_ORGANIZATION_ROLES,
+  ALL_PLATFORM_ROLES,
+  ALL_TENANT_ROLES,
+} from "./SystemRoles";
 import type { RoleDefinition } from "./RoleDefinition";
 
 const matchesRole = (
@@ -68,22 +70,22 @@ export const findSystemRoleDefinition = (match: {
   findTenantRoleDefinition(match) ??
   findOrganizationRoleDefinition(match);
 
-export const platformRoleCapabilityKeys = (match: {
+export const platformRolePermissionKeys = (match: {
   id?: string | null;
   key?: string | null;
-}): readonly string[] => findPlatformRoleDefinition(match)?.capabilityKeys ?? [];
+}): readonly string[] => findPlatformRoleDefinition(match)?.permissionKeys ?? [];
 
-export const tenantRoleCapabilityKeys = (match: {
+export const tenantRolePermissionKeys = (match: {
   id?: string | null;
   key?: string | null;
-}): readonly string[] => findTenantRoleDefinition(match)?.capabilityKeys ?? [];
+}): readonly string[] => findTenantRoleDefinition(match)?.permissionKeys ?? [];
 
-export const organizationRoleCapabilityKeys = (match: {
+export const organizationRolePermissionKeys = (match: {
   id?: string | null;
   key?: string | null;
-}): readonly string[] => findOrganizationRoleDefinition(match)?.capabilityKeys ?? [];
+}): readonly string[] => findOrganizationRoleDefinition(match)?.permissionKeys ?? [];
 
-export const systemRoleCapabilityKeys = (match: {
+export const systemRolePermissionKeys = (match: {
   id?: string | null;
   key?: string | null;
-}): readonly string[] => findSystemRoleDefinition(match)?.capabilityKeys ?? [];
+}): readonly string[] => findSystemRoleDefinition(match)?.permissionKeys ?? [];

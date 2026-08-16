@@ -1,11 +1,12 @@
 import Type from "typebox";
-import { GraphResourceSchema } from "@/features/authorization/schemas/GraphResourceSchema";
+import { GraphNamespaceSchema } from "@/features/authorization/schemas/GraphNamespaceSchema";
 
 export const CheckRelationshipBodySchema = Type.Object(
   {
-    object: GraphResourceSchema,
+    namespace: GraphNamespaceSchema,
+    object: Type.String({ minLength: 1 }),
     relation: Type.String({ minLength: 1 }),
-    subject: GraphResourceSchema,
+    subject: Type.String({ minLength: 1 }),
   },
   { additionalProperties: false },
 );

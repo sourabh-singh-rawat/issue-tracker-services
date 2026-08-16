@@ -3,6 +3,7 @@ import Type from "typebox";
 export const TenantCreatedDataSchema = Type.Object(
   {
     id: Type.String(),
+    platformId: Type.String(),
     name: Type.String(),
     slug: Type.String(),
     isActive: Type.Boolean(),

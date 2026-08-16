@@ -6,11 +6,7 @@ import { initializeObservability } from "@pine/observability";
 import { broker, container, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
-import {
-  PlatformMemberSyncConsumer,
-  PlatformRoleCapabilitySyncConsumer,
-  TenantMemberSyncConsumer,
-} from "@/features/platform";
+import { TenantSyncConsumer } from "@/features/platform";
 
 
 export { container } from "@/bootstrap";
@@ -33,13 +29,7 @@ const main = async () => {
 
   await broker.init();
 
-  void container
-    .get<PlatformRoleCapabilitySyncConsumer>(TYPES.PlatformRoleCapabilitySyncConsumer)
-    .start();
-  void container
-    .get<PlatformMemberSyncConsumer>(TYPES.PlatformMemberSyncConsumer)
-    .start();
-  void container.get<TenantMemberSyncConsumer>(TYPES.TenantMemberSyncConsumer).start();
+  void container.get<TenantSyncConsumer>(TYPES.TenantSyncConsumer).start();
 };
 
 main().catch((error) => {

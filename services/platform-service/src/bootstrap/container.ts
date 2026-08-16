@@ -27,52 +27,32 @@ import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import {
+  type IOrganizationMemberService,
   type IOrganizationRepository,
   type IOrganizationService,
+  OrganizationMemberService,
   OrganizationRepository,
   OrganizationService,
 } from "@/features/organizations";
 import {
-  type IOrganizationMemberRepository,
-  OrganizationMemberRepository,
-} from "@/features/organizationMembers";
-import {
-  type IOrganizationRoleRepository,
-  type IOrganizationRoleService,
-  OrganizationRoleRepository,
-  OrganizationRoleService,
-} from "@/features/organizationRoles";
-import {
-  type IPlatformMemberRepository,
   type IPlatformMemberService,
-  PlatformMemberRepository,
   PlatformMemberService,
-} from "@/features/platformMembers";
+} from "@/features/platform";
 import {
-  type IPlatformRoleRepository,
-  type IPlatformRoleService,
-  PlatformRoleRepository,
-  PlatformRoleService,
-} from "@/features/platformRoles";
+  type IIdentityRepository,
+  type IIdentityService,
+  IdentityRepository,
+  IdentityService,
+  IdentitySyncConsumer,
+} from "@/features/identities";
 import {
-  type ICapabilityRepository,
-  type ICapabilityService,
-  CapabilityRepository,
-  CapabilityService,
-} from "@/features/capabilities";
-import { type ITenantRepository, type ITenantService, TenantRepository, TenantService } from "@/features/tenants";
-import {
-  type ITenantMemberRepository,
   type ITenantMemberService,
-  TenantMemberRepository,
   TenantMemberService,
-} from "@/features/tenantMembers";
-import {
-  type ITenantRoleRepository,
-  type ITenantRoleService,
-  TenantRoleRepository,
-  TenantRoleService,
-} from "@/features/tenantRoles";
+  type ITenantRepository,
+  type ITenantService,
+  TenantRepository,
+} from "@/features/tenants";
+import { TenantService } from "@/features/tenants/services/TenantService";
 import { createContext } from "@/graphql";
 import { routes } from "@/routes";
 
@@ -119,31 +99,18 @@ container
   .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
 container.bind<ITenantService>(TYPES.TenantService).to(TenantService);
-container.bind<ITenantRoleRepository>(TYPES.TenantRoleRepository).to(TenantRoleRepository);
-container.bind<ITenantRoleService>(TYPES.TenantRoleService).to(TenantRoleService);
-container.bind<ITenantMemberRepository>(TYPES.TenantMemberRepository).to(TenantMemberRepository);
 container.bind<ITenantMemberService>(TYPES.TenantMemberService).to(TenantMemberService);
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
 container
-  .bind<IOrganizationRoleRepository>(TYPES.OrganizationRoleRepository)
-  .to(OrganizationRoleRepository);
-container
-  .bind<IOrganizationRoleService>(TYPES.OrganizationRoleService)
-  .to(OrganizationRoleService);
-container
-  .bind<IOrganizationMemberRepository>(TYPES.OrganizationMemberRepository)
-  .to(OrganizationMemberRepository);
-container.bind<IPlatformRoleRepository>(TYPES.PlatformRoleRepository).to(PlatformRoleRepository);
-container.bind<IPlatformRoleService>(TYPES.PlatformRoleService).to(PlatformRoleService);
-container
-  .bind<IPlatformMemberRepository>(TYPES.PlatformMemberRepository)
-  .to(PlatformMemberRepository);
+  .bind<IOrganizationMemberService>(TYPES.OrganizationMemberService)
+  .to(OrganizationMemberService);
 container
   .bind<IPlatformMemberService>(TYPES.PlatformMemberService)
   .to(PlatformMemberService);
-container.bind<ICapabilityRepository>(TYPES.CapabilityRepository).to(CapabilityRepository);
-container.bind<ICapabilityService>(TYPES.CapabilityService).to(CapabilityService);
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
+container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
+container.bind(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");
@@ -162,7 +129,7 @@ export const bindHttpServer = async (): Promise<void> => {
         info: {
           title: "Platform Service",
           version: "0.0.0",
-          description: "Tenant, organization, platform member, and capability catalog APIs",
+          description: "Tenant, organization, and platform member APIs",
           license: { name: "ISC", url: "https://opensource.org/license/isc-license-txt" },
         },
         servers: [{ url: env.PLATFORM_SERVICE_URL }],
@@ -172,7 +139,6 @@ export const bindHttpServer = async (): Promise<void> => {
           { name: "organizations", description: "Organization end-points" },
           { name: "platform-members", description: "Platform member end-points" },
           { name: "organization-members", description: "Organization member end-points" },
-          { name: "capabilities", description: "Capability catalog end-points" },
         ],
       },
       graphql: createGraphQLServer({

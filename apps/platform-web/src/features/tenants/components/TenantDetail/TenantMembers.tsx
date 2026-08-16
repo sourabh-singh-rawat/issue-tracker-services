@@ -12,23 +12,10 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { useGetTenantMembersQuery } from "@generated/gql";
 import { getErrorMessage } from "@shared/ui";
+import { CreateTenantMemberModal } from "../CreateTenantMemberModal";
 
 type TenantMembersProps = {
   tenantId: string;
-};
-
-const formatDateTime = (value: unknown): string => {
-  if (value == null) {
-    return "—";
-  }
-  if (typeof value === "string" || typeof value === "number" || value instanceof Date) {
-    const date = value instanceof Date ? value : new Date(value);
-    if (Number.isNaN(date.getTime())) {
-      return String(value);
-    }
-    return date.toLocaleString();
-  }
-  return "—";
 };
 
 export const TenantMembers = ({ tenantId }: TenantMembersProps) => {
@@ -44,10 +31,13 @@ export const TenantMembers = ({ tenantId }: TenantMembersProps) => {
 
   return (
     <Stack spacing={2}>
-      <Typography color="text.secondary">
-        Members that belong to this tenant. The creator is assigned the tenant owner role when the
-        tenant is created.
-      </Typography>
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center", justifyContent: "space-between" }}>
+        <Typography color="text.secondary">
+          Members of this tenant as graph relations. Creating a tenant writes the owner relation for
+          the creator.
+        </Typography>
+        <CreateTenantMemberModal tenantId={tenantId} />
+      </Stack>
 
       {membersQuery.isPending ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
@@ -71,9 +61,7 @@ export const TenantMembers = ({ tenantId }: TenantMembersProps) => {
             <TableHead>
               <TableRow>
                 <TableCell>Identity ID</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Assigned</TableCell>
-                <TableCell>Assigned by</TableCell>
+                <TableCell>Relation</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -82,21 +70,8 @@ export const TenantMembers = ({ tenantId }: TenantMembersProps) => {
                   <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
                     {member.identityId}
                   </TableCell>
-                  <TableCell>
-                    {member.tenantRole?.name ?? member.roleId}
-                    {member.tenantRole?.key ? (
-                      <Typography
-                        component="span"
-                        color="text.secondary"
-                        sx={{ display: "block", fontFamily: "monospace", fontSize: "0.75rem" }}
-                      >
-                        {member.tenantRole.key}
-                      </Typography>
-                    ) : null}
-                  </TableCell>
-                  <TableCell>{formatDateTime(member.assignedAt)}</TableCell>
                   <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                    {member.assignedBy ?? "—"}
+                    {member.relation}
                   </TableCell>
                 </TableRow>
               ))}

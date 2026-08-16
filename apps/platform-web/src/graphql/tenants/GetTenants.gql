@@ -1,5 +1,5 @@
-query GetTenants {
-  getTenants {
+query GetTenants($platformId: String!) {
+  getTenants(platformId: $platformId) {
     id
     name
     slug

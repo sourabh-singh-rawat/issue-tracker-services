@@ -1,11 +1,3 @@
-export type { ResourceDefinition } from "./ResourceDefinition";
-export { BRAND } from "./Brand";
-export { PRODUCT } from "./Product";
-export { TENANT } from "./Tenant";
-export { ORGANIZATION } from "./Organization";
-export { ROLE } from "./Role";
-export { PLATFORM_ROLE } from "./PlatformRole";
-export { PLATFORM_MEMBER } from "./PlatformMember";
-export { CAPABILITY } from "./Capability";
-export { CAPABILITY_GRANT } from "./CapabilityGrant";
-export { RESOURCES, ALL_RESOURCES } from "./AllResources";
+export type { Resource, ResourceKey } from "./AllResources";
+export { RESOURCES, isResource } from "./AllResources";
+export { parseResource, tryParseResource } from "./parseResource";

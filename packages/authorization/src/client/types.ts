@@ -1,6 +1,17 @@
-import type { GraphRelationship } from "../types";
+import type { GraphNamespace } from "../types/GraphNamespace";
 
-export type CheckRelationshipInput = GraphRelationship;
+export type CheckRelationshipInput = {
+  namespace: GraphNamespace;
+  object: string;
+  relation: string;
+  subject: string;
+};
+
+export type ListRelationshipsInput = {
+  namespace: GraphNamespace;
+  object: string;
+  relation?: string;
+};
 
 export interface CheckRelationshipResponse {
   allowed: boolean;

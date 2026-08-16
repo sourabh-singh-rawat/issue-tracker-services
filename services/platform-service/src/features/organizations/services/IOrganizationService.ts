@@ -19,13 +19,13 @@ export type UpdateOrganizationInput = {
 };
 
 export interface IOrganizationService {
-  createOrganization(input: CreateOrganizationInput, userId: string): Promise<Organization>;
-  getOrganizationById(id: string, userId: string): Promise<Organization>;
-  listOrganizations(input: ListOrganizationsInput, userId: string): Promise<Organization[]>;
+  createOrganization(input: CreateOrganizationInput, identityId: string): Promise<Organization>;
+  getOrganizationById(id: string, identityId: string): Promise<Organization>;
+  listOrganizations(input: ListOrganizationsInput, identityId: string): Promise<Organization[]>;
   updateOrganization(
     id: string,
     input: UpdateOrganizationInput,
-    userId: string,
+    identityId: string,
   ): Promise<Organization>;
-  deleteOrganization(id: string, userId: string): Promise<void>;
+  deleteOrganization(id: string, identityId: string): Promise<void>;
 }

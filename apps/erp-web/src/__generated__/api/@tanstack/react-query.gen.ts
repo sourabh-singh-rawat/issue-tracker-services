@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -413,7 +413,7 @@ export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMu
 /**
  * Check a graph relationship
  *
- * Verify whether a subject has a relation to an object in the authorization graph (Ory Keto). Capability checks use object type capability, relation has, and object id as the capability key (e.g. product:brand:create).
+ * Check a Keto permission: namespace, object, relation, and subject (subject_id, e.g. identity:<id>).
  */
 export const checkRelationshipMutation = (options?: Partial<Options<CheckRelationshipData>>): UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>> => {
     const mutationOptions: UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>> = {
@@ -432,14 +432,14 @@ export const checkRelationshipMutation = (options?: Partial<Options<CheckRelatio
 /**
  * Check a graph relationship
  *
- * Verify whether a subject has a relation to an object in the authorization graph (Ory Keto). Capability checks use object type capability, relation has, and object id as the capability key (e.g. product:brand:create).
+ * Check a Keto permission: namespace, object, relation, and subject (subject_id, e.g. identity:<id>).
  */
 export const useCheckRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>>, 'mutationFn'>>) => useMutation({ ...checkRelationshipMutation(), ...mutationOptions });
 
 /**
  * Ensure a graph relationship exists
  *
- * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant capabilities and role assignees.
+ * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant permissions and role members.
  */
 export const ensureRelationshipMutation = (options?: Partial<Options<EnsureRelationshipData>>): UseMutationOptions<EnsureRelationshipResponse, AxiosError<DefaultError>, Options<EnsureRelationshipData>> => {
     const mutationOptions: UseMutationOptions<EnsureRelationshipResponse, AxiosError<DefaultError>, Options<EnsureRelationshipData>> = {
@@ -458,7 +458,7 @@ export const ensureRelationshipMutation = (options?: Partial<Options<EnsureRelat
 /**
  * Ensure a graph relationship exists
  *
- * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant capabilities and role assignees.
+ * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant permissions and role members.
  */
 export const useEnsureRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<EnsureRelationshipResponse, AxiosError<DefaultError>, Options<EnsureRelationshipData>>, 'mutationFn'>>) => useMutation({ ...ensureRelationshipMutation(), ...mutationOptions });
 
@@ -487,3 +487,29 @@ export const deleteRelationshipMutation = (options?: Partial<Options<DeleteRelat
  * Idempotently delete a relationship from the authorization graph (Ory Keto).
  */
 export const useDeleteRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<DeleteRelationshipResponse, AxiosError<DefaultError>, Options<DeleteRelationshipData>>, 'mutationFn'>>) => useMutation({ ...deleteRelationshipMutation(), ...mutationOptions });
+
+/**
+ * List graph relationships
+ *
+ * List stored relationships for an object in the authorization graph.
+ */
+export const listRelationshipsMutation = (options?: Partial<Options<ListRelationshipsData>>): UseMutationOptions<ListRelationshipsResponse, AxiosError<DefaultError>, Options<ListRelationshipsData>> => {
+    const mutationOptions: UseMutationOptions<ListRelationshipsResponse, AxiosError<DefaultError>, Options<ListRelationshipsData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await listRelationships({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * List graph relationships
+ *
+ * List stored relationships for an object in the authorization graph.
+ */
+export const useListRelationshipsMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ListRelationshipsResponse, AxiosError<DefaultError>, Options<ListRelationshipsData>>, 'mutationFn'>>) => useMutation({ ...listRelationshipsMutation(), ...mutationOptions });

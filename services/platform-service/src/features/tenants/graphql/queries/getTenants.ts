@@ -7,9 +7,12 @@ import type { ITenantService } from "@/features/tenants/services";
 builder.queryFields((t) => ({
   getTenants: t.field({
     type: [TenantObject],
-    resolve: async (_root, _args, ctx) => {
+    args: {
+      platformId: t.arg.string({ required: true }),
+    },
+    resolve: async (_root, { platformId }, ctx) => {
       const service = container.get<ITenantService>(TYPES.TenantService);
-      return service.listTenants(ctx.user!.id);
+      return service.listTenants(platformId, ctx.user!.id);
     },
   }),
 }));

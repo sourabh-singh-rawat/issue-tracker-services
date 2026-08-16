@@ -28,7 +28,9 @@
     "dev:apps": "turbo run dev --filter=@pine/erp-web --filter=@pine/identity-web --filter=@pine/platform-web --filter=@pine/identity-service --filter=@pine/inventory-service --filter=@pine/product-service --filter=@pine/attachment-service --filter=@pine/notification-service --filter=@pine/platform-service --filter=@pine/authorization-service --filter=@pine/issues-service --filter=@pine/api-gateway",
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate",
-    "setup": "tsx tools/scripts/setup.ts",
+    "setup": "tsx tools/scripts/setup.ts --restart",
+    "setup:restart": "tsx tools/scripts/setup.ts --restart",
+    "setup:skip-docker": "tsx tools/scripts/setup.ts --skip-docker",
     "client": "turbo run dev --filter=@pine/erp-web",
     "web": "turbo run dev --filter=@pine/erp-web",
     "erp-web": "turbo run dev --filter=@pine/erp-web",
@@ -90,5 +92,5 @@
     "node": ">=20.13.1",
     "pnpm": ">=9.0.4"
   },
-  "packageManager": "pnpm@11.17.0"
+  "packageManager": "pnpm@11.21.0"
 }

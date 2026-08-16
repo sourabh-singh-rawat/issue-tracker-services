@@ -16,6 +16,7 @@ builder.mutationFields((t) => ({
 
       return service.createTenant(
         {
+          platformId: input.platformId,
           name: input.name,
           slug: input.slug,
           description: input.description ?? undefined,

@@ -7,10 +7,11 @@ builder.mutationFields((t) => ({
   deleteTenant: t.string({
     args: {
       id: t.arg.string({ required: true }),
+      platformId: t.arg.string({ required: true }),
     },
-    resolve: async (_root, { id }, ctx) => {
+    resolve: async (_root, { id, platformId }, ctx) => {
       const service = container.get<ITenantService>(TYPES.TenantService);
-      await service.deleteTenant(id, ctx.user!.id);
+      await service.deleteTenant(id, platformId, ctx.user!.id);
       return "Tenant deleted successfully.";
     },
   }),
