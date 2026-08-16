@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './../routes/__root'
 import { Route as AuthenticatedRouteImport } from './../routes/_authenticated'
 import { Route as CallbackRouteImport } from './../routes/callback'
 import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticated/index'
-import { Route as AuthenticatedPlatformRolesRouteImport } from './../routes/_authenticated/platform-roles'
+import { Route as AuthenticatedRelationsRouteImport } from './../routes/_authenticated/relations'
 import { Route as AuthenticatedTenantsRouteImport } from './../routes/_authenticated/tenants'
 import { Route as AuthenticatedPlatformRolesRoleIdRouteImport } from './../routes/_authenticated/platform-roles_.$roleId'
 import { Route as AuthenticatedTenantsTenantIdRouteImport } from './../routes/_authenticated/tenants_.$tenantId'
@@ -32,12 +32,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedPlatformRolesRoute =
-  AuthenticatedPlatformRolesRouteImport.update({
-    id: '/platform-roles',
-    path: '/platform-roles',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
+const AuthenticatedRelationsRoute = AuthenticatedRelationsRouteImport.update({
+  id: '/relations',
+  path: '/relations',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedTenantsRoute = AuthenticatedTenantsRouteImport.update({
   id: '/tenants',
   path: '/tenants',
@@ -65,7 +64,7 @@ const AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/callback': typeof CallbackRoute
-  '/platform-roles': typeof AuthenticatedPlatformRolesRoute
+  '/relations': typeof AuthenticatedRelationsRoute
   '/tenants': typeof AuthenticatedTenantsRoute
   '/platform-roles/$roleId': typeof AuthenticatedPlatformRolesRoleIdRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
@@ -73,7 +72,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/callback': typeof CallbackRoute
-  '/platform-roles': typeof AuthenticatedPlatformRolesRoute
+  '/relations': typeof AuthenticatedRelationsRoute
   '/tenants': typeof AuthenticatedTenantsRoute
   '/': typeof AuthenticatedIndexRoute
   '/platform-roles/$roleId': typeof AuthenticatedPlatformRolesRoleIdRoute
@@ -84,7 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/callback': typeof CallbackRoute
-  '/_authenticated/platform-roles': typeof AuthenticatedPlatformRolesRoute
+  '/_authenticated/relations': typeof AuthenticatedRelationsRoute
   '/_authenticated/tenants': typeof AuthenticatedTenantsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/platform-roles_/$roleId': typeof AuthenticatedPlatformRolesRoleIdRoute
@@ -96,7 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/callback'
-    | '/platform-roles'
+    | '/relations'
     | '/tenants'
     | '/platform-roles/$roleId'
     | '/tenants/$tenantId'
@@ -104,7 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/callback'
-    | '/platform-roles'
+    | '/relations'
     | '/tenants'
     | '/'
     | '/platform-roles/$roleId'
@@ -114,7 +113,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/callback'
-    | '/_authenticated/platform-roles'
+    | '/_authenticated/relations'
     | '/_authenticated/tenants'
     | '/_authenticated/'
     | '/_authenticated/platform-roles_/$roleId'
@@ -150,11 +149,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/platform-roles': {
-      id: '/_authenticated/platform-roles'
-      path: '/platform-roles'
-      fullPath: '/platform-roles'
-      preLoaderRoute: typeof AuthenticatedPlatformRolesRouteImport
+    '/_authenticated/relations': {
+      id: '/_authenticated/relations'
+      path: '/relations'
+      fullPath: '/relations'
+      preLoaderRoute: typeof AuthenticatedRelationsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/tenants': {
@@ -189,7 +188,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedPlatformRolesRoute: typeof AuthenticatedPlatformRolesRoute
+  AuthenticatedRelationsRoute: typeof AuthenticatedRelationsRoute
   AuthenticatedTenantsRoute: typeof AuthenticatedTenantsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedPlatformRolesRoleIdRoute: typeof AuthenticatedPlatformRolesRoleIdRoute
@@ -198,7 +197,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedPlatformRolesRoute: AuthenticatedPlatformRolesRoute,
+  AuthenticatedRelationsRoute: AuthenticatedRelationsRoute,
   AuthenticatedTenantsRoute: AuthenticatedTenantsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedPlatformRolesRoleIdRoute: AuthenticatedPlatformRolesRoleIdRoute,

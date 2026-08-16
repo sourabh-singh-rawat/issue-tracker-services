@@ -1,5 +1,5 @@
 import {
-  PLATFORM_RESOURCE,
+  PLATFORM_OBJECT_ID,
   requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
@@ -18,11 +18,13 @@ export class IdentityService implements IIdentityService {
     private readonly authorizationClient: IAuthorizationClient,
   ) {}
 
-  listIdentities = async (platformId: string, userId: string): Promise<Identity[]> => {
-    await requirePermission(this.authorizationClient, userId, "read", {
-      namespace: PLATFORM_RESOURCE.name,
-      id: platformId,
-    });
+  listIdentities = async (platformId: string, identityId: string): Promise<Identity[]> => {
+    await requirePermission(
+      this.authorizationClient,
+      identityId,
+      "read",
+      `platform:${PLATFORM_OBJECT_ID}`,
+    );
     return this.identityRepository.findAll();
   };
 }

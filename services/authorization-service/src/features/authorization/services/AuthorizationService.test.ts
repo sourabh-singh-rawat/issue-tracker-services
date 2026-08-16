@@ -32,9 +32,9 @@ describe("AuthorizationService", () => {
     const service = new AuthorizationService(authorizationGraphProvider);
 
     const relationship = {
-      object: { type: "permission", id: "platform:create_tenant" },
+      object: { namespace: "permission", id: "platform:create_tenant" },
       relation: "has",
-      subjectSet: { type: "role", id: "role-1", relation: "member" },
+      subjectSet: { namespace: "role", id: "role-1", relation: "member" },
     };
 
     await expect(service.ensureRelationship(relationship)).resolves.toEqual({ created: true });
@@ -43,9 +43,9 @@ describe("AuthorizationService", () => {
 
   it("skips create when relationship already exists", async () => {
     const relationship = {
-      object: { type: "role", id: "role-1" },
+      object: { namespace: "role", id: "role-1" },
       relation: "member",
-      subject: { type: "identity", id: "user-1" },
+      subject: { namespace: "identity", id: "user-1" },
     };
     const authorizationGraphProvider = {
       checkPermission: vi.fn(),

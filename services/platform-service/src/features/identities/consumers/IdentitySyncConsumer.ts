@@ -62,19 +62,19 @@ export class IdentitySyncConsumer extends Consumer<
     }
   };
 
-  private upsertIdentity = async (userId: string, displayName?: string | null): Promise<void> => {
+  private upsertIdentity = async (identityId: string, displayName?: string | null): Promise<void> => {
     await this.db.transaction(async (tx) => {
-      const existing = await this.identityRepository.findById(userId, { tx });
+      const existing = await this.identityRepository.findById(identityId, { tx });
       if (!existing) {
         await this.identityRepository.save(
-          { id: userId, displayName: displayName ?? null },
+          { id: identityId, displayName: displayName ?? null },
           { tx },
         );
         return;
       }
 
       if (displayName !== undefined && displayName !== existing.displayName) {
-        await this.identityRepository.update(userId, { displayName }, { tx });
+        await this.identityRepository.update(identityId, { displayName }, { tx });
       }
     });
   };

@@ -14,6 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+import { PLATFORM_OBJECT_ID } from "@pine/authorization";
 import { useDeleteTenantMutation, useGetTenantsQuery } from "@generated/gql";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,9 +25,12 @@ export const Tenants = () => {
   const navigate = useNavigate();
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
-  const tenantsQuery = useGetTenantsQuery(undefined, {
-    select: (data) => data.getTenants ?? [],
-  });
+  const tenantsQuery = useGetTenantsQuery(
+    { platformId: PLATFORM_OBJECT_ID },
+    {
+      select: (data) => data.getTenants ?? [],
+    },
+  );
   const deleteTenantMutation = useDeleteTenantMutation();
 
   const tenants = tenantsQuery.data ?? [];
@@ -43,7 +47,7 @@ export const Tenants = () => {
     }
 
     try {
-      await deleteTenantMutation.mutateAsync({ id });
+      await deleteTenantMutation.mutateAsync({ id, platformId: PLATFORM_OBJECT_ID });
       await queryClient.invalidateQueries({ queryKey: ["GetTenants"] });
       snackbar.success("Tenant deleted successfully");
     } catch (error) {

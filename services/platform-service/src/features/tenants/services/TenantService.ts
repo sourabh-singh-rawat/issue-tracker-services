@@ -1,8 +1,7 @@
 import {
-  PLATFORM_RESOURCE,
-  TENANT,
-  TENANT_ROLES,
+  PLATFORM_OBJECT_ID,
   requirePermission,
+  tenantOwnerRelationship,
   type IAuthorizationClient,
 } from "@pine/authorization";
 import {
@@ -16,7 +15,6 @@ import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Tenant } from "@/db";
-import type { ITenantMemberService } from "@/features/tenantMembers/services";
 import {
   TenantNameConflictError,
   TenantNotFoundError,
@@ -30,8 +28,6 @@ export class TenantService implements ITenantService {
   constructor(
     @inject(TYPES.TenantRepository)
     private readonly tenantRepository: ITenantRepository,
-    @inject(TYPES.TenantMemberService)
-    private readonly tenantMemberService: ITenantMemberService,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
     @inject(TYPES.OutboxService)
@@ -40,11 +36,13 @@ export class TenantService implements ITenantService {
     private readonly db: Database,
   ) {}
 
-  async createTenant(input: CreateTenantInput, userId: string): Promise<Tenant> {
-    await requirePermission(this.authorizationClient, userId, "create_tenant", {
-      namespace: PLATFORM_RESOURCE.name,
-      id: input.platformId,
-    });
+  async createTenant(input: CreateTenantInput, identityId: string): Promise<Tenant> {
+    await requirePermission(
+      this.authorizationClient,
+      identityId,
+      "create_tenant",
+      `platform:${PLATFORM_OBJECT_ID}`,
+    );
 
     const slugExists = await this.tenantRepository.existsBySlug(input.slug);
     if (slugExists) {
@@ -67,14 +65,8 @@ export class TenantService implements ITenantService {
         { tx },
       );
 
-      await this.tenantMemberService.createTenantMember(
-        {
-          tenantId: tenant.id,
-          roleId: TENANT_ROLES.TENANT_OWNER.id,
-          identityId: userId,
-        },
-        userId,
-        { tx, skipAuthorization: true },
+      await this.authorizationClient.ensureRelationship(
+        tenantOwnerRelationship(tenant.id, identityId),
       );
 
       const event: CloudEvent<TenantCreatedData> = createCloudEvent({
@@ -111,11 +103,13 @@ export class TenantService implements ITenantService {
     });
   }
 
-  async getTenantById(id: string, userId: string): Promise<Tenant> {
-    await requirePermission(this.authorizationClient, userId, "read", {
-      namespace: TENANT.name,
-      id,
-    });
+  async getTenantById(id: string, identityId: string): Promise<Tenant> {
+    await requirePermission(
+      this.authorizationClient,
+      identityId,
+      "read",
+      `tenant:${id}`,
+    );
 
     const tenant = await this.tenantRepository.findById(id);
     if (!tenant) {
@@ -125,20 +119,24 @@ export class TenantService implements ITenantService {
     return tenant;
   }
 
-  async listTenants(platformId: string, userId: string): Promise<Tenant[]> {
-    await requirePermission(this.authorizationClient, userId, "read", {
-      namespace: PLATFORM_RESOURCE.name,
-      id: platformId,
-    });
+  async listTenants(platformId: string, identityId: string): Promise<Tenant[]> {
+    await requirePermission(
+      this.authorizationClient,
+      identityId,
+      "read",
+      `platform:${PLATFORM_OBJECT_ID}`,
+    );
 
     return this.tenantRepository.findAll();
   }
 
-  async deleteTenant(id: string, platformId: string, userId: string): Promise<void> {
-    await requirePermission(this.authorizationClient, userId, "suspend", {
-      namespace: TENANT.name,
-      id,
-    });
+  async deleteTenant(id: string, platformId: string, identityId: string): Promise<void> {
+    await requirePermission(
+      this.authorizationClient,
+      identityId,
+      "suspend",
+      `tenant:${id}`,
+    );
 
     await this.db.transaction(async (tx) => {
       const deleted = await this.tenantRepository.softDelete(id, { tx });

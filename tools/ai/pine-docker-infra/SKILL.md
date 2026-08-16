@@ -54,7 +54,7 @@ Confirm in active compose + root `.env.example`.
 - `KRATOS_SECRETS_CIPHER` must be **32 chars**
 - App URLs: `KRATOS_*_URL`, `HYDRA_*_URL`, `KETO_READ_URL` / `KETO_WRITE_URL` in root `.env`
 - Keto datastore: role/DB `keto` on **ory-postgres** (`POSTGRES_KETO_PASSWORD`)
-- Keto namespaces: OPL in `services/authorization-service/src/integrations/authorization/ory-keto/opl/` (file-bind `keto.yaml` + mount OPL at `/etc/config/keto/opl`; do not nest that mount under a read-only directory bind of `authorization/keto`). `namespaces.location` in `keto.yaml`. Class names are namespace strings (`user`, `tenant`, `role`, …). Do not add a parallel `id`/`name` list.
+- Keto namespaces: OPL in `services/authorization-service/src/integrations/authorization/ory-keto/opl/namespaces.ts` (file-bind `keto.yaml` + mount OPL at `/etc/config/keto/opl`; do not nest that mount under a read-only directory bind of `authorization/keto`). `namespaces.location` in `keto.yaml` must point at that single `.ts` file. Class names are namespace strings (`identity`, `platform`, `tenant`, …). Do not add a parallel `id`/`name` list.
 - Kratos mail (verification/recovery): root `.env` only — never secrets in `kratos.yaml`
   - `BREVO_EMAIL` → `COURIER_SMTP_FROM_ADDRESS` (Brevo-verified sender)
   - `COURIER_SMTP_CONNECTION_URI` → Brevo SMTP relay URI

@@ -1,4 +1,4 @@
-import { InsufficientPermissionError, ORGANIZATION_ROLES } from "@pine/authorization";
+import { InsufficientPermissionError } from "@pine/authorization";
 import { describe, expect, it, vi } from "vitest";
 import {
   InvalidParentOrganizationError,
@@ -43,20 +43,16 @@ const childOrganization = {
   slug: "acme-division",
 };
 
-const userId = "user-1";
+const identityId = "user-1";
 
 const createService = (deps: {
   organizationRepository?: unknown;
-  organizationMemberRepository?: unknown;
   tenantRepository?: unknown;
   authorizationClient?: unknown;
   db?: unknown;
 }) =>
   new OrganizationService(
     (deps.organizationRepository ?? {}) as never,
-    (deps.organizationMemberRepository ?? {
-      save: vi.fn().mockResolvedValue({ id: "member-1" }),
-    }) as never,
     (deps.tenantRepository ?? {
       findById: vi.fn().mockResolvedValue(tenant),
     }) as never,
@@ -64,6 +60,7 @@ const createService = (deps: {
       checkRelationship: vi.fn().mockResolvedValue(true),
       ensureRelationship: vi.fn().mockResolvedValue(undefined),
       deleteRelationship: vi.fn().mockResolvedValue(undefined),
+      listRelationships: vi.fn().mockResolvedValue([]),
     }) as never,
     (deps.db ?? {
       transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn({})),
@@ -84,13 +81,13 @@ describe("OrganizationService", () => {
     const service = createService({ organizationRepository, authorizationClient });
 
     await expect(
-      service.listOrganizations({ tenantId: "tenant-1" }, userId),
+      service.listOrganizations({ tenantId: "tenant-1" }, identityId),
     ).resolves.toEqual([organization]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "tenant",
       object: "tenant-1",
       relation: "read",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(organizationRepository.findMany).toHaveBeenCalledWith({
       tenantId: "tenant-1",
@@ -110,14 +107,14 @@ describe("OrganizationService", () => {
 
     const service = createService({ organizationRepository, authorizationClient });
 
-    await expect(service.getOrganizationById(organization.id, userId)).resolves.toEqual(
+    await expect(service.getOrganizationById(organization.id, identityId)).resolves.toEqual(
       organization,
     );
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "organization",
       object: organization.id,
       relation: "read",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(organizationRepository.findById).toHaveBeenCalledWith(organization.id);
   });
@@ -134,7 +131,7 @@ describe("OrganizationService", () => {
 
     const service = createService({ organizationRepository, authorizationClient });
 
-    await expect(service.getOrganizationById(organization.id, userId)).rejects.toBeInstanceOf(
+    await expect(service.getOrganizationById(organization.id, identityId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(organizationRepository.findById).not.toHaveBeenCalled();
@@ -147,7 +144,7 @@ describe("OrganizationService", () => {
 
     const service = createService({ organizationRepository });
 
-    await expect(service.getOrganizationById("missing", userId)).rejects.toBeInstanceOf(
+    await expect(service.getOrganizationById("missing", identityId)).rejects.toBeInstanceOf(
       OrganizationNotFoundError,
     );
   });
@@ -165,7 +162,7 @@ describe("OrganizationService", () => {
     const service = createService({ organizationRepository, authorizationClient });
 
     await expect(
-      service.listOrganizations({ tenantId: "tenant-1" }, userId),
+      service.listOrganizations({ tenantId: "tenant-1" }, identityId),
     ).rejects.toBeInstanceOf(InsufficientPermissionError);
     expect(organizationRepository.findMany).not.toHaveBeenCalled();
   });
@@ -181,7 +178,7 @@ describe("OrganizationService", () => {
     const service = createService({ organizationRepository, tenantRepository });
 
     await expect(
-      service.listOrganizations({ tenantId: "missing" }, userId),
+      service.listOrganizations({ tenantId: "missing" }, identityId),
     ).rejects.toBeInstanceOf(TenantNotFoundError);
     expect(organizationRepository.findMany).not.toHaveBeenCalled();
   });
@@ -192,18 +189,15 @@ describe("OrganizationService", () => {
       existsByNameInTenant: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(organization),
     };
-    const organizationMemberRepository = {
-      save: vi.fn().mockResolvedValue({ id: "member-1" }),
-    };
     const authorizationClient = {
       checkRelationship: vi.fn().mockResolvedValue(true),
       ensureRelationship: vi.fn().mockResolvedValue(undefined),
       deleteRelationship: vi.fn().mockResolvedValue(undefined),
+      listRelationships: vi.fn().mockResolvedValue([]),
     };
 
     const service = createService({
       organizationRepository,
-      organizationMemberRepository,
       authorizationClient,
     });
 
@@ -215,7 +209,7 @@ describe("OrganizationService", () => {
           slug: "acme",
           description: "Primary organization",
         },
-        userId,
+        identityId,
       ),
     ).resolves.toEqual(organization);
 
@@ -223,7 +217,7 @@ describe("OrganizationService", () => {
       namespace: "tenant",
       object: "tenant-1",
       relation: "create_organization",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(organizationRepository.save).toHaveBeenCalledWith(
       {
@@ -236,15 +230,16 @@ describe("OrganizationService", () => {
       },
       { tx: {} },
     );
-    expect(organizationMemberRepository.save).toHaveBeenCalledWith(
-      {
-        organizationId: "org-1",
-        roleId: ORGANIZATION_ROLES.ORGANIZATION_OWNER.id,
-        identityId: userId,
-        assignedBy: userId,
-      },
-      { tx: {} },
-    );
+    expect(authorizationClient.ensureRelationship).toHaveBeenCalledWith({
+      object: { namespace: "organization", id: "org-1" },
+      relation: "owner",
+      subject: { namespace: "identity", id: identityId },
+    });
+    expect(authorizationClient.ensureRelationship).toHaveBeenCalledWith({
+      object: { namespace: "organization", id: "org-1" },
+      relation: "tenant",
+      subject: { namespace: "tenant", id: "tenant-1" },
+    });
   });
 
   it("creates a child organization when parent is in the same tenant", async () => {
@@ -254,13 +249,16 @@ describe("OrganizationService", () => {
       existsByNameInTenant: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(childOrganization),
     };
-    const organizationMemberRepository = {
-      save: vi.fn().mockResolvedValue({ id: "member-2" }),
+    const authorizationClient = {
+      checkRelationship: vi.fn().mockResolvedValue(true),
+      ensureRelationship: vi.fn().mockResolvedValue(undefined),
+      deleteRelationship: vi.fn().mockResolvedValue(undefined),
+      listRelationships: vi.fn().mockResolvedValue([]),
     };
 
     const service = createService({
       organizationRepository,
-      organizationMemberRepository,
+      authorizationClient,
     });
 
     await expect(
@@ -271,7 +269,7 @@ describe("OrganizationService", () => {
           name: "Acme Division",
           slug: "acme-division",
         },
-        userId,
+        identityId,
       ),
     ).resolves.toEqual(childOrganization);
 
@@ -287,15 +285,11 @@ describe("OrganizationService", () => {
       },
       { tx: {} },
     );
-    expect(organizationMemberRepository.save).toHaveBeenCalledWith(
-      {
-        organizationId: "org-2",
-        roleId: ORGANIZATION_ROLES.ORGANIZATION_OWNER.id,
-        identityId: userId,
-        assignedBy: userId,
-      },
-      { tx: {} },
-    );
+    expect(authorizationClient.ensureRelationship).toHaveBeenCalledWith({
+      object: { namespace: "organization", id: "org-2" },
+      relation: "owner",
+      subject: { namespace: "identity", id: identityId },
+    });
   });
 
   it("rejects create when parent organization is missing or in another tenant", async () => {
@@ -315,7 +309,7 @@ describe("OrganizationService", () => {
           name: "Acme Division",
           slug: "acme-division",
         },
-        userId,
+        identityId,
       ),
     ).rejects.toBeInstanceOf(InvalidParentOrganizationError);
     expect(organizationRepository.save).not.toHaveBeenCalled();
@@ -334,7 +328,7 @@ describe("OrganizationService", () => {
     await expect(
       service.createOrganization(
         { tenantId: "missing", name: "Acme Corp", slug: "acme" },
-        userId,
+        identityId,
       ),
     ).rejects.toBeInstanceOf(TenantNotFoundError);
     expect(organizationRepository.save).not.toHaveBeenCalled();
@@ -352,7 +346,7 @@ describe("OrganizationService", () => {
     await expect(
       service.createOrganization(
         { tenantId: "tenant-1", name: "Acme Corp", slug: "acme" },
-        userId,
+        identityId,
       ),
     ).rejects.toBeInstanceOf(OrganizationSlugConflictError);
     expect(organizationRepository.existsByNameInTenant).not.toHaveBeenCalled();
@@ -371,7 +365,7 @@ describe("OrganizationService", () => {
     await expect(
       service.createOrganization(
         { tenantId: "tenant-1", name: "Acme Corp", slug: "acme" },
-        userId,
+        identityId,
       ),
     ).rejects.toBeInstanceOf(OrganizationNameConflictError);
     expect(organizationRepository.save).not.toHaveBeenCalled();
@@ -392,13 +386,13 @@ describe("OrganizationService", () => {
     const service = createService({ organizationRepository, authorizationClient });
 
     await expect(
-      service.updateOrganization("org-2", { parentOrganizationId: null }, userId),
+      service.updateOrganization("org-2", { parentOrganizationId: null }, identityId),
     ).resolves.toEqual(updated);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "organization",
       object: "org-2",
       relation: "update",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(organizationRepository.update).toHaveBeenCalledWith("org-2", {
       parentOrganizationId: null,
@@ -417,7 +411,7 @@ describe("OrganizationService", () => {
     const service = createService({ organizationRepository });
 
     await expect(
-      service.updateOrganization("org-1", { parentOrganizationId: "org-2" }, userId),
+      service.updateOrganization("org-1", { parentOrganizationId: "org-2" }, identityId),
     ).rejects.toBeInstanceOf(InvalidParentOrganizationError);
     expect(organizationRepository.update).not.toHaveBeenCalled();
   });
@@ -431,7 +425,7 @@ describe("OrganizationService", () => {
     const service = createService({ organizationRepository });
 
     await expect(
-      service.updateOrganization("missing", { parentOrganizationId: null }, userId),
+      service.updateOrganization("missing", { parentOrganizationId: null }, identityId),
     ).rejects.toBeInstanceOf(OrganizationNotFoundError);
     expect(organizationRepository.update).not.toHaveBeenCalled();
   });
@@ -448,12 +442,12 @@ describe("OrganizationService", () => {
 
     const service = createService({ organizationRepository, authorizationClient });
 
-    await expect(service.deleteOrganization("org-1", userId)).resolves.toBeUndefined();
+    await expect(service.deleteOrganization("org-1", identityId)).resolves.toBeUndefined();
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "organization",
       object: "org-1",
       relation: "delete",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(organizationRepository.softDelete).toHaveBeenCalledWith("org-1");
   });
@@ -465,7 +459,7 @@ describe("OrganizationService", () => {
 
     const service = createService({ organizationRepository });
 
-    await expect(service.deleteOrganization("missing", userId)).rejects.toBeInstanceOf(
+    await expect(service.deleteOrganization("missing", identityId)).rejects.toBeInstanceOf(
       OrganizationNotFoundError,
     );
   });

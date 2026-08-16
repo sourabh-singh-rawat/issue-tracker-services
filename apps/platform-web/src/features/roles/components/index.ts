@@ -1,4 +1,4 @@
-export * from "./CreateRoleForm";
-export * from "./CreateRoleModal";
+export * from "./CreatePlatformMemberForm";
+export * from "./CreatePlatformMemberModal";
 export * from "./RoleDetail";
 export * from "./PlatformRoles";

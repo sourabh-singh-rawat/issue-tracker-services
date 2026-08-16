@@ -1,160 +1,56 @@
 import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import {
-  useDeletePlatformRoleMutation,
-  useGetPlatformRolesQuery,
-  type GetPlatformRolesQuery,
-} from "@generated/gql";
-import { DataTable, createColumnHelper } from "@pine/ui";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useDeletePlatformMemberMutation, useGetPlatformMembersQuery } from "@generated/gql";
 import { useQueryClient } from "@tanstack/react-query";
 import { getErrorMessage, useSnackbar } from "@shared/ui";
-import { CreateRoleModal } from "../CreateRoleModal";
+import { CreatePlatformMemberModal } from "../CreatePlatformMemberModal";
 
-type PlatformRole = NonNullable<NonNullable<GetPlatformRolesQuery["getPlatformRoles"]>[number]>;
-
-const columnHelper = createColumnHelper<PlatformRole>();
-
-type PlatformRoleCellProps = {
-  role: PlatformRole;
-};
-
-const PlatformRoleNameCell = ({ role }: PlatformRoleCellProps) => {
-  if (!role.id) {
-    return role.name ?? "—";
-  }
-
-  return (
-    <Link to="/platform-roles/$roleId" params={{ roleId: role.id }}>
-      {role.name ?? "—"}
-    </Link>
-  );
-};
-
-const PlatformRoleKeyCell = ({ role }: PlatformRoleCellProps) => (
-  <Box sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>{role.key ?? "—"}</Box>
-);
-
-const PlatformRoleTypeCell = ({ role }: PlatformRoleCellProps) => (
-  <Chip
-    size="small"
-    label={role.isSystem ? "System" : "Custom"}
-    color={role.isSystem ? "default" : "primary"}
-    variant={role.isSystem ? "outlined" : "filled"}
-  />
-);
-
-const PlatformRoleActionsHeader = () => <Box sx={{ textAlign: "right", width: 56 }}>Actions</Box>;
-
-const PlatformRoleActionsCell = ({ role }: PlatformRoleCellProps) => {
+export const PlatformRoles = () => {
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
-  const deleteRoleMutation = useDeletePlatformRoleMutation();
+  const membersQuery = useGetPlatformMembersQuery(undefined, {
+    select: (data) => data.getPlatformMembers ?? [],
+  });
+  const deletePlatformMemberMutation = useDeletePlatformMemberMutation();
 
-  const roleId = role.id;
-  if (role.isSystem || !roleId) {
-    return null;
-  }
+  const members = membersQuery.data ?? [];
 
-  const handleDelete = async () => {
-    const label = role.name?.trim() || "this platform role";
+  const handleDelete = async (
+    id: string | null | undefined,
+    identityId: string | null | undefined,
+    relation: string | null | undefined,
+  ) => {
+    if (!id) {
+      return;
+    }
+
+    const label = [identityId, relation].filter(Boolean).join(" / ") || "this relation";
     const confirmed = window.confirm(`Delete ${label}? This cannot be undone from the UI.`);
     if (!confirmed) {
       return;
     }
 
     try {
-      await deleteRoleMutation.mutateAsync({ id: roleId });
-      await queryClient.invalidateQueries({ queryKey: ["GetPlatformRoles"] });
-      snackbar.success("Platform role deleted successfully");
+      await deletePlatformMemberMutation.mutateAsync({ id });
+      await queryClient.invalidateQueries({ queryKey: ["GetPlatformMembers"] });
+      snackbar.success("Platform relation deleted successfully");
     } catch (error) {
-      snackbar.error(getErrorMessage(error, "Failed to delete platform role"));
+      snackbar.error(getErrorMessage(error, "Failed to delete platform relation"));
     }
   };
-
-  return (
-    <Box sx={{ textAlign: "right" }}>
-      <IconButton
-        size="small"
-        aria-label={`Delete platform role ${role.name ?? role.key ?? role.id}`}
-        disabled={deleteRoleMutation.isPending}
-        onClick={(event) => {
-          event.stopPropagation();
-          void handleDelete();
-        }}
-      >
-        <DeleteOutline fontSize="small" />
-      </IconButton>
-    </Box>
-  );
-};
-
-const columns = [
-  columnHelper.display({
-    id: "name",
-    header: "Name",
-    cell: ({ row }) => <PlatformRoleNameCell role={row.original} />,
-  }),
-  columnHelper.display({
-    id: "key",
-    header: "Key",
-    cell: ({ row }) => <PlatformRoleKeyCell role={row.original} />,
-  }),
-  columnHelper.display({
-    id: "description",
-    header: "Description",
-    cell: ({ row }) => row.original.description ?? "—",
-  }),
-  columnHelper.display({
-    id: "type",
-    header: "Type",
-    cell: ({ row }) => <PlatformRoleTypeCell role={row.original} />,
-  }),
-  columnHelper.display({
-    id: "actions",
-    header: PlatformRoleActionsHeader,
-    cell: ({ row }) => <PlatformRoleActionsCell role={row.original} />,
-  }),
-];
-
-type PlatformRolesTableProps = {
-  data: PlatformRole[];
-};
-
-const PlatformRolesTable = ({ data }: PlatformRolesTableProps) => {
-  const navigate = useNavigate();
-
-  return (
-    <DataTable
-      data={data}
-      columns={columns}
-      ariaLabel="Platform roles"
-      onRowClick={(role) => {
-        if (!role.id) {
-          return;
-        }
-        void navigate({
-          to: "/platform-roles/$roleId",
-          params: { roleId: role.id },
-        });
-      }}
-    />
-  );
-};
-
-export const PlatformRoles = () => {
-  const platformRolesQuery = useGetPlatformRolesQuery(undefined, {
-    select: (data) => data.getPlatformRoles ?? [],
-  });
-
-  const platformRoles = platformRolesQuery.data ?? [];
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -165,33 +61,74 @@ export const PlatformRoles = () => {
       >
         <Box>
           <Typography variant="h5" component="h1" gutterBottom>
-            Platform Roles
+            Platform relations
           </Typography>
           <Typography color="text.secondary">
-            Platform roles managed by the platform service.
+            Live membership tuples from the authorization graph. Creating a relation writes
+            platform:admin or platform:member for an identity.
           </Typography>
         </Box>
-        <CreateRoleModal />
+        <CreatePlatformMemberModal />
       </Stack>
 
-      {platformRolesQuery.isPending ? (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-          <CircularProgress size={32} />
+      {membersQuery.isPending ? (
+        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+          <CircularProgress size={28} />
         </Box>
       ) : null}
 
-      {platformRolesQuery.isError ? (
+      {membersQuery.isError ? (
         <Alert severity="error">
-          {getErrorMessage(platformRolesQuery.error, "Failed to load platform roles")}
+          {getErrorMessage(membersQuery.error, "Failed to load platform relations")}
         </Alert>
       ) : null}
 
-      {platformRolesQuery.isSuccess && platformRoles.length === 0 ? (
-        <Typography color="text.secondary">No platform roles found.</Typography>
+      {membersQuery.isSuccess && members.length === 0 ? (
+        <Alert severity="info">No platform relations found in the graph.</Alert>
       ) : null}
 
-      {platformRolesQuery.isSuccess && platformRoles.length > 0 ? (
-        <PlatformRolesTable data={platformRoles} />
+      {membersQuery.isSuccess && members.length > 0 ? (
+        <TableContainer component={Paper} variant="outlined">
+          <Table size="small" aria-label="Platform relations">
+            <TableHead>
+              <TableRow>
+                <TableCell>Identity ID</TableCell>
+                <TableCell>Relation</TableCell>
+                <TableCell align="right" width={72}>
+                  Actions
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {members.map((member) => (
+                <TableRow key={member.id}>
+                  <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
+                    {member.identityId}
+                  </TableCell>
+                  <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
+                    {member.relation}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      size="small"
+                      aria-label={`Delete ${member.identityId ?? "relation"} ${member.relation ?? ""}`.trim()}
+                      disabled={
+                        !member.id ||
+                        (deletePlatformMemberMutation.isPending &&
+                          deletePlatformMemberMutation.variables?.id === member.id)
+                      }
+                      onClick={() => {
+                        void handleDelete(member.id, member.identityId, member.relation);
+                      }}
+                    >
+                      <DeleteOutline fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       ) : null}
     </Container>
   );

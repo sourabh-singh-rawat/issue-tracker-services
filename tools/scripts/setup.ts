@@ -54,7 +54,28 @@ const parseIdentityId = (output: string): string => {
   return identityId;
 };
 
-const main = (): void => {
+const parseSetupMode = (): "restart" | "skip-docker" => {
+  const flags = process.argv.slice(2).filter((arg) => arg.startsWith("-"));
+  const skipDocker = flags.includes("--skip-docker");
+  const restart = flags.includes("--restart");
+  const unknown = flags.filter((flag) => flag !== "--skip-docker" && flag !== "--restart");
+
+  if (unknown.length > 0) {
+    throw new Error(`Unknown setup flag(s): ${unknown.join(", ")}. Use --restart or --skip-docker.`);
+  }
+
+  if (skipDocker && restart) {
+    throw new Error("Use either --restart or --skip-docker, not both.");
+  }
+
+  if (skipDocker) {
+    return "skip-docker";
+  }
+
+  return "restart";
+};
+
+const restartInfra = (): void => {
   console.log("setup: stopping infra");
   runPnpm(["dev:infra:down"]);
 
@@ -63,6 +84,16 @@ const main = (): void => {
 
   console.log("setup: starting infra");
   runPnpm(["dev:infra"]);
+};
+
+const main = (): void => {
+  const mode = parseSetupMode();
+
+  if (mode === "restart") {
+    restartInfra();
+  } else {
+    console.log("setup: skipping docker compose restart");
+  }
 
   console.log("setup: running database migrations");
   runPnpm(["db:migrate"]);

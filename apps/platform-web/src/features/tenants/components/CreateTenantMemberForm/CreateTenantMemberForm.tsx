@@ -4,20 +4,23 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import {
-  useCreateTenantMemberMutation,
-  useGetIdentitiesQuery,
-  useGetTenantRolesQuery,
-} from "@generated/gql";
-import { PrimaryButton, SecondaryButton, TextField } from "@pine/ui";
+import { ADMIN, ALL_TENANT_ROLES, MEMBER, OWNER } from "@pine/authorization";
+import { useCreateTenantMemberMutation, useFindIdentitiesQuery } from "@generated/gql";
+import { PrimaryButton, SecondaryButton } from "@pine/ui";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { getErrorMessage, useSnackbar } from "@shared/ui";
 
+const tenantRelations = [OWNER, ADMIN, MEMBER];
+
+const relationLabel = (relation: string): string => {
+  const definition = ALL_TENANT_ROLES.find((role) => role.relation === relation);
+  return definition?.name ?? relation;
+};
+
 export type CreateTenantMemberFormValues = {
   identityId: string;
-  roleId: string;
-  reason: string;
+  relation: string;
 };
 
 export type CreateTenantMemberFormProps = {
@@ -28,8 +31,7 @@ export type CreateTenantMemberFormProps = {
 
 const defaultValues: CreateTenantMemberFormValues = {
   identityId: "",
-  roleId: "",
-  reason: "",
+  relation: "",
 };
 
 const requiredString = (value: string, label: string): string | undefined => {
@@ -48,18 +50,10 @@ export const CreateTenantMemberForm = ({
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const createTenantMemberMutation = useCreateTenantMemberMutation();
-  const rolesQuery = useGetTenantRolesQuery(
-    { tenantId },
-    {
-      select: (data) => data.getTenantRoles ?? [],
-      enabled: Boolean(tenantId),
-    },
-  );
-  const identitiesQuery = useGetIdentitiesQuery(undefined, {
-    select: (data) => data.getIdentities ?? [],
+  const identitiesQuery = useFindIdentitiesQuery(undefined, {
+    select: (data) => data.findIdentities ?? [],
   });
 
-  const roles = rolesQuery.data ?? [];
   const identities = identitiesQuery.data ?? [];
 
   const form = useForm({
@@ -70,8 +64,7 @@ export const CreateTenantMemberForm = ({
           input: {
             tenantId,
             identityId: value.identityId.trim(),
-            roleId: value.roleId.trim(),
-            reason: value.reason.trim() || undefined,
+            relation: value.relation.trim(),
           },
         });
 
@@ -129,7 +122,7 @@ export const CreateTenantMemberForm = ({
                     }
                     return (
                       <MenuItem key={id} value={id}>
-                        {identity.displayName ?? id}
+                        {id}
                       </MenuItem>
                     );
                   })}
@@ -149,15 +142,15 @@ export const CreateTenantMemberForm = ({
         </form.Field>
 
         <form.Field
-          name="roleId"
+          name="relation"
           validators={{
-            onChange: ({ value }) => requiredString(value, "Role"),
+            onChange: ({ value }) => requiredString(value, "Relation"),
           }}
         >
           {(field) => (
             <Box>
               <Typography variant="body2" sx={{ pb: 1, fontWeight: 500 }}>
-                Role
+                Relation
               </Typography>
               <FormControl fullWidth size="small">
                 <Select
@@ -169,50 +162,26 @@ export const CreateTenantMemberForm = ({
                   onChange={(event) => {
                     field.handleChange(event.target.value);
                   }}
-                  disabled={rolesQuery.isPending}
                 >
                   <MenuItem value="">
-                    <em>Select a role</em>
+                    <em>Select a relation</em>
                   </MenuItem>
-                  {roles.map((role) => {
-                    const id = role.id;
-                    if (!id) {
-                      return null;
-                    }
-                    return (
-                      <MenuItem key={id} value={id}>
-                        {role.name ?? role.key ?? id}
-                      </MenuItem>
-                    );
-                  })}
+                  {tenantRelations.map((relation) => (
+                    <MenuItem key={relation} value={relation}>
+                      {relationLabel(relation)}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-              {rolesQuery.isError ? (
-                <Typography variant="body1" color="error" sx={{ mt: 1 }}>
-                  {getErrorMessage(rolesQuery.error, "Failed to load tenant roles")}
-                </Typography>
-              ) : (
-                <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-                  Choose a tenant role for this member.
-                </Typography>
-              )}
+              <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+                Choose the graph relation for this member.
+              </Typography>
             </Box>
           )}
         </form.Field>
 
-        <form.Field name="reason">
-          {(field) => (
-            <TextField
-              field={field}
-              label="Reason"
-              placeholder="Optional assignment reason"
-              rows={3}
-            />
-          )}
-        </form.Field>
-
         <Stack direction="row-reverse" spacing={1} sx={{ pt: 1, alignItems: "center" }}>
-          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting] as const}>
+          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
             {([canSubmit, isSubmitting]) => (
               <PrimaryButton
                 type="submit"

@@ -12,7 +12,7 @@ const identity = {
   version: 1,
 };
 
-const userId = "user-1";
+const identityId = "user-1";
 const platformId = "platform-1";
 
 const allowAuth = () => ({
@@ -41,7 +41,7 @@ describe("IdentityService", () => {
     identityRepository.findAll = vi.fn().mockResolvedValue([identity]);
     const service = new IdentityService(identityRepository, allowAuth());
 
-    await expect(service.listIdentities(platformId, userId)).resolves.toEqual([identity]);
+    await expect(service.listIdentities(platformId, identityId)).resolves.toEqual([identity]);
     expect(identityRepository.findAll).toHaveBeenCalledOnce();
   });
 
@@ -49,7 +49,7 @@ describe("IdentityService", () => {
     const identityRepository = emptyRepo();
     const service = new IdentityService(identityRepository, denyAuth());
 
-    await expect(service.listIdentities(platformId, userId)).rejects.toBeInstanceOf(
+    await expect(service.listIdentities(platformId, identityId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(identityRepository.findAll).not.toHaveBeenCalled();

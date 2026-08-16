@@ -3,5 +3,6 @@ export type RoleDefinition = {
   key: string;
   name: string;
   description: string;
+  relation: string;
   permissionKeys: readonly string[];
 };

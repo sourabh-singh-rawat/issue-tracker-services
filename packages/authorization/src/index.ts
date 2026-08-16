@@ -1,18 +1,5 @@
-export type { ResourceDefinition } from "./resources";
-export {
-  BRAND,
-  PRODUCT,
-  TENANT,
-  PLATFORM as PLATFORM_RESOURCE,
-  ORGANIZATION,
-  ROLE,
-  PLATFORM_ROLE as PLATFORM_ROLE_RESOURCE,
-  PLATFORM_MEMBER as PLATFORM_MEMBER_RESOURCE,
-  PERMISSION,
-  PERMISSION_GRANT,
-  RESOURCES,
-  ALL_RESOURCES,
-} from "./resources";
+export type { Resource, ResourceKey } from "./resources";
+export { RESOURCES, isResource, parseResource, tryParseResource } from "./resources";
 
 export type {
   Permission,
@@ -26,9 +13,9 @@ export type {
   PermissionGrantPermission,
 } from "./permissions";
 export {
-  definePermissions,
   permissionKey,
   parsePermission,
+  tryParsePermission,
   PLATFORM_PERMISSIONS,
   TENANT_PERMISSIONS,
   ORGANIZATION_PERMISSIONS,
@@ -61,14 +48,31 @@ export {
   systemRolePermissionKeys,
 } from "./roles";
 
-export type { GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
+export type { GraphNamespace, GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
+export { GRAPH_NAMESPACES, isGraphNamespace } from "./types";
 
 export { IDENTITY } from "./identities";
 export {
+  ADMIN,
+  BRAND_PRODUCT,
+  MEMBER,
+  ORGANIZATION_TENANT,
+  OWNER,
   PERMISSION_HAS,
-  ROLE_MEMBER,
+  PLATFORM_OBJECT_ID,
   PLATFORM_TENANT,
+  PRODUCT_ORGANIZATION,
+  ROLE_MEMBER,
   TENANT_PLATFORM,
+  organizationOwnerRelationship,
+  organizationTenantRelationship,
+  platformAdminRelationship,
+  platformMemberRelationship,
+  platformTenantRelationship,
+  tenantAdminRelationship,
+  tenantMemberRelationship,
+  tenantOwnerRelationship,
+  tenantPlatformRelationship,
 } from "./relations";
 
 export {
@@ -81,12 +85,16 @@ export {
 export type { IAuthorizationClient } from "./client";
 export { HttpAuthorizationClient, requirePermission } from "./client";
 export type {
-  ResourceReference,
   CheckRelationshipInput,
   CheckRelationshipResponse,
   EnsureRelationshipResponse,
   DeleteRelationshipResponse,
   HttpAuthorizationClientOptions,
+  ListRelationshipsInput,
 } from "./client";
 
-export { InsufficientPermissionError, InvalidPermissionKeyError } from "./errors";
+export {
+  InsufficientPermissionError,
+  InvalidPermissionKeyError,
+  InvalidResourceKeyError,
+} from "./errors";

@@ -1,4 +1,4 @@
-import { InsufficientPermissionError, TENANT_ROLES } from "@pine/authorization";
+import { InsufficientPermissionError, PLATFORM_OBJECT_ID } from "@pine/authorization";
 import { TenantCreatedEvent, TenantDeletedEvent } from "@pine/events";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -20,7 +20,7 @@ const tenant = {
   deletedAt: null,
 };
 
-const userId = "user-1";
+const identityId = "user-1";
 const platformId = "platform-1";
 
 const createDbMock = (tx: unknown = { tx: true }) => ({
@@ -29,20 +29,17 @@ const createDbMock = (tx: unknown = { tx: true }) => ({
 
 const createService = (deps: {
   tenantRepository?: unknown;
-  tenantMemberService?: unknown;
   authorizationClient?: unknown;
   outboxService?: unknown;
   db?: unknown;
 }) =>
   new TenantService(
     (deps.tenantRepository ?? {}) as never,
-    (deps.tenantMemberService ?? {
-      createTenantMember: vi.fn().mockResolvedValue({ id: "member-1" }),
-    }) as never,
     (deps.authorizationClient ?? {
       checkRelationship: vi.fn().mockResolvedValue(true),
       ensureRelationship: vi.fn().mockResolvedValue(undefined),
       deleteRelationship: vi.fn().mockResolvedValue(undefined),
+      listRelationships: vi.fn().mockResolvedValue([]),
     }) as never,
     (deps.outboxService ?? {
       schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
@@ -63,12 +60,12 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.listTenants(platformId, userId)).resolves.toEqual([tenant]);
+    await expect(service.listTenants(platformId, identityId)).resolves.toEqual([tenant]);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "platform",
-      object: platformId,
+      object: PLATFORM_OBJECT_ID,
       relation: "read",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(tenantRepository.findAll).toHaveBeenCalledOnce();
   });
@@ -85,12 +82,12 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.getTenantById(tenant.id, userId)).resolves.toEqual(tenant);
+    await expect(service.getTenantById(tenant.id, identityId)).resolves.toEqual(tenant);
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "tenant",
       object: tenant.id,
       relation: "read",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(tenantRepository.findById).toHaveBeenCalledWith(tenant.id);
   });
@@ -107,7 +104,7 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.getTenantById(tenant.id, userId)).rejects.toBeInstanceOf(
+    await expect(service.getTenantById(tenant.id, identityId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(tenantRepository.findById).not.toHaveBeenCalled();
@@ -120,7 +117,7 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository });
 
-    await expect(service.getTenantById("missing", userId)).rejects.toBeInstanceOf(
+    await expect(service.getTenantById("missing", identityId)).rejects.toBeInstanceOf(
       TenantNotFoundError,
     );
   });
@@ -137,7 +134,7 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.listTenants(platformId, userId)).rejects.toBeInstanceOf(
+    await expect(service.listTenants(platformId, identityId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(tenantRepository.findAll).not.toHaveBeenCalled();
@@ -151,14 +148,6 @@ describe("TenantService", () => {
       existsByName: vi.fn().mockResolvedValue(false),
       save: vi.fn().mockResolvedValue(tenant),
     };
-    const tenantMemberService = {
-      createTenantMember: vi.fn().mockResolvedValue({
-        id: "member-1",
-        tenantId: tenant.id,
-        roleId: TENANT_ROLES.TENANT_OWNER.id,
-        identityId: userId,
-      }),
-    };
     const authorizationClient = {
       checkRelationship: vi.fn().mockResolvedValue(true),
       ensureRelationship: vi.fn().mockResolvedValue(undefined),
@@ -170,7 +159,6 @@ describe("TenantService", () => {
 
     const service = createService({
       tenantRepository,
-      tenantMemberService,
       authorizationClient,
       outboxService,
       db,
@@ -184,15 +172,15 @@ describe("TenantService", () => {
           slug: "acme",
           description: "Primary tenant",
         },
-        userId,
+        identityId,
       ),
     ).resolves.toEqual(tenant);
 
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "platform",
-      object: platformId,
+      object: PLATFORM_OBJECT_ID,
       relation: "create_tenant",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(tenantRepository.existsBySlug).toHaveBeenCalledWith("acme");
     expect(tenantRepository.existsByName).toHaveBeenCalledWith("Acme Corp");
@@ -206,15 +194,11 @@ describe("TenantService", () => {
       },
       { tx },
     );
-    expect(tenantMemberService.createTenantMember).toHaveBeenCalledWith(
-      {
-        tenantId: tenant.id,
-        roleId: TENANT_ROLES.TENANT_OWNER.id,
-        identityId: userId,
-      },
-      userId,
-      { tx, skipAuthorization: true },
-    );
+    expect(authorizationClient.ensureRelationship).toHaveBeenCalledWith({
+      object: { namespace: "tenant", id: tenant.id },
+      relation: "owner",
+      subject: { namespace: "identity", id: identityId },
+    });
     expect(outboxService.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
         eventType: TenantCreatedEvent.type,
@@ -263,7 +247,7 @@ describe("TenantService", () => {
     });
 
     await expect(
-      service.createTenant({ platformId, name: "Acme Corp", slug: "acme" }, userId),
+      service.createTenant({ platformId, name: "Acme Corp", slug: "acme" }, identityId),
     ).rejects.toBeInstanceOf(InsufficientPermissionError);
 
     expect(tenantRepository.existsBySlug).not.toHaveBeenCalled();
@@ -284,7 +268,7 @@ describe("TenantService", () => {
     const service = createService({ tenantRepository, outboxService });
 
     await expect(
-      service.createTenant({ platformId, name: "Acme Corp", slug: "acme" }, userId),
+      service.createTenant({ platformId, name: "Acme Corp", slug: "acme" }, identityId),
     ).rejects.toBeInstanceOf(TenantSlugConflictError);
 
     expect(tenantRepository.existsByName).not.toHaveBeenCalled();
@@ -305,7 +289,7 @@ describe("TenantService", () => {
     const service = createService({ tenantRepository, outboxService });
 
     await expect(
-      service.createTenant({ platformId, name: "Acme Corp", slug: "acme" }, userId),
+      service.createTenant({ platformId, name: "Acme Corp", slug: "acme" }, identityId),
     ).rejects.toBeInstanceOf(TenantNameConflictError);
 
     expect(tenantRepository.save).not.toHaveBeenCalled();
@@ -327,12 +311,12 @@ describe("TenantService", () => {
     };
     const service = createService({ tenantRepository, authorizationClient, outboxService });
 
-    await expect(service.deleteTenant("tenant-1", platformId, userId)).resolves.toBeUndefined();
+    await expect(service.deleteTenant("tenant-1", platformId, identityId)).resolves.toBeUndefined();
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "tenant",
       object: "tenant-1",
       relation: "suspend",
-      subject: `identity:${userId}`,
+      subject: `identity:${identityId}`,
     });
     expect(tenantRepository.softDelete).toHaveBeenCalledWith("tenant-1", {
       tx: expect.anything(),
@@ -363,7 +347,7 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository, authorizationClient });
 
-    await expect(service.deleteTenant("tenant-1", platformId, userId)).rejects.toBeInstanceOf(
+    await expect(service.deleteTenant("tenant-1", platformId, identityId)).rejects.toBeInstanceOf(
       InsufficientPermissionError,
     );
     expect(tenantRepository.softDelete).not.toHaveBeenCalled();
@@ -376,7 +360,7 @@ describe("TenantService", () => {
 
     const service = createService({ tenantRepository });
 
-    await expect(service.deleteTenant("missing", platformId, userId)).rejects.toBeInstanceOf(
+    await expect(service.deleteTenant("missing", platformId, identityId)).rejects.toBeInstanceOf(
       TenantNotFoundError,
     );
   });

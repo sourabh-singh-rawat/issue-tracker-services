@@ -1,20 +1,8 @@
-query GetTenantMembers($tenantId: String) {
+query GetTenantMembers($tenantId: String!) {
   getTenantMembers(tenantId: $tenantId) {
     id
     tenantId
-    roleId
     identityId
-    assignedBy
-    assignedAt
-    expiresAt
-    reason
-    createdAt
-    updatedAt
-    tenantRole {
-      id
-      key
-      name
-      isSystem
-    }
+    relation
   }
 }

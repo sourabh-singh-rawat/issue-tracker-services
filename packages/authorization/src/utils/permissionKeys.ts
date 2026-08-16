@@ -1,7 +1,8 @@
 import { ALL_PERMISSIONS, permissionKey } from "../permissions";
+import type { Resource } from "../resources";
 
 export const permissionKeys = (
-  namespace: string,
+  namespace: Resource,
   permissions: readonly string[],
 ): string[] => {
   const keys: string[] = [];

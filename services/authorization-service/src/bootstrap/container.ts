@@ -12,12 +12,7 @@ import { env } from "@/bootstrap/env";
 import { ketoClient } from "@/bootstrap/keto-client";
 import { logger } from "@/bootstrap/logger";
 import { AuthorizationService, type IAuthorizationService } from "@/features/authorization";
-import {
-  PlatformMemberSyncConsumer,
-  PlatformRolePermissionSyncConsumer,
-  TenantMemberSyncConsumer,
-  TenantSyncConsumer,
-} from "@/features/platform";
+import { TenantSyncConsumer } from "@/features/platform";
 
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
 import {
@@ -38,15 +33,6 @@ container.bind<IAuthorizationService>(TYPES.AuthorizationService).to(Authorizati
 container
   .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
   .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
-container
-  .bind<PlatformRolePermissionSyncConsumer>(TYPES.PlatformRolePermissionSyncConsumer)
-  .to(PlatformRolePermissionSyncConsumer);
-container
-  .bind<PlatformMemberSyncConsumer>(TYPES.PlatformMemberSyncConsumer)
-  .to(PlatformMemberSyncConsumer);
-container
-  .bind<TenantMemberSyncConsumer>(TYPES.TenantMemberSyncConsumer)
-  .to(TenantMemberSyncConsumer);
 container.bind<TenantSyncConsumer>(TYPES.TenantSyncConsumer).to(TenantSyncConsumer);
 
 

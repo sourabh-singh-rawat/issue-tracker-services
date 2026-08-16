@@ -1,7 +1,3 @@
-import type { ResourceDefinition } from "../resources/ResourceDefinition";
+import type { GraphNamespace } from "../types/GraphNamespace";
 
-export const IDENTITY = {
-  name: "identity",
-  description: "User identity",
-  isSystem: true,
-} as const satisfies ResourceDefinition;
+export const IDENTITY: GraphNamespace = "identity";

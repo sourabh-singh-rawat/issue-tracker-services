@@ -1,4 +1,5 @@
 import { InvalidPermissionKeyError } from "../errors";
+import { isResource, type Resource } from "../resources";
 
 const isPermissionKey = (key: string): boolean => {
   const separator = key.indexOf(":");
@@ -8,7 +9,7 @@ const isPermissionKey = (key: string): boolean => {
 export const parsePermission = (
   key: string,
 ): {
-  namespace: string;
+  namespace: Resource;
   permission: string;
 } => {
   if (!isPermissionKey(key)) {
@@ -16,8 +17,29 @@ export const parsePermission = (
   }
 
   const separator = key.indexOf(":");
+  const namespace = key.slice(0, separator);
+  if (!isResource(namespace)) {
+    throw new InvalidPermissionKeyError(`Invalid permission key: ${key}`);
+  }
+
   return {
-    namespace: key.slice(0, separator),
+    namespace,
     permission: key.slice(separator + 1),
   };
+};
+
+export const tryParsePermission = (
+  key: string,
+): {
+  namespace: Resource;
+  permission: string;
+} | undefined => {
+  try {
+    return parsePermission(key);
+  } catch (error) {
+    if (error instanceof InvalidPermissionKeyError) {
+      return undefined;
+    }
+    throw error;
+  }
 };

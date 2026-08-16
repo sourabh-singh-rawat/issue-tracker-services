@@ -1,8 +1,9 @@
 import Type from "typebox";
+import { GraphNamespaceSchema } from "@/features/authorization/schemas/GraphNamespaceSchema";
 
 export const GraphResourceSchema = Type.Object(
   {
-    type: Type.String({ minLength: 1 }),
+    namespace: GraphNamespaceSchema,
     id: Type.String({ minLength: 1 }),
   },
   { additionalProperties: false },

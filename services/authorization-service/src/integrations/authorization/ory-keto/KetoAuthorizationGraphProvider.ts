@@ -1,9 +1,11 @@
 import { inject, injectable } from "inversify";
-import type {
-  CheckRelationshipInput,
-  GraphRelationship,
-  GraphResource,
-  GraphSubjectSet,
+import {
+  GRAPH_NAMESPACES,
+  isGraphNamespace,
+  type CheckRelationshipInput,
+  type GraphRelationship,
+  type GraphResource,
+  type GraphSubjectSet,
 } from "@pine/authorization";
 import { TYPES } from "@/bootstrap/container-types";
 import type {
@@ -11,17 +13,6 @@ import type {
   ListRelationshipsFilter,
 } from "@/integrations/authorization/IAuthorizationGraphProvider";
 import type { KetoClient } from "@/integrations/authorization/ory-keto/KetoClient";
-
-const KETO_NAMESPACES = [
-  "identity",
-  "platform",
-  "tenant",
-  "organization",
-  "product",
-  "brand",
-  "role",
-  "permission",
-] as const;
 
 @injectable()
 export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvider {
@@ -35,7 +26,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
 
     await this.keto.relationshipWriteApi.createRelationship({
       createRelationshipBody: {
-        namespace: relationship.object.type,
+        namespace: relationship.object.namespace,
         object: relationship.object.id,
         relation: relationship.relation,
         ...subjectFields,
@@ -47,7 +38,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     const subjectFields = this.toKetoSubjectQuery(relationship);
 
     await this.keto.relationshipWriteApi.deleteRelationships({
-      namespace: relationship.object.type,
+      namespace: relationship.object.namespace,
       object: relationship.object.id,
       relation: relationship.relation,
       ...subjectFields,
@@ -55,14 +46,14 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
   }
 
   async listRelationships(filter?: ListRelationshipsFilter): Promise<GraphRelationship[]> {
-    const namespaces = filter?.object ? [filter.object.type] : [...KETO_NAMESPACES];
+    const namespaces = filter?.object ? [filter.object.namespace] : [...GRAPH_NAMESPACES];
 
     if (filter?.subject && filter.subjectSet) {
       throw new Error("ListRelationshipsFilter must not set both subject and subjectSet");
     }
 
     const subjectId = filter?.subject ? this.toSubjectId(filter.subject) : undefined;
-    const subjectSetNamespace = filter?.subjectSet?.type;
+    const subjectSetNamespace = filter?.subjectSet?.namespace;
     const subjectSetObject = filter?.subjectSet?.id;
     const subjectSetRelation = filter?.subjectSet?.relation;
     const results: GraphRelationship[] = [];
@@ -97,7 +88,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
   };
 
   private toSubjectId(resource: GraphResource): string {
-    return `${resource.type}:${resource.id}`;
+    return `${resource.namespace}:${resource.id}`;
   }
 
   private toKetoSubjectFields(relationship: GraphRelationship): {
@@ -114,7 +105,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     if (relationship.subjectSet !== undefined) {
       return {
         subject_set: {
-          namespace: relationship.subjectSet.type,
+          namespace: relationship.subjectSet.namespace,
           object: relationship.subjectSet.id,
           relation: relationship.subjectSet.relation,
         },
@@ -143,7 +134,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
 
     if (relationship.subjectSet !== undefined) {
       return {
-        subjectSetNamespace: relationship.subjectSet.type,
+        subjectSetNamespace: relationship.subjectSet.namespace,
         subjectSetObject: relationship.subjectSet.id,
         subjectSetRelation: relationship.subjectSet.relation,
       };
@@ -158,12 +149,14 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
 
   private parseSubjectId(subjectId: string): GraphResource {
     const separator = subjectId.indexOf(":");
-    if (separator <= 0 || separator === subjectId.length - 1) {
+    const namespace = subjectId.slice(0, separator);
+    const id = subjectId.slice(separator + 1);
+    if (separator <= 0 || separator === subjectId.length - 1 || !isGraphNamespace(namespace)) {
       throw new Error(`Invalid Keto subject_id: ${subjectId}`);
     }
     return {
-      type: subjectId.slice(0, separator),
-      id: subjectId.slice(separator + 1),
+      namespace,
+      id,
     };
   }
 
@@ -178,7 +171,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
       relation?: string;
     };
   }): GraphRelationship {
-    if (!row.namespace || !row.object || !row.relation) {
+    if (!row.namespace || !row.object || !row.relation || !isGraphNamespace(row.namespace)) {
       throw new Error("Keto relationship response was incomplete");
     }
 
@@ -186,12 +179,14 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     const subjectSet = this.mapSubjectSet(row.subject_set);
 
     if (hasSubjectId === (subjectSet !== undefined)) {
-      throw new Error("Keto relationship response must have exactly one of subject_id or subject_set");
+      throw new Error(
+        "Keto relationship response must have exactly one of subject_id or subject_set",
+      );
     }
 
     if (subjectSet !== undefined) {
       return {
-        object: { type: row.namespace, id: row.object },
+        object: { namespace: row.namespace, id: row.object },
         relation: row.relation,
         subjectSet,
       };
@@ -202,7 +197,7 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
     }
 
     return {
-      object: { type: row.namespace, id: row.object },
+      object: { namespace: row.namespace, id: row.object },
       relation: row.relation,
       subject: this.parseSubjectId(row.subject_id),
     };
@@ -221,12 +216,17 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
       return undefined;
     }
 
-    if (!subjectSet.namespace || !subjectSet.object || !subjectSet.relation) {
+    if (
+      !subjectSet.namespace ||
+      !subjectSet.object ||
+      !subjectSet.relation ||
+      !isGraphNamespace(subjectSet.namespace)
+    ) {
       throw new Error("Keto subject_set response was incomplete");
     }
 
     return {
-      type: subjectSet.namespace,
+      namespace: subjectSet.namespace,
       id: subjectSet.object,
       relation: subjectSet.relation,
     };

@@ -22,6 +22,13 @@
       "when": 1786564671244,
       "tag": "0002_charming_stark_industries",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786780745202,
+      "tag": "0003_shallow_ozymandias",
+      "breakpoints": true
     }
   ]
 }

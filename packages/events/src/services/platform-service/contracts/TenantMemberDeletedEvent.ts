@@ -3,6 +3,6 @@ import { TenantMemberDeletedDataSchema } from "../schemas";
 
 export const TenantMemberDeletedEvent = defineEvent({
   type: "platform.tenant-member.deleted",
-  version: 1,
+  version: 2,
   schema: TenantMemberDeletedDataSchema,
 });

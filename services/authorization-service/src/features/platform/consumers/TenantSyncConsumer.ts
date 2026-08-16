@@ -1,8 +1,7 @@
 import {
-  PLATFORM_RESOURCE,
-  PLATFORM_TENANT,
-  TENANT,
-  TENANT_PLATFORM,
+  platformTenantRelationship,
+  tenantPlatformRelationship,
+  type GraphRelationship,
 } from "@pine/authorization";
 import {
   type CloudEvent,
@@ -18,6 +17,10 @@ import {
 import { inject, injectable } from "inversify";
 import type { JsMsg } from "nats";
 import { TYPES } from "@/bootstrap/container-types";
+import {
+  ensureRelationship,
+  removeRelationship,
+} from "@/features/platform/consumers/syncRelationship";
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
 
 @injectable()
@@ -49,12 +52,9 @@ export class TenantSyncConsumer extends Consumer<
         return;
       }
 
-      await this.ensureRelationship(
-        this.platformTenantRelationship(data.platformId, data.id),
-      );
-      await this.ensureRelationship(
-        this.tenantPlatformRelationship(data.platformId, data.id),
-      );
+      for (const relationship of this.tenantGraph(data.id)) {
+        await ensureRelationship(this.authorizationGraphProvider, relationship);
+      }
       message.ack();
       return;
     }
@@ -67,12 +67,9 @@ export class TenantSyncConsumer extends Consumer<
         return;
       }
 
-      await this.removeRelationship(
-        this.platformTenantRelationship(data.platformId, data.id),
-      );
-      await this.removeRelationship(
-        this.tenantPlatformRelationship(data.platformId, data.id),
-      );
+      for (const relationship of this.tenantGraph(data.id)) {
+        await removeRelationship(this.authorizationGraphProvider, relationship);
+      }
       message.ack();
       return;
     }
@@ -80,43 +77,7 @@ export class TenantSyncConsumer extends Consumer<
     message.ack();
   }
 
-  private platformTenantRelationship = (platformId: string, tenantId: string) => ({
-    object: { type: PLATFORM_RESOURCE.name, id: platformId },
-    relation: PLATFORM_TENANT,
-    subject: { type: TENANT.name, id: tenantId },
-  });
-
-  private tenantPlatformRelationship = (platformId: string, tenantId: string) => ({
-    object: { type: TENANT.name, id: tenantId },
-    relation: TENANT_PLATFORM,
-    subject: { type: PLATFORM_RESOURCE.name, id: platformId },
-  });
-
-  private ensureRelationship = async (
-    relationship: ReturnType<TenantSyncConsumer["platformTenantRelationship"]>,
-  ): Promise<void> => {
-    const existing = await this.authorizationGraphProvider.listRelationships({
-      object: relationship.object,
-      relation: relationship.relation,
-      subject: relationship.subject,
-    });
-
-    if (existing.length === 0) {
-      await this.authorizationGraphProvider.createRelationship(relationship);
-    }
-  };
-
-  private removeRelationship = async (
-    relationship: ReturnType<TenantSyncConsumer["platformTenantRelationship"]>,
-  ): Promise<void> => {
-    const existing = await this.authorizationGraphProvider.listRelationships({
-      object: relationship.object,
-      relation: relationship.relation,
-      subject: relationship.subject,
-    });
-
-    if (existing.length > 0) {
-      await this.authorizationGraphProvider.deleteRelationship(relationship);
-    }
-  };
+  private tenantGraph(tenantId: string): GraphRelationship[] {
+    return [platformTenantRelationship(tenantId), tenantPlatformRelationship(tenantId)];
+  }
 }

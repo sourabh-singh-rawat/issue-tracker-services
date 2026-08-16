@@ -1,4 +1,8 @@
-import type { CheckRelationshipInput, GraphRelationship } from "@pine/authorization";
+import type {
+  CheckRelationshipInput,
+  GraphRelationship,
+  ListRelationshipsInput,
+} from "@pine/authorization";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IAuthorizationService } from "@/features/authorization/services/IAuthorizationService";
@@ -41,6 +45,13 @@ export class AuthorizationService implements IAuthorizationService {
 
     await this.authorizationGraphProvider.createRelationship(relationship);
     return { created: true };
+  }
+
+  async listRelationships(input: ListRelationshipsInput): Promise<GraphRelationship[]> {
+    return this.authorizationGraphProvider.listRelationships({
+      object: { namespace: input.namespace, id: input.object },
+      relation: input.relation,
+    });
   }
 
   async deleteRelationship(

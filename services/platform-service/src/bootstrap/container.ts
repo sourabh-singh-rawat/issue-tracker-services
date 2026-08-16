@@ -27,33 +27,17 @@ import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import {
+  type IOrganizationMemberService,
   type IOrganizationRepository,
   type IOrganizationService,
+  OrganizationMemberService,
   OrganizationRepository,
   OrganizationService,
 } from "@/features/organizations";
 import {
-  type IOrganizationMemberRepository,
-  OrganizationMemberRepository,
-} from "@/features/organizationMembers";
-import {
-  type IOrganizationRoleRepository,
-  type IOrganizationRoleService,
-  OrganizationRoleRepository,
-  OrganizationRoleService,
-} from "@/features/organizationRoles";
-import {
-  type IPlatformMemberRepository,
   type IPlatformMemberService,
-  PlatformMemberRepository,
   PlatformMemberService,
-} from "@/features/platformMembers";
-import {
-  type IPlatformRoleRepository,
-  type IPlatformRoleService,
-  PlatformRoleRepository,
-  PlatformRoleService,
-} from "@/features/platformRoles";
+} from "@/features/platform";
 import {
   type IIdentityRepository,
   type IIdentityService,
@@ -61,19 +45,14 @@ import {
   IdentityService,
   IdentitySyncConsumer,
 } from "@/features/identities";
-import { type ITenantRepository, type ITenantService, TenantRepository, TenantService } from "@/features/tenants";
 import {
-  type ITenantMemberRepository,
   type ITenantMemberService,
-  TenantMemberRepository,
   TenantMemberService,
-} from "@/features/tenantMembers";
-import {
-  type ITenantRoleRepository,
-  type ITenantRoleService,
-  TenantRoleRepository,
-  TenantRoleService,
-} from "@/features/tenantRoles";
+  type ITenantRepository,
+  type ITenantService,
+  TenantRepository,
+} from "@/features/tenants";
+import { TenantService } from "@/features/tenants/services/TenantService";
 import { createContext } from "@/graphql";
 import { routes } from "@/routes";
 
@@ -120,26 +99,12 @@ container
   .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
 container.bind<ITenantService>(TYPES.TenantService).to(TenantService);
-container.bind<ITenantRoleRepository>(TYPES.TenantRoleRepository).to(TenantRoleRepository);
-container.bind<ITenantRoleService>(TYPES.TenantRoleService).to(TenantRoleService);
-container.bind<ITenantMemberRepository>(TYPES.TenantMemberRepository).to(TenantMemberRepository);
 container.bind<ITenantMemberService>(TYPES.TenantMemberService).to(TenantMemberService);
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
 container
-  .bind<IOrganizationRoleRepository>(TYPES.OrganizationRoleRepository)
-  .to(OrganizationRoleRepository);
-container
-  .bind<IOrganizationRoleService>(TYPES.OrganizationRoleService)
-  .to(OrganizationRoleService);
-container
-  .bind<IOrganizationMemberRepository>(TYPES.OrganizationMemberRepository)
-  .to(OrganizationMemberRepository);
-container.bind<IPlatformRoleRepository>(TYPES.PlatformRoleRepository).to(PlatformRoleRepository);
-container.bind<IPlatformRoleService>(TYPES.PlatformRoleService).to(PlatformRoleService);
-container
-  .bind<IPlatformMemberRepository>(TYPES.PlatformMemberRepository)
-  .to(PlatformMemberRepository);
+  .bind<IOrganizationMemberService>(TYPES.OrganizationMemberService)
+  .to(OrganizationMemberService);
 container
   .bind<IPlatformMemberService>(TYPES.PlatformMemberService)
   .to(PlatformMemberService);

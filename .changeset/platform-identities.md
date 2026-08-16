@@ -1,11 +1,11 @@
 ---
 "@pine/authorization": minor
+"@pine/authorization-service": minor
+"@pine/events": minor
 "@pine/platform-service": minor
 "@pine/platform-web": minor
-"@pine/events": patch
-"@pine/authorization-service": patch
-"@pine/ui": patch
+"@pine/common": patch
 "@pine/erp-web": patch
 ---
 
-feat(platform): identities catalog and create tenant members
+feat(platform): identities and graph membership relations

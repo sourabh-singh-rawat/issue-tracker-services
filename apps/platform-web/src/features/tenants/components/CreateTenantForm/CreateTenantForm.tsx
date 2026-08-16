@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { useCreateTenantMutation } from "@generated/gql";
+import { PLATFORM_OBJECT_ID } from "@pine/authorization";
 import { PrimaryButton, SecondaryButton, TextField } from "@pine/ui";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -42,6 +43,7 @@ export const CreateTenantForm = ({ onSuccess, onCancel }: CreateTenantFormProps)
       try {
         const result = await createTenantMutation.mutateAsync({
           input: {
+            platformId: PLATFORM_OBJECT_ID,
             name: value.name.trim(),
             slug: value.slug.trim(),
             description: value.description.trim() || undefined,

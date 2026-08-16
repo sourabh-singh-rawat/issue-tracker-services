@@ -3,6 +3,7 @@ import Type from "typebox";
 export const TenantMemberDeletedDataSchema = Type.Object(
   {
     id: Type.String(),
+    tenantId: Type.String(),
     tenantRoleId: Type.String(),
     identityId: Type.String(),
   },

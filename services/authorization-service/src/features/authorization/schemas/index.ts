@@ -18,6 +18,7 @@ export {
   GraphRelationshipBodySchema,
   type GraphRelationshipBody,
 } from "@/features/authorization/schemas/GraphRelationshipBodySchema";
+export { GraphNamespaceSchema } from "@/features/authorization/schemas/GraphNamespaceSchema";
 export {
   GraphResourceSchema,
   type GraphResourceBody,
@@ -26,3 +27,11 @@ export {
   GraphSubjectSetSchema,
   type GraphSubjectSetBody,
 } from "@/features/authorization/schemas/GraphSubjectSetSchema";
+export {
+  ListRelationshipsBodySchema,
+  type ListRelationshipsBody,
+} from "@/features/authorization/schemas/ListRelationshipsBodySchema";
+export {
+  ListRelationshipsResponseSchema,
+  type ListRelationshipsResponse,
+} from "@/features/authorization/schemas/ListRelationshipsResponseSchema";

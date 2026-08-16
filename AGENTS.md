@@ -71,9 +71,28 @@ EOF
 - Use current packages only: `@pine/server`, `@pine/events` — not `server-core` / `event-bus`.
 - Load the matching skill under `tools/ai/` for orientation, features, events, GraphQL, web, release, docker, k8s, or observability.
 - **No comments in code.** Do not add `//`, `/* */`, or JSDoc unless the user explicitly asks. Prefer clear names and structure over explanatory comments.
-- **Arrow functions only.** Use `const name = (…) => { … }` / `const name = async (…) => { … }` — never `function` declarations. On classes, use arrow property methods (`method = async (…) => { … }`); constructors stay as `constructor`. Interfaces/types express callables as properties (`name: (arg: T) => R`), not method syntax.
+- **Standalone functions are arrows; class methods are not.** Module-level and other standalone functions use `const name = (…) => { … }` / `const name = async (…) => { … }` — never `function` declarations. Inside classes, use normal methods (`method(…) { … }` / `async method(…) { … }`), not arrow property methods. Constructors stay as `constructor`. Interfaces/types express callables as properties (`name: (arg: T) => R`), not method syntax.
 - **Public members first.** In classes and modules, put the constructor and public methods/functions above private/protected helpers. Keep the public surface at the top of the type or file.
 - **Never use `as` or `any`.** Ban TypeScript type assertions (`value as Foo`, `as const`, `as unknown as T`, etc.) and the `any` type (`: any`, `as any`, `<any>`, `Array<any>`, etc.). Fix types properly with generics, narrowing, unions, `unknown` + type guards, `satisfies`, or correct library typings. Do not silence type errors with casts.
+
+## Service method names — drop the repeated noun
+
+When the type, class, or module already names the subject, methods are verbs. Do not repeat the noun.
+
+| Do (on `IPlatformRoleService`) | Don't |
+| --- | --- |
+| `create` | `createPlatformRole` |
+| `getById` | `getPlatformRoleById` |
+| `list` | `listPlatformRoles` |
+| `getPermissions` | `getPermissionsForPlatformRole` |
+| `update` | `updatePlatformRole` |
+| `delete` | `deletePlatformRole` |
+
+Call sites already read as `platformRoleService.create(...)`. Keep a qualifier when there is more than one get/list (`getById` vs `get`, `getPermissions` vs `permissions`).
+
+**Keep the noun** where there is no receiver and names share a flat namespace: GraphQL fields, event types, error classes, table names, public HTTP routes. `createPlatformRole` on the schema stays; only the service method shortens.
+
+When editing a service that still uses the long form, rename that service’s methods and update its callers in the same change. Do not rename sibling services unless you are already in those files. Never rename GraphQL operations or event payloads as part of a service cleanup.
 
 ## Generated React Query hooks (web apps)
 

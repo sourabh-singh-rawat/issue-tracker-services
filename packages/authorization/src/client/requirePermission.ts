@@ -1,25 +1,26 @@
 import { permissionKey, type Permission } from "../permissions";
+import { parseResource, type ResourceKey } from "../resources";
 import { IDENTITY } from "../identities";
 import { InsufficientPermissionError } from "../errors";
 import type { IAuthorizationClient } from "./IAuthorizationClient";
-import type { ResourceReference } from "./types";
 
 export const requirePermission = async (
   client: IAuthorizationClient,
-  userId: string,
+  identityId: string,
   permission: Permission,
-  resource: ResourceReference,
+  resource: ResourceKey,
 ): Promise<void> => {
+  const object = parseResource(resource);
   const allowed = await client.checkRelationship({
-    namespace: resource.namespace,
-    object: resource.id,
+    namespace: object.namespace,
+    object: object.id,
     relation: permission,
-    subject: `${IDENTITY.name}:${userId}`,
+    subject: `${IDENTITY}:${identityId}`,
   });
 
   if (!allowed) {
     throw new InsufficientPermissionError(
-      `Missing permission: ${permissionKey(resource.namespace, permission)}`,
+      `Missing permission: ${permissionKey(object.namespace, permission)}`,
     );
   }
 };

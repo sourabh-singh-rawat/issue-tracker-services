@@ -1,13 +1,16 @@
-export type ResourceReference = {
-  namespace: string;
-  id: string;
-};
+import type { GraphNamespace } from "../types/GraphNamespace";
 
 export type CheckRelationshipInput = {
-  namespace: string;
+  namespace: GraphNamespace;
   object: string;
   relation: string;
   subject: string;
+};
+
+export type ListRelationshipsInput = {
+  namespace: GraphNamespace;
+  object: string;
+  relation?: string;
 };
 
 export interface CheckRelationshipResponse {
