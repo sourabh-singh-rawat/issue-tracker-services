@@ -1,0 +1,7 @@
+mutation CreatePlatformRelation($input: CreatePlatformRelationInput!) {
+  createPlatformRelation(input: $input) {
+    id
+    identityId
+    relation
+  }
+}

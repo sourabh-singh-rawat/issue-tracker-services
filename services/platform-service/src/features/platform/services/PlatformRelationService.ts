@@ -18,7 +18,7 @@ import { TYPES } from "@/bootstrap/container-types";
 import type { Database } from "@/db";
 import {
   InvalidPlatformRelationError,
-  PlatformMemberNotFoundError,
+  PlatformRelationNotFoundError,
 } from "@/features/platform/errors";
 import type {
   CreatePlatformRelationInput,
@@ -111,18 +111,18 @@ export class PlatformRelationService implements IPlatformRelationService {
       parts[1].length === 0 ||
       parts[2].length === 0
     ) {
-      throw new PlatformMemberNotFoundError(`Platform member not found: ${id}`);
+      throw new PlatformRelationNotFoundError(`Platform relation not found: ${id}`);
     }
 
     const relation = parts[1];
-    const memberIdentityId = parts[2];
-    const members = await this.membersFor(relation);
-    const member = members.find((item) => item.identityId === memberIdentityId);
-    if (!member) {
-      throw new PlatformMemberNotFoundError(`Platform member not found: ${id}`);
+    const subjectIdentityId = parts[2];
+    const assigned = await this.assignedFor(relation);
+    const platformRelation = assigned.find((item) => item.identityId === subjectIdentityId);
+    if (!platformRelation) {
+      throw new PlatformRelationNotFoundError(`Platform relation not found: ${id}`);
     }
 
-    return member;
+    return platformRelation;
   }
 
   async list(input: ListPlatformRelationsInput, identityId: string) {
@@ -138,18 +138,18 @@ export class PlatformRelationService implements IPlatformRelationService {
       throw new InvalidPlatformRelationError(`Invalid platform relation: ${input.relation}`);
     }
 
-    const members: PlatformRelation[] = [];
+    const platformRelations: PlatformRelation[] = [];
     for (const relation of relations) {
-      const assigned = await this.membersFor(relation);
-      for (const member of assigned) {
-        if (input.identityId !== undefined && member.identityId !== input.identityId) {
+      const assigned = await this.assignedFor(relation);
+      for (const platformRelation of assigned) {
+        if (input.identityId !== undefined && platformRelation.identityId !== input.identityId) {
           continue;
         }
-        members.push(member);
+        platformRelations.push(platformRelation);
       }
     }
 
-    return members;
+    return platformRelations;
   }
 
   async delete(id: string, identityId: string) {
@@ -169,11 +169,11 @@ export class PlatformRelationService implements IPlatformRelationService {
       parts[1].length === 0 ||
       parts[2].length === 0
     ) {
-      throw new PlatformMemberNotFoundError(`Platform member not found: ${id}`);
+      throw new PlatformRelationNotFoundError(`Platform relation not found: ${id}`);
     }
 
     const relation = parts[1];
-    const memberIdentityId = parts[2];
+    const subjectIdentityId = parts[2];
     if (relation !== ADMIN && relation !== MEMBER) {
       throw new InvalidPlatformRelationError(`Invalid platform relation: ${relation}`);
     }
@@ -181,28 +181,28 @@ export class PlatformRelationService implements IPlatformRelationService {
     await this.authorizationClient.deleteRelationship({
       object: { namespace: "platform", id: PLATFORM_OBJECT_ID },
       relation,
-      subject: { namespace: IDENTITY, id: memberIdentityId },
+      subject: { namespace: IDENTITY, id: subjectIdentityId },
     });
   }
 
-  private membersFor = async (relation: string): Promise<PlatformRelation[]> => {
+  private assignedFor = async (relation: string): Promise<PlatformRelation[]> => {
     const relationships = await this.authorizationClient.listRelationships({
       namespace: "platform",
       object: PLATFORM_OBJECT_ID,
       relation,
     });
 
-    const members: PlatformRelation[] = [];
+    const platformRelations: PlatformRelation[] = [];
     for (const relationship of relationships) {
       if (relationship.subject === undefined) {
         continue;
       }
-      members.push({
+      platformRelations.push({
         id: `${PLATFORM_OBJECT_ID}:${relation}:${relationship.subject.id}`,
         identityId: relationship.subject.id,
         relation,
       });
     }
-    return members;
+    return platformRelations;
   };
 }

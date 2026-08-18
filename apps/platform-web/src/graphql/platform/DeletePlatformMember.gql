@@ -1,3 +1,0 @@
-mutation DeletePlatformMember($id: String!) {
-  deletePlatformMember(id: $id)
-}

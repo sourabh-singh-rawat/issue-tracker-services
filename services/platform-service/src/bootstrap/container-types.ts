@@ -13,7 +13,7 @@ export const TYPES = {
   AuthorizationClient: Symbol.for("IAuthorizationClient"),
   TenantRepository: Symbol.for("ITenantRepository"),
   TenantService: Symbol.for("ITenantService"),
-  TenantMemberService: Symbol.for("ITenantMemberService"),
+  TenantRelationService: Symbol.for("ITenantRelationService"),
   OrganizationRepository: Symbol.for("IOrganizationRepository"),
   OrganizationService: Symbol.for("IOrganizationService"),
   OrganizationMemberService: Symbol.for("IOrganizationMemberService"),

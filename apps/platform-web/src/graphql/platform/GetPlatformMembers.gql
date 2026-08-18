@@ -1,7 +1,0 @@
-query GetPlatformMembers($relation: String, $identityId: String) {
-  getPlatformMembers(relation: $relation, identityId: $identityId) {
-    id
-    identityId
-    relation
-  }
-}

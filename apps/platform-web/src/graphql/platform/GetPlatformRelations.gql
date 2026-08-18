@@ -1,0 +1,7 @@
+query GetPlatformRelations($relation: String, $identityId: String) {
+  getPlatformRelations(relation: $relation, identityId: $identityId) {
+    id
+    identityId
+    relation
+  }
+}

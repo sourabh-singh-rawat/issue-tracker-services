@@ -14,7 +14,7 @@ import { Route as CallbackRouteImport } from './../routes/callback'
 import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticated/index'
 import { Route as AuthenticatedRelationsRouteImport } from './../routes/_authenticated/relations'
 import { Route as AuthenticatedTenantsRouteImport } from './../routes/_authenticated/tenants'
-import { Route as AuthenticatedPlatformRolesRoleIdRouteImport } from './../routes/_authenticated/platform-roles_.$roleId'
+import { Route as AuthenticatedRelationsRoleIdRouteImport } from './../routes/_authenticated/relations_.$roleId'
 import { Route as AuthenticatedTenantsTenantIdRouteImport } from './../routes/_authenticated/tenants_.$tenantId'
 import { Route as AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRouteImport } from './../routes/_authenticated/tenants_.$tenantId_.organizations.$organizationId'
 
@@ -42,10 +42,10 @@ const AuthenticatedTenantsRoute = AuthenticatedTenantsRouteImport.update({
   path: '/tenants',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedPlatformRolesRoleIdRoute =
-  AuthenticatedPlatformRolesRoleIdRouteImport.update({
-    id: '/platform-roles_/$roleId',
-    path: '/platform-roles/$roleId',
+const AuthenticatedRelationsRoleIdRoute =
+  AuthenticatedRelationsRoleIdRouteImport.update({
+    id: '/relations_/$roleId',
+    path: '/relations/$roleId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedTenantsTenantIdRoute =
@@ -66,7 +66,7 @@ export interface FileRoutesByFullPath {
   '/callback': typeof CallbackRoute
   '/relations': typeof AuthenticatedRelationsRoute
   '/tenants': typeof AuthenticatedTenantsRoute
-  '/platform-roles/$roleId': typeof AuthenticatedPlatformRolesRoleIdRoute
+  '/relations/$roleId': typeof AuthenticatedRelationsRoleIdRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/tenants/$tenantId/organizations/$organizationId': typeof AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute
 }
@@ -75,7 +75,7 @@ export interface FileRoutesByTo {
   '/relations': typeof AuthenticatedRelationsRoute
   '/tenants': typeof AuthenticatedTenantsRoute
   '/': typeof AuthenticatedIndexRoute
-  '/platform-roles/$roleId': typeof AuthenticatedPlatformRolesRoleIdRoute
+  '/relations/$roleId': typeof AuthenticatedRelationsRoleIdRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/tenants/$tenantId/organizations/$organizationId': typeof AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute
 }
@@ -86,7 +86,7 @@ export interface FileRoutesById {
   '/_authenticated/relations': typeof AuthenticatedRelationsRoute
   '/_authenticated/tenants': typeof AuthenticatedTenantsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/platform-roles_/$roleId': typeof AuthenticatedPlatformRolesRoleIdRoute
+  '/_authenticated/relations_/$roleId': typeof AuthenticatedRelationsRoleIdRoute
   '/_authenticated/tenants_/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/_authenticated/tenants_/$tenantId_/organizations/$organizationId': typeof AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute
 }
@@ -97,7 +97,7 @@ export interface FileRouteTypes {
     | '/callback'
     | '/relations'
     | '/tenants'
-    | '/platform-roles/$roleId'
+    | '/relations/$roleId'
     | '/tenants/$tenantId'
     | '/tenants/$tenantId/organizations/$organizationId'
   fileRoutesByTo: FileRoutesByTo
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/relations'
     | '/tenants'
     | '/'
-    | '/platform-roles/$roleId'
+    | '/relations/$roleId'
     | '/tenants/$tenantId'
     | '/tenants/$tenantId/organizations/$organizationId'
   id:
@@ -116,7 +116,7 @@ export interface FileRouteTypes {
     | '/_authenticated/relations'
     | '/_authenticated/tenants'
     | '/_authenticated/'
-    | '/_authenticated/platform-roles_/$roleId'
+    | '/_authenticated/relations_/$roleId'
     | '/_authenticated/tenants_/$tenantId'
     | '/_authenticated/tenants_/$tenantId_/organizations/$organizationId'
   fileRoutesById: FileRoutesById
@@ -163,11 +163,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTenantsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/platform-roles_/$roleId': {
-      id: '/_authenticated/platform-roles_/$roleId'
-      path: '/platform-roles/$roleId'
-      fullPath: '/platform-roles/$roleId'
-      preLoaderRoute: typeof AuthenticatedPlatformRolesRoleIdRouteImport
+    '/_authenticated/relations_/$roleId': {
+      id: '/_authenticated/relations_/$roleId'
+      path: '/relations/$roleId'
+      fullPath: '/relations/$roleId'
+      preLoaderRoute: typeof AuthenticatedRelationsRoleIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/tenants_/$tenantId': {
@@ -191,7 +191,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedRelationsRoute: typeof AuthenticatedRelationsRoute
   AuthenticatedTenantsRoute: typeof AuthenticatedTenantsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedPlatformRolesRoleIdRoute: typeof AuthenticatedPlatformRolesRoleIdRoute
+  AuthenticatedRelationsRoleIdRoute: typeof AuthenticatedRelationsRoleIdRoute
   AuthenticatedTenantsTenantIdRoute: typeof AuthenticatedTenantsTenantIdRoute
   AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute: typeof AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute
 }
@@ -200,7 +200,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedRelationsRoute: AuthenticatedRelationsRoute,
   AuthenticatedTenantsRoute: AuthenticatedTenantsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedPlatformRolesRoleIdRoute: AuthenticatedPlatformRolesRoleIdRoute,
+  AuthenticatedRelationsRoleIdRoute: AuthenticatedRelationsRoleIdRoute,
   AuthenticatedTenantsTenantIdRoute: AuthenticatedTenantsTenantIdRoute,
   AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute:
     AuthenticatedTenantsTenantIdOrganizationsOrganizationIdRoute,

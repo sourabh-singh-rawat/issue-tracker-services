@@ -1,0 +1,3 @@
+mutation DeletePlatformRelation($id: String!) {
+  deletePlatformRelation(id: $id)
+}
