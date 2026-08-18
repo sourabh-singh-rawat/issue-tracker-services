@@ -92,7 +92,7 @@ export class TenantRelationService implements ITenantRelationService {
           eventType: event.type,
           eventVersion: TenantRelationCreatedEvent.version,
           aggregateType: "tenant-relation",
-          aggregateId: tenantRelation.id,
+          aggregateId: tenantRelation.tenantId,
           payload: event,
         },
         { tx },

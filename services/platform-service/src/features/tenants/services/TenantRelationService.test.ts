@@ -44,7 +44,7 @@ describe("TenantRelationService", () => {
         eventType: TenantRelationCreatedEvent.type,
         eventVersion: TenantRelationCreatedEvent.version,
         aggregateType: "tenant-relation",
-        aggregateId: `${tenantId}:${ADMIN}:${identityId}`,
+        aggregateId: tenantId,
         payload: expect.objectContaining({
           type: TenantRelationCreatedEvent.type,
           subject: `${tenantId}:${ADMIN}:${identityId}`,

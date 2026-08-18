@@ -25,10 +25,10 @@ import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import {
-  type IOrganizationMemberService,
+  type IOrganizationRelationService,
   type IOrganizationRepository,
   type IOrganizationService,
-  OrganizationMemberService,
+  OrganizationRelationService,
   OrganizationRepository,
   OrganizationService,
 } from "@/features/organizations";
@@ -67,7 +67,7 @@ container.bind<ITenantService>(TYPES.TenantService).to(TenantService);
 container.bind<ITenantRelationService>(TYPES.TenantRelationService).to(TenantRelationService);
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
-container.bind<IOrganizationMemberService>(TYPES.OrganizationMemberService).to(OrganizationMemberService);
+container.bind<IOrganizationRelationService>(TYPES.OrganizationRelationService).to(OrganizationRelationService);
 container.bind<IPlatformRelationService>(TYPES.PlatformRelationService).to(PlatformRelationService);
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
@@ -100,7 +100,7 @@ export const bindHttpServer = async (): Promise<void> => {
           { name: "tenant-members", description: "Tenant member end-points" },
           { name: "organizations", description: "Organization end-points" },
           { name: "platform-relations", description: "Platform relation end-points" },
-          { name: "organization-members", description: "Organization member end-points" },
+          { name: "organization-relations", description: "Organization relation end-points" },
         ],
       },
       hooks: {

@@ -1,19 +1,19 @@
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
-import { OrganizationMemberObject } from "@/features/organizations/graphql/objects/OrganizationMemberObject";
-import type { IOrganizationMemberService } from "@/features/organizations/services";
+import { OrganizationRelationObject } from "@/features/organizations/graphql/objects/OrganizationRelationObject";
+import type { IOrganizationRelationService } from "@/features/organizations/services";
 
 builder.queryFields((t) => ({
-  getOrganizationMembers: t.field({
-    type: [OrganizationMemberObject],
+  getOrganizationRelations: t.field({
+    type: [OrganizationRelationObject],
     args: {
       organizationId: t.arg.string({ required: true }),
       relation: t.arg.string({ required: false }),
       identityId: t.arg.string({ required: false }),
     },
     resolve: async (_root, args, ctx) => {
-      const service = container.get<IOrganizationMemberService>(TYPES.OrganizationMemberService);
+      const service = container.get<IOrganizationRelationService>(TYPES.OrganizationRelationService);
       return service.list(
         {
           organizationId: args.organizationId,

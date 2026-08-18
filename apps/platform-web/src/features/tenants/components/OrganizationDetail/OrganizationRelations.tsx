@@ -10,19 +10,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import { useGetOrganizationMembersQuery } from "@generated/gql";
+import { useGetOrganizationRelationsQuery } from "@generated/gql";
 import { getErrorMessage } from "@shared/ui";
+import { CreateOrganizationRelationModal } from "../CreateOrganizationRelationModal";
 
 type OrganizationRelationsProps = {
   organizationId: string;
 };
 
 export const OrganizationRelations = ({ organizationId }: OrganizationRelationsProps) => {
-  const relationsQuery = useGetOrganizationMembersQuery(
+  const relationsQuery = useGetOrganizationRelationsQuery(
     { organizationId },
     {
       enabled: Boolean(organizationId),
-      select: (data) => data.getOrganizationMembers ?? [],
+      select: (data) => data.getOrganizationRelations ?? [],
     },
   );
 
@@ -30,10 +31,13 @@ export const OrganizationRelations = ({ organizationId }: OrganizationRelationsP
 
   return (
     <Stack spacing={2}>
-      <Typography color="text.secondary">
-        Graph relations for this organization. Creating an organization writes the owner relation
-        for the creator.
-      </Typography>
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center", justifyContent: "space-between" }}>
+        <Typography color="text.secondary">
+          Graph relations for this organization. Creating an organization writes the owner relation
+          for the creator.
+        </Typography>
+        <CreateOrganizationRelationModal organizationId={organizationId} />
+      </Stack>
 
       {relationsQuery.isPending ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>

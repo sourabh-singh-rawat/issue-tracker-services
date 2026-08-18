@@ -1,9 +1,13 @@
+import { OWNER, requirePermission, type IAuthorizationClient } from "@pine/authorization";
 import {
-  organizationOwnerRelationship,
-  organizationTenantRelationship,
-  requirePermission,
-  type IAuthorizationClient,
-} from "@pine/authorization";
+  CloudEvent,
+  createCloudEvent,
+  OrganizationCreatedEvent,
+  OrganizationRelationCreatedEvent,
+  type OrganizationCreatedData,
+  type OrganizationRelationCreatedData,
+} from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Database, Organization } from "@/db";
@@ -32,11 +36,13 @@ export class OrganizationService implements IOrganizationService {
     private readonly tenantRepository: ITenantRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
     @inject(TYPES.Database)
     private readonly db: Database,
   ) {}
 
-  async createOrganization(
+  async create(
     input: CreateOrganizationInput,
     identityId: string,
   ): Promise<Organization> {
@@ -94,18 +100,72 @@ export class OrganizationService implements IOrganizationService {
         { tx },
       );
 
-      await this.authorizationClient.ensureRelationship(
-        organizationOwnerRelationship(organization.id, identityId),
+      const created: CloudEvent<OrganizationCreatedData> = createCloudEvent({
+        type: OrganizationCreatedEvent.type,
+        version: OrganizationCreatedEvent.version,
+        schema: OrganizationCreatedEvent.schema,
+        source: "pine/platform-service",
+        subject: organization.id,
+        data: {
+          id: organization.id,
+          tenantId: organization.tenantId,
+          name: organization.name,
+          slug: organization.slug,
+          isActive: organization.isActive,
+          version: organization.version,
+          createdAt: organization.createdAt.toISOString(),
+          ...(organization.description != null ? { description: organization.description } : {}),
+          ...(organization.parentOrganizationId != null
+            ? { parentOrganizationId: organization.parentOrganizationId }
+            : {}),
+        },
+      });
+
+      await this.outboxService.schedule(
+        {
+          eventId: created.id,
+          eventType: created.type,
+          eventVersion: OrganizationCreatedEvent.version,
+          aggregateType: "organization",
+          aggregateId: organization.id,
+          payload: created,
+        },
+        { tx },
       );
-      await this.authorizationClient.ensureRelationship(
-        organizationTenantRelationship(organization.id, input.tenantId),
+
+      const ownerRelationId = `${organization.id}:${OWNER}:${identityId}`;
+      const ownerRelation: CloudEvent<OrganizationRelationCreatedData> = createCloudEvent({
+        type: OrganizationRelationCreatedEvent.type,
+        version: OrganizationRelationCreatedEvent.version,
+        schema: OrganizationRelationCreatedEvent.schema,
+        source: "pine/platform-service",
+        subject: ownerRelationId,
+        data: {
+          id: ownerRelationId,
+          organizationId: organization.id,
+          identityId,
+          relation: OWNER,
+          createdAt: new Date().toISOString(),
+        },
+      });
+
+      await this.outboxService.schedule(
+        {
+          eventId: ownerRelation.id,
+          eventType: ownerRelation.type,
+          eventVersion: OrganizationRelationCreatedEvent.version,
+          aggregateType: "organization-relation",
+          aggregateId: organization.id,
+          payload: ownerRelation,
+        },
+        { tx },
       );
 
       return organization;
     });
   }
 
-  async getOrganizationById(id: string, identityId: string): Promise<Organization> {
+  async getById(id: string, identityId: string): Promise<Organization> {
     await requirePermission(
       this.authorizationClient,
       identityId,
@@ -121,7 +181,7 @@ export class OrganizationService implements IOrganizationService {
     return organization;
   }
 
-  async listOrganizations(
+  async list(
     input: ListOrganizationsInput,
     identityId: string,
   ): Promise<Organization[]> {
@@ -143,7 +203,7 @@ export class OrganizationService implements IOrganizationService {
     });
   }
 
-  async updateOrganization(
+  async update(
     id: string,
     input: UpdateOrganizationInput,
     identityId: string,
@@ -174,7 +234,7 @@ export class OrganizationService implements IOrganizationService {
     return updated;
   }
 
-  async deleteOrganization(id: string, identityId: string): Promise<void> {
+  async delete(id: string, identityId: string): Promise<void> {
     await requirePermission(
       this.authorizationClient,
       identityId,

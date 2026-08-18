@@ -1,5 +1,7 @@
 export * from "./CreateOrganizationForm";
 export * from "./CreateOrganizationModal";
+export * from "./CreateOrganizationRelationForm";
+export * from "./CreateOrganizationRelationModal";
 export * from "./CreateTenantForm";
 export * from "./CreateTenantRelationForm";
 export * from "./CreateTenantRelationModal";
