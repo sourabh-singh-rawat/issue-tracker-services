@@ -3,7 +3,7 @@ import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
 import swagger from "@fastify/swagger";
 import { ErrorHandlerUtil } from "@pine/common";
-import fastify, { type FastifyInstance, type FastifyReply } from "fastify";
+import { type FastifyInstance, type FastifyReply } from "fastify";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { IGraphQLServer } from "../graphql-server/IGraphQLServer";
@@ -31,9 +31,9 @@ export class FastifyHttpServer implements IHttpServer {
   private openApiEnabled = false;
   private graphqlServer: IGraphQLServer | undefined;
 
-  constructor(options: HttpServerOptions, server?: FastifyInstance) {
+  constructor(options: HttpServerOptions, server: FastifyInstance) {
     this.options = options;
-    this.server = server ?? fastify();
+    this.server = server;
   }
 
   async start() {
