@@ -1,0 +1,8 @@
+query GetTenantRelations($tenantId: String!) {
+  getTenantRelations(tenantId: $tenantId) {
+    id
+    tenantId
+    identityId
+    relation
+  }
+}

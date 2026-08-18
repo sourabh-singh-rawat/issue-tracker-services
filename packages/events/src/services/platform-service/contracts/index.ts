@@ -1,8 +1,8 @@
-export { PlatformMemberCreatedEvent } from "./PlatformMemberCreatedEvent";
-export { PlatformMemberDeletedEvent } from "./PlatformMemberDeletedEvent";
+export { PlatformRelationCreatedEvent } from "./PlatformRelationCreatedEvent";
+export { PlatformRelationDeletedEvent } from "./PlatformRelationDeletedEvent";
 export { PlatformRolePermissionsUpdatedEvent } from "./PlatformRolePermissionsUpdatedEvent";
 export { TenantCreatedEvent } from "./TenantCreatedEvent";
 export { TenantDeletedEvent } from "./TenantDeletedEvent";
 export { TenantRolePermissionsUpdatedEvent } from "./TenantRolePermissionsUpdatedEvent";
-export { TenantMemberCreatedEvent } from "./TenantMemberCreatedEvent";
-export { TenantMemberDeletedEvent } from "./TenantMemberDeletedEvent";
+export { TenantRelationCreatedEvent } from "./TenantRelationCreatedEvent";
+export { TenantRelationDeletedEvent } from "./TenantRelationDeletedEvent";

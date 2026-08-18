@@ -1,15 +1,15 @@
 import { ADMIN } from "@pine/authorization";
 import type { ICommand } from "@pine/common";
 import type {
-  IPlatformMemberService,
-  PlatformMember,
-} from "@/features/platform/services/IPlatformMemberService";
+  IPlatformRelationService,
+  PlatformRelation,
+} from "@/features/platform/services/IPlatformRelationService";
 
-export class GrantPlatformAdmin implements ICommand<string, PlatformMember> {
-  constructor(private readonly platformMemberService: IPlatformMemberService) {}
+export class GrantPlatformAdmin implements ICommand<string, PlatformRelation> {
+  constructor(private readonly platformRelationService: IPlatformRelationService) {}
 
-  async execute(identityId: string): Promise<PlatformMember> {
-    return this.platformMemberService.create(
+  async execute(identityId: string): Promise<PlatformRelation> {
+    return this.platformRelationService.create(
       {
         relation: ADMIN,
         identityId,

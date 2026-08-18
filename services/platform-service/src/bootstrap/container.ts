@@ -32,9 +32,9 @@ import {
   OrganizationRepository,
   OrganizationService,
 } from "@/features/organizations";
-import { type IPlatformMemberService, PlatformMemberService } from "@/features/platform";
+import { type IPlatformRelationService, PlatformRelationService } from "@/features/platform";
 import { type IIdentityRepository, type IIdentityService, IdentityRepository, IdentityService, IdentitySyncConsumer } from "@/features/identities";
-import { type ITenantMemberService, TenantMemberService, type ITenantRepository, type ITenantService, TenantRepository } from "@/features/tenants";
+import { type ITenantRelationService, TenantRelationService, type ITenantRepository, type ITenantService, TenantRepository } from "@/features/tenants";
 import { TenantService } from "@/features/tenants/services/TenantService";
 import { createContext } from "@/graphql";
 import { routes } from "@/routes";
@@ -64,11 +64,11 @@ container
 container.bind<IAuthorizationClient>(TYPES.AuthorizationClient).toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
 container.bind<ITenantService>(TYPES.TenantService).to(TenantService);
-container.bind<ITenantMemberService>(TYPES.TenantMemberService).to(TenantMemberService);
+container.bind<ITenantRelationService>(TYPES.TenantRelationService).to(TenantRelationService);
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
 container.bind<IOrganizationMemberService>(TYPES.OrganizationMemberService).to(OrganizationMemberService);
-container.bind<IPlatformMemberService>(TYPES.PlatformMemberService).to(PlatformMemberService);
+container.bind<IPlatformRelationService>(TYPES.PlatformRelationService).to(PlatformRelationService);
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
 container.bind(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
@@ -99,7 +99,7 @@ export const bindHttpServer = async (): Promise<void> => {
           { name: "tenants", description: "Tenant end-points" },
           { name: "tenant-members", description: "Tenant member end-points" },
           { name: "organizations", description: "Organization end-points" },
-          { name: "platform-members", description: "Platform member end-points" },
+          { name: "platform-relations", description: "Platform relation end-points" },
           { name: "organization-members", description: "Organization member end-points" },
         ],
       },

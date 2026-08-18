@@ -14,7 +14,11 @@ import { logger } from "@/bootstrap/logger";
 import { AuthorizationService, type IAuthorizationService } from "@/features/authorization";
 import { AuthorizationProfileSyncConsumer } from "@/features/identity";
 
-import { TenantSyncConsumer } from "@/features/platform";
+import {
+  AuthorizationPlatformRelationSyncConsumer,
+  AuthorizationTenantRelationSyncConsumer,
+  AuthorizationTenantSyncConsumer,
+} from "@/features/platform";
 
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
 import {
@@ -35,7 +39,17 @@ container.bind<IAuthorizationService>(TYPES.AuthorizationService).to(Authorizati
 container
   .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
   .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
-container.bind<TenantSyncConsumer>(TYPES.TenantSyncConsumer).to(TenantSyncConsumer);
+container
+  .bind<AuthorizationTenantSyncConsumer>(TYPES.AuthorizationTenantSyncConsumer)
+  .to(AuthorizationTenantSyncConsumer);
+container
+  .bind<AuthorizationTenantRelationSyncConsumer>(TYPES.AuthorizationTenantRelationSyncConsumer)
+  .to(AuthorizationTenantRelationSyncConsumer);
+container
+  .bind<AuthorizationPlatformRelationSyncConsumer>(
+    TYPES.AuthorizationPlatformRelationSyncConsumer,
+  )
+  .to(AuthorizationPlatformRelationSyncConsumer);
 container
   .bind<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer)
   .to(AuthorizationProfileSyncConsumer);

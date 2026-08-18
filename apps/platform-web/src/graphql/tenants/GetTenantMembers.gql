@@ -1,8 +1,0 @@
-query GetTenantMembers($tenantId: String!) {
-  getTenantMembers(tenantId: $tenantId) {
-    id
-    tenantId
-    identityId
-    relation
-  }
-}

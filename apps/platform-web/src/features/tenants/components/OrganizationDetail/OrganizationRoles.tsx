@@ -18,7 +18,7 @@ export const OrganizationRoles = ({ organizationId: _organizationId }: Organizat
   return (
     <Stack spacing={2}>
       <Typography color="text.secondary">
-        Organization membership is stored as graph relations. These labels come from the
+        Organization relations are stored in the authorization graph. These labels come from the
         authorization catalog and are not persisted in platform-service.
       </Typography>
 

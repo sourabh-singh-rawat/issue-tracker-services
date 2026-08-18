@@ -6,7 +6,11 @@ export const TYPES = {
   AuthorizationClient: Symbol.for("IAuthorizationClient"),
   KetoClient: Symbol.for("KetoClient"),
   AuthorizationGraphProvider: Symbol.for("IAuthorizationGraphProvider"),
-  TenantSyncConsumer: Symbol.for("TenantSyncConsumer"),
+  AuthorizationTenantSyncConsumer: Symbol.for("AuthorizationTenantSyncConsumer"),
+  AuthorizationTenantRelationSyncConsumer: Symbol.for("AuthorizationTenantRelationSyncConsumer"),
+  AuthorizationPlatformRelationSyncConsumer: Symbol.for(
+    "AuthorizationPlatformRelationSyncConsumer",
+  ),
   AuthorizationProfileSyncConsumer: Symbol.for("AuthorizationProfileSyncConsumer"),
 
 } as const;

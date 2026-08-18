@@ -1,6 +1,6 @@
-import "@/features/platform/graphql/objects/PlatformMemberObject";
-import "@/features/platform/graphql/inputs/CreatePlatformMemberInput";
-import "@/features/platform/graphql/queries/getPlatformMember";
-import "@/features/platform/graphql/queries/getPlatformMembers";
-import "@/features/platform/graphql/mutations/createPlatformMember";
-import "@/features/platform/graphql/mutations/deletePlatformMember";
+import "@/features/platform/graphql/objects/PlatformRelationObject";
+import "@/features/platform/graphql/inputs/CreatePlatformRelationInput";
+import "@/features/platform/graphql/queries/getPlatformRelation";
+import "@/features/platform/graphql/queries/getPlatformRelations";
+import "@/features/platform/graphql/mutations/createPlatformRelation";
+import "@/features/platform/graphql/mutations/deletePlatformRelation";

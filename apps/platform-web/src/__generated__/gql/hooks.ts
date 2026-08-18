@@ -57,27 +57,27 @@ export type UpdateOrganizationMutationVariables = Exact<{
 
 export type UpdateOrganizationMutation = { updateOrganization: { id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
 
-export type CreatePlatformMemberMutationVariables = Exact<{
-  input: Types.CreatePlatformMemberInput;
+export type CreatePlatformRelationMutationVariables = Exact<{
+  input: Types.CreatePlatformRelationInput;
 }>;
 
 
-export type CreatePlatformMemberMutation = { createPlatformMember: { id: string | null, identityId: string | null, relation: string | null } | null };
+export type CreatePlatformRelationMutation = { createPlatformRelation: { id: string | null, identityId: string | null, relation: string | null } | null };
 
-export type DeletePlatformMemberMutationVariables = Exact<{
+export type DeletePlatformRelationMutationVariables = Exact<{
   id: string;
 }>;
 
 
-export type DeletePlatformMemberMutation = { deletePlatformMember: string | null };
+export type DeletePlatformRelationMutation = { deletePlatformRelation: string | null };
 
-export type GetPlatformMembersQueryVariables = Exact<{
+export type GetPlatformRelationsQueryVariables = Exact<{
   relation?: string | null | undefined;
   identityId?: string | null | undefined;
 }>;
 
 
-export type GetPlatformMembersQuery = { getPlatformMembers: Array<{ id: string | null, identityId: string | null, relation: string | null }> | null };
+export type GetPlatformRelationsQuery = { getPlatformRelations: Array<{ id: string | null, identityId: string | null, relation: string | null }> | null };
 
 export type CreateTenantMutationVariables = Exact<{
   input: Types.CreateTenantInput;
@@ -86,12 +86,12 @@ export type CreateTenantMutationVariables = Exact<{
 
 export type CreateTenantMutation = { createTenant: { id: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
 
-export type CreateTenantMemberMutationVariables = Exact<{
-  input: Types.CreateTenantMemberInput;
+export type CreateTenantRelationMutationVariables = Exact<{
+  input: Types.CreateTenantRelationInput;
 }>;
 
 
-export type CreateTenantMemberMutation = { createTenantMember: { id: string | null, tenantId: string | null, identityId: string | null, relation: string | null } | null };
+export type CreateTenantRelationMutation = { createTenantRelation: { id: string | null, tenantId: string | null, identityId: string | null, relation: string | null } | null };
 
 export type DeleteTenantMutationVariables = Exact<{
   id: string;
@@ -108,12 +108,12 @@ export type GetTenantQueryVariables = Exact<{
 
 export type GetTenantQuery = { getTenant: { id: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
 
-export type GetTenantMembersQueryVariables = Exact<{
+export type GetTenantRelationsQueryVariables = Exact<{
   tenantId: string;
 }>;
 
 
-export type GetTenantMembersQuery = { getTenantMembers: Array<{ id: string | null, tenantId: string | null, identityId: string | null, relation: string | null }> | null };
+export type GetTenantRelationsQuery = { getTenantRelations: Array<{ id: string | null, tenantId: string | null, identityId: string | null, relation: string | null }> | null };
 
 export type GetTenantsQueryVariables = Exact<{
   platformId: string;
@@ -367,9 +367,9 @@ export const useUpdateOrganizationMutation = <
 
 useUpdateOrganizationMutation.getKey = () => ['UpdateOrganization'];
 
-export const CreatePlatformMemberDocument = new TypedDocumentString(`
-    mutation CreatePlatformMember($input: CreatePlatformMemberInput!) {
-  createPlatformMember(input: $input) {
+export const CreatePlatformRelationDocument = new TypedDocumentString(`
+    mutation CreatePlatformRelation($input: CreatePlatformRelationInput!) {
+  createPlatformRelation(input: $input) {
     id
     identityId
     relation
@@ -377,45 +377,45 @@ export const CreatePlatformMemberDocument = new TypedDocumentString(`
 }
     `);
 
-export const useCreatePlatformMemberMutation = <
+export const useCreatePlatformRelationMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<CreatePlatformMemberMutation, TError, CreatePlatformMemberMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<CreatePlatformRelationMutation, TError, CreatePlatformRelationMutationVariables, TContext>) => {
     
-    return useMutation<CreatePlatformMemberMutation, TError, CreatePlatformMemberMutationVariables, TContext>(
+    return useMutation<CreatePlatformRelationMutation, TError, CreatePlatformRelationMutationVariables, TContext>(
       {
-    mutationKey: ['CreatePlatformMember'],
-    mutationFn: (variables?: CreatePlatformMemberMutationVariables) => graphQLFetcher<CreatePlatformMemberMutation, CreatePlatformMemberMutationVariables>(CreatePlatformMemberDocument, variables)(),
+    mutationKey: ['CreatePlatformRelation'],
+    mutationFn: (variables?: CreatePlatformRelationMutationVariables) => graphQLFetcher<CreatePlatformRelationMutation, CreatePlatformRelationMutationVariables>(CreatePlatformRelationDocument, variables)(),
     ...options
   }
     )};
 
-useCreatePlatformMemberMutation.getKey = () => ['CreatePlatformMember'];
+useCreatePlatformRelationMutation.getKey = () => ['CreatePlatformRelation'];
 
-export const DeletePlatformMemberDocument = new TypedDocumentString(`
-    mutation DeletePlatformMember($id: String!) {
-  deletePlatformMember(id: $id)
+export const DeletePlatformRelationDocument = new TypedDocumentString(`
+    mutation DeletePlatformRelation($id: String!) {
+  deletePlatformRelation(id: $id)
 }
     `);
 
-export const useDeletePlatformMemberMutation = <
+export const useDeletePlatformRelationMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<DeletePlatformMemberMutation, TError, DeletePlatformMemberMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<DeletePlatformRelationMutation, TError, DeletePlatformRelationMutationVariables, TContext>) => {
     
-    return useMutation<DeletePlatformMemberMutation, TError, DeletePlatformMemberMutationVariables, TContext>(
+    return useMutation<DeletePlatformRelationMutation, TError, DeletePlatformRelationMutationVariables, TContext>(
       {
-    mutationKey: ['DeletePlatformMember'],
-    mutationFn: (variables?: DeletePlatformMemberMutationVariables) => graphQLFetcher<DeletePlatformMemberMutation, DeletePlatformMemberMutationVariables>(DeletePlatformMemberDocument, variables)(),
+    mutationKey: ['DeletePlatformRelation'],
+    mutationFn: (variables?: DeletePlatformRelationMutationVariables) => graphQLFetcher<DeletePlatformRelationMutation, DeletePlatformRelationMutationVariables>(DeletePlatformRelationDocument, variables)(),
     ...options
   }
     )};
 
-useDeletePlatformMemberMutation.getKey = () => ['DeletePlatformMember'];
+useDeletePlatformRelationMutation.getKey = () => ['DeletePlatformRelation'];
 
-export const GetPlatformMembersDocument = new TypedDocumentString(`
-    query GetPlatformMembers($relation: String, $identityId: String) {
-  getPlatformMembers(relation: $relation, identityId: $identityId) {
+export const GetPlatformRelationsDocument = new TypedDocumentString(`
+    query GetPlatformRelations($relation: String, $identityId: String) {
+  getPlatformRelations(relation: $relation, identityId: $identityId) {
     id
     identityId
     relation
@@ -423,25 +423,25 @@ export const GetPlatformMembersDocument = new TypedDocumentString(`
 }
     `);
 
-export const useGetPlatformMembersQuery = <
-      TData = GetPlatformMembersQuery,
+export const useGetPlatformRelationsQuery = <
+      TData = GetPlatformRelationsQuery,
       TError = unknown
     >(
-      variables?: GetPlatformMembersQueryVariables,
-      options?: Omit<UseQueryOptions<GetPlatformMembersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetPlatformMembersQuery, TError, TData>['queryKey'] }
+      variables?: GetPlatformRelationsQueryVariables,
+      options?: Omit<UseQueryOptions<GetPlatformRelationsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetPlatformRelationsQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<GetPlatformMembersQuery, TError, TData>(
+    return useQuery<GetPlatformRelationsQuery, TError, TData>(
       {
-    queryKey: variables === undefined ? ['GetPlatformMembers'] : ['GetPlatformMembers', variables],
-    queryFn: graphQLFetcher<GetPlatformMembersQuery, GetPlatformMembersQueryVariables>(GetPlatformMembersDocument, variables),
+    queryKey: variables === undefined ? ['GetPlatformRelations'] : ['GetPlatformRelations', variables],
+    queryFn: graphQLFetcher<GetPlatformRelationsQuery, GetPlatformRelationsQueryVariables>(GetPlatformRelationsDocument, variables),
     ...options
   }
     )};
 
-useGetPlatformMembersQuery.document = GetPlatformMembersDocument;
+useGetPlatformRelationsQuery.document = GetPlatformRelationsDocument;
 
-useGetPlatformMembersQuery.getKey = (variables?: GetPlatformMembersQueryVariables) => variables === undefined ? ['GetPlatformMembers'] : ['GetPlatformMembers', variables];
+useGetPlatformRelationsQuery.getKey = (variables?: GetPlatformRelationsQueryVariables) => variables === undefined ? ['GetPlatformRelations'] : ['GetPlatformRelations', variables];
 
 export const CreateTenantDocument = new TypedDocumentString(`
     mutation CreateTenant($input: CreateTenantInput!) {
@@ -472,9 +472,9 @@ export const useCreateTenantMutation = <
 
 useCreateTenantMutation.getKey = () => ['CreateTenant'];
 
-export const CreateTenantMemberDocument = new TypedDocumentString(`
-    mutation CreateTenantMember($input: CreateTenantMemberInput!) {
-  createTenantMember(input: $input) {
+export const CreateTenantRelationDocument = new TypedDocumentString(`
+    mutation CreateTenantRelation($input: CreateTenantRelationInput!) {
+  createTenantRelation(input: $input) {
     id
     tenantId
     identityId
@@ -483,20 +483,20 @@ export const CreateTenantMemberDocument = new TypedDocumentString(`
 }
     `);
 
-export const useCreateTenantMemberMutation = <
+export const useCreateTenantRelationMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<CreateTenantMemberMutation, TError, CreateTenantMemberMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<CreateTenantRelationMutation, TError, CreateTenantRelationMutationVariables, TContext>) => {
     
-    return useMutation<CreateTenantMemberMutation, TError, CreateTenantMemberMutationVariables, TContext>(
+    return useMutation<CreateTenantRelationMutation, TError, CreateTenantRelationMutationVariables, TContext>(
       {
-    mutationKey: ['CreateTenantMember'],
-    mutationFn: (variables?: CreateTenantMemberMutationVariables) => graphQLFetcher<CreateTenantMemberMutation, CreateTenantMemberMutationVariables>(CreateTenantMemberDocument, variables)(),
+    mutationKey: ['CreateTenantRelation'],
+    mutationFn: (variables?: CreateTenantRelationMutationVariables) => graphQLFetcher<CreateTenantRelationMutation, CreateTenantRelationMutationVariables>(CreateTenantRelationDocument, variables)(),
     ...options
   }
     )};
 
-useCreateTenantMemberMutation.getKey = () => ['CreateTenantMember'];
+useCreateTenantRelationMutation.getKey = () => ['CreateTenantRelation'];
 
 export const DeleteTenantDocument = new TypedDocumentString(`
     mutation DeleteTenant($id: String!, $platformId: String!) {
@@ -553,9 +553,9 @@ useGetTenantQuery.document = GetTenantDocument;
 
 useGetTenantQuery.getKey = (variables: GetTenantQueryVariables) => ['GetTenant', variables];
 
-export const GetTenantMembersDocument = new TypedDocumentString(`
-    query GetTenantMembers($tenantId: String!) {
-  getTenantMembers(tenantId: $tenantId) {
+export const GetTenantRelationsDocument = new TypedDocumentString(`
+    query GetTenantRelations($tenantId: String!) {
+  getTenantRelations(tenantId: $tenantId) {
     id
     tenantId
     identityId
@@ -564,25 +564,25 @@ export const GetTenantMembersDocument = new TypedDocumentString(`
 }
     `);
 
-export const useGetTenantMembersQuery = <
-      TData = GetTenantMembersQuery,
+export const useGetTenantRelationsQuery = <
+      TData = GetTenantRelationsQuery,
       TError = unknown
     >(
-      variables: GetTenantMembersQueryVariables,
-      options?: Omit<UseQueryOptions<GetTenantMembersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetTenantMembersQuery, TError, TData>['queryKey'] }
+      variables: GetTenantRelationsQueryVariables,
+      options?: Omit<UseQueryOptions<GetTenantRelationsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetTenantRelationsQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<GetTenantMembersQuery, TError, TData>(
+    return useQuery<GetTenantRelationsQuery, TError, TData>(
       {
-    queryKey: ['GetTenantMembers', variables],
-    queryFn: graphQLFetcher<GetTenantMembersQuery, GetTenantMembersQueryVariables>(GetTenantMembersDocument, variables),
+    queryKey: ['GetTenantRelations', variables],
+    queryFn: graphQLFetcher<GetTenantRelationsQuery, GetTenantRelationsQueryVariables>(GetTenantRelationsDocument, variables),
     ...options
   }
     )};
 
-useGetTenantMembersQuery.document = GetTenantMembersDocument;
+useGetTenantRelationsQuery.document = GetTenantRelationsDocument;
 
-useGetTenantMembersQuery.getKey = (variables: GetTenantMembersQueryVariables) => ['GetTenantMembers', variables];
+useGetTenantRelationsQuery.getKey = (variables: GetTenantRelationsQueryVariables) => ['GetTenantRelations', variables];
 
 export const GetTenantsDocument = new TypedDocumentString(`
     query GetTenants($platformId: String!) {

@@ -16,13 +16,13 @@ import { findPlatformRoleDefinition } from "@pine/authorization";
 import { Link, useParams } from "@tanstack/react-router";
 
 export const RoleDetail = () => {
-  const { roleId } = useParams({ from: "/_authenticated/platform-roles_/$roleId" });
+  const { roleId } = useParams({ from: "/_authenticated/relations_/$roleId" });
   const role = findPlatformRoleDefinition({ id: roleId });
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 3 }}>
-        <Button component={Link} to="/platform-roles" size="small" sx={{ mb: 2, px: 0 }}>
+        <Button component={Link} to="/relations" size="small" sx={{ mb: 2, px: 0 }}>
           ← Back to platform relations
         </Button>
 

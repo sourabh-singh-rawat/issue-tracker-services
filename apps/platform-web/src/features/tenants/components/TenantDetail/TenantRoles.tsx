@@ -18,8 +18,8 @@ export const TenantRoles = ({ tenantId: _tenantId }: TenantRolesProps) => {
   return (
     <Stack spacing={2}>
       <Typography color="text.secondary">
-        Tenant membership is stored as graph relations. These labels come from the authorization
-        catalog and are not persisted in platform-service.
+        Tenant relations are stored in the authorization graph. These labels come from the
+        authorization catalog and are not persisted in platform-service.
       </Typography>
 
       <TableContainer component={Paper} variant="outlined">
