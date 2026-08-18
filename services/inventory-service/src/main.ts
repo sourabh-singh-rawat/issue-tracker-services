@@ -7,7 +7,7 @@ import { broker, container, initializeDb, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
 import { BrandSyncConsumer } from "@/features/brands";
-import { IdentitySyncConsumer } from "@/features/identities";
+import { InventoryIdentitySyncConsumer } from "@/features/identities";
 import { ProductSyncConsumer } from "@/features/products";
 
 export { container, db } from "@/bootstrap";
@@ -32,7 +32,7 @@ const main = async () => {
 
   await broker.init();
 
-  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
+  void container.get<InventoryIdentitySyncConsumer>(TYPES.InventoryIdentitySyncConsumer).start();
   void container.get<BrandSyncConsumer>(TYPES.BrandSyncConsumer).start();
   void container.get<ProductSyncConsumer>(TYPES.ProductSyncConsumer).start();
 };

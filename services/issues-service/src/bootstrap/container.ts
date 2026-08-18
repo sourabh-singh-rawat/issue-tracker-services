@@ -23,7 +23,7 @@ import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
-import { IIdentityRepository, IdentityRepository, IdentitySyncConsumer } from "@/features/identities";
+import { IIdentityRepository, IdentityRepository, IssuesIdentitySyncConsumer } from "@/features/identities";
 import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigneeRepository, IssueRepository, IssueService } from "@/features/issue";
 import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
 import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
@@ -57,7 +57,7 @@ container.bind<IStatusRepository>(TYPES.StatusRepository).to(StatusRepository);
 container.bind<IStatusService>(TYPES.StatusService).to(StatusService);
 container.bind<IProjectRepository>(TYPES.ProjectRepository).to(ProjectRepository);
 container.bind<IProjectService>(TYPES.ProjectService).to(ProjectService);
-container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
+container.bind<IssuesIdentitySyncConsumer>(TYPES.IssuesIdentitySyncConsumer).to(IssuesIdentitySyncConsumer);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({

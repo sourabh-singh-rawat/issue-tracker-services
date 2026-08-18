@@ -5,7 +5,7 @@ export const TYPES = {
   Publisher: Symbol.for("Publisher"),
   HttpServer: Symbol.for("IHttpServer"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
-  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
+  InventoryIdentitySyncConsumer: Symbol.for("InventoryIdentitySyncConsumer"),
   MeService: Symbol.for("IMeService"),
   BrandRepository: Symbol.for("IBrandRepository"),
   BrandSyncConsumer: Symbol.for("BrandSyncConsumer"),

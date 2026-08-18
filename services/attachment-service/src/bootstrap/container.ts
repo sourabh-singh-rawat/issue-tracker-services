@@ -9,7 +9,7 @@ import { logger } from "@/bootstrap/logger";
 import { imageProcessingQueue } from "@/bootstrap/queue";
 import { redisClient } from "@/bootstrap/redis-client";
 import { AttachmentRepository, AttachmentService, CoreAttachmentService, IAttachmentRepository } from "@/features/attachment";
-import { IdentitySyncConsumer, IIdentityRepository, IdentityRepository } from "@/features/identities";
+import { AttachmentIdentitySyncConsumer, IIdentityRepository, IdentityRepository } from "@/features/identities";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
@@ -25,7 +25,7 @@ container.bind(TYPES.ImageProcessingQueue).toConstantValue(imageProcessingQueue)
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IAttachmentRepository>(TYPES.AttachmentRepository).to(AttachmentRepository);
 container.bind<AttachmentService>(TYPES.AttachmentService).to(CoreAttachmentService);
-container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
+container.bind<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).to(AttachmentIdentitySyncConsumer);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({

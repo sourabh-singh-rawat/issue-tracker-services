@@ -11,7 +11,7 @@ export const TYPES = {
   RetryPolicy: Symbol.for("IRetryPolicy"),
   HttpServer: Symbol.for("IHttpServer"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
-  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
+  ProductIdentitySyncConsumer: Symbol.for("ProductIdentitySyncConsumer"),
   MeService: Symbol.for("IMeService"),
   BrandRepository: Symbol.for("IBrandRepository"),
   BrandService: Symbol.for("IBrandService"),

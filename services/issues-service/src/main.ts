@@ -5,7 +5,7 @@ import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, TYPES } from "@/bootstrap";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
-import { IdentitySyncConsumer } from "@/features/identities";
+import { IssuesIdentitySyncConsumer } from "@/features/identities";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -25,7 +25,7 @@ const main = async () => {
 
   void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
   void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
-  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
+  void container.get<IssuesIdentitySyncConsumer>(TYPES.IssuesIdentitySyncConsumer).start();
 };
 
 main().catch((error) => {

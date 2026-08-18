@@ -14,9 +14,9 @@ import type { Database } from "@/db";
 import type { IIdentityRepository } from "@/features/identities/repositories";
 
 @injectable()
-export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
+export class InventoryIdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = "product-identity-sync";
+  readonly consumer = "inventory-identity-sync";
   readonly subjects = [IdentityEmailVerifiedEvent.type];
 
   constructor(
@@ -36,9 +36,7 @@ export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerif
 
     await this.db.transaction(async (tx) => {
       const exists = await this.identityRepository.existsById(userId, { tx });
-      if (exists) {
-        return;
-      }
+      if (exists) return;
 
       await this.identityRepository.save({ id: userId }, { tx });
     });
