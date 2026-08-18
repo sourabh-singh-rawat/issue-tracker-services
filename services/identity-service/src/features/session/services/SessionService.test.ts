@@ -36,7 +36,7 @@ describe("SessionService", () => {
     getSession.mockResolvedValue(idpIdentity);
     getIdByExternalId.mockResolvedValue("identity-1");
 
-    await expect(service.getSession("token-1")).resolves.toEqual({
+    await expect(service.getIdentityFromSessionToken("token-1")).resolves.toEqual({
       id: "identity-1",
       email: "user@example.com",
       emailVerified: true,
@@ -52,7 +52,9 @@ describe("SessionService", () => {
     });
     getIdByExternalId.mockRejectedValue(new UserNotFoundError());
 
-    await expect(service.getSession("token-1")).rejects.toBeInstanceOf(UserNotFoundError);
+    await expect(service.getIdentityFromSessionToken("token-1")).rejects.toBeInstanceOf(
+      UserNotFoundError,
+    );
   });
 
   it("returns the local identity from an active OAuth access token", async () => {
@@ -67,7 +69,7 @@ describe("SessionService", () => {
       updatedAt: null,
     });
 
-    await expect(service.getSessionFromAccessToken("access-token-1")).resolves.toEqual({
+    await expect(service.getIdentityFromAccessToken("access-token-1")).resolves.toEqual({
       id: "identity-1",
       email: "oauth@example.com",
       emailVerified: true,
@@ -87,7 +89,7 @@ describe("SessionService", () => {
       updatedAt: null,
     });
 
-    await expect(service.getSessionFromAccessToken("access-token-2")).resolves.toEqual({
+    await expect(service.getIdentityFromAccessToken("access-token-2")).resolves.toEqual({
       id: "identity-2",
       email: "",
       emailVerified: false,
@@ -97,7 +99,7 @@ describe("SessionService", () => {
   it("throws when the access token is inactive", async () => {
     introspectToken.mockResolvedValue({ active: false });
 
-    await expect(service.getSessionFromAccessToken("dead-token")).rejects.toBeInstanceOf(
+    await expect(service.getIdentityFromAccessToken("dead-token")).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
     expect(getById).not.toHaveBeenCalled();
@@ -106,7 +108,7 @@ describe("SessionService", () => {
   it("throws when the access token has no subject", async () => {
     introspectToken.mockResolvedValue({ active: true });
 
-    await expect(service.getSessionFromAccessToken("no-sub")).rejects.toBeInstanceOf(
+    await expect(service.getIdentityFromAccessToken("no-sub")).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
     expect(getById).not.toHaveBeenCalled();
@@ -119,7 +121,7 @@ describe("SessionService", () => {
     });
     getById.mockRejectedValue(new UserNotFoundError());
 
-    await expect(service.getSessionFromAccessToken("access-token-3")).rejects.toBeInstanceOf(
+    await expect(service.getIdentityFromAccessToken("access-token-3")).rejects.toBeInstanceOf(
       UserNotFoundError,
     );
   });

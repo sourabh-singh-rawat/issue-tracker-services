@@ -98,6 +98,55 @@ describe("updateProfileName mutation", () => {
     expect(response).toEqual(updated);
   });
 
+  it("throws when the GraphQL context has no authenticated user", async () => {
+    const updateName = vi.fn();
+    get.mockReturnValue({ updateName });
+
+    let resolve:
+      | ((
+          root: unknown,
+          args: {
+            input: {
+              firstName: string;
+              middleName?: string | null;
+              lastName?: string | null;
+            };
+          },
+          ctx: { user?: { id: string } },
+        ) => Promise<unknown>)
+      | undefined;
+
+    mutationFields.mockImplementation((fn: (t: unknown) => unknown) => {
+      const t = {
+        field: (config: {
+          resolve: (
+            root: unknown,
+            args: {
+              input: {
+                firstName: string;
+                middleName?: string | null;
+                lastName?: string | null;
+              };
+            },
+            ctx: { user?: { id: string } },
+          ) => Promise<unknown>;
+        }) => {
+          resolve = config.resolve;
+          return config;
+        },
+        arg: (opts: unknown) => opts,
+      };
+      return fn(t);
+    });
+
+    await import("@/features/profiles/graphql/mutations/updateProfileName");
+
+    await expect(
+      resolve!(null, { input: { firstName: "Ada" } }, {}),
+    ).rejects.toThrow("No active session");
+    expect(updateName).not.toHaveBeenCalled();
+  });
+
   it("keeps expected fields on UpdateProfileNameInput", async () => {
     await import("@/features/profiles/graphql/inputs/UpdateProfileNameInput");
 

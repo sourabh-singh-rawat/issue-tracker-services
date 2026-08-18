@@ -8,6 +8,7 @@ export {
   PLATFORM_OBJECT_ID,
   PLATFORM_TENANT,
   PRODUCT_ORGANIZATION,
+  PROFILE_IDENTITY,
   ROLE_MEMBER,
   TENANT_PLATFORM,
 } from "./names";
@@ -17,6 +18,7 @@ export {
   platformAdminRelationship,
   platformMemberRelationship,
   platformTenantRelationship,
+  profileIdentityRelationship,
   tenantAdminRelationship,
   tenantMemberRelationship,
   tenantOwnerRelationship,

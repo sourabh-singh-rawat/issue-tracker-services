@@ -17,7 +17,7 @@ export class SessionService implements ISessionService {
     private readonly identityService: IIdentityService,
   ) {}
 
-  async getSession(sessionToken: string): Promise<Identity> {
+  async getIdentityFromSessionToken(sessionToken: string): Promise<Identity> {
     const idpIdentity = await this.sessionProvider.getSession(sessionToken);
     const identityId = await this.identityService.getIdByExternalId(idpIdentity.id);
 
@@ -28,7 +28,7 @@ export class SessionService implements ISessionService {
     };
   }
 
-  async getSessionFromAccessToken(accessToken: string): Promise<Identity> {
+  async getIdentityFromAccessToken(accessToken: string): Promise<Identity> {
     const introspection = await this.oauthTokenProvider.introspectToken(accessToken);
 
     if (!introspection.active || !introspection.subject) {
@@ -40,12 +40,13 @@ export class SessionService implements ISessionService {
     const extra = introspection.extra ?? {};
     const email =
       typeof extra.email === "string" && extra.email.length > 0 ? extra.email : undefined;
-    const emailVerified =
-      typeof extra.email_verified === "boolean"
-        ? extra.email_verified
-        : typeof extra.emailVerified === "boolean"
-          ? extra.emailVerified
-          : undefined;
+
+    let emailVerified: boolean | undefined;
+    if (typeof extra.email_verified === "boolean") {
+      emailVerified = extra.email_verified;
+    } else if (typeof extra.emailVerified === "boolean") {
+      emailVerified = extra.emailVerified;
+    }
 
     return {
       id: identity.id,

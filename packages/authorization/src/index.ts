@@ -51,7 +51,7 @@ export {
 export type { GraphNamespace, GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
 export { GRAPH_NAMESPACES, isGraphNamespace } from "./types";
 
-export { IDENTITY } from "./identities";
+export { IDENTITY, PROFILE } from "./identities";
 export {
   ADMIN,
   BRAND_PRODUCT,
@@ -62,6 +62,7 @@ export {
   PLATFORM_OBJECT_ID,
   PLATFORM_TENANT,
   PRODUCT_ORGANIZATION,
+  PROFILE_IDENTITY,
   ROLE_MEMBER,
   TENANT_PLATFORM,
   organizationOwnerRelationship,
@@ -69,6 +70,7 @@ export {
   platformAdminRelationship,
   platformMemberRelationship,
   platformTenantRelationship,
+  profileIdentityRelationship,
   tenantAdminRelationship,
   tenantMemberRelationship,
   tenantOwnerRelationship,
