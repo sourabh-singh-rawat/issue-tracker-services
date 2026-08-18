@@ -1,5 +1,6 @@
 export type GraphNamespace =
   | "identity"
+  | "profile"
   | "platform"
   | "tenant"
   | "organization"
@@ -10,6 +11,7 @@ export type GraphNamespace =
 
 export const GRAPH_NAMESPACES: readonly GraphNamespace[] = [
   "identity",
+  "profile",
   "platform",
   "tenant",
   "organization",

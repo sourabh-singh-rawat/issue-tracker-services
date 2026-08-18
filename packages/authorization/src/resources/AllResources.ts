@@ -1,4 +1,5 @@
 export type Resource =
+  | "profile"
   | "platform"
   | "tenant"
   | "organization"
@@ -10,6 +11,7 @@ export type Resource =
 export type ResourceKey = `${Resource}:${string}`;
 
 export const RESOURCES: readonly Resource[] = [
+  "profile",
   "platform",
   "tenant",
   "organization",

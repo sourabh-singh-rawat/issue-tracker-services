@@ -41,7 +41,7 @@ export const getIdentityFromAccessToken: HttpRoute = {
     }
 
     const service = container.get<ISessionService>(TYPES.SessionService);
-    const identity = await service.getSessionFromAccessToken(accessToken);
+    const identity = await service.getIdentityFromAccessToken(accessToken);
 
     const response: GetIdentityFromAccessTokenResponse = {
       identity: {

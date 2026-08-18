@@ -32,12 +32,12 @@ describe("getIdentityFromSession route", () => {
   });
 
   it("returns the identity for a valid session cookie", async () => {
-    const getSessionFn = vi.fn().mockResolvedValue({
+    const getIdentityFromSessionToken = vi.fn().mockResolvedValue({
       id: "identity-1",
       email: "a@b.com",
       emailVerified: true,
     });
-    get.mockReturnValue({ getSession: getSessionFn });
+    get.mockReturnValue({ getIdentityFromSessionToken });
 
     const response = await getIdentityFromSession.handler(
       httpRequest({
@@ -46,7 +46,7 @@ describe("getIdentityFromSession route", () => {
     );
 
     expect(get).toHaveBeenCalledWith(TYPES.SessionService);
-    expect(getSessionFn).toHaveBeenCalledWith("session-token-1");
+    expect(getIdentityFromSessionToken).toHaveBeenCalledWith("session-token-1");
     expect(response).toEqual({
       status: 200,
       body: {
@@ -60,13 +60,13 @@ describe("getIdentityFromSession route", () => {
   });
 
   it("throws InvalidCredentialError when the session cookie is missing", async () => {
-    const getSessionFn = vi.fn();
-    get.mockReturnValue({ getSession: getSessionFn });
+    const getIdentityFromSessionToken = vi.fn();
+    get.mockReturnValue({ getIdentityFromSessionToken });
 
     await expect(getIdentityFromSession.handler(httpRequest({ cookies: {} }))).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
 
-    expect(getSessionFn).not.toHaveBeenCalled();
+    expect(getIdentityFromSessionToken).not.toHaveBeenCalled();
   });
 });

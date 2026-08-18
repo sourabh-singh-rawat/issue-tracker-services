@@ -30,7 +30,7 @@ export const getIdentityFromSession: HttpRoute = {
     }
 
     const service = container.get<ISessionService>(TYPES.SessionService);
-    const identity = await service.getSession(sessionToken);
+    const identity = await service.getIdentityFromSessionToken(sessionToken);
 
     const response: GetIdentityFromSessionResponse = {
       identity: {

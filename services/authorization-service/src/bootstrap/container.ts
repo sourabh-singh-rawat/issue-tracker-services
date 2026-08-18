@@ -12,6 +12,8 @@ import { env } from "@/bootstrap/env";
 import { ketoClient } from "@/bootstrap/keto-client";
 import { logger } from "@/bootstrap/logger";
 import { AuthorizationService, type IAuthorizationService } from "@/features/authorization";
+import { AuthorizationProfileSyncConsumer } from "@/features/identity";
+
 import { TenantSyncConsumer } from "@/features/platform";
 
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
@@ -34,6 +36,10 @@ container
   .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
   .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<TenantSyncConsumer>(TYPES.TenantSyncConsumer).to(TenantSyncConsumer);
+container
+  .bind<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer)
+  .to(AuthorizationProfileSyncConsumer);
+
 
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(

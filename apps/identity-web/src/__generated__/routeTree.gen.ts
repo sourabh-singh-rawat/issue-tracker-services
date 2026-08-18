@@ -9,12 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
+import { Route as IndexRouteImport } from './../routes/index'
 import { Route as noAuthConsentRouteImport } from './../routes/(no-auth)/consent'
 import { Route as noAuthRegistrationRouteImport } from './../routes/(no-auth)/registration'
 import { Route as noAuthResendVerificationRouteImport } from './../routes/(no-auth)/resend-verification'
 import { Route as noAuthSigninRouteImport } from './../routes/(no-auth)/signin'
 import { Route as noAuthVerificationRouteImport } from './../routes/(no-auth)/verification'
+import { Route as NameIndexRouteImport } from './../routes/name/index'
+import { Route as NameEditRouteImport } from './../routes/name/edit'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const noAuthConsentRoute = noAuthConsentRouteImport.update({
   id: '/(no-auth)/consent',
   path: '/consent',
@@ -41,63 +49,101 @@ const noAuthVerificationRoute = noAuthVerificationRouteImport.update({
   path: '/verification',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NameIndexRoute = NameIndexRouteImport.update({
+  id: '/name/',
+  path: '/name/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NameEditRoute = NameEditRouteImport.update({
+  id: '/name/edit',
+  path: '/name/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/consent': typeof noAuthConsentRoute
   '/registration': typeof noAuthRegistrationRoute
   '/resend-verification': typeof noAuthResendVerificationRoute
   '/signin': typeof noAuthSigninRoute
   '/verification': typeof noAuthVerificationRoute
+  '/name/edit': typeof NameEditRoute
+  '/name/': typeof NameIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/consent': typeof noAuthConsentRoute
   '/registration': typeof noAuthRegistrationRoute
   '/resend-verification': typeof noAuthResendVerificationRoute
   '/signin': typeof noAuthSigninRoute
   '/verification': typeof noAuthVerificationRoute
+  '/name/edit': typeof NameEditRoute
+  '/name': typeof NameIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/(no-auth)/consent': typeof noAuthConsentRoute
   '/(no-auth)/registration': typeof noAuthRegistrationRoute
   '/(no-auth)/resend-verification': typeof noAuthResendVerificationRoute
   '/(no-auth)/signin': typeof noAuthSigninRoute
   '/(no-auth)/verification': typeof noAuthVerificationRoute
+  '/name/edit': typeof NameEditRoute
+  '/name/': typeof NameIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/consent'
     | '/registration'
     | '/resend-verification'
     | '/signin'
     | '/verification'
+    | '/name/edit'
+    | '/name/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/consent'
     | '/registration'
     | '/resend-verification'
     | '/signin'
     | '/verification'
+    | '/name/edit'
+    | '/name'
   id:
     | '__root__'
+    | '/'
     | '/(no-auth)/consent'
     | '/(no-auth)/registration'
     | '/(no-auth)/resend-verification'
     | '/(no-auth)/signin'
     | '/(no-auth)/verification'
+    | '/name/edit'
+    | '/name/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   noAuthConsentRoute: typeof noAuthConsentRoute
   noAuthRegistrationRoute: typeof noAuthRegistrationRoute
   noAuthResendVerificationRoute: typeof noAuthResendVerificationRoute
   noAuthSigninRoute: typeof noAuthSigninRoute
   noAuthVerificationRoute: typeof noAuthVerificationRoute
+  NameEditRoute: typeof NameEditRoute
+  NameIndexRoute: typeof NameIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(no-auth)/consent': {
       id: '/(no-auth)/consent'
       path: '/consent'
@@ -133,15 +179,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof noAuthVerificationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/name/': {
+      id: '/name/'
+      path: '/name'
+      fullPath: '/name/'
+      preLoaderRoute: typeof NameIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/name/edit': {
+      id: '/name/edit'
+      path: '/name/edit'
+      fullPath: '/name/edit'
+      preLoaderRoute: typeof NameEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   noAuthConsentRoute: noAuthConsentRoute,
   noAuthRegistrationRoute: noAuthRegistrationRoute,
   noAuthResendVerificationRoute: noAuthResendVerificationRoute,
   noAuthSigninRoute: noAuthSigninRoute,
   noAuthVerificationRoute: noAuthVerificationRoute,
+  NameEditRoute: NameEditRoute,
+  NameIndexRoute: NameIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

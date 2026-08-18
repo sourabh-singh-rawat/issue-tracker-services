@@ -3,6 +3,17 @@ import { Context, Namespace } from "@ory/keto-namespace-types";
 
 export class identity implements Namespace {} // NOSONAR typescript:S101
 
+export class profile implements Namespace { // NOSONAR typescript:S101
+  related: {
+    identity: identity[];
+  };
+
+  permits = {
+    read: (ctx: Context): boolean => this.related.identity.includes(ctx.subject),
+    update: (ctx: Context): boolean => this.related.identity.includes(ctx.subject),
+  };
+}
+
 export class platform implements Namespace { // NOSONAR typescript:S101
   related: {
     admin: identity[];

@@ -32,12 +32,12 @@ describe("getIdentityFromAccessToken route", () => {
   });
 
   it("returns the identity for a valid bearer access token", async () => {
-    const getSessionFromAccessToken = vi.fn().mockResolvedValue({
+    const getIdentityFromAccessTokenFn = vi.fn().mockResolvedValue({
       id: "identity-1",
       email: "a@b.com",
       emailVerified: true,
     });
-    get.mockReturnValue({ getSessionFromAccessToken });
+    get.mockReturnValue({ getIdentityFromAccessToken: getIdentityFromAccessTokenFn });
 
     const response = await getIdentityFromAccessToken.handler(
       httpRequest({
@@ -46,7 +46,7 @@ describe("getIdentityFromAccessToken route", () => {
     );
 
     expect(get).toHaveBeenCalledWith(TYPES.SessionService);
-    expect(getSessionFromAccessToken).toHaveBeenCalledWith("access-token-1");
+    expect(getIdentityFromAccessTokenFn).toHaveBeenCalledWith("access-token-1");
     expect(response).toEqual({
       status: 200,
       body: {
@@ -60,13 +60,13 @@ describe("getIdentityFromAccessToken route", () => {
   });
 
   it("throws InvalidCredentialError when the Authorization header is missing", async () => {
-    const getSessionFromAccessToken = vi.fn();
-    get.mockReturnValue({ getSessionFromAccessToken });
+    const getIdentityFromAccessTokenFn = vi.fn();
+    get.mockReturnValue({ getIdentityFromAccessToken: getIdentityFromAccessTokenFn });
 
     await expect(
       getIdentityFromAccessToken.handler(httpRequest({ headers: {} })),
     ).rejects.toBeInstanceOf(InvalidCredentialError);
 
-    expect(getSessionFromAccessToken).not.toHaveBeenCalled();
+    expect(getIdentityFromAccessTokenFn).not.toHaveBeenCalled();
   });
 });

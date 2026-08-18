@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, createAttachment, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CreateAttachmentData, CreateAttachmentError, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -119,16 +119,16 @@ export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => 
  */
 export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
 
-export const getSessionIdentityQueryKey = (options?: Options<GetSessionIdentityData>) => createQueryKey('getSessionIdentity', options);
+export const getIdentityFromSessionQueryKey = (options?: Options<GetIdentityFromSessionData>) => createQueryKey('getIdentityFromSession', options);
 
 /**
  * Resolve session identity
  *
- * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const getSessionIdentityOptions = (options?: Options<GetSessionIdentityData>) => queryOptions<GetSessionIdentityResponse, AxiosError<DefaultError>, GetSessionIdentityResponse, ReturnType<typeof getSessionIdentityQueryKey>>({
+export const getIdentityFromSessionOptions = (options?: Options<GetIdentityFromSessionData>) => queryOptions<GetIdentityFromSessionResponse, AxiosError<DefaultError>, GetIdentityFromSessionResponse, ReturnType<typeof getIdentityFromSessionQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getSessionIdentity({
+        const { data } = await getIdentityFromSession({
             ...options,
             ...queryKey[0],
             signal,
@@ -136,26 +136,26 @@ export const getSessionIdentityOptions = (options?: Options<GetSessionIdentityDa
         });
         return data;
     },
-    queryKey: getSessionIdentityQueryKey(options)
+    queryKey: getIdentityFromSessionQueryKey(options)
 });
 
 /**
  * Resolve session identity
  *
- * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const useGetSessionIdentityQuery = (options?: Options<GetSessionIdentityData>) => useQuery(getSessionIdentityOptions(options));
+export const useGetIdentityFromSessionQuery = (options?: Options<GetIdentityFromSessionData>) => useQuery(getIdentityFromSessionOptions(options));
 
-export const getTokenSessionIdentityQueryKey = (options?: Options<GetTokenSessionIdentityData>) => createQueryKey('getTokenSessionIdentity', options);
+export const getIdentityFromAccessTokenQueryKey = (options?: Options<GetIdentityFromAccessTokenData>) => createQueryKey('getIdentityFromAccessToken', options);
 
 /**
  * Resolve identity from OAuth access token
  *
- * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const getTokenSessionIdentityOptions = (options?: Options<GetTokenSessionIdentityData>) => queryOptions<GetTokenSessionIdentityResponse, AxiosError<DefaultError>, GetTokenSessionIdentityResponse, ReturnType<typeof getTokenSessionIdentityQueryKey>>({
+export const getIdentityFromAccessTokenOptions = (options?: Options<GetIdentityFromAccessTokenData>) => queryOptions<GetIdentityFromAccessTokenResponse, AxiosError<DefaultError>, GetIdentityFromAccessTokenResponse, ReturnType<typeof getIdentityFromAccessTokenQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getTokenSessionIdentity({
+        const { data } = await getIdentityFromAccessToken({
             ...options,
             ...queryKey[0],
             signal,
@@ -163,15 +163,15 @@ export const getTokenSessionIdentityOptions = (options?: Options<GetTokenSession
         });
         return data;
     },
-    queryKey: getTokenSessionIdentityQueryKey(options)
+    queryKey: getIdentityFromAccessTokenQueryKey(options)
 });
 
 /**
  * Resolve identity from OAuth access token
  *
- * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const useGetTokenSessionIdentityQuery = (options?: Options<GetTokenSessionIdentityData>) => useQuery(getTokenSessionIdentityOptions(options));
+export const useGetIdentityFromAccessTokenQuery = (options?: Options<GetIdentityFromAccessTokenData>) => useQuery(getIdentityFromAccessTokenOptions(options));
 
 export const authorizeQueryKey = (options: Options<AuthorizeData>) => createQueryKey('authorize', options);
 
@@ -409,3 +409,107 @@ export const createAttachmentMutation = (options?: Partial<Options<CreateAttachm
  * Create a new issue attachment
  */
 export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>>, 'mutationFn'>>) => useMutation({ ...createAttachmentMutation(), ...mutationOptions });
+
+/**
+ * Check a graph relationship
+ *
+ * Check a Keto permission: namespace, object, relation, and subject (subject_id, e.g. identity:<id>).
+ */
+export const checkRelationshipMutation = (options?: Partial<Options<CheckRelationshipData>>): UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>> => {
+    const mutationOptions: UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await checkRelationship({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Check a graph relationship
+ *
+ * Check a Keto permission: namespace, object, relation, and subject (subject_id, e.g. identity:<id>).
+ */
+export const useCheckRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<CheckRelationshipResponse, AxiosError<DefaultError>, Options<CheckRelationshipData>>, 'mutationFn'>>) => useMutation({ ...checkRelationshipMutation(), ...mutationOptions });
+
+/**
+ * Ensure a graph relationship exists
+ *
+ * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant permissions and role members.
+ */
+export const ensureRelationshipMutation = (options?: Partial<Options<EnsureRelationshipData>>): UseMutationOptions<EnsureRelationshipResponse, AxiosError<DefaultError>, Options<EnsureRelationshipData>> => {
+    const mutationOptions: UseMutationOptions<EnsureRelationshipResponse, AxiosError<DefaultError>, Options<EnsureRelationshipData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await ensureRelationship({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Ensure a graph relationship exists
+ *
+ * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant permissions and role members.
+ */
+export const useEnsureRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<EnsureRelationshipResponse, AxiosError<DefaultError>, Options<EnsureRelationshipData>>, 'mutationFn'>>) => useMutation({ ...ensureRelationshipMutation(), ...mutationOptions });
+
+/**
+ * Delete a graph relationship
+ *
+ * Idempotently delete a relationship from the authorization graph (Ory Keto).
+ */
+export const deleteRelationshipMutation = (options?: Partial<Options<DeleteRelationshipData>>): UseMutationOptions<DeleteRelationshipResponse, AxiosError<DefaultError>, Options<DeleteRelationshipData>> => {
+    const mutationOptions: UseMutationOptions<DeleteRelationshipResponse, AxiosError<DefaultError>, Options<DeleteRelationshipData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await deleteRelationship({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Delete a graph relationship
+ *
+ * Idempotently delete a relationship from the authorization graph (Ory Keto).
+ */
+export const useDeleteRelationshipMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<DeleteRelationshipResponse, AxiosError<DefaultError>, Options<DeleteRelationshipData>>, 'mutationFn'>>) => useMutation({ ...deleteRelationshipMutation(), ...mutationOptions });
+
+/**
+ * List graph relationships
+ *
+ * List stored relationships for an object in the authorization graph.
+ */
+export const listRelationshipsMutation = (options?: Partial<Options<ListRelationshipsData>>): UseMutationOptions<ListRelationshipsResponse, AxiosError<DefaultError>, Options<ListRelationshipsData>> => {
+    const mutationOptions: UseMutationOptions<ListRelationshipsResponse, AxiosError<DefaultError>, Options<ListRelationshipsData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await listRelationships({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * List graph relationships
+ *
+ * List stored relationships for an object in the authorization graph.
+ */
+export const useListRelationshipsMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ListRelationshipsResponse, AxiosError<DefaultError>, Options<ListRelationshipsData>>, 'mutationFn'>>) => useMutation({ ...listRelationshipsMutation(), ...mutationOptions });

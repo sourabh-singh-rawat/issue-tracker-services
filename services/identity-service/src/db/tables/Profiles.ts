@@ -3,7 +3,7 @@ import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { auditColumns, idColumn } from "@/db/columns";
 import { Identities } from "@/db/tables/Identities";
 
-export const IdentityProfiles = pgTable("identity_profiles", {
+export const Profiles = pgTable("profiles", {
   ...idColumn,
   identityId: uuid("identity_id")
     .notNull()
@@ -11,17 +11,18 @@ export const IdentityProfiles = pgTable("identity_profiles", {
   firstName: text("first_name").notNull(),
   middleName: text("middle_name"),
   lastName: text("last_name"),
+  gender: text("gender"),
   description: text("description"),
   photoUrl: text("photo_url"),
   ...auditColumns,
 });
 
-export const IdentityProfilesRelations = relations(IdentityProfiles, ({ one }) => ({
+export const ProfilesRelations = relations(Profiles, ({ one }) => ({
   identity: one(Identities, {
-    fields: [IdentityProfiles.identityId],
+    fields: [Profiles.identityId],
     references: [Identities.id],
   }),
 }));
 
-export type IdentityProfile = typeof IdentityProfiles.$inferSelect;
-export type NewIdentityProfile = typeof IdentityProfiles.$inferInsert;
+export type Profile = typeof Profiles.$inferSelect;
+export type NewProfile = typeof Profiles.$inferInsert;

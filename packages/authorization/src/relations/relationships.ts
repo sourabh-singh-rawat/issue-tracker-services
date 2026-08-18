@@ -78,3 +78,4 @@ export const organizationTenantRelationship = (
   relation: ORGANIZATION_TENANT,
   subject: { namespace: "tenant", id: tenantId },
 });
+

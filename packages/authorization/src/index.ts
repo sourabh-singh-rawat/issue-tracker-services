@@ -4,6 +4,7 @@ export { RESOURCES, isResource, parseResource, tryParseResource } from "./resour
 export type {
   Permission,
   PermissionKey,
+  ProfilePermission,
   PlatformPermission,
   TenantPermission,
   OrganizationPermission,
@@ -16,6 +17,7 @@ export {
   permissionKey,
   parsePermission,
   tryParsePermission,
+  PROFILE_PERMISSIONS,
   PLATFORM_PERMISSIONS,
   TENANT_PERMISSIONS,
   ORGANIZATION_PERMISSIONS,
@@ -51,7 +53,7 @@ export {
 export type { GraphNamespace, GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
 export { GRAPH_NAMESPACES, isGraphNamespace } from "./types";
 
-export { IDENTITY } from "./identities";
+export { IDENTITY, PROFILE } from "./identities";
 export {
   ADMIN,
   BRAND_PRODUCT,

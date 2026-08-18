@@ -12,6 +12,7 @@ export const EnvSchema = Type.Object({
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
   IDENTITY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5000" }),
+  AUTHORIZATION_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5006" }),
   IDENTITY_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),

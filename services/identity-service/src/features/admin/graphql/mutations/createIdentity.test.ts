@@ -34,8 +34,8 @@ describe("createIdentity mutation", () => {
   it("creates the identity via AdminService and returns the local identity", async () => {
     const created = {
       id: "identity-1",
-      idpId: "idp-1",
-      idpProvider: "kratos",
+      createdAt: new Date("2026-01-01"),
+      updatedAt: null,
     };
     const createIdentityFn = vi.fn().mockResolvedValue(created);
     get.mockReturnValue({ createIdentity: createIdentityFn });

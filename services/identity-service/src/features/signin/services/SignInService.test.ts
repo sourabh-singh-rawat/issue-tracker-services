@@ -11,12 +11,6 @@ describe("SignInService", () => {
     expiresAt: new Date("2030-01-01T00:00:00.000Z"),
   };
 
-  const localIdentity = {
-    id: "identity-1",
-    idpId: "idp-1",
-    idpProvider: "kratos",
-  };
-
   const resolvedSignInResult = {
     ...idpSignInResult,
     identity: {
@@ -34,7 +28,7 @@ describe("SignInService", () => {
       acceptLoginRequest: vi.fn(),
     };
     const identityService = {
-      getIdentityByIdpId: vi.fn().mockResolvedValue(localIdentity),
+      getIdByExternalId: vi.fn().mockResolvedValue("identity-1"),
     };
 
     const service = new SignInService(
@@ -51,7 +45,7 @@ describe("SignInService", () => {
       email: "a@b.com",
       password: "password",
     });
-    expect(identityService.getIdentityByIdpId).toHaveBeenCalledWith("idp-1");
+    expect(identityService.getIdByExternalId).toHaveBeenCalledWith("idp-1");
     expect(oauthProvider.acceptLoginRequest).not.toHaveBeenCalled();
   });
 
@@ -65,7 +59,7 @@ describe("SignInService", () => {
       }),
     };
     const identityService = {
-      getIdentityByIdpId: vi.fn().mockResolvedValue(localIdentity),
+      getIdByExternalId: vi.fn().mockResolvedValue("identity-1"),
     };
 
     const service = new SignInService(
@@ -100,7 +94,7 @@ describe("SignInService", () => {
       acceptLoginRequest: vi.fn(),
     };
     const identityService = {
-      getIdentityByIdpId: vi.fn().mockRejectedValue(new UserNotFoundError()),
+      getIdByExternalId: vi.fn().mockRejectedValue(new UserNotFoundError()),
     };
 
     const service = new SignInService(
@@ -124,7 +118,7 @@ describe("SignInService", () => {
       acceptLoginRequest: vi.fn(),
     };
     const identityService = {
-      getIdentityByIdpId: vi.fn(),
+      getIdByExternalId: vi.fn(),
     };
 
     const service = new SignInService(
@@ -141,7 +135,7 @@ describe("SignInService", () => {
       email: "a@b.com",
       password: "wrong",
     });
-    expect(identityService.getIdentityByIdpId).not.toHaveBeenCalled();
+    expect(identityService.getIdByExternalId).not.toHaveBeenCalled();
     expect(oauthProvider.acceptLoginRequest).not.toHaveBeenCalled();
   });
 
@@ -153,7 +147,7 @@ describe("SignInService", () => {
       acceptLoginRequest: vi.fn(),
     };
     const identityService = {
-      getIdentityByIdpId: vi.fn(),
+      getIdByExternalId: vi.fn(),
     };
 
     const service = new SignInService(
@@ -166,7 +160,7 @@ describe("SignInService", () => {
       service.signInWithEmailAndPassword({ email: "a@b.com", password: "password" }),
     ).rejects.toBeInstanceOf(IdentityProviderUnavailableError);
 
-    expect(identityService.getIdentityByIdpId).not.toHaveBeenCalled();
+    expect(identityService.getIdByExternalId).not.toHaveBeenCalled();
     expect(oauthProvider.acceptLoginRequest).not.toHaveBeenCalled();
   });
 });

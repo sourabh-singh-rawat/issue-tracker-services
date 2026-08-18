@@ -175,8 +175,6 @@ export type IdentityObject = {
   __typename?: 'IdentityObject';
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  idpId?: Maybe<Scalars['String']['output']>;
-  idpProvider?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -223,6 +221,8 @@ export type Mutation = {
   updateCategory?: Maybe<CategoryObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
   updateOrganization?: Maybe<OrganizationObject>;
+  updateProfileGender?: Maybe<ProfileObject>;
+  updateProfileName?: Maybe<ProfileObject>;
   updateUnit?: Maybe<UnitObject>;
 };
 
@@ -359,6 +359,16 @@ export type MutationUpdateOrganizationArgs = {
 };
 
 
+export type MutationUpdateProfileGenderArgs = {
+  input: UpdateProfileGenderInput;
+};
+
+
+export type MutationUpdateProfileNameArgs = {
+  input: UpdateProfileNameInput;
+};
+
+
 export type MutationUpdateUnitArgs = {
   input: UpdateUnitInput;
 };
@@ -424,6 +434,26 @@ export type ProductObject = {
   name?: Maybe<Scalars['String']['output']>;
   productType?: Maybe<Scalars['String']['output']>;
   sku?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type ProfileGender =
+  | 'FEMALE'
+  | 'MALE'
+  | 'OTHER'
+  | 'UNSPECIFIED';
+
+export type ProfileObject = {
+  __typename?: 'ProfileObject';
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  gender?: Maybe<ProfileGender>;
+  id?: Maybe<Scalars['String']['output']>;
+  identityId?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  middleName?: Maybe<Scalars['String']['output']>;
+  photoUrl?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -643,6 +673,16 @@ export type UpdateIssueInput = {
 
 export type UpdateOrganizationInput = {
   parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateProfileGenderInput = {
+  gender: ProfileGender;
+};
+
+export type UpdateProfileNameInput = {
+  firstName: Scalars['String']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  middleName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUnitInput = {

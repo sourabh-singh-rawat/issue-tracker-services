@@ -15,8 +15,8 @@ describe("VerificationService", () => {
         .fn()
         .mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
-    const identityRepository = {
-      findByIdpId: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
+    const identityService = {
+      getIdByExternalId: vi.fn().mockResolvedValue("identity-1"),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn().mockResolvedValue({
@@ -33,7 +33,7 @@ describe("VerificationService", () => {
 
     const service = new VerificationService(
       verificationProvider as never,
-      identityRepository as never,
+      identityService as never,
       identityProfileRepository as never,
       outboxService as never,
     );
@@ -46,7 +46,7 @@ describe("VerificationService", () => {
       flowId: "flow-1",
       code: "123456",
     });
-    expect(identityRepository.findByIdpId).toHaveBeenCalledWith("idp-1");
+    expect(identityService.getIdByExternalId).toHaveBeenCalledWith("idp-1");
     expect(identityProfileRepository.findByIdentityId).toHaveBeenCalledWith("identity-1");
     expect(outboxService.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -78,8 +78,8 @@ describe("VerificationService", () => {
         .fn()
         .mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
-    const identityRepository = {
-      findByIdpId: vi.fn().mockResolvedValue({ id: "identity-1", idpId: "idp-1" }),
+    const identityService = {
+      getIdByExternalId: vi.fn().mockResolvedValue("identity-1"),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn().mockResolvedValue(null),
@@ -90,7 +90,7 @@ describe("VerificationService", () => {
 
     const service = new VerificationService(
       verificationProvider as never,
-      identityRepository as never,
+      identityService as never,
       identityProfileRepository as never,
       outboxService as never,
     );
@@ -115,8 +115,8 @@ describe("VerificationService", () => {
         .fn()
         .mockResolvedValue({ id: "idp-1", email: "a@b.com", emailVerified: true }),
     };
-    const identityRepository = {
-      findByIdpId: vi.fn().mockResolvedValue(null),
+    const identityService = {
+      getIdByExternalId: vi.fn().mockRejectedValue(new UserNotFoundError()),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn(),
@@ -127,7 +127,7 @@ describe("VerificationService", () => {
 
     const service = new VerificationService(
       verificationProvider as never,
-      identityRepository as never,
+      identityService as never,
       identityProfileRepository as never,
       outboxService as never,
     );
@@ -142,8 +142,8 @@ describe("VerificationService", () => {
     const verificationProvider = {
       verifyEmail: vi.fn().mockRejectedValue(new InvalidCredentialError()),
     };
-    const identityRepository = {
-      findByIdpId: vi.fn(),
+    const identityService = {
+      getIdByExternalId: vi.fn(),
     };
     const identityProfileRepository = {
       findByIdentityId: vi.fn(),
@@ -154,7 +154,7 @@ describe("VerificationService", () => {
 
     const service = new VerificationService(
       verificationProvider as never,
-      identityRepository as never,
+      identityService as never,
       identityProfileRepository as never,
       outboxService as never,
     );
@@ -162,7 +162,7 @@ describe("VerificationService", () => {
     await expect(service.verifyEmail({ flowId: "flow-1", code: "bad" })).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
-    expect(identityRepository.findByIdpId).not.toHaveBeenCalled();
+    expect(identityService.getIdByExternalId).not.toHaveBeenCalled();
     expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 

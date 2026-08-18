@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetSessionIdentityData, GetSessionIdentityResponses, GetTokenSessionIdentityData, GetTokenSessionIdentityResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CheckRelationshipData, CheckRelationshipResponses, CreateAttachmentData, CreateAttachmentErrors, CreateAttachmentResponses, DeleteRelationshipData, DeleteRelationshipResponses, EnsureRelationshipData, EnsureRelationshipResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponses, GetIdentityFromSessionData, GetIdentityFromSessionResponses, ListRelationshipsData, ListRelationshipsResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -58,23 +58,23 @@ export const getCurrentUser = <ThrowOnError extends boolean = false>(options?: O
 /**
  * Resolve session identity
  *
- * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const getSessionIdentity = <ThrowOnError extends boolean = false>(options?: Options<GetSessionIdentityData, ThrowOnError>): RequestResult<GetSessionIdentityResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetSessionIdentityResponses, unknown, ThrowOnError>({
+export const getIdentityFromSession = <ThrowOnError extends boolean = false>(options?: Options<GetIdentityFromSessionData, ThrowOnError>): RequestResult<GetIdentityFromSessionResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetIdentityFromSessionResponses, unknown, ThrowOnError>({
     responseType: 'json',
-    url: '/identity/getSession',
+    url: '/identity/getIdentityFromSession',
     ...options
 });
 
 /**
  * Resolve identity from OAuth access token
  *
- * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const getTokenSessionIdentity = <ThrowOnError extends boolean = false>(options?: Options<GetTokenSessionIdentityData, ThrowOnError>): RequestResult<GetTokenSessionIdentityResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetTokenSessionIdentityResponses, unknown, ThrowOnError>({
+export const getIdentityFromAccessToken = <ThrowOnError extends boolean = false>(options?: Options<GetIdentityFromAccessTokenData, ThrowOnError>): RequestResult<GetIdentityFromAccessTokenResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetIdentityFromAccessTokenResponses, unknown, ThrowOnError>({
     responseType: 'json',
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/identity/getTokenSession',
+    url: '/identity/getIdentityFromAccessToken',
     ...options
 });
 
@@ -193,6 +193,66 @@ export const createAttachment = <ThrowOnError extends boolean = false>(options: 
     ...options,
     headers: {
         'Content-Type': null,
+        ...options.headers
+    }
+});
+
+/**
+ * Check a graph relationship
+ *
+ * Check a Keto permission: namespace, object, relation, and subject (subject_id, e.g. identity:<id>).
+ */
+export const checkRelationship = <ThrowOnError extends boolean = false>(options: Options<CheckRelationshipData, ThrowOnError>): RequestResult<CheckRelationshipResponses, unknown, ThrowOnError> => (options.client ?? client).post<CheckRelationshipResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/authorization/checkRelationship',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Ensure a graph relationship exists
+ *
+ * Idempotently create a relationship in the authorization graph (Ory Keto). Used by domain services to grant permissions and role members.
+ */
+export const ensureRelationship = <ThrowOnError extends boolean = false>(options: Options<EnsureRelationshipData, ThrowOnError>): RequestResult<EnsureRelationshipResponses, unknown, ThrowOnError> => (options.client ?? client).post<EnsureRelationshipResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/authorization/ensureRelationship',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete a graph relationship
+ *
+ * Idempotently delete a relationship from the authorization graph (Ory Keto).
+ */
+export const deleteRelationship = <ThrowOnError extends boolean = false>(options: Options<DeleteRelationshipData, ThrowOnError>): RequestResult<DeleteRelationshipResponses, unknown, ThrowOnError> => (options.client ?? client).post<DeleteRelationshipResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/authorization/deleteRelationship',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List graph relationships
+ *
+ * List stored relationships for an object in the authorization graph.
+ */
+export const listRelationships = <ThrowOnError extends boolean = false>(options: Options<ListRelationshipsData, ThrowOnError>): RequestResult<ListRelationshipsResponses, unknown, ThrowOnError> => (options.client ?? client).post<ListRelationshipsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/authorization/listRelationships',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
         ...options.headers
     }
 });
