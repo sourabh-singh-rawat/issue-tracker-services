@@ -71,7 +71,7 @@ Set the durable name **directly** on the consumer class (`readonly consumer = "â
 **Convention:** `<service>-<purpose>` (short service token, not the full package name)
 
 ```ts
-// features/identities/consumers/IdentitySyncConsumer.ts
+// features/identities/consumers/ProductIdentitySyncConsumer.ts
 readonly consumer = "product-identity-sync";
 ```
 

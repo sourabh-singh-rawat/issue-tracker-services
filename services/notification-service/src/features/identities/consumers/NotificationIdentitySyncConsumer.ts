@@ -1,4 +1,3 @@
-import { UserAlreadyExists } from "@pine/common";
 import {
   type CloudEvent,
   type IBroker,
@@ -15,9 +14,9 @@ import type { Database } from "@/db";
 import type { IIdentityRepository } from "@/features/identities/repositories";
 
 @injectable()
-export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
+export class NotificationIdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerifiedData>> {
   readonly stream = Streams.IDENTITY;
-  readonly consumer = "attachment-identity-sync";
+  readonly consumer = "notification-identity-sync";
   readonly subjects = [IdentityEmailVerifiedEvent.type];
 
   constructor(
@@ -37,7 +36,9 @@ export class IdentitySyncConsumer extends Consumer<CloudEvent<IdentityEmailVerif
 
     await this.db.transaction(async (tx) => {
       const exists = await this.identityRepository.existsById(userId, { tx });
-      if (exists) throw new UserAlreadyExists();
+      if (exists) {
+        return;
+      }
 
       await this.identityRepository.save({ id: userId }, { tx });
     });

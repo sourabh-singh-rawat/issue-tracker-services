@@ -33,7 +33,7 @@ import {
   OrganizationService,
 } from "@/features/organizations";
 import { type IPlatformRelationService, PlatformRelationService } from "@/features/platform";
-import { type IIdentityRepository, type IIdentityService, IdentityRepository, IdentityService, IdentitySyncConsumer } from "@/features/identities";
+import { type IIdentityRepository, type IIdentityService, IdentityRepository, IdentityService, PlatformIdentitySyncConsumer } from "@/features/identities";
 import { type ITenantRelationService, TenantRelationService, type ITenantRepository, type ITenantService, TenantRepository } from "@/features/tenants";
 import { TenantService } from "@/features/tenants/services/TenantService";
 import { createContext } from "@/graphql";
@@ -71,7 +71,7 @@ container.bind<IOrganizationRelationService>(TYPES.OrganizationRelationService).
 container.bind<IPlatformRelationService>(TYPES.PlatformRelationService).to(PlatformRelationService);
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
-container.bind(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
+container.bind(TYPES.PlatformIdentitySyncConsumer).to(PlatformIdentitySyncConsumer);
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");

@@ -8,5 +8,5 @@ export const TYPES = {
   AttachmentService: Symbol.for("AttachmentService"),
   AttachmentRepository: Symbol.for("IAttachmentRepository"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
-  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
+  AttachmentIdentitySyncConsumer: Symbol.for("AttachmentIdentitySyncConsumer"),
 } as const;

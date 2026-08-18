@@ -20,5 +20,5 @@ export const TYPES = {
   PlatformRelationService: Symbol.for("IPlatformRelationService"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
   IdentityService: Symbol.for("IIdentityService"),
-  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
+  PlatformIdentitySyncConsumer: Symbol.for("PlatformIdentitySyncConsumer"),
 } as const;

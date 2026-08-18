@@ -5,7 +5,7 @@ import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { startImageWorker } from "@/bootstrap/image-worker";
-import { IdentitySyncConsumer } from "@/features/identities";
+import { AttachmentIdentitySyncConsumer } from "@/features/identities";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -24,7 +24,7 @@ const main = async () => {
 
   await broker.init();
 
-  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
+  void container.get<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).start();
   startImageWorker();
 };
 

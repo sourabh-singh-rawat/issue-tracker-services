@@ -16,7 +16,7 @@ import type { Database } from "@/db";
 import type { IIdentityRepository } from "@/features/identities/repositories";
 
 @injectable()
-export class IdentitySyncConsumer extends Consumer<
+export class PlatformIdentitySyncConsumer extends Consumer<
   CloudEvent<UserRegisteredData | IdentityEmailVerifiedData>
 > {
   readonly stream = Streams.IDENTITY;
