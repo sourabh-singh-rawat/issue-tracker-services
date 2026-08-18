@@ -8,7 +8,7 @@ import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
 import { AuthorizationProfileSyncConsumer } from "@/features/identity";
 
-import { TenantSyncConsumer } from "@/features/platform";
+import { PlatformRelationSyncConsumer, TenantSyncConsumer } from "@/features/platform";
 
 
 export { container } from "@/bootstrap";
@@ -32,6 +32,9 @@ const main = async () => {
   await broker.init();
 
   void container.get<TenantSyncConsumer>(TYPES.TenantSyncConsumer).start();
+  void container
+    .get<PlatformRelationSyncConsumer>(TYPES.PlatformRelationSyncConsumer)
+    .start();
   void container
     .get<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer)
     .start();

@@ -2,9 +2,10 @@ import "reflect-metadata";
 
 import { ADMIN } from "@pine/authorization";
 import { resolveIdentityId } from "@pine/common";
-import { closeDb, container, initializeDb, TYPES } from "@/bootstrap";
+import type { IOutboxWorker } from "@pine/outbox";
+import { broker, closeDb, container, initializeDb, TYPES } from "@/bootstrap";
 import { GrantPlatformAdmin } from "@/features/platform/commands/GrantPlatformAdmin";
-import type { IPlatformMemberService } from "@/features/platform/services/IPlatformMemberService";
+import type { IPlatformRelationService } from "@/features/platform/services/IPlatformRelationService";
 
 const main = async (): Promise<void> => {
   const identityId = resolveIdentityId({
@@ -16,9 +17,12 @@ const main = async (): Promise<void> => {
   await initializeDb();
 
   const command = new GrantPlatformAdmin(
-    container.get<IPlatformMemberService>(TYPES.PlatformMemberService),
+    container.get<IPlatformRelationService>(TYPES.PlatformRelationService),
   );
   await command.execute(identityId);
+
+  await broker.init();
+  await container.get<IOutboxWorker>(TYPES.OutboxWorker).tick();
 
   console.log(`grant-platform-admin: assigned relation=${ADMIN} identity=${identityId}`);
 };

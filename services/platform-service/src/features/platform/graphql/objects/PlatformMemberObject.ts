@@ -1,7 +1,7 @@
 import { builder } from "@pine/server";
-import type { PlatformMember } from "@/features/platform/services/IPlatformMemberService";
+import type { PlatformRelation } from "@/features/platform/services/IPlatformRelationService";
 
-export const PlatformMemberObject = builder.objectRef<PlatformMember>("PlatformMemberObject");
+export const PlatformMemberObject = builder.objectRef<PlatformRelation>("PlatformMemberObject");
 
 PlatformMemberObject.implement({
   fields: (t) => ({

@@ -1,7 +1,7 @@
 export {
-  PlatformMemberCreatedDataSchema,
-  type PlatformMemberCreatedData,
-} from "./PlatformMemberCreatedDataSchema";
+  PlatformRelationCreatedDataSchema,
+  type PlatformRelationCreatedData,
+} from "./PlatformRelationCreatedDataSchema";
 export {
   PlatformMemberDeletedDataSchema,
   type PlatformMemberDeletedData,

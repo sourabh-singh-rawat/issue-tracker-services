@@ -1,4 +1,4 @@
-export { PlatformMemberCreatedEvent } from "./PlatformMemberCreatedEvent";
+export { PlatformRelationCreatedEvent } from "./PlatformRelationCreatedEvent";
 export { PlatformMemberDeletedEvent } from "./PlatformMemberDeletedEvent";
 export { PlatformRolePermissionsUpdatedEvent } from "./PlatformRolePermissionsUpdatedEvent";
 export { TenantCreatedEvent } from "./TenantCreatedEvent";

@@ -6,31 +6,43 @@ import {
   requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
+import {
+  CloudEvent,
+  createCloudEvent,
+  PlatformRelationCreatedEvent,
+  type PlatformRelationCreatedData,
+} from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
+import type { Database } from "@/db";
 import {
   InvalidPlatformRelationError,
   PlatformMemberNotFoundError,
 } from "@/features/platform/errors";
 import type {
-  CreatePlatformMemberInput,
-  CreatePlatformMemberOptions,
-  IPlatformMemberService,
-  ListPlatformMembersInput,
-  PlatformMember,
-} from "@/features/platform/services/IPlatformMemberService";
+  CreatePlatformRelationInput,
+  CreatePlatformRelationOptions,
+  IPlatformRelationService,
+  ListPlatformRelationsInput,
+  PlatformRelation,
+} from "@/features/platform/services/IPlatformRelationService";
 
 @injectable()
-export class PlatformMemberService implements IPlatformMemberService {
+export class PlatformRelationService implements IPlatformRelationService {
   constructor(
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
+    @inject(TYPES.Database)
+    private readonly db: Database,
   ) {}
 
   async create(
-    input: CreatePlatformMemberInput,
+    input: CreatePlatformRelationInput,
     identityId: string,
-    options?: CreatePlatformMemberOptions,
+    options?: CreatePlatformRelationOptions,
   ) {
     if (!options?.skipAuthorization) {
       await requirePermission(
@@ -45,17 +57,41 @@ export class PlatformMemberService implements IPlatformMemberService {
       throw new InvalidPlatformRelationError(`Invalid platform relation: ${input.relation}`);
     }
 
-    await this.authorizationClient.ensureRelationship({
-      object: { namespace: "platform", id: PLATFORM_OBJECT_ID },
-      relation: input.relation,
-      subject: { namespace: IDENTITY, id: input.identityId },
-    });
-
-    return {
+    const relation: PlatformRelation = {
       id: `${PLATFORM_OBJECT_ID}:${input.relation}:${input.identityId}`,
       identityId: input.identityId,
       relation: input.relation,
     };
+
+    return this.db.transaction(async (tx) => {
+      const event: CloudEvent<PlatformRelationCreatedData> = createCloudEvent({
+        type: PlatformRelationCreatedEvent.type,
+        version: PlatformRelationCreatedEvent.version,
+        schema: PlatformRelationCreatedEvent.schema,
+        source: "pine/platform-service",
+        subject: relation.id,
+        data: {
+          id: relation.id,
+          identityId: relation.identityId,
+          relation: relation.relation,
+          createdAt: new Date().toISOString(),
+        },
+      });
+
+      await this.outboxService.schedule(
+        {
+          eventId: event.id,
+          eventType: event.type,
+          eventVersion: PlatformRelationCreatedEvent.version,
+          aggregateType: "platform-relation",
+          aggregateId: relation.id,
+          payload: event,
+        },
+        { tx },
+      );
+
+      return relation;
+    });
   }
 
   async getById(id: string, identityId: string) {
@@ -89,7 +125,7 @@ export class PlatformMemberService implements IPlatformMemberService {
     return member;
   }
 
-  async list(input: ListPlatformMembersInput, identityId: string) {
+  async list(input: ListPlatformRelationsInput, identityId: string) {
     await requirePermission(
       this.authorizationClient,
       identityId,
@@ -102,7 +138,7 @@ export class PlatformMemberService implements IPlatformMemberService {
       throw new InvalidPlatformRelationError(`Invalid platform relation: ${input.relation}`);
     }
 
-    const members: PlatformMember[] = [];
+    const members: PlatformRelation[] = [];
     for (const relation of relations) {
       const assigned = await this.membersFor(relation);
       for (const member of assigned) {
@@ -149,14 +185,14 @@ export class PlatformMemberService implements IPlatformMemberService {
     });
   }
 
-  private membersFor = async (relation: string): Promise<PlatformMember[]> => {
+  private membersFor = async (relation: string): Promise<PlatformRelation[]> => {
     const relationships = await this.authorizationClient.listRelationships({
       namespace: "platform",
       object: PLATFORM_OBJECT_ID,
       relation,
     });
 
-    const members: PlatformMember[] = [];
+    const members: PlatformRelation[] = [];
     for (const relationship of relationships) {
       if (relationship.subject === undefined) {
         continue;
