@@ -19,6 +19,11 @@ function createOutboxMock() {
   };
 }
 
+const createProfileService = () => ({
+  create: vi.fn().mockResolvedValue(undefined),
+  delete: vi.fn().mockResolvedValue(undefined),
+});
+
 describe("AdminService.createIdentity", () => {
   it("creates via IdP admin API, saves identity and profile, and schedules UserRegistered", async () => {
     const tx = { tx: true };
@@ -32,10 +37,9 @@ describe("AdminService.createIdentity", () => {
         idpProvider: IdentityProviderType.KRATOS,
       }),
     };
-    const identityProfileRepository = {
-      save: vi.fn().mockResolvedValue({ id: "profile-1", identityId: "identity-1" }),
-      findByIdentityId: vi.fn(),
-      softDelete: vi.fn(),
+    const profileService = {
+      create: vi.fn().mockResolvedValue(undefined),
+      delete: vi.fn().mockResolvedValue(undefined),
     };
     const identityAdminProvider = {
       createIdentity: vi.fn().mockResolvedValue({ id: "idp-1", email: "admin@pine.local" }),
@@ -45,7 +49,7 @@ describe("AdminService.createIdentity", () => {
 
     const service = new AdminService(
       identityRepository as never,
-      identityProfileRepository as never,
+      profileService as never,
       identityAdminProvider as never,
       outboxService as never,
       db as never,
@@ -78,15 +82,13 @@ describe("AdminService.createIdentity", () => {
       },
       { tx },
     );
-    expect(identityProfileRepository.save).toHaveBeenCalledWith(
-      {
-        identityId: "identity-1",
-        firstName: "Sourabh",
-        middleName: undefined,
-        lastName: "Rawat",
-      },
-      { tx },
-    );
+    expect(profileService.create).toHaveBeenCalledWith({
+      tx,
+      identityId: "identity-1",
+      firstName: "Sourabh",
+      middleName: undefined,
+      lastName: "Rawat",
+    });
     expect(outboxService.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
         eventType: UserRegisteredEvent.type,
@@ -112,7 +114,7 @@ describe("AdminService.createIdentity", () => {
 
     const service = new AdminService(
       identityRepository as never,
-      { findByIdentityId: vi.fn(), softDelete: vi.fn() } as never,
+      { create: vi.fn(), delete: vi.fn() } as never,
       identityAdminProvider as never,
       createOutboxMock() as never,
       db as never,
@@ -145,7 +147,7 @@ describe("AdminService.createIdentity", () => {
 
     const service = new AdminService(
       identityRepository as never,
-      { findByIdentityId: vi.fn(), softDelete: vi.fn() } as never,
+      { create: vi.fn(), delete: vi.fn() } as never,
       identityAdminProvider as never,
       outboxService as never,
       db as never,
@@ -184,19 +186,14 @@ describe("AdminService", () => {
       }),
       softDelete: vi.fn().mockResolvedValue(undefined),
     };
-    const identityProfileRepository = {
-      findByIdentityId: vi
-        .fn()
-        .mockResolvedValue({ id: "profile-1", identityId: "identity-row-1" }),
-      softDelete: vi.fn().mockResolvedValue(undefined),
-    };
+    const profileService = createProfileService();
     const identityAdminProvider = {
       deleteIdentity: vi.fn().mockResolvedValue(undefined),
     };
 
     const service = new AdminService(
       identityRepository as never,
-      identityProfileRepository as never,
+      profileService as never,
       identityAdminProvider as never,
       createOutboxMock() as never,
       db as never,
@@ -207,49 +204,8 @@ describe("AdminService", () => {
     expect(identityRepository.findById).toHaveBeenCalledWith("identity-row-1");
     expect(identityAdminProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
     expect(db.transaction).toHaveBeenCalledOnce();
-    expect(identityProfileRepository.findByIdentityId).toHaveBeenCalledWith("identity-row-1");
-    expect(identityProfileRepository.softDelete).toHaveBeenCalledWith("profile-1", { tx });
+    expect(profileService.delete).toHaveBeenCalledWith({ tx, identityId: "identity-row-1" });
     expect(identityRepository.softDelete).toHaveBeenCalledWith("identity-row-1", { tx });
-  });
-
-  it("soft-deletes the identity when no profile exists", async () => {
-    const tx = { tx: true };
-    const db = {
-      transaction: vi.fn(async (cb: (tx: unknown) => Promise<void>) => {
-        await cb(tx);
-      }),
-    };
-    const identityRepository = {
-      findById: vi.fn().mockResolvedValue({
-        id: "identity-row-1",
-        idpId: "idp-1",
-        idpProvider: "kratos",
-      }),
-      softDelete: vi.fn().mockResolvedValue(undefined),
-    };
-    const identityProfileRepository = {
-      findByIdentityId: vi.fn().mockResolvedValue(null),
-      softDelete: vi.fn(),
-    };
-    const identityAdminProvider = {
-      deleteIdentity: vi.fn().mockResolvedValue(undefined),
-    };
-
-    const service = new AdminService(
-      identityRepository as never,
-      identityProfileRepository as never,
-      identityAdminProvider as never,
-      createOutboxMock() as never,
-      db as never,
-    );
-
-    await expect(service.deleteIdentity("identity-row-1")).resolves.toBeUndefined();
-
-    expect(identityAdminProvider.deleteIdentity).toHaveBeenCalledWith("idp-1");
-    expect(identityProfileRepository.findByIdentityId).toHaveBeenCalledWith("identity-row-1");
-    expect(identityProfileRepository.softDelete).not.toHaveBeenCalled();
-    expect(identityRepository.softDelete).toHaveBeenCalledWith("identity-row-1", { tx });
-    expect(db.transaction).toHaveBeenCalledOnce();
   });
 
   it("propagates IdentityNotFoundError from the IdP and does not soft-delete locally", async () => {
@@ -262,17 +218,14 @@ describe("AdminService", () => {
       }),
       softDelete: vi.fn().mockResolvedValue(undefined),
     };
-    const identityProfileRepository = {
-      findByIdentityId: vi.fn().mockResolvedValue(null),
-      softDelete: vi.fn(),
-    };
+    const profileService = createProfileService();
     const identityAdminProvider = {
       deleteIdentity: vi.fn().mockRejectedValue(new IdentityNotFoundError()),
     };
 
     const service = new AdminService(
       identityRepository as never,
-      identityProfileRepository as never,
+      profileService as never,
       identityAdminProvider as never,
       createOutboxMock() as never,
       db as never,
@@ -293,17 +246,13 @@ describe("AdminService", () => {
       findById: vi.fn().mockResolvedValue(null),
       softDelete: vi.fn(),
     };
-    const identityProfileRepository = {
-      findByIdentityId: vi.fn(),
-      softDelete: vi.fn(),
-    };
     const identityAdminProvider = {
       deleteIdentity: vi.fn(),
     };
 
     const service = new AdminService(
       identityRepository as never,
-      identityProfileRepository as never,
+      createProfileService() as never,
       identityAdminProvider as never,
       createOutboxMock() as never,
       db as never,
@@ -326,17 +275,14 @@ describe("AdminService", () => {
       }),
       softDelete: vi.fn(),
     };
-    const identityProfileRepository = {
-      findByIdentityId: vi.fn(),
-      softDelete: vi.fn(),
-    };
+    const profileService = createProfileService();
     const identityAdminProvider = {
       deleteIdentity: vi.fn().mockRejectedValue(new IdentityProviderUnavailableError()),
     };
 
     const service = new AdminService(
       identityRepository as never,
-      identityProfileRepository as never,
+      profileService as never,
       identityAdminProvider as never,
       createOutboxMock() as never,
       db as never,
@@ -347,7 +293,7 @@ describe("AdminService", () => {
     );
 
     expect(db.transaction).not.toHaveBeenCalled();
-    expect(identityProfileRepository.softDelete).not.toHaveBeenCalled();
+    expect(profileService.delete).not.toHaveBeenCalled();
     expect(identityRepository.softDelete).not.toHaveBeenCalled();
   });
 
@@ -359,17 +305,13 @@ describe("AdminService", () => {
     const identityRepository = {
       findAll: vi.fn().mockResolvedValue(identities),
     };
-    const identityProfileRepository = {
-      findByIdentityId: vi.fn(),
-      softDelete: vi.fn(),
-    };
     const identityAdminProvider = {
       deleteIdentity: vi.fn(),
     };
 
     const service = new AdminService(
       identityRepository as never,
-      identityProfileRepository as never,
+      createProfileService() as never,
       identityAdminProvider as never,
       createOutboxMock() as never,
       createDbMock() as never,

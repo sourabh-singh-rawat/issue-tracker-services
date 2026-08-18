@@ -1,5 +1,7 @@
 import type { Resource } from "../resources";
 
+export type ProfilePermission = "read" | "update";
+
 export type PlatformPermission = "read" | "create_tenant" | "manage_admins";
 
 export type TenantPermission =
@@ -28,6 +30,7 @@ export type RolePermission = "read" | "create" | "update" | "delete";
 export type PermissionGrantPermission = "read" | "create" | "update" | "delete";
 
 export type Permission =
+  | ProfilePermission
   | PlatformPermission
   | TenantPermission
   | OrganizationPermission
@@ -37,6 +40,7 @@ export type Permission =
   | PermissionGrantPermission;
 
 export type PermissionKey =
+  | `profile:${ProfilePermission}`
   | `platform:${PlatformPermission}`
   | `tenant:${TenantPermission}`
   | `organization:${OrganizationPermission}`
@@ -44,6 +48,8 @@ export type PermissionKey =
   | `brand:${BrandPermission}`
   | `role:${RolePermission}`
   | `permission:${PermissionGrantPermission}`;
+
+export const PROFILE_PERMISSIONS: readonly ProfilePermission[] = ["read", "update"];
 
 export const PLATFORM_PERMISSIONS: readonly PlatformPermission[] = [
   "read",
@@ -95,6 +101,7 @@ const catalog = (
   permissions.map((permission) => ({ namespace, permission }));
 
 export const ALL_PERMISSIONS = [
+  ...catalog("profile", PROFILE_PERMISSIONS),
   ...catalog("platform", PLATFORM_PERMISSIONS),
   ...catalog("tenant", TENANT_PERMISSIONS),
   ...catalog("organization", ORGANIZATION_PERMISSIONS),

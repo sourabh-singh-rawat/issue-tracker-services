@@ -1,10 +1,20 @@
+import { requirePermission, type IAuthorizationClient } from "@pine/authorization";
 import { UserProfileNotFoundError } from "@pine/common";
+import {
+  createCloudEvent,
+  ProfileCreatedEvent,
+  ProfileDeletedEvent,
+  ProfileGenderUpdatedEvent,
+} from "@pine/events";
+
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Profile } from "@/db";
 import type { IProfileRepository } from "@/features/profiles/repositories/IProfileRepository";
 import type {
   CreateProfileOptions,
+  DeleteProfileOptions,
   IProfileService,
   UpdateGenderOptions,
   UpdateNameOptions,
@@ -15,13 +25,41 @@ export class ProfileService implements IProfileService {
   constructor(
     @inject(TYPES.ProfileRepository)
     private readonly profileRepository: IProfileRepository,
+    @inject(TYPES.AuthorizationClient)
+    private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
   ) {}
 
   async create(options: CreateProfileOptions) {
     const { tx, firstName, middleName, lastName, identityId, description } = options;
 
-    await this.profileRepository.save(
+    const profile = await this.profileRepository.save(
       { firstName, middleName, lastName, identityId, description },
+      { tx },
+    );
+
+    const event = createCloudEvent({
+      type: ProfileCreatedEvent.type,
+      version: ProfileCreatedEvent.version,
+      schema: ProfileCreatedEvent.schema,
+      source: "pine/identity-service",
+      subject: profile.id,
+      data: {
+        id: profile.id,
+        identityId,
+      },
+    });
+
+    await this.outboxService.schedule(
+      {
+        eventId: event.id,
+        eventType: event.type,
+        eventVersion: ProfileCreatedEvent.version,
+        aggregateType: "profile",
+        aggregateId: profile.id,
+        payload: event,
+      },
       { tx },
     );
   }
@@ -37,6 +75,13 @@ export class ProfileService implements IProfileService {
     const profile = await this.profileRepository.findByIdentityId(options.identityId);
     if (!profile) throw new UserProfileNotFoundError();
 
+    await requirePermission(
+      this.authorizationClient,
+      options.identityId,
+      "update",
+      `profile:${profile.id}`,
+    );
+
     return this.profileRepository.update(profile.id, {
       firstName: options.firstName,
       middleName: options.middleName ?? null,
@@ -48,8 +93,71 @@ export class ProfileService implements IProfileService {
     const profile = await this.profileRepository.findByIdentityId(options.identityId);
     if (!profile) throw new UserProfileNotFoundError();
 
-    return this.profileRepository.update(profile.id, {
+    await requirePermission(
+      this.authorizationClient,
+      options.identityId,
+      "update",
+      `profile:${profile.id}`,
+    );
+
+    const updated = await this.profileRepository.update(profile.id, {
       gender: options.gender,
     });
+
+    const event = createCloudEvent({
+      type: ProfileGenderUpdatedEvent.type,
+      version: ProfileGenderUpdatedEvent.version,
+      schema: ProfileGenderUpdatedEvent.schema,
+      source: "pine/identity-service",
+      subject: updated.id,
+      data: {
+        id: updated.id,
+        identityId: options.identityId,
+      },
+    });
+
+    await this.outboxService.schedule({
+      eventId: event.id,
+      eventType: event.type,
+      eventVersion: ProfileGenderUpdatedEvent.version,
+      aggregateType: "profile",
+      aggregateId: updated.id,
+      payload: event,
+    });
+
+    return updated;
+  }
+
+  async delete(options: DeleteProfileOptions): Promise<void> {
+    const profile = await this.profileRepository.findByIdentityId(options.identityId, {
+      tx: options.tx,
+    });
+    if (!profile) return;
+
+    await this.profileRepository.softDelete(profile.id, { tx: options.tx });
+
+    const event = createCloudEvent({
+      type: ProfileDeletedEvent.type,
+      version: ProfileDeletedEvent.version,
+      schema: ProfileDeletedEvent.schema,
+      source: "pine/identity-service",
+      subject: profile.id,
+      data: {
+        id: profile.id,
+        identityId: options.identityId,
+      },
+    });
+
+    await this.outboxService.schedule(
+      {
+        eventId: event.id,
+        eventType: event.type,
+        eventVersion: ProfileDeletedEvent.version,
+        aggregateType: "profile",
+        aggregateId: profile.id,
+        payload: event,
+      },
+      { tx: options.tx },
+    );
   }
 }

@@ -14,6 +14,7 @@ export const TYPES = {
   IdentityService: Symbol.for("IIdentityService"),
   ProfileRepository: Symbol.for("IProfileRepository"),
   ProfileService: Symbol.for("IProfileService"),
+  AuthorizationClient: Symbol.for("IAuthorizationClient"),
   ClientService: Symbol.for("IClientService"),
   ClientSeederService: Symbol.for("IClientSeederService"),
   KratosClient: Symbol.for("KratosClient"),

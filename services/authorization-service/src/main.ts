@@ -6,6 +6,8 @@ import { initializeObservability } from "@pine/observability";
 import { broker, container, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
+import { AuthorizationProfileSyncConsumer } from "@/features/identity";
+
 import { TenantSyncConsumer } from "@/features/platform";
 
 
@@ -30,6 +32,10 @@ const main = async () => {
   await broker.init();
 
   void container.get<TenantSyncConsumer>(TYPES.TenantSyncConsumer).start();
+  void container
+    .get<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer)
+    .start();
+
 };
 
 main().catch((error) => {

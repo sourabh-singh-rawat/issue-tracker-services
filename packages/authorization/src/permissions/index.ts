@@ -1,6 +1,7 @@
 export { permissionKey } from "./permissionKey";
 export { parsePermission, tryParsePermission } from "./parsePermission";
 export {
+  PROFILE_PERMISSIONS,
   PLATFORM_PERMISSIONS,
   TENANT_PERMISSIONS,
   ORGANIZATION_PERMISSIONS,
@@ -11,6 +12,7 @@ export {
   ALL_PERMISSIONS,
   type Permission,
   type PermissionKey,
+  type ProfilePermission,
   type PlatformPermission,
   type TenantPermission,
   type OrganizationPermission,

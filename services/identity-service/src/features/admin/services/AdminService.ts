@@ -11,7 +11,7 @@ import {
   toPublicIdentity,
 } from "@/features/identities/services/IIdentityService";
 import type { IIdentityRepository } from "@/features/identities/repositories/IIdentityRepository";
-import type { IProfileRepository } from "@/features/profiles/repositories/IProfileRepository";
+import type { IProfileService } from "@/features/profiles/services/IProfileService";
 import type { IIdentityAdminProvider } from "@/integrations/identity";
 
 @injectable()
@@ -19,8 +19,8 @@ export class AdminService implements IAdminService {
   constructor(
     @inject(TYPES.IdentityRepository)
     private readonly identityRepository: IIdentityRepository,
-    @inject(TYPES.ProfileRepository)
-    private readonly profileRepository: IProfileRepository,
+    @inject(TYPES.ProfileService)
+    private readonly profileService: IProfileService,
     @inject(TYPES.IdentityAdminProvider)
     private readonly identityAdminProvider: IIdentityAdminProvider,
     @inject(TYPES.OutboxService)
@@ -47,15 +47,13 @@ export class AdminService implements IAdminService {
           { tx },
         );
 
-        await this.profileRepository.save(
-          {
-            identityId: identity.id,
-            firstName: options.firstName,
-            middleName: options.middleName,
-            lastName: options.lastName,
-          },
-          { tx },
-        );
+        await this.profileService.create({
+          tx,
+          identityId: identity.id,
+          firstName: options.firstName,
+          middleName: options.middleName,
+          lastName: options.lastName,
+        });
 
         const event = createCloudEvent({
           type: UserRegisteredEvent.type,
@@ -94,12 +92,8 @@ export class AdminService implements IAdminService {
 
     await this.identityAdminProvider.deleteIdentity(identity.idpId);
 
-    const profile = await this.profileRepository.findByIdentityId(identityId);
-
     await this.db.transaction(async (tx) => {
-      if (profile) {
-        await this.profileRepository.softDelete(profile.id, { tx });
-      }
+      await this.profileService.delete({ tx, identityId });
       await this.identityRepository.softDelete(identityId, { tx });
     });
   }

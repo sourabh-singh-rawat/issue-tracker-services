@@ -1,3 +1,4 @@
+import { HttpAuthorizationClient, type IAuthorizationClient } from "@pine/authorization";
 import { NatsPublisher, type IPublisher } from "@pine/events";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
@@ -96,6 +97,9 @@ container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityReposit
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
 container.bind<IProfileRepository>(TYPES.ProfileRepository).to(ProfileRepository);
 container.bind<IProfileService>(TYPES.ProfileService).to(ProfileService);
+container
+  .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
+  .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IClientSeederService>(TYPES.ClientSeederService).to(ClientSeederService);
 container.bind<IRegistrationProvider>(TYPES.RegistrationProvider).to(KratosRegistrationProvider);

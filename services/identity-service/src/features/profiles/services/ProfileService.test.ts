@@ -1,7 +1,20 @@
+import { InsufficientPermissionError } from "@pine/authorization";
 import { UserProfileNotFoundError } from "@pine/common";
+import { ProfileCreatedEvent, ProfileDeletedEvent, ProfileGenderUpdatedEvent } from "@pine/events";
 import { describe, expect, it, vi } from "vitest";
 import { ProfileGender } from "@/features/profiles/constants";
 import { ProfileService } from "@/features/profiles/services/ProfileService";
+
+const allowAuthorizationClient = () => ({
+  checkRelationship: vi.fn().mockResolvedValue(true),
+  ensureRelationship: vi.fn().mockResolvedValue(undefined),
+  deleteRelationship: vi.fn().mockResolvedValue(undefined),
+  listRelationships: vi.fn().mockResolvedValue([]),
+});
+
+const createOutbox = () => ({
+  schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
+});
 
 const existingProfile = {
   id: "profile-1",
@@ -19,9 +32,12 @@ describe("ProfileService", () => {
       save: vi.fn().mockResolvedValue(existingProfile),
       findByIdentityId: vi.fn(),
       update: vi.fn(),
+      softDelete: vi.fn(),
     };
+    const authorizationClient = allowAuthorizationClient();
+    const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
 
     await service.create({
       tx,
@@ -40,6 +56,24 @@ describe("ProfileService", () => {
       },
       { tx },
     );
+    expect(authorizationClient.ensureRelationship).not.toHaveBeenCalled();
+    expect(outboxService.schedule).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: ProfileCreatedEvent.type,
+        eventVersion: ProfileCreatedEvent.version,
+        aggregateType: "profile",
+        aggregateId: "profile-1",
+        payload: expect.objectContaining({
+          type: ProfileCreatedEvent.type,
+          subject: "profile-1",
+          data: {
+            id: "profile-1",
+            identityId: "identity-1",
+          },
+        }),
+      }),
+      { tx },
+    );
   });
 
   it("returns the profile by identity id", async () => {
@@ -49,7 +83,7 @@ describe("ProfileService", () => {
       update: vi.fn(),
     };
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, allowAuthorizationClient(), createOutbox());
 
     await expect(service.getByIdentityId("identity-1")).resolves.toEqual(existingProfile);
   });
@@ -59,9 +93,10 @@ describe("ProfileService", () => {
       save: vi.fn(),
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
+      softDelete: vi.fn(),
     };
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, allowAuthorizationClient(), createOutbox());
 
     await expect(service.getByIdentityId("missing")).rejects.toBeInstanceOf(UserProfileNotFoundError);
   });
@@ -72,9 +107,11 @@ describe("ProfileService", () => {
       save: vi.fn(),
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn().mockResolvedValue(updated),
+      softDelete: vi.fn(),
     };
+    const authorizationClient = allowAuthorizationClient();
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, authorizationClient, createOutbox());
 
     const result = await service.updateName({
       identityId: "identity-1",
@@ -82,6 +119,12 @@ describe("ProfileService", () => {
       lastName: "Hopper",
     });
 
+    expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
+      namespace: "profile",
+      object: "profile-1",
+      relation: "update",
+      subject: "identity:identity-1",
+    });
     expect(profileRepository.findByIdentityId).toHaveBeenCalledWith("identity-1");
     expect(profileRepository.update).toHaveBeenCalledWith("profile-1", {
       firstName: "Grace",
@@ -91,14 +134,35 @@ describe("ProfileService", () => {
     expect(result).toEqual(updated);
   });
 
+  it("does not update the name without update permission", async () => {
+    const profileRepository = {
+      save: vi.fn(),
+      findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
+      update: vi.fn(),
+      softDelete: vi.fn(),
+    };
+    const authorizationClient = {
+      ...allowAuthorizationClient(),
+      checkRelationship: vi.fn().mockResolvedValue(false),
+    };
+
+    const service = new ProfileService(profileRepository, authorizationClient, createOutbox());
+
+    await expect(
+      service.updateName({ identityId: "identity-1", firstName: "Grace" }),
+    ).rejects.toBeInstanceOf(InsufficientPermissionError);
+    expect(profileRepository.update).not.toHaveBeenCalled();
+  });
+
   it("throws when updating a name for a missing profile", async () => {
     const profileRepository = {
       save: vi.fn(),
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
+      softDelete: vi.fn(),
     };
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, allowAuthorizationClient(), createOutbox());
 
     await expect(
       service.updateName({ identityId: "missing", firstName: "Ada" }),
@@ -106,25 +170,72 @@ describe("ProfileService", () => {
     expect(profileRepository.update).not.toHaveBeenCalled();
   });
 
-  it("updates gender on the identity profile", async () => {
+  it("updates gender on the identity profile and schedules ProfileGenderUpdated", async () => {
     const updated = { ...existingProfile, gender: ProfileGender.FEMALE };
     const profileRepository = {
       save: vi.fn(),
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn().mockResolvedValue(updated),
+      softDelete: vi.fn(),
     };
+    const authorizationClient = allowAuthorizationClient();
+    const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
 
     const result = await service.updateGender({
       identityId: "identity-1",
       gender: ProfileGender.FEMALE,
     });
 
+    expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
+      namespace: "profile",
+      object: "profile-1",
+      relation: "update",
+      subject: "identity:identity-1",
+    });
     expect(profileRepository.update).toHaveBeenCalledWith("profile-1", {
       gender: ProfileGender.FEMALE,
     });
+    expect(outboxService.schedule).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: ProfileGenderUpdatedEvent.type,
+        eventVersion: ProfileGenderUpdatedEvent.version,
+        aggregateType: "profile",
+        aggregateId: "profile-1",
+        payload: expect.objectContaining({
+          type: ProfileGenderUpdatedEvent.type,
+          subject: "profile-1",
+          data: {
+            id: "profile-1",
+            identityId: "identity-1",
+          },
+        }),
+      }),
+    );
     expect(result).toEqual(updated);
+  });
+
+  it("does not update gender without update permission", async () => {
+    const profileRepository = {
+      save: vi.fn(),
+      findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
+      update: vi.fn(),
+      softDelete: vi.fn(),
+    };
+    const authorizationClient = {
+      ...allowAuthorizationClient(),
+      checkRelationship: vi.fn().mockResolvedValue(false),
+    };
+    const outboxService = createOutbox();
+
+    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+
+    await expect(
+      service.updateGender({ identityId: "identity-1", gender: ProfileGender.FEMALE }),
+    ).rejects.toBeInstanceOf(InsufficientPermissionError);
+    expect(profileRepository.update).not.toHaveBeenCalled();
+    expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 
   it("throws when updating gender for a missing profile", async () => {
@@ -132,13 +243,73 @@ describe("ProfileService", () => {
       save: vi.fn(),
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
+      softDelete: vi.fn(),
     };
+    const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository);
+    const service = new ProfileService(profileRepository, allowAuthorizationClient(), outboxService);
 
     await expect(
       service.updateGender({ identityId: "missing", gender: ProfileGender.MALE }),
     ).rejects.toBeInstanceOf(UserProfileNotFoundError);
     expect(profileRepository.update).not.toHaveBeenCalled();
+    expect(outboxService.schedule).not.toHaveBeenCalled();
+  });
+
+  it("soft-deletes the profile and schedules ProfileDeleted", async () => {
+    const tx = {};
+    const profileRepository = {
+      save: vi.fn(),
+      findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
+      update: vi.fn(),
+      softDelete: vi.fn(),
+    };
+    const authorizationClient = allowAuthorizationClient();
+    const outboxService = createOutbox();
+
+    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+
+    await service.delete({ tx, identityId: "identity-1" });
+
+    expect(profileRepository.findByIdentityId).toHaveBeenCalledWith("identity-1", { tx });
+    expect(profileRepository.softDelete).toHaveBeenCalledWith("profile-1", { tx });
+    expect(authorizationClient.deleteRelationship).not.toHaveBeenCalled();
+    expect(outboxService.schedule).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: ProfileDeletedEvent.type,
+        eventVersion: ProfileDeletedEvent.version,
+        aggregateType: "profile",
+        aggregateId: "profile-1",
+        payload: expect.objectContaining({
+          type: ProfileDeletedEvent.type,
+          subject: "profile-1",
+          data: {
+            id: "profile-1",
+            identityId: "identity-1",
+          },
+        }),
+      }),
+      { tx },
+    );
+  });
+
+  it("does not schedule ProfileDeleted when the profile is missing", async () => {
+    const tx = {};
+    const profileRepository = {
+      save: vi.fn(),
+      findByIdentityId: vi.fn().mockResolvedValue(null),
+      update: vi.fn(),
+      softDelete: vi.fn(),
+    };
+    const authorizationClient = allowAuthorizationClient();
+    const outboxService = createOutbox();
+
+    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+
+    await service.delete({ tx, identityId: "missing" });
+
+    expect(profileRepository.softDelete).not.toHaveBeenCalled();
+    expect(authorizationClient.deleteRelationship).not.toHaveBeenCalled();
+    expect(outboxService.schedule).not.toHaveBeenCalled();
   });
 });

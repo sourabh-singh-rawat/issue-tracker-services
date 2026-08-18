@@ -7,5 +7,7 @@ export const TYPES = {
   KetoClient: Symbol.for("KetoClient"),
   AuthorizationGraphProvider: Symbol.for("IAuthorizationGraphProvider"),
   TenantSyncConsumer: Symbol.for("TenantSyncConsumer"),
+  AuthorizationProfileSyncConsumer: Symbol.for("AuthorizationProfileSyncConsumer"),
+
 } as const;
 

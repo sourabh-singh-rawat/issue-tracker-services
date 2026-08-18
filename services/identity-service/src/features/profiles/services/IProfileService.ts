@@ -22,9 +22,15 @@ export type UpdateGenderOptions = {
   gender: ProfileGender;
 };
 
+export type DeleteProfileOptions = {
+  tx: DbClient;
+  identityId: string;
+};
+
 export interface IProfileService {
   create(options: CreateProfileOptions): Promise<void>;
   getByIdentityId(identityId: string): Promise<Profile>;
   updateName(options: UpdateNameOptions): Promise<Profile>;
   updateGender(options: UpdateGenderOptions): Promise<Profile>;
+  delete(options: DeleteProfileOptions): Promise<void>;
 }

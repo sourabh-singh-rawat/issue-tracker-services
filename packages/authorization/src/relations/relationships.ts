@@ -1,4 +1,4 @@
-import { IDENTITY, PROFILE } from "../identities";
+import { IDENTITY } from "../identities";
 import type { GraphRelationship } from "../types/GraphRelationship";
 import {
   ADMIN,
@@ -7,7 +7,6 @@ import {
   OWNER,
   PLATFORM_OBJECT_ID,
   PLATFORM_TENANT,
-  PROFILE_IDENTITY,
   TENANT_PLATFORM,
 } from "./names";
 
@@ -80,11 +79,3 @@ export const organizationTenantRelationship = (
   subject: { namespace: "tenant", id: tenantId },
 });
 
-export const profileIdentityRelationship = (
-  profileId: string,
-  identityId: string,
-): GraphRelationship => ({
-  object: { namespace: PROFILE, id: profileId },
-  relation: PROFILE_IDENTITY,
-  subject: { namespace: IDENTITY, id: identityId },
-});
