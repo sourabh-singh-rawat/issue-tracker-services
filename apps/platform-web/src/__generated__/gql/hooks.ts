@@ -27,6 +27,20 @@ export type CreateOrganizationMutationVariables = Exact<{
 
 export type CreateOrganizationMutation = { createOrganization: { id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
 
+export type CreateOrganizationRelationMutationVariables = Exact<{
+  input: Types.CreateOrganizationRelationInput;
+}>;
+
+
+export type CreateOrganizationRelationMutation = { createOrganizationRelation: { id: string | null, organizationId: string | null, identityId: string | null, relation: string | null } | null };
+
+export type DeleteOrganizationRelationMutationVariables = Exact<{
+  id: string;
+}>;
+
+
+export type DeleteOrganizationRelationMutation = { deleteOrganizationRelation: boolean | null };
+
 export type GetOrganizationQueryVariables = Exact<{
   id: string;
 }>;
@@ -34,12 +48,12 @@ export type GetOrganizationQueryVariables = Exact<{
 
 export type GetOrganizationQuery = { getOrganization: { id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, updatedAt: unknown } | null };
 
-export type GetOrganizationMembersQueryVariables = Exact<{
+export type GetOrganizationRelationsQueryVariables = Exact<{
   organizationId: string;
 }>;
 
 
-export type GetOrganizationMembersQuery = { getOrganizationMembers: Array<{ id: string | null, organizationId: string | null, identityId: string | null, relation: string | null }> | null };
+export type GetOrganizationRelationsQuery = { getOrganizationRelations: Array<{ id: string | null, organizationId: string | null, identityId: string | null, relation: string | null }> | null };
 
 export type GetOrganizationsQueryVariables = Exact<{
   tenantId: string;
@@ -230,6 +244,53 @@ export const useCreateOrganizationMutation = <
 
 useCreateOrganizationMutation.getKey = () => ['CreateOrganization'];
 
+export const CreateOrganizationRelationDocument = new TypedDocumentString(`
+    mutation CreateOrganizationRelation($input: CreateOrganizationRelationInput!) {
+  createOrganizationRelation(input: $input) {
+    id
+    organizationId
+    identityId
+    relation
+  }
+}
+    `);
+
+export const useCreateOrganizationRelationMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateOrganizationRelationMutation, TError, CreateOrganizationRelationMutationVariables, TContext>) => {
+    
+    return useMutation<CreateOrganizationRelationMutation, TError, CreateOrganizationRelationMutationVariables, TContext>(
+      {
+    mutationKey: ['CreateOrganizationRelation'],
+    mutationFn: (variables?: CreateOrganizationRelationMutationVariables) => graphQLFetcher<CreateOrganizationRelationMutation, CreateOrganizationRelationMutationVariables>(CreateOrganizationRelationDocument, variables)(),
+    ...options
+  }
+    )};
+
+useCreateOrganizationRelationMutation.getKey = () => ['CreateOrganizationRelation'];
+
+export const DeleteOrganizationRelationDocument = new TypedDocumentString(`
+    mutation DeleteOrganizationRelation($id: String!) {
+  deleteOrganizationRelation(id: $id)
+}
+    `);
+
+export const useDeleteOrganizationRelationMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<DeleteOrganizationRelationMutation, TError, DeleteOrganizationRelationMutationVariables, TContext>) => {
+    
+    return useMutation<DeleteOrganizationRelationMutation, TError, DeleteOrganizationRelationMutationVariables, TContext>(
+      {
+    mutationKey: ['DeleteOrganizationRelation'],
+    mutationFn: (variables?: DeleteOrganizationRelationMutationVariables) => graphQLFetcher<DeleteOrganizationRelationMutation, DeleteOrganizationRelationMutationVariables>(DeleteOrganizationRelationDocument, variables)(),
+    ...options
+  }
+    )};
+
+useDeleteOrganizationRelationMutation.getKey = () => ['DeleteOrganizationRelation'];
+
 export const GetOrganizationDocument = new TypedDocumentString(`
     query GetOrganization($id: String!) {
   getOrganization(id: $id) {
@@ -266,9 +327,9 @@ useGetOrganizationQuery.document = GetOrganizationDocument;
 
 useGetOrganizationQuery.getKey = (variables: GetOrganizationQueryVariables) => ['GetOrganization', variables];
 
-export const GetOrganizationMembersDocument = new TypedDocumentString(`
-    query GetOrganizationMembers($organizationId: String!) {
-  getOrganizationMembers(organizationId: $organizationId) {
+export const GetOrganizationRelationsDocument = new TypedDocumentString(`
+    query GetOrganizationRelations($organizationId: String!) {
+  getOrganizationRelations(organizationId: $organizationId) {
     id
     organizationId
     identityId
@@ -277,25 +338,25 @@ export const GetOrganizationMembersDocument = new TypedDocumentString(`
 }
     `);
 
-export const useGetOrganizationMembersQuery = <
-      TData = GetOrganizationMembersQuery,
+export const useGetOrganizationRelationsQuery = <
+      TData = GetOrganizationRelationsQuery,
       TError = unknown
     >(
-      variables: GetOrganizationMembersQueryVariables,
-      options?: Omit<UseQueryOptions<GetOrganizationMembersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetOrganizationMembersQuery, TError, TData>['queryKey'] }
+      variables: GetOrganizationRelationsQueryVariables,
+      options?: Omit<UseQueryOptions<GetOrganizationRelationsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetOrganizationRelationsQuery, TError, TData>['queryKey'] }
     ) => {
     
-    return useQuery<GetOrganizationMembersQuery, TError, TData>(
+    return useQuery<GetOrganizationRelationsQuery, TError, TData>(
       {
-    queryKey: ['GetOrganizationMembers', variables],
-    queryFn: graphQLFetcher<GetOrganizationMembersQuery, GetOrganizationMembersQueryVariables>(GetOrganizationMembersDocument, variables),
+    queryKey: ['GetOrganizationRelations', variables],
+    queryFn: graphQLFetcher<GetOrganizationRelationsQuery, GetOrganizationRelationsQueryVariables>(GetOrganizationRelationsDocument, variables),
     ...options
   }
     )};
 
-useGetOrganizationMembersQuery.document = GetOrganizationMembersDocument;
+useGetOrganizationRelationsQuery.document = GetOrganizationRelationsDocument;
 
-useGetOrganizationMembersQuery.getKey = (variables: GetOrganizationMembersQueryVariables) => ['GetOrganizationMembers', variables];
+useGetOrganizationRelationsQuery.getKey = (variables: GetOrganizationRelationsQueryVariables) => ['GetOrganizationRelations', variables];
 
 export const GetOrganizationsDocument = new TypedDocumentString(`
     query GetOrganizations($tenantId: String!, $parentOrganizationId: String) {

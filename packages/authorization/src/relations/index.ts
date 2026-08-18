@@ -12,6 +12,8 @@ export {
   TENANT_PLATFORM,
 } from "./names";
 export {
+  organizationAdminRelationship,
+  organizationMemberRelationship,
   organizationOwnerRelationship,
   organizationTenantRelationship,
   platformAdminRelationship,

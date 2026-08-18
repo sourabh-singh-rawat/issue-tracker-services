@@ -42,7 +42,7 @@ describe("PlatformRelationService", () => {
         eventType: PlatformRelationCreatedEvent.type,
         eventVersion: PlatformRelationCreatedEvent.version,
         aggregateType: "platform-relation",
-        aggregateId: `${PLATFORM_OBJECT_ID}:${ADMIN}:${identityId}`,
+        aggregateId: PLATFORM_OBJECT_ID,
         payload: expect.objectContaining({
           type: PlatformRelationCreatedEvent.type,
           subject: `${PLATFORM_OBJECT_ID}:${ADMIN}:${identityId}`,

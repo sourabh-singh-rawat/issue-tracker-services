@@ -14,7 +14,7 @@ builder.mutationFields((t) => ({
     resolve: async (_root, { input }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
 
-      return service.createOrganization(
+      return service.create(
         {
           tenantId: input.tenantId,
           parentOrganizationId: input.parentOrganizationId ?? undefined,

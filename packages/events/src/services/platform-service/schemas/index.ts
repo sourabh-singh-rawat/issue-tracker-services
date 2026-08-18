@@ -23,6 +23,14 @@ export {
   type TenantRolePermissionsUpdatedData,
 } from "./TenantRolePermissionsUpdatedDataSchema";
 export {
+  OrganizationCreatedDataSchema,
+  type OrganizationCreatedData,
+} from "./OrganizationCreatedDataSchema";
+export {
+  OrganizationRelationCreatedDataSchema,
+  type OrganizationRelationCreatedData,
+} from "./OrganizationRelationCreatedDataSchema";
+export {
   TenantRelationCreatedDataSchema,
   type TenantRelationCreatedData,
 } from "./TenantRelationCreatedDataSchema";

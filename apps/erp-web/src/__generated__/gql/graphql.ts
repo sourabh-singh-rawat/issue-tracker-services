@@ -104,6 +104,12 @@ export type CreateOrganizationInput = {
   tenantId: Scalars['String']['input'];
 };
 
+export type CreateOrganizationRelationInput = {
+  identityId: Scalars['String']['input'];
+  organizationId: Scalars['String']['input'];
+  relation: Scalars['String']['input'];
+};
+
 export type CreatePlatformRelationInput = {
   identityId: Scalars['String']['input'];
   relation: Scalars['String']['input'];
@@ -200,6 +206,7 @@ export type Mutation = {
   createIdentity?: Maybe<IdentityObject>;
   createIssue?: Maybe<Scalars['String']['output']>;
   createOrganization?: Maybe<OrganizationObject>;
+  createOrganizationRelation?: Maybe<OrganizationRelationObject>;
   createPlatformRelation?: Maybe<PlatformRelationObject>;
   createProduct?: Maybe<ProductObject>;
   createProject?: Maybe<Scalars['String']['output']>;
@@ -212,6 +219,7 @@ export type Mutation = {
   deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
   deleteOrganization?: Maybe<Scalars['String']['output']>;
+  deleteOrganizationRelation?: Maybe<Scalars['Boolean']['output']>;
   deletePlatformRelation?: Maybe<Scalars['String']['output']>;
   deleteTenant?: Maybe<Scalars['String']['output']>;
   deleteTenantRelation?: Maybe<Scalars['Boolean']['output']>;
@@ -254,6 +262,11 @@ export type MutationCreateIssueArgs = {
 
 export type MutationCreateOrganizationArgs = {
   input: CreateOrganizationInput;
+};
+
+
+export type MutationCreateOrganizationRelationArgs = {
+  input: CreateOrganizationRelationInput;
 };
 
 
@@ -317,6 +330,11 @@ export type MutationDeleteOrganizationArgs = {
 };
 
 
+export type MutationDeleteOrganizationRelationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeletePlatformRelationArgs = {
   id: Scalars['String']['input'];
 };
@@ -373,14 +391,6 @@ export type MutationUpdateUnitArgs = {
   input: UpdateUnitInput;
 };
 
-export type OrganizationMemberObject = {
-  __typename?: 'OrganizationMemberObject';
-  id?: Maybe<Scalars['String']['output']>;
-  identityId?: Maybe<Scalars['String']['output']>;
-  organizationId?: Maybe<Scalars['String']['output']>;
-  relation?: Maybe<Scalars['String']['output']>;
-};
-
 export type OrganizationObject = {
   __typename?: 'OrganizationObject';
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -392,6 +402,14 @@ export type OrganizationObject = {
   slug?: Maybe<Scalars['String']['output']>;
   tenantId?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type OrganizationRelationObject = {
+  __typename?: 'OrganizationRelationObject';
+  id?: Maybe<Scalars['String']['output']>;
+  identityId?: Maybe<Scalars['String']['output']>;
+  organizationId?: Maybe<Scalars['String']['output']>;
+  relation?: Maybe<Scalars['String']['output']>;
 };
 
 export type PaginatedFileOutput = {
@@ -479,8 +497,8 @@ export type Query = {
   getClient?: Maybe<ClientObject>;
   getIdentities?: Maybe<Array<PlatformIdentityObject>>;
   getOrganization?: Maybe<OrganizationObject>;
-  getOrganizationMember?: Maybe<OrganizationMemberObject>;
-  getOrganizationMembers?: Maybe<Array<OrganizationMemberObject>>;
+  getOrganizationRelation?: Maybe<OrganizationRelationObject>;
+  getOrganizationRelations?: Maybe<Array<OrganizationRelationObject>>;
   getOrganizations?: Maybe<Array<OrganizationObject>>;
   getPlatformRelation?: Maybe<PlatformRelationObject>;
   getPlatformRelations?: Maybe<Array<PlatformRelationObject>>;
@@ -546,12 +564,12 @@ export type QueryGetOrganizationArgs = {
 };
 
 
-export type QueryGetOrganizationMemberArgs = {
+export type QueryGetOrganizationRelationArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type QueryGetOrganizationMembersArgs = {
+export type QueryGetOrganizationRelationsArgs = {
   identityId?: InputMaybe<Scalars['String']['input']>;
   organizationId: Scalars['String']['input'];
   relation?: InputMaybe<Scalars['String']['input']>;

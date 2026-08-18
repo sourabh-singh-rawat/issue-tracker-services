@@ -12,7 +12,7 @@ builder.queryFields((t) => ({
     },
     resolve: async (_root, { id }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
-      return service.getOrganizationById(id, ctx.user!.id);
+      return service.getById(id, ctx.user!.id);
     },
   }),
 }));

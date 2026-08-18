@@ -66,6 +66,8 @@ export {
   PRODUCT_ORGANIZATION,
   ROLE_MEMBER,
   TENANT_PLATFORM,
+  organizationAdminRelationship,
+  organizationMemberRelationship,
   organizationOwnerRelationship,
   organizationTenantRelationship,
   platformAdminRelationship,

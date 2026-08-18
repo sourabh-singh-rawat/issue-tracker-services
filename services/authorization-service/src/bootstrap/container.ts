@@ -15,6 +15,8 @@ import { AuthorizationService, type IAuthorizationService } from "@/features/aut
 import { AuthorizationProfileSyncConsumer } from "@/features/identity";
 
 import {
+  AuthorizationOrganizationRelationSyncConsumer,
+  AuthorizationOrganizationSyncConsumer,
   AuthorizationPlatformRelationSyncConsumer,
   AuthorizationTenantRelationSyncConsumer,
   AuthorizationTenantSyncConsumer,
@@ -42,6 +44,14 @@ container
 container
   .bind<AuthorizationTenantSyncConsumer>(TYPES.AuthorizationTenantSyncConsumer)
   .to(AuthorizationTenantSyncConsumer);
+container
+  .bind<AuthorizationOrganizationSyncConsumer>(TYPES.AuthorizationOrganizationSyncConsumer)
+  .to(AuthorizationOrganizationSyncConsumer);
+container
+  .bind<AuthorizationOrganizationRelationSyncConsumer>(
+    TYPES.AuthorizationOrganizationRelationSyncConsumer,
+  )
+  .to(AuthorizationOrganizationRelationSyncConsumer);
 container
   .bind<AuthorizationTenantRelationSyncConsumer>(TYPES.AuthorizationTenantRelationSyncConsumer)
   .to(AuthorizationTenantRelationSyncConsumer);

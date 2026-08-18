@@ -7,6 +7,10 @@ export const TYPES = {
   KetoClient: Symbol.for("KetoClient"),
   AuthorizationGraphProvider: Symbol.for("IAuthorizationGraphProvider"),
   AuthorizationTenantSyncConsumer: Symbol.for("AuthorizationTenantSyncConsumer"),
+  AuthorizationOrganizationSyncConsumer: Symbol.for("AuthorizationOrganizationSyncConsumer"),
+  AuthorizationOrganizationRelationSyncConsumer: Symbol.for(
+    "AuthorizationOrganizationRelationSyncConsumer",
+  ),
   AuthorizationTenantRelationSyncConsumer: Symbol.for("AuthorizationTenantRelationSyncConsumer"),
   AuthorizationPlatformRelationSyncConsumer: Symbol.for(
     "AuthorizationPlatformRelationSyncConsumer",

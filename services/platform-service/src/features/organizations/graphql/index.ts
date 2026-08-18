@@ -1,11 +1,14 @@
 import "@/features/organizations/graphql/objects/OrganizationObject";
-import "@/features/organizations/graphql/objects/OrganizationMemberObject";
+import "@/features/organizations/graphql/objects/OrganizationRelationObject";
 import "@/features/organizations/graphql/inputs/CreateOrganizationInput";
+import "@/features/organizations/graphql/inputs/CreateOrganizationRelationInput";
 import "@/features/organizations/graphql/inputs/UpdateOrganizationInput";
 import "@/features/organizations/graphql/queries/getOrganization";
 import "@/features/organizations/graphql/queries/getOrganizations";
-import "@/features/organizations/graphql/queries/getOrganizationMember";
-import "@/features/organizations/graphql/queries/getOrganizationMembers";
+import "@/features/organizations/graphql/queries/getOrganizationRelation";
+import "@/features/organizations/graphql/queries/getOrganizationRelations";
 import "@/features/organizations/graphql/mutations/createOrganization";
+import "@/features/organizations/graphql/mutations/createOrganizationRelation";
 import "@/features/organizations/graphql/mutations/updateOrganization";
 import "@/features/organizations/graphql/mutations/deleteOrganization";
+import "@/features/organizations/graphql/mutations/deleteOrganizationRelation";

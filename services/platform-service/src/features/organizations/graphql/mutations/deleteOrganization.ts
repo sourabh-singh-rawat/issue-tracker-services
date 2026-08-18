@@ -10,7 +10,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, { id }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
-      await service.deleteOrganization(id, ctx.user!.id);
+      await service.delete(id, ctx.user!.id);
       return id;
     },
   }),

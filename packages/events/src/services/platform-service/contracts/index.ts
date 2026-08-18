@@ -1,3 +1,5 @@
+export { OrganizationCreatedEvent } from "./OrganizationCreatedEvent";
+export { OrganizationRelationCreatedEvent } from "./OrganizationRelationCreatedEvent";
 export { PlatformRelationCreatedEvent } from "./PlatformRelationCreatedEvent";
 export { PlatformRelationDeletedEvent } from "./PlatformRelationDeletedEvent";
 export { PlatformRolePermissionsUpdatedEvent } from "./PlatformRolePermissionsUpdatedEvent";

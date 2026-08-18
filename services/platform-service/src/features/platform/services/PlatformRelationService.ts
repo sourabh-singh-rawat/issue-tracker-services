@@ -84,7 +84,7 @@ export class PlatformRelationService implements IPlatformRelationService {
           eventType: event.type,
           eventVersion: PlatformRelationCreatedEvent.version,
           aggregateType: "platform-relation",
-          aggregateId: relation.id,
+          aggregateId: PLATFORM_OBJECT_ID,
           payload: event,
         },
         { tx },
