@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './../routes/__root'
 import { Route as IndexRouteImport } from './../routes/index'
+import { Route as GenderRouteImport } from './../routes/gender'
 import { Route as noAuthConsentRouteImport } from './../routes/(no-auth)/consent'
 import { Route as noAuthRegistrationRouteImport } from './../routes/(no-auth)/registration'
 import { Route as noAuthResendVerificationRouteImport } from './../routes/(no-auth)/resend-verification'
@@ -21,6 +22,11 @@ import { Route as NameEditRouteImport } from './../routes/name/edit'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GenderRoute = GenderRouteImport.update({
+  id: '/gender',
+  path: '/gender',
   getParentRoute: () => rootRouteImport,
 } as any)
 const noAuthConsentRoute = noAuthConsentRouteImport.update({
@@ -62,6 +68,7 @@ const NameEditRoute = NameEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gender': typeof GenderRoute
   '/consent': typeof noAuthConsentRoute
   '/registration': typeof noAuthRegistrationRoute
   '/resend-verification': typeof noAuthResendVerificationRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gender': typeof GenderRoute
   '/consent': typeof noAuthConsentRoute
   '/registration': typeof noAuthRegistrationRoute
   '/resend-verification': typeof noAuthResendVerificationRoute
@@ -83,6 +91,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gender': typeof GenderRoute
   '/(no-auth)/consent': typeof noAuthConsentRoute
   '/(no-auth)/registration': typeof noAuthRegistrationRoute
   '/(no-auth)/resend-verification': typeof noAuthResendVerificationRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/gender'
     | '/consent'
     | '/registration'
     | '/resend-verification'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/gender'
     | '/consent'
     | '/registration'
     | '/resend-verification'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/gender'
     | '/(no-auth)/consent'
     | '/(no-auth)/registration'
     | '/(no-auth)/resend-verification'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GenderRoute: typeof GenderRoute
   noAuthConsentRoute: typeof noAuthConsentRoute
   noAuthRegistrationRoute: typeof noAuthRegistrationRoute
   noAuthResendVerificationRoute: typeof noAuthResendVerificationRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gender': {
+      id: '/gender'
+      path: '/gender'
+      fullPath: '/gender'
+      preLoaderRoute: typeof GenderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(no-auth)/consent': {
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GenderRoute: GenderRoute,
   noAuthConsentRoute: noAuthConsentRoute,
   noAuthRegistrationRoute: noAuthRegistrationRoute,
   noAuthResendVerificationRoute: noAuthResendVerificationRoute,

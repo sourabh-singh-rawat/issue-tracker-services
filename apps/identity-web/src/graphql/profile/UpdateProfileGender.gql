@@ -1,0 +1,7 @@
+mutation UpdateProfileGender($input: UpdateProfileGenderInput!) {
+  updateProfileGender(input: $input) {
+    id
+    identityId
+    gender
+  }
+}

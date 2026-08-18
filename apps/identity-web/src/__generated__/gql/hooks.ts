@@ -8,6 +8,13 @@ import type * as Types from './graphql';
 
 import type { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+export type UpdateProfileGenderMutationVariables = Exact<{
+  input: Types.UpdateProfileGenderInput;
+}>;
+
+
+export type UpdateProfileGenderMutation = { updateProfileGender: { id: string | null, identityId: string | null, gender: Types.ProfileGender | null } | null };
+
 export type UpdateProfileNameMutationVariables = Exact<{
   input: Types.UpdateProfileNameInput;
 }>;
@@ -34,6 +41,31 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
+
+export const UpdateProfileGenderDocument = new TypedDocumentString(`
+    mutation UpdateProfileGender($input: UpdateProfileGenderInput!) {
+  updateProfileGender(input: $input) {
+    id
+    identityId
+    gender
+  }
+}
+    `);
+
+export const useUpdateProfileGenderMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<UpdateProfileGenderMutation, TError, UpdateProfileGenderMutationVariables, TContext>) => {
+    
+    return useMutation<UpdateProfileGenderMutation, TError, UpdateProfileGenderMutationVariables, TContext>(
+      {
+    mutationKey: ['UpdateProfileGender'],
+    mutationFn: (variables?: UpdateProfileGenderMutationVariables) => graphQLFetcher<UpdateProfileGenderMutation, UpdateProfileGenderMutationVariables>(UpdateProfileGenderDocument, variables)(),
+    ...options
+  }
+    )};
+
+useUpdateProfileGenderMutation.getKey = () => ['UpdateProfileGender'];
 
 export const UpdateProfileNameDocument = new TypedDocumentString(`
     mutation UpdateProfileName($input: UpdateProfileNameInput!) {

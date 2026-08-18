@@ -1,6 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { UpdateNamePage } from "@features/home";
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/name/edit")({
-  component: UpdateNamePage,
+  component: lazyRouteComponent(() => import("@features/home/components"), "UpdateName"),
 });

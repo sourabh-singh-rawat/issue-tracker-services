@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 
 type LocationCrumb = {
   label: string;
-  to?: "/" | "/name";
+  to?: "/" | "/name" | "/gender";
 };
 
 type LocationBreadcrumbsProps = {
