@@ -1,8 +1,9 @@
+/* oxlint-disable max-lines */
 import { Context, Namespace } from "@ory/keto-namespace-types";
 
-export class identity implements Namespace {}
+export class identity implements Namespace {} // NOSONAR typescript:S101
 
-export class platform implements Namespace {
+export class platform implements Namespace { // NOSONAR typescript:S101
   related: {
     admin: identity[];
     member: identity[];
@@ -17,7 +18,7 @@ export class platform implements Namespace {
   };
 }
 
-export class tenant implements Namespace {
+export class tenant implements Namespace { // NOSONAR typescript:S101
   related: {
     owner: identity[];
     admin: identity[];
@@ -58,7 +59,7 @@ export class tenant implements Namespace {
   };
 }
 
-export class organization implements Namespace {
+export class organization implements Namespace { // NOSONAR typescript:S101
   related: {
     owner: identity[];
     admin: identity[];
@@ -90,7 +91,7 @@ export class organization implements Namespace {
   };
 }
 
-export class product implements Namespace {
+export class product implements Namespace { // NOSONAR typescript:S101
   related: {
     organization: organization[];
   };
@@ -107,7 +108,7 @@ export class product implements Namespace {
   };
 }
 
-export class brand implements Namespace {
+export class brand implements Namespace { // NOSONAR typescript:S101
   related: {
     product: product[];
   };
@@ -124,13 +125,13 @@ export class brand implements Namespace {
   };
 }
 
-export class role implements Namespace {
+export class role implements Namespace { // NOSONAR typescript:S101
   related: {
     member: identity[];
   };
 }
 
-export class permission implements Namespace {
+export class permission implements Namespace { // NOSONAR typescript:S101
   related: {
     has: role[];
   };
