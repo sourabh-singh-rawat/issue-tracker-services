@@ -1,2 +1,12 @@
 export { type Attachment, type NewAttachment, Attachments } from "@/db/tables/Attachments";
+export {
+  type AttachmentVersion,
+  type NewAttachmentVersion,
+  AttachmentVersions,
+} from "@/db/tables/AttachmentVersions";
+export {
+  type AttachmentUpload,
+  type NewAttachmentUpload,
+  AttachmentUploads,
+} from "@/db/tables/AttachmentUploads";
 export { type Identity, type NewIdentity, Identities } from "@/db/tables/Identities";

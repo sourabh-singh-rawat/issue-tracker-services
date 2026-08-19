@@ -1,0 +1,23 @@
+import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { idColumn } from "@/db/columns";
+import { Identities } from "@/db/tables/Identities";
+
+export const AttachmentUploads = pgTable("attachment_uploads", {
+  ...idColumn,
+  tenantId: uuid("tenant_id").notNull(),
+  status: text("status").notNull(),
+  filename: text("filename").notNull(),
+  contentType: text("content_type").notNull(),
+  expectedSize: integer("expected_size").notNull(),
+  storageProvider: text("storage_provider").notNull(),
+  storageObjectKey: text("storage_object_key").notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdBy: uuid("created_by")
+    .notNull()
+    .references(() => Identities.id),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+});
+
+export type AttachmentUpload = typeof AttachmentUploads.$inferSelect;
+export type NewAttachmentUpload = typeof AttachmentUploads.$inferInsert;

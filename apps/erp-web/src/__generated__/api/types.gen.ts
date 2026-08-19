@@ -69,6 +69,17 @@ export type GetCurrentUserResponses = {
             email: string;
             emailVerified?: boolean;
         };
+        profile: {
+            id: string;
+            identityId: string;
+            firstName: string;
+            middleName?: string | unknown;
+            lastName?: string | unknown;
+            gender?: string | unknown;
+            description?: string | unknown;
+            photoUrl?: string | unknown;
+            fullName: string;
+        } | unknown;
     };
 };
 
@@ -340,7 +351,7 @@ export type CreateAttachmentResponses = {
 
 export type CheckRelationshipData = {
     body: {
-        namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+        namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
         object: string;
         relation: string;
         subject: string;
@@ -364,16 +375,16 @@ export type CheckRelationshipResponse = CheckRelationshipResponses[keyof CheckRe
 export type EnsureRelationshipData = {
     body: {
         object: {
-            namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+            namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
             id: string;
         };
         relation: string;
         subject?: {
-            namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+            namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
             id: string;
         };
         subjectSet?: {
-            namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+            namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
             id: string;
             relation: string;
         };
@@ -397,16 +408,16 @@ export type EnsureRelationshipResponse = EnsureRelationshipResponses[keyof Ensur
 export type DeleteRelationshipData = {
     body: {
         object: {
-            namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+            namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
             id: string;
         };
         relation: string;
         subject?: {
-            namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+            namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
             id: string;
         };
         subjectSet?: {
-            namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+            namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
             id: string;
             relation: string;
         };
@@ -429,7 +440,7 @@ export type DeleteRelationshipResponse = DeleteRelationshipResponses[keyof Delet
 
 export type ListRelationshipsData = {
     body: {
-        namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+        namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
         object: string;
         relation?: string;
     };
@@ -445,16 +456,16 @@ export type ListRelationshipsResponses = {
     200: {
         relationships: Array<{
             object: {
-                namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+                namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
                 id: string;
             };
             relation: string;
             subject?: {
-                namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+                namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
                 id: string;
             };
             subjectSet?: {
-                namespace: 'identity' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
+                namespace: 'identity' | 'profile' | 'platform' | 'tenant' | 'organization' | 'product' | 'brand' | 'role' | 'permission';
                 id: string;
                 relation: string;
             };

@@ -9,7 +9,14 @@ import { logger } from "@/bootstrap/logger";
 import { imageProcessingQueue } from "@/bootstrap/queue";
 import { redisClient } from "@/bootstrap/redis-client";
 import { AttachmentRepository, AttachmentService, CoreAttachmentService, IAttachmentRepository } from "@/features/attachment";
+import {
+  AttachmentUploadRepository,
+  AttachmentUploadService,
+  IAttachmentUploadRepository,
+  IAttachmentUploadService,
+} from "@/features/attachment-upload";
 import { AttachmentIdentitySyncConsumer, IIdentityRepository, IdentityRepository } from "@/features/identities";
+import { IObjectStorage, SeaweedObjectStorage } from "@/integrations/storage";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
 import { routes } from "@/routes";
@@ -24,6 +31,9 @@ container.bind(TYPES.ImageProcessingQueue).toConstantValue(imageProcessingQueue)
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IAttachmentRepository>(TYPES.AttachmentRepository).to(AttachmentRepository);
+container.bind<IAttachmentUploadRepository>(TYPES.AttachmentUploadRepository).to(AttachmentUploadRepository);
+container.bind<IObjectStorage>(TYPES.ObjectStorage).to(SeaweedObjectStorage);
+container.bind<IAttachmentUploadService>(TYPES.AttachmentUploadService).to(AttachmentUploadService);
 container.bind<AttachmentService>(TYPES.AttachmentService).to(CoreAttachmentService);
 container.bind<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).to(AttachmentIdentitySyncConsumer);
 
