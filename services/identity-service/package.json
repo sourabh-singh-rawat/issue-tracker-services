@@ -8,15 +8,15 @@
     "identity",
     "user"
   ],
-  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "homepage": "https://github.com/sourabh-singh-rawat/pine#readme",
   "bugs": {
-    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+    "url": "https://github.com/sourabh-singh-rawat/pine/issues"
   },
   "license": "ISC",
   "author": "Sourabh Singh Rawat",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+    "url": "git+https://github.com/sourabh-singh-rawat/pine.git"
   },
   "main": "./src/main.ts",
   "scripts": {
