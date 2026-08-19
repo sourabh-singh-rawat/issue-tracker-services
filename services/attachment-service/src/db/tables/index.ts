@@ -10,3 +10,4 @@ export {
   AttachmentUploads,
 } from "@/db/tables/AttachmentUploads";
 export { type Identity, type NewIdentity, Identities } from "@/db/tables/Identities";
+export { type Tenant, type NewTenant, Tenants } from "@/db/tables/Tenants";

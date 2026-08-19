@@ -11,5 +11,7 @@ export const TYPES = {
   AttachmentUploadService: Symbol.for("IAttachmentUploadService"),
   ObjectStorage: Symbol.for("IObjectStorage"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
+  TenantRepository: Symbol.for("ITenantRepository"),
   AttachmentIdentitySyncConsumer: Symbol.for("AttachmentIdentitySyncConsumer"),
+  AttachmentTenantSyncConsumer: Symbol.for("AttachmentTenantSyncConsumer"),
 } as const;

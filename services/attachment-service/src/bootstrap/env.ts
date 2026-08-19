@@ -17,6 +17,7 @@ export const EnvSchema = Type.Object({
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
   ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  IDENTITY_WEB_URL: Type.String({ default: "http://localhost:3000" }),
   REDIS_URL: Type.String({ default: "redis://localhost:6380" }),
   S3_ENDPOINT: Type.String({ default: "http://127.0.0.1:8333" }),
   S3_REGION: Type.String({ default: "us-east-1" }),

@@ -9,5 +9,5 @@ export type CreateAttachmentUploadInput = {
 };
 
 export interface IAttachmentUploadService {
-  create: (input: CreateAttachmentUploadInput) => Promise<UploadTarget>;
+  createUploadTarget: (input: CreateAttachmentUploadInput) => Promise<UploadTarget>;
 }

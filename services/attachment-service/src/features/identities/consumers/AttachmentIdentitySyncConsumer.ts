@@ -1,4 +1,3 @@
-import { UserAlreadyExists } from "@pine/common";
 import {
   type CloudEvent,
   type IBroker,
@@ -37,7 +36,9 @@ export class AttachmentIdentitySyncConsumer extends Consumer<CloudEvent<Identity
 
     await this.db.transaction(async (tx) => {
       const exists = await this.identityRepository.existsById(userId, { tx });
-      if (exists) throw new UserAlreadyExists();
+      if (exists) {
+        return;
+      }
 
       await this.identityRepository.save({ id: userId }, { tx });
     });

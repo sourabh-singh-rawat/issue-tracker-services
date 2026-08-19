@@ -17,7 +17,7 @@ export class AttachmentUploadService implements IAttachmentUploadService {
     private readonly objectStorage: IObjectStorage,
   ) {}
 
-  async create(input: CreateAttachmentUploadInput): Promise<UploadTarget> {
+  async createUploadTarget(input: CreateAttachmentUploadInput): Promise<UploadTarget> {
     const id = uuidv7();
     const objectKey = `${input.tenantId}/${id}`;
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);

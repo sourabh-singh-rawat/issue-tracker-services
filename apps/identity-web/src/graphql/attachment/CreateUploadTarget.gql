@@ -1,0 +1,11 @@
+mutation CreateUploadTarget($input: CreateUploadTargetInput!) {
+  createUploadTarget(input: $input) {
+    objectId
+    url
+    expiresAt
+    headers {
+      key
+      value
+    }
+  }
+}

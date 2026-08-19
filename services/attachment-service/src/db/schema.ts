@@ -12,4 +12,7 @@ export {
   type Identity,
   type NewIdentity,
   Identities,
+  type Tenant,
+  type NewTenant,
+  Tenants,
 } from "@/db/tables";
