@@ -7,6 +7,7 @@ vi.mock("@/bootstrap/env", () => ({
 }));
 
 import type { AttachmentUpload } from "@/db";
+import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
 import type { IAttachmentUploadRepository } from "@/features/attachment-upload/repositories";
 import { AttachmentUploadService } from "@/features/attachment-upload/services/AttachmentUploadService";
 import type { IObjectStorage, UploadTarget } from "@/integrations/storage";
@@ -113,7 +114,7 @@ describe("AttachmentUploadService", () => {
       const record: AttachmentUpload = {
         id: "upload-1",
         tenantId: "tenant-1",
-        status: "PENDING",
+        status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",
         expectedSize: 1024,

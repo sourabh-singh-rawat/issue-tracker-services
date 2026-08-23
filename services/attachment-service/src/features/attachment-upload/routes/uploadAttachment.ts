@@ -2,6 +2,7 @@ import type { HttpRoute } from "@pine/server";
 import { StatusCodes } from "http-status-codes";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
+import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
 import {
   UploadAttachmentParamsSchema,
   UploadAttachmentResponseSchema,
@@ -55,7 +56,7 @@ export const uploadAttachment: HttpRoute = {
 
     return {
       status: StatusCodes.OK,
-      body: { status: "COMPLETED" },
+      body: { status: ATTACHMENT_UPLOAD_STATUS.COMPLETED },
     };
   },
 };

@@ -2,6 +2,7 @@ import { NotFoundError, uuidv7 } from "@pine/common";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { env } from "@/bootstrap/env";
+import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
 import type { IAttachmentUploadRepository } from "@/features/attachment-upload/repositories";
 import type {
   CreateAttachmentUploadInput,
@@ -28,7 +29,7 @@ export class AttachmentUploadService implements IAttachmentUploadService {
     await this.attachmentUploads.save({
       id,
       tenantId: input.tenantId,
-      status: "PENDING",
+      status: ATTACHMENT_UPLOAD_STATUS.PENDING,
       filename: input.filename,
       contentType: input.contentType,
       expectedSize: input.size,
@@ -68,7 +69,7 @@ export class AttachmentUploadService implements IAttachmentUploadService {
       throw new NotFoundError("AttachmentUpload");
     }
 
-    if (record.status !== "PENDING") {
+    if (record.status !== ATTACHMENT_UPLOAD_STATUS.PENDING) {
       throw new Error(`Upload is already ${record.status.toLowerCase()}`);
     }
 

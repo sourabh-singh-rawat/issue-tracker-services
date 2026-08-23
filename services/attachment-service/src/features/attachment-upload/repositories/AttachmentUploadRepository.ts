@@ -7,6 +7,7 @@ import {
   type Database,
   type NewAttachmentUpload,
 } from "@/db";
+import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
 import type {
   AttachmentUploadRepositoryOptions,
   IAttachmentUploadRepository,
@@ -44,7 +45,7 @@ export class AttachmentUploadRepository implements IAttachmentUploadRepository {
     const client = this.client(options);
     await client
       .update(AttachmentUploads)
-      .set({ status: "COMPLETED", completedAt: new Date() })
+      .set({ status: ATTACHMENT_UPLOAD_STATUS.COMPLETED, completedAt: new Date() })
       .where(eq(AttachmentUploads.id, id));
   }
 
@@ -52,7 +53,7 @@ export class AttachmentUploadRepository implements IAttachmentUploadRepository {
     const client = this.client(options);
     await client
       .update(AttachmentUploads)
-      .set({ status: "FAILED" })
+      .set({ status: ATTACHMENT_UPLOAD_STATUS.FAILED })
       .where(eq(AttachmentUploads.id, id));
   }
 
