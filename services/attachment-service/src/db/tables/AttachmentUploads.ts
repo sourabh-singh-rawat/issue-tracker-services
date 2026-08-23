@@ -1,10 +1,12 @@
-import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { idColumn } from "@/db/columns";
 import { Identities } from "@/db/tables/Identities";
 
 export const AttachmentUploads = pgTable("attachment_uploads", {
   ...idColumn,
   tenantId: uuid("tenant_id").notNull(),
+  operationId: uuid("operation_id"),
+  metadata: jsonb("metadata").$type<Record<string, unknown>>(),
   status: text("status").notNull(),
   filename: text("filename").notNull(),
   contentType: text("content_type").notNull(),

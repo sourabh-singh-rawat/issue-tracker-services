@@ -307,7 +307,7 @@ describe("token route", () => {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
-          secure: false,
+          secure: true,
           expires: expect.any(Date),
         }),
         expect.objectContaining({
@@ -316,7 +316,7 @@ describe("token route", () => {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
-          secure: false,
+          secure: true,
         }),
         expect.objectContaining({
           name: "idToken",
@@ -324,7 +324,7 @@ describe("token route", () => {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
-          secure: false,
+          secure: true,
           expires: expect.any(Date),
         }),
       ]),

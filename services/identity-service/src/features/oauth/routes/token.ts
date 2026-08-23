@@ -1,18 +1,19 @@
-import type { HttpRoute } from "@pine/server";
+import type { HttpResponseCookie, HttpRoute } from "@pine/server";
 import { json } from "@pine/server";
 import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IOAuthService } from "@/features/oauth/services";
 import { TokenBodySchema, TokenResponseSchema, type TokenResponse } from "@/features/oauth/schemas";
-import { env } from "@/bootstrap/env";
 
-function isTokenBody(body: unknown): body is {
+const isTokenBody = (
+  body: unknown,
+): body is {
   grant_type: "authorization_code";
   code: string;
   client_id: string;
   redirect_uri: string;
   code_verifier: string;
-} {
+} => {
   if (body === null || typeof body !== "object") {
     return false;
   }
@@ -28,7 +29,7 @@ function isTokenBody(body: unknown): body is {
     "code_verifier" in body &&
     typeof body.code_verifier === "string"
   );
-}
+};
 
 export const token: HttpRoute = {
   url: "/identity/oauth/token",
@@ -58,11 +59,11 @@ export const token: HttpRoute = {
       codeVerifier: request.body.code_verifier,
     });
 
-    const tokenCookieOptions = {
+    const tokenCookieOptions: Omit<HttpResponseCookie, "name" | "value"> = {
       httpOnly: true,
       path: "/",
-      sameSite: "lax" as const,
-      secure: env.NODE_ENV === "production",
+      sameSite: "lax",
+      secure: true,
     };
 
     const accessExpires =

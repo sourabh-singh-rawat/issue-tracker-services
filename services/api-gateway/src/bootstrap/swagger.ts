@@ -1,6 +1,6 @@
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, RawServerBase } from "fastify";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { env } from "./env";
@@ -50,7 +50,9 @@ const rewriteServersForGateway = (
   };
 };
 
-export const registerSwagger = async (server: FastifyInstance): Promise<void> => {
+export const registerSwagger = async <RawServer extends RawServerBase>(
+  server: FastifyInstance<RawServer>,
+): Promise<void> => {
   // Relative URL keeps Try-it-out on the same origin as /docs (avoids localhost vs 127.0.0.1 CSP/CORS).
   const gatewayUrl = "/";
   const gatewayOrigin = new URL(env.API_GATEWAY_URL).origin;

@@ -61,6 +61,7 @@
     "openapi:compose": "tsx tools/scripts/compose-schemas.ts --openapi",
     "schemas:compose": "tsx tools/scripts/compose-schemas.ts",
     "schemas:watch": "tsx tools/scripts/compose-schemas.ts --watch",
+    "tls:generate": "tsx infra/tls/generate-dev-certs.ts",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:release": "changeset publish",

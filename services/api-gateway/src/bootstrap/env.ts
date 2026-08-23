@@ -3,10 +3,16 @@ import Value from "typebox/value";
 
 export const EnvSchema = Type.Object({
   NODE_ENV: Type.String({ default: "development" }),
-  API_GATEWAY_URL: Type.String({ default: "http://127.0.0.1:4000" }),
-  IDENTITY_WEB_URL: Type.String({ default: "http://localhost:3000" }),
-  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
-  VITE_PLATFORM_WEB_URL: Type.String({ default: "http://localhost:3002" }),
+  API_GATEWAY_URL: Type.String({ default: "https://127.0.0.1:4000" }),
+  API_GATEWAY_TLS_KEY_PATH: Type.String({
+    default: ".local/tls/api-gateway/api-gateway.key",
+  }),
+  API_GATEWAY_TLS_CERT_PATH: Type.String({
+    default: ".local/tls/api-gateway/api-gateway.crt",
+  }),
+  IDENTITY_WEB_URL: Type.String({ default: "https://localhost:3000" }),
+  ERP_WEB_URL: Type.String({ default: "https://localhost:3001" }),
+  VITE_PLATFORM_WEB_URL: Type.String({ default: "https://localhost:3002" }),
   IDENTITY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5000" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5003" }),
   INVENTORY_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5002" }),

@@ -13,18 +13,16 @@ import { TYPES } from "@/bootstrap/container-types";
 import { logout } from "@/features/logout/routes/logout";
 import { InvalidCredentialError } from "@/integrations/identity";
 
-function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
-  return {
-    method: partial.method ?? "POST",
-    url: partial.url ?? "/identity/logout",
-    headers: partial.headers ?? {},
-    query: partial.query ?? {},
-    params: partial.params ?? {},
-    cookies: partial.cookies ?? {},
-    body: partial.body,
-    file: partial.file ?? (async () => undefined),
-  };
-}
+const httpRequest = (partial: Partial<HttpRequest>): HttpRequest => ({
+  method: partial.method ?? "POST",
+  url: partial.url ?? "/identity/logout",
+  headers: partial.headers ?? {},
+  query: partial.query ?? {},
+  params: partial.params ?? {},
+  cookies: partial.cookies ?? {},
+  body: partial.body,
+  file: partial.file ?? (async () => undefined),
+});
 
 describe("logout route", () => {
   beforeEach(() => {
@@ -53,7 +51,7 @@ describe("logout route", () => {
           name: "session",
           path: "/",
           sameSite: "lax",
-          secure: false,
+          secure: true,
         },
       ],
     });

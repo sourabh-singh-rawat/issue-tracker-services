@@ -8,7 +8,6 @@ import { ATTACHMENT_SECURITY_STATUS, ATTACHMENT_STATUS } from "@/features/attach
 import type { IAttachmentRepository } from "@/features/attachment/repositories";
 import {
   type AttachmentDatabase,
-  type AttachmentQueue,
   AttachmentService,
 } from "@/features/attachment/services/AttachmentService";
 
@@ -17,10 +16,6 @@ const dummyTx: unknown = {};
 const mockTx = toDbClient(dummyTx) ? dummyTx : undefined;
 
 describe("AttachmentService", () => {
-  const imageProcessingQueue: AttachmentQueue = {
-    add: vi.fn(),
-  };
-
   const db: AttachmentDatabase = {
     transaction: vi.fn(async (callback) => {
       if (!mockTx) {
@@ -34,7 +29,6 @@ describe("AttachmentService", () => {
     save: vi.fn(),
     saveVersion: vi.fn(),
     findById: vi.fn(),
-    findByIssueId: vi.fn(),
     deleteById: vi.fn(),
   };
 
@@ -57,6 +51,8 @@ describe("AttachmentService", () => {
         id: "att-123",
         tenantId: "tenant-1",
         currentVersionId: "ver-123",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_STATUS.QUARANTINED,
         securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
         createdBy: "user-1",
@@ -83,7 +79,6 @@ describe("AttachmentService", () => {
 
       const service = new AttachmentService(
         db,
-        imageProcessingQueue,
         attachmentRepository,
         outboxService,
       );
@@ -149,56 +144,12 @@ describe("AttachmentService", () => {
     });
   });
 
-  describe("create", () => {
-    it("adds image processing job to queue", async () => {
-      const service = new AttachmentService(
-        db,
-        imageProcessingQueue,
-        attachmentRepository,
-        outboxService,
-      );
-      const options = {
-        issueId: "issue-1",
-        userId: "user-1",
-        file: Buffer.from("data"),
-        filename: "test.png",
-        mimetype: "image/png",
-      };
-
-      await service.create(options);
-
-      expect(imageProcessingQueue.add).toHaveBeenCalledWith(
-        "process-and-upload-image",
-        options,
-      );
-    });
-  });
-
-  describe("findByIssueId", () => {
-    it("delegates to repository", async () => {
-      const output = { rows: [], rowCount: 0 };
-      vi.mocked(attachmentRepository.findByIssueId).mockResolvedValue(output);
-
-      const service = new AttachmentService(
-        db,
-        imageProcessingQueue,
-        attachmentRepository,
-        outboxService,
-      );
-      const result = await service.findByIssueId("issue-1");
-
-      expect(result).toBe(output);
-      expect(attachmentRepository.findByIssueId).toHaveBeenCalledWith("issue-1");
-    });
-  });
-
   describe("delete", () => {
     it("throws NotFoundError when attachment does not exist", async () => {
       vi.mocked(attachmentRepository.findById).mockResolvedValue(null);
 
       const service = new AttachmentService(
         db,
-        imageProcessingQueue,
         attachmentRepository,
         outboxService,
       );
@@ -213,6 +164,8 @@ describe("AttachmentService", () => {
         id: "att-1",
         tenantId: "tenant-1",
         currentVersionId: "ver-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_STATUS.AVAILABLE,
         securityStatus: ATTACHMENT_SECURITY_STATUS.CLEAN,
         createdBy: "user-1",
@@ -223,7 +176,6 @@ describe("AttachmentService", () => {
 
       const service = new AttachmentService(
         db,
-        imageProcessingQueue,
         attachmentRepository,
         outboxService,
       );

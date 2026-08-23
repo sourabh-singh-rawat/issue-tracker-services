@@ -36,6 +36,8 @@ export class AttachmentUploadService implements IAttachmentUploadService {
     await this.attachmentUploads.save({
       id,
       tenantId: input.tenantId,
+      operationId: input.operationId,
+      metadata: input.metadata,
       status: ATTACHMENT_UPLOAD_STATUS.PENDING,
       filename: input.filename,
       contentType: input.contentType,
@@ -90,6 +92,8 @@ export class AttachmentUploadService implements IAttachmentUploadService {
         data: input.data,
         storageProvider: record.storageProvider,
         storageObjectKey: record.storageObjectKey,
+        operationId: record.operationId ?? undefined,
+        metadata: record.metadata ?? undefined,
         createdBy: record.createdBy,
       });
 

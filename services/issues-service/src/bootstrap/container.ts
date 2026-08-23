@@ -1,5 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
+import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -16,6 +16,7 @@ import {
   type IRetryPolicy,
 } from "@pine/outbox";
 import { Container } from "inversify";
+import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
@@ -67,7 +68,14 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: env.NODE_ENV,
       version: 1,
     },
-    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    https: {
+      key: readTlsFile(env.ISSUES_SERVICE_TLS_KEY_PATH),
+      cert: readTlsFile(env.ISSUES_SERVICE_TLS_CERT_PATH),
+    },
+    cors: {
+      credentials: true,
+      origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
+    },
     cookie: { secret: env.JWT_SECRET },
     graphql: createGraphQLServer({
       schema,

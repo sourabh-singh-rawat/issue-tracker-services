@@ -35,6 +35,7 @@
   "dependencies": {
     "@ory/hydra-client": "26.2.0",
     "@ory/kratos-client": "26.2.0",
+    "@pine/attachment": "workspace:^",
     "@pine/authorization": "workspace:^",
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",

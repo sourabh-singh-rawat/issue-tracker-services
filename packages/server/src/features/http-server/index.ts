@@ -41,4 +41,4 @@ export { attachHttpServer } from "./attachHttpServer";
 export { createHttpServer } from "./createHttpServer";
 export { FastifyHttpRequestAdapter } from "./FastifyHttpRequestAdapter";
 export { FastifyHttpServer } from "./FastifyHttpServer";
-export { json, redirect } from "./utils";
+export { json, readTlsFile, redirect } from "./utils";

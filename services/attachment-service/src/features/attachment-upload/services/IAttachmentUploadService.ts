@@ -6,6 +6,8 @@ export type CreateAttachmentUploadInput = {
   filename: string;
   contentType: string;
   size: number;
+  operationId?: string;
+  metadata?: Record<string, unknown>;
 };
 
 export type UploadToTargetInput = {

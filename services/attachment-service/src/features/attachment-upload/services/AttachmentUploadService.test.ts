@@ -40,8 +40,6 @@ describe("AttachmentUploadService", () => {
 
   const attachmentService: IAttachmentService = {
     createFromUpload: vi.fn(),
-    create: vi.fn(),
-    findByIssueId: vi.fn(),
     delete: vi.fn(),
   };
 
@@ -75,6 +73,8 @@ describe("AttachmentUploadService", () => {
       const record: AttachmentUpload = {
         id: "upload-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",
@@ -92,6 +92,8 @@ describe("AttachmentUploadService", () => {
         id: "att-1",
         tenantId: "tenant-1",
         currentVersionId: "ver-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_STATUS.QUARANTINED,
         securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
         createdBy: "user-1",
@@ -145,6 +147,8 @@ describe("AttachmentUploadService", () => {
       const record: AttachmentUpload = {
         id: "upload-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.COMPLETED,
         filename: "photo.png",
         contentType: "image/png",
@@ -174,6 +178,8 @@ describe("AttachmentUploadService", () => {
       const record: AttachmentUpload = {
         id: "upload-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",
@@ -205,6 +211,8 @@ describe("AttachmentUploadService", () => {
       const record: AttachmentUpload = {
         id: "upload-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",

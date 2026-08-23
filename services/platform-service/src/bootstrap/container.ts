@@ -16,7 +16,7 @@ import {
   type IRetryPolicy,
 } from "@pine/outbox";
 import { HttpIdentityClient } from "@pine/identity";
-import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
+import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
@@ -85,7 +85,14 @@ export const bindHttpServer = async (): Promise<void> => {
         environment: env.NODE_ENV,
         version: 1,
       },
-      cors: { credentials: true, origin: [env.ERP_WEB_URL, env.VITE_PLATFORM_WEB_URL] },
+      https: {
+        key: readTlsFile(env.PLATFORM_SERVICE_TLS_KEY_PATH),
+        cert: readTlsFile(env.PLATFORM_SERVICE_TLS_CERT_PATH),
+      },
+      cors: {
+        credentials: true,
+        origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
+      },
       cookie: { secret: env.JWT_SECRET },
       openapi: {
         info: {

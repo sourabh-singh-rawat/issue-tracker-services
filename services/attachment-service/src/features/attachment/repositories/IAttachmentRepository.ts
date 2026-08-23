@@ -14,9 +14,5 @@ export interface IAttachmentRepository {
     options?: AttachmentRepositoryOptions,
   ) => Promise<AttachmentVersion>;
   findById: (id: string, options?: AttachmentRepositoryOptions) => Promise<Attachment | null>;
-  findByIssueId: (
-    issueId: string,
-    options?: AttachmentRepositoryOptions,
-  ) => Promise<{ rows: Attachment[]; rowCount: number }>;
   deleteById: (id: string, options?: AttachmentRepositoryOptions) => Promise<void>;
 }

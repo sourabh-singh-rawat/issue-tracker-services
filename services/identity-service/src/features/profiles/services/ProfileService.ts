@@ -1,4 +1,9 @@
-import { requirePermission, type IAuthorizationClient } from "@pine/authorization";
+import type { IAttachmentClient } from "@pine/attachment";
+import {
+  PLATFORM_OBJECT_ID,
+  requirePermission,
+  type IAuthorizationClient,
+} from "@pine/authorization";
 import { UserProfileNotFoundError } from "@pine/common";
 import {
   createCloudEvent,
@@ -6,13 +11,15 @@ import {
   ProfileDeletedEvent,
   ProfileGenderUpdatedEvent,
 } from "@pine/events";
-
 import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Profile } from "@/db";
+import type { IProfilePhotoUploadRequestRepository } from "@/features/profiles/repositories/IProfilePhotoUploadRequestRepository";
 import type { IProfileRepository } from "@/features/profiles/repositories/IProfileRepository";
 import type {
+  CreatePhotoUploadRequestOptions,
+  CreatePhotoUploadRequestResult,
   CreateProfileOptions,
   DeleteProfileOptions,
   IProfileService,
@@ -25,8 +32,12 @@ export class ProfileService implements IProfileService {
   constructor(
     @inject(TYPES.ProfileRepository)
     private readonly profileRepository: IProfileRepository,
+    @inject(TYPES.ProfilePhotoUploadRequestRepository)
+    private readonly photoUploadRequestRepository: IProfilePhotoUploadRequestRepository,
     @inject(TYPES.AuthorizationClient)
     private readonly authorizationClient: IAuthorizationClient,
+    @inject(TYPES.AttachmentClient)
+    private readonly attachmentClient: IAttachmentClient,
     @inject(TYPES.OutboxService)
     private readonly outboxService: IOutboxService,
   ) {}
@@ -159,5 +170,47 @@ export class ProfileService implements IProfileService {
       },
       { tx: options.tx },
     );
+  }
+
+  async createPhotoUploadRequest(
+    options: CreatePhotoUploadRequestOptions,
+  ): Promise<CreatePhotoUploadRequestResult> {
+    const profile = await this.profileRepository.findByIdentityId(options.identityId);
+    if (!profile) throw new UserProfileNotFoundError();
+
+    await requirePermission(
+      this.authorizationClient,
+      options.identityId,
+      "update",
+      `profile:${profile.id}`,
+    );
+
+    const requestRecord = await this.photoUploadRequestRepository.save({
+      profileId: profile.id,
+      status: "pending",
+    });
+
+    const uploadTarget = await this.attachmentClient.createUploadTarget({
+      input: {
+        tenantId: PLATFORM_OBJECT_ID,
+        filename: options.filename,
+        contentType: options.contentType,
+        size: options.size,
+        operationId: requestRecord.id,
+        metadata: {
+          profileId: profile.id,
+          uploadRequestId: requestRecord.id,
+        },
+      },
+      token: options.token,
+      cookieHeader: options.cookieHeader,
+    });
+
+    return {
+      uploadRequestId: requestRecord.id,
+      url: uploadTarget.url,
+      headers: uploadTarget.headers,
+      expiresAt: uploadTarget.expiresAt,
+    };
   }
 }

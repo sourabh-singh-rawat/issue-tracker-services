@@ -10,3 +10,9 @@ export {
   Profiles,
   ProfilesRelations,
 } from "@/db/tables/Profiles";
+export {
+  type ProfilePhotoUploadRequest,
+  type NewProfilePhotoUploadRequest,
+  ProfilePhotoUploadRequests,
+  ProfilePhotoUploadRequestsRelations,
+} from "@/db/tables/ProfilePhotoUploadRequests";

@@ -44,13 +44,6 @@ export class AttachmentRepository implements IAttachmentRepository {
     return row ?? null;
   }
 
-  async findByIssueId(
-    _issueId: string,
-    _options?: AttachmentRepositoryOptions,
-  ): Promise<{ rows: Attachment[]; rowCount: number }> {
-    return { rows: [], rowCount: 0 };
-  }
-
   async deleteById(id: string, options?: AttachmentRepositoryOptions): Promise<void> {
     const client = this.client(options);
     await client.delete(Attachments).where(eq(Attachments.id, id));

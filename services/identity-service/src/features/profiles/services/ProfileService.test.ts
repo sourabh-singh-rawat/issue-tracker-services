@@ -16,6 +16,28 @@ const createOutbox = () => ({
   schedule: vi.fn().mockResolvedValue({ id: "outbox-1" }),
 });
 
+const createAttachmentClient = () => ({
+  createUploadTarget: vi.fn().mockResolvedValue({
+    objectId: "target-object-id",
+    url: "http://data-gateway/attachments/upload/123",
+    headers: { "Content-Type": "image/png" },
+    expiresAt: "2026-08-23T18:00:00.000Z",
+  }),
+});
+
+const createPhotoUploadRequestRepo = () => ({
+  save: vi.fn().mockResolvedValue({
+    id: "req-1",
+    profileId: "profile-1",
+    status: "pending",
+    attachmentId: null,
+    createdAt: new Date(),
+    completedAt: null,
+  }),
+  findById: vi.fn(),
+  update: vi.fn(),
+});
+
 const existingProfile = {
   id: "profile-1",
   identityId: "identity-1",
@@ -33,11 +55,21 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn(),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = allowAuthorizationClient();
     const outboxService = createOutbox();
+    const photoUploadRequestRepo = createPhotoUploadRequestRepo();
+    const attachmentClient = createAttachmentClient();
 
-    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+    const service = new ProfileService(
+      profileRepository,
+      photoUploadRequestRepo,
+      authorizationClient,
+      attachmentClient,
+      outboxService,
+    );
 
     await service.create({
       tx,
@@ -81,9 +113,18 @@ describe("ProfileService", () => {
       save: vi.fn(),
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn(),
+      softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
 
-    const service = new ProfileService(profileRepository, allowAuthorizationClient(), createOutbox());
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      allowAuthorizationClient(),
+      createAttachmentClient(),
+      createOutbox(),
+    );
 
     await expect(service.getByIdentityId("identity-1")).resolves.toEqual(existingProfile);
   });
@@ -94,9 +135,17 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
 
-    const service = new ProfileService(profileRepository, allowAuthorizationClient(), createOutbox());
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      allowAuthorizationClient(),
+      createAttachmentClient(),
+      createOutbox(),
+    );
 
     await expect(service.getByIdentityId("missing")).rejects.toBeInstanceOf(UserProfileNotFoundError);
   });
@@ -108,10 +157,18 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn().mockResolvedValue(updated),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = allowAuthorizationClient();
 
-    const service = new ProfileService(profileRepository, authorizationClient, createOutbox());
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      authorizationClient,
+      createAttachmentClient(),
+      createOutbox(),
+    );
 
     const result = await service.updateName({
       identityId: "identity-1",
@@ -140,13 +197,21 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = {
       ...allowAuthorizationClient(),
       checkRelationship: vi.fn().mockResolvedValue(false),
     };
 
-    const service = new ProfileService(profileRepository, authorizationClient, createOutbox());
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      authorizationClient,
+      createAttachmentClient(),
+      createOutbox(),
+    );
 
     await expect(
       service.updateName({ identityId: "identity-1", firstName: "Grace" }),
@@ -160,9 +225,17 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
 
-    const service = new ProfileService(profileRepository, allowAuthorizationClient(), createOutbox());
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      allowAuthorizationClient(),
+      createAttachmentClient(),
+      createOutbox(),
+    );
 
     await expect(
       service.updateName({ identityId: "missing", firstName: "Ada" }),
@@ -177,11 +250,19 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn().mockResolvedValue(updated),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = allowAuthorizationClient();
     const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      authorizationClient,
+      createAttachmentClient(),
+      outboxService,
+    );
 
     const result = await service.updateGender({
       identityId: "identity-1",
@@ -222,6 +303,8 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = {
       ...allowAuthorizationClient(),
@@ -229,7 +312,13 @@ describe("ProfileService", () => {
     };
     const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      authorizationClient,
+      createAttachmentClient(),
+      outboxService,
+    );
 
     await expect(
       service.updateGender({ identityId: "identity-1", gender: ProfileGender.FEMALE }),
@@ -244,10 +333,18 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository, allowAuthorizationClient(), outboxService);
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      allowAuthorizationClient(),
+      createAttachmentClient(),
+      outboxService,
+    );
 
     await expect(
       service.updateGender({ identityId: "missing", gender: ProfileGender.MALE }),
@@ -263,11 +360,19 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = allowAuthorizationClient();
     const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      authorizationClient,
+      createAttachmentClient(),
+      outboxService,
+    );
 
     await service.delete({ tx, identityId: "identity-1" });
 
@@ -300,16 +405,87 @@ describe("ProfileService", () => {
       findByIdentityId: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
       softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
     };
     const authorizationClient = allowAuthorizationClient();
     const outboxService = createOutbox();
 
-    const service = new ProfileService(profileRepository, authorizationClient, outboxService);
+    const service = new ProfileService(
+      profileRepository,
+      createPhotoUploadRequestRepo(),
+      authorizationClient,
+      createAttachmentClient(),
+      outboxService,
+    );
 
     await service.delete({ tx, identityId: "missing" });
 
     expect(profileRepository.softDelete).not.toHaveBeenCalled();
     expect(authorizationClient.deleteRelationship).not.toHaveBeenCalled();
     expect(outboxService.schedule).not.toHaveBeenCalled();
+  });
+
+  it("creates a photo upload request and returns target details", async () => {
+    const profileRepository = {
+      save: vi.fn(),
+      findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
+      update: vi.fn(),
+      softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
+    };
+    const photoUploadRequestRepo = createPhotoUploadRequestRepo();
+    const authorizationClient = allowAuthorizationClient();
+    const attachmentClient = createAttachmentClient();
+    const outboxService = createOutbox();
+
+    const service = new ProfileService(
+      profileRepository,
+      photoUploadRequestRepo,
+      authorizationClient,
+      attachmentClient,
+      outboxService,
+    );
+
+    const result = await service.createPhotoUploadRequest({
+      identityId: "identity-1",
+      filename: "avatar.png",
+      contentType: "image/png",
+      size: 1024,
+      token: "test-token",
+    });
+
+    expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
+      namespace: "profile",
+      object: "profile-1",
+      relation: "update",
+      subject: "identity:identity-1",
+    });
+    expect(photoUploadRequestRepo.save).toHaveBeenCalledWith({
+      profileId: "profile-1",
+      status: "pending",
+    });
+    expect(attachmentClient.createUploadTarget).toHaveBeenCalledWith({
+      input: {
+        tenantId: "01900000-0000-7000-8000-000000000000",
+        filename: "avatar.png",
+        contentType: "image/png",
+        size: 1024,
+        operationId: "req-1",
+        metadata: {
+          profileId: "profile-1",
+          uploadRequestId: "req-1",
+        },
+      },
+      token: "test-token",
+      cookieHeader: undefined,
+    });
+    expect(result).toEqual({
+      uploadRequestId: "req-1",
+      url: "http://data-gateway/attachments/upload/123",
+      headers: { "Content-Type": "image/png" },
+      expiresAt: "2026-08-23T18:00:00.000Z",
+    });
   });
 });

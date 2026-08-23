@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { idColumn } from "@/db/columns";
 import { Identities } from "@/db/tables/Identities";
 import { Tenants } from "@/db/tables/Tenants";
@@ -10,6 +10,8 @@ export const Attachments = pgTable("attachments", {
     .notNull()
     .references(() => Tenants.id),
   currentVersionId: uuid("current_version_id"),
+  operationId: uuid("operation_id"),
+  metadata: jsonb("metadata").$type<Record<string, unknown>>(),
   status: text("status").$type<AttachmentStatus>().notNull(),
   securityStatus: text("security_status").$type<AttachmentSecurityStatus>().notNull(),
   createdBy: uuid("created_by")

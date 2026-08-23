@@ -12,10 +12,18 @@ export const EnvSchema = Type.Object({
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
   PRODUCT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5004" }),
+  PRODUCT_SERVICE_TLS_KEY_PATH: Type.String({
+    default: ".local/tls/product-service/product-service.key",
+  }),
+  PRODUCT_SERVICE_TLS_CERT_PATH: Type.String({
+    default: ".local/tls/product-service/product-service.crt",
+  }),
   PRODUCT_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
-  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  ERP_WEB_URL: Type.String({ default: "https://localhost:3001" }),
+  IDENTITY_WEB_URL: Type.String({ default: "https://localhost:3000" }),
+  VITE_PLATFORM_WEB_URL: Type.String({ default: "https://localhost:3002" }),
   OTEL_EXPORTER_OTLP_ENDPOINT: Type.String({ default: "http://127.0.0.1:4317" }),
 });
 
