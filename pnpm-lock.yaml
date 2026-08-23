@@ -665,12 +665,18 @@ importers:
       '@pine/common':
         specifier: workspace:^
         version: link:../../packages/common
+      '@pine/errors':
+        specifier: workspace:^
+        version: link:../../packages/errors
       '@pine/events':
         specifier: workspace:^
         version: link:../../packages/events
       '@pine/identity':
         specifier: workspace:^
         version: link:../../packages/identity
+      '@pine/outbox':
+        specifier: workspace:^
+        version: link:../../packages/outbox
       '@pine/security':
         specifier: workspace:^
         version: link:../../packages/security

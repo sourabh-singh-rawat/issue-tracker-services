@@ -5,7 +5,11 @@ import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { logger } from "@/bootstrap/logger";
 import { redisClient } from "@/bootstrap/redis-client";
-import { ATTACHMENT_STATUS, type IAttachmentRepository } from "@/features/attachment";
+import {
+  ATTACHMENT_SECURITY_STATUS,
+  ATTACHMENT_STATUS,
+  type IAttachmentRepository,
+} from "@/features/attachment";
 
 interface ImageProcessingWorkerData {
   issueId: string;
@@ -30,8 +34,8 @@ export const startImageWorker = (): void => {
       await attachmentRepository.save({
         id: uuidv7(),
         tenantId: userId,
-        status: ATTACHMENT_STATUS.UPLOADING,
-        securityStatus: "pending",
+        status: ATTACHMENT_STATUS.QUARANTINED,
+        securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
         createdBy: userId,
       });
     },

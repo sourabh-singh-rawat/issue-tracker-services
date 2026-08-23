@@ -9,14 +9,14 @@ import {
 } from "@/features/attachment-upload/schemas";
 import type { IAttachmentUploadService } from "@/features/attachment-upload/services";
 
-export const uploadAttachment: HttpRoute = {
+export const uploadToTarget: HttpRoute = {
   url: "/attachments/upload/:id",
   method: "PUT",
   schema: {
     tags: ["attachment"],
     summary: "Upload file to upload target",
     description: "Upload file to upload target",
-    operationId: "uploadAttachment",
+    operationId: "uploadToTarget",
     params: UploadAttachmentParamsSchema,
     response: {
       200: UploadAttachmentResponseSchema,
@@ -48,7 +48,7 @@ export const uploadAttachment: HttpRoute = {
     }
 
     const service = container.get<IAttachmentUploadService>(TYPES.AttachmentUploadService);
-    await service.upload({
+    await service.uploadToTarget({
       uploadId: id,
       data: buffer,
       contentType,

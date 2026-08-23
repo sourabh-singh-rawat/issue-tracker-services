@@ -1,14 +1,8 @@
-export type AttachmentStatus =
-  | "UPLOADING"
-  | "QUARANTINED"
-  | "AVAILABLE"
-  | "REJECTED"
-  | "DELETED";
-
-export const ATTACHMENT_STATUS: { [K in AttachmentStatus]: K } = {
-  UPLOADING: "UPLOADING",
+export const ATTACHMENT_STATUS = {
   QUARANTINED: "QUARANTINED",
   AVAILABLE: "AVAILABLE",
   REJECTED: "REJECTED",
   DELETED: "DELETED",
-};
+} as const;
+
+export type AttachmentStatus = (typeof ATTACHMENT_STATUS)[keyof typeof ATTACHMENT_STATUS];

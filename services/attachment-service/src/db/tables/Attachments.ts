@@ -2,7 +2,7 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { idColumn } from "@/db/columns";
 import { Identities } from "@/db/tables/Identities";
 import { Tenants } from "@/db/tables/Tenants";
-import type { AttachmentStatus } from "@/features/attachment/constants";
+import type { AttachmentSecurityStatus, AttachmentStatus } from "@/features/attachment/constants";
 
 export const Attachments = pgTable("attachments", {
   ...idColumn,
@@ -11,7 +11,7 @@ export const Attachments = pgTable("attachments", {
     .references(() => Tenants.id),
   currentVersionId: uuid("current_version_id"),
   status: text("status").$type<AttachmentStatus>().notNull(),
-  securityStatus: text("security_status").notNull(),
+  securityStatus: text("security_status").$type<AttachmentSecurityStatus>().notNull(),
   createdBy: uuid("created_by")
     .notNull()
     .references(() => Identities.id),

@@ -1,6 +1,6 @@
 import type { HttpRoute } from "@pine/server";
-import { uploadAttachment } from "./uploadAttachment";
+import { uploadToTarget } from "./uploadToTarget";
 
-export * from "./uploadAttachment";
+export * from "./uploadToTarget";
 
-export const attachmentUploadRoutes: HttpRoute[] = [uploadAttachment];
+export const attachmentUploadRoutes: HttpRoute[] = [uploadToTarget];

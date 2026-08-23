@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/bootstrap/env", () => ({
   env: {
@@ -6,11 +6,21 @@ vi.mock("@/bootstrap/env", () => ({
   },
 }));
 
-import type { AttachmentUpload } from "@/db";
+import type { Attachment, AttachmentUpload } from "@/db";
+import {
+  ATTACHMENT_SECURITY_STATUS,
+  ATTACHMENT_STATUS,
+  type IAttachmentService,
+} from "@/features/attachment";
 import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
+import {
+  AttachmentUploadAlreadyProcessedError,
+  AttachmentUploadExpiredError,
+  AttachmentUploadNotFoundError,
+} from "@/features/attachment-upload/errors";
 import type { IAttachmentUploadRepository } from "@/features/attachment-upload/repositories";
 import { AttachmentUploadService } from "@/features/attachment-upload/services/AttachmentUploadService";
-import type { IObjectStorage, UploadTarget } from "@/integrations/storage";
+import type { IObjectStorage } from "@/integrations/storage";
 
 describe("AttachmentUploadService", () => {
   const attachmentUploads: IAttachmentUploadRepository = {
@@ -28,13 +38,24 @@ describe("AttachmentUploadService", () => {
     getObjectMetadata: vi.fn(),
   };
 
+  const attachmentService: IAttachmentService = {
+    createFromUpload: vi.fn(),
+    create: vi.fn(),
+    findByIssueId: vi.fn(),
+    delete: vi.fn(),
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   describe("createUploadTarget", () => {
     it("creates a target URL on data-gateway and saves pending upload record", async () => {
-      const service = new AttachmentUploadService(attachmentUploads, objectStorage);
+      const service = new AttachmentUploadService(
+        attachmentUploads,
+        objectStorage,
+        attachmentService,
+      );
       const target = await service.createUploadTarget({
         tenantId: "01a015a6-2e8f-74da-92ce-174d8adb00d4",
         filename: "avatar.png",
@@ -50,67 +71,7 @@ describe("AttachmentUploadService", () => {
   });
 
   describe("uploadToTarget", () => {
-    const originalFetch = globalThis.fetch;
-
-    afterEach(() => {
-      globalThis.fetch = originalFetch;
-    });
-
-    it("puts the data to the target url with provided headers", async () => {
-      const fetchMock = vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        statusText: "OK",
-      });
-      globalThis.fetch = fetchMock;
-
-      const service = new AttachmentUploadService(attachmentUploads, objectStorage);
-      const target: UploadTarget = {
-        objectId: "tenant-1/file-1",
-        url: "http://127.0.0.1:4001/attachments/upload/upload-1",
-        headers: {
-          "Content-Type": "image/png",
-        },
-        expiresAt: new Date(),
-      };
-
-      const data = Buffer.from("test image data");
-      await service.uploadToTarget({ target, data });
-
-      expect(fetchMock).toHaveBeenCalledWith(target.url, {
-        method: "PUT",
-        headers: target.headers,
-        body: data,
-      });
-    });
-
-    it("throws an error when target upload fails", async () => {
-      const fetchMock = vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        statusText: "Internal Server Error",
-      });
-      globalThis.fetch = fetchMock;
-
-      const service = new AttachmentUploadService(attachmentUploads, objectStorage);
-      const target: UploadTarget = {
-        objectId: "tenant-1/file-1",
-        url: "http://127.0.0.1:4001/attachments/upload/upload-1",
-        headers: {
-          "Content-Type": "image/png",
-        },
-        expiresAt: new Date(),
-      };
-
-      const data = Buffer.from("test data");
-      await expect(service.uploadToTarget({ target, data })).rejects.toThrow(
-        "Failed to upload to target: 500 Internal Server Error",
-      );
-    });
-  });
-
-  describe("upload", () => {
-    it("puts object to storage and marks upload as completed", async () => {
+    it("puts object to storage, creates attachment/version via attachmentService, and marks upload as completed", async () => {
       const record: AttachmentUpload = {
         id: "upload-1",
         tenantId: "tenant-1",
@@ -127,9 +88,25 @@ describe("AttachmentUploadService", () => {
       };
       vi.mocked(attachmentUploads.findById).mockResolvedValue(record);
 
-      const service = new AttachmentUploadService(attachmentUploads, objectStorage);
+      const createdAttachment: Attachment = {
+        id: "att-1",
+        tenantId: "tenant-1",
+        currentVersionId: "ver-1",
+        status: ATTACHMENT_STATUS.QUARANTINED,
+        securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
+        createdBy: "user-1",
+        createdAt: new Date(),
+        updatedAt: null,
+      };
+      vi.mocked(attachmentService.createFromUpload).mockResolvedValue(createdAttachment);
+
+      const service = new AttachmentUploadService(
+        attachmentUploads,
+        objectStorage,
+        attachmentService,
+      );
       const data = Buffer.from("test payload");
-      await service.upload({ uploadId: "upload-1", data, contentType: "image/png" });
+      await service.uploadToTarget({ uploadId: "upload-1", data, contentType: "image/png" });
 
       expect(objectStorage.putObject).toHaveBeenCalledWith({
         storageObjectKey: "tenant-1/upload-1",
@@ -137,7 +114,125 @@ describe("AttachmentUploadService", () => {
         body: data,
         contentLength: data.byteLength,
       });
+      expect(attachmentService.createFromUpload).toHaveBeenCalledWith({
+        tenantId: "tenant-1",
+        filename: "photo.png",
+        contentType: "image/png",
+        data,
+        storageProvider: "seaweed",
+        storageObjectKey: "tenant-1/upload-1",
+        createdBy: "user-1",
+      });
       expect(attachmentUploads.markCompleted).toHaveBeenCalledWith("upload-1");
+    });
+
+    it("throws AttachmentUploadNotFoundError when record is not found", async () => {
+      vi.mocked(attachmentUploads.findById).mockResolvedValue(null);
+
+      const service = new AttachmentUploadService(
+        attachmentUploads,
+        objectStorage,
+        attachmentService,
+      );
+      const data = Buffer.from("test payload");
+
+      await expect(
+        service.uploadToTarget({ uploadId: "missing-upload", data, contentType: "image/png" }),
+      ).rejects.toBeInstanceOf(AttachmentUploadNotFoundError);
+    });
+
+    it("throws AttachmentUploadAlreadyProcessedError when status is not PENDING", async () => {
+      const record: AttachmentUpload = {
+        id: "upload-1",
+        tenantId: "tenant-1",
+        status: ATTACHMENT_UPLOAD_STATUS.COMPLETED,
+        filename: "photo.png",
+        contentType: "image/png",
+        expectedSize: 1024,
+        storageProvider: "seaweed",
+        storageObjectKey: "tenant-1/upload-1",
+        expiresAt: new Date(Date.now() + 60_000),
+        createdBy: "user-1",
+        createdAt: new Date(),
+        completedAt: new Date(),
+      };
+      vi.mocked(attachmentUploads.findById).mockResolvedValue(record);
+
+      const service = new AttachmentUploadService(
+        attachmentUploads,
+        objectStorage,
+        attachmentService,
+      );
+      const data = Buffer.from("test payload");
+
+      await expect(
+        service.uploadToTarget({ uploadId: "upload-1", data, contentType: "image/png" }),
+      ).rejects.toBeInstanceOf(AttachmentUploadAlreadyProcessedError);
+    });
+
+    it("marks upload as failed and throws AttachmentUploadExpiredError when expired", async () => {
+      const record: AttachmentUpload = {
+        id: "upload-1",
+        tenantId: "tenant-1",
+        status: ATTACHMENT_UPLOAD_STATUS.PENDING,
+        filename: "photo.png",
+        contentType: "image/png",
+        expectedSize: 1024,
+        storageProvider: "seaweed",
+        storageObjectKey: "tenant-1/upload-1",
+        expiresAt: new Date(Date.now() - 60_000),
+        createdBy: "user-1",
+        createdAt: new Date(),
+        completedAt: null,
+      };
+      vi.mocked(attachmentUploads.findById).mockResolvedValue(record);
+
+      const service = new AttachmentUploadService(
+        attachmentUploads,
+        objectStorage,
+        attachmentService,
+      );
+      const data = Buffer.from("test payload");
+
+      await expect(
+        service.uploadToTarget({ uploadId: "upload-1", data, contentType: "image/png" }),
+      ).rejects.toBeInstanceOf(AttachmentUploadExpiredError);
+
+      expect(attachmentUploads.markFailed).toHaveBeenCalledWith("upload-1");
+    });
+
+    it("marks upload as failed if storage or attachment creation throws", async () => {
+      const record: AttachmentUpload = {
+        id: "upload-1",
+        tenantId: "tenant-1",
+        status: ATTACHMENT_UPLOAD_STATUS.PENDING,
+        filename: "photo.png",
+        contentType: "image/png",
+        expectedSize: 1024,
+        storageProvider: "seaweed",
+        storageObjectKey: "tenant-1/upload-1",
+        expiresAt: new Date(Date.now() + 60_000),
+        createdBy: "user-1",
+        createdAt: new Date(),
+        completedAt: null,
+      };
+      vi.mocked(attachmentUploads.findById).mockResolvedValue(record);
+      vi.mocked(attachmentService.createFromUpload).mockRejectedValue(
+        new Error("Database insert failure"),
+      );
+
+      const service = new AttachmentUploadService(
+        attachmentUploads,
+        objectStorage,
+        attachmentService,
+      );
+      const data = Buffer.from("test payload");
+
+      await expect(
+        service.uploadToTarget({ uploadId: "upload-1", data, contentType: "image/png" }),
+      ).rejects.toThrow("Database insert failure");
+
+      expect(attachmentUploads.markFailed).toHaveBeenCalledWith("upload-1");
     });
   });
 });

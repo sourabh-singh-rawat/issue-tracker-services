@@ -1,13 +1,18 @@
-import { NotFoundError, uuidv7 } from "@pine/common";
+import { uuidv7 } from "@pine/common";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { env } from "@/bootstrap/env";
+import type { IAttachmentService } from "@/features/attachment";
 import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
+import {
+  AttachmentUploadAlreadyProcessedError,
+  AttachmentUploadExpiredError,
+  AttachmentUploadNotFoundError,
+} from "@/features/attachment-upload/errors";
 import type { IAttachmentUploadRepository } from "@/features/attachment-upload/repositories";
 import type {
   CreateAttachmentUploadInput,
   IAttachmentUploadService,
-  ProcessUploadInput,
   UploadToTargetInput,
 } from "@/features/attachment-upload/services/IAttachmentUploadService";
 import type { IObjectStorage, UploadTarget } from "@/integrations/storage";
@@ -19,6 +24,8 @@ export class AttachmentUploadService implements IAttachmentUploadService {
     private readonly attachmentUploads: IAttachmentUploadRepository,
     @inject(TYPES.ObjectStorage)
     private readonly objectStorage: IObjectStorage,
+    @inject(TYPES.AttachmentService)
+    private readonly attachmentService: IAttachmentService,
   ) {}
 
   async createUploadTarget(input: CreateAttachmentUploadInput): Promise<UploadTarget> {
@@ -52,38 +59,38 @@ export class AttachmentUploadService implements IAttachmentUploadService {
   }
 
   async uploadToTarget(input: UploadToTargetInput): Promise<void> {
-    const response = await fetch(input.target.url, {
-      method: "PUT",
-      headers: input.target.headers,
-      body: input.data,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to upload to target: ${response.status} ${response.statusText}`);
-    }
-  }
-
-  async upload(input: ProcessUploadInput): Promise<void> {
     const record = await this.attachmentUploads.findById(input.uploadId);
     if (!record) {
-      throw new NotFoundError("AttachmentUpload");
+      throw new AttachmentUploadNotFoundError();
     }
 
     if (record.status !== ATTACHMENT_UPLOAD_STATUS.PENDING) {
-      throw new Error(`Upload is already ${record.status.toLowerCase()}`);
+      throw new AttachmentUploadAlreadyProcessedError(record.status);
     }
 
     if (record.expiresAt < new Date()) {
       await this.attachmentUploads.markFailed(record.id);
-      throw new Error("Upload has expired");
+      throw new AttachmentUploadExpiredError();
     }
 
     try {
+      const contentType = input.contentType ?? record.contentType;
+
       await this.objectStorage.putObject({
         storageObjectKey: record.storageObjectKey,
-        contentType: input.contentType ?? record.contentType,
+        contentType,
         body: input.data,
         contentLength: input.data.byteLength,
+      });
+
+      await this.attachmentService.createFromUpload({
+        tenantId: record.tenantId,
+        filename: record.filename,
+        contentType,
+        data: input.data,
+        storageProvider: record.storageProvider,
+        storageObjectKey: record.storageObjectKey,
+        createdBy: record.createdBy,
       });
 
       await this.attachmentUploads.markCompleted(record.id);

@@ -1,5 +1,6 @@
 import "reflect-metadata";
 
+import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import type { IHttpServer } from "@pine/server";
 import { bindHttpServer, broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
@@ -25,6 +26,8 @@ const main = async () => {
 
   await broker.init();
 
+  void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
+  void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
   void container.get<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).start();
   void container.get<AttachmentTenantSyncConsumer>(TYPES.AttachmentTenantSyncConsumer).start();
   startImageWorker();
