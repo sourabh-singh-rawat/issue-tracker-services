@@ -34,6 +34,9 @@ export class FastifyHttpServer implements IHttpServer {
   constructor(options: HttpServerOptions, server: FastifyInstance) {
     this.options = options;
     this.server = server;
+    this.server.addContentTypeParser("*", { parseAs: "buffer" }, (_req, body, done) => {
+      done(null, body);
+    });
   }
 
   async start() {

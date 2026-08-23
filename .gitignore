@@ -156,6 +156,11 @@ combined_output.txt
 infra/docker/pgadmin/pgpass
 infra/docker/pgadmin/servers.json
 
+# DBeaver local credentials / generated state
+.dbeaver/credentials-config.json
+.dbeaver/*.bak
+.dbeaver/project-metadata.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

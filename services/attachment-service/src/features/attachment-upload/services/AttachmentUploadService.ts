@@ -1,0 +1,102 @@
+import { uuidv7 } from "@pine/common";
+import { inject, injectable } from "inversify";
+import { TYPES } from "@/bootstrap/container-types";
+import { env } from "@/bootstrap/env";
+import type { IAttachmentService } from "@/features/attachment";
+import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
+import {
+  AttachmentUploadAlreadyProcessedError,
+  AttachmentUploadExpiredError,
+  AttachmentUploadNotFoundError,
+} from "@/features/attachment-upload/errors";
+import type { IAttachmentUploadRepository } from "@/features/attachment-upload/repositories";
+import type {
+  CreateAttachmentUploadInput,
+  IAttachmentUploadService,
+  UploadToTargetInput,
+} from "@/features/attachment-upload/services/IAttachmentUploadService";
+import type { IObjectStorage, UploadTarget } from "@/integrations/storage";
+
+@injectable()
+export class AttachmentUploadService implements IAttachmentUploadService {
+  constructor(
+    @inject(TYPES.AttachmentUploadRepository)
+    private readonly attachmentUploads: IAttachmentUploadRepository,
+    @inject(TYPES.ObjectStorage)
+    private readonly objectStorage: IObjectStorage,
+    @inject(TYPES.AttachmentService)
+    private readonly attachmentService: IAttachmentService,
+  ) {}
+
+  async createUploadTarget(input: CreateAttachmentUploadInput): Promise<UploadTarget> {
+    const id = uuidv7();
+    const objectKey = `${input.tenantId}/${id}`;
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    await this.attachmentUploads.save({
+      id,
+      tenantId: input.tenantId,
+      status: ATTACHMENT_UPLOAD_STATUS.PENDING,
+      filename: input.filename,
+      contentType: input.contentType,
+      expectedSize: input.size,
+      storageProvider: "seaweed",
+      storageObjectKey: objectKey,
+      expiresAt,
+      createdBy: input.createdBy,
+    });
+
+    const url = new URL(`/attachments/upload/${id}`, env.DATA_GATEWAY_URL).toString();
+
+    return {
+      objectId: objectKey,
+      url,
+      headers: {
+        "Content-Type": input.contentType,
+      },
+      expiresAt,
+    };
+  }
+
+  async uploadToTarget(input: UploadToTargetInput): Promise<void> {
+    const record = await this.attachmentUploads.findById(input.uploadId);
+    if (!record) {
+      throw new AttachmentUploadNotFoundError();
+    }
+
+    if (record.status !== ATTACHMENT_UPLOAD_STATUS.PENDING) {
+      throw new AttachmentUploadAlreadyProcessedError(record.status);
+    }
+
+    if (record.expiresAt < new Date()) {
+      await this.attachmentUploads.markFailed(record.id);
+      throw new AttachmentUploadExpiredError();
+    }
+
+    try {
+      const contentType = input.contentType ?? record.contentType;
+
+      await this.objectStorage.putObject({
+        storageObjectKey: record.storageObjectKey,
+        contentType,
+        body: input.data,
+        contentLength: input.data.byteLength,
+      });
+
+      await this.attachmentService.createFromUpload({
+        tenantId: record.tenantId,
+        filename: record.filename,
+        contentType,
+        data: input.data,
+        storageProvider: record.storageProvider,
+        storageObjectKey: record.storageObjectKey,
+        createdBy: record.createdBy,
+      });
+
+      await this.attachmentUploads.markCompleted(record.id);
+    } catch (error) {
+      await this.attachmentUploads.markFailed(record.id);
+      throw error;
+    }
+  }
+}

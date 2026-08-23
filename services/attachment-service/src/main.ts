@@ -1,11 +1,13 @@
 import "reflect-metadata";
 
+import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import type { IHttpServer } from "@pine/server";
-import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
+import { bindHttpServer, broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { startImageWorker } from "@/bootstrap/image-worker";
 import { AttachmentIdentitySyncConsumer } from "@/features/identities";
+import { AttachmentTenantSyncConsumer } from "@/features/tenants";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -14,8 +16,8 @@ export { schema } from "@/graphql/schema";
 
 const main = async () => {
   await initializeDb();
-
-  writeSchemaToDist();
+  await bindHttpServer();
+  await writeSchemaToDist();
 
   const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();
@@ -24,7 +26,10 @@ const main = async () => {
 
   await broker.init();
 
+  void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
+  void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
   void container.get<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).start();
+  void container.get<AttachmentTenantSyncConsumer>(TYPES.AttachmentTenantSyncConsumer).start();
   startImageWorker();
 };
 

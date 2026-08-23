@@ -28,8 +28,16 @@ export class FastifyHttpRequestAdapter {
       get body() {
         return request.body;
       },
+      isMultipart: () => {
+        if (typeof request.isMultipart === "function") {
+          return request.isMultipart();
+        }
+        const contentType = request.headers["content-type"];
+        return typeof contentType === "string" && contentType.toLowerCase().includes("multipart/form-data");
+      },
       file: async (): Promise<HttpUploadedFile | undefined> => {
         if (typeof request.file !== "function") return undefined;
+        if (typeof request.isMultipart === "function" && !request.isMultipart()) return undefined;
 
         const data = await request.file();
         if (!data) return undefined;

@@ -15,6 +15,7 @@
         "identity-web",
         "platform-web",
         "api-gateway",
+        "data-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
@@ -40,6 +41,7 @@
         "identity-web",
         "platform-web",
         "api-gateway",
+        "data-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
@@ -65,6 +67,7 @@
         "identity-web",
         "platform-web",
         "api-gateway",
+        "data-gateway",
         "notification-service",
         "attachment-service",
         "product-service",
@@ -238,6 +241,24 @@
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "presentation": { "group": "1-services", "order": 9 }
+    },
+    {
+      "name": "data-gateway",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["data-gateway"],
+      "console": "integratedTerminal",
+      "outFiles": [],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/services/**",
+        "${workspaceFolder}/packages/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "presentation": { "group": "1-services", "order": 10 }
     },
     {
       "name": "identity-web",

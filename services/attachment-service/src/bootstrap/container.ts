@@ -1,3 +1,20 @@
+import { NatsPublisher, type IPublisher } from "@pine/events";
+import { HttpIdentityClient } from "@pine/identity";
+import {
+  ExponentialBackoffPolicy,
+  OutboxCleanupService,
+  OutboxCleanupWorker,
+  OutboxRepository,
+  OutboxService,
+  OutboxWorker,
+  type IOutboxCleanupService,
+  type IOutboxCleanupWorker,
+  type IOutboxPublisher,
+  type IOutboxRepository,
+  type IOutboxService,
+  type IOutboxWorker,
+  type IRetryPolicy,
+} from "@pine/outbox";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
@@ -8,13 +25,35 @@ import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import { imageProcessingQueue } from "@/bootstrap/queue";
 import { redisClient } from "@/bootstrap/redis-client";
-import { AttachmentRepository, AttachmentService, CoreAttachmentService, IAttachmentRepository } from "@/features/attachment";
-import { AttachmentIdentitySyncConsumer, IIdentityRepository, IdentityRepository } from "@/features/identities";
+import {
+  AttachmentRepository,
+  AttachmentService,
+  IAttachmentRepository,
+  IAttachmentService,
+} from "@/features/attachment";
+import {
+  AttachmentUploadRepository,
+  AttachmentUploadService,
+  IAttachmentUploadRepository,
+  IAttachmentUploadService,
+} from "@/features/attachment-upload";
+import {
+  AttachmentIdentitySyncConsumer,
+  IIdentityRepository,
+  IdentityRepository,
+} from "@/features/identities";
+import {
+  AttachmentTenantSyncConsumer,
+  ITenantRepository,
+  TenantRepository,
+} from "@/features/tenants";
 import { createContext } from "@/graphql";
-import { schema } from "@/graphql/schema";
+import { IObjectStorage, SeaweedObjectStorage } from "@/integrations/storage";
 import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });
+
+const publisher = new NatsPublisher(broker);
 
 container.bind(TYPES.Database).toConstantValue(db);
 container.bind(TYPES.Logger).toConstantValue(logger);
@@ -22,44 +61,86 @@ container.bind(TYPES.Broker).toConstantValue(broker);
 container.bind(TYPES.RedisClient).toConstantValue(redisClient);
 container.bind(TYPES.ImageProcessingQueue).toConstantValue(imageProcessingQueue);
 
-container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
-container.bind<IAttachmentRepository>(TYPES.AttachmentRepository).to(AttachmentRepository);
-container.bind<AttachmentService>(TYPES.AttachmentService).to(CoreAttachmentService);
-container.bind<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).to(AttachmentIdentitySyncConsumer);
+container.bind<IPublisher>(TYPES.Publisher).toConstantValue(publisher);
+container.bind<IOutboxRepository>(TYPES.OutboxRepository).toConstantValue(new OutboxRepository(db));
+container.bind<IRetryPolicy>(TYPES.RetryPolicy).toConstantValue(new ExponentialBackoffPolicy());
+container
+  .bind<IOutboxService>(TYPES.OutboxService)
+  .toConstantValue(
+    new OutboxService(
+      container.get<IOutboxRepository>(TYPES.OutboxRepository),
+      container.get<IRetryPolicy>(TYPES.RetryPolicy),
+    ),
+  );
+container
+  .bind<IOutboxWorker>(TYPES.OutboxWorker)
+  .toConstantValue(
+    new OutboxWorker(
+      container.get<IOutboxService>(TYPES.OutboxService),
+      publisher satisfies IOutboxPublisher,
+    ),
+  );
+container
+  .bind<IOutboxCleanupService>(TYPES.OutboxCleanupService)
+  .toConstantValue(
+    new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)),
+  );
+container
+  .bind<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker)
+  .toConstantValue(
+    new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)),
+  );
 
-container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
-  createHttpServer({
-    config: {
-      host: "0.0.0.0",
-      port: 5003,
-      environment: env.NODE_ENV,
-      version: 1,
-    },
-    cors: {
-      credentials: true,
-      origin: env.ERP_WEB_URL,
-    },
-    cookie: { secret: env.JWT_SECRET },
-    multipart: { fileSize: 32000000 },
-    openapi: {
-      info: {
-        title: "Attachment Service",
-        version: "0.0.1",
-        license: {
-          name: "ISC",
-          url: "https://opensource.org/license/isc-license-txt",
-        },
+container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
+container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
+container.bind<IAttachmentRepository>(TYPES.AttachmentRepository).to(AttachmentRepository);
+container.bind<IAttachmentUploadRepository>(TYPES.AttachmentUploadRepository).to(AttachmentUploadRepository);
+container.bind<IObjectStorage>(TYPES.ObjectStorage).to(SeaweedObjectStorage);
+container.bind<IAttachmentUploadService>(TYPES.AttachmentUploadService).to(AttachmentUploadService);
+container.bind<IAttachmentService>(TYPES.AttachmentService).to(AttachmentService);
+container.bind<AttachmentIdentitySyncConsumer>(TYPES.AttachmentIdentitySyncConsumer).to(AttachmentIdentitySyncConsumer);
+container.bind<AttachmentTenantSyncConsumer>(TYPES.AttachmentTenantSyncConsumer).to(AttachmentTenantSyncConsumer);
+
+export const bindHttpServer = async (): Promise<void> => {
+  const { schema } = await import("@/graphql/schema");
+  const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
+
+  container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
+    createHttpServer({
+      config: {
+        host: "0.0.0.0",
+        port: 5003,
+        environment: env.NODE_ENV,
+        version: 1,
       },
-      servers: [{ url: env.ATTACHMENT_SERVICE_URL }],
-      tags: [{ name: "attachment", description: "Attachment related end-points" }],
-    },
-    graphql: createGraphQLServer({
-      schema,
-      context: createContext,
+      cors: {
+        credentials: true,
+        origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL],
+      },
+      cookie: { secret: env.JWT_SECRET },
+      multipart: { fileSize: 32000000 },
+      openapi: {
+        info: {
+          title: "Attachment Service",
+          version: "0.0.1",
+          license: {
+            name: "ISC",
+            url: "https://opensource.org/license/isc-license-txt",
+          },
+        },
+        servers: [{ url: env.ATTACHMENT_SERVICE_URL }],
+        tags: [{ name: "attachment", description: "Attachment related end-points" }],
+      },
+      hooks: {
+        onRequest: [(request) => identityClient.resolveRequestUser(request)],
+      },
+      graphql: createGraphQLServer({
+        schema,
+        context: createContext,
+      }),
+      routes,
     }),
-    routes,
-  }),
-);
+  );
+};
 
 export const openApiOutputPath = path.join(process.cwd(), "dist", "openapi.json");
-

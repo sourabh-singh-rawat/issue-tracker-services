@@ -1,0 +1,27 @@
+import Type from "typebox";
+import Value from "typebox/value";
+
+export const EnvSchema = Type.Object({
+  NODE_ENV: Type.String({ default: "development" }),
+  DATA_GATEWAY_URL: Type.String({ default: "http://127.0.0.1:4001" }),
+  ATTACHMENT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5003" }),
+  IDENTITY_WEB_URL: Type.String({ default: "http://localhost:3000" }),
+  ERP_WEB_URL: Type.String({ default: "http://localhost:3001" }),
+  VITE_PLATFORM_WEB_URL: Type.String({ default: "http://localhost:3002" }),
+});
+
+export type Env = Type.Static<typeof EnvSchema>;
+
+export const listenPortFromUrl = (url: string): number => {
+  const parsed = new URL(url);
+  if (parsed.port) return Number.parseInt(parsed.port, 10);
+  return parsed.protocol === "https:" ? 443 : 80;
+};
+
+const parseEnv = (): Env => {
+  const withDefaults = Value.Default(EnvSchema, { ...process.env });
+  const cleaned = Value.Clean(EnvSchema, withDefaults);
+  return Value.Parse(EnvSchema, cleaned);
+};
+
+export const env = parseEnv();

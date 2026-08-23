@@ -1,3 +1,2 @@
-export * from "./CoreAttachmentService";
-export * from "./CoreImageMetadataService";
-export * from "./interfaces";
+export * from "./AttachmentService";
+export * from "./IAttachmentService";

@@ -1,0 +1,10 @@
+export const ATTACHMENT_SECURITY_STATUS = {
+  PENDING: "PENDING",
+  SCANNING: "SCANNING",
+  CLEAN: "CLEAN",
+  INFECTED: "INFECTED",
+  FAILED: "FAILED",
+} as const;
+
+export type AttachmentSecurityStatus =
+  (typeof ATTACHMENT_SECURITY_STATUS)[keyof typeof ATTACHMENT_SECURITY_STATUS];

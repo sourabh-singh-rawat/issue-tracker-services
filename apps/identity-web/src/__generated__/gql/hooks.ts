@@ -8,6 +8,13 @@ import type * as Types from './graphql';
 
 import type { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+export type CreateUploadTargetMutationVariables = Exact<{
+  input: Types.CreateUploadTargetInput;
+}>;
+
+
+export type CreateUploadTargetMutation = { createUploadTarget: { objectId: string | null, url: string | null, expiresAt: unknown, headers: Array<{ key: string | null, value: string | null }> | null } | null };
+
 export type UpdateProfileGenderMutationVariables = Exact<{
   input: Types.UpdateProfileGenderInput;
 }>;
@@ -41,6 +48,35 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
+
+export const CreateUploadTargetDocument = new TypedDocumentString(`
+    mutation CreateUploadTarget($input: CreateUploadTargetInput!) {
+  createUploadTarget(input: $input) {
+    objectId
+    url
+    expiresAt
+    headers {
+      key
+      value
+    }
+  }
+}
+    `);
+
+export const useCreateUploadTargetMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreateUploadTargetMutation, TError, CreateUploadTargetMutationVariables, TContext>) => {
+    
+    return useMutation<CreateUploadTargetMutation, TError, CreateUploadTargetMutationVariables, TContext>(
+      {
+    mutationKey: ['CreateUploadTarget'],
+    mutationFn: (variables?: CreateUploadTargetMutationVariables) => graphQLFetcher<CreateUploadTargetMutation, CreateUploadTargetMutationVariables>(CreateUploadTargetDocument, variables)(),
+    ...options
+  }
+    )};
+
+useCreateUploadTargetMutation.getKey = () => ['CreateUploadTarget'];
 
 export const UpdateProfileGenderDocument = new TypedDocumentString(`
     mutation UpdateProfileGender($input: UpdateProfileGenderInput!) {

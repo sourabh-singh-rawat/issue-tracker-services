@@ -1,6 +1,6 @@
 import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
-import type { AttachmentService } from "@/features/attachment";
+import type { IAttachmentService } from "@/features/attachment";
 import { PaginatedFileOutput } from "../objects/PaginatedFileOutput";
 
 builder.queryFields((t) => ({
@@ -10,8 +10,8 @@ builder.queryFields((t) => ({
       issueId: t.arg.string({ required: true }),
     },
     resolve: async (_root, { issueId }) => {
-      const service = container.get<AttachmentService>(TYPES.AttachmentService);
-      return await service.findAttachments(issueId);
+      const service = container.get<IAttachmentService>(TYPES.AttachmentService);
+      return await service.findByIssueId(issueId);
     },
   }),
 }));

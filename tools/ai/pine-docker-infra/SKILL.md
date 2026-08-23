@@ -37,7 +37,9 @@ Files under `infra/docker/`: `compose.yaml`, `compose.single-db.yaml` (default),
 
 | Host        | Service                       |
 | ----------- | ----------------------------- |
-| 5432        | Postgres                      |
+| 5432        | Postgres (single-db)          |
+| 5433–5439   | Per-service Postgres (multi-db) |
+| 5440        | Ory Postgres (kratos/hydra/keto) |
 | 4222 / 8222 | NATS client / monitor         |
 | 6380        | Redis (`REDIS_URL`)           |
 | 4433 / 4434 | Kratos public / admin         |
