@@ -1,4 +1,4 @@
-import { useRef, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -12,7 +12,10 @@ export const ProfilePhotoBlock = () => {
   const snackbar = useSnackbar();
   const currentUserQuery = useGetCurrentUserQuery();
   const createUploadTargetMutation = useCreateUploadTargetMutation();
+  const [isUploading, setIsUploading] = useState(false);
   const identityId = currentUserQuery.data?.identity?.id;
+
+  const isPending = createUploadTargetMutation.isPending || isUploading;
 
   const handleSelectFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -27,8 +30,10 @@ export const ProfilePhotoBlock = () => {
       return;
     }
 
+    setIsUploading(true);
+
     try {
-      await createUploadTargetMutation.mutateAsync({
+      const result = await createUploadTargetMutation.mutateAsync({
         input: {
           tenantId: identityId,
           filename: file.name,
@@ -36,9 +41,36 @@ export const ProfilePhotoBlock = () => {
           size: file.size,
         },
       });
-      snackbar.success("Upload target created.");
+
+      const target = result.createUploadTarget;
+      if (!target?.url) {
+        throw new Error("Missing upload target URL");
+      }
+
+      const headers: Record<string, string> = {};
+      if (target.headers) {
+        for (const item of target.headers) {
+          if (item.key && item.value) {
+            headers[item.key] = item.value;
+          }
+        }
+      }
+
+      const response = await fetch(target.url, {
+        method: "PUT",
+        headers,
+        body: file,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+
+      snackbar.success("Profile photo uploaded.");
     } catch (error) {
-      snackbar.error(getErrorMessage(error, "Could not create an upload target. Please try again."));
+      snackbar.error(getErrorMessage(error, "Could not upload profile photo. Please try again."));
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -73,12 +105,12 @@ export const ProfilePhotoBlock = () => {
         <Button
           variant="outlined"
           size="small"
-          disabled={createUploadTargetMutation.isPending}
+          disabled={isPending}
           onClick={() => {
             fileInputRef.current?.click();
           }}
         >
-          {createUploadTargetMutation.isPending ? "Uploading…" : "Upload"}
+          {isPending ? "Uploading…" : "Upload"}
         </Button>
       </Box>
     </Paper>

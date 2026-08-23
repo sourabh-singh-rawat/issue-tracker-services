@@ -10,7 +10,7 @@ export type HttpUploadedFile = {
   filename: string;
   mimetype: string;
   encoding: string;
-  toBuffer(): Promise<Buffer>;
+  toBuffer: () => Promise<Buffer>;
 };
 
 export type HttpRequest = {
@@ -22,5 +22,6 @@ export type HttpRequest = {
   cookies: Record<string, string | undefined>;
   body: unknown;
   user?: HttpUser;
-  file(): Promise<HttpUploadedFile | undefined>;
+  file: () => Promise<HttpUploadedFile | undefined>;
+  isMultipart: () => boolean;
 };

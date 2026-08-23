@@ -26,6 +26,28 @@ export class AttachmentUploadRepository implements IAttachmentUploadRepository {
     return created;
   }
 
+  async findById(
+    id: string,
+    options?: AttachmentUploadRepositoryOptions,
+  ): Promise<AttachmentUpload | null> {
+    const client = this.client(options);
+    const [row] = await client
+      .select()
+      .from(AttachmentUploads)
+      .where(eq(AttachmentUploads.id, id))
+      .limit(1);
+
+    return row ?? null;
+  }
+
+  async markCompleted(id: string, options?: AttachmentUploadRepositoryOptions): Promise<void> {
+    const client = this.client(options);
+    await client
+      .update(AttachmentUploads)
+      .set({ status: "COMPLETED", completedAt: new Date() })
+      .where(eq(AttachmentUploads.id, id));
+  }
+
   async markFailed(id: string, options?: AttachmentUploadRepositoryOptions): Promise<void> {
     const client = this.client(options);
     await client

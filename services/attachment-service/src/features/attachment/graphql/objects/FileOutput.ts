@@ -1,15 +1,15 @@
 import { builder } from "@pine/server";
+import type { Attachment } from "@/db";
 
 export const FileOutput = builder
-  .objectRef<{
-    id: string;
-    bucket: string;
-    thumbnailLink: string;
-  }>("FileOutput")
+  .objectRef<Attachment>("FileOutput")
   .implement({
     fields: (t) => ({
       id: t.exposeString("id"),
-      bucket: t.exposeString("bucket"),
-      thumbnailLink: t.exposeString("thumbnailLink"),
+      tenantId: t.exposeString("tenantId"),
+      currentVersionId: t.exposeString("currentVersionId", { nullable: true }),
+      status: t.exposeString("status"),
+      securityStatus: t.exposeString("securityStatus"),
+      createdBy: t.exposeString("createdBy"),
     }),
   });

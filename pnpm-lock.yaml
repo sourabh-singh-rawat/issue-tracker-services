@@ -814,6 +814,9 @@ importers:
 
   services/data-gateway:
     dependencies:
+      '@fastify/cors':
+        specifier: ^11.3.0
+        version: 11.3.0
       '@fastify/http-proxy':
         specifier: ^11.6.0
         version: 11.6.0

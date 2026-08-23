@@ -7,6 +7,7 @@ import type {
   DownloadUrl,
   IObjectStorage,
   ObjectMetadata,
+  PutObjectInput,
   UploadTarget,
 } from "@/integrations/storage/IObjectStorage";
 
@@ -32,16 +33,31 @@ export class SeaweedObjectStorage implements IObjectStorage {
       ContentType: input.contentType,
       ContentLength: input.size,
     });
-    const url = await getSignedUrl(this.s3, command, { expiresIn });
+    const signedUrl = await getSignedUrl(this.s3, command, { expiresIn });
+    const targetUrl = new URL(signedUrl);
+    const gatewayUrl = new URL(env.DATA_GATEWAY_URL);
+    targetUrl.protocol = gatewayUrl.protocol;
+    targetUrl.host = gatewayUrl.host;
 
     return {
       objectId: input.storageObjectKey,
-      url,
+      url: targetUrl.toString(),
       headers: {
         "Content-Type": input.contentType,
       },
       expiresAt: input.expiresAt,
     };
+  }
+
+  async putObject(input: PutObjectInput): Promise<void> {
+    const command = new PutObjectCommand({
+      Bucket: env.S3_BUCKET,
+      Key: input.storageObjectKey,
+      ContentType: input.contentType,
+      ContentLength: input.contentLength,
+      Body: input.body,
+    });
+    await this.s3.send(command);
   }
 
   async createDownloadUrl(_objectId: string): Promise<DownloadUrl> {

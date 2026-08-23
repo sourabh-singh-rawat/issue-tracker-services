@@ -24,6 +24,7 @@
     "build": "pnpm clean && tsc"
   },
   "dependencies": {
+    "@fastify/cors": "^11.3.0",
     "@fastify/http-proxy": "^11.6.0",
     "@pine/server": "workspace:^",
     "fastify": "^5.10.0",

@@ -24,9 +24,17 @@ export type ObjectMetadata = {
   sha256?: string;
 };
 
+export type PutObjectInput = {
+  storageObjectKey: string;
+  contentType: string;
+  body: Buffer | Uint8Array | string;
+  contentLength?: number;
+};
+
 export interface IObjectStorage {
   createUploadTarget: (input: CreateUploadTargetInput) => Promise<UploadTarget>;
+  putObject: (input: PutObjectInput) => Promise<void>;
   createDownloadUrl: (objectId: string) => Promise<DownloadUrl>;
   deleteObject: (objectId: string) => Promise<void>;
   getObjectMetadata: (objectId: string) => Promise<ObjectMetadata>;
-};
+}
