@@ -16,6 +16,7 @@ import path from "node:path";
 import type { IGraphQLServer } from "../graphql-server/IGraphQLServer";
 import { FastifyHttpRequestAdapter } from "./FastifyHttpRequestAdapter";
 import type { IHttpServer } from "./IHttpServer";
+import { expandLoopbackOrigins } from "./utils";
 import type {
   CookieOptions,
   CorsOptions,
@@ -93,7 +94,17 @@ export class FastifyHttpServer<
   }
 
   private async registerCors(options: CorsOptions) {
-    await this.server.register(cors, options);
+    const origin = options.origin;
+    const resolvedOrigin = Array.isArray(origin)
+      ? expandLoopbackOrigins(origin)
+      : typeof origin === "string"
+        ? expandLoopbackOrigins([origin])
+        : origin;
+
+    await this.server.register(cors, {
+      ...options,
+      ...(resolvedOrigin !== undefined ? { origin: resolvedOrigin } : {}),
+    });
   }
 
   private async registerCookie(options: CookieOptions) {

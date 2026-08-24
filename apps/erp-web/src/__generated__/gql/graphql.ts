@@ -152,13 +152,6 @@ export type CreateUnitInput = {
   symbol?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CreateUploadTargetInput = {
-  contentType: Scalars['String']['input'];
-  filename: Scalars['String']['input'];
-  size: Scalars['Int']['input'];
-  tenantId: Scalars['String']['input'];
-};
-
 export type DeleteIdentityInput = {
   identityId: Scalars['String']['input'];
 };
@@ -220,7 +213,6 @@ export type Mutation = {
   createTenant?: Maybe<TenantObject>;
   createTenantRelation?: Maybe<TenantRelationObject>;
   createUnit?: Maybe<UnitObject>;
-  createUploadTarget?: Maybe<UploadTarget>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
   deleteBrand?: Maybe<Scalars['String']['output']>;
   deleteClient?: Maybe<Scalars['String']['output']>;
@@ -305,11 +297,6 @@ export type MutationCreateTenantRelationArgs = {
 
 export type MutationCreateUnitArgs = {
   input: CreateUnitInput;
-};
-
-
-export type MutationCreateUploadTargetArgs = {
-  input: CreateUploadTargetInput;
 };
 
 
@@ -722,20 +709,6 @@ export type UpdateUnitInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   symbol?: InputMaybe<Scalars['String']['input']>;
   unitId: Scalars['String']['input'];
-};
-
-export type UploadTarget = {
-  __typename?: 'UploadTarget';
-  expiresAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  headers?: Maybe<Array<UploadTargetHeader>>;
-  objectId?: Maybe<Scalars['String']['output']>;
-  url?: Maybe<Scalars['String']['output']>;
-};
-
-export type UploadTargetHeader = {
-  __typename?: 'UploadTargetHeader';
-  key?: Maybe<Scalars['String']['output']>;
-  value?: Maybe<Scalars['String']['output']>;
 };
 
 export type Join__Graph =

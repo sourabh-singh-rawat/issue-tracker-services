@@ -11,7 +11,7 @@ export const EnvSchema = Type.Object({
     ],
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
-  PRODUCT_SERVICE_URL: Type.String({ default: "http://127.0.0.1:5004" }),
+  PRODUCT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5004" }),
   PRODUCT_SERVICE_TLS_KEY_PATH: Type.String({
     default: ".local/tls/product-service/product-service.key",
   }),
