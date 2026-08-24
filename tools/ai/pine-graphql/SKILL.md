@@ -40,14 +40,14 @@ builder.mutationFields((t) => ({
     resolve: async (_r, { input }, ctx) => {
       const svc = container.get<IXService>(TYPES.XService);
       return dataSource.transaction((manager) =>
-        svc.createX({ manager, userId: ctx.user!.id, ...input }),
+        svc.createX({ manager, userId: ctx.identity!.id, ...input }),
       );
     },
   }),
 }));
 ```
 
-Queries: `builder.queryFields`. Filters: `Find*Input` / `Find*Options`. Auth user: `ctx.user` from `src/graphql/context.ts` — don’t invent parallel auth.
+Queries: `builder.queryFields`. Filters: `Find*Input` / `Find*Options`. Auth identity: `ctx.identity` from `src/graphql/context.ts` — don’t invent parallel auth.
 
 ## Naming
 

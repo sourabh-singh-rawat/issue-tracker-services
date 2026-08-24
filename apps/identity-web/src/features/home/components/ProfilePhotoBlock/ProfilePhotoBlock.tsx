@@ -4,18 +4,18 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useGetCurrentUserQuery } from "@generated/api/@tanstack/react-query.gen";
-import { useCreateUploadTargetMutation } from "@generated/gql/hooks";
+import { useCreatePhotoUploadRequestMutation } from "@generated/gql/hooks";
 import { getErrorMessage, useSnackbar } from "@shared/ui";
 
 export const ProfilePhotoBlock = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const snackbar = useSnackbar();
   const currentUserQuery = useGetCurrentUserQuery();
-  const createUploadTargetMutation = useCreateUploadTargetMutation();
+  const createPhotoUploadRequestMutation = useCreatePhotoUploadRequestMutation();
   const [isUploading, setIsUploading] = useState(false);
   const identityId = currentUserQuery.data?.identity?.id;
 
-  const isPending = createUploadTargetMutation.isPending || isUploading;
+  const isPending = createPhotoUploadRequestMutation.isPending || isUploading;
 
   const handleSelectFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -33,16 +33,15 @@ export const ProfilePhotoBlock = () => {
     setIsUploading(true);
 
     try {
-      const result = await createUploadTargetMutation.mutateAsync({
+      const result = await createPhotoUploadRequestMutation.mutateAsync({
         input: {
-          tenantId: identityId,
           filename: file.name,
           contentType: file.type || "application/octet-stream",
           size: file.size,
         },
       });
 
-      const target = result.createUploadTarget;
+      const target = result.createPhotoUploadRequest;
       if (!target?.url) {
         throw new Error("Missing upload target URL");
       }

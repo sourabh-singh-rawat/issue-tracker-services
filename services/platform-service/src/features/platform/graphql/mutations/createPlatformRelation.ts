@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -19,7 +20,7 @@ builder.mutationFields((t) => ({
           relation: input.relation,
           identityId: input.identityId,
         },
-        ctx.user!.id,
+        requireIdentityId(ctx),
       );
     },
   }),

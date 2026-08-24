@@ -3,11 +3,13 @@ import { container, TYPES } from "@/bootstrap";
 import { UpdateProfileGenderInput } from "@/features/profiles/graphql/inputs/UpdateProfileGenderInput";
 import { ProfileObject } from "@/features/profiles/graphql/objects/ProfileObject";
 import type { IProfileService } from "@/features/profiles/services";
-import { requireUserId } from "@/graphql/context";
 
 builder.mutationFields((t) => ({
   updateProfileGender: t.field({
     type: ProfileObject,
+    authScopes: {
+      identityRequired: true,
+    },
     args: {
       input: t.arg({ type: UpdateProfileGenderInput, required: true }),
     },
@@ -15,7 +17,7 @@ builder.mutationFields((t) => ({
       const service = container.get<IProfileService>(TYPES.ProfileService);
 
       return service.updateGender({
-        identityId: requireUserId(ctx),
+        identityId: ctx.identity.id,
         gender: input.gender,
       });
     },

@@ -33,6 +33,7 @@
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
+    "@pine/identity": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/security": "workspace:^",
     "@pine/server": "workspace:^",

@@ -1,6 +1,7 @@
 import { HttpAttachmentClient, type IAttachmentClient } from "@pine/attachment";
 import { HttpAuthorizationClient, type IAuthorizationClient } from "@pine/authorization";
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import { resolveIdentityFromHeaders } from "@pine/identity";
 import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
@@ -37,12 +38,7 @@ import { IOAuthService, OAuthService } from "@/features/oauth";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
 import { IVerificationService, VerificationService } from "@/features/verification";
 import { ClientSeederService, ClientService, IClientSeederService, IClientService } from "@/features/clients";
-import {
-  IIdentityRepository,
-  IIdentityService,
-  IdentityRepository,
-  IdentityService,
-} from "@/features/identities";
+import { IIdentityRepository, IIdentityService, IdentityRepository, IdentityService } from "@/features/identities";
 import {
   IProfilePhotoUploadRequestRepository,
   IProfileRepository,
@@ -99,16 +95,10 @@ container.bind(TYPES.KratosErrorMapper).to(KratosErrorMapper);
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
 container.bind<IProfileRepository>(TYPES.ProfileRepository).to(ProfileRepository);
-container
-  .bind<IProfilePhotoUploadRequestRepository>(TYPES.ProfilePhotoUploadRequestRepository)
-  .to(ProfilePhotoUploadRequestRepository);
+container.bind<IProfilePhotoUploadRequestRepository>(TYPES.ProfilePhotoUploadRequestRepository).to(ProfilePhotoUploadRequestRepository);
 container.bind<IProfileService>(TYPES.ProfileService).to(ProfileService);
-container
-  .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
-  .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
-container
-  .bind<IAttachmentClient>(TYPES.AttachmentClient)
-  .toConstantValue(new HttpAttachmentClient({ baseUrl: env.ATTACHMENT_SERVICE_URL }));
+container.bind<IAuthorizationClient>(TYPES.AuthorizationClient).toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
+container.bind<IAttachmentClient>(TYPES.AttachmentClient).toConstantValue(new HttpAttachmentClient({ baseUrl: env.ATTACHMENT_SERVICE_URL }));
 container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IClientSeederService>(TYPES.ClientSeederService).to(ClientSeederService);
 container.bind<IRegistrationProvider>(TYPES.RegistrationProvider).to(KratosRegistrationProvider);
@@ -162,6 +152,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
         },
       },
     },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders],
+    },
     graphql: createGraphQLServer({
       schema,
       context: createContext,
@@ -171,4 +164,3 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
 );
 
 export const openApiOutputPath = path.join(process.cwd(), "dist", "openapi.json");
-

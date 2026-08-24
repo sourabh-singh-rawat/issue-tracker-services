@@ -20,7 +20,7 @@ export class HttpIdentityClient implements IIdentityClient {
     this.baseUrl = options.baseUrl.replace(/\/$/, "");
   }
 
-  async resolveRequestUser(request: HttpRequest): Promise<void> {
+  async resolveRequestIdentity(request: HttpRequest): Promise<void> {
     const authorization = request.headers.authorization;
     const headerToken = authorization ? authorization.replace(BEARER_PREFIX, "").trim() : "";
     const cookieToken = request.cookies.accessToken;
@@ -34,7 +34,7 @@ export class HttpIdentityClient implements IIdentityClient {
     if (accessToken) {
       const identity = await this.getIdentityViaAccessToken(accessToken);
       if (identity) {
-        request.user = { id: identity.id, authMethod: "access_token" };
+        request.identity = { id: identity.id, authMethod: "access_token" };
         return;
       }
     }
@@ -43,7 +43,7 @@ export class HttpIdentityClient implements IIdentityClient {
     if (cookieHeader && (request.cookies.session || /(?:^|;\s*)session=/.test(cookieHeader))) {
       const identity = await this.getIdentityViaSession(cookieHeader);
       if (identity) {
-        request.user = { id: identity.id, authMethod: "session" };
+        request.identity = { id: identity.id, authMethod: "session" };
       }
     }
   }

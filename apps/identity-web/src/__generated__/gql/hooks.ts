@@ -8,12 +8,12 @@ import type * as Types from './graphql';
 
 import type { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
-export type CreateUploadTargetMutationVariables = Exact<{
-  input: Types.CreateUploadTargetInput;
+export type CreatePhotoUploadRequestMutationVariables = Exact<{
+  input: Types.CreatePhotoUploadRequestInput;
 }>;
 
 
-export type CreateUploadTargetMutation = { createUploadTarget: { objectId: string | null, url: string | null, expiresAt: unknown, headers: Array<{ key: string | null, value: string | null }> | null } | null };
+export type CreatePhotoUploadRequestMutation = { createPhotoUploadRequest: { uploadRequestId: string | null, url: string | null, expiresAt: string | null, headers: Array<{ key: string | null, value: string | null }> | null } | null };
 
 export type UpdateProfileGenderMutationVariables = Exact<{
   input: Types.UpdateProfileGenderInput;
@@ -49,10 +49,10 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const CreateUploadTargetDocument = new TypedDocumentString(`
-    mutation CreateUploadTarget($input: CreateUploadTargetInput!) {
-  createUploadTarget(input: $input) {
-    objectId
+export const CreatePhotoUploadRequestDocument = new TypedDocumentString(`
+    mutation CreatePhotoUploadRequest($input: CreatePhotoUploadRequestInput!) {
+  createPhotoUploadRequest(input: $input) {
+    uploadRequestId
     url
     expiresAt
     headers {
@@ -63,20 +63,20 @@ export const CreateUploadTargetDocument = new TypedDocumentString(`
 }
     `);
 
-export const useCreateUploadTargetMutation = <
+export const useCreatePhotoUploadRequestMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<CreateUploadTargetMutation, TError, CreateUploadTargetMutationVariables, TContext>) => {
+    >(options?: UseMutationOptions<CreatePhotoUploadRequestMutation, TError, CreatePhotoUploadRequestMutationVariables, TContext>) => {
     
-    return useMutation<CreateUploadTargetMutation, TError, CreateUploadTargetMutationVariables, TContext>(
+    return useMutation<CreatePhotoUploadRequestMutation, TError, CreatePhotoUploadRequestMutationVariables, TContext>(
       {
-    mutationKey: ['CreateUploadTarget'],
-    mutationFn: (variables?: CreateUploadTargetMutationVariables) => graphQLFetcher<CreateUploadTargetMutation, CreateUploadTargetMutationVariables>(CreateUploadTargetDocument, variables)(),
+    mutationKey: ['CreatePhotoUploadRequest'],
+    mutationFn: (variables?: CreatePhotoUploadRequestMutationVariables) => graphQLFetcher<CreatePhotoUploadRequestMutation, CreatePhotoUploadRequestMutationVariables>(CreatePhotoUploadRequestDocument, variables)(),
     ...options
   }
     )};
 
-useCreateUploadTargetMutation.getKey = () => ['CreateUploadTarget'];
+useCreatePhotoUploadRequestMutation.getKey = () => ['CreatePhotoUploadRequest'];
 
 export const UpdateProfileGenderDocument = new TypedDocumentString(`
     mutation UpdateProfileGender($input: UpdateProfileGenderInput!) {

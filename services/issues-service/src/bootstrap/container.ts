@@ -1,4 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import { resolveIdentityFromHeaders } from "@pine/identity";
 import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
@@ -77,6 +78,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
     },
     cookie: { secret: env.JWT_SECRET },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders],
+    },
     graphql: createGraphQLServer({
       schema,
       context: createContext,

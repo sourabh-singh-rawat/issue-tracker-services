@@ -34,6 +34,7 @@
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
+    "@pine/identity": "workspace:^",
     "@pine/server": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/outbox": "workspace:^",

@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -22,7 +23,7 @@ builder.mutationFields((t) => ({
           description: input.description ?? undefined,
           isActive: input.isActive ?? undefined,
         },
-        ctx.user!.id,
+        requireIdentityId(ctx),
       );
     },
   }),

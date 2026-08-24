@@ -1,5 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { HttpIdentityClient } from "@pine/identity";
+import { resolveIdentityFromHeaders } from "@pine/identity";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -103,7 +103,6 @@ container.bind<AttachmentTenantSyncConsumer>(TYPES.AttachmentTenantSyncConsumer)
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");
-  const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
 
   container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     createHttpServer({
@@ -136,7 +135,7 @@ export const bindHttpServer = async (): Promise<void> => {
         tags: [{ name: "attachment", description: "Attachment related end-points" }],
       },
       hooks: {
-        onRequest: [(request) => identityClient.resolveRequestUser(request)],
+        onRequest: [resolveIdentityFromHeaders],
       },
       graphql: createGraphQLServer({
         schema,

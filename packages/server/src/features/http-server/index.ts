@@ -7,10 +7,10 @@ export type {
   HttpRequestHook,
   HttpResponse,
   HttpResponseCookie,
+  HttpIdentity,
   HttpRoute,
   HttpSameSite,
   HttpUploadedFile,
-  HttpUser,
 } from "./types";
 export type { IHttpServer } from "./IHttpServer";
 export {

@@ -1,4 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import { resolveIdentityFromHeaders } from "@pine/identity";
 import { createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
@@ -55,6 +56,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       },
       servers: [{ url: env.INVENTORY_SERVICE_URL }],
       tags: [{ name: "auth", description: "Authentication related end-points" }],
+    },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders],
     },
     routes,
   }),

@@ -18,7 +18,6 @@ export const EnvSchema = Type.Object({
   ISSUES_SERVICE_TLS_CERT_PATH: Type.String({
     default: ".local/tls/issues-service/issues-service.crt",
   }),
-  IDENTITY_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5000" }),
   ISSUES_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),

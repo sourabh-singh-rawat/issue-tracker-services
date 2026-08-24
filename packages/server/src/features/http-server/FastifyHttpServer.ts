@@ -53,7 +53,17 @@ export class FastifyHttpServer<
   }
 
   async start() {
-    const { cors, cookie, multipart, openapi, proxy: proxyOptions, routes, graphql, hooks, config } = this.options;
+    const {
+      cors,
+      cookie,
+      multipart,
+      openapi,
+      proxy: proxyOptions,
+      routes,
+      graphql,
+      hooks,
+      config,
+    } = this.options;
 
     if (cors) await this.registerCors(cors);
     if (cookie) await this.registerCookie(cookie);
@@ -161,10 +171,11 @@ export class FastifyHttpServer<
         prefix: route.prefix,
         rewritePrefix: route.rewritePrefix ?? route.prefix,
         proxyPayloads: route.proxyPayloads ?? true,
-        undici: route.undici ?? options.undici ?? {
-          headersTimeout: 60_000,
-          bodyTimeout: 120_000,
-        },
+        undici: route.undici ??
+          options.undici ?? {
+            headersTimeout: 60_000,
+            bodyTimeout: 120_000,
+          },
       });
     }
   }
@@ -188,10 +199,18 @@ export class FastifyHttpServer<
   private registerHooks(hooks: HttpHooks) {
     if (hooks.onRequest) {
       this.server.addHook("onRequest", async (request) => {
+        delete request.headers["x-identity-id"];
+        delete request.headers["x-identity-auth-method"];
+
         const httpRequest = this.requestAdapter.toHttpRequest(request);
 
         for (const hook of hooks.onRequest ?? []) {
           await hook(httpRequest);
+        }
+
+        if (httpRequest.identity) {
+          request.headers["x-identity-id"] = httpRequest.identity.id;
+          request.headers["x-identity-auth-method"] = httpRequest.identity.authMethod;
         }
       });
     }

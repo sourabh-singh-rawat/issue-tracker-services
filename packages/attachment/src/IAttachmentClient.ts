@@ -5,8 +5,8 @@ import type {
 
 export interface CreateUploadTargetOptions {
   input: CreateUploadTargetInput;
-  token?: string;
-  cookieHeader?: string;
+  identityId: string;
+  authMethod?: "access_token" | "session";
 }
 
 export interface IAttachmentClient {

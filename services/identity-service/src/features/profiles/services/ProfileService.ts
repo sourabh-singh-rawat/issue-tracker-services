@@ -197,13 +197,10 @@ export class ProfileService implements IProfileService {
         contentType: options.contentType,
         size: options.size,
         operationId: requestRecord.id,
-        metadata: {
-          profileId: profile.id,
-          uploadRequestId: requestRecord.id,
-        },
+        metadata: { profileId: profile.id, uploadRequestId: requestRecord.id },
       },
-      token: options.token,
-      cookieHeader: options.cookieHeader,
+      identityId: options.identityId,
+      authMethod: options.authMethod,
     });
 
     return {

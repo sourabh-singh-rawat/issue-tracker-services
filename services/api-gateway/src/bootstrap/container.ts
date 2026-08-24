@@ -1,3 +1,4 @@
+import { HttpIdentityClient } from "@pine/identity";
 import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import { TYPES } from "./container-types";
@@ -10,6 +11,8 @@ const resolveEnvironment = (value: string) => {
   }
   return "development";
 };
+
+const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -29,10 +32,14 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: resolveEnvironment(env.NODE_ENV),
       version: 1,
     },
+    hooks: {
+      onRequest: [(request) => identityClient.resolveRequestIdentity(request)],
+    },
     graphql: createGraphQLServer({
       gateway: graphqlGateway,
       context: async (req) => ({
-        cookie: typeof req.headers.cookie === "string" ? req.headers.cookie : undefined,
+        identityId: req.identity?.id,
+        authMethod: req.identity?.authMethod,
       }),
     }),
     proxy: {

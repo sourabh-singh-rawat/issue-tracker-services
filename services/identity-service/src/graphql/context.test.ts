@@ -1,92 +1,37 @@
-import type { HttpRequest } from "@pine/server";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { HttpIdentity, HttpRequest } from "@pine/server";
+import { describe, expect, it } from "vitest";
+import { createContext } from "@/graphql/context";
 
-const { get, verify, hasUserIdentity } = vi.hoisted(() => ({
-  get: vi.fn(),
-  verify: vi.fn(),
-  hasUserIdentity: vi.fn(),
-}));
-
-vi.mock("@pine/security", () => ({
-  JwtToken: { verify },
-  hasUserIdentity,
-}));
-
-vi.mock("@/bootstrap/env", () => ({
-  env: { JWT_SECRET: "test-secret" },
-}));
-
-vi.mock("@/bootstrap", () => ({
-  container: { get },
-  TYPES: { SessionService: Symbol.for("ISessionService") },
-}));
-
-import { createContext, requireUserId } from "@/graphql/context";
-import { InvalidCredentialError } from "@/integrations/identity";
-
-const httpRequest = (cookies: Record<string, string | undefined>): HttpRequest => ({
+const httpRequest = (options?: {
+  headers?: Record<string, string | undefined>;
+  identity?: HttpIdentity;
+}): HttpRequest => ({
   method: "POST",
   url: "/graphql",
-  headers: {},
+  headers: options?.headers ?? {},
   query: {},
   params: {},
-  cookies,
+  cookies: { session: "session-cookie" },
   body: {},
+  ...(options?.identity ? { identity: options.identity } : {}),
   file: async () => undefined,
+  isMultipart: () => false,
 });
 
 describe("createContext", () => {
-  beforeEach(() => {
-    get.mockReset();
-    verify.mockReset();
-    hasUserIdentity.mockReset();
+  it("resolves the identity from request identity", async () => {
+    const ctx = await createContext(
+      httpRequest({ identity: { id: "identity-1", authMethod: "access_token" } }),
+    );
+
+    expect(ctx.identity).toEqual({ id: "identity-1", authMethod: "access_token" });
+    expect(ctx.cookies).toBeUndefined();
   });
 
-  it("resolves the user from an access token cookie", async () => {
-    verify.mockResolvedValue({ userId: "identity-1" });
-    hasUserIdentity.mockReturnValue(true);
+  it("returns no identity when identity is not present", async () => {
+    const ctx = await createContext(httpRequest());
 
-    const ctx = await createContext(httpRequest({ accessToken: "jwt-1" }));
-
-    expect(verify).toHaveBeenCalledWith("jwt-1", "test-secret");
-    expect(ctx.user).toEqual({ id: "identity-1", authMethod: "access_token" });
-    expect(get).not.toHaveBeenCalled();
-  });
-
-  it("resolves the user from a session cookie", async () => {
-    const getIdentityFromSessionToken = vi.fn().mockResolvedValue({
-      id: "identity-2",
-      email: "a@b.com",
-      emailVerified: true,
-    });
-    get.mockReturnValue({ getIdentityFromSessionToken });
-
-    const ctx = await createContext(httpRequest({ session: "session-1" }));
-
-    expect(getIdentityFromSessionToken).toHaveBeenCalledWith("session-1");
-    expect(ctx.user).toEqual({ id: "identity-2", authMethod: "session" });
-  });
-
-  it("returns no user when neither cookie is present", async () => {
-    const ctx = await createContext(httpRequest({}));
-
-    expect(ctx.user).toBeUndefined();
-    expect(get).not.toHaveBeenCalled();
-  });
-});
-
-describe("requireUserId", () => {
-  it("returns the authenticated identity id", () => {
-    expect(
-      requireUserId({
-        cookies: {},
-        headers: {},
-        user: { id: "identity-1", authMethod: "session" },
-      }),
-    ).toBe("identity-1");
-  });
-
-  it("throws InvalidCredentialError when the user is missing", () => {
-    expect(() => requireUserId({ cookies: {}, headers: {} })).toThrow(InvalidCredentialError);
+    expect(ctx.identity).toBeUndefined();
+    expect(ctx.cookies).toBeUndefined();
   });
 });

@@ -25,7 +25,7 @@ export const createUploadTarget: HttpRoute = {
     },
   },
   handler: async (request) => {
-    if (!request.user) {
+    if (!request.identity) {
       throw new UnauthorizedError();
     }
 
@@ -37,7 +37,7 @@ export const createUploadTarget: HttpRoute = {
     const service = container.get<IAttachmentUploadService>(TYPES.AttachmentUploadService);
     const target = await service.createUploadTarget({
       tenantId: body.tenantId,
-      createdBy: request.user.id,
+      createdBy: request.identity.id,
       filename: body.filename,
       contentType: body.contentType,
       size: body.size,

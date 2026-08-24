@@ -1,5 +1,6 @@
-﻿---
+---
 "@pine/attachment": minor
+"@pine/identity": minor
 "@pine/identity-service": minor
 "@pine/attachment-service": minor
 "@pine/server": patch

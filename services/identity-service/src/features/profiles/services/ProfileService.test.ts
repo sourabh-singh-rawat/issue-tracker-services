@@ -453,7 +453,6 @@ describe("ProfileService", () => {
       filename: "avatar.png",
       contentType: "image/png",
       size: 1024,
-      token: "test-token",
     });
 
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
@@ -478,8 +477,8 @@ describe("ProfileService", () => {
           uploadRequestId: "req-1",
         },
       },
-      token: "test-token",
-      cookieHeader: undefined,
+      identityId: "identity-1",
+      authMethod: undefined,
     });
     expect(result).toEqual({
       uploadRequestId: "req-1",

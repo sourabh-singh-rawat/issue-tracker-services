@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -19,7 +20,7 @@ builder.queryFields((t) => ({
           tenantId: args.tenantId,
           parentOrganizationId: args.parentOrganizationId ?? undefined,
         },
-        ctx.user!.id,
+        requireIdentityId(ctx),
       );
     },
   }),

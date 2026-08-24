@@ -15,7 +15,7 @@ import {
   type IOutboxWorker,
   type IRetryPolicy,
 } from "@pine/outbox";
-import { HttpIdentityClient } from "@pine/identity";
+import { resolveIdentityFromHeaders } from "@pine/identity";
 import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
@@ -75,7 +75,6 @@ container.bind(TYPES.PlatformIdentitySyncConsumer).to(PlatformIdentitySyncConsum
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");
-  const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
 
   container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     createHttpServer({
@@ -111,7 +110,7 @@ export const bindHttpServer = async (): Promise<void> => {
         ],
       },
       hooks: {
-        onRequest: [(request) => identityClient.resolveRequestUser(request)],
+        onRequest: [resolveIdentityFromHeaders],
       },
       graphql: createGraphQLServer({
         schema,

@@ -29,11 +29,10 @@ export type DeleteProfileOptions = {
 
 export type CreatePhotoUploadRequestOptions = {
   identityId: string;
+  authMethod?: "access_token" | "session";
   filename: string;
   contentType: string;
   size: number;
-  token?: string;
-  cookieHeader?: string;
 };
 
 export type CreatePhotoUploadRequestResult = {

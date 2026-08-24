@@ -19,7 +19,6 @@ export const EnvSchema = Type.Object({
     default: ".local/tls/attachment-service/attachment-service.crt",
   }),
   DATA_GATEWAY_URL: Type.String({ default: "https://127.0.0.1:4001" }),
-  IDENTITY_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5000" }),
   ATTACHMENT_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),

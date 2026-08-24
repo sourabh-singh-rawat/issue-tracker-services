@@ -25,15 +25,9 @@ export class HttpAttachmentClient implements IAttachmentClient {
     const headers: Record<string, string> = {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "x-identity-id": options.identityId,
+      "x-identity-auth-method": options.authMethod ?? "session",
     };
-
-    if (options.token) {
-      headers.Authorization = `Bearer ${options.token}`;
-    }
-
-    if (options.cookieHeader) {
-      headers.Cookie = options.cookieHeader;
-    }
 
     const response = await fetch(
       `${this.baseUrl}/internal/attachments/createUploadTarget`,

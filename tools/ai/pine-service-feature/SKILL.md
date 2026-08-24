@@ -47,7 +47,7 @@ services/<svc>/src/
 // mutation resolve sketch
 const service = container.get<IIssueService>(TYPES.IssueService);
 return db.transaction((tx) =>
-  service.createIssue({ tx, userId: ctx.user!.userId, ... }),
+  service.createIssue({ tx, userId: ctx.identity!.id, ... }),
 );
 ```
 
