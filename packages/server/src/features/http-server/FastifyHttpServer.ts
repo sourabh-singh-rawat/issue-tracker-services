@@ -199,10 +199,10 @@ export class FastifyHttpServer<
   private registerHooks(hooks: HttpHooks) {
     if (hooks.onRequest) {
       this.server.addHook("onRequest", async (request) => {
+        const httpRequest = this.requestAdapter.toHttpRequest(request);
+
         delete request.headers["x-identity-id"];
         delete request.headers["x-identity-auth-method"];
-
-        const httpRequest = this.requestAdapter.toHttpRequest(request);
 
         for (const hook of hooks.onRequest ?? []) {
           await hook(httpRequest);

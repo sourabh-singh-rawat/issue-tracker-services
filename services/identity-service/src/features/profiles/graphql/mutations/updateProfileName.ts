@@ -1,3 +1,4 @@
+import { UnauthorizedError } from "@pine/common";
 import { builder } from "@pine/server";
 import { container, TYPES } from "@/bootstrap";
 import { UpdateProfileNameInput } from "@/features/profiles/graphql/inputs/UpdateProfileNameInput";
@@ -15,6 +16,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, { input }, ctx) => {
       const service = container.get<IProfileService>(TYPES.ProfileService);
+      if (!ctx.identity) throw new UnauthorizedError();
 
       return service.updateName({
         identityId: ctx.identity.id,

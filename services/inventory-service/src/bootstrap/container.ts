@@ -42,10 +42,6 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       key: readTlsFile(env.INVENTORY_SERVICE_TLS_KEY_PATH),
       cert: readTlsFile(env.INVENTORY_SERVICE_TLS_CERT_PATH),
     },
-    cors: {
-      credentials: true,
-      origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
-    },
     cookie: { secret: env.JWT_SECRET },
     openapi: {
       info: {

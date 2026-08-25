@@ -18,6 +18,7 @@ export const EnvSchema = Type.Object({
   PRODUCT_SERVICE_TLS_CERT_PATH: Type.String({
     default: ".local/tls/product-service/product-service.crt",
   }),
+  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
   PRODUCT_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),

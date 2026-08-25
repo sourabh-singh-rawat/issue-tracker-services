@@ -18,6 +18,7 @@ export const EnvSchema = Type.Object({
   IDENTITY_SERVICE_TLS_CERT_PATH: Type.String({
     default: ".local/tls/identity-service/identity-service.crt",
   }),
+  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
   AUTHORIZATION_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5006" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5003" }),
   IDENTITY_DATABASE_URL: Type.String({ minLength: 1 }),

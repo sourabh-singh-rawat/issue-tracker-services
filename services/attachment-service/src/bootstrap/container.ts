@@ -25,28 +25,10 @@ import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import { imageProcessingQueue } from "@/bootstrap/queue";
 import { redisClient } from "@/bootstrap/redis-client";
-import {
-  AttachmentRepository,
-  AttachmentService,
-  IAttachmentRepository,
-  IAttachmentService,
-} from "@/features/attachment";
-import {
-  AttachmentUploadRepository,
-  AttachmentUploadService,
-  IAttachmentUploadRepository,
-  IAttachmentUploadService,
-} from "@/features/attachment-upload";
-import {
-  AttachmentIdentitySyncConsumer,
-  IIdentityRepository,
-  IdentityRepository,
-} from "@/features/identities";
-import {
-  AttachmentTenantSyncConsumer,
-  ITenantRepository,
-  TenantRepository,
-} from "@/features/tenants";
+import { AttachmentRepository, AttachmentService, IAttachmentRepository, IAttachmentService } from "@/features/attachment";
+import { AttachmentUploadRepository, AttachmentUploadService, IAttachmentUploadRepository, IAttachmentUploadService } from "@/features/attachment-upload";
+import { AttachmentIdentitySyncConsumer, IIdentityRepository, IdentityRepository } from "@/features/identities";
+import { AttachmentTenantSyncConsumer, ITenantRepository, TenantRepository } from "@/features/tenants";
 import { createContext } from "@/graphql";
 import { IObjectStorage, SeaweedObjectStorage } from "@/integrations/storage";
 import { routes } from "@/routes";
@@ -66,30 +48,16 @@ container.bind<IOutboxRepository>(TYPES.OutboxRepository).toConstantValue(new Ou
 container.bind<IRetryPolicy>(TYPES.RetryPolicy).toConstantValue(new ExponentialBackoffPolicy());
 container
   .bind<IOutboxService>(TYPES.OutboxService)
-  .toConstantValue(
-    new OutboxService(
-      container.get<IOutboxRepository>(TYPES.OutboxRepository),
-      container.get<IRetryPolicy>(TYPES.RetryPolicy),
-    ),
-  );
+  .toConstantValue(new OutboxService(container.get<IOutboxRepository>(TYPES.OutboxRepository), container.get<IRetryPolicy>(TYPES.RetryPolicy)));
 container
   .bind<IOutboxWorker>(TYPES.OutboxWorker)
-  .toConstantValue(
-    new OutboxWorker(
-      container.get<IOutboxService>(TYPES.OutboxService),
-      publisher satisfies IOutboxPublisher,
-    ),
-  );
+  .toConstantValue(new OutboxWorker(container.get<IOutboxService>(TYPES.OutboxService), publisher satisfies IOutboxPublisher));
 container
   .bind<IOutboxCleanupService>(TYPES.OutboxCleanupService)
-  .toConstantValue(
-    new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)),
-  );
+  .toConstantValue(new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)));
 container
   .bind<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker)
-  .toConstantValue(
-    new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)),
-  );
+  .toConstantValue(new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)));
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
@@ -115,10 +83,6 @@ export const bindHttpServer = async (): Promise<void> => {
       https: {
         key: readTlsFile(env.ATTACHMENT_SERVICE_TLS_KEY_PATH),
         cert: readTlsFile(env.ATTACHMENT_SERVICE_TLS_CERT_PATH),
-      },
-      cors: {
-        credentials: true,
-        origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
       },
       cookie: { secret: env.JWT_SECRET },
       multipart: { fileSize: 32000000 },

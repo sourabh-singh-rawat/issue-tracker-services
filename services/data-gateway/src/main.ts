@@ -1,7 +1,11 @@
+import { configureTls } from "@pine/common";
 import "reflect-metadata";
+import { env } from "./bootstrap";
+
+configureTls({ caPath: env.CA_CERT_PATH });
 
 import type { IHttpServer } from "@pine/server";
-import { container, env, TYPES } from "./bootstrap";
+import { container, TYPES } from "./bootstrap";
 
 const main = async () => {
   const httpServer = container.get<IHttpServer>(TYPES.HttpServer);

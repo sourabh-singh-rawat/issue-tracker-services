@@ -6,17 +6,12 @@ import {
 import { readFileSync, watch } from "node:fs";
 import path from "node:path";
 
-import { customFetcher } from "./custom-fetcher";
-
 export type GatewayContext = {
   identityId?: string;
   authMethod?: string;
 };
 
 class SubgraphDataSource extends RemoteGraphQLDataSource<GatewayContext> {
-  constructor(options: { url?: string }) {
-    super({ ...options, fetcher: customFetcher });
-  }
 
   willSendRequest = (options: GraphQLDataSourceProcessOptions<GatewayContext>) => {
     const identityId = options.context?.identityId;

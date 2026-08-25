@@ -10,6 +10,7 @@ export const EnvSchema = Type.Object({
   API_GATEWAY_TLS_CERT_PATH: Type.String({
     default: ".local/tls/api-gateway/api-gateway.crt",
   }),
+  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
   IDENTITY_WEB_URL: Type.String({ default: "https://localhost:3000" }),
   ERP_WEB_URL: Type.String({ default: "https://localhost:3001" }),
   VITE_PLATFORM_WEB_URL: Type.String({ default: "https://localhost:3002" }),

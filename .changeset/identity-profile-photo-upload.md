@@ -7,6 +7,7 @@
 "@pine/common": patch
 "@pine/api-gateway": patch
 "@pine/data-gateway": patch
+"@pine/authorization": patch
 "@pine/authorization-service": patch
 "@pine/inventory-service": patch
 "@pine/issues-service": patch

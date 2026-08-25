@@ -1,3 +1,4 @@
+export * from "./configureTls";
 export * from "./ErrorHandlerUtil";
 export * from "./flatten";
 export * from "./InvalidIdentityIdError";
