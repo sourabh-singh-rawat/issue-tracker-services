@@ -866,8 +866,11 @@ importers:
       '@fastify/http-proxy':
         specifier: ^11.6.0
         version: 11.6.0
+      '@pine/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@pine/server':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/server
       fastify:
         specifier: ^5.10.0

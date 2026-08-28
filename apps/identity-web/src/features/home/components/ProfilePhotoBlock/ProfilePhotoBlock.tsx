@@ -46,10 +46,13 @@ export const ProfilePhotoBlock = () => {
         throw new Error("Missing upload target URL");
       }
 
+      const formData = new FormData();
+      formData.append("file", file);
+
       const headers: Record<string, string> = {};
       if (target.headers) {
         for (const item of target.headers) {
-          if (item.key && item.value) {
+          if (item.key && item.value && item.key.toLowerCase() !== "content-type") {
             headers[item.key] = item.value;
           }
         }
@@ -58,7 +61,7 @@ export const ProfilePhotoBlock = () => {
       const response = await fetch(target.url, {
         method: "PUT",
         headers,
-        body: file,
+        body: formData,
       });
 
       if (!response.ok) {

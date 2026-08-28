@@ -6,6 +6,9 @@ export const CorsOptionsSchema = Type.Object(
   {
     credentials: Type.Optional(Type.Boolean()),
     origin: Type.Optional(CorsOriginSchema),
+    methods: Type.Optional(Type.Union([Type.Array(Type.String()), Type.String()])),
+    allowedHeaders: Type.Optional(Type.Union([Type.Array(Type.String()), Type.String()])),
+    exposedHeaders: Type.Optional(Type.Union([Type.Array(Type.String()), Type.String()])),
   },
   { additionalProperties: false },
 );

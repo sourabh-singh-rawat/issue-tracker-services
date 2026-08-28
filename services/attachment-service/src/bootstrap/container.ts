@@ -85,6 +85,11 @@ export const bindHttpServer = async (): Promise<void> => {
         cert: readTlsFile(env.ATTACHMENT_SERVICE_TLS_CERT_PATH),
       },
       cookie: { secret: env.JWT_SECRET },
+      cors: {
+        credentials: true,
+        origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
+        methods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"],
+      },
       multipart: { fileSize: 32000000 },
       openapi: {
         info: {

@@ -26,7 +26,8 @@
   "dependencies": {
     "@fastify/cors": "^11.3.0",
     "@fastify/http-proxy": "^11.6.0",
-    "@pine/server": "workspace:^",
+    "@pine/common": "workspace:*",
+    "@pine/server": "workspace:*",
     "fastify": "^5.10.0",
     "inversify": "8.2.2",
     "reflect-metadata": "^0.2.2",

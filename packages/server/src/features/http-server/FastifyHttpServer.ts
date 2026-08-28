@@ -112,6 +112,7 @@ export class FastifyHttpServer<
         : origin;
 
     await this.server.register(cors, {
+      methods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"],
       ...options,
       ...(resolvedOrigin !== undefined ? { origin: resolvedOrigin } : {}),
     });

@@ -21,6 +21,7 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     cors: {
       credentials: true,
       origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
+      methods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"],
     },
     config: {
       host: "0.0.0.0",
