@@ -3,6 +3,7 @@ import "@/features/organizations/graphql/objects/OrganizationRelationObject";
 import "@/features/organizations/graphql/inputs/CreateOrganizationInput";
 import "@/features/organizations/graphql/inputs/CreateOrganizationRelationInput";
 import "@/features/organizations/graphql/inputs/UpdateOrganizationInput";
+import "@/features/organizations/graphql/queries/getMyOrganizations";
 import "@/features/organizations/graphql/queries/getOrganization";
 import "@/features/organizations/graphql/queries/getOrganizations";
 import "@/features/organizations/graphql/queries/getOrganizationRelation";

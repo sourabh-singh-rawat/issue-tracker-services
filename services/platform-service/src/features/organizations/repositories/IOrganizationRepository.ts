@@ -31,6 +31,7 @@ export interface IOrganizationRepository {
     options?: OrganizationRepositoryOptions,
   ): Promise<Organization | null>;
   findById(id: string): Promise<Organization | null>;
+  findByIds(ids: string[]): Promise<Organization[]>;
   existsBySlugInTenant(tenantId: string, slug: string): Promise<boolean>;
   existsByNameInTenant(tenantId: string, name: string): Promise<boolean>;
   findMany(filter: ListOrganizationsFilter): Promise<Organization[]>;

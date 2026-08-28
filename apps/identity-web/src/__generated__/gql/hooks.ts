@@ -7,7 +7,7 @@ export { graphQLFetcher };
 import type * as Types from './graphql';
 
 import type { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { useMutation, useQuery, type UseMutationOptions, type UseQueryOptions } from '@tanstack/react-query';
 export type CreatePhotoUploadRequestMutationVariables = Exact<{
   input: Types.CreatePhotoUploadRequestInput;
 }>;
@@ -28,6 +28,11 @@ export type UpdateProfileNameMutationVariables = Exact<{
 
 
 export type UpdateProfileNameMutation = { updateProfileName: { id: string | null, identityId: string | null, firstName: string | null, middleName: string | null, lastName: string | null } | null };
+
+export type GetMyTenantsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyTenantsQuery = { getMyTenants: Array<{ id: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown }> | null };
 
 
 export class TypedDocumentString<TResult, TVariables>
@@ -129,3 +134,36 @@ export const useUpdateProfileNameMutation = <
     )};
 
 useUpdateProfileNameMutation.getKey = () => ['UpdateProfileName'];
+
+export const GetMyTenantsDocument = new TypedDocumentString(`
+    query GetMyTenants {
+  getMyTenants {
+    id
+    name
+    slug
+    description
+    isActive
+    createdAt
+  }
+}
+    `);
+
+export const useGetMyTenantsQuery = <
+      TData = GetMyTenantsQuery,
+      TError = unknown
+    >(
+      variables?: GetMyTenantsQueryVariables,
+      options?: Omit<UseQueryOptions<GetMyTenantsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetMyTenantsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetMyTenantsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetMyTenants'] : ['GetMyTenants', variables],
+    queryFn: graphQLFetcher<GetMyTenantsQuery, GetMyTenantsQueryVariables>(GetMyTenantsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetMyTenantsQuery.document = GetMyTenantsDocument;
+
+useGetMyTenantsQuery.getKey = (variables?: GetMyTenantsQueryVariables) => variables === undefined ? ['GetMyTenants'] : ['GetMyTenants', variables];

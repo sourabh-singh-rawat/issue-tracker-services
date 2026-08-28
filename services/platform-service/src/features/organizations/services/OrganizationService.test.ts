@@ -496,4 +496,42 @@ describe("OrganizationService", () => {
       OrganizationNotFoundError,
     );
   });
+
+  it("lists my organizations for identity", async () => {
+    const organizationRepository = {
+      findByIds: vi.fn().mockResolvedValue([organization]),
+    };
+    const authorizationClient = {
+      listRelationships: vi.fn().mockResolvedValue([
+        {
+          object: { namespace: "organization", id: organization.id },
+          relation: "member",
+          subject: { namespace: "identity", id: identityId },
+        },
+      ]),
+    };
+
+    const service = createService({ organizationRepository, authorizationClient });
+
+    await expect(service.listMyOrganizations(identityId)).resolves.toEqual([organization]);
+    expect(authorizationClient.listRelationships).toHaveBeenCalledWith({
+      namespace: "organization",
+      subject: { namespace: "identity", id: identityId },
+    });
+    expect(organizationRepository.findByIds).toHaveBeenCalledWith([organization.id]);
+  });
+
+  it("returns empty list if identity has no organization relationships", async () => {
+    const organizationRepository = {
+      findByIds: vi.fn().mockResolvedValue([]),
+    };
+    const authorizationClient = {
+      listRelationships: vi.fn().mockResolvedValue([]),
+    };
+
+    const service = createService({ organizationRepository, authorizationClient });
+
+    await expect(service.listMyOrganizations(identityId)).resolves.toEqual([]);
+    expect(organizationRepository.findByIds).not.toHaveBeenCalled();
+  });
 });

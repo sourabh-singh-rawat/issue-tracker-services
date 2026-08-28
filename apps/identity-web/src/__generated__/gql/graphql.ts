@@ -496,6 +496,7 @@ export type ProjectObject = {
 
 export type Query = {
   __typename?: 'Query';
+  attachmentServiceHealth?: Maybe<Scalars['String']['output']>;
   findBrands?: Maybe<Array<BrandObject>>;
   findIdentities?: Maybe<Array<IdentityObject>>;
   findIssue?: Maybe<IssueObject>;
@@ -508,6 +509,8 @@ export type Query = {
   getBrand?: Maybe<BrandObject>;
   getClient?: Maybe<ClientObject>;
   getIdentities?: Maybe<Array<PlatformIdentityObject>>;
+  getMyOrganizations?: Maybe<Array<OrganizationObject>>;
+  getMyTenants?: Maybe<Array<TenantObject>>;
   getOrganization?: Maybe<OrganizationObject>;
   getOrganizationRelation?: Maybe<OrganizationRelationObject>;
   getOrganizationRelations?: Maybe<Array<OrganizationRelationObject>>;

@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, createUploadTarget, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, uploadToTarget, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateUploadTargetData, CreateUploadTargetResponse, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, UploadToTargetData, UploadToTargetResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -385,14 +385,14 @@ export const resendVerificationEmailMutation = (options?: Partial<Options<Resend
 export const useResendVerificationEmailMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>>, 'mutationFn'>>) => useMutation({ ...resendVerificationEmailMutation(), ...mutationOptions });
 
 /**
- * Create a new issue attachment
+ * Create upload target
  *
- * Create a new issue attachment
+ * Create an upload target for uploading attachment files
  */
-export const createAttachmentMutation = (options?: Partial<Options<CreateAttachmentData>>): UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> = {
+export const createUploadTargetMutation = (options?: Partial<Options<CreateUploadTargetData>>): UseMutationOptions<CreateUploadTargetResponse, AxiosError<DefaultError>, Options<CreateUploadTargetData>> => {
+    const mutationOptions: UseMutationOptions<CreateUploadTargetResponse, AxiosError<DefaultError>, Options<CreateUploadTargetData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await createAttachment({
+            const { data } = await createUploadTarget({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -404,11 +404,37 @@ export const createAttachmentMutation = (options?: Partial<Options<CreateAttachm
 };
 
 /**
- * Create a new issue attachment
+ * Create upload target
  *
- * Create a new issue attachment
+ * Create an upload target for uploading attachment files
  */
-export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>>, 'mutationFn'>>) => useMutation({ ...createAttachmentMutation(), ...mutationOptions });
+export const useCreateUploadTargetMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<CreateUploadTargetResponse, AxiosError<DefaultError>, Options<CreateUploadTargetData>>, 'mutationFn'>>) => useMutation({ ...createUploadTargetMutation(), ...mutationOptions });
+
+/**
+ * Upload file to upload target
+ *
+ * Upload file to upload target
+ */
+export const uploadToTargetMutation = (options?: Partial<Options<UploadToTargetData>>): UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>> => {
+    const mutationOptions: UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await uploadToTarget({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Upload file to upload target
+ *
+ * Upload file to upload target
+ */
+export const useUploadToTargetMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>>, 'mutationFn'>>) => useMutation({ ...uploadToTargetMutation(), ...mutationOptions });
 
 /**
  * Check a graph relationship
