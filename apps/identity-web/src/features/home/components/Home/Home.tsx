@@ -71,7 +71,7 @@ export const Home = () => {
         </Box>
 
         <Stack spacing={1}>
-          <ProfilePhotoBlock />
+          <ProfilePhotoBlock photoUrl={profile.photoUrl} fullName={profile.fullName} />
           <NameBlock fullName={profile.fullName} to="/name" />
           <GenderBlock gender={profile.gender} to="/gender" />
         </Stack>

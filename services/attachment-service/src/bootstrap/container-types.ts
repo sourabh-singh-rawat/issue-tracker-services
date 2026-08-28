@@ -21,4 +21,5 @@ export const TYPES = {
   TenantRepository: Symbol.for("ITenantRepository"),
   AttachmentIdentitySyncConsumer: Symbol.for("AttachmentIdentitySyncConsumer"),
   AttachmentTenantSyncConsumer: Symbol.for("AttachmentTenantSyncConsumer"),
-} as const;
+  AttachmentScannedConsumer: Symbol.for("AttachmentScannedConsumer"),
+};

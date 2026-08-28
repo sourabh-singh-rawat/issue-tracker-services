@@ -36,7 +36,7 @@ const createPhotoUploadRequestRepo = () => ({
     completedAt: null,
   }),
   findById: vi.fn(),
-  update: vi.fn(),
+  update: vi.fn().mockResolvedValue({}),
 });
 
 const existingProfile = {
@@ -488,5 +488,52 @@ describe("ProfileService", () => {
       headers: { "Content-Type": "image/png" },
       expiresAt: "2026-08-23T18:00:00.000Z",
     });
+  });
+
+  it("updates profile photo and completes upload request", async () => {
+    const updated = { ...existingProfile, photoUrl: "/attachments/att-1" };
+    const profileRepository = {
+      save: vi.fn(),
+      findByIdentityId: vi.fn().mockResolvedValue(existingProfile),
+      update: vi.fn().mockResolvedValue(updated),
+      softDelete: vi.fn(),
+      existsById: vi.fn(),
+      findById: vi.fn(),
+    };
+    const photoUploadRequestRepo = createPhotoUploadRequestRepo();
+    const authorizationClient = allowAuthorizationClient();
+    const attachmentClient = createAttachmentClient();
+    const outboxService = createOutbox();
+
+    const service = new ProfileService(
+      profileRepository,
+      photoUploadRequestRepo,
+      authorizationClient,
+      attachmentClient,
+      outboxService,
+    );
+
+    const result = await service.updatePhoto({
+      identityId: "identity-1",
+      photoUrl: "/attachments/att-1",
+      uploadRequestId: "req-1",
+      attachmentId: "att-1",
+    });
+
+    expect(profileRepository.findByIdentityId).toHaveBeenCalledWith("identity-1", { tx: undefined });
+    expect(profileRepository.update).toHaveBeenCalledWith(
+      "profile-1",
+      { photoUrl: "/attachments/att-1" },
+      { tx: undefined },
+    );
+    expect(photoUploadRequestRepo.update).toHaveBeenCalledWith(
+      "req-1",
+      expect.objectContaining({
+        status: "completed",
+        attachmentId: "att-1",
+      }),
+      { tx: undefined },
+    );
+    expect(result).toEqual(updated);
   });
 });

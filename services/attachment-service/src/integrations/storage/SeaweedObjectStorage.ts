@@ -1,10 +1,18 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { Readable } from "node:stream";
+import {
+  CopyObjectCommand,
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { injectable } from "inversify";
 import { env } from "@/bootstrap/env";
 import type {
   CreateUploadTargetInput,
   DownloadUrl,
+  GetObjectOutput,
   IObjectStorage,
   ObjectMetadata,
   PutObjectInput,
@@ -64,11 +72,51 @@ export class SeaweedObjectStorage implements IObjectStorage {
     throw new Error("Not implemented");
   }
 
-  async deleteObject(_objectId: string): Promise<void> {
-    throw new Error("Not implemented");
+  async deleteObject(objectId: string): Promise<void> {
+    const command = new DeleteObjectCommand({
+      Bucket: env.S3_BUCKET,
+      Key: objectId,
+    });
+    await this.s3.send(command);
+  }
+
+  async copyObject(sourceKey: string, destinationKey: string): Promise<void> {
+    const command = new CopyObjectCommand({
+      Bucket: env.S3_BUCKET,
+      CopySource: `${env.S3_BUCKET}/${sourceKey}`,
+      Key: destinationKey,
+    });
+    await this.s3.send(command);
+  }
+
+  async moveObject(sourceKey: string, destinationKey: string): Promise<void> {
+    await this.copyObject(sourceKey, destinationKey);
+    await this.deleteObject(sourceKey);
   }
 
   async getObjectMetadata(_objectId: string): Promise<ObjectMetadata> {
     throw new Error("Not implemented");
+  }
+
+  async getObject(objectId: string): Promise<GetObjectOutput> {
+    const command = new GetObjectCommand({
+      Bucket: env.S3_BUCKET,
+      Key: objectId,
+    });
+    const response = await this.s3.send(command);
+    if (!response.Body) {
+      throw new Error(`Failed to get object body for ${objectId}`);
+    }
+
+    const body =
+      response.Body instanceof Readable
+        ? response.Body
+        : Readable.from(response.Body.transformToWebStream());
+
+    return {
+      body,
+      contentType: response.ContentType,
+      contentLength: response.ContentLength,
+    };
   }
 }

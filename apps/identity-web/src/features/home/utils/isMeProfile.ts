@@ -4,6 +4,7 @@ export type MeProfile = {
   lastName?: string | null;
   fullName: string;
   gender?: string | null;
+  photoUrl?: string | null;
 };
 
 const isOptionalNamePart = (value: unknown): value is string | null | undefined =>
@@ -21,12 +22,14 @@ export const isMeProfile = (value: unknown): value is MeProfile => {
   const middleName = "middleName" in value ? value.middleName : undefined;
   const lastName = "lastName" in value ? value.lastName : undefined;
   const gender = "gender" in value ? value.gender : undefined;
+  const photoUrl = "photoUrl" in value ? value.photoUrl : undefined;
 
   return (
     typeof value.firstName === "string" &&
     typeof value.fullName === "string" &&
     isOptionalNamePart(middleName) &&
     isOptionalNamePart(lastName) &&
-    isOptionalNamePart(gender)
+    isOptionalNamePart(gender) &&
+    isOptionalNamePart(photoUrl)
   );
 };

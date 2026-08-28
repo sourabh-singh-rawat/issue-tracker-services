@@ -15,6 +15,7 @@ export const TYPES = {
   ProfileRepository: Symbol.for("IProfileRepository"),
   ProfilePhotoUploadRequestRepository: Symbol.for("IProfilePhotoUploadRequestRepository"),
   ProfileService: Symbol.for("IProfileService"),
+  ProfilePhotoAttachmentConsumer: Symbol.for("ProfilePhotoAttachmentConsumer"),
   AuthorizationClient: Symbol.for("IAuthorizationClient"),
   AttachmentClient: Symbol.for("IAttachmentClient"),
   ClientService: Symbol.for("IClientService"),
@@ -37,4 +38,4 @@ export const TYPES = {
   OAuthService: Symbol.for("IOAuthService"),
   AdminService: Symbol.for("IAdminService"),
   VerificationService: Symbol.for("IVerificationService"),
-} as const;
+};

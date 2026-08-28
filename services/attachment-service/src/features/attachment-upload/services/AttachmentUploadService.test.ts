@@ -55,12 +55,17 @@ describe("AttachmentUploadService", () => {
     putObject: vi.fn(),
     createDownloadUrl: vi.fn(),
     deleteObject: vi.fn(),
+    copyObject: vi.fn(),
+    moveObject: vi.fn(),
     getObjectMetadata: vi.fn(),
+    getObject: vi.fn(),
   };
 
   const attachmentService: IAttachmentService = {
     createFromUpload: vi.fn(),
     delete: vi.fn(),
+    getContent: vi.fn(),
+    updateSecurityStatus: vi.fn(),
   };
 
   const schedule = vi.fn();

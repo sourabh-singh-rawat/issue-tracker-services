@@ -18,6 +18,7 @@
         "data-gateway",
         "notification-service",
         "attachment-service",
+        "attachment-scanner-service",
         "product-service",
         "inventory-service",
         "issues-service",
@@ -44,6 +45,7 @@
         "data-gateway",
         "notification-service",
         "attachment-service",
+        "attachment-scanner-service",
         "product-service",
         "inventory-service",
         "issues-service",
@@ -70,6 +72,7 @@
         "data-gateway",
         "notification-service",
         "attachment-service",
+        "attachment-scanner-service",
         "product-service",
         "inventory-service",
         "issues-service",
@@ -169,6 +172,24 @@
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "presentation": { "group": "1-services", "order": 5 }
+    },
+    {
+      "name": "attachment-scanner-service",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["attachment-scanner-service"],
+      "console": "integratedTerminal",
+      "outFiles": [],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/services/**",
+        "${workspaceFolder}/packages/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "presentation": { "group": "1-services", "order": 6 }
     },
     {
       "name": "notification-service",

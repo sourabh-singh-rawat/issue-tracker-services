@@ -1,6 +1,6 @@
 import type { HttpRoute } from "@pine/server";
 import { StatusCodes } from "http-status-codes";
-import { container } from "@/bootstrap";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
 import {
