@@ -1,6 +1,5 @@
-import type { IAttachmentClient } from "@pine/attachment";
+import { ATTACHMENT_SCOPE_TYPE, type IAttachmentClient } from "@pine/attachment";
 import {
-  PLATFORM_OBJECT_ID,
   requirePermission,
   type IAuthorizationClient,
 } from "@pine/authorization";
@@ -192,7 +191,8 @@ export class ProfileService implements IProfileService {
 
     const uploadTarget = await this.attachmentClient.createUploadTarget({
       input: {
-        tenantId: PLATFORM_OBJECT_ID,
+        scopeType: ATTACHMENT_SCOPE_TYPE.IDENTITY,
+        scopeId: options.identityId,
         filename: options.filename,
         contentType: options.contentType,
         size: options.size,

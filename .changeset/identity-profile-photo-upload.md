@@ -3,6 +3,7 @@
 "@pine/identity": minor
 "@pine/identity-service": minor
 "@pine/attachment-service": minor
+"@pine/events": minor
 "@pine/server": patch
 "@pine/common": patch
 "@pine/api-gateway": patch

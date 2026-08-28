@@ -37,7 +37,9 @@ export class AttachmentService implements IAttachmentService {
       const attachment = await this.attachmentRepository.save(
         {
           id,
-          tenantId: input.tenantId,
+          scopeType: input.scopeType,
+          scopeId: input.scopeId,
+          tenantId: input.tenantId ?? null,
           currentVersionId: versionId,
           operationId: input.operationId,
           metadata: input.metadata,
@@ -72,7 +74,9 @@ export class AttachmentService implements IAttachmentService {
         subject: attachment.id,
         data: {
           id: attachment.id,
-          tenantId: attachment.tenantId,
+          scopeType: attachment.scopeType,
+          scopeId: attachment.scopeId,
+          tenantId: attachment.tenantId ?? undefined,
           currentVersionId: attachment.currentVersionId ?? undefined,
           status: attachment.status,
           securityStatus: attachment.securityStatus,

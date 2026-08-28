@@ -4,7 +4,11 @@ import { AttachmentCreatedEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Attachment, AttachmentVersion, DbClient } from "@/db";
-import { ATTACHMENT_SECURITY_STATUS, ATTACHMENT_STATUS } from "@/features/attachment/constants";
+import {
+  ATTACHMENT_SCOPE_TYPE,
+  ATTACHMENT_SECURITY_STATUS,
+  ATTACHMENT_STATUS,
+} from "@/features/attachment/constants";
 import type { IAttachmentRepository } from "@/features/attachment/repositories";
 import {
   type AttachmentDatabase,
@@ -49,6 +53,8 @@ describe("AttachmentService", () => {
     it("creates attachment, attachment version, and schedules outbox event within a transaction", async () => {
       const savedAttachment: Attachment = {
         id: "att-123",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
         currentVersionId: "ver-123",
         operationId: null,
@@ -69,7 +75,7 @@ describe("AttachmentService", () => {
         fileSize: 10,
         sha256: "abc",
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/att-123",
+        storageObjectKey: "organization/org-1/att-123",
         createdBy: "user-1",
         createdAt: new Date(),
       };
@@ -86,18 +92,22 @@ describe("AttachmentService", () => {
       const expectedSha256 = createHash("sha256").update(data).digest("hex");
 
       const result = await service.createFromUpload({
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
         filename: "test.png",
         contentType: "image/png",
         data,
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/att-123",
+        storageObjectKey: "organization/org-1/att-123",
         createdBy: "user-1",
       });
 
       expect(result).toBe(savedAttachment);
       expect(attachmentRepository.save).toHaveBeenCalledWith(
         expect.objectContaining({
+          scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+          scopeId: "org-1",
           tenantId: "tenant-1",
           status: ATTACHMENT_STATUS.QUARANTINED,
           securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
@@ -113,7 +123,7 @@ describe("AttachmentService", () => {
           fileSize: data.byteLength,
           sha256: expectedSha256,
           storageProvider: "seaweed",
-          storageObjectKey: "tenant-1/att-123",
+          storageObjectKey: "organization/org-1/att-123",
           createdBy: "user-1",
         }),
         expect.anything(),
@@ -130,6 +140,8 @@ describe("AttachmentService", () => {
             subject: "att-123",
             data: {
               id: "att-123",
+              scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+              scopeId: "org-1",
               tenantId: "tenant-1",
               currentVersionId: "ver-123",
               status: ATTACHMENT_STATUS.QUARANTINED,
@@ -162,6 +174,8 @@ describe("AttachmentService", () => {
     it("deletes attachment when found", async () => {
       const existing: Attachment = {
         id: "att-1",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
         currentVersionId: "ver-1",
         operationId: null,

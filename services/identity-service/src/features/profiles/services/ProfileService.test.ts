@@ -1,3 +1,4 @@
+import { ATTACHMENT_SCOPE_TYPE } from "@pine/attachment";
 import { InsufficientPermissionError } from "@pine/authorization";
 import { UserProfileNotFoundError } from "@pine/common";
 import { ProfileCreatedEvent, ProfileDeletedEvent, ProfileGenderUpdatedEvent } from "@pine/events";
@@ -467,7 +468,8 @@ describe("ProfileService", () => {
     });
     expect(attachmentClient.createUploadTarget).toHaveBeenCalledWith({
       input: {
-        tenantId: "01900000-0000-7000-8000-000000000000",
+        scopeType: ATTACHMENT_SCOPE_TYPE.IDENTITY,
+        scopeId: "identity-1",
         filename: "avatar.png",
         contentType: "image/png",
         size: 1024,

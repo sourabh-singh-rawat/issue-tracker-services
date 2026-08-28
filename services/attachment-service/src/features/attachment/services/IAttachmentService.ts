@@ -1,7 +1,10 @@
 import type { Attachment, DbClient } from "@/db";
+import type { AttachmentScopeType } from "@/features/attachment/constants";
 
 export type CreateAttachmentFromUploadInput = {
-  tenantId: string;
+  scopeType: AttachmentScopeType;
+  scopeId: string;
+  tenantId?: string;
   filename: string;
   contentType: string;
   data: Buffer | Uint8Array;

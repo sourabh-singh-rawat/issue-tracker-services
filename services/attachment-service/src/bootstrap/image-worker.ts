@@ -6,6 +6,7 @@ import { TYPES } from "@/bootstrap/container-types";
 import { logger } from "@/bootstrap/logger";
 import { redisClient } from "@/bootstrap/redis-client";
 import {
+  ATTACHMENT_SCOPE_TYPE,
   ATTACHMENT_SECURITY_STATUS,
   ATTACHMENT_STATUS,
   type IAttachmentRepository,
@@ -33,7 +34,8 @@ export const startImageWorker = (): void => {
 
       await attachmentRepository.save({
         id: uuidv7(),
-        tenantId: userId,
+        scopeType: ATTACHMENT_SCOPE_TYPE.IDENTITY,
+        scopeId: userId,
         status: ATTACHMENT_STATUS.QUARANTINED,
         securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
         createdBy: userId,
