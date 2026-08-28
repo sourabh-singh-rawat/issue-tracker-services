@@ -22,6 +22,7 @@ export interface IOrganizationService {
   create: (input: CreateOrganizationInput, identityId: string) => Promise<Organization>;
   getById: (id: string, identityId: string) => Promise<Organization>;
   list: (input: ListOrganizationsInput, identityId: string) => Promise<Organization[]>;
+  listMyOrganizations: (identityId: string) => Promise<Organization[]>;
   update: (id: string, input: UpdateOrganizationInput, identityId: string) => Promise<Organization>;
   delete: (id: string, identityId: string) => Promise<void>;
 }

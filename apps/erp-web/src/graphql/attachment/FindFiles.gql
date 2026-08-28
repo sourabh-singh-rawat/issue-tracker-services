@@ -3,7 +3,8 @@ query FindFiles($issueId: String!) {
     rowCount
     rows {
       id
-      thumbnailLink
+      status
+      securityStatus
     }
   }
 }

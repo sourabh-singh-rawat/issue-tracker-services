@@ -1,0 +1,12 @@
+query GetMyOrganizations {
+  getMyOrganizations {
+    id
+    tenantId
+    parentOrganizationId
+    name
+    slug
+    description
+    isActive
+    createdAt
+  }
+}

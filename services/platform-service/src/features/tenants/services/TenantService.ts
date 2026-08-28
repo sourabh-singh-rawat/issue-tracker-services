@@ -130,6 +130,23 @@ export class TenantService implements ITenantService {
     return this.tenantRepository.findAll();
   }
 
+  async listMyTenants(identityId: string): Promise<Tenant[]> {
+    const relationships = await this.authorizationClient.listRelationships({
+      namespace: "tenant",
+      subject: { namespace: "identity", id: identityId },
+    });
+
+    const tenantIds = Array.from(
+      new Set(relationships.map((rel) => rel.object.id).filter((id) => id.length > 0)),
+    );
+
+    if (tenantIds.length === 0) {
+      return [];
+    }
+
+    return this.tenantRepository.findByIds(tenantIds);
+  }
+
   async deleteTenant(id: string, platformId: string, identityId: string): Promise<void> {
     await requirePermission(
       this.authorizationClient,

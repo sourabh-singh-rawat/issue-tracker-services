@@ -20,7 +20,7 @@ export type FindFilesQueryVariables = Exact<{
 }>;
 
 
-export type FindFilesQuery = { findFiles: { rowCount: number | null, rows: Array<{ id: string | null, thumbnailLink: string | null }> | null } | null };
+export type FindFilesQuery = { findFiles: { rowCount: number | null, rows: Array<{ id: string | null, status: string | null, securityStatus: string | null }> | null } | null };
 
 export type CreateIssueMutationVariables = Exact<{
   input: Types.CreateIssueInput;
@@ -56,6 +56,11 @@ export type UpdateIssueMutationVariables = Exact<{
 
 
 export type UpdateIssueMutation = { updateIssue: string | null };
+
+export type GetMyOrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyOrganizationsQuery = { getMyOrganizations: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown }> | null };
 
 export type CreateProjectMutationVariables = Exact<{
   input: Types.CreateProjectInput;
@@ -130,7 +135,8 @@ export const FindFilesDocument = new TypedDocumentString(`
     rowCount
     rows {
       id
-      thumbnailLink
+      status
+      securityStatus
     }
   }
 }
@@ -299,6 +305,41 @@ export const useUpdateIssueMutation = <
     )};
 
 useUpdateIssueMutation.getKey = () => ['UpdateIssue'];
+
+export const GetMyOrganizationsDocument = new TypedDocumentString(`
+    query GetMyOrganizations {
+  getMyOrganizations {
+    id
+    tenantId
+    parentOrganizationId
+    name
+    slug
+    description
+    isActive
+    createdAt
+  }
+}
+    `);
+
+export const useGetMyOrganizationsQuery = <
+      TData = GetMyOrganizationsQuery,
+      TError = unknown
+    >(
+      variables?: GetMyOrganizationsQueryVariables,
+      options?: Omit<UseQueryOptions<GetMyOrganizationsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetMyOrganizationsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetMyOrganizationsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetMyOrganizations'] : ['GetMyOrganizations', variables],
+    queryFn: graphQLFetcher<GetMyOrganizationsQuery, GetMyOrganizationsQueryVariables>(GetMyOrganizationsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetMyOrganizationsQuery.document = GetMyOrganizationsDocument;
+
+useGetMyOrganizationsQuery.getKey = (variables?: GetMyOrganizationsQueryVariables) => variables === undefined ? ['GetMyOrganizations'] : ['GetMyOrganizations', variables];
 
 export const CreateProjectDocument = new TypedDocumentString(`
     mutation CreateProject($input: CreateProjectInput!) {

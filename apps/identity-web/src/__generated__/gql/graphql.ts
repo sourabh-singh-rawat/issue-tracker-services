@@ -165,9 +165,12 @@ export type DeleteIdentityInput = {
 
 export type FileOutput = {
   __typename?: 'FileOutput';
-  bucket?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<Scalars['String']['output']>;
+  currentVersionId?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  thumbnailLink?: Maybe<Scalars['String']['output']>;
+  securityStatus?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
 };
 
 export type FindIssuesInput = {
@@ -509,6 +512,7 @@ export type Query = {
   getBrand?: Maybe<BrandObject>;
   getClient?: Maybe<ClientObject>;
   getIdentities?: Maybe<Array<PlatformIdentityObject>>;
+  getMyTenants?: Maybe<Array<TenantObject>>;
   getOrganization?: Maybe<OrganizationObject>;
   getOrganizationRelation?: Maybe<OrganizationRelationObject>;
   getOrganizationRelations?: Maybe<Array<OrganizationRelationObject>>;

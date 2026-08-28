@@ -1,5 +1,5 @@
 import { uuidv7 } from "@pine/common";
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { type Database, type Tenant, Tenants } from "@/db";
@@ -48,6 +48,18 @@ export class TenantRepository implements ITenantRepository {
       .limit(1);
 
     return row ?? null;
+  }
+
+  async findByIds(ids: string[]): Promise<Tenant[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    return this.db
+      .select()
+      .from(Tenants)
+      .where(and(inArray(Tenants.id, ids), isNull(Tenants.deletedAt)))
+      .orderBy(desc(Tenants.createdAt));
   }
 
   async existsBySlug(slug: string): Promise<boolean> {
