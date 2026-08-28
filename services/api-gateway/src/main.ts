@@ -1,6 +1,12 @@
+import { configureTls } from "@pine/common";
+import "reflect-metadata";
+import { env } from "./bootstrap";
+
+configureTls({ caPath: env.CA_CERT_PATH });
+
 import { initializeObservability } from "@pine/observability";
-import { createHttpServer } from "./bootstrap";
-import { env } from "./bootstrap/env";
+import type { IHttpServer } from "@pine/server";
+import { container, TYPES } from "./bootstrap";
 
 const main = async () => {
   const observability = initializeObservability({
@@ -13,7 +19,7 @@ const main = async () => {
   });
   observability?.start();
 
-  const httpServer = await createHttpServer();
+  const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();
 
   console.log(`🚀 API Gateway ready at ${env.API_GATEWAY_URL}`);

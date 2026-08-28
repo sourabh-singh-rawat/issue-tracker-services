@@ -1,15 +1,17 @@
-import { ApolloServer, HeaderMap } from "@apollo/server";
+import { ApolloServer, type BaseContext, HeaderMap } from "@apollo/server";
 import { Readable } from "node:stream";
 import type { HttpRequest } from "../http-server/types/HttpRequest";
 import type { GraphQLServerOptions, IGraphQLServer } from "./IGraphQLServer";
 
-export class ApolloGraphQLServer implements IGraphQLServer {
+export class ApolloGraphQLServer<
+  TContext extends BaseContext = BaseContext,
+> implements IGraphQLServer {
   readonly path: string;
 
-  private readonly options: GraphQLServerOptions;
-  private apollo: ApolloServer | undefined;
+  private readonly options: GraphQLServerOptions<TContext>;
+  private apollo: ApolloServer<TContext> | undefined;
 
-  constructor(options: GraphQLServerOptions) {
+  constructor(options: GraphQLServerOptions<TContext>) {
     this.options = options;
     this.path = options.path ?? "/graphql";
   }
@@ -19,7 +21,43 @@ export class ApolloGraphQLServer implements IGraphQLServer {
       return;
     }
 
-    const apollo = new ApolloServer({ schema: this.options.schema });
+    const {
+      schema,
+      gateway,
+      plugins,
+      introspection,
+      csrfPrevention,
+      formatError,
+      includeStacktraceInErrorResponses,
+      allowBatchedHttpRequests,
+    } = this.options;
+
+    const apollo = gateway
+      ? new ApolloServer<TContext>({
+          gateway,
+          plugins,
+          introspection,
+          csrfPrevention,
+          formatError,
+          includeStacktraceInErrorResponses,
+          allowBatchedHttpRequests,
+        })
+      : schema
+        ? new ApolloServer<TContext>({
+            schema,
+            plugins,
+            introspection,
+            csrfPrevention,
+            formatError,
+            includeStacktraceInErrorResponses,
+            allowBatchedHttpRequests,
+          })
+        : undefined;
+
+    if (!apollo) {
+      throw new Error("Either schema or gateway must be provided to createGraphQLServer");
+    }
+
     await apollo.start();
     this.apollo = apollo;
   }
@@ -45,13 +83,15 @@ export class ApolloGraphQLServer implements IGraphQLServer {
         if (contextFactory) {
           return contextFactory(request);
         }
-        return {};
+        return this.createEmptyContext();
       },
     });
 
     const headers: Record<string, string> = {};
     for (const [key, value] of response.headers) {
-      headers[key] = value;
+      if (value) {
+        headers[key] = value;
+      }
     }
 
     const status = response.status ?? 200;
@@ -69,6 +109,18 @@ export class ApolloGraphQLServer implements IGraphQLServer {
       headers,
       body: Readable.from(response.body.asyncIterator),
     };
+  }
+
+  private createEmptyContext(): TContext {
+    const empty: Record<string, unknown> = {};
+    if (this.isEmptyContext(empty)) {
+      return empty;
+    }
+    throw new Error("Context factory is required when custom context type is used");
+  }
+
+  private isEmptyContext(value: Record<string, unknown>): value is TContext {
+    return typeof value === "object" && value !== null;
   }
 
   private toHttpGraphQLRequest(request: HttpRequest) {

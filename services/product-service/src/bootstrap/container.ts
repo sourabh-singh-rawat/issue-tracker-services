@@ -1,5 +1,6 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
+import { resolveIdentityFromHeaders } from "@pine/identity";
+import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -81,7 +82,10 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: env.NODE_ENV,
       version: 1,
     },
-    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    https: {
+      key: readTlsFile(env.PRODUCT_SERVICE_TLS_KEY_PATH),
+      cert: readTlsFile(env.PRODUCT_SERVICE_TLS_CERT_PATH),
+    },
     cookie: { secret: env.JWT_SECRET },
     openapi: {
       info: {
@@ -92,6 +96,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       },
       servers: [{ url: env.PRODUCT_SERVICE_URL }],
       tags: [{ name: "auth", description: "Authentication related end-points" }],
+    },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders],
     },
     graphql: createGraphQLServer({
       schema,

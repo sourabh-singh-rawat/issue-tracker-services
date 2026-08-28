@@ -2,7 +2,6 @@ import { createHash } from "node:crypto";
 import { NotFoundError, uuidv7 } from "@pine/common";
 import { AttachmentCreatedEvent, createCloudEvent } from "@pine/events";
 import type { IOutboxService } from "@pine/outbox";
-import type { Queue } from "bullmq";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Attachment, DbClient } from "@/db";
@@ -10,12 +9,10 @@ import { ATTACHMENT_SECURITY_STATUS, ATTACHMENT_STATUS } from "@/features/attach
 import type { IAttachmentRepository } from "@/features/attachment/repositories";
 import type {
   CreateAttachmentFromUploadInput,
-  CreateAttachmentOptions,
   DeleteAttachmentOptions,
   IAttachmentService,
 } from "@/features/attachment/services/IAttachmentService";
 
-export type AttachmentQueue = Pick<Queue, "add">;
 export type AttachmentDatabase = {
   transaction: <T>(callback: (tx: DbClient) => Promise<T>) => Promise<T>;
 };
@@ -25,8 +22,6 @@ export class AttachmentService implements IAttachmentService {
   constructor(
     @inject(TYPES.Database)
     private readonly db: AttachmentDatabase,
-    @inject(TYPES.ImageProcessingQueue)
-    private readonly imageProcessingQueue: AttachmentQueue,
     @inject(TYPES.AttachmentRepository)
     private readonly attachmentRepository: IAttachmentRepository,
     @inject(TYPES.OutboxService)
@@ -42,8 +37,12 @@ export class AttachmentService implements IAttachmentService {
       const attachment = await this.attachmentRepository.save(
         {
           id,
-          tenantId: input.tenantId,
+          scopeType: input.scopeType,
+          scopeId: input.scopeId,
+          tenantId: input.tenantId ?? null,
           currentVersionId: versionId,
+          operationId: input.operationId,
+          metadata: input.metadata,
           status: ATTACHMENT_STATUS.QUARANTINED,
           securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
           createdBy: input.createdBy,
@@ -75,7 +74,9 @@ export class AttachmentService implements IAttachmentService {
         subject: attachment.id,
         data: {
           id: attachment.id,
-          tenantId: attachment.tenantId,
+          scopeType: attachment.scopeType,
+          scopeId: attachment.scopeId,
+          tenantId: attachment.tenantId ?? undefined,
           currentVersionId: attachment.currentVersionId ?? undefined,
           status: attachment.status,
           securityStatus: attachment.securityStatus,
@@ -104,16 +105,6 @@ export class AttachmentService implements IAttachmentService {
     }
 
     return this.db.transaction(execute);
-  }
-
-  async create(options: CreateAttachmentOptions): Promise<void> {
-    await this.imageProcessingQueue.add("process-and-upload-image", {
-      ...options,
-    });
-  }
-
-  async findByIssueId(issueId: string) {
-    return this.attachmentRepository.findByIssueId(issueId);
   }
 
   async delete(options: DeleteAttachmentOptions): Promise<void> {

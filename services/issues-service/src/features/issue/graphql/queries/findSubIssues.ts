@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { TYPES, container } from "@/bootstrap";
 import { IIssueService } from "@/features/issue";
@@ -12,7 +13,7 @@ builder.queryFields((t) => ({
     },
     resolve: async (_root, { input }, ctx) => {
       const { parentIssueId } = input;
-      const userId = ctx.user!.id;
+      const userId = requireIdentityId(ctx);
       const service = container.get<IIssueService>(TYPES.IssueService);
       return await service.findSubIssues({ userId, parentIssueId });
     },

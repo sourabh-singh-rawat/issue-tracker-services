@@ -1,4 +1,8 @@
+import { configureTls } from "@pine/common";
+import { env } from "@/bootstrap/env";
 import "reflect-metadata";
+
+configureTls({ caPath: env.CA_CERT_PATH });
 
 import type { IHttpServer } from "@pine/server";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";

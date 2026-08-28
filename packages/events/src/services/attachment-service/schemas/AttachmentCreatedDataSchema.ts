@@ -3,7 +3,9 @@ import Type from "typebox";
 export const AttachmentCreatedDataSchema = Type.Object(
   {
     id: Type.String(),
-    tenantId: Type.String(),
+    scopeType: Type.Union([Type.Literal("IDENTITY"), Type.Literal("ORGANIZATION")]),
+    scopeId: Type.String(),
+    tenantId: Type.Optional(Type.String()),
     currentVersionId: Type.Optional(Type.String()),
     status: Type.String(),
     securityStatus: Type.String(),

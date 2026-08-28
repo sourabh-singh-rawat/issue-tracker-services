@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -11,7 +12,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, args, ctx) => {
       const service = container.get<IOrganizationRelationService>(TYPES.OrganizationRelationService);
-      await service.delete(args.id, ctx.user!.id);
+      await service.delete(args.id, requireIdentityId(ctx));
       return true;
     },
   }),

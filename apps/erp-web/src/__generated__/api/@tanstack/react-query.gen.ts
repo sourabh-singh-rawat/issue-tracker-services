@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, uploadToTarget, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, UploadToTargetData, UploadToTargetResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -385,14 +385,14 @@ export const resendVerificationEmailMutation = (options?: Partial<Options<Resend
 export const useResendVerificationEmailMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>>, 'mutationFn'>>) => useMutation({ ...resendVerificationEmailMutation(), ...mutationOptions });
 
 /**
- * Create a new issue attachment
+ * Upload file to upload target
  *
- * Create a new issue attachment
+ * Upload file to upload target
  */
-export const createAttachmentMutation = (options?: Partial<Options<CreateAttachmentData>>): UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> = {
+export const uploadToTargetMutation = (options?: Partial<Options<UploadToTargetData>>): UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>> => {
+    const mutationOptions: UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await createAttachment({
+            const { data } = await uploadToTarget({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -404,11 +404,11 @@ export const createAttachmentMutation = (options?: Partial<Options<CreateAttachm
 };
 
 /**
- * Create a new issue attachment
+ * Upload file to upload target
  *
- * Create a new issue attachment
+ * Upload file to upload target
  */
-export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>>, 'mutationFn'>>) => useMutation({ ...createAttachmentMutation(), ...mutationOptions });
+export const useUploadToTargetMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>>, 'mutationFn'>>) => useMutation({ ...uploadToTargetMutation(), ...mutationOptions });
 
 /**
  * Check a graph relationship

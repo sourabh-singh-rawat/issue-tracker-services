@@ -15,8 +15,8 @@ import {
   type IOutboxWorker,
   type IRetryPolicy,
 } from "@pine/outbox";
-import { HttpIdentityClient } from "@pine/identity";
-import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
+import { resolveIdentityFromHeaders } from "@pine/identity";
+import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
@@ -75,7 +75,6 @@ container.bind(TYPES.PlatformIdentitySyncConsumer).to(PlatformIdentitySyncConsum
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");
-  const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
 
   container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     createHttpServer({
@@ -85,7 +84,10 @@ export const bindHttpServer = async (): Promise<void> => {
         environment: env.NODE_ENV,
         version: 1,
       },
-      cors: { credentials: true, origin: [env.ERP_WEB_URL, env.VITE_PLATFORM_WEB_URL] },
+      https: {
+        key: readTlsFile(env.PLATFORM_SERVICE_TLS_KEY_PATH),
+        cert: readTlsFile(env.PLATFORM_SERVICE_TLS_CERT_PATH),
+      },
       cookie: { secret: env.JWT_SECRET },
       openapi: {
         info: {
@@ -104,7 +106,7 @@ export const bindHttpServer = async (): Promise<void> => {
         ],
       },
       hooks: {
-        onRequest: [(request) => identityClient.resolveRequestUser(request)],
+        onRequest: [resolveIdentityFromHeaders],
       },
       graphql: createGraphQLServer({
         schema,

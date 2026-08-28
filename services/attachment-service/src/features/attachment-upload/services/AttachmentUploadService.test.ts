@@ -6,8 +6,9 @@ vi.mock("@/bootstrap/env", () => ({
   },
 }));
 
-import type { Attachment, AttachmentUpload } from "@/db";
+import type { Attachment, AttachmentUpload, DbClient } from "@/db";
 import {
+  ATTACHMENT_SCOPE_TYPE,
   ATTACHMENT_SECURITY_STATUS,
   ATTACHMENT_STATUS,
   type IAttachmentService,
@@ -19,10 +20,26 @@ import {
   AttachmentUploadNotFoundError,
 } from "@/features/attachment-upload/errors";
 import type { IAttachmentUploadRepository } from "@/features/attachment-upload/repositories";
-import { AttachmentUploadService } from "@/features/attachment-upload/services/AttachmentUploadService";
+import {
+  AttachmentUploadService,
+  type UploadDatabase,
+} from "@/features/attachment-upload/services/AttachmentUploadService";
 import type { IObjectStorage } from "@/integrations/storage";
 
+const toDbClient = (val: unknown): val is DbClient => true;
+const dummyTx: unknown = {};
+const mockTx = toDbClient(dummyTx) ? dummyTx : undefined;
+
 describe("AttachmentUploadService", () => {
+  const db: UploadDatabase = {
+    transaction: vi.fn(async (callback) => {
+      if (!mockTx) {
+        throw new Error("mockTx not defined");
+      }
+      return callback(mockTx);
+    }),
+  };
+
   const attachmentUploads: IAttachmentUploadRepository = {
     save: vi.fn(),
     findById: vi.fn(),
@@ -40,8 +57,6 @@ describe("AttachmentUploadService", () => {
 
   const attachmentService: IAttachmentService = {
     createFromUpload: vi.fn(),
-    create: vi.fn(),
-    findByIssueId: vi.fn(),
     delete: vi.fn(),
   };
 
@@ -52,12 +67,15 @@ describe("AttachmentUploadService", () => {
   describe("createUploadTarget", () => {
     it("creates a target URL on data-gateway and saves pending upload record", async () => {
       const service = new AttachmentUploadService(
+        db,
         attachmentUploads,
         objectStorage,
         attachmentService,
       );
       const target = await service.createUploadTarget({
-        tenantId: "01a015a6-2e8f-74da-92ce-174d8adb00d4",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "01a015a6-2e8f-74da-92ce-174d8adb00d4",
+        tenantId: "tenant-1",
         filename: "avatar.png",
         contentType: "image/png",
         size: 1024,
@@ -71,16 +89,20 @@ describe("AttachmentUploadService", () => {
   });
 
   describe("uploadToTarget", () => {
-    it("puts object to storage, creates attachment/version via attachmentService, and marks upload as completed", async () => {
+    it("puts object to storage, creates attachment/version via attachmentService, and marks upload as completed in transaction", async () => {
       const record: AttachmentUpload = {
         id: "upload-1",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",
         expectedSize: 1024,
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/upload-1",
+        storageObjectKey: "organization/org-1/upload-1",
         expiresAt: new Date(Date.now() + 60_000),
         createdBy: "user-1",
         createdAt: new Date(),
@@ -90,8 +112,12 @@ describe("AttachmentUploadService", () => {
 
       const createdAttachment: Attachment = {
         id: "att-1",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
         currentVersionId: "ver-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_STATUS.QUARANTINED,
         securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
         createdBy: "user-1",
@@ -101,6 +127,7 @@ describe("AttachmentUploadService", () => {
       vi.mocked(attachmentService.createFromUpload).mockResolvedValue(createdAttachment);
 
       const service = new AttachmentUploadService(
+        db,
         attachmentUploads,
         objectStorage,
         attachmentService,
@@ -109,27 +136,32 @@ describe("AttachmentUploadService", () => {
       await service.uploadToTarget({ uploadId: "upload-1", data, contentType: "image/png" });
 
       expect(objectStorage.putObject).toHaveBeenCalledWith({
-        storageObjectKey: "tenant-1/upload-1",
+        storageObjectKey: "organization/org-1/upload-1",
         contentType: "image/png",
         body: data,
         contentLength: data.byteLength,
       });
+      expect(db.transaction).toHaveBeenCalled();
       expect(attachmentService.createFromUpload).toHaveBeenCalledWith({
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
         filename: "photo.png",
         contentType: "image/png",
         data,
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/upload-1",
+        storageObjectKey: "organization/org-1/upload-1",
         createdBy: "user-1",
+        tx: mockTx,
       });
-      expect(attachmentUploads.markCompleted).toHaveBeenCalledWith("upload-1");
+      expect(attachmentUploads.markCompleted).toHaveBeenCalledWith("upload-1", { tx: mockTx });
     });
 
     it("throws AttachmentUploadNotFoundError when record is not found", async () => {
       vi.mocked(attachmentUploads.findById).mockResolvedValue(null);
 
       const service = new AttachmentUploadService(
+        db,
         attachmentUploads,
         objectStorage,
         attachmentService,
@@ -144,13 +176,17 @@ describe("AttachmentUploadService", () => {
     it("throws AttachmentUploadAlreadyProcessedError when status is not PENDING", async () => {
       const record: AttachmentUpload = {
         id: "upload-1",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.COMPLETED,
         filename: "photo.png",
         contentType: "image/png",
         expectedSize: 1024,
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/upload-1",
+        storageObjectKey: "organization/org-1/upload-1",
         expiresAt: new Date(Date.now() + 60_000),
         createdBy: "user-1",
         createdAt: new Date(),
@@ -159,6 +195,7 @@ describe("AttachmentUploadService", () => {
       vi.mocked(attachmentUploads.findById).mockResolvedValue(record);
 
       const service = new AttachmentUploadService(
+        db,
         attachmentUploads,
         objectStorage,
         attachmentService,
@@ -173,13 +210,17 @@ describe("AttachmentUploadService", () => {
     it("marks upload as failed and throws AttachmentUploadExpiredError when expired", async () => {
       const record: AttachmentUpload = {
         id: "upload-1",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",
         expectedSize: 1024,
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/upload-1",
+        storageObjectKey: "organization/org-1/upload-1",
         expiresAt: new Date(Date.now() - 60_000),
         createdBy: "user-1",
         createdAt: new Date(),
@@ -188,6 +229,7 @@ describe("AttachmentUploadService", () => {
       vi.mocked(attachmentUploads.findById).mockResolvedValue(record);
 
       const service = new AttachmentUploadService(
+        db,
         attachmentUploads,
         objectStorage,
         attachmentService,
@@ -204,13 +246,17 @@ describe("AttachmentUploadService", () => {
     it("marks upload as failed if storage or attachment creation throws", async () => {
       const record: AttachmentUpload = {
         id: "upload-1",
+        scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
+        scopeId: "org-1",
         tenantId: "tenant-1",
+        operationId: null,
+        metadata: null,
         status: ATTACHMENT_UPLOAD_STATUS.PENDING,
         filename: "photo.png",
         contentType: "image/png",
         expectedSize: 1024,
         storageProvider: "seaweed",
-        storageObjectKey: "tenant-1/upload-1",
+        storageObjectKey: "organization/org-1/upload-1",
         expiresAt: new Date(Date.now() + 60_000),
         createdBy: "user-1",
         createdAt: new Date(),
@@ -222,6 +268,7 @@ describe("AttachmentUploadService", () => {
       );
 
       const service = new AttachmentUploadService(
+        db,
         attachmentUploads,
         objectStorage,
         attachmentService,

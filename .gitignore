@@ -148,6 +148,7 @@ k8s/secrets
 
 # Docker local data
 infra/data/
+.local/
 
 # Combined scripts outputs
 combined_output.txt

@@ -47,7 +47,7 @@ describe("updateProfileName mutation", () => {
               lastName?: string | null;
             };
           },
-          ctx: { user?: { id: string } },
+          ctx: { identity?: { id: string } },
         ) => Promise<unknown>)
       | undefined;
 
@@ -63,7 +63,7 @@ describe("updateProfileName mutation", () => {
                 lastName?: string | null;
               };
             },
-            ctx: { user?: { id: string } },
+            ctx: { identity?: { id: string } },
           ) => Promise<unknown>;
         }) => {
           resolve = config.resolve;
@@ -85,7 +85,7 @@ describe("updateProfileName mutation", () => {
           lastName: "Hopper",
         },
       },
-      { user: { id: "identity-1" } },
+      { identity: { id: "identity-1" } },
     );
 
     expect(get).toHaveBeenCalledWith(Symbol.for("IProfileService"));
@@ -98,40 +98,13 @@ describe("updateProfileName mutation", () => {
     expect(response).toEqual(updated);
   });
 
-  it("throws when the GraphQL context has no authenticated user", async () => {
-    const updateName = vi.fn();
-    get.mockReturnValue({ updateName });
-
-    let resolve:
-      | ((
-          root: unknown,
-          args: {
-            input: {
-              firstName: string;
-              middleName?: string | null;
-              lastName?: string | null;
-            };
-          },
-          ctx: { user?: { id: string } },
-        ) => Promise<unknown>)
-      | undefined;
+  it("configures authScopes with identityRequired", async () => {
+    let fieldConfig: unknown;
 
     mutationFields.mockImplementation((fn: (t: unknown) => unknown) => {
       const t = {
-        field: (config: {
-          resolve: (
-            root: unknown,
-            args: {
-              input: {
-                firstName: string;
-                middleName?: string | null;
-                lastName?: string | null;
-              };
-            },
-            ctx: { user?: { id: string } },
-          ) => Promise<unknown>;
-        }) => {
-          resolve = config.resolve;
+        field: (config: unknown) => {
+          fieldConfig = config;
           return config;
         },
         arg: (opts: unknown) => opts,
@@ -141,10 +114,11 @@ describe("updateProfileName mutation", () => {
 
     await import("@/features/profiles/graphql/mutations/updateProfileName");
 
-    await expect(
-      resolve!(null, { input: { firstName: "Ada" } }, {}),
-    ).rejects.toThrow("No active session");
-    expect(updateName).not.toHaveBeenCalled();
+    expect(fieldConfig).toEqual(
+      expect.objectContaining({
+        authScopes: { identityRequired: true },
+      }),
+    );
   });
 
   it("keeps expected fields on UpdateProfileNameInput", async () => {

@@ -5,7 +5,6 @@ import { TYPES } from "@/bootstrap/container-types";
 import type { ILogoutService } from "@/features/logout/services";
 import { LogoutResponseSchema, type LogoutResponse } from "@/features/logout/schemas";
 import { InvalidCredentialError } from "@/integrations/identity";
-import { env } from "@/bootstrap/env";
 
 export const logout: HttpRoute = {
   url: "/identity/logout",
@@ -40,7 +39,7 @@ export const logout: HttpRoute = {
           name: "session",
           path: "/",
           sameSite: "lax",
-          secure: env.NODE_ENV === "production",
+          secure: true,
         },
       ],
     };

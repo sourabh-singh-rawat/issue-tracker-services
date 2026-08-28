@@ -1,10 +1,23 @@
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const readDevTls = (appName: string) => {
+  const keyPath = path.resolve(__dirname, `../../.local/tls/${appName}/${appName}.key`);
+  const certPath = path.resolve(__dirname, `../../.local/tls/${appName}/${appName}.crt`);
+  if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+    return {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath),
+    };
+  }
+  return undefined;
+};
 
 export default defineConfig({
   envDir: path.resolve(__dirname, "../.."),
@@ -40,5 +53,6 @@ export default defineConfig({
   },
   server: {
     port: 3002,
+    https: readDevTls("platform-web"),
   },
 });

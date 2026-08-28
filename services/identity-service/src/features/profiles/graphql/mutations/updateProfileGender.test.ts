@@ -42,7 +42,7 @@ describe("updateProfileGender mutation", () => {
       | ((
           root: unknown,
           args: { input: { gender: string } },
-          ctx: { user?: { id: string } },
+          ctx: { identity?: { id: string } },
         ) => Promise<unknown>)
       | undefined;
 
@@ -52,7 +52,7 @@ describe("updateProfileGender mutation", () => {
           resolve: (
             root: unknown,
             args: { input: { gender: string } },
-            ctx: { user?: { id: string } },
+            ctx: { identity?: { id: string } },
           ) => Promise<unknown>;
         }) => {
           resolve = config.resolve;
@@ -69,7 +69,7 @@ describe("updateProfileGender mutation", () => {
     const response = await resolve!(
       null,
       { input: { gender: ProfileGender.FEMALE } },
-      { user: { id: "identity-1" } },
+      { identity: { id: "identity-1" } },
     );
 
     expect(get).toHaveBeenCalledWith(Symbol.for("IProfileService"));

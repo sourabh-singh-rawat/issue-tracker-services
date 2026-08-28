@@ -203,6 +203,23 @@ export class OrganizationService implements IOrganizationService {
     });
   }
 
+  async listMyOrganizations(identityId: string): Promise<Organization[]> {
+    const relationships = await this.authorizationClient.listRelationships({
+      namespace: "organization",
+      subject: { namespace: "identity", id: identityId },
+    });
+
+    const organizationIds = Array.from(
+      new Set(relationships.map((rel) => rel.object.id).filter((id) => id.length > 0)),
+    );
+
+    if (organizationIds.length === 0) {
+      return [];
+    }
+
+    return this.organizationRepository.findByIds(organizationIds);
+  }
+
   async update(
     id: string,
     input: UpdateOrganizationInput,

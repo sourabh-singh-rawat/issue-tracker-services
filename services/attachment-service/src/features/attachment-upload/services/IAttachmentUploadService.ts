@@ -1,11 +1,16 @@
+import type { AttachmentScopeType } from "@/features/attachment/constants";
 import type { UploadTarget } from "@/integrations/storage";
 
 export type CreateAttachmentUploadInput = {
-  tenantId: string;
+  scopeType: AttachmentScopeType;
+  scopeId: string;
+  tenantId?: string;
   createdBy: string;
   filename: string;
   contentType: string;
   size: number;
+  operationId?: string;
+  metadata?: Record<string, unknown>;
 };
 
 export type UploadToTargetInput = {

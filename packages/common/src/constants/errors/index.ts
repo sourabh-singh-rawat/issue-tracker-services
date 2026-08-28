@@ -1,6 +1,5 @@
 export * from "./connection-refused.error";
 export * from "./email-not-verified";
-export * from "./error-handler.util";
 export * from "./errors";
 export * from "./http";
 export * from "./invalid-credentials.error";

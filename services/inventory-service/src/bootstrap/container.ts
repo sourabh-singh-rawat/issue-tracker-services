@@ -1,5 +1,6 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { createHttpServer, type IHttpServer } from "@pine/server";
+import { resolveIdentityFromHeaders } from "@pine/identity";
+import { createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
@@ -37,7 +38,10 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: env.NODE_ENV,
       version: 1,
     },
-    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    https: {
+      key: readTlsFile(env.INVENTORY_SERVICE_TLS_KEY_PATH),
+      cert: readTlsFile(env.INVENTORY_SERVICE_TLS_CERT_PATH),
+    },
     cookie: { secret: env.JWT_SECRET },
     openapi: {
       info: {
@@ -48,6 +52,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       },
       servers: [{ url: env.INVENTORY_SERVICE_URL }],
       tags: [{ name: "auth", description: "Authentication related end-points" }],
+    },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders],
     },
     routes,
   }),

@@ -1,4 +1,10 @@
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type {
+  FastifyReply,
+  FastifyRequest,
+  RawServerBase,
+  RawServerDefault,
+  RouteGenericInterface,
+} from "fastify";
 import { StatusCodes } from "http-status-codes";
 import { ResponseError, StandardError } from "../constants/errors";
 
@@ -24,7 +30,12 @@ export class ErrorHandlerUtil {
     };
   }
 
-  static handleError(error: unknown, _request: FastifyRequest, reply: FastifyReply) {
+  static handleError<RawServer extends RawServerBase = RawServerDefault>(
+    error: unknown,
+    _request: FastifyRequest<RouteGenericInterface, RawServer>,
+    reply: FastifyReply<RouteGenericInterface, RawServer>,
+  ) {
+    console.error(error);
     const { statusCode, body } = ErrorHandlerUtil.serialize(error);
     return reply.status(statusCode).send(body);
   }

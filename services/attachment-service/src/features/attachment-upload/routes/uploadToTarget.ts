@@ -48,11 +48,7 @@ export const uploadToTarget: HttpRoute = {
     }
 
     const service = container.get<IAttachmentUploadService>(TYPES.AttachmentUploadService);
-    await service.uploadToTarget({
-      uploadId: id,
-      data: buffer,
-      contentType,
-    });
+    await service.uploadToTarget({ uploadId: id, data: buffer, contentType });
 
     return {
       status: StatusCodes.OK,

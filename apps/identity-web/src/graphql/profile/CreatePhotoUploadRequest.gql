@@ -1,0 +1,11 @@
+mutation CreatePhotoUploadRequest($input: CreatePhotoUploadRequestInput!) {
+  createPhotoUploadRequest(input: $input) {
+    uploadRequestId
+    url
+    expiresAt
+    headers {
+      key
+      value
+    }
+  }
+}

@@ -27,10 +27,28 @@ export type DeleteProfileOptions = {
   identityId: string;
 };
 
+export type CreatePhotoUploadRequestOptions = {
+  identityId: string;
+  authMethod?: "access_token" | "session";
+  filename: string;
+  contentType: string;
+  size: number;
+};
+
+export type CreatePhotoUploadRequestResult = {
+  uploadRequestId: string;
+  url: string;
+  headers: Record<string, string>;
+  expiresAt: string;
+};
+
 export interface IProfileService {
   create(options: CreateProfileOptions): Promise<void>;
   getByIdentityId(identityId: string): Promise<Profile>;
   updateName(options: UpdateNameOptions): Promise<Profile>;
   updateGender(options: UpdateGenderOptions): Promise<Profile>;
   delete(options: DeleteProfileOptions): Promise<void>;
+  createPhotoUploadRequest(
+    options: CreatePhotoUploadRequestOptions,
+  ): Promise<CreatePhotoUploadRequestResult>;
 }

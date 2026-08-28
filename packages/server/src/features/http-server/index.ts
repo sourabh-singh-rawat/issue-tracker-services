@@ -7,10 +7,10 @@ export type {
   HttpRequestHook,
   HttpResponse,
   HttpResponseCookie,
+  HttpIdentity,
   HttpRoute,
   HttpSameSite,
   HttpUploadedFile,
-  HttpUser,
 } from "./types";
 export type { IHttpServer } from "./IHttpServer";
 export {
@@ -41,4 +41,4 @@ export { attachHttpServer } from "./attachHttpServer";
 export { createHttpServer } from "./createHttpServer";
 export { FastifyHttpRequestAdapter } from "./FastifyHttpRequestAdapter";
 export { FastifyHttpServer } from "./FastifyHttpServer";
-export { json, redirect } from "./utils";
+export { expandLoopbackOrigins, json, readTlsFile, redirect } from "./utils";

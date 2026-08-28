@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -20,7 +21,7 @@ builder.queryFields((t) => ({
           relation: args.relation ?? undefined,
           identityId: args.identityId ?? undefined,
         },
-        ctx.user!.id,
+        requireIdentityId(ctx),
       );
     },
   }),

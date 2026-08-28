@@ -1,6 +1,6 @@
 import type { HttpMethod } from "../../../constants";
 
-export type HttpUser = {
+export type HttpIdentity = {
   id: string;
   authMethod: "access_token" | "session";
 };
@@ -21,7 +21,7 @@ export type HttpRequest = {
   params: Record<string, string | undefined>;
   cookies: Record<string, string | undefined>;
   body: unknown;
-  user?: HttpUser;
+  identity?: HttpIdentity;
   file: () => Promise<HttpUploadedFile | undefined>;
   isMultipart: () => boolean;
 };

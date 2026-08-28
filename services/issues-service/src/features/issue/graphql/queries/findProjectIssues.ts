@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { TYPES, container } from "@/bootstrap";
 import { IIssueService } from "@/features/issue";
@@ -10,7 +11,7 @@ builder.queryFields((t) => ({
       projectId: t.arg.string({ required: true }),
     },
     resolve: async (_root, { projectId }, ctx) => {
-      const userId = ctx.user!.id;
+      const userId = requireIdentityId(ctx);
       const service = container.get<IIssueService>(TYPES.IssueService);
       return await service.findProjectIssues({ userId, projectId });
     },

@@ -1,7 +1,7 @@
 export type {
+  HttpIdentity,
   HttpRequest,
   HttpUploadedFile,
-  HttpUser,
 } from "./HttpRequest";
 export type {
   HttpClearCookie,

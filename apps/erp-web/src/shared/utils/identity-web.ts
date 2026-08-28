@@ -1,14 +1,12 @@
-/** Base URL of identity-web (signin/registration live there). */
-export function getIdentityWebBaseUrl(): string {
-  const base = import.meta.env.VITE_IDENTITY_WEB_URL ?? "http://localhost:3000";
+export const getIdentityWebBaseUrl = (): string => {
+  const base = import.meta.env.VITE_IDENTITY_WEB_URL ?? "https://localhost:3000";
   return base.replace(/\/$/, "");
-}
+};
 
-export function getIdentityWebSignInUrl(): string {
+export const getIdentityWebSignInUrl = (): string => {
   return `${getIdentityWebBaseUrl()}/signin`;
-}
+};
 
-/** Full-page redirect to identity-web signin (cross-app). */
-export function redirectToIdentitySignIn(): void {
+export const redirectToIdentitySignIn = (): void => {
   window.location.assign(getIdentityWebSignInUrl());
-}
+};

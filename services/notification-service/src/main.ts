@@ -1,4 +1,8 @@
+import { configureTls } from "@pine/common";
+import { env } from "@/bootstrap/env";
 import "reflect-metadata";
+
+configureTls({ caPath: env.CA_CERT_PATH });
 
 import { broker, container, initializeDb, logger, TYPES } from "@/bootstrap";
 import { NotificationIdentitySyncConsumer } from "@/features/identities";

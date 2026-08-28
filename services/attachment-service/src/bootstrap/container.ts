@@ -1,5 +1,5 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { HttpIdentityClient } from "@pine/identity";
+import { resolveIdentityFromHeaders } from "@pine/identity";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -15,7 +15,7 @@ import {
   type IOutboxWorker,
   type IRetryPolicy,
 } from "@pine/outbox";
-import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
+import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
@@ -25,28 +25,10 @@ import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import { imageProcessingQueue } from "@/bootstrap/queue";
 import { redisClient } from "@/bootstrap/redis-client";
-import {
-  AttachmentRepository,
-  AttachmentService,
-  IAttachmentRepository,
-  IAttachmentService,
-} from "@/features/attachment";
-import {
-  AttachmentUploadRepository,
-  AttachmentUploadService,
-  IAttachmentUploadRepository,
-  IAttachmentUploadService,
-} from "@/features/attachment-upload";
-import {
-  AttachmentIdentitySyncConsumer,
-  IIdentityRepository,
-  IdentityRepository,
-} from "@/features/identities";
-import {
-  AttachmentTenantSyncConsumer,
-  ITenantRepository,
-  TenantRepository,
-} from "@/features/tenants";
+import { AttachmentRepository, AttachmentService, IAttachmentRepository, IAttachmentService } from "@/features/attachment";
+import { AttachmentUploadRepository, AttachmentUploadService, IAttachmentUploadRepository, IAttachmentUploadService } from "@/features/attachment-upload";
+import { AttachmentIdentitySyncConsumer, IIdentityRepository, IdentityRepository } from "@/features/identities";
+import { AttachmentTenantSyncConsumer, ITenantRepository, TenantRepository } from "@/features/tenants";
 import { createContext } from "@/graphql";
 import { IObjectStorage, SeaweedObjectStorage } from "@/integrations/storage";
 import { routes } from "@/routes";
@@ -66,30 +48,16 @@ container.bind<IOutboxRepository>(TYPES.OutboxRepository).toConstantValue(new Ou
 container.bind<IRetryPolicy>(TYPES.RetryPolicy).toConstantValue(new ExponentialBackoffPolicy());
 container
   .bind<IOutboxService>(TYPES.OutboxService)
-  .toConstantValue(
-    new OutboxService(
-      container.get<IOutboxRepository>(TYPES.OutboxRepository),
-      container.get<IRetryPolicy>(TYPES.RetryPolicy),
-    ),
-  );
+  .toConstantValue(new OutboxService(container.get<IOutboxRepository>(TYPES.OutboxRepository), container.get<IRetryPolicy>(TYPES.RetryPolicy)));
 container
   .bind<IOutboxWorker>(TYPES.OutboxWorker)
-  .toConstantValue(
-    new OutboxWorker(
-      container.get<IOutboxService>(TYPES.OutboxService),
-      publisher satisfies IOutboxPublisher,
-    ),
-  );
+  .toConstantValue(new OutboxWorker(container.get<IOutboxService>(TYPES.OutboxService), publisher satisfies IOutboxPublisher));
 container
   .bind<IOutboxCleanupService>(TYPES.OutboxCleanupService)
-  .toConstantValue(
-    new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)),
-  );
+  .toConstantValue(new OutboxCleanupService(container.get<IOutboxRepository>(TYPES.OutboxRepository)));
 container
   .bind<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker)
-  .toConstantValue(
-    new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)),
-  );
+  .toConstantValue(new OutboxCleanupWorker(container.get<IOutboxCleanupService>(TYPES.OutboxCleanupService)));
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
@@ -103,7 +71,6 @@ container.bind<AttachmentTenantSyncConsumer>(TYPES.AttachmentTenantSyncConsumer)
 
 export const bindHttpServer = async (): Promise<void> => {
   const { schema } = await import("@/graphql/schema");
-  const identityClient = new HttpIdentityClient({ baseUrl: env.IDENTITY_SERVICE_URL });
 
   container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     createHttpServer({
@@ -113,11 +80,16 @@ export const bindHttpServer = async (): Promise<void> => {
         environment: env.NODE_ENV,
         version: 1,
       },
-      cors: {
-        credentials: true,
-        origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL],
+      https: {
+        key: readTlsFile(env.ATTACHMENT_SERVICE_TLS_KEY_PATH),
+        cert: readTlsFile(env.ATTACHMENT_SERVICE_TLS_CERT_PATH),
       },
       cookie: { secret: env.JWT_SECRET },
+      cors: {
+        credentials: true,
+        origin: [env.ERP_WEB_URL, env.IDENTITY_WEB_URL, env.VITE_PLATFORM_WEB_URL],
+        methods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"],
+      },
       multipart: { fileSize: 32000000 },
       openapi: {
         info: {
@@ -132,7 +104,7 @@ export const bindHttpServer = async (): Promise<void> => {
         tags: [{ name: "attachment", description: "Attachment related end-points" }],
       },
       hooks: {
-        onRequest: [(request) => identityClient.resolveRequestUser(request)],
+        onRequest: [resolveIdentityFromHeaders],
       },
       graphql: createGraphQLServer({
         schema,

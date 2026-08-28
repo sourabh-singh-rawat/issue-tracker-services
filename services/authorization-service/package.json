@@ -33,6 +33,7 @@
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
+    "@pine/identity": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/security": "workspace:^",
     "@pine/server": "workspace:^",
@@ -44,6 +45,7 @@
     "typebox": "1.3.6"
   },
   "devDependencies": {
+    "@pothos/plugin-scope-auth": "^4.1.7",
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "^4.1.10",
     "pino-pretty": "^13.1.3",

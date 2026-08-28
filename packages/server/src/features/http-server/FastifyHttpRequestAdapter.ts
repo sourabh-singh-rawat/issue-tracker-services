@@ -1,11 +1,14 @@
-import type { FastifyRequest } from "fastify";
+import type { FastifyRequest, RawServerBase, RouteGenericInterface } from "fastify";
 import { isHttpMethod } from "../../constants";
 import type { HttpRequest, HttpUploadedFile } from "./types";
 
 export class FastifyHttpRequestAdapter {
-  private readonly httpRequests = new WeakMap<FastifyRequest, HttpRequest>();
+  private readonly httpRequests = new WeakMap<
+    FastifyRequest<RouteGenericInterface, RawServerBase>,
+    HttpRequest
+  >();
 
-  toHttpRequest(request: FastifyRequest): HttpRequest {
+  toHttpRequest(request: FastifyRequest<RouteGenericInterface, RawServerBase>): HttpRequest {
     const cached = this.httpRequests.get(request);
     if (cached) return cached;
 
@@ -56,7 +59,9 @@ export class FastifyHttpRequestAdapter {
     return httpRequest;
   }
 
-  private toCookies(request: FastifyRequest): Record<string, string | undefined> {
+  private toCookies(
+    request: FastifyRequest<RouteGenericInterface, RawServerBase>,
+  ): Record<string, string | undefined> {
     const cookies = request.cookies;
     if (cookies === null || typeof cookies !== "object") {
       return {};
