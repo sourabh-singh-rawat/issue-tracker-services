@@ -4,13 +4,9 @@ import Value from "typebox/value";
 export const EnvSchema = Type.Object({
   NODE_ENV: Type.String({ default: "development" }),
   DATA_GATEWAY_URL: Type.String({ default: "https://localhost:4001" }),
-  DATA_GATEWAY_TLS_KEY_PATH: Type.String({
-    default: ".local/tls/data-gateway/data-gateway.key",
-  }),
-  DATA_GATEWAY_TLS_CERT_PATH: Type.String({
-    default: ".local/tls/data-gateway/data-gateway.crt",
-  }),
-  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
+  DATA_GATEWAY_TLS_KEY_PATH: Type.String({ minLength: 1 }),
+  DATA_GATEWAY_TLS_CERT_PATH: Type.String({ minLength: 1 }),
+  CA_CERT_PATH: Type.String({ minLength: 1 }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5003" }),
   IDENTITY_WEB_URL: Type.String({ default: "https://localhost:3000" }),
   ERP_WEB_URL: Type.String({ default: "https://localhost:3001" }),

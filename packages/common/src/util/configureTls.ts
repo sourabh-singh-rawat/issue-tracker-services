@@ -1,24 +1,20 @@
-import { existsSync, readFileSync } from "node:fs";
-import path from "node:path";
+import { readFileSync } from "node:fs";
 import { Agent, setGlobalDispatcher } from "undici";
 
 export interface ConfigureTlsOptions {
   caPath: string;
+  certPath: string;
+  keyPath: string;
 }
 
-export const configureTls = ({ caPath }: ConfigureTlsOptions) => {
-  let resolved = caPath;
-  if (!path.isAbsolute(caPath)) {
-    const directPath = path.resolve(process.cwd(), caPath);
-    const monorepoPath = path.resolve(process.cwd(), "../../", caPath);
-    if (existsSync(directPath)) {
-      resolved = directPath;
-    } else if (existsSync(monorepoPath)) {
-      resolved = monorepoPath;
-    }
-  }
-
-  const ca = readFileSync(resolved);
-  const dispatcher = new Agent({ connect: { ca } });
-  setGlobalDispatcher(dispatcher);
+export const configureTls = ({ caPath, certPath, keyPath }: ConfigureTlsOptions): void => {
+  setGlobalDispatcher(
+    new Agent({
+      connect: {
+        ca: readFileSync(caPath),
+        cert: readFileSync(certPath),
+        key: readFileSync(keyPath),
+      },
+    }),
+  );
 };

@@ -3,8 +3,11 @@ import {
   GraphQLDataSourceProcessOptions,
   RemoteGraphQLDataSource,
 } from "@apollo/gateway";
+import makeFetchHappen from "make-fetch-happen";
 import { readFileSync, watch } from "node:fs";
 import path from "node:path";
+import { env } from "./env";
+import "./tls";
 
 export type GatewayContext = {
   identityId?: string;
@@ -12,7 +15,6 @@ export type GatewayContext = {
 };
 
 class SubgraphDataSource extends RemoteGraphQLDataSource<GatewayContext> {
-
   willSendRequest = (options: GraphQLDataSourceProcessOptions<GatewayContext>) => {
     const identityId = options.context?.identityId;
     if (identityId) {
@@ -37,6 +39,14 @@ const readSupergraphSdl = (): string => {
   }
   return sdl;
 };
+
+const subgraphFetcher = makeFetchHappen.defaults({
+  maxSockets: Infinity,
+  retry: false,
+  ca: readFileSync(env.CA_CERT_PATH),
+  cert: readFileSync(env.API_GATEWAY_TLS_CERT_PATH),
+  key: readFileSync(env.API_GATEWAY_TLS_KEY_PATH),
+});
 
 export const graphqlGateway = new ApolloGateway({
   async supergraphSdl({ update }) {
@@ -63,5 +73,9 @@ export const graphqlGateway = new ApolloGateway({
       },
     };
   },
-  buildService: ({ url }) => new SubgraphDataSource({ url }),
+  buildService: ({ url }) =>
+    new SubgraphDataSource({
+      url,
+      fetcher: subgraphFetcher,
+    }),
 });

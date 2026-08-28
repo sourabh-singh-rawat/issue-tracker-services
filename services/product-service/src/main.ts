@@ -2,7 +2,11 @@ import { configureTls } from "@pine/common";
 import { env } from "@/bootstrap/env";
 import "reflect-metadata";
 
-configureTls({ caPath: env.CA_CERT_PATH });
+configureTls({
+  caPath: env.CA_CERT_PATH,
+  certPath: env.PRODUCT_SERVICE_TLS_CERT_PATH,
+  keyPath: env.PRODUCT_SERVICE_TLS_KEY_PATH,
+});
 
 import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";

@@ -12,13 +12,9 @@ export const EnvSchema = Type.Object({
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
   IDENTITY_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5000" }),
-  IDENTITY_SERVICE_TLS_KEY_PATH: Type.String({
-    default: ".local/tls/identity-service/identity-service.key",
-  }),
-  IDENTITY_SERVICE_TLS_CERT_PATH: Type.String({
-    default: ".local/tls/identity-service/identity-service.crt",
-  }),
-  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
+  IDENTITY_SERVICE_TLS_KEY_PATH: Type.String({ minLength: 1 }),
+  IDENTITY_SERVICE_TLS_CERT_PATH: Type.String({ minLength: 1 }),
+  CA_CERT_PATH: Type.String({ minLength: 1 }),
   AUTHORIZATION_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5006" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5003" }),
   DATA_GATEWAY_URL: Type.String({ default: "https://localhost:4001" }),

@@ -1,7 +1,8 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
 import { resolveIdentityFromHeaders } from "@pine/identity";
-import { createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
+import { createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
@@ -39,8 +40,11 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       version: 1,
     },
     https: {
-      key: readTlsFile(env.INVENTORY_SERVICE_TLS_KEY_PATH),
-      cert: readTlsFile(env.INVENTORY_SERVICE_TLS_CERT_PATH),
+      key: readFileSync(env.INVENTORY_SERVICE_TLS_KEY_PATH),
+      cert: readFileSync(env.INVENTORY_SERVICE_TLS_CERT_PATH),
+      ca: readFileSync(env.CA_CERT_PATH),
+      requestCert: true,
+      rejectUnauthorized: true,
     },
     cookie: { secret: env.JWT_SECRET },
     openapi: {

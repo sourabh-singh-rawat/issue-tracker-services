@@ -12,13 +12,9 @@ export const EnvSchema = Type.Object({
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
   INVENTORY_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5002" }),
-  INVENTORY_SERVICE_TLS_KEY_PATH: Type.String({
-    default: ".local/tls/inventory-service/inventory-service.key",
-  }),
-  INVENTORY_SERVICE_TLS_CERT_PATH: Type.String({
-    default: ".local/tls/inventory-service/inventory-service.crt",
-  }),
-  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
+  INVENTORY_SERVICE_TLS_KEY_PATH: Type.String({ minLength: 1 }),
+  INVENTORY_SERVICE_TLS_CERT_PATH: Type.String({ minLength: 1 }),
+  CA_CERT_PATH: Type.String({ minLength: 1 }),
   INVENTORY_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),
