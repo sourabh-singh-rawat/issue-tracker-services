@@ -1,9 +1,11 @@
 import { uuidv7 } from "@pine/common";
+import { AttachmentQuarantinedEvent, createCloudEvent } from "@pine/events";
+import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { env } from "@/bootstrap/env";
 import type { DbClient } from "@/db";
-import type { IAttachmentService } from "@/features/attachment";
+import { ATTACHMENT_STORAGE_ZONE, type IAttachmentService } from "@/features/attachment";
 import { ATTACHMENT_UPLOAD_STATUS } from "@/features/attachment-upload/constants";
 import {
   AttachmentUploadAlreadyProcessedError,
@@ -33,11 +35,13 @@ export class AttachmentUploadService implements IAttachmentUploadService {
     private readonly objectStorage: IObjectStorage,
     @inject(TYPES.AttachmentService)
     private readonly attachmentService: IAttachmentService,
+    @inject(TYPES.OutboxService)
+    private readonly outboxService: IOutboxService,
   ) {}
 
   async createUploadTarget(input: CreateAttachmentUploadInput): Promise<UploadTarget> {
     const id = uuidv7();
-    const objectKey = `${input.scopeType.toLowerCase()}/${input.scopeId}/${id}`;
+    const objectKey = `${ATTACHMENT_STORAGE_ZONE.QUARANTINE}/${input.scopeType.toLowerCase()}/${input.scopeId}/${id}`;
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
     await this.attachmentUploads.save({
@@ -95,7 +99,7 @@ export class AttachmentUploadService implements IAttachmentUploadService {
       });
 
       await this.db.transaction(async (tx) => {
-        await this.attachmentService.createFromUpload({
+        const attachment = await this.attachmentService.createFromUpload({
           scopeType: record.scopeType,
           scopeId: record.scopeId,
           tenantId: record.tenantId ?? undefined,
@@ -111,6 +115,37 @@ export class AttachmentUploadService implements IAttachmentUploadService {
         });
 
         await this.attachmentUploads.markCompleted(record.id, { tx });
+
+        const event = createCloudEvent({
+          type: AttachmentQuarantinedEvent.type,
+          version: AttachmentQuarantinedEvent.version,
+          schema: AttachmentQuarantinedEvent.schema,
+          source: "pine/attachment-service",
+          subject: attachment.id,
+          data: {
+            id: attachment.id,
+            scopeType: attachment.scopeType,
+            scopeId: attachment.scopeId,
+            tenantId: attachment.tenantId ?? undefined,
+            currentVersionId: attachment.currentVersionId ?? undefined,
+            status: attachment.status,
+            securityStatus: attachment.securityStatus,
+            createdBy: attachment.createdBy,
+            createdAt: attachment.createdAt.toISOString(),
+          },
+        });
+
+        await this.outboxService.schedule(
+          {
+            eventId: event.id,
+            eventType: event.type,
+            eventVersion: AttachmentQuarantinedEvent.version,
+            aggregateType: "attachment",
+            aggregateId: attachment.id,
+            payload: event,
+          },
+          { tx },
+        );
       });
     } catch (error) {
       await this.attachmentUploads.markFailed(record.id);

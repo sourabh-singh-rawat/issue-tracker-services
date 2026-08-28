@@ -1,7 +1,5 @@
 import { createHash } from "node:crypto";
 import { NotFoundError } from "@pine/common";
-import { AttachmentCreatedEvent } from "@pine/events";
-import type { IOutboxService } from "@pine/outbox";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Attachment, AttachmentVersion, DbClient } from "@/db";
 import {
@@ -15,7 +13,7 @@ import {
   AttachmentService,
 } from "@/features/attachment/services/AttachmentService";
 
-const toDbClient = (val: unknown): val is DbClient => true;
+const toDbClient = (_val: unknown): _val is DbClient => true;
 const dummyTx: unknown = {};
 const mockTx = toDbClient(dummyTx) ? dummyTx : undefined;
 
@@ -36,21 +34,12 @@ describe("AttachmentService", () => {
     deleteById: vi.fn(),
   };
 
-  const outboxService: IOutboxService = {
-    schedule: vi.fn(),
-    claimBatch: vi.fn(),
-    complete: vi.fn(),
-    failed: vi.fn(),
-    get: vi.fn(),
-    getByEventId: vi.fn(),
-  };
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   describe("createFromUpload", () => {
-    it("creates attachment, attachment version, and schedules outbox event within a transaction", async () => {
+    it("creates attachment and attachment version within a transaction", async () => {
       const savedAttachment: Attachment = {
         id: "att-123",
         scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
@@ -83,11 +72,7 @@ describe("AttachmentService", () => {
       vi.mocked(attachmentRepository.save).mockResolvedValue(savedAttachment);
       vi.mocked(attachmentRepository.saveVersion).mockResolvedValue(savedVersion);
 
-      const service = new AttachmentService(
-        db,
-        attachmentRepository,
-        outboxService,
-      );
+      const service = new AttachmentService(db, attachmentRepository);
       const data = Buffer.from("image data");
       const expectedSha256 = createHash("sha256").update(data).digest("hex");
 
@@ -128,31 +113,6 @@ describe("AttachmentService", () => {
         }),
         expect.anything(),
       );
-      expect(outboxService.schedule).toHaveBeenCalledWith(
-        expect.objectContaining({
-          eventType: AttachmentCreatedEvent.type,
-          eventVersion: AttachmentCreatedEvent.version,
-          aggregateType: "attachment",
-          aggregateId: "att-123",
-          payload: expect.objectContaining({
-            type: AttachmentCreatedEvent.type,
-            source: "pine/attachment-service",
-            subject: "att-123",
-            data: {
-              id: "att-123",
-              scopeType: ATTACHMENT_SCOPE_TYPE.ORGANIZATION,
-              scopeId: "org-1",
-              tenantId: "tenant-1",
-              currentVersionId: "ver-123",
-              status: ATTACHMENT_STATUS.QUARANTINED,
-              securityStatus: ATTACHMENT_SECURITY_STATUS.PENDING,
-              createdBy: "user-1",
-              createdAt: savedAttachment.createdAt.toISOString(),
-            },
-          }),
-        }),
-        expect.anything(),
-      );
     });
   });
 
@@ -160,11 +120,7 @@ describe("AttachmentService", () => {
     it("throws NotFoundError when attachment does not exist", async () => {
       vi.mocked(attachmentRepository.findById).mockResolvedValue(null);
 
-      const service = new AttachmentService(
-        db,
-        attachmentRepository,
-        outboxService,
-      );
+      const service = new AttachmentService(db, attachmentRepository);
 
       await expect(service.delete({ id: "non-existent" })).rejects.toBeInstanceOf(
         NotFoundError,
@@ -188,11 +144,7 @@ describe("AttachmentService", () => {
       };
       vi.mocked(attachmentRepository.findById).mockResolvedValue(existing);
 
-      const service = new AttachmentService(
-        db,
-        attachmentRepository,
-        outboxService,
-      );
+      const service = new AttachmentService(db, attachmentRepository);
       await service.delete({ id: "att-1" });
 
       expect(attachmentRepository.deleteById).toHaveBeenCalledWith("att-1", { tx: undefined });
