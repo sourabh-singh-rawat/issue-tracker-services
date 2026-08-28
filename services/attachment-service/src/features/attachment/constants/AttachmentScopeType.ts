@@ -1,6 +1,7 @@
-export type AttachmentScopeType = "IDENTITY" | "ORGANIZATION";
-
 export const ATTACHMENT_SCOPE_TYPE = {
   IDENTITY: "IDENTITY",
   ORGANIZATION: "ORGANIZATION",
-} satisfies Record<AttachmentScopeType, AttachmentScopeType>;
+} as const;
+
+export type AttachmentScopeType =
+  (typeof ATTACHMENT_SCOPE_TYPE)[keyof typeof ATTACHMENT_SCOPE_TYPE];

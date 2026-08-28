@@ -1,7 +1,5 @@
 import { createHash } from "node:crypto";
 import { NotFoundError, uuidv7 } from "@pine/common";
-import { AttachmentCreatedEvent, createCloudEvent } from "@pine/events";
-import type { IOutboxService } from "@pine/outbox";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import type { Attachment, DbClient } from "@/db";
@@ -24,8 +22,6 @@ export class AttachmentService implements IAttachmentService {
     private readonly db: AttachmentDatabase,
     @inject(TYPES.AttachmentRepository)
     private readonly attachmentRepository: IAttachmentRepository,
-    @inject(TYPES.OutboxService)
-    private readonly outboxService: IOutboxService,
   ) {}
 
   async createFromUpload(input: CreateAttachmentFromUploadInput): Promise<Attachment> {
@@ -62,37 +58,6 @@ export class AttachmentService implements IAttachmentService {
           storageProvider: input.storageProvider,
           storageObjectKey: input.storageObjectKey,
           createdBy: input.createdBy,
-        },
-        { tx },
-      );
-
-      const event = createCloudEvent({
-        type: AttachmentCreatedEvent.type,
-        version: AttachmentCreatedEvent.version,
-        schema: AttachmentCreatedEvent.schema,
-        source: "pine/attachment-service",
-        subject: attachment.id,
-        data: {
-          id: attachment.id,
-          scopeType: attachment.scopeType,
-          scopeId: attachment.scopeId,
-          tenantId: attachment.tenantId ?? undefined,
-          currentVersionId: attachment.currentVersionId ?? undefined,
-          status: attachment.status,
-          securityStatus: attachment.securityStatus,
-          createdBy: attachment.createdBy,
-          createdAt: attachment.createdAt.toISOString(),
-        },
-      });
-
-      await this.outboxService.schedule(
-        {
-          eventId: event.id,
-          eventType: event.type,
-          eventVersion: AttachmentCreatedEvent.version,
-          aggregateType: "attachment",
-          aggregateId: attachment.id,
-          payload: event,
         },
         { tx },
       );
