@@ -1,9 +1,11 @@
 import { HttpIdentityClient } from "@pine/identity";
-import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
+import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
 import { TYPES } from "./container-types";
 import { env, listenPortFromUrl } from "./env";
 import { graphqlGateway } from "./graphql-gateway";
+import "./tls";
 
 const resolveEnvironment = (value: string) => {
   if (value === "production" || value === "development" || value === "test") {
@@ -19,8 +21,8 @@ export const container = new Container({ defaultScope: "Singleton" });
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({
     https: {
-      key: readTlsFile(env.API_GATEWAY_TLS_KEY_PATH),
-      cert: readTlsFile(env.API_GATEWAY_TLS_CERT_PATH),
+      key: readFileSync(env.API_GATEWAY_TLS_KEY_PATH),
+      cert: readFileSync(env.API_GATEWAY_TLS_CERT_PATH),
     },
     cors: {
       credentials: true,
@@ -44,6 +46,15 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       }),
     }),
     proxy: {
+      undici: {
+        headersTimeout: 60_000,
+        bodyTimeout: 120_000,
+        connect: {
+          ca: readFileSync(env.CA_CERT_PATH),
+          cert: readFileSync(env.API_GATEWAY_TLS_CERT_PATH),
+          key: readFileSync(env.API_GATEWAY_TLS_KEY_PATH),
+        },
+      },
       routes: [
         { prefix: "/identity", upstream: env.IDENTITY_SERVICE_URL, proxyPayloads: true },
         { prefix: "/attachments", upstream: env.ATTACHMENT_SERVICE_URL, proxyPayloads: true },

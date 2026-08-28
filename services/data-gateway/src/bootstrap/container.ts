@@ -1,7 +1,9 @@
-import { createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
+import { createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
 import { TYPES } from "./container-types";
 import { env, listenPortFromUrl } from "./env";
+import "./tls";
 
 const resolveEnvironment = (value: string) => {
   if (value === "production" || value === "development" || value === "test") {
@@ -15,8 +17,8 @@ export const container = new Container({ defaultScope: "Singleton" });
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({
     https: {
-      key: readTlsFile(env.DATA_GATEWAY_TLS_KEY_PATH),
-      cert: readTlsFile(env.DATA_GATEWAY_TLS_CERT_PATH),
+      key: readFileSync(env.DATA_GATEWAY_TLS_KEY_PATH),
+      cert: readFileSync(env.DATA_GATEWAY_TLS_CERT_PATH),
     },
     cors: {
       credentials: true,
@@ -30,6 +32,15 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       version: 1,
     },
     proxy: {
+      undici: {
+        headersTimeout: 60_000,
+        bodyTimeout: 120_000,
+        connect: {
+          ca: readFileSync(env.CA_CERT_PATH),
+          cert: readFileSync(env.DATA_GATEWAY_TLS_CERT_PATH),
+          key: readFileSync(env.DATA_GATEWAY_TLS_KEY_PATH),
+        },
+      },
       routes: [
         {
           prefix: "/attachments",

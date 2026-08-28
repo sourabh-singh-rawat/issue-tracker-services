@@ -15,8 +15,9 @@ import {
   type IOutboxWorker,
   type IRetryPolicy,
 } from "@pine/outbox";
-import { createGraphQLServer, createHttpServer, readTlsFile, type IHttpServer } from "@pine/server";
+import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
@@ -88,8 +89,11 @@ export const bindHttpServer = async (): Promise<void> => {
         version: 1,
       },
       https: {
-        key: readTlsFile(env.ATTACHMENT_SERVICE_TLS_KEY_PATH),
-        cert: readTlsFile(env.ATTACHMENT_SERVICE_TLS_CERT_PATH),
+        key: readFileSync(env.ATTACHMENT_SERVICE_TLS_KEY_PATH),
+        cert: readFileSync(env.ATTACHMENT_SERVICE_TLS_CERT_PATH),
+        ca: readFileSync(env.CA_CERT_PATH),
+        requestCert: true,
+        rejectUnauthorized: true,
       },
       cookie: { secret: env.JWT_SECRET },
       cors: {

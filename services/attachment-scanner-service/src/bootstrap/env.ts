@@ -11,13 +11,9 @@ export const EnvSchema = Type.Object({
     ],
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
-  ATTACHMENT_SCANNER_SERVICE_TLS_KEY_PATH: Type.String({
-    default: ".local/tls/attachment-scanner-service/attachment-scanner-service.key",
-  }),
-  ATTACHMENT_SCANNER_SERVICE_TLS_CERT_PATH: Type.String({
-    default: ".local/tls/attachment-scanner-service/attachment-scanner-service.crt",
-  }),
-  CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
+  ATTACHMENT_SCANNER_SERVICE_TLS_KEY_PATH: Type.String({ minLength: 1 }),
+  ATTACHMENT_SCANNER_SERVICE_TLS_CERT_PATH: Type.String({ minLength: 1 }),
+  CA_CERT_PATH: Type.String({ minLength: 1 }),
   ATTACHMENT_SCANNER_DATABASE_URL: Type.String({ minLength: 1 }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5003" }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),

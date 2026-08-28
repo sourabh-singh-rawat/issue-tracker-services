@@ -9,13 +9,7 @@ export const createHttpServer = (options: HttpServerOptions): IHttpServer =>
     options.https
       ? fastify({
           http2: true,
-          https: {
-            ...options.https,
-            allowHTTP1: options.https.allowHTTP1 ?? true,
-          },
+          https: { ...options.https, allowHTTP1: options.https.allowHTTP1 ?? true },
         })
-      : fastify({
-          http2: true,
-        }),
+      : fastify({ http2: true }),
   );
-
