@@ -43,6 +43,7 @@ import {
   IProfilePhotoUploadRequestRepository,
   IProfileRepository,
   IProfileService,
+  ProfilePhotoAttachmentConsumer,
   ProfilePhotoUploadRequestRepository,
   ProfileRepository,
   ProfileService,
@@ -97,6 +98,7 @@ container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
 container.bind<IProfileRepository>(TYPES.ProfileRepository).to(ProfileRepository);
 container.bind<IProfilePhotoUploadRequestRepository>(TYPES.ProfilePhotoUploadRequestRepository).to(ProfilePhotoUploadRequestRepository);
 container.bind<IProfileService>(TYPES.ProfileService).to(ProfileService);
+container.bind<ProfilePhotoAttachmentConsumer>(TYPES.ProfilePhotoAttachmentConsumer).to(ProfilePhotoAttachmentConsumer);
 container.bind<IAuthorizationClient>(TYPES.AuthorizationClient).toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
 container.bind<IAttachmentClient>(TYPES.AttachmentClient).toConstantValue(new HttpAttachmentClient({ baseUrl: env.ATTACHMENT_SERVICE_URL }));
 container.bind<IClientService>(TYPES.ClientService).to(ClientService);

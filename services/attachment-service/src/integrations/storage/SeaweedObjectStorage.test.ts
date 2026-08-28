@@ -66,4 +66,11 @@ describe("SeaweedObjectStorage", () => {
 
     expect(send).toHaveBeenCalled();
   });
+
+  it("copies, deletes, and moves object in S3 storage bucket", async () => {
+    const storage = new SeaweedObjectStorage();
+    await storage.moveObject("quarantine/att-1", "trusted/att-1");
+
+    expect(send).toHaveBeenCalledTimes(3);
+  });
 });

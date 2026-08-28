@@ -2,7 +2,7 @@ import { UnauthorizedError } from "@pine/common";
 import type { HttpRoute } from "@pine/server";
 import { json } from "@pine/server";
 import Value from "typebox/value";
-import { container } from "@/bootstrap";
+import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
 import {
   CreateUploadTargetBodySchema,

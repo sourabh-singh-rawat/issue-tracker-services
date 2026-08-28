@@ -24,6 +24,7 @@ import type {
   IProfileService,
   UpdateGenderOptions,
   UpdateNameOptions,
+  UpdatePhotoOptions,
 } from "@/features/profiles/services/IProfileService";
 
 @injectable()
@@ -134,6 +135,32 @@ export class ProfileService implements IProfileService {
       aggregateId: updated.id,
       payload: event,
     });
+
+    return updated;
+  }
+
+  async updatePhoto(options: UpdatePhotoOptions): Promise<Profile> {
+    const { identityId, photoUrl, uploadRequestId, attachmentId, tx } = options;
+    const profile = await this.profileRepository.findByIdentityId(identityId, { tx });
+    if (!profile) throw new UserProfileNotFoundError();
+
+    const updated = await this.profileRepository.update(
+      profile.id,
+      { photoUrl },
+      { tx },
+    );
+
+    if (uploadRequestId) {
+      await this.photoUploadRequestRepository.update(
+        uploadRequestId,
+        {
+          status: "completed",
+          attachmentId,
+          completedAt: new Date(),
+        },
+        { tx },
+      );
+    }
 
     return updated;
   }

@@ -1,6 +1,7 @@
 export type {
   CreateUploadTargetInput,
   DownloadUrl,
+  GetObjectOutput,
   IObjectStorage,
   ObjectMetadata,
   UploadTarget,

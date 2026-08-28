@@ -1,3 +1,5 @@
+import type { Readable } from "node:stream";
+
 export type CreateUploadTargetInput = {
   storageObjectKey: string;
   contentType: string;
@@ -31,10 +33,19 @@ export type PutObjectInput = {
   contentLength?: number;
 };
 
+export type GetObjectOutput = {
+  body: Readable;
+  contentType?: string;
+  contentLength?: number;
+};
+
 export interface IObjectStorage {
   createUploadTarget: (input: CreateUploadTargetInput) => Promise<UploadTarget>;
   putObject: (input: PutObjectInput) => Promise<void>;
   createDownloadUrl: (objectId: string) => Promise<DownloadUrl>;
   deleteObject: (objectId: string) => Promise<void>;
+  copyObject: (sourceKey: string, destinationKey: string) => Promise<void>;
+  moveObject: (sourceKey: string, destinationKey: string) => Promise<void>;
   getObjectMetadata: (objectId: string) => Promise<ObjectMetadata>;
+  getObject: (objectId: string) => Promise<GetObjectOutput>;
 }

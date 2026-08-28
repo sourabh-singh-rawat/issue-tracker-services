@@ -12,6 +12,7 @@ import { openApiOutputPath } from "@/bootstrap/container";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
 import type { IClientSeederService } from "@/features/clients";
+import { ProfilePhotoAttachmentConsumer } from "@/features/profiles";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -44,6 +45,7 @@ const main = async () => {
 
   void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
   void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
+  void container.get<ProfilePhotoAttachmentConsumer>(TYPES.ProfilePhotoAttachmentConsumer).start();
 };
 
 main().catch((error) => {

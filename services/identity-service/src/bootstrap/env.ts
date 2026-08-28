@@ -21,6 +21,7 @@ export const EnvSchema = Type.Object({
   CA_CERT_PATH: Type.String({ default: ".local/tls/ca/ca.crt" }),
   AUTHORIZATION_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5006" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5003" }),
+  DATA_GATEWAY_URL: Type.String({ default: "https://localhost:4001" }),
   IDENTITY_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
   JWT_SECRET: Type.String({ minLength: 1 }),

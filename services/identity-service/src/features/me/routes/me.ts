@@ -4,7 +4,7 @@ import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IMeService } from "@/features/me/services";
 import { MeResponseSchema, type MeResponse } from "@/features/me/schemas";
-import { toMeProfileFullName } from "@/features/me/utils";
+import { toMeProfileFullName, toMeProfilePhotoUrl } from "@/features/me/utils";
 import { InvalidCredentialError } from "@/integrations/identity";
 
 export const me: HttpRoute = {
@@ -44,7 +44,7 @@ export const me: HttpRoute = {
             fullName: toMeProfileFullName(profile.firstName, profile.middleName, profile.lastName),
             gender: profile.gender,
             description: profile.description,
-            photoUrl: profile.photoUrl,
+            photoUrl: toMeProfilePhotoUrl(profile.photoUrl),
           }
         : null,
     };

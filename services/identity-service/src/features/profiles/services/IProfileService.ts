@@ -42,13 +42,22 @@ export type CreatePhotoUploadRequestResult = {
   expiresAt: string;
 };
 
+export type UpdatePhotoOptions = {
+  identityId: string;
+  photoUrl: string;
+  uploadRequestId?: string;
+  attachmentId?: string;
+  tx?: DbClient;
+};
+
 export interface IProfileService {
-  create(options: CreateProfileOptions): Promise<void>;
-  getByIdentityId(identityId: string): Promise<Profile>;
-  updateName(options: UpdateNameOptions): Promise<Profile>;
-  updateGender(options: UpdateGenderOptions): Promise<Profile>;
-  delete(options: DeleteProfileOptions): Promise<void>;
-  createPhotoUploadRequest(
+  create: (options: CreateProfileOptions) => Promise<void>;
+  getByIdentityId: (identityId: string) => Promise<Profile>;
+  updateName: (options: UpdateNameOptions) => Promise<Profile>;
+  updateGender: (options: UpdateGenderOptions) => Promise<Profile>;
+  updatePhoto: (options: UpdatePhotoOptions) => Promise<Profile>;
+  delete: (options: DeleteProfileOptions) => Promise<void>;
+  createPhotoUploadRequest: (
     options: CreatePhotoUploadRequestOptions,
-  ): Promise<CreatePhotoUploadRequestResult>;
+  ) => Promise<CreatePhotoUploadRequestResult>;
 }

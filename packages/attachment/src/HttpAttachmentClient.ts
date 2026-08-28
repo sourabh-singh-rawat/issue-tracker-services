@@ -1,6 +1,8 @@
+import { Readable } from "node:stream";
 import Value from "typebox/value";
 import type {
   CreateUploadTargetOptions,
+  DownloadAttachmentOptions,
   IAttachmentClient,
 } from "./IAttachmentClient";
 import {
@@ -50,5 +52,22 @@ export class HttpAttachmentClient implements IAttachmentClient {
     }
 
     return body;
+  }
+
+  async downloadStream(
+    options: DownloadAttachmentOptions,
+  ): Promise<Readable> {
+    const url = `${this.baseUrl}/internal/attachments/${options.attachmentId}/versions/${options.versionId}/content`;
+
+    const response = await fetch(url);
+    const body = response.body;
+
+    if (!response.ok || !body) {
+      throw new Error(
+        `Failed to download attachment: ${response.statusText}`,
+      );
+    }
+
+    return Readable.from(body);
   }
 }

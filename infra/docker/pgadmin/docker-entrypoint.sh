@@ -19,6 +19,7 @@ issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
 inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
 product-postgres:5432:*:product:${POSTGRES_PRODUCT_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
+attachment-scanner-postgres:5432:*:attachment_scanner:${POSTGRES_ATTACHMENT_SCANNER_PASSWORD}
 notification-postgres:5432:*:notification:${POSTGRES_NOTIFICATION_PASSWORD}
 platform-postgres:5432:*:platform:${POSTGRES_PLATFORM_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}

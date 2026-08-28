@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import {
@@ -14,6 +14,7 @@ import {
 import type {
   AttachmentRepositoryOptions,
   IAttachmentRepository,
+  UpdateAttachmentStatusInput,
 } from "@/features/attachment/repositories/IAttachmentRepository";
 
 @injectable()
@@ -42,6 +43,55 @@ export class AttachmentRepository implements IAttachmentRepository {
     const [row] = await client.select().from(Attachments).where(eq(Attachments.id, id)).limit(1);
 
     return row ?? null;
+  }
+
+  async findVersionById(
+    attachmentId: string,
+    versionId: string,
+    options?: AttachmentRepositoryOptions,
+  ): Promise<AttachmentVersion | null> {
+    const client = this.client(options);
+    const [row] = await client
+      .select()
+      .from(AttachmentVersions)
+      .where(and(eq(AttachmentVersions.attachmentId, attachmentId), eq(AttachmentVersions.id, versionId)))
+      .limit(1);
+
+    return row ?? null;
+  }
+
+  async updateStatus(
+    id: string,
+    input: UpdateAttachmentStatusInput,
+    options?: AttachmentRepositoryOptions,
+  ): Promise<Attachment | null> {
+    const client = this.client(options);
+    const now = new Date();
+    const [updated] = await client
+      .update(Attachments)
+      .set({
+        ...input,
+        updatedAt: now,
+      })
+      .where(eq(Attachments.id, id))
+      .returning();
+
+    return updated ?? null;
+  }
+
+  async updateVersionStorageKey(
+    versionId: string,
+    storageObjectKey: string,
+    options?: AttachmentRepositoryOptions,
+  ): Promise<AttachmentVersion | null> {
+    const client = this.client(options);
+    const [updated] = await client
+      .update(AttachmentVersions)
+      .set({ storageObjectKey })
+      .where(eq(AttachmentVersions.id, versionId))
+      .returning();
+
+    return updated ?? null;
   }
 
   async deleteById(id: string, options?: AttachmentRepositoryOptions): Promise<void> {
