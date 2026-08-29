@@ -2,6 +2,7 @@ import { Box, Grid2, styled, Toolbar, Typography, useTheme } from "@mui/material
 import { Link, useRouterState } from "@tanstack/react-router";
 import { getActiveApp } from "../../../apps";
 import { AccountSwitcher } from "../../../../features/auth/components/AccountSwitcher";
+import { OrganizationSwitcher } from "../../../../features/organization/components/OrganizationSwitcher";
 
 import MuiAppBar from "@mui/material/AppBar";
 
@@ -46,6 +47,9 @@ export const Navbar = () => {
               </Grid2>
             ) : null}
             <Grid2 size="grow" />
+            <Grid2>
+              <OrganizationSwitcher />
+            </Grid2>
             <Grid2>
               <AccountSwitcher />
             </Grid2>

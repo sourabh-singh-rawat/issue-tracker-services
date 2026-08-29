@@ -3,6 +3,7 @@ export * from "./catalog";
 export * from "./home";
 export * from "./inventory";
 export * from "./issue";
+export * from "./organization";
 export * from "./products";
 export * from "./project";
 export * from "./profile";

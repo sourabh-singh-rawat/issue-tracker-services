@@ -31,7 +31,7 @@ export const PLATFORM_ROLES: Record<string, RoleDefinition> = {
     relation: "member",
     permissionKeys: [
       ...permissionKeys("platform", ["read"]),
-      ...permissionKeys("tenant", ["read"]),
+      ...permissionKeys("tenant", ["read", "read_list"]),
     ],
   },
 };
@@ -75,7 +75,7 @@ export const TENANT_ROLES: Record<string, RoleDefinition> = {
     description: "Read access to tenant resources, organizations, and roles",
     relation: "member",
     permissionKeys: [
-      ...permissionKeys("tenant", ["read"]),
+      ...permissionKeys("tenant", ["read", "read_list"]),
       ...permissionKeys("organization", ["read"]),
       ...permissionKeys("role", ["read"]),
     ],

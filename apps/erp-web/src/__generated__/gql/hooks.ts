@@ -15,13 +15,6 @@ export type DeleteAttachmentMutationVariables = Exact<{
 
 export type DeleteAttachmentMutation = { deleteAttachment: string | null };
 
-export type FindFilesQueryVariables = Exact<{
-  issueId: string;
-}>;
-
-
-export type FindFilesQuery = { findFiles: { rowCount: number | null, rows: Array<{ id: string | null, status: string | null, securityStatus: string | null }> | null } | null };
-
 export type CreateIssueMutationVariables = Exact<{
   input: Types.CreateIssueInput;
 }>;
@@ -60,7 +53,7 @@ export type UpdateIssueMutation = { updateIssue: string | null };
 export type GetMyOrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyOrganizationsQuery = { getMyOrganizations: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown }> | null };
+export type GetMyOrganizationsQuery = { getMyOrganizations: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown }> | null }> | null }> | null }> | null }> | null }> | null };
 
 export type CreateProjectMutationVariables = Exact<{
   input: Types.CreateProjectInput;
@@ -128,39 +121,6 @@ export const useDeleteAttachmentMutation = <
     )};
 
 useDeleteAttachmentMutation.getKey = () => ['DeleteAttachment'];
-
-export const FindFilesDocument = new TypedDocumentString(`
-    query FindFiles($issueId: String!) {
-  findFiles(issueId: $issueId) {
-    rowCount
-    rows {
-      id
-      status
-      securityStatus
-    }
-  }
-}
-    `);
-
-export const useFindFilesQuery = <
-      TData = FindFilesQuery,
-      TError = unknown
-    >(
-      variables: FindFilesQueryVariables,
-      options?: Omit<UseQueryOptions<FindFilesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<FindFilesQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<FindFilesQuery, TError, TData>(
-      {
-    queryKey: ['FindFiles', variables],
-    queryFn: graphQLFetcher<FindFilesQuery, FindFilesQueryVariables>(FindFilesDocument, variables),
-    ...options
-  }
-    )};
-
-useFindFilesQuery.document = FindFilesDocument;
-
-useFindFilesQuery.getKey = (variables: FindFilesQueryVariables) => ['FindFiles', variables];
 
 export const CreateIssueDocument = new TypedDocumentString(`
     mutation CreateIssue($input: CreateIssueInput!) {
@@ -317,6 +277,56 @@ export const GetMyOrganizationsDocument = new TypedDocumentString(`
     description
     isActive
     createdAt
+    children {
+      id
+      tenantId
+      parentOrganizationId
+      name
+      slug
+      description
+      isActive
+      createdAt
+      children {
+        id
+        tenantId
+        parentOrganizationId
+        name
+        slug
+        description
+        isActive
+        createdAt
+        children {
+          id
+          tenantId
+          parentOrganizationId
+          name
+          slug
+          description
+          isActive
+          createdAt
+          children {
+            id
+            tenantId
+            parentOrganizationId
+            name
+            slug
+            description
+            isActive
+            createdAt
+            children {
+              id
+              tenantId
+              parentOrganizationId
+              name
+              slug
+              description
+              isActive
+              createdAt
+            }
+          }
+        }
+      }
+    }
   }
 }
     `);

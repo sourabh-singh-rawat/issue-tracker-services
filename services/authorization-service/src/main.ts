@@ -23,7 +23,6 @@ import {
   AuthorizationTenantSyncConsumer,
 } from "@/features/platform";
 
-
 export { container } from "@/bootstrap";
 
 const main = async () => {
@@ -59,14 +58,11 @@ const main = async () => {
     .get<AuthorizationTenantRelationSyncConsumer>(TYPES.AuthorizationTenantRelationSyncConsumer)
     .start();
   void container
-    .get<AuthorizationPlatformRelationSyncConsumer>(
-      TYPES.AuthorizationPlatformRelationSyncConsumer,
-    )
+    .get<AuthorizationPlatformRelationSyncConsumer>(TYPES.AuthorizationPlatformRelationSyncConsumer)
     .start();
   void container
     .get<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer)
     .start();
-
 };
 
 main().catch((error) => {

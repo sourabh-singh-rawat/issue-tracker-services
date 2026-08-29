@@ -91,7 +91,7 @@ describe("OrganizationService", () => {
     expect(authorizationClient.checkRelationship).toHaveBeenCalledWith({
       namespace: "tenant",
       object: "tenant-1",
-      relation: "read",
+      relation: "read_list",
       subject: `identity:${identityId}`,
     });
     expect(organizationRepository.findMany).toHaveBeenCalledWith({
@@ -497,9 +497,9 @@ describe("OrganizationService", () => {
     );
   });
 
-  it("lists my organizations for identity", async () => {
+  it("lists my organizations for identity as a forest", async () => {
     const organizationRepository = {
-      findByIds: vi.fn().mockResolvedValue([organization]),
+      findByIds: vi.fn().mockResolvedValue([organization, childOrganization]),
     };
     const authorizationClient = {
       listRelationships: vi.fn().mockResolvedValue([
@@ -508,17 +508,35 @@ describe("OrganizationService", () => {
           relation: "member",
           subject: { namespace: "identity", id: identityId },
         },
+        {
+          object: { namespace: "organization", id: childOrganization.id },
+          relation: "member",
+          subject: { namespace: "identity", id: identityId },
+        },
       ]),
     };
 
     const service = createService({ organizationRepository, authorizationClient });
 
-    await expect(service.listMyOrganizations(identityId)).resolves.toEqual([organization]);
+    await expect(service.listMyOrganizations(identityId)).resolves.toEqual([
+      {
+        ...organization,
+        children: [
+          {
+            ...childOrganization,
+            children: [],
+          },
+        ],
+      },
+    ]);
     expect(authorizationClient.listRelationships).toHaveBeenCalledWith({
       namespace: "organization",
       subject: { namespace: "identity", id: identityId },
     });
-    expect(organizationRepository.findByIds).toHaveBeenCalledWith([organization.id]);
+    expect(organizationRepository.findByIds).toHaveBeenCalledWith([
+      organization.id,
+      childOrganization.id,
+    ]);
   });
 
   it("returns empty list if identity has no organization relationships", async () => {

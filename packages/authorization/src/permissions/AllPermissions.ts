@@ -6,6 +6,7 @@ export type PlatformPermission = "read" | "create_tenant" | "manage_admins";
 
 export type TenantPermission =
   | "read"
+  | "read_list"
   | "configure"
   | "manage_members"
   | "create_organization"
@@ -59,6 +60,7 @@ export const PLATFORM_PERMISSIONS: readonly PlatformPermission[] = [
 
 export const TENANT_PERMISSIONS: readonly TenantPermission[] = [
   "read",
+  "read_list",
   "configure",
   "manage_members",
   "create_organization",
