@@ -33,7 +33,12 @@ import {
   OrganizationRepository,
   OrganizationService,
 } from "@/features/organizations";
-import { type IPlatformRelationService, PlatformRelationService } from "@/features/platform";
+import {
+  type IIdentityRelationService,
+  type IPlatformRelationService,
+  IdentityRelationService,
+  PlatformRelationService,
+} from "@/features/platform";
 import { type IIdentityRepository, type IIdentityService, IdentityRepository, IdentityService, PlatformIdentitySyncConsumer } from "@/features/identities";
 import { type ITenantRelationService, TenantRelationService, type ITenantRepository, type ITenantService, TenantRepository } from "@/features/tenants";
 import { TenantService } from "@/features/tenants/services/TenantService";
@@ -70,6 +75,7 @@ container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(Organiz
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
 container.bind<IOrganizationRelationService>(TYPES.OrganizationRelationService).to(OrganizationRelationService);
 container.bind<IPlatformRelationService>(TYPES.PlatformRelationService).to(PlatformRelationService);
+container.bind<IIdentityRelationService>(TYPES.IdentityRelationService).to(IdentityRelationService);
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
 container.bind(TYPES.PlatformIdentitySyncConsumer).to(PlatformIdentitySyncConsumer);

@@ -85,6 +85,13 @@ export type DeletePlatformRelationMutationVariables = Exact<{
 
 export type DeletePlatformRelationMutation = { deletePlatformRelation: string | null };
 
+export type GetIdentityRelationsQueryVariables = Exact<{
+  identityId: string;
+}>;
+
+
+export type GetIdentityRelationsQuery = { getIdentityRelations: { identityId: string | null, platform: Array<{ id: string | null, identityId: string | null, relation: string | null }> | null, tenants: Array<{ id: string | null, tenantId: string | null, identityId: string | null, relation: string | null }> | null, organizations: Array<{ id: string | null, organizationId: string | null, identityId: string | null, relation: string | null }> | null } | null };
+
 export type GetPlatformRelationsQueryVariables = Exact<{
   relation?: string | null | undefined;
   identityId?: string | null | undefined;
@@ -473,6 +480,51 @@ export const useDeletePlatformRelationMutation = <
     )};
 
 useDeletePlatformRelationMutation.getKey = () => ['DeletePlatformRelation'];
+
+export const GetIdentityRelationsDocument = new TypedDocumentString(`
+    query GetIdentityRelations($identityId: String!) {
+  getIdentityRelations(identityId: $identityId) {
+    identityId
+    platform {
+      id
+      identityId
+      relation
+    }
+    tenants {
+      id
+      tenantId
+      identityId
+      relation
+    }
+    organizations {
+      id
+      organizationId
+      identityId
+      relation
+    }
+  }
+}
+    `);
+
+export const useGetIdentityRelationsQuery = <
+      TData = GetIdentityRelationsQuery,
+      TError = unknown
+    >(
+      variables: GetIdentityRelationsQueryVariables,
+      options?: Omit<UseQueryOptions<GetIdentityRelationsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetIdentityRelationsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetIdentityRelationsQuery, TError, TData>(
+      {
+    queryKey: ['GetIdentityRelations', variables],
+    queryFn: graphQLFetcher<GetIdentityRelationsQuery, GetIdentityRelationsQueryVariables>(GetIdentityRelationsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetIdentityRelationsQuery.document = GetIdentityRelationsDocument;
+
+useGetIdentityRelationsQuery.getKey = (variables: GetIdentityRelationsQueryVariables) => ['GetIdentityRelations', variables];
 
 export const GetPlatformRelationsDocument = new TypedDocumentString(`
     query GetPlatformRelations($relation: String, $identityId: String) {
