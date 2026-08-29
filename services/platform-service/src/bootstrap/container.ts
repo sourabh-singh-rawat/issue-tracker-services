@@ -15,7 +15,10 @@ import {
   type IOutboxWorker,
   type IRetryPolicy,
 } from "@pine/outbox";
-import { resolveIdentityFromHeaders } from "@pine/identity";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import { readFileSync } from "node:fs";
@@ -26,9 +29,13 @@ import { db } from "@/bootstrap/db";
 import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import {
+  type IOrganizationPreferenceRepository,
+  type IOrganizationPreferenceService,
   type IOrganizationRelationService,
   type IOrganizationRepository,
   type IOrganizationService,
+  OrganizationPreferenceRepository,
+  OrganizationPreferenceService,
   OrganizationRelationService,
   OrganizationRepository,
   OrganizationService,
@@ -72,7 +79,13 @@ container.bind<ITenantRepository>(TYPES.TenantRepository).to(TenantRepository);
 container.bind<ITenantService>(TYPES.TenantService).to(TenantService);
 container.bind<ITenantRelationService>(TYPES.TenantRelationService).to(TenantRelationService);
 container.bind<IOrganizationRepository>(TYPES.OrganizationRepository).to(OrganizationRepository);
+container
+  .bind<IOrganizationPreferenceRepository>(TYPES.OrganizationPreferenceRepository)
+  .to(OrganizationPreferenceRepository);
 container.bind<IOrganizationService>(TYPES.OrganizationService).to(OrganizationService);
+container
+  .bind<IOrganizationPreferenceService>(TYPES.OrganizationPreferenceService)
+  .to(OrganizationPreferenceService);
 container.bind<IOrganizationRelationService>(TYPES.OrganizationRelationService).to(OrganizationRelationService);
 container.bind<IPlatformRelationService>(TYPES.PlatformRelationService).to(PlatformRelationService);
 container.bind<IIdentityRelationService>(TYPES.IdentityRelationService).to(IdentityRelationService);
@@ -116,7 +129,7 @@ export const bindHttpServer = async (): Promise<void> => {
         ],
       },
       hooks: {
-        onRequest: [resolveIdentityFromHeaders],
+        onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
       },
       graphql: createGraphQLServer({
         schema,

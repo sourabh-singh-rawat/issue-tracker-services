@@ -50,10 +50,22 @@ export type UpdateIssueMutationVariables = Exact<{
 
 export type UpdateIssueMutation = { updateIssue: string | null };
 
+export type GetMyOrganizationPreferenceQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyOrganizationPreferenceQuery = { getMyOrganizationPreference: { organizationId: string | null, tenantId: string | null, updatedAt: unknown } | null };
+
 export type GetMyOrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMyOrganizationsQuery = { getMyOrganizations: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown, children: Array<{ id: string | null, tenantId: string | null, parentOrganizationId: string | null, name: string | null, slug: string | null, description: string | null, isActive: boolean | null, createdAt: unknown }> | null }> | null }> | null }> | null }> | null }> | null };
+
+export type SetMyOrganizationPreferenceMutationVariables = Exact<{
+  organizationId: string;
+}>;
+
+
+export type SetMyOrganizationPreferenceMutation = { setMyOrganizationPreference: { organizationId: string | null, tenantId: string | null, updatedAt: unknown } | null };
 
 export type CreateProjectMutationVariables = Exact<{
   input: Types.CreateProjectInput;
@@ -266,6 +278,36 @@ export const useUpdateIssueMutation = <
 
 useUpdateIssueMutation.getKey = () => ['UpdateIssue'];
 
+export const GetMyOrganizationPreferenceDocument = new TypedDocumentString(`
+    query GetMyOrganizationPreference {
+  getMyOrganizationPreference {
+    organizationId
+    tenantId
+    updatedAt
+  }
+}
+    `);
+
+export const useGetMyOrganizationPreferenceQuery = <
+      TData = GetMyOrganizationPreferenceQuery,
+      TError = unknown
+    >(
+      variables?: GetMyOrganizationPreferenceQueryVariables,
+      options?: Omit<UseQueryOptions<GetMyOrganizationPreferenceQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetMyOrganizationPreferenceQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetMyOrganizationPreferenceQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetMyOrganizationPreference'] : ['GetMyOrganizationPreference', variables],
+    queryFn: graphQLFetcher<GetMyOrganizationPreferenceQuery, GetMyOrganizationPreferenceQueryVariables>(GetMyOrganizationPreferenceDocument, variables),
+    ...options
+  }
+    )};
+
+useGetMyOrganizationPreferenceQuery.document = GetMyOrganizationPreferenceDocument;
+
+useGetMyOrganizationPreferenceQuery.getKey = (variables?: GetMyOrganizationPreferenceQueryVariables) => variables === undefined ? ['GetMyOrganizationPreference'] : ['GetMyOrganizationPreference', variables];
+
 export const GetMyOrganizationsDocument = new TypedDocumentString(`
     query GetMyOrganizations {
   getMyOrganizations {
@@ -350,6 +392,31 @@ export const useGetMyOrganizationsQuery = <
 useGetMyOrganizationsQuery.document = GetMyOrganizationsDocument;
 
 useGetMyOrganizationsQuery.getKey = (variables?: GetMyOrganizationsQueryVariables) => variables === undefined ? ['GetMyOrganizations'] : ['GetMyOrganizations', variables];
+
+export const SetMyOrganizationPreferenceDocument = new TypedDocumentString(`
+    mutation SetMyOrganizationPreference($organizationId: String!) {
+  setMyOrganizationPreference(organizationId: $organizationId) {
+    organizationId
+    tenantId
+    updatedAt
+  }
+}
+    `);
+
+export const useSetMyOrganizationPreferenceMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<SetMyOrganizationPreferenceMutation, TError, SetMyOrganizationPreferenceMutationVariables, TContext>) => {
+    
+    return useMutation<SetMyOrganizationPreferenceMutation, TError, SetMyOrganizationPreferenceMutationVariables, TContext>(
+      {
+    mutationKey: ['SetMyOrganizationPreference'],
+    mutationFn: (variables?: SetMyOrganizationPreferenceMutationVariables) => graphQLFetcher<SetMyOrganizationPreferenceMutation, SetMyOrganizationPreferenceMutationVariables>(SetMyOrganizationPreferenceDocument, variables)(),
+    ...options
+  }
+    )};
+
+useSetMyOrganizationPreferenceMutation.getKey = () => ['SetMyOrganizationPreference'];
 
 export const CreateProjectDocument = new TypedDocumentString(`
     mutation CreateProject($input: CreateProjectInput!) {

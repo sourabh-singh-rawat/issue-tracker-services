@@ -1,21 +1,23 @@
 import { describe, it, expect, vi } from "vitest";
 import { HydraOAuthClientProvider } from "@/integrations/oauth/HydraOAuthClientProvider";
 
-function createHydraMock(overrides?: {
+const createHydraMock = (overrides?: {
   getOAuth2Client?: ReturnType<typeof vi.fn>;
   createOAuth2Client?: ReturnType<typeof vi.fn>;
+  setOAuth2Client?: ReturnType<typeof vi.fn>;
   deleteOAuth2Client?: ReturnType<typeof vi.fn>;
-}) {
+}) => {
   return {
     publicUrl: "http://127.0.0.1:4444",
     adminApi: {
       getOAuth2Client: overrides?.getOAuth2Client ?? vi.fn(),
       createOAuth2Client: overrides?.createOAuth2Client ?? vi.fn(),
+      setOAuth2Client: overrides?.setOAuth2Client ?? vi.fn(),
       deleteOAuth2Client: overrides?.deleteOAuth2Client ?? vi.fn(),
     },
     publicApi: {},
   };
-}
+};
 
 describe("HydraOAuthClientProvider.getClient", () => {
   it("returns the mapped OAuth client from the admin API", async () => {
@@ -46,6 +48,51 @@ describe("HydraOAuthClientProvider.getClient", () => {
     const provider = new HydraOAuthClientProvider(createHydraMock({ getOAuth2Client }) as never);
 
     await expect(provider.getClient("missing")).resolves.toBeNull();
+  });
+});
+
+describe("HydraOAuthClientProvider.updateClient", () => {
+  it("updates the OAuth client via the admin API", async () => {
+    const setOAuth2Client = vi.fn().mockResolvedValue({
+      data: {
+        client_id: "erp-web",
+        client_name: "ERP Web",
+        redirect_uris: ["https://localhost:3001/callback"],
+        grant_types: ["authorization_code", "refresh_token"],
+        scope: "openid offline email",
+      },
+    });
+    const provider = new HydraOAuthClientProvider(createHydraMock({ setOAuth2Client }) as never);
+
+    await expect(
+      provider.updateClient({
+        clientId: "erp-web",
+        name: "ERP Web",
+        redirectUris: ["https://localhost:3001/callback"],
+        grantTypes: ["authorization_code", "refresh_token"],
+        scopes: ["openid", "offline", "email"],
+        tokenEndpointAuthMethod: "none",
+      }),
+    ).resolves.toEqual({
+      clientId: "erp-web",
+      name: "ERP Web",
+      redirectUris: ["https://localhost:3001/callback"],
+      grantTypes: ["authorization_code", "refresh_token"],
+      scopes: ["openid", "offline", "email"],
+      clientSecret: undefined,
+    });
+    expect(setOAuth2Client).toHaveBeenCalledWith({
+      id: "erp-web",
+      oAuth2Client: {
+        client_id: "erp-web",
+        client_name: "ERP Web",
+        redirect_uris: ["https://localhost:3001/callback"],
+        grant_types: ["authorization_code", "refresh_token"],
+        response_types: ["code"],
+        scope: "openid offline email",
+        token_endpoint_auth_method: "none",
+      },
+    });
   });
 });
 

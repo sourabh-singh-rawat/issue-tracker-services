@@ -22,6 +22,8 @@ export type HttpRequest = {
   cookies: Record<string, string | undefined>;
   body: unknown;
   identity?: HttpIdentity;
+  tenantId?: string;
+  organizationId?: string;
   file: () => Promise<HttpUploadedFile | undefined>;
   isMultipart: () => boolean;
 };

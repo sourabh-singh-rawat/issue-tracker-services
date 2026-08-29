@@ -1,5 +1,8 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { resolveIdentityFromHeaders } from "@pine/identity";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
@@ -102,7 +105,7 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       tags: [{ name: "auth", description: "Authentication related end-points" }],
     },
     hooks: {
-      onRequest: [resolveIdentityFromHeaders],
+      onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
     },
     graphql: createGraphQLServer({
       schema,

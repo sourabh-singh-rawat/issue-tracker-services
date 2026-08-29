@@ -183,6 +183,14 @@ export type IdentityObject = {
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
+export type IdentityRelationsObject = {
+  __typename?: 'IdentityRelationsObject';
+  identityId?: Maybe<Scalars['String']['output']>;
+  organizations?: Maybe<Array<OrganizationRelationObject>>;
+  platform?: Maybe<Array<PlatformRelationObject>>;
+  tenants?: Maybe<Array<TenantRelationObject>>;
+};
+
 export type IssueObject = {
   __typename?: 'IssueObject';
   component?: Maybe<Scalars['String']['output']>;
@@ -225,6 +233,7 @@ export type Mutation = {
   deleteTenantRelation?: Maybe<Scalars['Boolean']['output']>;
   deleteUnit?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
+  setMyOrganizationPreference?: Maybe<OrganizationPreferenceObject>;
   updateBrand?: Maybe<BrandObject>;
   updateCategory?: Maybe<CategoryObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
@@ -361,6 +370,11 @@ export type MutationDeleteUnitArgs = {
 };
 
 
+export type MutationSetMyOrganizationPreferenceArgs = {
+  organizationId: Scalars['String']['input'];
+};
+
+
 export type MutationUpdateBrandArgs = {
   input: UpdateBrandInput;
 };
@@ -406,6 +420,13 @@ export type OrganizationObject = {
   name?: Maybe<Scalars['String']['output']>;
   parentOrganizationId?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type OrganizationPreferenceObject = {
+  __typename?: 'OrganizationPreferenceObject';
+  organizationId?: Maybe<Scalars['String']['output']>;
   tenantId?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
@@ -510,6 +531,8 @@ export type Query = {
   getBrand?: Maybe<BrandObject>;
   getClient?: Maybe<ClientObject>;
   getIdentities?: Maybe<Array<PlatformIdentityObject>>;
+  getIdentityRelations?: Maybe<IdentityRelationsObject>;
+  getMyOrganizationPreference?: Maybe<OrganizationPreferenceObject>;
   getMyOrganizations?: Maybe<Array<OrganizationObject>>;
   getMyTenants?: Maybe<Array<TenantObject>>;
   getOrganization?: Maybe<OrganizationObject>;
@@ -567,6 +590,11 @@ export type QueryGetClientArgs = {
 
 export type QueryGetIdentitiesArgs = {
   platformId: Scalars['String']['input'];
+};
+
+
+export type QueryGetIdentityRelationsArgs = {
+  identityId: Scalars['String']['input'];
 };
 
 

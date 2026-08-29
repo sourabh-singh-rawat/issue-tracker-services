@@ -2,7 +2,11 @@ import { useEffect, useLayoutEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 import MuiBox from "@mui/material/Box";
-import { useFindProjectsQuery, useGetMyOrganizationsQuery } from "@generated/gql";
+import {
+  useFindProjectsQuery,
+  useGetMyOrganizationPreferenceQuery,
+  useGetMyOrganizationsQuery,
+} from "@generated/gql";
 import { useGetCurrentUserQuery } from "@generated/api/@tanstack/react-query.gen";
 import { useAuthStore } from "@features/auth";
 import { useOrganizationStore } from "@features/organization";
@@ -57,6 +61,10 @@ export function Main({ children }: MainProps) {
     select: (data) => data.getMyOrganizations ?? [],
     enabled: userQuery.isSuccess,
   });
+  const organizationPreferenceQuery = useGetMyOrganizationPreferenceQuery(undefined, {
+    select: (data) => data.getMyOrganizationPreference ?? null,
+    enabled: userQuery.isSuccess,
+  });
 
   useEffect(() => {
     const identity = getIdentityFromMeResponse(userQuery.data);
@@ -85,14 +93,27 @@ export function Main({ children }: MainProps) {
   }, [projectsQuery.data, setProjects]);
 
   useLayoutEffect(() => {
+    const preferenceReady =
+      organizationPreferenceQuery.isSuccess || organizationPreferenceQuery.isError;
+    if (!preferenceReady) {
+      return;
+    }
+
+    const preferredOrganizationId = organizationPreferenceQuery.isSuccess
+      ? organizationPreferenceQuery.data?.organizationId
+      : null;
+
     if (organizationsQuery.isSuccess) {
-      syncOrganizations(organizationsQuery.data);
+      syncOrganizations(organizationsQuery.data, { preferredOrganizationId });
       return;
     }
     if (organizationsQuery.isError) {
-      syncOrganizations([]);
+      syncOrganizations([], { preferredOrganizationId });
     }
   }, [
+    organizationPreferenceQuery.data,
+    organizationPreferenceQuery.isError,
+    organizationPreferenceQuery.isSuccess,
     organizationsQuery.data,
     organizationsQuery.isError,
     organizationsQuery.isSuccess,
@@ -107,7 +128,10 @@ export function Main({ children }: MainProps) {
 
   const loading =
     userQuery.isPending ||
-    (userQuery.isSuccess && (projectsQuery.isPending || organizationsQuery.isPending));
+    (userQuery.isSuccess &&
+      (projectsQuery.isPending ||
+        organizationsQuery.isPending ||
+        organizationPreferenceQuery.isPending));
 
   return (
     <MuiBox width="100vw" height="100vh">

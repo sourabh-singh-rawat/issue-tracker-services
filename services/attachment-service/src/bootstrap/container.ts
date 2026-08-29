@@ -1,5 +1,8 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
-import { resolveIdentityFromHeaders } from "@pine/identity";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import {
   ExponentialBackoffPolicy,
   OutboxCleanupService,
@@ -115,7 +118,7 @@ export const bindHttpServer = async (): Promise<void> => {
         tags: [{ name: "attachment", description: "Attachment related end-points" }],
       },
       hooks: {
-        onRequest: [resolveIdentityFromHeaders],
+        onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
       },
       graphql: createGraphQLServer({
         schema,

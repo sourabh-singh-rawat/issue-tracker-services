@@ -1,6 +1,9 @@
 import { HttpAuthorizationClient, type IAuthorizationClient } from "@pine/authorization";
 import type { IBroker } from "@pine/events";
-import { resolveIdentityFromHeaders } from "@pine/identity";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import { createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
 import { readFileSync } from "node:fs";
@@ -69,7 +72,7 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       tags: [{ name: "authorization", description: "Authorization graph end-points" }],
     },
     hooks: {
-      onRequest: [resolveIdentityFromHeaders],
+      onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
     },
     routes,
   }),

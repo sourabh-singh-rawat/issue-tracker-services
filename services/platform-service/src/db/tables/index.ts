@@ -15,3 +15,8 @@ export {
   Organizations,
   OrganizationsRelations,
 } from "@/db/tables/Organizations";
+export {
+  type IdentityOrganizationPreference,
+  type NewIdentityOrganizationPreference,
+  IdentityOrganizationPreferences,
+} from "@/db/tables/IdentityOrganizationPreferences";

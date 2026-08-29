@@ -5,4 +5,6 @@ export type IssuesContext = GraphQLContext;
 export const createContext = async (request: HttpRequest): Promise<IssuesContext> => ({
   headers: request.headers,
   ...(request.identity ? { identity: request.identity } : {}),
+  ...(request.tenantId ? { tenantId: request.tenantId } : {}),
+  ...(request.organizationId ? { organizationId: request.organizationId } : {}),
 });
