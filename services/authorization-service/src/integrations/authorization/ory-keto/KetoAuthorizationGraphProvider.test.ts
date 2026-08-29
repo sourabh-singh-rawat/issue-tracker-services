@@ -178,4 +178,62 @@ describe("KetoAuthorizationGraphProvider", () => {
       }),
     ).rejects.toThrow("must not set both subject and subjectSet");
   });
+
+  it("lists relationships for a namespace without an object", async () => {
+    const { provider, getRelationships } = createProvider();
+    getRelationships.mockResolvedValue({
+      data: {
+        relation_tuples: [
+          {
+            namespace: "tenant",
+            object: "tenant-1",
+            relation: "member",
+            subject_id: "identity:user-1",
+          },
+        ],
+      },
+    });
+
+    const results = await provider.listRelationships({
+      namespace: "tenant",
+      subject: { namespace: "identity", id: "user-1" },
+    });
+
+    expect(getRelationships).toHaveBeenCalledTimes(1);
+    expect(getRelationships).toHaveBeenCalledWith({
+      namespace: "tenant",
+      object: undefined,
+      relation: undefined,
+      subjectId: "identity:user-1",
+      subjectSetNamespace: undefined,
+      subjectSetObject: undefined,
+      subjectSetRelation: undefined,
+    });
+    expect(results).toEqual([
+      {
+        object: { namespace: "tenant", id: "tenant-1" },
+        relation: "member",
+        subject: { namespace: "identity", id: "user-1" },
+      },
+    ]);
+  });
+
+  it("prefers object namespace over filter namespace", async () => {
+    const { provider, getRelationships } = createProvider();
+
+    await provider.listRelationships({
+      namespace: "tenant",
+      object: { namespace: "organization", id: "org-1" },
+      subject: { namespace: "identity", id: "user-1" },
+    });
+
+    expect(getRelationships).toHaveBeenCalledTimes(1);
+    expect(getRelationships).toHaveBeenCalledWith(
+      expect.objectContaining({
+        namespace: "organization",
+        object: "org-1",
+        subjectId: "identity:user-1",
+      }),
+    );
+  });
 });

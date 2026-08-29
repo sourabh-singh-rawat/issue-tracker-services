@@ -18,6 +18,7 @@ export const TYPES = {
   OrganizationService: Symbol.for("IOrganizationService"),
   OrganizationRelationService: Symbol.for("IOrganizationRelationService"),
   PlatformRelationService: Symbol.for("IPlatformRelationService"),
+  IdentityRelationService: Symbol.for("IIdentityRelationService"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
   IdentityService: Symbol.for("IIdentityService"),
   PlatformIdentitySyncConsumer: Symbol.for("PlatformIdentitySyncConsumer"),

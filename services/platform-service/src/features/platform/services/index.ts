@@ -1,4 +1,9 @@
 export type {
+  IdentityRelations,
+  IIdentityRelationService,
+} from "@/features/platform/services/IIdentityRelationService";
+export { IdentityRelationService } from "@/features/platform/services/IdentityRelationService";
+export type {
   CreatePlatformRelationInput,
   CreatePlatformRelationOptions,
   IPlatformRelationService,

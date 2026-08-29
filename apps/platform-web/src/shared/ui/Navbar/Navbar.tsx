@@ -7,7 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 const NAV_ITEMS = [
-  { to: "/relations", label: "Relations" },
+  { to: "/identities", label: "Identities" },
   { to: "/tenants", label: "Tenants" },
 ] as const;
 

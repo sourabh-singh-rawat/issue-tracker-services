@@ -1,9 +1,7 @@
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
@@ -13,43 +11,29 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import { useDeletePlatformRelationMutation, useGetPlatformRelationsQuery } from "@generated/gql";
-import { useQueryClient } from "@tanstack/react-query";
-import { getErrorMessage, useSnackbar } from "@shared/ui";
+import { PLATFORM_OBJECT_ID } from "@pine/authorization";
+import { useGetIdentitiesQuery } from "@generated/gql";
+import { useNavigate } from "@tanstack/react-router";
+import { getErrorMessage } from "@shared/ui";
 import { CreatePlatformRelationModal } from "../CreatePlatformRelationModal";
 
 export const PlatformRelations = () => {
-  const snackbar = useSnackbar();
-  const queryClient = useQueryClient();
-  const relationsQuery = useGetPlatformRelationsQuery(undefined, {
-    select: (data) => data.getPlatformRelations ?? [],
-  });
-  const deletePlatformRelationMutation = useDeletePlatformRelationMutation();
+  const navigate = useNavigate();
 
-  const relations = relationsQuery.data ?? [];
+  const identitiesQuery = useGetIdentitiesQuery(
+    { platformId: PLATFORM_OBJECT_ID },
+    {
+      select: (data) => data.getIdentities ?? [],
+    },
+  );
 
-  const handleDelete = async (
-    id: string | null | undefined,
-    identityId: string | null | undefined,
-    relation: string | null | undefined,
-  ) => {
-    if (!id) {
-      return;
-    }
+  const identities = identitiesQuery.data ?? [];
 
-    const label = [identityId, relation].filter(Boolean).join(" / ") || "this relation";
-    const confirmed = window.confirm(`Delete ${label}? This cannot be undone from the UI.`);
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      await deletePlatformRelationMutation.mutateAsync({ id });
-      await queryClient.invalidateQueries({ queryKey: ["GetPlatformRelations"] });
-      snackbar.success("Platform relation deleted successfully");
-    } catch (error) {
-      snackbar.error(getErrorMessage(error, "Failed to delete platform relation"));
-    }
+  const openIdentity = (identityId: string) => {
+    void navigate({
+      to: "/identities/$identityId",
+      params: { identityId },
+    });
   };
 
   return (
@@ -61,71 +45,71 @@ export const PlatformRelations = () => {
       >
         <Box>
           <Typography variant="h5" component="h1" gutterBottom>
-            Platform relations
+            Identities
           </Typography>
           <Typography color="text.secondary">
-            Live graph tuples. Creating a relation writes platform:admin or platform:member for an
-            identity.
+            Identities on this platform. Open an identity to inspect its platform, tenant, and
+            organization relations.
           </Typography>
         </Box>
         <CreatePlatformRelationModal />
       </Stack>
 
-      {relationsQuery.isPending ? (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-          <CircularProgress size={28} />
+      {identitiesQuery.isPending ? (
+        <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+          <CircularProgress size={32} />
         </Box>
       ) : null}
 
-      {relationsQuery.isError ? (
+      {identitiesQuery.isError ? (
         <Alert severity="error">
-          {getErrorMessage(relationsQuery.error, "Failed to load platform relations")}
+          {getErrorMessage(identitiesQuery.error, "Failed to load identities")}
         </Alert>
       ) : null}
 
-      {relationsQuery.isSuccess && relations.length === 0 ? (
-        <Alert severity="info">No platform relations found in the graph.</Alert>
-      ) : null}
-
-      {relationsQuery.isSuccess && relations.length > 0 ? (
+      {identitiesQuery.isSuccess ? (
         <TableContainer component={Paper} variant="outlined">
-          <Table size="small" aria-label="Platform relations">
+          <Table size="small" aria-label="Identities">
             <TableHead>
               <TableRow>
-                <TableCell>Identity ID</TableCell>
-                <TableCell>Relation</TableCell>
-                <TableCell align="right" width={72}>
-                  Actions
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>ID</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {relations.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                    {item.identityId}
-                  </TableCell>
-                  <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                    {item.relation}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      size="small"
-                      aria-label={`Delete ${item.identityId ?? "relation"} ${item.relation ?? ""}`.trim()}
-                      disabled={
-                        !item.id ||
-                        (deletePlatformRelationMutation.isPending &&
-                          deletePlatformRelationMutation.variables?.id === item.id)
-                      }
-                      onClick={() => {
-                        void handleDelete(item.id, item.identityId, item.relation);
-                      }}
-                    >
-                      <DeleteOutline fontSize="small" />
-                    </IconButton>
+              {identities.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    <Typography color="text.secondary">No identities found.</Typography>
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                identities.map((identity) => {
+                  const identityId = identity.id;
+                  const displayName = identity.displayName?.trim();
+
+                  return (
+                    <TableRow
+                      key={identityId ?? displayName ?? undefined}
+                      hover
+                      sx={identityId ? { cursor: "pointer" } : undefined}
+                      onClick={() => {
+                        if (!identityId) {
+                          return;
+                        }
+                        openIdentity(identityId);
+                      }}
+                    >
+                      <TableCell>
+                        {displayName || identityId || "—"}
+                      </TableCell>
+                      <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
+                        {identityId}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              )}
             </TableBody>
           </Table>
         </TableContainer>

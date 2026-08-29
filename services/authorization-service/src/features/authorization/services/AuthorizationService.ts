@@ -49,6 +49,7 @@ export class AuthorizationService implements IAuthorizationService {
 
   async listRelationships(input: ListRelationshipsInput): Promise<GraphRelationship[]> {
     return this.authorizationGraphProvider.listRelationships({
+      namespace: input.namespace,
       object: input.object !== undefined ? { namespace: input.namespace, id: input.object } : undefined,
       relation: input.relation,
       subject: input.subject,

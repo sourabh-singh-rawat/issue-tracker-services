@@ -1,0 +1,22 @@
+query GetIdentityRelations($identityId: String!) {
+  getIdentityRelations(identityId: $identityId) {
+    identityId
+    platform {
+      id
+      identityId
+      relation
+    }
+    tenants {
+      id
+      tenantId
+      identityId
+      relation
+    }
+    organizations {
+      id
+      organizationId
+      identityId
+      relation
+    }
+  }
+}
