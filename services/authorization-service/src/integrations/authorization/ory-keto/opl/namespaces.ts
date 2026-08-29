@@ -43,6 +43,11 @@ export class tenant implements Namespace { // NOSONAR typescript:S101
       this.related.admin.includes(ctx.subject) ||
       this.related.owner.includes(ctx.subject) ||
       this.related.platform.traverse((item) => item.permits.read(ctx)),
+    read_list: (ctx: Context): boolean =>
+      this.related.member.includes(ctx.subject) ||
+      this.related.admin.includes(ctx.subject) ||
+      this.related.owner.includes(ctx.subject) ||
+      this.related.platform.traverse((item) => item.permits.read(ctx)),
     configure: (ctx: Context): boolean =>
       this.related.admin.includes(ctx.subject) ||
       this.related.owner.includes(ctx.subject) ||

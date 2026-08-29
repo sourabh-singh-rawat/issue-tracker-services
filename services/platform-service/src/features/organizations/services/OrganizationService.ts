@@ -24,6 +24,7 @@ import type {
   ListOrganizationsInput,
   UpdateOrganizationInput,
 } from "@/features/organizations/services/IOrganizationService";
+import { buildOrganizationForest, type OrganizationNode } from "@/features/organizations/utils";
 import { TenantNotFoundError } from "@/features/tenants/errors";
 import type { ITenantRepository } from "@/features/tenants/repositories";
 
@@ -42,10 +43,7 @@ export class OrganizationService implements IOrganizationService {
     private readonly db: Database,
   ) {}
 
-  async create(
-    input: CreateOrganizationInput,
-    identityId: string,
-  ): Promise<Organization> {
+  async create(input: CreateOrganizationInput, identityId: string): Promise<Organization> {
     await requirePermission(
       this.authorizationClient,
       identityId,
@@ -166,12 +164,7 @@ export class OrganizationService implements IOrganizationService {
   }
 
   async getById(id: string, identityId: string): Promise<Organization> {
-    await requirePermission(
-      this.authorizationClient,
-      identityId,
-      "read",
-      `organization:${id}`,
-    );
+    await requirePermission(this.authorizationClient, identityId, "read", `organization:${id}`);
 
     const organization = await this.organizationRepository.findById(id);
     if (!organization) {
@@ -181,14 +174,11 @@ export class OrganizationService implements IOrganizationService {
     return organization;
   }
 
-  async list(
-    input: ListOrganizationsInput,
-    identityId: string,
-  ): Promise<Organization[]> {
+  async list(input: ListOrganizationsInput, identityId: string): Promise<Organization[]> {
     await requirePermission(
       this.authorizationClient,
       identityId,
-      "read",
+      "read_list",
       `tenant:${input.tenantId}`,
     );
 
@@ -203,7 +193,7 @@ export class OrganizationService implements IOrganizationService {
     });
   }
 
-  async listMyOrganizations(identityId: string): Promise<Organization[]> {
+  async listMyOrganizations(identityId: string): Promise<OrganizationNode[]> {
     const relationships = await this.authorizationClient.listRelationships({
       namespace: "organization",
       subject: { namespace: "identity", id: identityId },
@@ -213,11 +203,10 @@ export class OrganizationService implements IOrganizationService {
       new Set(relationships.map((rel) => rel.object.id).filter((id) => id.length > 0)),
     );
 
-    if (organizationIds.length === 0) {
-      return [];
-    }
+    if (organizationIds.length === 0) return [];
 
-    return this.organizationRepository.findByIds(organizationIds);
+    const organizations = await this.organizationRepository.findByIds(organizationIds);
+    return buildOrganizationForest(organizations);
   }
 
   async update(
@@ -225,12 +214,7 @@ export class OrganizationService implements IOrganizationService {
     input: UpdateOrganizationInput,
     identityId: string,
   ): Promise<Organization> {
-    await requirePermission(
-      this.authorizationClient,
-      identityId,
-      "update",
-      `organization:${id}`,
-    );
+    await requirePermission(this.authorizationClient, identityId, "update", `organization:${id}`);
 
     const organization = await this.organizationRepository.findById(id);
     if (!organization) {
@@ -252,12 +236,7 @@ export class OrganizationService implements IOrganizationService {
   }
 
   async delete(id: string, identityId: string): Promise<void> {
-    await requirePermission(
-      this.authorizationClient,
-      identityId,
-      "delete",
-      `organization:${id}`,
-    );
+    await requirePermission(this.authorizationClient, identityId, "delete", `organization:${id}`);
 
     const deleted = await this.organizationRepository.softDelete(id);
     if (!deleted) {
