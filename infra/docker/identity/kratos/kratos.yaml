@@ -8,9 +8,9 @@ serve:
     cors:
       enabled: true
       allowed_origins:
-        - http://localhost:5173
-        - http://localhost:3000
-        - http://localhost:3001
+        - https://localhost:3000
+        - https://localhost:3001
+        - https://localhost:3002
       allowed_methods:
         - POST
         - GET
@@ -28,11 +28,11 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:3000/
+  default_browser_return_url: https://localhost:3000/
   allowed_return_urls:
-    - http://localhost:5173
-    - http://localhost:3000
-    - http://localhost:3001
+    - https://localhost:3000
+    - https://localhost:3001
+    - https://localhost:3002
 
   methods:
     password:
@@ -50,36 +50,36 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://localhost:3000/error
+      ui_url: https://localhost:3000/error
 
     settings:
-      ui_url: http://localhost:3000/settings
+      ui_url: https://localhost:3000/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: http://localhost:3000/recovery
+      ui_url: https://localhost:3000/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://localhost:3000/verification
+      ui_url: https://localhost:3000/verification
       use: code
       after:
-        default_browser_return_url: http://localhost:3000/
+        default_browser_return_url: https://localhost:3000/
 
     logout:
       after:
-        default_browser_return_url: http://localhost:3000/signin
+        default_browser_return_url: https://localhost:3000/signin
 
     login:
-      ui_url: http://localhost:3000/signin
+      ui_url: https://localhost:3000/signin
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:3000/registration
+      ui_url: https://localhost:3000/registration
       after:
         password:
           hooks:

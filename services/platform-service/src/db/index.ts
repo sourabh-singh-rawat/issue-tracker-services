@@ -12,5 +12,8 @@ export {
   type NewOrganization,
   Organizations,
   OrganizationsRelations,
+  type IdentityOrganizationPreference,
+  type NewIdentityOrganizationPreference,
+  IdentityOrganizationPreferences,
 } from "@/db/tables";
 export type { Database, DbClient, Transaction } from "@/db/types";

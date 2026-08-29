@@ -12,6 +12,8 @@ import "./tls";
 export type GatewayContext = {
   identityId?: string;
   authMethod?: string;
+  tenantId?: string;
+  organizationId?: string;
 };
 
 class SubgraphDataSource extends RemoteGraphQLDataSource<GatewayContext> {
@@ -24,6 +26,16 @@ class SubgraphDataSource extends RemoteGraphQLDataSource<GatewayContext> {
     const authMethod = options.context?.authMethod;
     if (authMethod) {
       options.request.http?.headers.set("x-identity-auth-method", authMethod);
+    }
+
+    const tenantId = options.context?.tenantId;
+    if (tenantId) {
+      options.request.http?.headers.set("x-tenant-id", tenantId);
+    }
+
+    const organizationId = options.context?.organizationId;
+    if (organizationId) {
+      options.request.http?.headers.set("x-organization-id", organizationId);
     }
   };
 }

@@ -40,10 +40,23 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
     },
     graphql: createGraphQLServer({
       gateway: graphqlGateway,
-      context: async (req) => ({
-        identityId: req.identity?.id,
-        authMethod: req.identity?.authMethod,
-      }),
+      context: async (req) => {
+        const tenantHeader = req.headers["x-tenant-id"];
+        const organizationHeader = req.headers["x-organization-id"];
+        const tenantId =
+          typeof tenantHeader === "string" && tenantHeader.length > 0 ? tenantHeader : undefined;
+        const organizationId =
+          typeof organizationHeader === "string" && organizationHeader.length > 0
+            ? organizationHeader
+            : undefined;
+
+        return {
+          identityId: req.identity?.id,
+          authMethod: req.identity?.authMethod,
+          ...(tenantId ? { tenantId } : {}),
+          ...(organizationId ? { organizationId } : {}),
+        };
+      },
     }),
     proxy: {
       undici: {

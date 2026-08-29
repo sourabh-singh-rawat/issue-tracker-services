@@ -10,7 +10,10 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState, type MouseEvent } from "react";
+import { useSetMyOrganizationPreferenceMutation } from "@generated/gql";
+import { useSnackbar } from "@shared";
 import {
   type CurrentOrganization,
   useOrganizationStore,
@@ -21,6 +24,9 @@ export const OrganizationSwitcher = () => {
   const currentOrganization = useOrganizationStore((s) => s.currentOrganization);
   const isLoading = useOrganizationStore((s) => s.isLoading);
   const setCurrentOrganization = useOrganizationStore((s) => s.setCurrentOrganization);
+  const setPreferenceMutation = useSetMyOrganizationPreferenceMutation();
+  const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   if (isLoading) {
@@ -37,9 +43,20 @@ export const OrganizationSwitcher = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const handleSelect = (organization: CurrentOrganization) => {
-    setCurrentOrganization(organization);
-    handleClose();
+  const handleSelect = async (organization: CurrentOrganization) => {
+    if (organization.id === currentOrganization?.id) {
+      handleClose();
+      return;
+    }
+
+    try {
+      await setPreferenceMutation.mutateAsync({ organizationId: organization.id });
+      setCurrentOrganization(organization);
+      await queryClient.invalidateQueries();
+      handleClose();
+    } catch {
+      snackbar.error("Failed to switch organization");
+    }
   };
 
   const label = currentOrganization?.name ?? "Select organization";
@@ -55,6 +72,7 @@ export const OrganizationSwitcher = () => {
         aria-haspopup="menu"
         aria-expanded={Boolean(anchorEl)}
         aria-label="Switch organization"
+        disabled={setPreferenceMutation.isPending}
         sx={{
           textTransform: "none",
           maxWidth: 220,
@@ -73,7 +91,10 @@ export const OrganizationSwitcher = () => {
               key={organization.id}
               selected={selected}
               dense
-              onClick={() => handleSelect(organization)}
+              disabled={setPreferenceMutation.isPending}
+              onClick={() => {
+                void handleSelect(organization);
+              }}
             >
               {selected ? (
                 <ListItemIcon>

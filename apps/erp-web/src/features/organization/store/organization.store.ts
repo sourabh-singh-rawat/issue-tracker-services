@@ -101,12 +101,19 @@ export const flattenOrganizations = (
   return flattened;
 };
 
+type SyncOrganizationsOptions = {
+  preferredOrganizationId?: string | null;
+};
+
 interface OrganizationState {
   organizations: CurrentOrganization[];
   currentOrganization: CurrentOrganization | null;
   isLoading: boolean;
   setCurrentOrganization: (organization: CurrentOrganization | null) => void;
-  syncOrganizations: (organizations: OrganizationFromQuery[]) => void;
+  syncOrganizations: (
+    organizations: OrganizationFromQuery[],
+    options?: SyncOrganizationsOptions,
+  ) => void;
 }
 
 export const useOrganizationStore = create<OrganizationState>((set, get) => ({
@@ -117,14 +124,20 @@ export const useOrganizationStore = create<OrganizationState>((set, get) => ({
     writeStoredOrganization(organization);
     set({ currentOrganization: organization });
   },
-  syncOrganizations: (organizations) => {
+  syncOrganizations: (organizations, options) => {
     const nextOrganizations = flattenOrganizations(organizations);
 
+    const preferredId = options?.preferredOrganizationId;
+    const preferred = preferredId
+      ? nextOrganizations.find((organization) => organization.id === preferredId)
+      : undefined;
+
     const stored = get().currentOrganization ?? readStoredOrganization();
-    const matched = stored
+    const matchedStored = stored
       ? nextOrganizations.find((organization) => organization.id === stored.id)
       : undefined;
-    const currentOrganization = matched ?? nextOrganizations[0] ?? null;
+
+    const currentOrganization = preferred ?? matchedStored ?? nextOrganizations[0] ?? null;
 
     writeStoredOrganization(currentOrganization);
     set({
