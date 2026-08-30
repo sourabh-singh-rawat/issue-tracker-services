@@ -10,11 +10,9 @@
 "@pine/data-gateway": patch
 "@pine/authorization": patch
 "@pine/authorization-service": patch
-"@pine/inventory-service": patch
 "@pine/issues-service": patch
 "@pine/notification-service": patch
 "@pine/platform-service": patch
-"@pine/product-service": patch
 "@pine/erp-web": patch
 "@pine/identity-web": patch
 "@pine/platform-web": patch
