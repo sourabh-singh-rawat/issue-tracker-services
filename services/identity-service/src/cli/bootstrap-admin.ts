@@ -41,13 +41,11 @@ const bootstrapAdmin = async (): Promise<void> => {
     const identity = await identityRepository.findByIdpId(existingIdpId);
     if (!identity) {
       throw new Error(
-        `bootstrap-admin: Kratos identity exists for email=${email} idpId=${existingIdpId} but no local identity row was found`,
+        `bootstrap-admin: identity provider record exists for email=${email} but no local identity row was found`,
       );
     }
 
-    logger.info(
-      `bootstrap-admin: identity already exists id=${identity.id} idpId=${identity.idpId} email=${email}`,
-    );
+    logger.info(`bootstrap-admin: identity already exists id=${identity.id} email=${email}`);
     emitIdentityId(identity.id);
     return;
   }
@@ -63,7 +61,7 @@ const bootstrapAdmin = async (): Promise<void> => {
   });
 
   logger.info(
-    `bootstrap-admin: created identity id=${identity.id} idpId=${identity.idpId} email=${email} username=${username}`,
+    `bootstrap-admin: created identity id=${identity.id} email=${email} username=${username}`,
   );
   emitIdentityId(identity.id);
 };

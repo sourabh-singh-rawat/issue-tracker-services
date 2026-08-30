@@ -11,9 +11,13 @@ export const TYPES = {
   RetryPolicy: Symbol.for("IRetryPolicy"),
   HttpServer: Symbol.for("IHttpServer"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
-  IdentityProfileRepository: Symbol.for("IIdentityProfileRepository"),
   IdentityService: Symbol.for("IIdentityService"),
-  IdentityProfileService: Symbol.for("IIdentityProfileService"),
+  ProfileRepository: Symbol.for("IProfileRepository"),
+  ProfilePhotoUploadRequestRepository: Symbol.for("IProfilePhotoUploadRequestRepository"),
+  ProfileService: Symbol.for("IProfileService"),
+  ProfilePhotoAttachmentConsumer: Symbol.for("ProfilePhotoAttachmentConsumer"),
+  AuthorizationClient: Symbol.for("IAuthorizationClient"),
+  AttachmentClient: Symbol.for("IAttachmentClient"),
   ClientService: Symbol.for("IClientService"),
   ClientSeederService: Symbol.for("IClientSeederService"),
   KratosClient: Symbol.for("KratosClient"),
@@ -34,4 +38,4 @@ export const TYPES = {
   OAuthService: Symbol.for("IOAuthService"),
   AdminService: Symbol.for("IAdminService"),
   VerificationService: Symbol.for("IVerificationService"),
-} as const;
+};

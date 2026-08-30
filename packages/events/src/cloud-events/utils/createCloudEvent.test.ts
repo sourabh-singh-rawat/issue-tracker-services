@@ -42,25 +42,25 @@ describe("createCloudEvent", () => {
 
   it("requires schema and always sets dataschema on the envelope", () => {
     const event = createCloudEvent({
-      type: "product.product.created",
-      source: "pine/product-service",
+      type: "issues.issue.created",
+      source: "pine/issues-service",
       schema: Type.Object({ id: Type.String() }),
       data: { id: "p-1" },
     });
 
-    expect(event.dataschema).toBe("urn:pine:events:product.product.created");
+    expect(event.dataschema).toBe("urn:pine:events:issues.issue.created");
   });
 
   it("includes version in default dataschema when provided", () => {
     const event = createCloudEvent({
-      type: "product.product.created",
+      type: "issues.issue.created",
       version: 1,
-      source: "pine/product-service",
+      source: "pine/issues-service",
       schema: Type.Object({ id: Type.String() }),
       data: { id: "p-1" },
     });
 
-    expect(event.dataschema).toBe("urn:pine:events:product.product.created:v1");
+    expect(event.dataschema).toBe("urn:pine:events:issues.issue.created:v1");
   });
 
   it("respects explicit overrides", () => {

@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -11,7 +12,7 @@ builder.mutationFields((t) => ({
     },
     resolve: async (_root, { id, platformId }, ctx) => {
       const service = container.get<ITenantService>(TYPES.TenantService);
-      await service.deleteTenant(id, platformId, ctx.user!.id);
+      await service.deleteTenant(id, platformId, requireIdentityId(ctx));
       return "Tenant deleted successfully.";
     },
   }),

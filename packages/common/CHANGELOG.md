@@ -1,5 +1,15 @@
 # @pine/common
 
+## 0.1.0
+
+### Minor Changes
+
+- 1fad54f: feat(security): require mTLS between gateways and backend services
+
+### Patch Changes
+
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+
 ## 0.0.3
 
 ### Patch Changes

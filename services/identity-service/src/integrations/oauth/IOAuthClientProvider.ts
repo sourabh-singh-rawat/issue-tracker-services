@@ -23,6 +23,7 @@ export interface RegisteredOAuthClient {
 
 export interface IOAuthClientProvider {
   registerClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient>;
+  updateClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient>;
   getClient(clientId: string): Promise<RegisteredOAuthClient | null>;
   deleteClient(providerClientId: string): Promise<void>;
 }

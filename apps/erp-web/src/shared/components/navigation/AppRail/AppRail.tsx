@@ -1,14 +1,10 @@
 import { Box, IconButton, Stack, Toolbar, Tooltip, useTheme } from "@mui/material";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
-import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ERP_APPS, type ErpAppId } from "../../../apps";
 
 const APP_ICONS: Record<ErpAppId, typeof AssignmentOutlinedIcon> = {
   issues: AssignmentOutlinedIcon,
-  inventory: Inventory2OutlinedIcon,
-  catalog: CategoryOutlinedIcon,
 };
 
 export const AppRail = () => {

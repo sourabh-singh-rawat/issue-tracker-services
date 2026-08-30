@@ -1,5 +1,5 @@
 import { uuidv7 } from "@pine/common";
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@/bootstrap/container-types";
 import { type Database, type Organization, Organizations } from "@/db";
@@ -71,6 +71,18 @@ export class OrganizationRepository implements IOrganizationRepository {
       .limit(1);
 
     return row ?? null;
+  }
+
+  async findByIds(ids: string[]): Promise<Organization[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    return this.db
+      .select()
+      .from(Organizations)
+      .where(and(inArray(Organizations.id, ids), isNull(Organizations.deletedAt)))
+      .orderBy(desc(Organizations.createdAt));
   }
 
   async existsBySlugInTenant(tenantId: string, slug: string): Promise<boolean> {

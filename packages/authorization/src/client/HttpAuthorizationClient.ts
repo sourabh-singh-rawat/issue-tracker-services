@@ -16,58 +16,69 @@ export class HttpAuthorizationClient implements IAuthorizationClient {
     this.baseUrl = options.baseUrl.replace(/\/$/, "");
   }
 
-  checkRelationship = async (input: CheckRelationshipInput): Promise<boolean> => {
+  async checkRelationship(input: CheckRelationshipInput): Promise<boolean> {
     const body = await this.postJson("/authorization/checkRelationship", input);
     if (!isCheckRelationshipResponse(body)) {
       throw new Error("checkRelationship returned an invalid response body");
     }
     return body.allowed;
-  };
+  }
 
-  ensureRelationship = async (
+  async ensureRelationship(
     relationship: GraphRelationship,
-  ): Promise<{ created: boolean }> => {
+  ): Promise<{ created: boolean }> {
     const body = await this.postJson("/authorization/ensureRelationship", relationship);
     if (!isEnsureRelationshipResponse(body)) {
       throw new Error("ensureRelationship returned an invalid response body");
     }
     return { created: body.created };
-  };
+  }
 
-  listRelationships = async (input: ListRelationshipsInput): Promise<GraphRelationship[]> => {
+  async listRelationships(input: ListRelationshipsInput): Promise<GraphRelationship[]> {
     const body = await this.postJson("/authorization/listRelationships", input);
     if (!isListRelationshipsResponse(body)) {
       throw new Error("listRelationships returned an invalid response body");
     }
     return body.relationships;
-  };
+  }
 
-  deleteRelationship = async (
+  async deleteRelationship(
     relationship: GraphRelationship,
-  ): Promise<{ deleted: boolean }> => {
+  ): Promise<{ deleted: boolean }> {
     const body = await this.postJson("/authorization/deleteRelationship", relationship);
     if (!isDeleteRelationshipResponse(body)) {
       throw new Error("deleteRelationship returned an invalid response body");
     }
     return { deleted: body.deleted };
-  };
+  }
 
-  private postJson = async (path: string, payload: unknown): Promise<unknown> => {
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+  private async postJson(path: string, payload: unknown): Promise<unknown> {
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}${path}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      const causeMessage =
+        isRecord(error) && isRecord(error.cause) && typeof error.cause.message === "string"
+          ? `: ${error.cause.message}`
+          : error instanceof Error
+            ? `: ${error.message}`
+            : "";
+      throw new Error(`fetch to ${this.baseUrl}${path} failed${causeMessage}`);
+    }
 
     if (!response.ok) {
       throw new Error(`${path} failed with status ${response.status}`);
     }
 
     return response.json();
-  };
+  }
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>

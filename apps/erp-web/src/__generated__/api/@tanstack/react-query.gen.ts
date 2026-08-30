@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, checkRelationship, createAttachment, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getSessionIdentity, getTokenSessionIdentity, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateAttachmentData, CreateAttachmentError, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetSessionIdentityData, GetSessionIdentityResponse, GetTokenSessionIdentityData, GetTokenSessionIdentityResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, createUploadTarget, deleteRelationship, ensureRelationship, exchangeToken, getAttachmentContent, getAttachmentVersionContent, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, uploadToTarget, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateUploadTargetData, CreateUploadTargetResponse, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetAttachmentContentData, GetAttachmentVersionContentData, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, UploadToTargetData, UploadToTargetResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -119,16 +119,16 @@ export const getCurrentUserOptions = (options?: Options<GetCurrentUserData>) => 
  */
 export const useGetCurrentUserQuery = (options?: Options<GetCurrentUserData>) => useQuery(getCurrentUserOptions(options));
 
-export const getSessionIdentityQueryKey = (options?: Options<GetSessionIdentityData>) => createQueryKey('getSessionIdentity', options);
+export const getIdentityFromSessionQueryKey = (options?: Options<GetIdentityFromSessionData>) => createQueryKey('getIdentityFromSession', options);
 
 /**
  * Resolve session identity
  *
- * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const getSessionIdentityOptions = (options?: Options<GetSessionIdentityData>) => queryOptions<GetSessionIdentityResponse, AxiosError<DefaultError>, GetSessionIdentityResponse, ReturnType<typeof getSessionIdentityQueryKey>>({
+export const getIdentityFromSessionOptions = (options?: Options<GetIdentityFromSessionData>) => queryOptions<GetIdentityFromSessionResponse, AxiosError<DefaultError>, GetIdentityFromSessionResponse, ReturnType<typeof getIdentityFromSessionQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getSessionIdentity({
+        const { data } = await getIdentityFromSession({
             ...options,
             ...queryKey[0],
             signal,
@@ -136,26 +136,26 @@ export const getSessionIdentityOptions = (options?: Options<GetSessionIdentityDa
         });
         return data;
     },
-    queryKey: getSessionIdentityQueryKey(options)
+    queryKey: getIdentityFromSessionQueryKey(options)
 });
 
 /**
  * Resolve session identity
  *
- * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Verify the session cookie against Ory Kratos (SDK FrontendApi.toSession) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const useGetSessionIdentityQuery = (options?: Options<GetSessionIdentityData>) => useQuery(getSessionIdentityOptions(options));
+export const useGetIdentityFromSessionQuery = (options?: Options<GetIdentityFromSessionData>) => useQuery(getIdentityFromSessionOptions(options));
 
-export const getTokenSessionIdentityQueryKey = (options?: Options<GetTokenSessionIdentityData>) => createQueryKey('getTokenSessionIdentity', options);
+export const getIdentityFromAccessTokenQueryKey = (options?: Options<GetIdentityFromAccessTokenData>) => createQueryKey('getIdentityFromAccessToken', options);
 
 /**
  * Resolve identity from OAuth access token
  *
- * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const getTokenSessionIdentityOptions = (options?: Options<GetTokenSessionIdentityData>) => queryOptions<GetTokenSessionIdentityResponse, AxiosError<DefaultError>, GetTokenSessionIdentityResponse, ReturnType<typeof getTokenSessionIdentityQueryKey>>({
+export const getIdentityFromAccessTokenOptions = (options?: Options<GetIdentityFromAccessTokenData>) => queryOptions<GetIdentityFromAccessTokenResponse, AxiosError<DefaultError>, GetIdentityFromAccessTokenResponse, ReturnType<typeof getIdentityFromAccessTokenQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getTokenSessionIdentity({
+        const { data } = await getIdentityFromAccessToken({
             ...options,
             ...queryKey[0],
             signal,
@@ -163,15 +163,15 @@ export const getTokenSessionIdentityOptions = (options?: Options<GetTokenSession
         });
         return data;
     },
-    queryKey: getTokenSessionIdentityQueryKey(options)
+    queryKey: getIdentityFromAccessTokenQueryKey(options)
 });
 
 /**
  * Resolve identity from OAuth access token
  *
- * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity-client.
+ * Introspect an OAuth provider access token (Authorization: Bearer) and return the authenticated identity. Used by other services via @pine/identity.
  */
-export const useGetTokenSessionIdentityQuery = (options?: Options<GetTokenSessionIdentityData>) => useQuery(getTokenSessionIdentityOptions(options));
+export const useGetIdentityFromAccessTokenQuery = (options?: Options<GetIdentityFromAccessTokenData>) => useQuery(getIdentityFromAccessTokenOptions(options));
 
 export const authorizeQueryKey = (options: Options<AuthorizeData>) => createQueryKey('authorize', options);
 
@@ -384,15 +384,69 @@ export const resendVerificationEmailMutation = (options?: Partial<Options<Resend
  */
 export const useResendVerificationEmailMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>>, 'mutationFn'>>) => useMutation({ ...resendVerificationEmailMutation(), ...mutationOptions });
 
+export const getAttachmentContentQueryKey = (options: Options<GetAttachmentContentData>) => createQueryKey('getAttachmentContent', options);
+
 /**
- * Create a new issue attachment
+ * Get attachment content stream
  *
- * Create a new issue attachment
+ * Download raw current version content for an attachment
  */
-export const createAttachmentMutation = (options?: Partial<Options<CreateAttachmentData>>): UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> => {
-    const mutationOptions: UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>> = {
+export const getAttachmentContentOptions = (options: Options<GetAttachmentContentData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getAttachmentContentQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getAttachmentContent({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getAttachmentContentQueryKey(options)
+});
+
+/**
+ * Get attachment content stream
+ *
+ * Download raw current version content for an attachment
+ */
+export const useGetAttachmentContentQuery = (options: Options<GetAttachmentContentData>) => useQuery(getAttachmentContentOptions(options));
+
+export const getAttachmentVersionContentQueryKey = (options: Options<GetAttachmentVersionContentData>) => createQueryKey('getAttachmentVersionContent', options);
+
+/**
+ * Get attachment version content stream
+ *
+ * Download raw attachment version content
+ */
+export const getAttachmentVersionContentOptions = (options: Options<GetAttachmentVersionContentData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getAttachmentVersionContentQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getAttachmentVersionContent({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getAttachmentVersionContentQueryKey(options)
+});
+
+/**
+ * Get attachment version content stream
+ *
+ * Download raw attachment version content
+ */
+export const useGetAttachmentVersionContentQuery = (options: Options<GetAttachmentVersionContentData>) => useQuery(getAttachmentVersionContentOptions(options));
+
+/**
+ * Create upload target
+ *
+ * Create an upload target for uploading attachment files
+ */
+export const createUploadTargetMutation = (options?: Partial<Options<CreateUploadTargetData>>): UseMutationOptions<CreateUploadTargetResponse, AxiosError<DefaultError>, Options<CreateUploadTargetData>> => {
+    const mutationOptions: UseMutationOptions<CreateUploadTargetResponse, AxiosError<DefaultError>, Options<CreateUploadTargetData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await createAttachment({
+            const { data } = await createUploadTarget({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -404,11 +458,37 @@ export const createAttachmentMutation = (options?: Partial<Options<CreateAttachm
 };
 
 /**
- * Create a new issue attachment
+ * Create upload target
  *
- * Create a new issue attachment
+ * Create an upload target for uploading attachment files
  */
-export const useCreateAttachmentMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<unknown, AxiosError<CreateAttachmentError>, Options<CreateAttachmentData>>, 'mutationFn'>>) => useMutation({ ...createAttachmentMutation(), ...mutationOptions });
+export const useCreateUploadTargetMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<CreateUploadTargetResponse, AxiosError<DefaultError>, Options<CreateUploadTargetData>>, 'mutationFn'>>) => useMutation({ ...createUploadTargetMutation(), ...mutationOptions });
+
+/**
+ * Upload file to upload target
+ *
+ * Upload file to upload target
+ */
+export const uploadToTargetMutation = (options?: Partial<Options<UploadToTargetData>>): UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>> => {
+    const mutationOptions: UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await uploadToTarget({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Upload file to upload target
+ *
+ * Upload file to upload target
+ */
+export const useUploadToTargetMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<UploadToTargetResponse, AxiosError<DefaultError>, Options<UploadToTargetData>>, 'mutationFn'>>) => useMutation({ ...uploadToTargetMutation(), ...mutationOptions });
 
 /**
  * Check a graph relationship

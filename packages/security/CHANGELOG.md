@@ -1,5 +1,17 @@
 # @pine/security
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [3925de4]
+- Updated dependencies [715fce7]
+- Updated dependencies [d01fc4c]
+- Updated dependencies [f3ae7b4]
+- Updated dependencies [1fad54f]
+  - @pine/server@1.1.0
+  - @pine/common@0.1.0
+
 ## 0.1.1
 
 ### Patch Changes

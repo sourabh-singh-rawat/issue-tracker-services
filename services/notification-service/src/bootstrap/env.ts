@@ -11,6 +11,9 @@ export const EnvSchema = Type.Object({
     ],
     { default: ENVIRONMENT.DEVELOPMENT },
   ),
+  NOTIFICATION_SERVICE_TLS_KEY_PATH: Type.String({ minLength: 1 }),
+  NOTIFICATION_SERVICE_TLS_CERT_PATH: Type.String({ minLength: 1 }),
+  CA_CERT_PATH: Type.String({ minLength: 1 }),
   NOTIFICATION_DATABASE_URL: Type.String({ minLength: 1 }),
   NATS_URL: Type.String({ default: "nats://localhost:4222" }),
 });

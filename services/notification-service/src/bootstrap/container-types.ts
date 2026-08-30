@@ -3,5 +3,5 @@ export const TYPES = {
   Logger: Symbol.for("Logger"),
   Broker: Symbol.for("Broker"),
   IdentityRepository: Symbol.for("IIdentityRepository"),
-  IdentitySyncConsumer: Symbol.for("IdentitySyncConsumer"),
+  NotificationIdentitySyncConsumer: Symbol.for("NotificationIdentitySyncConsumer"),
 } as const;

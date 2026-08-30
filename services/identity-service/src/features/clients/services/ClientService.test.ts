@@ -55,7 +55,7 @@ describe("ClientService.getClientById", () => {
   it("returns client details from the OAuth provider", async () => {
     const getClient = vi.fn().mockResolvedValue({
       clientId: "client-1",
-      name: "inventory-web",
+      name: "erp-web",
       redirectUris: ["http://localhost/callback", "http://localhost/silent"],
       scopes: ["openid", "profile"],
       grantTypes: ["authorization_code"],
@@ -64,7 +64,7 @@ describe("ClientService.getClientById", () => {
 
     await expect(service.getClientById("client-1")).resolves.toEqual({
       id: "client-1",
-      name: "inventory-web",
+      name: "erp-web",
       redirectUris: ["http://localhost/callback", "http://localhost/silent"],
       scopes: ["openid", "profile"],
       grantTypes: ["authorization_code"],
@@ -87,7 +87,7 @@ describe("ClientService.deleteClientById", () => {
   it("deletes the client via the OAuth provider", async () => {
     const getClient = vi.fn().mockResolvedValue({
       clientId: "client-1",
-      name: "inventory-web",
+      name: "erp-web",
     });
     const deleteClient = vi.fn().mockResolvedValue(undefined);
     const service = createService({ getClient, deleteClient });

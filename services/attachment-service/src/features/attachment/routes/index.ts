@@ -1,6 +1,11 @@
 import type { HttpRoute } from "@pine/server";
-import { createAttachment } from "@/features/attachment/routes/createAttachment";
+import { getAttachmentContent } from "./getAttachmentContent";
+import { getAttachmentVersionContent } from "./getAttachmentVersionContent";
 
-export * from "@/features/attachment/routes/createAttachment";
+export * from "./getAttachmentContent";
+export * from "./getAttachmentVersionContent";
 
-export const attachmentRoutes: HttpRoute[] = [createAttachment];
+export const attachmentRoutes: HttpRoute[] = [
+  getAttachmentContent,
+  getAttachmentVersionContent,
+];

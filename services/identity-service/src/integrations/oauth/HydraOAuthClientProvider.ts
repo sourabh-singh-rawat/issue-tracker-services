@@ -17,21 +17,22 @@ export class HydraOAuthClientProvider implements IOAuthClientProvider {
   ) {}
 
   async registerClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient> {
-    const tokenEndpointAuthMethod = input.tokenEndpointAuthMethod ?? "none";
-    const responseTypes = input.grantTypes.includes("authorization_code") ? ["code"] : [];
-
     try {
       const { data } = await this.hydra.adminApi.createOAuth2Client({
-        oAuth2Client: {
-          client_id: input.clientId,
-          client_name: input.name,
-          redirect_uris: input.redirectUris,
-          grant_types: input.grantTypes,
-          response_types: responseTypes,
-          scope: input.scopes.join(" "),
-          token_endpoint_auth_method: tokenEndpointAuthMethod,
-          ...(input.clientSecret !== undefined ? { client_secret: input.clientSecret } : {}),
-        },
+        oAuth2Client: this.toHydraClient(input),
+      });
+
+      return this.mapRegisteredClient(data, input.clientId);
+    } catch (error) {
+      rethrowHydraError(error);
+    }
+  }
+
+  async updateClient(input: RegisterOAuthClientInput): Promise<RegisteredOAuthClient> {
+    try {
+      const { data } = await this.hydra.adminApi.setOAuth2Client({
+        id: input.clientId,
+        oAuth2Client: this.toHydraClient(input),
       });
 
       return this.mapRegisteredClient(data, input.clientId);
@@ -61,6 +62,22 @@ export class HydraOAuthClientProvider implements IOAuthClientProvider {
       }
       rethrowHydraError(error);
     }
+  }
+
+  private toHydraClient(input: RegisterOAuthClientInput): OAuth2Client {
+    const tokenEndpointAuthMethod = input.tokenEndpointAuthMethod ?? "none";
+    const responseTypes = input.grantTypes.includes("authorization_code") ? ["code"] : [];
+
+    return {
+      client_id: input.clientId,
+      client_name: input.name,
+      redirect_uris: input.redirectUris,
+      grant_types: input.grantTypes,
+      response_types: responseTypes,
+      scope: input.scopes.join(" "),
+      token_endpoint_auth_method: tokenEndpointAuthMethod,
+      ...(input.clientSecret !== undefined ? { client_secret: input.clientSecret } : {}),
+    };
   }
 
   private mapRegisteredClient(data: OAuth2Client, fallbackClientId: string): RegisteredOAuthClient {

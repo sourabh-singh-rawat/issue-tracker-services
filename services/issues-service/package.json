@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/issues-service",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Issues, projects, workspaces, and statuses",
   "keywords": [],
   "license": "ISC",
@@ -23,7 +23,7 @@
     "@pine/common": "workspace:*",
     "@pine/events": "workspace:*",
     "@pine/server": "workspace:*",
-    "@pine/identity-client": "workspace:*",
+    "@pine/identity": "workspace:*",
     "@pine/outbox": "workspace:*",
     "@pine/security": "workspace:*",
     "@pothos/core": "^4.13.1",

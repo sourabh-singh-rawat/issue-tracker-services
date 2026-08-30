@@ -58,4 +58,50 @@ describe("AuthorizationService", () => {
     await expect(service.ensureRelationship(relationship)).resolves.toEqual({ created: false });
     expect(authorizationGraphProvider.createRelationship).not.toHaveBeenCalled();
   });
+
+  it("forwards namespace when listing without an object", async () => {
+    const authorizationGraphProvider = {
+      checkPermission: vi.fn(),
+      listRelationships: vi.fn().mockResolvedValue([]),
+      createRelationship: vi.fn(),
+      deleteRelationship: vi.fn(),
+    };
+    const service = new AuthorizationService(authorizationGraphProvider);
+
+    await service.listRelationships({
+      namespace: "tenant",
+      subject: { namespace: "identity", id: "user-1" },
+    });
+
+    expect(authorizationGraphProvider.listRelationships).toHaveBeenCalledWith({
+      namespace: "tenant",
+      object: undefined,
+      relation: undefined,
+      subject: { namespace: "identity", id: "user-1" },
+    });
+  });
+
+  it("forwards namespace and object when listing with an object", async () => {
+    const authorizationGraphProvider = {
+      checkPermission: vi.fn(),
+      listRelationships: vi.fn().mockResolvedValue([]),
+      createRelationship: vi.fn(),
+      deleteRelationship: vi.fn(),
+    };
+    const service = new AuthorizationService(authorizationGraphProvider);
+
+    await service.listRelationships({
+      namespace: "organization",
+      object: "org-1",
+      relation: "admin",
+      subject: { namespace: "identity", id: "user-1" },
+    });
+
+    expect(authorizationGraphProvider.listRelationships).toHaveBeenCalledWith({
+      namespace: "organization",
+      object: { namespace: "organization", id: "org-1" },
+      relation: "admin",
+      subject: { namespace: "identity", id: "user-1" },
+    });
+  });
 });

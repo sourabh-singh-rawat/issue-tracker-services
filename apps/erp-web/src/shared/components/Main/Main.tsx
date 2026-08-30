@@ -1,10 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 import MuiBox from "@mui/material/Box";
-import { useFindProjectsQuery } from "@generated/gql";
+import {
+  useFindProjectsQuery,
+  useGetMyOrganizationPreferenceQuery,
+  useGetMyOrganizationsQuery,
+} from "@generated/gql";
 import { useGetCurrentUserQuery } from "@generated/api/@tanstack/react-query.gen";
 import { useAuthStore } from "@features/auth";
+import { useOrganizationStore } from "@features/organization";
 import { useProjectStore } from "@features/project";
 import { redirectToOidcSignIn } from "../../../lib/auth";
 import { AppLoader } from "../AppLoader";
@@ -45,10 +50,19 @@ export function Main({ children }: MainProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const setCurrentUser = useAuthStore((s) => s.setCurrentUser);
   const setProjects = useProjectStore((s) => s.setProjects);
+  const syncOrganizations = useOrganizationStore((s) => s.syncOrganizations);
 
   const userQuery = useGetCurrentUserQuery();
   const projectsQuery = useFindProjectsQuery(undefined, {
     select: (data) => data.findProjects,
+    enabled: userQuery.isSuccess,
+  });
+  const organizationsQuery = useGetMyOrganizationsQuery(undefined, {
+    select: (data) => data.getMyOrganizations ?? [],
+    enabled: userQuery.isSuccess,
+  });
+  const organizationPreferenceQuery = useGetMyOrganizationPreferenceQuery(undefined, {
+    select: (data) => data.getMyOrganizationPreference ?? null,
     enabled: userQuery.isSuccess,
   });
 
@@ -78,13 +92,46 @@ export function Main({ children }: MainProps) {
     }
   }, [projectsQuery.data, setProjects]);
 
+  useLayoutEffect(() => {
+    const preferenceReady =
+      organizationPreferenceQuery.isSuccess || organizationPreferenceQuery.isError;
+    if (!preferenceReady) {
+      return;
+    }
+
+    const preferredOrganizationId = organizationPreferenceQuery.isSuccess
+      ? organizationPreferenceQuery.data?.organizationId
+      : null;
+
+    if (organizationsQuery.isSuccess) {
+      syncOrganizations(organizationsQuery.data, { preferredOrganizationId });
+      return;
+    }
+    if (organizationsQuery.isError) {
+      syncOrganizations([], { preferredOrganizationId });
+    }
+  }, [
+    organizationPreferenceQuery.data,
+    organizationPreferenceQuery.isError,
+    organizationPreferenceQuery.isSuccess,
+    organizationsQuery.data,
+    organizationsQuery.isError,
+    organizationsQuery.isSuccess,
+    syncOrganizations,
+  ]);
+
   useEffect(() => {
     if (!userQuery.isError) return;
     if (isPublicPath(pathname)) return;
     redirectToOidcSignIn();
   }, [userQuery.isError, pathname]);
 
-  const loading = userQuery.isPending || (userQuery.isSuccess && projectsQuery.isPending);
+  const loading =
+    userQuery.isPending ||
+    (userQuery.isSuccess &&
+      (projectsQuery.isPending ||
+        organizationsQuery.isPending ||
+        organizationPreferenceQuery.isPending));
 
   return (
     <MuiBox width="100vw" height="100vh">

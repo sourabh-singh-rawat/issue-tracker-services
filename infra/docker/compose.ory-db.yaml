@@ -11,6 +11,8 @@ services:
     volumes:
       - ../data/docker/pg-ory-data:/var/lib/postgresql
       - ./init-db/ory:/docker-entrypoint-initdb.d:ro
+    ports:
+      - 5440:5432
     command:
       - postgres
       - -c

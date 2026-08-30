@@ -1,5 +1,12 @@
+import { configureTls } from "@pine/common";
 import { env } from "@/bootstrap/env";
 import "reflect-metadata";
+
+configureTls({
+  caPath: env.CA_CERT_PATH,
+  certPath: env.IDENTITY_SERVICE_TLS_CERT_PATH,
+  keyPath: env.IDENTITY_SERVICE_TLS_KEY_PATH,
+});
 
 import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
@@ -9,6 +16,7 @@ import { openApiOutputPath } from "@/bootstrap/container";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
 import type { IClientSeederService } from "@/features/clients";
+import { ProfilePhotoAttachmentConsumer } from "@/features/profiles";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -41,6 +49,7 @@ const main = async () => {
 
   void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
   void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
+  void container.get<ProfilePhotoAttachmentConsumer>(TYPES.ProfilePhotoAttachmentConsumer).start();
 };
 
 main().catch((error) => {

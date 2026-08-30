@@ -1,8 +1,19 @@
 import { Context, Namespace } from "@ory/keto-namespace-types";
 
-export class identity implements Namespace {}
+export class identity implements Namespace {} // NOSONAR typescript:S101
 
-export class platform implements Namespace {
+export class profile implements Namespace { // NOSONAR typescript:S101
+  related: {
+    identity: identity[];
+  };
+
+  permits = {
+    read: (ctx: Context): boolean => this.related.identity.includes(ctx.subject),
+    update: (ctx: Context): boolean => this.related.identity.includes(ctx.subject),
+  };
+}
+
+export class platform implements Namespace { // NOSONAR typescript:S101
   related: {
     admin: identity[];
     member: identity[];
@@ -17,7 +28,7 @@ export class platform implements Namespace {
   };
 }
 
-export class tenant implements Namespace {
+export class tenant implements Namespace { // NOSONAR typescript:S101
   related: {
     owner: identity[];
     admin: identity[];
@@ -27,6 +38,11 @@ export class tenant implements Namespace {
 
   permits = {
     read: (ctx: Context): boolean =>
+      this.related.member.includes(ctx.subject) ||
+      this.related.admin.includes(ctx.subject) ||
+      this.related.owner.includes(ctx.subject) ||
+      this.related.platform.traverse((item) => item.permits.read(ctx)),
+    read_list: (ctx: Context): boolean =>
       this.related.member.includes(ctx.subject) ||
       this.related.admin.includes(ctx.subject) ||
       this.related.owner.includes(ctx.subject) ||
@@ -58,7 +74,7 @@ export class tenant implements Namespace {
   };
 }
 
-export class organization implements Namespace {
+export class organization implements Namespace { // NOSONAR typescript:S101
   related: {
     owner: identity[];
     admin: identity[];
@@ -80,57 +96,19 @@ export class organization implements Namespace {
       this.related.admin.includes(ctx.subject) ||
       this.related.owner.includes(ctx.subject) ||
       this.related.tenant.traverse((item) => item.permits.administer(ctx)),
-    create_product: (ctx: Context): boolean =>
-      this.related.admin.includes(ctx.subject) ||
-      this.related.owner.includes(ctx.subject) ||
-      this.related.tenant.traverse((item) => item.permits.administer(ctx)),
     delete: (ctx: Context): boolean =>
       this.related.owner.includes(ctx.subject) ||
       this.related.tenant.traverse((item) => item.related.owner.includes(ctx.subject)),
   };
 }
 
-export class product implements Namespace {
-  related: {
-    organization: organization[];
-  };
-
-  permits = {
-    read: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.read(ctx)),
-    update: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.update(ctx)),
-    delete: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.update(ctx)),
-    create_brand: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.create_product(ctx)),
-  };
-}
-
-export class brand implements Namespace {
-  related: {
-    product: product[];
-  };
-
-  permits = {
-    read: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.read(ctx)),
-    create: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.update(ctx)),
-    update: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.update(ctx)),
-    delete: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.create_brand(ctx)),
-  };
-}
-
-export class role implements Namespace {
+export class role implements Namespace { // NOSONAR typescript:S101
   related: {
     member: identity[];
   };
 }
 
-export class permission implements Namespace {
+export class permission implements Namespace { // NOSONAR typescript:S101
   related: {
     has: role[];
   };

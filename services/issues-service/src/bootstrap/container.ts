@@ -1,4 +1,8 @@
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
@@ -16,6 +20,8 @@ import {
   type IRetryPolicy,
 } from "@pine/outbox";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
 import { db } from "@/bootstrap/db";
@@ -23,7 +29,7 @@ import { env } from "@/bootstrap/env";
 import { logger } from "@/bootstrap/logger";
 import { createContext } from "@/graphql";
 import { schema } from "@/graphql/schema";
-import { IIdentityRepository, IdentityRepository, IdentitySyncConsumer } from "@/features/identities";
+import { IIdentityRepository, IdentityRepository, IssuesIdentitySyncConsumer } from "@/features/identities";
 import { IIssueAssigneeRepository, IIssueRepository, IIssueService, IssueAssigneeRepository, IssueRepository, IssueService } from "@/features/issue";
 import { IProjectRepository, IProjectService, ProjectRepository, ProjectService } from "@/features/project";
 import { IStatusRepository, IStatusService, StatusRepository, StatusService } from "@/features/status";
@@ -57,7 +63,7 @@ container.bind<IStatusRepository>(TYPES.StatusRepository).to(StatusRepository);
 container.bind<IStatusService>(TYPES.StatusService).to(StatusService);
 container.bind<IProjectRepository>(TYPES.ProjectRepository).to(ProjectRepository);
 container.bind<IProjectService>(TYPES.ProjectService).to(ProjectService);
-container.bind<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).to(IdentitySyncConsumer);
+container.bind<IssuesIdentitySyncConsumer>(TYPES.IssuesIdentitySyncConsumer).to(IssuesIdentitySyncConsumer);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({
@@ -67,8 +73,17 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: env.NODE_ENV,
       version: 1,
     },
-    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    https: {
+      key: readFileSync(env.ISSUES_SERVICE_TLS_KEY_PATH),
+      cert: readFileSync(env.ISSUES_SERVICE_TLS_CERT_PATH),
+      ca: readFileSync(env.CA_CERT_PATH),
+      requestCert: true,
+      rejectUnauthorized: true,
+    },
     cookie: { secret: env.JWT_SECRET },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
+    },
     graphql: createGraphQLServer({
       schema,
       context: createContext,

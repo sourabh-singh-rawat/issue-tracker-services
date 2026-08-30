@@ -1,1 +1,1 @@
-export * from "./IdentitySyncConsumer";
+export * from "./NotificationIdentitySyncConsumer";

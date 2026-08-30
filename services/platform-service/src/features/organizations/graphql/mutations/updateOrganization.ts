@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -15,12 +16,12 @@ builder.mutationFields((t) => ({
     resolve: async (_root, { id, input }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
 
-      return service.updateOrganization(
+      return service.update(
         id,
         {
           parentOrganizationId: input.parentOrganizationId,
         },
-        ctx.user!.id,
+        requireIdentityId(ctx),
       );
     },
   }),

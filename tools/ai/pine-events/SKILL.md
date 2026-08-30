@@ -9,13 +9,13 @@ description: >
 
 ## Wire format (production)
 
-**CloudEvent envelopes** on NATS. Subject = CloudEvent `type` (e.g. `product.product.created`).
+**CloudEvent envelopes** on NATS. Subject = CloudEvent `type` (e.g. `issues.issue.created`).
 
 1. `NatsBroker` → streams with subjects `` `${stream}.>` `` (multi-token types)
 2. `publisher.send(cloudEvent)` — no separate subject argument
 3. `Consumer<CloudEvent<T>>`: set `stream` / `consumer` / `subjects = [SomeEvent.type, …]`; `validateEvent`; `message.ack()`
 
-Stream names match the first token of `type`: `identity`, `issues`, `mail`, `product`.
+Stream names match the first token of `type`: `identity`, `issues`, `attachment`, `notification`, `platform`.
 
 ## Hard rules
 
@@ -30,7 +30,7 @@ Stream names match the first token of `type`: `identity`, `issues`, `mail`, `pro
 
 ```ts
 // broker.ts — stream names = first type token
-new NatsBroker({ servers, streams: ["identity", "product"], logger })
+new NatsBroker({ servers, streams: ["identity", "issues"], logger })
 
 // container
 TYPES.Publisher → new NatsPublisher(broker)
@@ -40,11 +40,11 @@ TYPES.Broker → broker
 ```ts
 // publish
 const event = createCloudEvent({
-  type: ProductCreatedEvent.type,
-  version: ProductCreatedEvent.version,
-  schema: ProductCreatedEvent.schema,
-  source: "pine/product-service",
-  subject: product.id, // domain resource id, not NATS subject
+  type: IssueCreatedEvent.type,
+  version: IssueCreatedEvent.version,
+  schema: IssueCreatedEvent.schema,
+  source: "pine/issues-service",
+  subject: issue.id, // domain resource id, not NATS subject
   data: {/* mapped DTO */},
 });
 await this.publisher.send(event);
@@ -71,21 +71,19 @@ Set the durable name **directly** on the consumer class (`readonly consumer = "�
 **Convention:** `<service>-<purpose>` (short service token, not the full package name)
 
 ```ts
-// features/identities/consumers/IdentitySyncConsumer.ts
-readonly consumer = "product-identity-sync";
+// features/identities/consumers/IssuesIdentitySyncConsumer.ts
+readonly consumer = "issues-identity-sync";
 ```
 
 | Service token  | Example durable name           |
 | -------------- | ------------------------------ |
-| `product`      | `product-identity-sync`        |
-| `inventory`    | `inventory-brand-sync`         |
 | `issues`       | `issues-identity-sync`         |
 | `attachment`   | `attachment-identity-sync`     |
 | `notification` | `notification-user-registered` |
 
 - **service** = consuming service (who owns the durable cursor)
-- **purpose** = projection or side-effect intent (`identity-sync`, `brand-sync`, `workspace-invite`, …), **not** one durable per event verb
-- Group related events on one durable when they sync the same entity (e.g. brand created + updated → `inventory-brand-sync` with `filter_subjects`)
+- **purpose** = projection or side-effect intent (`identity-sync`, `workspace-invite`, …), **not** one durable per event verb
+- Group related events on one durable when they sync the same entity
 - One durable name per consumer class; never share across services
 
 ## Package pitfalls

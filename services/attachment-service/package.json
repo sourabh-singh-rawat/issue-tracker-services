@@ -1,21 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/attachment-service",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Manage attachments",
   "keywords": [
     "attachment",
     "attachment-service"
   ],
-  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "homepage": "https://github.com/sourabh-singh-rawat/pine#readme",
   "bugs": {
-    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+    "url": "https://github.com/sourabh-singh-rawat/pine/issues"
   },
   "license": "ISC",
   "author": "Sourabh Singh Rawat",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+    "url": "git+https://github.com/sourabh-singh-rawat/pine.git"
   },
   "main": "./src/main.ts",
   "scripts": {
@@ -31,11 +31,15 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1112.0",
+    "@aws-sdk/s3-request-presigner": "^3.1112.0",
     "@pine/common": "workspace:^",
+    "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
-    "@pine/server": "workspace:^",
-    "@pine/identity-client": "workspace:^",
+    "@pine/identity": "workspace:^",
+    "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",
+    "@pine/server": "workspace:^",
     "@pothos/core": "^4.13.1",
     "bullmq": "^5.81.0",
     "drizzle-orm": "0.45.2",

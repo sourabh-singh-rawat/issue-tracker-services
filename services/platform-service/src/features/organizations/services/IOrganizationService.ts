@@ -1,4 +1,5 @@
 import type { Organization } from "@/db";
+import type { OrganizationNode } from "@/features/organizations/utils";
 
 export type CreateOrganizationInput = {
   tenantId: string;
@@ -19,13 +20,10 @@ export type UpdateOrganizationInput = {
 };
 
 export interface IOrganizationService {
-  createOrganization(input: CreateOrganizationInput, identityId: string): Promise<Organization>;
-  getOrganizationById(id: string, identityId: string): Promise<Organization>;
-  listOrganizations(input: ListOrganizationsInput, identityId: string): Promise<Organization[]>;
-  updateOrganization(
-    id: string,
-    input: UpdateOrganizationInput,
-    identityId: string,
-  ): Promise<Organization>;
-  deleteOrganization(id: string, identityId: string): Promise<void>;
+  create: (input: CreateOrganizationInput, identityId: string) => Promise<Organization>;
+  getById: (id: string, identityId: string) => Promise<Organization>;
+  list: (input: ListOrganizationsInput, identityId: string) => Promise<Organization[]>;
+  listMyOrganizations: (identityId: string) => Promise<OrganizationNode[]>;
+  update: (id: string, input: UpdateOrganizationInput, identityId: string) => Promise<Organization>;
+  delete: (id: string, identityId: string) => Promise<void>;
 }

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@pine/attachment-processing-service",
+  "version": "0.0.1",
+  "description": "Attachment processing service",
+  "keywords": [
+    "attachment",
+    "attachment-processing-service"
+  ],
+  "homepage": "https://github.com/sourabh-singh-rawat/pine#readme",
+  "bugs": {
+    "url": "https://github.com/sourabh-singh-rawat/pine/issues"
+  },
+  "license": "ISC",
+  "author": "Sourabh Singh Rawat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourabh-singh-rawat/pine.git"
+  },
+  "private": true
+}

@@ -9,21 +9,21 @@ import type { IOAuthTokenProvider } from "@/integrations/oauth";
 describe("SessionService", () => {
   const getSession = vi.fn();
   const introspectToken = vi.fn();
-  const getIdentityByIdpId = vi.fn();
-  const getIdentityById = vi.fn();
+  const getIdByExternalId = vi.fn();
+  const getById = vi.fn();
   const sessionProvider = { getSession } as unknown as ISessionProvider;
   const oauthTokenProvider = { introspectToken } as unknown as IOAuthTokenProvider;
   const identityService = {
-    getIdentityByIdpId,
-    getIdentityById,
+    getIdByExternalId,
+    getById,
   } as unknown as IIdentityService;
   let service: SessionService;
 
   beforeEach(() => {
     getSession.mockReset();
     introspectToken.mockReset();
-    getIdentityByIdpId.mockReset();
-    getIdentityById.mockReset();
+    getIdByExternalId.mockReset();
+    getById.mockReset();
     service = new SessionService(sessionProvider, oauthTokenProvider, identityService);
   });
 
@@ -34,19 +34,15 @@ describe("SessionService", () => {
       emailVerified: true,
     };
     getSession.mockResolvedValue(idpIdentity);
-    getIdentityByIdpId.mockResolvedValue({
-      id: "identity-1",
-      idpId: "idp-1",
-      idpProvider: "kratos",
-    });
+    getIdByExternalId.mockResolvedValue("identity-1");
 
-    await expect(service.getSession("token-1")).resolves.toEqual({
+    await expect(service.getIdentityFromSessionToken("token-1")).resolves.toEqual({
       id: "identity-1",
       email: "user@example.com",
       emailVerified: true,
     });
     expect(getSession).toHaveBeenCalledWith("token-1");
-    expect(getIdentityByIdpId).toHaveBeenCalledWith("idp-1");
+    expect(getIdByExternalId).toHaveBeenCalledWith("idp-1");
   });
 
   it("throws when no local identity exists for the IdP session", async () => {
@@ -54,9 +50,11 @@ describe("SessionService", () => {
       id: "idp-missing",
       email: "missing@example.com",
     });
-    getIdentityByIdpId.mockRejectedValue(new UserNotFoundError());
+    getIdByExternalId.mockRejectedValue(new UserNotFoundError());
 
-    await expect(service.getSession("token-1")).rejects.toBeInstanceOf(UserNotFoundError);
+    await expect(service.getIdentityFromSessionToken("token-1")).rejects.toBeInstanceOf(
+      UserNotFoundError,
+    );
   });
 
   it("returns the local identity from an active OAuth access token", async () => {
@@ -65,19 +63,19 @@ describe("SessionService", () => {
       subject: "identity-1",
       extra: { email: "oauth@example.com", email_verified: true },
     });
-    getIdentityById.mockResolvedValue({
+    getById.mockResolvedValue({
       id: "identity-1",
-      idpId: "idp-1",
-      idpProvider: "kratos",
+      createdAt: new Date("2026-01-01"),
+      updatedAt: null,
     });
 
-    await expect(service.getSessionFromAccessToken("access-token-1")).resolves.toEqual({
+    await expect(service.getIdentityFromAccessToken("access-token-1")).resolves.toEqual({
       id: "identity-1",
       email: "oauth@example.com",
       emailVerified: true,
     });
     expect(introspectToken).toHaveBeenCalledWith("access-token-1");
-    expect(getIdentityById).toHaveBeenCalledWith("identity-1");
+    expect(getById).toHaveBeenCalledWith("identity-1");
   });
 
   it("returns subject without email when token claims omit it", async () => {
@@ -85,35 +83,35 @@ describe("SessionService", () => {
       active: true,
       subject: "identity-2",
     });
-    getIdentityById.mockResolvedValue({
+    getById.mockResolvedValue({
       id: "identity-2",
-      idpId: "idp-2",
-      idpProvider: "kratos",
+      createdAt: new Date("2026-01-01"),
+      updatedAt: null,
     });
 
-    await expect(service.getSessionFromAccessToken("access-token-2")).resolves.toEqual({
+    await expect(service.getIdentityFromAccessToken("access-token-2")).resolves.toEqual({
       id: "identity-2",
       email: "",
-      emailVerified: undefined,
+      emailVerified: false,
     });
   });
 
   it("throws when the access token is inactive", async () => {
     introspectToken.mockResolvedValue({ active: false });
 
-    await expect(service.getSessionFromAccessToken("dead-token")).rejects.toBeInstanceOf(
+    await expect(service.getIdentityFromAccessToken("dead-token")).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
-    expect(getIdentityById).not.toHaveBeenCalled();
+    expect(getById).not.toHaveBeenCalled();
   });
 
   it("throws when the access token has no subject", async () => {
     introspectToken.mockResolvedValue({ active: true });
 
-    await expect(service.getSessionFromAccessToken("no-sub")).rejects.toBeInstanceOf(
+    await expect(service.getIdentityFromAccessToken("no-sub")).rejects.toBeInstanceOf(
       InvalidCredentialError,
     );
-    expect(getIdentityById).not.toHaveBeenCalled();
+    expect(getById).not.toHaveBeenCalled();
   });
 
   it("throws when the OAuth subject is not a known local identity", async () => {
@@ -121,9 +119,9 @@ describe("SessionService", () => {
       active: true,
       subject: "unknown-identity",
     });
-    getIdentityById.mockRejectedValue(new UserNotFoundError());
+    getById.mockRejectedValue(new UserNotFoundError());
 
-    await expect(service.getSessionFromAccessToken("access-token-3")).rejects.toBeInstanceOf(
+    await expect(service.getIdentityFromAccessToken("access-token-3")).rejects.toBeInstanceOf(
       UserNotFoundError,
     );
   });

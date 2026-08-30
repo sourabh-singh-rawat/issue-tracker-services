@@ -58,6 +58,24 @@ export const organizationOwnerRelationship = (
   subject: { namespace: IDENTITY, id: identityId },
 });
 
+export const organizationAdminRelationship = (
+  organizationId: string,
+  identityId: string,
+): GraphRelationship => ({
+  object: { namespace: "organization", id: organizationId },
+  relation: ADMIN,
+  subject: { namespace: IDENTITY, id: identityId },
+});
+
+export const organizationMemberRelationship = (
+  organizationId: string,
+  identityId: string,
+): GraphRelationship => ({
+  object: { namespace: "organization", id: organizationId },
+  relation: MEMBER,
+  subject: { namespace: IDENTITY, id: identityId },
+});
+
 export const platformTenantRelationship = (tenantId: string): GraphRelationship => ({
   object: { namespace: "platform", id: PLATFORM_OBJECT_ID },
   relation: PLATFORM_TENANT,
@@ -78,3 +96,4 @@ export const organizationTenantRelationship = (
   relation: ORGANIZATION_TENANT,
   subject: { namespace: "tenant", id: tenantId },
 });
+

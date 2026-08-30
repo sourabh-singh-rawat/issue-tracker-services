@@ -1,0 +1,10 @@
+query GetMyTenants {
+  getMyTenants {
+    id
+    name
+    slug
+    description
+    isActive
+    createdAt
+  }
+}

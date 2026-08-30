@@ -30,7 +30,7 @@ describe("getClient query", () => {
   it("returns the client from ClientService by id", async () => {
     const client = {
       id: "client-1",
-      name: "inventory-web",
+      name: "erp-web",
       redirectUris: ["http://localhost/callback"],
       scopes: ["openid"],
       grantTypes: ["authorization_code"],

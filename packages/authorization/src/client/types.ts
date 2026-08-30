@@ -9,8 +9,12 @@ export type CheckRelationshipInput = {
 
 export type ListRelationshipsInput = {
   namespace: GraphNamespace;
-  object: string;
+  object?: string;
   relation?: string;
+  subject?: {
+    namespace: GraphNamespace;
+    id: string;
+  };
 };
 
 export interface CheckRelationshipResponse {

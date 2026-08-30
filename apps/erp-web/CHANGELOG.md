@@ -1,5 +1,20 @@
 # @pine/erp-web
 
+## 0.6.0
+
+### Minor Changes
+
+- f3ae7b4: feat(organization): persist default org preference and tenant/org request headers
+- 77b700a: feat(organization): add org switcher with nested memberships and tenant.read_list
+- baef746: chore: remove inventory-service and product-service
+
+### Patch Changes
+
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+- Updated dependencies [d01fc4c]
+- Updated dependencies [1fad54f]
+  - @pine/common@0.1.0
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,11 +1,19 @@
+import { configureTls } from "@pine/common";
+import { env } from "@/bootstrap/env";
 import "reflect-metadata";
+
+configureTls({
+  caPath: env.CA_CERT_PATH,
+  certPath: env.ISSUES_SERVICE_TLS_CERT_PATH,
+  keyPath: env.ISSUES_SERVICE_TLS_KEY_PATH,
+});
 
 import type { IHttpServer } from "@pine/server";
 import type { IOutboxCleanupWorker, IOutboxWorker } from "@pine/outbox";
 import { broker, container, initializeDb, TYPES } from "@/bootstrap";
 import { writeSchemaToDist } from "@/bootstrap/graphql";
 import { logger } from "@/bootstrap/logger";
-import { IdentitySyncConsumer } from "@/features/identities";
+import { IssuesIdentitySyncConsumer } from "@/features/identities";
 
 export { container, db } from "@/bootstrap";
 export { builder, createContext } from "@/graphql";
@@ -25,7 +33,7 @@ const main = async () => {
 
   void container.get<IOutboxWorker>(TYPES.OutboxWorker).start();
   void container.get<IOutboxCleanupWorker>(TYPES.OutboxCleanupWorker).start();
-  void container.get<IdentitySyncConsumer>(TYPES.IdentitySyncConsumer).start();
+  void container.get<IssuesIdentitySyncConsumer>(TYPES.IssuesIdentitySyncConsumer).start();
 };
 
 main().catch((error) => {

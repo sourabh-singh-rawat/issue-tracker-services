@@ -35,6 +35,7 @@ export const listRelationships: HttpRoute = {
       namespace: body.namespace,
       object: body.object,
       relation: body.relation,
+      subject: body.subject,
     });
 
     const response: ListRelationshipsResponse = { relationships };

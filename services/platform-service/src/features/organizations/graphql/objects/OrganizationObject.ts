@@ -1,7 +1,12 @@
 import { builder } from "@pine/server";
 import type { Organization } from "@/db";
+import type { OrganizationNode } from "@/features/organizations/utils";
 
-export const OrganizationObject = builder.objectRef<Organization>("OrganizationObject");
+type OrganizationObjectShape = Organization & {
+  children?: OrganizationNode[];
+};
+
+export const OrganizationObject = builder.objectRef<OrganizationObjectShape>("OrganizationObject");
 
 OrganizationObject.implement({
   fields: (t) => ({
@@ -14,5 +19,9 @@ OrganizationObject.implement({
     isActive: t.exposeBoolean("isActive"),
     createdAt: t.expose("createdAt", { type: "DateTimeISO" }),
     updatedAt: t.expose("updatedAt", { type: "DateTimeISO", nullable: true }),
+    children: t.field({
+      type: [OrganizationObject],
+      resolve: (organization) => organization.children ?? [],
+    }),
   }),
 });

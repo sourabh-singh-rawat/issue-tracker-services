@@ -1,6 +1,7 @@
+import "reflect-metadata";
 import { initializeObservability } from "@pine/observability";
-import { createHttpServer } from "./bootstrap";
-import { env } from "./bootstrap/env";
+import type { IHttpServer } from "@pine/server";
+import { container, env, TYPES } from "./bootstrap";
 
 const main = async () => {
   const observability = initializeObservability({
@@ -13,7 +14,7 @@ const main = async () => {
   });
   observability?.start();
 
-  const httpServer = await createHttpServer();
+  const httpServer = container.get<IHttpServer>(TYPES.HttpServer);
   await httpServer.start();
 
   console.log(`🚀 API Gateway ready at ${env.API_GATEWAY_URL}`);
@@ -21,8 +22,6 @@ const main = async () => {
   console.log(`   Swagger:  ${env.API_GATEWAY_URL}/docs`);
   console.log(`   Proxy → identity:   ${env.IDENTITY_SERVICE_URL}  (/identity)`);
   console.log(`   Proxy → attachment: ${env.ATTACHMENT_SERVICE_URL}  (/attachments)`);
-  console.log(`   Proxy → inventory:  ${env.INVENTORY_SERVICE_URL}  (/inventory)`);
-  console.log(`   Proxy → product:    ${env.PRODUCT_SERVICE_URL}  (/products)`);
 };
 
 main().catch((err) => {

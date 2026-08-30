@@ -1,22 +1,19 @@
 federation_version: =2.8.1
 subgraphs:
   attachment:
-    routing_url: http://127.0.0.1:5003/graphql
+    routing_url: https://127.0.0.1:5003/graphql
     schema:
       file: ../../services/attachment-service/dist/schema.graphql
   identity-service:
-    routing_url: http://127.0.0.1:5000/graphql
+    routing_url: https://127.0.0.1:5000/graphql
     schema:
       file: ../../services/identity-service/dist/schema.graphql
   issues-service:
-    routing_url: http://127.0.0.1:5001/graphql
+    routing_url: https://127.0.0.1:5001/graphql
     schema:
       file: ../../services/issues-service/dist/schema.graphql
-  product-service:
-    routing_url: http://127.0.0.1:5004/graphql
-    schema:
-      file: ../../services/product-service/dist/schema.graphql
   platform-service:
-    routing_url: http://127.0.0.1:5005/graphql
+    routing_url: https://127.0.0.1:5005/graphql
     schema:
       file: ../../services/platform-service/dist/schema.graphql
+

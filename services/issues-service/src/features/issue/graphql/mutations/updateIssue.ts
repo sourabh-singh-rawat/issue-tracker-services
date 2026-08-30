@@ -1,4 +1,5 @@
 import { ItemPriority } from "@pine/common";
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { TYPES, container } from "@/bootstrap";
 import { IIssueService } from "@/features/issue";
@@ -10,7 +11,7 @@ builder.mutationFields((t) => ({
       input: t.arg({ type: UpdateIssueInput, required: true }),
     },
     resolve: async (_root, { input }, ctx) => {
-      const userId = ctx.user!.id;
+      const userId = requireIdentityId(ctx);
       const service = container.get<IIssueService>(TYPES.IssueService);
       const { issueId } = input;
 

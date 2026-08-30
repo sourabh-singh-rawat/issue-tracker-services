@@ -6,9 +6,14 @@
   "description": "Observability utilities for Pine",
   "keywords": [],
   "license": "ISC",
-  "author": "",
-  "main": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "main": "src/main.ts",
+  "types": "src/main.ts",
+  "exports": {
+    ".": {
+      "types": "./src/main.ts",
+      "default": "./src/main.ts"
+    }
+  },
   "scripts": {
     "clean": "node ../../tools/scripts/rm-rf.mjs dist",
     "build": "pnpm clean && tsc"

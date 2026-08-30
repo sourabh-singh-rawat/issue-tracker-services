@@ -1,22 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/identity-service",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Identity service — authentication and authorization",
   "keywords": [
     "authentication",
     "identity",
     "user"
   ],
-  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "homepage": "https://github.com/sourabh-singh-rawat/pine#readme",
   "bugs": {
-    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+    "url": "https://github.com/sourabh-singh-rawat/pine/issues"
   },
   "license": "ISC",
   "author": "Sourabh Singh Rawat",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+    "url": "git+https://github.com/sourabh-singh-rawat/pine.git"
   },
   "main": "./src/main.ts",
   "scripts": {
@@ -35,14 +35,18 @@
   "dependencies": {
     "@ory/hydra-client": "26.2.0",
     "@ory/kratos-client": "26.2.0",
+    "@pine/attachment": "workspace:^",
+    "@pine/authorization": "workspace:^",
     "@pine/common": "workspace:^",
     "@pine/errors": "workspace:^",
     "@pine/events": "workspace:^",
+    "@pine/identity": "workspace:^",
     "@pine/observability": "workspace:*",
     "@pine/outbox": "workspace:^",
     "@pine/security": "workspace:^",
     "@pine/server": "workspace:^",
     "@pothos/core": "^4.13.1",
+    "@pothos/plugin-scope-auth": "^4.1.7",
     "@vitest/coverage-v8": "^4.1.10",
     "axios": "^1.18.1",
     "drizzle-orm": "0.45.2",

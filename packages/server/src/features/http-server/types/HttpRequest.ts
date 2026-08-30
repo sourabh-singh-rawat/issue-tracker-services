@@ -1,6 +1,6 @@
 import type { HttpMethod } from "../../../constants";
 
-export type HttpUser = {
+export type HttpIdentity = {
   id: string;
   authMethod: "access_token" | "session";
 };
@@ -10,7 +10,7 @@ export type HttpUploadedFile = {
   filename: string;
   mimetype: string;
   encoding: string;
-  toBuffer(): Promise<Buffer>;
+  toBuffer: () => Promise<Buffer>;
 };
 
 export type HttpRequest = {
@@ -21,6 +21,9 @@ export type HttpRequest = {
   params: Record<string, string | undefined>;
   cookies: Record<string, string | undefined>;
   body: unknown;
-  user?: HttpUser;
-  file(): Promise<HttpUploadedFile | undefined>;
+  identity?: HttpIdentity;
+  tenantId?: string;
+  organizationId?: string;
+  file: () => Promise<HttpUploadedFile | undefined>;
+  isMultipart: () => boolean;
 };

@@ -17,29 +17,6 @@ export type Scalars = {
   link__Import: { input: unknown; output: unknown; }
 };
 
-export type BrandObject = {
-  __typename?: 'BrandObject';
-  code?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-};
-
-export type CategoryObject = {
-  __typename?: 'CategoryObject';
-  code?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  parentCategoryId?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-};
-
 export type ClientObject = {
   __typename?: 'ClientObject';
   grantTypes?: Maybe<Array<Scalars['String']['output']>>;
@@ -47,21 +24,6 @@ export type ClientObject = {
   name?: Maybe<Scalars['String']['output']>;
   redirectUris?: Maybe<Array<Scalars['String']['output']>>;
   scopes?: Maybe<Array<Scalars['String']['output']>>;
-};
-
-export type CreateBrandInput = {
-  code: Scalars['String']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-};
-
-export type CreateCategoryInput = {
-  code: Scalars['String']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  parentCategoryId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateClientInput = {
@@ -104,21 +66,21 @@ export type CreateOrganizationInput = {
   tenantId: Scalars['String']['input'];
 };
 
-export type CreatePlatformMemberInput = {
+export type CreateOrganizationRelationInput = {
   identityId: Scalars['String']['input'];
+  organizationId: Scalars['String']['input'];
   relation: Scalars['String']['input'];
 };
 
-export type CreateProductInput = {
-  brandId?: InputMaybe<Scalars['String']['input']>;
-  categoryId?: InputMaybe<Scalars['String']['input']>;
-  code: Scalars['String']['input'];
-  defaultUnitId: Scalars['String']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  productType: Scalars['String']['input'];
-  sku: Scalars['String']['input'];
+export type CreatePhotoUploadRequestInput = {
+  contentType: Scalars['String']['input'];
+  filename: Scalars['String']['input'];
+  size: Scalars['Int']['input'];
+};
+
+export type CreatePlatformRelationInput = {
+  identityId: Scalars['String']['input'];
+  relation: Scalars['String']['input'];
 };
 
 export type CreateProjectInput = {
@@ -133,28 +95,14 @@ export type CreateTenantInput = {
   slug: Scalars['String']['input'];
 };
 
-export type CreateTenantMemberInput = {
+export type CreateTenantRelationInput = {
   identityId: Scalars['String']['input'];
   relation: Scalars['String']['input'];
   tenantId: Scalars['String']['input'];
 };
 
-export type CreateUnitInput = {
-  code: Scalars['String']['input'];
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  symbol?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type DeleteIdentityInput = {
   identityId: Scalars['String']['input'];
-};
-
-export type FileOutput = {
-  __typename?: 'FileOutput';
-  bucket?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  thumbnailLink?: Maybe<Scalars['String']['output']>;
 };
 
 export type FindIssuesInput = {
@@ -175,9 +123,15 @@ export type IdentityObject = {
   __typename?: 'IdentityObject';
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  idpId?: Maybe<Scalars['String']['output']>;
-  idpProvider?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type IdentityRelationsObject = {
+  __typename?: 'IdentityRelationsObject';
+  identityId?: Maybe<Scalars['String']['output']>;
+  organizations?: Maybe<Array<OrganizationRelationObject>>;
+  platform?: Maybe<Array<PlatformRelationObject>>;
+  tenants?: Maybe<Array<TenantRelationObject>>;
 };
 
 export type IssueObject = {
@@ -196,44 +150,31 @@ export type IssueObject = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createBrand?: Maybe<BrandObject>;
-  createCategory?: Maybe<CategoryObject>;
   createClient?: Maybe<ClientObject>;
   createIdentity?: Maybe<IdentityObject>;
   createIssue?: Maybe<Scalars['String']['output']>;
   createOrganization?: Maybe<OrganizationObject>;
-  createPlatformMember?: Maybe<PlatformMemberObject>;
-  createProduct?: Maybe<ProductObject>;
+  createOrganizationRelation?: Maybe<OrganizationRelationObject>;
+  createPhotoUploadRequest?: Maybe<PhotoUploadTargetObject>;
+  createPlatformRelation?: Maybe<PlatformRelationObject>;
   createProject?: Maybe<Scalars['String']['output']>;
   createTenant?: Maybe<TenantObject>;
-  createTenantMember?: Maybe<TenantMemberObject>;
-  createUnit?: Maybe<UnitObject>;
+  createTenantRelation?: Maybe<TenantRelationObject>;
   deleteAttachment?: Maybe<Scalars['String']['output']>;
-  deleteBrand?: Maybe<Scalars['String']['output']>;
   deleteClient?: Maybe<Scalars['String']['output']>;
   deleteIdentity?: Maybe<Scalars['String']['output']>;
   deleteIssue?: Maybe<Scalars['String']['output']>;
   deleteOrganization?: Maybe<Scalars['String']['output']>;
-  deletePlatformMember?: Maybe<Scalars['String']['output']>;
+  deleteOrganizationRelation?: Maybe<Scalars['Boolean']['output']>;
+  deletePlatformRelation?: Maybe<Scalars['String']['output']>;
   deleteTenant?: Maybe<Scalars['String']['output']>;
-  deleteTenantMember?: Maybe<Scalars['Boolean']['output']>;
-  deleteUnit?: Maybe<Scalars['String']['output']>;
+  deleteTenantRelation?: Maybe<Scalars['Boolean']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
-  updateBrand?: Maybe<BrandObject>;
-  updateCategory?: Maybe<CategoryObject>;
+  setMyOrganizationPreference?: Maybe<OrganizationPreferenceObject>;
   updateIssue?: Maybe<Scalars['String']['output']>;
   updateOrganization?: Maybe<OrganizationObject>;
-  updateUnit?: Maybe<UnitObject>;
-};
-
-
-export type MutationCreateBrandArgs = {
-  input: CreateBrandInput;
-};
-
-
-export type MutationCreateCategoryArgs = {
-  input: CreateCategoryInput;
+  updateProfileGender?: Maybe<ProfileObject>;
+  updateProfileName?: Maybe<ProfileObject>;
 };
 
 
@@ -257,13 +198,18 @@ export type MutationCreateOrganizationArgs = {
 };
 
 
-export type MutationCreatePlatformMemberArgs = {
-  input: CreatePlatformMemberInput;
+export type MutationCreateOrganizationRelationArgs = {
+  input: CreateOrganizationRelationInput;
 };
 
 
-export type MutationCreateProductArgs = {
-  input: CreateProductInput;
+export type MutationCreatePhotoUploadRequestArgs = {
+  input: CreatePhotoUploadRequestInput;
+};
+
+
+export type MutationCreatePlatformRelationArgs = {
+  input: CreatePlatformRelationInput;
 };
 
 
@@ -277,22 +223,12 @@ export type MutationCreateTenantArgs = {
 };
 
 
-export type MutationCreateTenantMemberArgs = {
-  input: CreateTenantMemberInput;
-};
-
-
-export type MutationCreateUnitArgs = {
-  input: CreateUnitInput;
+export type MutationCreateTenantRelationArgs = {
+  input: CreateTenantRelationInput;
 };
 
 
 export type MutationDeleteAttachmentArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type MutationDeleteBrandArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -317,7 +253,12 @@ export type MutationDeleteOrganizationArgs = {
 };
 
 
-export type MutationDeletePlatformMemberArgs = {
+export type MutationDeleteOrganizationRelationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeletePlatformRelationArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -328,23 +269,13 @@ export type MutationDeleteTenantArgs = {
 };
 
 
-export type MutationDeleteTenantMemberArgs = {
+export type MutationDeleteTenantRelationArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type MutationDeleteUnitArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateBrandArgs = {
-  input: UpdateBrandInput;
-};
-
-
-export type MutationUpdateCategoryArgs = {
-  input: UpdateCategoryInput;
+export type MutationSetMyOrganizationPreferenceArgs = {
+  organizationId: Scalars['String']['input'];
 };
 
 
@@ -359,12 +290,18 @@ export type MutationUpdateOrganizationArgs = {
 };
 
 
-export type MutationUpdateUnitArgs = {
-  input: UpdateUnitInput;
+export type MutationUpdateProfileGenderArgs = {
+  input: UpdateProfileGenderInput;
+};
+
+
+export type MutationUpdateProfileNameArgs = {
+  input: UpdateProfileNameInput;
 };
 
 export type OrganizationObject = {
   __typename?: 'OrganizationObject';
+  children?: Maybe<Array<OrganizationObject>>;
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
@@ -376,16 +313,39 @@ export type OrganizationObject = {
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
-export type PaginatedFileOutput = {
-  __typename?: 'PaginatedFileOutput';
-  rowCount?: Maybe<Scalars['Float']['output']>;
-  rows?: Maybe<Array<FileOutput>>;
+export type OrganizationPreferenceObject = {
+  __typename?: 'OrganizationPreferenceObject';
+  organizationId?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type OrganizationRelationObject = {
+  __typename?: 'OrganizationRelationObject';
+  id?: Maybe<Scalars['String']['output']>;
+  identityId?: Maybe<Scalars['String']['output']>;
+  organizationId?: Maybe<Scalars['String']['output']>;
+  relation?: Maybe<Scalars['String']['output']>;
 };
 
 export type PaginatedProjectObject = {
   __typename?: 'PaginatedProjectObject';
   rowCount?: Maybe<Scalars['Float']['output']>;
   rows?: Maybe<Array<ProjectObject>>;
+};
+
+export type PhotoUploadHeaderObject = {
+  __typename?: 'PhotoUploadHeaderObject';
+  key?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export type PhotoUploadTargetObject = {
+  __typename?: 'PhotoUploadTargetObject';
+  expiresAt?: Maybe<Scalars['String']['output']>;
+  headers?: Maybe<Array<PhotoUploadHeaderObject>>;
+  uploadRequestId?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type PlatformIdentityObject = {
@@ -396,26 +356,30 @@ export type PlatformIdentityObject = {
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
-export type PlatformMemberObject = {
-  __typename?: 'PlatformMemberObject';
+export type PlatformRelationObject = {
+  __typename?: 'PlatformRelationObject';
   id?: Maybe<Scalars['String']['output']>;
   identityId?: Maybe<Scalars['String']['output']>;
   relation?: Maybe<Scalars['String']['output']>;
 };
 
-export type ProductObject = {
-  __typename?: 'ProductObject';
-  brandId?: Maybe<Scalars['String']['output']>;
-  categoryId?: Maybe<Scalars['String']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
+export type ProfileGender =
+  | 'FEMALE'
+  | 'MALE'
+  | 'OTHER'
+  | 'UNSPECIFIED';
+
+export type ProfileObject = {
+  __typename?: 'ProfileObject';
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  defaultUnitId?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  gender?: Maybe<ProfileGender>;
   id?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  productType?: Maybe<Scalars['String']['output']>;
-  sku?: Maybe<Scalars['String']['output']>;
+  identityId?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  middleName?: Maybe<Scalars['String']['output']>;
+  photoUrl?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -427,8 +391,7 @@ export type ProjectObject = {
 
 export type Query = {
   __typename?: 'Query';
-  findBrands?: Maybe<Array<BrandObject>>;
-  findFiles?: Maybe<PaginatedFileOutput>;
+  attachmentServiceHealth?: Maybe<Scalars['String']['output']>;
   findIdentities?: Maybe<Array<IdentityObject>>;
   findIssue?: Maybe<IssueObject>;
   findProject?: Maybe<ProjectObject>;
@@ -436,28 +399,24 @@ export type Query = {
   findProjects?: Maybe<PaginatedProjectObject>;
   findStatuses?: Maybe<Array<StatusObject>>;
   findSubIssues?: Maybe<Array<IssueObject>>;
-  findUnits?: Maybe<Array<UnitObject>>;
-  getBrand?: Maybe<BrandObject>;
   getClient?: Maybe<ClientObject>;
   getIdentities?: Maybe<Array<PlatformIdentityObject>>;
+  getIdentityRelations?: Maybe<IdentityRelationsObject>;
+  getMyOrganizationPreference?: Maybe<OrganizationPreferenceObject>;
+  getMyOrganizations?: Maybe<Array<OrganizationObject>>;
+  getMyTenants?: Maybe<Array<TenantObject>>;
   getOrganization?: Maybe<OrganizationObject>;
+  getOrganizationRelation?: Maybe<OrganizationRelationObject>;
+  getOrganizationRelations?: Maybe<Array<OrganizationRelationObject>>;
   getOrganizations?: Maybe<Array<OrganizationObject>>;
-  getPlatformMember?: Maybe<PlatformMemberObject>;
-  getPlatformMembers?: Maybe<Array<PlatformMemberObject>>;
-  getProduct?: Maybe<ProductObject>;
+  getPlatformRelation?: Maybe<PlatformRelationObject>;
+  getPlatformRelations?: Maybe<Array<PlatformRelationObject>>;
   getTenant?: Maybe<TenantObject>;
-  getTenantMember?: Maybe<TenantMemberObject>;
-  getTenantMembers?: Maybe<Array<TenantMemberObject>>;
+  getTenantRelation?: Maybe<TenantRelationObject>;
+  getTenantRelations?: Maybe<Array<TenantRelationObject>>;
   getTenants?: Maybe<Array<TenantObject>>;
-  getUnit?: Maybe<UnitObject>;
   hello?: Maybe<HelloXyz>;
   hello2?: Maybe<Scalars['String']['output']>;
-  productServiceHealth?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type QueryFindFilesArgs = {
-  issueId: Scalars['String']['input'];
 };
 
 
@@ -486,11 +445,6 @@ export type QueryFindSubIssuesArgs = {
 };
 
 
-export type QueryGetBrandArgs = {
-  id: Scalars['String']['input'];
-};
-
-
 export type QueryGetClientArgs = {
   id: Scalars['String']['input'];
 };
@@ -501,8 +455,25 @@ export type QueryGetIdentitiesArgs = {
 };
 
 
+export type QueryGetIdentityRelationsArgs = {
+  identityId: Scalars['String']['input'];
+};
+
+
 export type QueryGetOrganizationArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryGetOrganizationRelationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetOrganizationRelationsArgs = {
+  identityId?: InputMaybe<Scalars['String']['input']>;
+  organizationId: Scalars['String']['input'];
+  relation?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -512,19 +483,14 @@ export type QueryGetOrganizationsArgs = {
 };
 
 
-export type QueryGetPlatformMemberArgs = {
+export type QueryGetPlatformRelationArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type QueryGetPlatformMembersArgs = {
+export type QueryGetPlatformRelationsArgs = {
   identityId?: InputMaybe<Scalars['String']['input']>;
   relation?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryGetProductArgs = {
-  id: Scalars['String']['input'];
 };
 
 
@@ -533,12 +499,12 @@ export type QueryGetTenantArgs = {
 };
 
 
-export type QueryGetTenantMemberArgs = {
+export type QueryGetTenantRelationArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type QueryGetTenantMembersArgs = {
+export type QueryGetTenantRelationsArgs = {
   identityId?: InputMaybe<Scalars['String']['input']>;
   relation?: InputMaybe<Scalars['String']['input']>;
   tenantId: Scalars['String']['input'];
@@ -549,23 +515,10 @@ export type QueryGetTenantsArgs = {
   platformId: Scalars['String']['input'];
 };
 
-
-export type QueryGetUnitArgs = {
-  id: Scalars['String']['input'];
-};
-
 export type StatusObject = {
   __typename?: 'StatusObject';
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
-};
-
-export type TenantMemberObject = {
-  __typename?: 'TenantMemberObject';
-  id?: Maybe<Scalars['String']['output']>;
-  identityId?: Maybe<Scalars['String']['output']>;
-  relation?: Maybe<Scalars['String']['output']>;
-  tenantId?: Maybe<Scalars['String']['output']>;
 };
 
 export type TenantObject = {
@@ -579,32 +532,12 @@ export type TenantObject = {
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
-export type UnitObject = {
-  __typename?: 'UnitObject';
-  code?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+export type TenantRelationObject = {
+  __typename?: 'TenantRelationObject';
   id?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  symbol?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-};
-
-export type UpdateBrandInput = {
-  brandId: Scalars['String']['input'];
-  code?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateCategoryInput = {
-  categoryId: Scalars['String']['input'];
-  code?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  parentCategoryId?: InputMaybe<Scalars['String']['input']>;
+  identityId?: Maybe<Scalars['String']['output']>;
+  relation?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
 };
 
 export type UpdateIssueInput = {
@@ -623,20 +556,21 @@ export type UpdateOrganizationInput = {
   parentOrganizationId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateUnitInput = {
-  code?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  symbol?: InputMaybe<Scalars['String']['input']>;
-  unitId: Scalars['String']['input'];
+export type UpdateProfileGenderInput = {
+  gender: ProfileGender;
+};
+
+export type UpdateProfileNameInput = {
+  firstName: Scalars['String']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  middleName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Join__Graph =
   | 'ATTACHMENT'
   | 'IDENTITY_SERVICE'
   | 'ISSUES_SERVICE'
-  | 'PLATFORM_SERVICE'
-  | 'PRODUCT_SERVICE';
+  | 'PLATFORM_SERVICE';
 
 export type Link__Purpose =
   /** `EXECUTION` features provide metadata necessary for operation execution. */

@@ -46,7 +46,11 @@ export class KetoAuthorizationGraphProvider implements IAuthorizationGraphProvid
   }
 
   async listRelationships(filter?: ListRelationshipsFilter): Promise<GraphRelationship[]> {
-    const namespaces = filter?.object ? [filter.object.namespace] : [...GRAPH_NAMESPACES];
+    const namespaces = filter?.object
+      ? [filter.object.namespace]
+      : filter?.namespace
+        ? [filter.namespace]
+        : [...GRAPH_NAMESPACES];
 
     if (filter?.subject && filter.subjectSet) {
       throw new Error("ListRelationshipsFilter must not set both subject and subjectSet");

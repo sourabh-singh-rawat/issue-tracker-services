@@ -1,0 +1,408 @@
+{
+  "folders": {
+    "Pine": {},
+    "Pine (multi-db)": {},
+    "Ory": {}
+  },
+  "connections": {
+    "postgres-jdbc-pine-identity": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "identity",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "identity",
+        "url": "jdbc:postgresql://localhost:5432/identity",
+        "user": "identity",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-issues": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "issues",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "issues",
+        "url": "jdbc:postgresql://localhost:5432/issues",
+        "user": "issues",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-inventory": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "inventory",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "inventory",
+        "url": "jdbc:postgresql://localhost:5432/inventory",
+        "user": "inventory",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-product": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "product",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "product",
+        "url": "jdbc:postgresql://localhost:5432/product",
+        "user": "product",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-attachment": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "attachment",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "attachment",
+        "url": "jdbc:postgresql://localhost:5432/attachment",
+        "user": "attachment",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-notification": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "notification",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "notification",
+        "url": "jdbc:postgresql://localhost:5432/notification",
+        "user": "notification",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-platform": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "platform",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "platform",
+        "url": "jdbc:postgresql://localhost:5432/platform",
+        "user": "platform",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-admin": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "postgres (admin)",
+      "folder": "Pine",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "postgres",
+        "url": "jdbc:postgresql://localhost:5432/postgres",
+        "user": "postgres",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "true"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-identity": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "identity",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5433",
+        "database": "identity",
+        "url": "jdbc:postgresql://localhost:5433/identity",
+        "user": "identity",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-issues": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "issues",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5434",
+        "database": "issues",
+        "url": "jdbc:postgresql://localhost:5434/issues",
+        "user": "issues",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-notification": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "notification",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5435",
+        "database": "notification",
+        "url": "jdbc:postgresql://localhost:5435/notification",
+        "user": "notification",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-attachment": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "attachment",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5436",
+        "database": "attachment",
+        "url": "jdbc:postgresql://localhost:5436/attachment",
+        "user": "attachment",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-inventory": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "inventory",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5437",
+        "database": "inventory",
+        "url": "jdbc:postgresql://localhost:5437/inventory",
+        "user": "inventory",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-product": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "product",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5438",
+        "database": "product",
+        "url": "jdbc:postgresql://localhost:5438/product",
+        "user": "product",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-pine-multi-platform": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "platform",
+      "folder": "Pine (multi-db)",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5439",
+        "database": "platform",
+        "url": "jdbc:postgresql://localhost:5439/platform",
+        "user": "platform",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-ory-kratos": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "kratos",
+      "folder": "Ory",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5440",
+        "database": "kratos",
+        "url": "jdbc:postgresql://localhost:5440/kratos",
+        "user": "kratos",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-ory-hydra": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "hydra",
+      "folder": "Ory",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5440",
+        "database": "hydra",
+        "url": "jdbc:postgresql://localhost:5440/hydra",
+        "user": "hydra",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-ory-keto": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "keto",
+      "folder": "Ory",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5440",
+        "database": "keto",
+        "url": "jdbc:postgresql://localhost:5440/keto",
+        "user": "keto",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "false"
+        }
+      }
+    },
+    "postgres-jdbc-ory-admin": {
+      "provider": "postgresql",
+      "driver": "postgres-jdbc",
+      "name": "postgres (admin)",
+      "folder": "Ory",
+      "save-password": false,
+      "configuration": {
+        "host": "localhost",
+        "port": "5440",
+        "database": "postgres",
+        "url": "jdbc:postgresql://localhost:5440/postgres",
+        "user": "postgres",
+        "configurationType": "MANUAL",
+        "type": "dev",
+        "auth-model": "native",
+        "provider-properties": {
+          "sslMode": "disable",
+          "@dbeaver-show-non-default-db@": "true"
+        }
+      }
+    }
+  }
+}

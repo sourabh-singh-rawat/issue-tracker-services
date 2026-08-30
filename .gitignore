@@ -148,6 +148,7 @@ k8s/secrets
 
 # Docker local data
 infra/data/
+.local/
 
 # Combined scripts outputs
 combined_output.txt
@@ -155,6 +156,11 @@ combined_output.txt
 # pgAdmin generated configs
 infra/docker/pgadmin/pgpass
 infra/docker/pgadmin/servers.json
+
+# DBeaver local credentials / generated state
+.dbeaver/credentials-config.json
+.dbeaver/*.bak
+.dbeaver/project-metadata.json
 
 # Editor directories and files
 .vscode/*

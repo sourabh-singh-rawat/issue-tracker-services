@@ -40,8 +40,8 @@ feat(erp-web): one-line summary
 ## Product release
 
 ```bash
-pnpm create-release-branch           # next N for today from development
-pnpm create-release-branch --push
+pnpm branch:release                  # switches to dev, then next N for today
+pnpm branch:release --push
 pnpm release-branch-check            # name shape + no leftover changesets
 # merge release/* → main → release.yml tags vYYYY.MM.DD.N + GitHub Release
 ```

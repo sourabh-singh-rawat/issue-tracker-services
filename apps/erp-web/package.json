@@ -1,23 +1,23 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@pine/erp-web",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
-  "description": "Pine ERP web — issues, inventory, and related product UI",
+  "description": "Pine ERP web — issues and related product UI",
   "keywords": [
     "client",
     "erp",
     "react"
   ],
-  "homepage": "https://github.com/sourabh-singh-rawat/issue-tracker#readme",
+  "homepage": "https://github.com/sourabh-singh-rawat/pine#readme",
   "bugs": {
-    "url": "https://github.com/sourabh-singh-rawat/issue-tracker/issues"
+    "url": "https://github.com/sourabh-singh-rawat/pine/issues"
   },
   "license": "ISC",
   "author": "Sourabh Singh Rawat",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sourabh-singh-rawat/issue-tracker.git"
+    "url": "git+https://github.com/sourabh-singh-rawat/pine.git"
   },
   "type": "module",
   "main": "src/main.tsx",

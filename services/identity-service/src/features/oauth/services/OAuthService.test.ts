@@ -294,7 +294,7 @@ describe("OAuthService.exchangeToken", () => {
       service.exchangeToken({
         grantType: "authorization_code",
         code: "auth-code-1",
-        clientId: "inventory-web",
+        clientId: "erp-web",
         redirectUri: "http://localhost:3001/callback",
         codeVerifier: "verifier-1",
       }),
@@ -309,7 +309,7 @@ describe("OAuthService.exchangeToken", () => {
 
     expect(exchangeToken).toHaveBeenCalledWith({
       grantType: "authorization_code",
-      clientId: "inventory-web",
+      clientId: "erp-web",
       code: "auth-code-1",
       redirectUri: "http://localhost:3001/callback",
       codeVerifier: "verifier-1",
@@ -324,7 +324,7 @@ describe("OAuthService.exchangeToken", () => {
       service.exchangeToken({
         grantType: "authorization_code",
         code: "bad-code",
-        clientId: "inventory-web",
+        clientId: "erp-web",
         redirectUri: "http://localhost:3001/callback",
         codeVerifier: "verifier-1",
       }),
@@ -339,7 +339,7 @@ describe("OAuthService.exchangeToken", () => {
       service.exchangeToken({
         grantType: "authorization_code",
         code: "auth-code-1",
-        clientId: "inventory-web",
+        clientId: "erp-web",
         redirectUri: "http://localhost:3001/callback",
         codeVerifier: "verifier-1",
       }),

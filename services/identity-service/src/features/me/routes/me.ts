@@ -4,6 +4,7 @@ import { container } from "@/bootstrap";
 import { TYPES } from "@/bootstrap/container-types";
 import type { IMeService } from "@/features/me/services";
 import { MeResponseSchema, type MeResponse } from "@/features/me/schemas";
+import { toMeProfileFullName, toMeProfilePhotoUrl } from "@/features/me/utils";
 import { InvalidCredentialError } from "@/integrations/identity";
 
 export const me: HttpRoute = {
@@ -26,14 +27,26 @@ export const me: HttpRoute = {
     }
 
     const service = container.get<IMeService>(TYPES.MeService);
-    const identity = await service.getCurrentUser(sessionToken);
+    const {
+      identity: { id, email, emailVerified },
+      profile,
+    } = await service.getCurrentUser(sessionToken);
 
     const response: MeResponse = {
-      identity: {
-        id: identity.id,
-        email: identity.email,
-        emailVerified: identity.emailVerified,
-      },
+      identity: { id, email, emailVerified },
+      profile: profile
+        ? {
+            id: profile.id,
+            identityId: profile.identityId,
+            firstName: profile.firstName,
+            middleName: profile.middleName,
+            lastName: profile.lastName,
+            fullName: toMeProfileFullName(profile.firstName, profile.middleName, profile.lastName),
+            gender: profile.gender,
+            description: profile.description,
+            photoUrl: toMeProfilePhotoUrl(profile.photoUrl),
+          }
+        : null,
     };
 
     return json(response);

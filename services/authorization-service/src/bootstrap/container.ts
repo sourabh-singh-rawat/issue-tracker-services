@@ -1,10 +1,12 @@
-import {
-  HttpAuthorizationClient,
-  type IAuthorizationClient,
-} from "@pine/authorization";
+import { HttpAuthorizationClient, type IAuthorizationClient } from "@pine/authorization";
 import type { IBroker } from "@pine/events";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import { createHttpServer, type IHttpServer } from "@pine/server";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
@@ -12,13 +14,18 @@ import { env } from "@/bootstrap/env";
 import { ketoClient } from "@/bootstrap/keto-client";
 import { logger } from "@/bootstrap/logger";
 import { AuthorizationService, type IAuthorizationService } from "@/features/authorization";
-import { TenantSyncConsumer } from "@/features/platform";
+import { AuthorizationProfileSyncConsumer } from "@/features/identity";
+
+import {
+  AuthorizationOrganizationRelationSyncConsumer,
+  AuthorizationOrganizationSyncConsumer,
+  AuthorizationPlatformRelationSyncConsumer,
+  AuthorizationTenantRelationSyncConsumer,
+  AuthorizationTenantSyncConsumer,
+} from "@/features/platform";
 
 import type { IAuthorizationGraphProvider } from "@/integrations/authorization";
-import {
-  KetoAuthorizationGraphProvider,
-  KetoClient,
-} from "@/integrations/authorization/ory-keto";
+import { KetoAuthorizationGraphProvider, KetoClient } from "@/integrations/authorization/ory-keto";
 import { routes } from "@/routes";
 
 export const container = new Container({ defaultScope: "Singleton" });
@@ -26,15 +33,17 @@ export const container = new Container({ defaultScope: "Singleton" });
 container.bind(TYPES.Logger).toConstantValue(logger);
 container.bind<IBroker>(TYPES.Broker).toConstantValue(broker);
 container.bind<KetoClient>(TYPES.KetoClient).toConstantValue(ketoClient);
-container
-  .bind<IAuthorizationGraphProvider>(TYPES.AuthorizationGraphProvider)
-  .to(KetoAuthorizationGraphProvider);
+container.bind<IAuthorizationGraphProvider>(TYPES.AuthorizationGraphProvider).to(KetoAuthorizationGraphProvider);
 container.bind<IAuthorizationService>(TYPES.AuthorizationService).to(AuthorizationService);
+container.bind<IAuthorizationClient>(TYPES.AuthorizationClient).toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
+container.bind<AuthorizationTenantSyncConsumer>(TYPES.AuthorizationTenantSyncConsumer).to(AuthorizationTenantSyncConsumer);
+container.bind<AuthorizationOrganizationSyncConsumer>(TYPES.AuthorizationOrganizationSyncConsumer).to(AuthorizationOrganizationSyncConsumer);
 container
-  .bind<IAuthorizationClient>(TYPES.AuthorizationClient)
-  .toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
-container.bind<TenantSyncConsumer>(TYPES.TenantSyncConsumer).to(TenantSyncConsumer);
-
+  .bind<AuthorizationOrganizationRelationSyncConsumer>(TYPES.AuthorizationOrganizationRelationSyncConsumer)
+  .to(AuthorizationOrganizationRelationSyncConsumer);
+container.bind<AuthorizationTenantRelationSyncConsumer>(TYPES.AuthorizationTenantRelationSyncConsumer).to(AuthorizationTenantRelationSyncConsumer);
+container.bind<AuthorizationPlatformRelationSyncConsumer>(TYPES.AuthorizationPlatformRelationSyncConsumer).to(AuthorizationPlatformRelationSyncConsumer);
+container.bind<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer).to(AuthorizationProfileSyncConsumer);
 
 container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
   createHttpServer({
@@ -44,7 +53,13 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: env.NODE_ENV,
       version: 1,
     },
-    cors: { credentials: true, origin: env.ERP_WEB_URL },
+    https: {
+      key: readFileSync(env.AUTHORIZATION_SERVICE_TLS_KEY_PATH),
+      cert: readFileSync(env.AUTHORIZATION_SERVICE_TLS_CERT_PATH),
+      ca: readFileSync(env.CA_CERT_PATH),
+      requestCert: true,
+      rejectUnauthorized: true,
+    },
     cookie: { secret: env.JWT_SECRET },
     openapi: {
       info: {
@@ -55,6 +70,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       },
       servers: [{ url: env.AUTHORIZATION_SERVICE_URL }],
       tags: [{ name: "authorization", description: "Authorization graph end-points" }],
+    },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
     },
     routes,
   }),

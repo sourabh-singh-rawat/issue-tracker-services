@@ -107,7 +107,7 @@ The Issue Tracker is a Web Application that tracks issues in a project. Once ins
 
 5. **Clone the git repo and install dependencies:**
 
-   - Clone the git repo using `git clone https://github.com/sourabh-singh-rawat/issue-tracker.git`
+   - Clone the git repo using `git clone https://github.com/sourabh-singh-rawat/pine.git`
    - Install backend dependencies by going to `/server` and using `npm install`
    - Install frontend dependencies going to `/client` and using `npm install`
 

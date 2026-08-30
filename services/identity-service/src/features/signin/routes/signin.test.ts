@@ -12,18 +12,16 @@ vi.mock("@/bootstrap", () => ({
 import { TYPES } from "@/bootstrap/container-types";
 import { signin } from "@/features/signin/routes/signin";
 
-function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
-  return {
-    method: partial.method ?? "POST",
-    url: partial.url ?? "/identity/signin",
-    headers: partial.headers ?? {},
-    query: partial.query ?? {},
-    params: partial.params ?? {},
-    cookies: partial.cookies ?? {},
-    body: partial.body,
-    file: partial.file ?? (async () => undefined),
-  };
-}
+const httpRequest = (partial: Partial<HttpRequest>): HttpRequest => ({
+  method: partial.method ?? "POST",
+  url: partial.url ?? "/identity/signin",
+  headers: partial.headers ?? {},
+  query: partial.query ?? {},
+  params: partial.params ?? {},
+  cookies: partial.cookies ?? {},
+  body: partial.body,
+  file: partial.file ?? (async () => undefined),
+});
 
 describe("signin route", () => {
   beforeEach(() => {
@@ -76,7 +74,7 @@ describe("signin route", () => {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
-          secure: false,
+          secure: true,
           expires: expiresAt,
         },
       ],
@@ -136,7 +134,7 @@ describe("signin route", () => {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
-          secure: false,
+          secure: true,
           expires: expiresAt,
         },
       ],

@@ -70,6 +70,44 @@ describe("TenantService", () => {
     expect(tenantRepository.findAll).toHaveBeenCalledOnce();
   });
 
+  it("lists my tenants for identity", async () => {
+    const tenantRepository = {
+      findByIds: vi.fn().mockResolvedValue([tenant]),
+    };
+    const authorizationClient = {
+      listRelationships: vi.fn().mockResolvedValue([
+        {
+          object: { namespace: "tenant", id: tenant.id },
+          relation: "member",
+          subject: { namespace: "identity", id: identityId },
+        },
+      ]),
+    };
+
+    const service = createService({ tenantRepository, authorizationClient });
+
+    await expect(service.listMyTenants(identityId)).resolves.toEqual([tenant]);
+    expect(authorizationClient.listRelationships).toHaveBeenCalledWith({
+      namespace: "tenant",
+      subject: { namespace: "identity", id: identityId },
+    });
+    expect(tenantRepository.findByIds).toHaveBeenCalledWith([tenant.id]);
+  });
+
+  it("returns empty list if identity has no tenant relationships", async () => {
+    const tenantRepository = {
+      findByIds: vi.fn().mockResolvedValue([]),
+    };
+    const authorizationClient = {
+      listRelationships: vi.fn().mockResolvedValue([]),
+    };
+
+    const service = createService({ tenantRepository, authorizationClient });
+
+    await expect(service.listMyTenants(identityId)).resolves.toEqual([]);
+    expect(tenantRepository.findByIds).not.toHaveBeenCalled();
+  });
+
   it("gets a tenant by id", async () => {
     const tenantRepository = {
       findById: vi.fn().mockResolvedValue(tenant),

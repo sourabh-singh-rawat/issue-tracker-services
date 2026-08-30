@@ -1,5 +1,18 @@
 # @pine/identity-web
 
+## 0.5.0
+
+### Minor Changes
+
+- 3925de4: feat(attachment): add attachment service upload target, proxy, and outbox event integration
+- bfaca3c: feat(identity): extract profiles with name, events, and authz sync
+- 35cec8a: feat(identity-web): add navbar and gender to personal info
+
+### Patch Changes
+
+- 01ba62c: feat(attachment-scanner): implement attachment scanner service and malware scanning pipeline
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+
 ## 0.4.0
 
 ### Minor Changes

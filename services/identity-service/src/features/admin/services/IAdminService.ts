@@ -1,4 +1,4 @@
-import type { Identity } from "@/db";
+import type { PublicIdentity } from "@/features/identities/services/IIdentityService";
 
 export type CreateIdentityOptions = {
   email: string;
@@ -16,7 +16,7 @@ export interface IAdminService {
    * profile, and schedule UserRegistered. Rolls back the IdP identity if local
    * persistence fails.
    */
-  createIdentity(options: CreateIdentityOptions): Promise<Identity>;
+  createIdentity(options: CreateIdentityOptions): Promise<PublicIdentity>;
 
   /**
    * Load the local identity, delete it from the IdP, then soft-delete the local
@@ -25,5 +25,5 @@ export interface IAdminService {
   deleteIdentity(identityId: string): Promise<void>;
 
   /** List all non-deleted identities (admin). */
-  findIdentities(): Promise<Identity[]>;
+  findIdentities(): Promise<PublicIdentity[]>;
 }

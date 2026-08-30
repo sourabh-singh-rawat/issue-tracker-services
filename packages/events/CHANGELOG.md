@@ -1,5 +1,28 @@
 # @pine/events
 
+## 0.4.0
+
+### Minor Changes
+
+- bfaca3c: feat(identity): extract profiles with name, events, and authz sync
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+- 8773588: feat(platform): add organization relations and authorization sync
+- c2b64b6: feat(platform): rename members to relations and publish relation created via outbox
+- baef746: chore: remove inventory-service and product-service
+
+### Patch Changes
+
+- aa9d59e: feat(attachment): publish quarantined outbox event on upload completion
+- 01ba62c: feat(attachment-scanner): implement attachment scanner service and malware scanning pipeline
+- 3925de4: feat(attachment): add attachment service upload target, proxy, and outbox event integration
+- Updated dependencies [3925de4]
+- Updated dependencies [715fce7]
+- Updated dependencies [d01fc4c]
+- Updated dependencies [f3ae7b4]
+- Updated dependencies [1fad54f]
+  - @pine/server@1.1.0
+  - @pine/common@0.1.0
+
 ## 0.3.0
 
 ### Minor Changes

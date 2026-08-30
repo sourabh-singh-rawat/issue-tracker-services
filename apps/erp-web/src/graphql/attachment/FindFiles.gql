@@ -1,9 +1,0 @@
-query FindFiles($issueId: String!) {
-  findFiles(issueId: $issueId) {
-    rowCount
-    rows {
-      id
-      thumbnailLink
-    }
-  }
-}

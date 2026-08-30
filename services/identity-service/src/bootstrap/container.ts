@@ -1,4 +1,10 @@
+import { HttpAttachmentClient, type IAttachmentClient } from "@pine/attachment";
+import { HttpAuthorizationClient, type IAuthorizationClient } from "@pine/authorization";
 import { NatsPublisher, type IPublisher } from "@pine/events";
+import {
+  resolveIdentityFromHeaders,
+  resolveTenantContextFromHeaders,
+} from "@pine/identity";
 import { createGraphQLServer, createHttpServer, type IHttpServer } from "@pine/server";
 import {
   ExponentialBackoffPolicy,
@@ -16,6 +22,7 @@ import {
   type IRetryPolicy,
 } from "@pine/outbox";
 import { Container } from "inversify";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { broker } from "@/bootstrap/broker";
 import { TYPES } from "@/bootstrap/container-types";
@@ -35,16 +42,16 @@ import { IOAuthService, OAuthService } from "@/features/oauth";
 import { IRegistrationService, RegistrationService } from "@/features/registration";
 import { IVerificationService, VerificationService } from "@/features/verification";
 import { ClientSeederService, ClientService, IClientSeederService, IClientService } from "@/features/clients";
+import { IIdentityRepository, IIdentityService, IdentityRepository, IdentityService } from "@/features/identities";
 import {
-  IIdentityProfileRepository,
-  IIdentityProfileService,
-  IIdentityRepository,
-  IIdentityService,
-  IdentityProfileRepository,
-  IdentityProfileService,
-  IdentityRepository,
-  IdentityService,
-} from "@/features/identities";
+  IProfilePhotoUploadRequestRepository,
+  IProfileRepository,
+  IProfileService,
+  ProfilePhotoAttachmentConsumer,
+  ProfilePhotoUploadRequestRepository,
+  ProfileRepository,
+  ProfileService,
+} from "@/features/profiles";
 import {
   IIdentityAdminProvider,
   IRegistrationProvider,
@@ -91,9 +98,13 @@ container.bind(TYPES.HydraClient).toConstantValue(hydraClient);
 container.bind(TYPES.KratosErrorMapper).to(KratosErrorMapper);
 
 container.bind<IIdentityRepository>(TYPES.IdentityRepository).to(IdentityRepository);
-container.bind<IIdentityProfileRepository>(TYPES.IdentityProfileRepository).to(IdentityProfileRepository);
 container.bind<IIdentityService>(TYPES.IdentityService).to(IdentityService);
-container.bind<IIdentityProfileService>(TYPES.IdentityProfileService).to(IdentityProfileService);
+container.bind<IProfileRepository>(TYPES.ProfileRepository).to(ProfileRepository);
+container.bind<IProfilePhotoUploadRequestRepository>(TYPES.ProfilePhotoUploadRequestRepository).to(ProfilePhotoUploadRequestRepository);
+container.bind<IProfileService>(TYPES.ProfileService).to(ProfileService);
+container.bind<ProfilePhotoAttachmentConsumer>(TYPES.ProfilePhotoAttachmentConsumer).to(ProfilePhotoAttachmentConsumer);
+container.bind<IAuthorizationClient>(TYPES.AuthorizationClient).toConstantValue(new HttpAuthorizationClient({ baseUrl: env.AUTHORIZATION_SERVICE_URL }));
+container.bind<IAttachmentClient>(TYPES.AttachmentClient).toConstantValue(new HttpAttachmentClient({ baseUrl: env.ATTACHMENT_SERVICE_URL }));
 container.bind<IClientService>(TYPES.ClientService).to(ClientService);
 container.bind<IClientSeederService>(TYPES.ClientSeederService).to(ClientSeederService);
 container.bind<IRegistrationProvider>(TYPES.RegistrationProvider).to(KratosRegistrationProvider);
@@ -120,7 +131,13 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       environment: env.NODE_ENV,
       version: 1,
     },
-    cors: { credentials: true, origin: env.IDENTITY_WEB_URL },
+    https: {
+      key: readFileSync(env.IDENTITY_SERVICE_TLS_KEY_PATH),
+      cert: readFileSync(env.IDENTITY_SERVICE_TLS_CERT_PATH),
+      ca: readFileSync(env.CA_CERT_PATH),
+      requestCert: true,
+      rejectUnauthorized: true,
+    },
     cookie: { secret: env.JWT_SECRET },
     openapi: {
       info: {
@@ -140,6 +157,9 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
         },
       },
     },
+    hooks: {
+      onRequest: [resolveIdentityFromHeaders, resolveTenantContextFromHeaders],
+    },
     graphql: createGraphQLServer({
       schema,
       context: createContext,
@@ -149,4 +169,3 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
 );
 
 export const openApiOutputPath = path.join(process.cwd(), "dist", "openapi.json");
-

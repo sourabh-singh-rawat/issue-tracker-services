@@ -1,5 +1,40 @@
 # @pine/authorization-service
 
+## 0.4.0
+
+### Minor Changes
+
+- bfaca3c: feat(identity): extract profiles with name, events, and authz sync
+- bee71c3: feat(platform): add identity relations page and graph
+- 77b700a: feat(organization): add org switcher with nested memberships and tenant.read_list
+- 8773588: feat(platform): add organization relations and authorization sync
+- baef746: chore: remove inventory-service and product-service
+- 1fad54f: feat(security): require mTLS between gateways and backend services
+
+### Patch Changes
+
+- bad0ca6: chore(authz): suppress sonar class-name lint on keto namespaces
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+- c2b64b6: feat(platform): rename members to relations and publish relation created via outbox
+- Updated dependencies [aa9d59e]
+- Updated dependencies [01ba62c]
+- Updated dependencies [3925de4]
+- Updated dependencies [bfaca3c]
+- Updated dependencies [715fce7]
+- Updated dependencies [d01fc4c]
+- Updated dependencies [f3ae7b4]
+- Updated dependencies [77b700a]
+- Updated dependencies [8773588]
+- Updated dependencies [c2b64b6]
+- Updated dependencies [baef746]
+- Updated dependencies [1fad54f]
+  - @pine/events@0.4.0
+  - @pine/server@1.1.0
+  - @pine/authorization@0.4.0
+  - @pine/identity@0.2.0
+  - @pine/common@0.1.0
+  - @pine/security@0.1.2
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { auditColumns, idColumn } from "@/db/columns";
-import { IdentityProfiles } from "@/db/tables/IdentityProfiles";
+import { Profiles } from "@/db/tables/Profiles";
 
 export const Identities = pgTable("identities", {
   ...idColumn,
@@ -11,9 +11,9 @@ export const Identities = pgTable("identities", {
 });
 
 export const IdentitiesRelations = relations(Identities, ({ one }) => ({
-  profile: one(IdentityProfiles, {
+  profile: one(Profiles, {
     fields: [Identities.id],
-    references: [IdentityProfiles.identityId],
+    references: [Profiles.identityId],
   }),
 }));
 

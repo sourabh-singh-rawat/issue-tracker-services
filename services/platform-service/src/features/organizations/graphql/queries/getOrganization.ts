@@ -1,3 +1,4 @@
+import { requireIdentityId } from "@pine/identity";
 import { builder } from "@pine/server";
 import { container } from "@/bootstrap/container";
 import { TYPES } from "@/bootstrap/container-types";
@@ -12,7 +13,7 @@ builder.queryFields((t) => ({
     },
     resolve: async (_root, { id }, ctx) => {
       const service = container.get<IOrganizationService>(TYPES.OrganizationService);
-      return service.getOrganizationById(id, ctx.user!.id);
+      return service.getById(id, requireIdentityId(ctx));
     },
   }),
 }));

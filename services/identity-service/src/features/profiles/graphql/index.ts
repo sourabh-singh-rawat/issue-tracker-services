@@ -1,0 +1,9 @@
+import "@/features/profiles/graphql/objects/ProfileGenderEnum";
+import "@/features/profiles/graphql/objects/ProfileObject";
+import "@/features/profiles/graphql/objects/PhotoUploadTargetObject";
+import "@/features/profiles/graphql/inputs/UpdateProfileNameInput";
+import "@/features/profiles/graphql/inputs/UpdateProfileGenderInput";
+import "@/features/profiles/graphql/inputs/CreatePhotoUploadRequestInput";
+import "@/features/profiles/graphql/mutations/updateProfileName";
+import "@/features/profiles/graphql/mutations/updateProfileGender";
+import "@/features/profiles/graphql/mutations/createPhotoUploadRequest";

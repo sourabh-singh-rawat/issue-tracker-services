@@ -16,9 +16,8 @@ fi
 cat > "$PGPASS_FILE" <<EOF
 identity-postgres:5432:*:identity:${POSTGRES_IDENTITY_PASSWORD}
 issues-postgres:5432:*:issues:${POSTGRES_ISSUES_PASSWORD}
-inventory-postgres:5432:*:inventory:${POSTGRES_INVENTORY_PASSWORD}
-product-postgres:5432:*:product:${POSTGRES_PRODUCT_PASSWORD}
 attachment-postgres:5432:*:attachment:${POSTGRES_ATTACHMENT_PASSWORD}
+attachment-scanner-postgres:5432:*:attachment_scanner:${POSTGRES_ATTACHMENT_SCANNER_PASSWORD}
 notification-postgres:5432:*:notification:${POSTGRES_NOTIFICATION_PASSWORD}
 platform-postgres:5432:*:platform:${POSTGRES_PLATFORM_PASSWORD}
 ory-postgres:5432:*:postgres:${POSTGRES_ADMIN_PASSWORD}
@@ -70,26 +69,6 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "PassFile": "$PGPASS_FILE"
     },
     "3": {
-      "Name": "Inventory Service DB",
-      "Group": "Pine",
-      "Host": "inventory-postgres",
-      "Port": 5432,
-      "MaintenanceDB": "inventory",
-      "Username": "inventory",
-      "SSLMode": "prefer",
-      "PassFile": "$PGPASS_FILE"
-    },
-    "4": {
-      "Name": "Product Service DB",
-      "Group": "Pine",
-      "Host": "product-postgres",
-      "Port": 5432,
-      "MaintenanceDB": "product",
-      "Username": "product",
-      "SSLMode": "prefer",
-      "PassFile": "$PGPASS_FILE"
-    },
-    "5": {
       "Name": "Attachment Service DB",
       "Group": "Pine",
       "Host": "attachment-postgres",
@@ -99,7 +78,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
-    "6": {
+    "4": {
       "Name": "Notification Service DB",
       "Group": "Pine",
       "Host": "notification-postgres",
@@ -109,7 +88,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
-    "7": {
+    "5": {
       "Name": "Platform Service DB",
       "Group": "Pine",
       "Host": "platform-postgres",
@@ -119,7 +98,7 @@ if [ "$PGADMIN_CONFIG_TYPE" = "multi-db" ]; then
       "SSLMode": "prefer",
       "PassFile": "$PGPASS_FILE"
     },
-$(ory_server_json 8)
+$(ory_server_json 6)
   }
 }
 EOF

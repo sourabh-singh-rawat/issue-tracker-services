@@ -31,11 +31,23 @@ describe("me route", () => {
     get.mockReset();
   });
 
-  it("returns the current user identity for a valid session cookie", async () => {
+  it("returns the current user identity and profile for a valid session cookie", async () => {
     const getCurrentUser = vi.fn().mockResolvedValue({
-      id: "identity-1",
-      email: "a@b.com",
-      emailVerified: true,
+      identity: {
+        id: "identity-1",
+        email: "a@b.com",
+        emailVerified: true,
+      },
+      profile: {
+        id: "profile-1",
+        identityId: "identity-1",
+        firstName: "Ada",
+        middleName: null,
+        lastName: "Lovelace",
+        gender: "FEMALE",
+        description: "Mathematician",
+        photoUrl: "https://example.com/ada.jpg",
+      },
     });
     get.mockReturnValue({ getCurrentUser });
 
@@ -55,6 +67,47 @@ describe("me route", () => {
           email: "a@b.com",
           emailVerified: true,
         },
+        profile: {
+          id: "profile-1",
+          identityId: "identity-1",
+          firstName: "Ada",
+          middleName: null,
+          lastName: "Lovelace",
+          fullName: "Ada Lovelace",
+          gender: "FEMALE",
+          description: "Mathematician",
+          photoUrl: "https://example.com/ada.jpg",
+        },
+      },
+    });
+  });
+
+  it("returns a null profile when the identity has none", async () => {
+    const getCurrentUser = vi.fn().mockResolvedValue({
+      identity: {
+        id: "identity-1",
+        email: "a@b.com",
+        emailVerified: true,
+      },
+      profile: null,
+    });
+    get.mockReturnValue({ getCurrentUser });
+
+    const response = await me.handler(
+      httpRequest({
+        cookies: { session: "session-token-1" },
+      }),
+    );
+
+    expect(response).toEqual({
+      status: 200,
+      body: {
+        identity: {
+          id: "identity-1",
+          email: "a@b.com",
+          emailVerified: true,
+        },
+        profile: null,
       },
     });
   });

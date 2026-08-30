@@ -8,6 +8,41 @@
       "when": 1786559492588,
       "tag": "0000_dusty_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1787155532538,
+      "tag": "0001_free_wendell_rand",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787156999968,
+      "tag": "0002_shiny_colossus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787157302580,
+      "tag": "0003_mysterious_victor_mancha",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1787677089105,
+      "tag": "0004_short_rawhide_kid",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1787907856041,
+      "tag": "0005_concerned_skrulls",
+      "breakpoints": true
     }
   ]
 }

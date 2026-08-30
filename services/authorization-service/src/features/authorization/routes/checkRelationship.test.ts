@@ -13,19 +13,17 @@ import { TYPES } from "@/bootstrap/container-types";
 import { InvalidCheckRelationshipBodyError } from "@/features/authorization/errors";
 import { checkRelationship } from "@/features/authorization/routes/checkRelationship";
 
-function httpRequest(partial: Partial<HttpRequest>): HttpRequest {
-  return {
-    method: partial.method ?? "POST",
-    url: partial.url ?? "/authorization/checkRelationship",
-    headers: partial.headers ?? {},
-    query: partial.query ?? {},
-    params: partial.params ?? {},
-    cookies: partial.cookies ?? {},
-    body: partial.body,
-    user: partial.user,
-    file: partial.file ?? (async () => undefined),
-  };
-}
+const httpRequest = (partial: Partial<HttpRequest>): HttpRequest => ({
+  method: partial.method ?? "POST",
+  url: partial.url ?? "/authorization/checkRelationship",
+  headers: partial.headers ?? {},
+  query: partial.query ?? {},
+  params: partial.params ?? {},
+  cookies: partial.cookies ?? {},
+  body: partial.body,
+  user: partial.user,
+  file: partial.file ?? (async () => undefined),
+});
 
 describe("checkRelationship route", () => {
   beforeEach(() => {
@@ -40,7 +38,7 @@ describe("checkRelationship route", () => {
       httpRequest({
         body: {
           namespace: "permission",
-          object: "brand:create",
+          object: "organization:update",
           relation: "has",
           subject: "identity:user-1",
         },
@@ -50,7 +48,7 @@ describe("checkRelationship route", () => {
     expect(get).toHaveBeenCalledWith(TYPES.AuthorizationService);
     expect(hasRelationship).toHaveBeenCalledWith({
       namespace: "permission",
-      object: "brand:create",
+      object: "organization:update",
       relation: "has",
       subject: "identity:user-1",
     });
@@ -68,7 +66,7 @@ describe("checkRelationship route", () => {
       httpRequest({
         body: {
           namespace: "permission",
-          object: "brand:create",
+          object: "organization:update",
           relation: "has",
           subject: "identity:user-1",
         },
@@ -105,7 +103,7 @@ describe("checkRelationship route", () => {
         httpRequest({
           body: {
             namespace: "permission",
-            object: "brand:create",
+            object: "organization:update",
             relation: "has",
           },
         }),

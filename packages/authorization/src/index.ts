@@ -4,11 +4,10 @@ export { RESOURCES, isResource, parseResource, tryParseResource } from "./resour
 export type {
   Permission,
   PermissionKey,
+  ProfilePermission,
   PlatformPermission,
   TenantPermission,
   OrganizationPermission,
-  ProductPermission,
-  BrandPermission,
   RolePermission,
   PermissionGrantPermission,
 } from "./permissions";
@@ -16,11 +15,10 @@ export {
   permissionKey,
   parsePermission,
   tryParsePermission,
+  PROFILE_PERMISSIONS,
   PLATFORM_PERMISSIONS,
   TENANT_PERMISSIONS,
   ORGANIZATION_PERMISSIONS,
-  PRODUCT_PERMISSIONS,
-  BRAND_PERMISSIONS,
   ROLE_PERMISSIONS,
   PERMISSION_GRANT_PERMISSIONS,
   ALL_PERMISSIONS,
@@ -51,19 +49,19 @@ export {
 export type { GraphNamespace, GraphResource, GraphRelationship, GraphSubjectSet } from "./types";
 export { GRAPH_NAMESPACES, isGraphNamespace } from "./types";
 
-export { IDENTITY } from "./identities";
+export { IDENTITY, PROFILE } from "./identities";
 export {
   ADMIN,
-  BRAND_PRODUCT,
   MEMBER,
   ORGANIZATION_TENANT,
   OWNER,
   PERMISSION_HAS,
   PLATFORM_OBJECT_ID,
   PLATFORM_TENANT,
-  PRODUCT_ORGANIZATION,
   ROLE_MEMBER,
   TENANT_PLATFORM,
+  organizationAdminRelationship,
+  organizationMemberRelationship,
   organizationOwnerRelationship,
   organizationTenantRelationship,
   platformAdminRelationship,

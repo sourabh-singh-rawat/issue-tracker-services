@@ -9,12 +9,10 @@ import {
   SignInResponseSchema,
   type SignInResponse,
 } from "@/features/signin/schemas";
-import { env } from "@/bootstrap/env";
-
-function readQueryString(
+const readQueryString = (
   query: Record<string, string | string[] | undefined>,
   key: string,
-): string | undefined {
+): string | undefined => {
   const value = query[key];
   if (typeof value === "string") {
     return value;
@@ -23,9 +21,9 @@ function readQueryString(
     return value[0];
   }
   return undefined;
-}
+};
 
-function isSignInBody(body: unknown): body is { email: string; password: string } {
+const isSignInBody = (body: unknown): body is { email: string; password: string } => {
   return (
     body !== null &&
     typeof body === "object" &&
@@ -34,7 +32,7 @@ function isSignInBody(body: unknown): body is { email: string; password: string 
     "password" in body &&
     typeof body.password === "string"
   );
-}
+};
 
 export const signin: HttpRoute = {
   url: "/identity/signin",
@@ -83,7 +81,7 @@ export const signin: HttpRoute = {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
-          secure: env.NODE_ENV === "production",
+          secure: true,
           expires: result.expiresAt,
         },
       ],

@@ -1,7 +1,0 @@
-mutation CreatePlatformMember($input: CreatePlatformMemberInput!) {
-  createPlatformMember(input: $input) {
-    id
-    identityId
-    relation
-  }
-}

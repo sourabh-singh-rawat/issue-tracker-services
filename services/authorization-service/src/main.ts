@@ -1,13 +1,27 @@
+import { configureTls } from "@pine/common";
 import { env } from "@/bootstrap/env";
 import "reflect-metadata";
+
+configureTls({
+  caPath: env.CA_CERT_PATH,
+  certPath: env.AUTHORIZATION_SERVICE_TLS_CERT_PATH,
+  keyPath: env.AUTHORIZATION_SERVICE_TLS_KEY_PATH,
+});
 
 import type { IHttpServer } from "@pine/server";
 import { initializeObservability } from "@pine/observability";
 import { broker, container, TYPES } from "@/bootstrap";
 import { openApiOutputPath } from "@/bootstrap/container";
 import { logger } from "@/bootstrap/logger";
-import { TenantSyncConsumer } from "@/features/platform";
+import { AuthorizationProfileSyncConsumer } from "@/features/identity";
 
+import {
+  AuthorizationOrganizationRelationSyncConsumer,
+  AuthorizationOrganizationSyncConsumer,
+  AuthorizationPlatformRelationSyncConsumer,
+  AuthorizationTenantRelationSyncConsumer,
+  AuthorizationTenantSyncConsumer,
+} from "@/features/platform";
 
 export { container } from "@/bootstrap";
 
@@ -29,7 +43,26 @@ const main = async () => {
 
   await broker.init();
 
-  void container.get<TenantSyncConsumer>(TYPES.TenantSyncConsumer).start();
+  void container
+    .get<AuthorizationTenantSyncConsumer>(TYPES.AuthorizationTenantSyncConsumer)
+    .start();
+  void container
+    .get<AuthorizationOrganizationSyncConsumer>(TYPES.AuthorizationOrganizationSyncConsumer)
+    .start();
+  void container
+    .get<AuthorizationOrganizationRelationSyncConsumer>(
+      TYPES.AuthorizationOrganizationRelationSyncConsumer,
+    )
+    .start();
+  void container
+    .get<AuthorizationTenantRelationSyncConsumer>(TYPES.AuthorizationTenantRelationSyncConsumer)
+    .start();
+  void container
+    .get<AuthorizationPlatformRelationSyncConsumer>(TYPES.AuthorizationPlatformRelationSyncConsumer)
+    .start();
+  void container
+    .get<AuthorizationProfileSyncConsumer>(TYPES.AuthorizationProfileSyncConsumer)
+    .start();
 };
 
 main().catch((error) => {
