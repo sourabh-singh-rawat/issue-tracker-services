@@ -1,5 +1,37 @@
 # @pine/attachment-service
 
+## 0.5.0
+
+### Minor Changes
+
+- 3925de4: feat(attachment): add attachment service upload target, proxy, and outbox event integration
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+- 1fad54f: feat(security): require mTLS between gateways and backend services
+
+### Patch Changes
+
+- aa9d59e: feat(attachment): publish quarantined outbox event on upload completion
+- 01ba62c: feat(attachment-scanner): implement attachment scanner service and malware scanning pipeline
+- 715fce7: refactor(identity): replace identity-client with HttpIdentityClient
+- 061d3ba: refactor: prefix identity sync consumers with service names
+- Updated dependencies [aa9d59e]
+- Updated dependencies [01ba62c]
+- Updated dependencies [3925de4]
+- Updated dependencies [bfaca3c]
+- Updated dependencies [715fce7]
+- Updated dependencies [d01fc4c]
+- Updated dependencies [f3ae7b4]
+- Updated dependencies [8773588]
+- Updated dependencies [c2b64b6]
+- Updated dependencies [baef746]
+- Updated dependencies [1fad54f]
+  - @pine/events@0.4.0
+  - @pine/server@1.1.0
+  - @pine/identity@0.2.0
+  - @pine/common@0.1.0
+  - @pine/outbox@0.1.2
+  - @pine/security@0.1.2
+
 ## 0.4.1
 
 ### Patch Changes

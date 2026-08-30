@@ -1,5 +1,14 @@
 # @pine/outbox
 
+## 0.1.2
+
+### Patch Changes
+
+- baef746: chore: remove inventory-service and product-service
+- Updated dependencies [d01fc4c]
+- Updated dependencies [1fad54f]
+  - @pine/common@0.1.0
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @pine/server
 
+## 1.1.0
+
+### Minor Changes
+
+- 715fce7: refactor(identity): replace identity-client with HttpIdentityClient
+- f3ae7b4: feat(organization): persist default org preference and tenant/org request headers
+- 1fad54f: feat(security): require mTLS between gateways and backend services
+
+### Patch Changes
+
+- 3925de4: feat(attachment): add attachment service upload target, proxy, and outbox event integration
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+- Updated dependencies [d01fc4c]
+- Updated dependencies [1fad54f]
+  - @pine/common@0.1.0
+
 ## 1.0.1
 
 ### Patch Changes

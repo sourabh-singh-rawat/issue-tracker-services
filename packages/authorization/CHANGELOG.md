@@ -1,5 +1,18 @@
 # @pine/authorization
 
+## 0.4.0
+
+### Minor Changes
+
+- bfaca3c: feat(identity): extract profiles with name, events, and authz sync
+- 77b700a: feat(organization): add org switcher with nested memberships and tenant.read_list
+- 8773588: feat(platform): add organization relations and authorization sync
+- baef746: chore: remove inventory-service and product-service
+
+### Patch Changes
+
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+
 ## 0.3.0
 
 ### Minor Changes
