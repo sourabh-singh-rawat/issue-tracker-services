@@ -16,13 +16,13 @@ description: >
 
 Scripts: `tools/scripts/changeset-required.ts`, `create-release-branch.ts`, `release-branch-check.ts`, `release.ts`.
 
-## PR → `development`
+## PR → `dev`
 
-Non-draft PRs need **exactly one** new changeset file (CI: `changeset-required.yml`).
+Non-draft PRs may include **at most one** new changeset file (CI: `changeset-required.yml`). Zero is allowed.
 
 ```bash
 pnpm changeset
-pnpm changeset-required   # base: origin/development
+pnpm changeset-required   # base: origin/dev
 ```
 
 ```md
@@ -33,8 +33,9 @@ pnpm changeset-required   # base: origin/development
 feat(erp-web): one-line summary
 ```
 
-- Zero or multiple new `.changeset/*.md` → fail
-- Docs/CI-only: label **`skip-changeset`**
+- More than one new `.changeset/*.md` → fail
+- `release/*` PRs must have **zero** new changesets
+- Optional escape hatch: label **`skip-changeset`**
 - Draft PRs skip check until ready
 
 ## Product release

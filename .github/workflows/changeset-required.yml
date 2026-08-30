@@ -3,7 +3,7 @@ name: changeset-required
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
-    branches: [development]
+    branches: [dev]
 
 permissions:
   contents: read
@@ -27,7 +27,7 @@ jobs:
         run: |
           if echo ",$LABELS," | grep -q ",skip-changeset,"; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "PR has label 'skip-changeset' — changeset not required."
+            echo "PR has label 'skip-changeset' — changeset check skipped."
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
@@ -50,13 +50,15 @@ jobs:
 
       - name: Run changeset-required
         if: steps.skip.outputs.skip != 'true'
+        env:
+          GITHUB_HEAD_REF: ${{ github.head_ref }}
         run: |
           set -euo pipefail
           BASE="origin/${{ github.base_ref }}"
-          echo "Expecting exactly one new .changeset/*.md file since ${BASE}…"
+          echo "Checking changesets since ${BASE} (at most one; release/* must have zero)…"
           if ! node --no-warnings --experimental-strip-types \
             tools/scripts/changeset-required.ts "$BASE"; then
             echo ""
-            echo "::error::This PR must include exactly one Changeset (not zero, not multiple) before merging into ${{ github.base_ref }}."
+            echo "::error::This PR may include at most one Changeset (zero is fine). release/* PRs must include none."
             exit 1
           fi

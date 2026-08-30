@@ -31,8 +31,8 @@ When finishing work that should land as a PR:
 
 1. **Base off `development`** (or the branch the user names). Create a **new branch** for the work; do not commit on `development` / `main` unless asked.
 2. **One logical commit** on that branch for the change set (prefer a single clean commit over a noisy trail of fixups).
-3. **Add a Changeset** under `.changeset/` in the **same commit**. CI requires one on non-draft PRs into `development` (skip only with label `skip-changeset`).
-4. **Commit message and Changeset summary must match** and stay **concise** (same short line in both places).
+3. **Add a Changeset** under `.changeset/` in the **same commit** when the change should bump a package or need release notes. CI allows **0 or 1** new changeset on non-draft PRs into `dev` (fail if more than one). `release/*` branches must have **zero**. Skip the check entirely with label `skip-changeset`.
+4. **Commit message and Changeset summary must match** and stay **concise** (same short line in both places). When there is no changeset, the commit subject alone is enough.
 
 Changeset file shape:
 
