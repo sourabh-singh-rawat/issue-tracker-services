@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "clean": "node ../../tools/scripts/setup/rm-rf.mjs dist",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "gen": "pnpm gen:gql && pnpm gen:api",

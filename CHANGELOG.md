@@ -1,0 +1,230 @@
+# Changelog
+
+## v2026.08.30.1
+
+### Minor
+
+- 01ba62c4: feat(attachment-scanner): implement attachment scanner service and malware scanning pipeline — Sourabh Singh Rawat (`@pine/attachment`, `@pine/attachment-scanner-service`, `@pine/attachment-service`, `@pine/events`, `@pine/identity-service`, `@pine/identity-web`)
+- 3925de4f: feat(attachment): add attachment service upload target, proxy, and outbox event integration — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/data-gateway`, `@pine/events`, `@pine/identity-web`, `@pine/server`)
+- bfaca3c4: feat(identity): extract profiles with name, events, and authz sync — Sourabh Singh Rawat (`@pine/authorization`, `@pine/authorization-service`, `@pine/events`, `@pine/identity-service`, `@pine/identity-web`)
+- 715fce74: refactor(identity): replace identity-client with HttpIdentityClient — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/identity`, `@pine/identity-service`, `@pine/issues-service`, `@pine/platform-service`, `@pine/server`)
+- d01fc4c5: feat(identity): implement profile photo upload flow and dev tls support — Sourabh Singh Rawat, sourabh-singh-rawat (`@pine/api-gateway`, `@pine/attachment`, `@pine/attachment-service`, `@pine/authorization`, `@pine/authorization-service`, `@pine/common`, `@pine/data-gateway`, `@pine/erp-web`, `@pine/events`, `@pine/identity`, `@pine/identity-service`, `@pine/identity-web`, `@pine/issues-service`, `@pine/notification-service`, `@pine/platform-service`, `@pine/platform-web`, `@pine/server`)
+- bee71c32: feat(platform): add identity relations page and graph — Sourabh Singh Rawat (`@pine/authorization-service`, `@pine/platform-service`, `@pine/platform-web`)
+- 35cec8af: feat(identity-web): add navbar and gender to personal info — Sourabh Singh Rawat (`@pine/identity-web`)
+- f3ae7b4a: feat(organization): persist default org preference and tenant/org request headers — Sourabh Singh Rawat (`@pine/api-gateway`, `@pine/erp-web`, `@pine/identity`, `@pine/identity-service`, `@pine/platform-service`, `@pine/server`)
+- 77b700a6: feat(organization): add org switcher with nested memberships and tenant.read_list — Sourabh Singh Rawat (`@pine/authorization`, `@pine/authorization-service`, `@pine/erp-web`, `@pine/platform-service`)
+- 8773588d: feat(platform): add organization relations and authorization sync — Sourabh Singh Rawat (`@pine/authorization`, `@pine/authorization-service`, `@pine/events`, `@pine/platform-service`, `@pine/platform-web`)
+- c2b64b6c: feat(platform): rename members to relations and publish relation created via outbox — Sourabh Singh Rawat (`@pine/authorization-service`, `@pine/events`, `@pine/platform-service`, `@pine/platform-web`)
+- baef746c: chore: remove inventory-service and product-service — Sourabh Singh Rawat (`@pine/api-gateway`, `@pine/authorization`, `@pine/authorization-service`, `@pine/erp-web`, `@pine/events`, `@pine/identity-service`, `@pine/outbox`)
+- 1fad54fb: feat(security): require mTLS between gateways and backend services — Sourabh Singh Rawat, sourabh-singh-rawat (`@pine/api-gateway`, `@pine/attachment-scanner-service`, `@pine/attachment-service`, `@pine/authorization-service`, `@pine/common`, `@pine/data-gateway`, `@pine/identity-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/platform-service`, `@pine/server`)
+
+### Patch
+
+- aa9d59e8: feat(attachment): publish quarantined outbox event on upload completion — Sourabh Singh Rawat (`@pine/attachment`, `@pine/attachment-service`, `@pine/events`)
+- bad0ca63: chore(authz): suppress sonar class-name lint on keto namespaces — Sourabh Singh Rawat (`@pine/authorization-service`)
+- 061d3ba1: refactor: prefix identity sync consumers with service names — Sourabh Singh Rawat, sourabh-singh-rawat (`@pine/attachment-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/platform-service`)
+
+### Packages
+
+- `@pine/api-gateway@0.4.0`
+- `@pine/attachment@0.2.0`
+- `@pine/attachment-processing-service@0.0.1`
+- `@pine/attachment-scanner-service@0.1.0`
+- `@pine/attachment-service@0.5.0`
+- `@pine/authorization@0.4.0`
+- `@pine/authorization-service@0.4.0`
+- `@pine/common@0.1.0`
+- `@pine/data-gateway@0.1.0`
+- `@pine/erp-web@0.6.0`
+- `@pine/events@0.4.0`
+- `@pine/identity@0.2.0`
+- `@pine/identity-service@0.5.0`
+- `@pine/identity-web@0.5.0`
+- `@pine/issues-service@0.4.0`
+- `@pine/notification-service@0.4.0`
+- `@pine/outbox@0.1.2`
+- `@pine/platform-service@0.4.0`
+- `@pine/platform-web@0.4.0`
+- `@pine/security@0.1.2`
+- `@pine/server@1.1.0`
+
+## v2026.08.16.1
+
+### Minor
+
+- 617eacc9: feat(platform): identities and graph membership relations — Sourabh Singh Rawat (`@pine/authorization`, `@pine/authorization-service`, `@pine/common`, `@pine/erp-web`, `@pine/events`, `@pine/platform-service`, `@pine/platform-web`)
+- b0911f8d: feat(platform): members and roles for platform, tenant, and organization — Sourabh Singh Rawat (`@pine/authorization`, `@pine/authorization-service`, `@pine/erp-web`, `@pine/events`, `@pine/platform-service`, `@pine/platform-web`)
+- 1dd2bfb9: refactor(platform): platform-web, platform-service, and erp app rail — Sourabh Singh Rawat (`@pine/common`, `@pine/erp-web`, `@pine/platform-service`, `@pine/platform-web`)
+- f1cb277e: feat(tenants): tenant and organization detail with create org — Sourabh Singh Rawat (`@pine/platform-service`, `@pine/platform-web`)
+
+### Patch
+
+- 6960ceb8: fix(authz): namespace tenant capabilities under platform — Sourabh Singh Rawat (`@pine/authorization`, `@pine/platform-service`)
+
+### Packages
+
+- `@pine/api-gateway@0.3.3`
+- `@pine/attachment-service@0.4.1`
+- `@pine/authorization@0.3.0`
+- `@pine/authorization-service@0.3.0`
+- `@pine/common@0.0.3`
+- `@pine/erp-web@0.5.0`
+- `@pine/events@0.3.0`
+- `@pine/identity-client@0.1.1`
+- `@pine/identity-service@0.4.2`
+- `@pine/inventory-service@0.3.1`
+- `@pine/issues-service@0.3.1`
+- `@pine/notification-service@0.3.1`
+- `@pine/outbox@0.1.1`
+- `@pine/platform-service@0.3.0`
+- `@pine/platform-web@0.3.0`
+- `@pine/product-service@0.2.1`
+- `@pine/security@0.1.1`
+- `@pine/server@1.0.1`
+
+## v2026.08.11.1
+
+### Minor
+
+- 07bb3bce: feat(authz): keto subject-set grants, role capability checks, and local session identity ids — Sourabh Singh Rawat (`@pine/api-gateway`, `@pine/authorization`, `@pine/authorization-service`, `@pine/identity-service`)
+- 1933c6c7: feat(authz): share requireCapability and InsufficientPermissionError — Sourabh Singh Rawat (`@pine/authorization`, `@pine/authorization-service`)
+- 1ca92d74: feat(organization): require capability checks on organization service methods — Sourabh Singh Rawat (`@pine/organization-service`)
+
+### Packages
+
+- `@pine/api-gateway@0.3.2`
+- `@pine/authorization@0.2.0`
+- `@pine/authorization-service@0.2.0`
+- `@pine/identity-service@0.4.1`
+- `@pine/organization-service@0.2.0`
+
+## v2026.08.09.1
+
+### Major
+
+- 689a980f: refactor: rename @pine/http to @pine/server and merge graphql-core — Sourabh Singh Rawat (`@pine/api-gateway`, `@pine/attachment-service`, `@pine/authorization-service`, `@pine/events`, `@pine/identity-client`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/organization-service`, `@pine/product-service`, `@pine/security`, `@pine/server`)
+
+### Minor
+
+- 11abe4b6: feat(product): add product-service with dedicated database, gateway proxy and bootstrap; add brand operations — Sourabh Singh Rawat (`@pine/api-gateway`, `@pine/inventory-service`, `@pine/product-service`)
+- de6a3b1d: feat(authz): organizations, authorization, roles, keto, and admin-web — Sourabh Singh Rawat (`@pine/admin-web`, `@pine/api-gateway`, `@pine/authorization`, `@pine/authorization-service`, `@pine/erp-web`, `@pine/events`, `@pine/identity-service`, `@pine/identity-web`, `@pine/organization-service`, `@pine/ui`)
+- 2cd57360: refactor(authz): role capabilities model, drop permissions — Sourabh Singh Rawat (`@pine/admin-web`, `@pine/authorization`, `@pine/authorization-service`, `@pine/events`)
+- 8ae018c6: feat(product): publish brand events; project brands and products in inventory — Sourabh Singh Rawat (`@pine/events`, `@pine/inventory-service`, `@pine/product-service`)
+- cffc076f: feat(commands): add initial empty commands — Sourabh Singh Rawat (`@pine/cli`)
+- 14a1fb56: Identity email verification and session APIs; migrate services to Drizzle with local identities tables; remove workspace multi-tenancy from issues and ERP web — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/erp-web`, `@pine/events`, `@pine/identity-client`, `@pine/identity-service`, `@pine/identity-web`, `@pine/inventory-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/product-service`, `@pine/security`)
+- 4b72801d: refactor(identity): drop local email, add profile names, register with username — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/events`, `@pine/identity-client`, `@pine/identity-service`, `@pine/identity-web`, `@pine/issues-service`, `@pine/product-service`, `@pine/security`, `@pine/server`)
+- 0acc6d39: fix(identity): login returns 204/302 and OAuth redirect via response — Sourabh Singh Rawat (`@pine/identity-service`, `@pine/identity-web`)
+- 9c0d1872: feat(web): merge issues-web and inventory-web into a single erp-web app Product UI lives in `@pine/erp-web` (port 3001) with OIDC PKCE auth and an inventory route shell. Backend CORS and invite URLs use `ERP_WEB_URL` instead of separate issues/inventory web origins. — sourabh-singh-rawat (`@pine/api-gateway`, `@pine/attachment-service`, `@pine/erp-web`, `@pine/inventory-service`, `@pine/issues-service`)
+- 84ae79f3: refactor(events): rename NATS subscribers to consumers — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/events`, `@pine/inventory-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/product-service`)
+- cafe973b: feat(admin-web): manage role capabilities and add navbar — Sourabh Singh Rawat (`@pine/admin-web`, `@pine/authorization-service`)
+- d175229d: refactor(notification): remove email sending, events, and emails table — Sourabh Singh Rawat (`@pine/common`, `@pine/events`, `@pine/notification-service`)
+- 7ed63fe1: fix(oauth): 302 authorize redirect and require explicit DATABASE_URL env vars — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/inventory-web`, `@pine/issues-service`, `@pine/mail-service`)
+- fff12b7a: feat(outbox): schedule identity registration and brand create via outbox — Sourabh Singh Rawat (`@pine/events`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/product-service`)
+- 04d33c3d: feat(product): add category create/update with events and GraphQL — Sourabh Singh Rawat (`@pine/events`, `@pine/product-service`)
+- 7c958b1c: feat(product): create product with default unit; publish nats now publish cloud events — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/events`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/product-service`)
+- d206a7c9: refactor: rename @pine/http-core to @pine/http — Sourabh Singh Rawat (`@pine/api-gateway`, `@pine/attachment-service`, `@pine/authorization-service`, `@pine/common`, `@pine/events`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/organization-service`, `@pine/product-service`, `@pine/security`, `@pine/server`)
+- 179562aa: feat(outbox): transactional outbox for product events; project product units — Sourabh Singh Rawat (`@pine/events`, `@pine/inventory-service`, `@pine/outbox`, `@pine/product-service`)
+- b92cb727: feat(cli): add .NET pine cli — Sourabh Singh Rawat (`@pine/cli`)
+
+### Patch
+
+- d67c1e11: feat(authz): sync keto relationship tuples on role capability updated event — Sourabh Singh Rawat (`@pine/authorization-service`, `@pine/events`)
+- 5b5506ba: chore(fmt): format code — Sourabh Singh Rawat (`@pine/attachment-service`, `@pine/authorization`, `@pine/authorization-service`, `@pine/common`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/issues-service`, `@pine/notification-service`, `@pine/organization-service`, `@pine/product-service`)
+- 5bd9a1a7: refactor(security): remove Hash, argon2, and awilix — Sourabh Singh Rawat (`@pine/security`)
+
+### Packages
+
+- `@pine/admin-web@0.2.0`
+- `@pine/api-gateway@0.3.1`
+- `@pine/attachment-service@0.4.0`
+- `@pine/authorization@0.1.0`
+- `@pine/authorization-service@0.1.0`
+- `@pine/cli@0.1.0`
+- `@pine/common@0.0.2`
+- `@pine/erp-web@0.4.0`
+- `@pine/events@0.2.0`
+- `@pine/identity-client@0.1.0`
+- `@pine/identity-service@0.4.0`
+- `@pine/identity-web@0.4.0`
+- `@pine/inventory-service@0.3.0`
+- `@pine/issues-service@0.3.0`
+- `@pine/notification-service@0.3.0`
+- `@pine/organization-service@0.1.0`
+- `@pine/outbox@0.1.0`
+- `@pine/product-service@0.2.0`
+- `@pine/security@0.1.0`
+- `@pine/server@1.0.0`
+- `@pine/ui@0.1.0`
+
+## v2026.07.26.2
+
+### Minor
+
+- 4518c751: feat(inventory): add inventory-service with gateway proxy, bootstrap env modules, and OAuth token cookies — sourabh-singh-rawat (`@pine/api-gateway`, `@pine/attachment-service`, `@pine/http-core`, `@pine/identity-service`, `@pine/inventory-service`, `@pine/inventory-web`, `@pine/issues-service`, `@pine/issues-web`, `@pine/mail-service`)
+- 2f4b756a: refactor(env): unify root .env and URL-based service bootstrap — sourabh-singh-rawat (`@pine/api-gateway`, `@pine/attachment-service`, `@pine/identity-service`, `@pine/identity-web`, `@pine/inventory-service`, `@pine/inventory-web`, `@pine/issues-service`, `@pine/issues-web`, `@pine/mail-service`)
+
+### Packages
+
+- `@pine/api-gateway@0.3.0`
+- `@pine/attachment-service@0.3.0`
+- `@pine/http-core@0.2.1`
+- `@pine/identity-service@0.3.0`
+- `@pine/identity-web@0.3.0`
+- `@pine/inventory-service@0.2.0`
+- `@pine/inventory-web@0.3.0`
+- `@pine/issues-service@0.2.0`
+- `@pine/issues-web@0.2.0`
+- `@pine/mail-service@0.2.0`
+
+## v2026.07.26.1
+
+### Minor
+
+- 643f8616: feat(identity): add OAuth consent, token exchange, and client auth flows — sourabh-singh-rawat (`@pine/api-gateway`, `@pine/identity-service`, `@pine/identity-web`, `@pine/inventory-web`, `@pine/issues-web`)
+- a291ebd0: feat(api-gateway): add schemas:watch compose and supergraph hot-reload — sourabh-singh-rawat (`@pine/api-gateway`)
+- 6214051f: refactor(issues-service): rename package and align layout with identity — sourabh-singh-rawat (`@pine/issues-service`)
+- bc60210f: refactor: rename packages to events/http-core, add CloudEvents and Hydra OAuth — sourabh-singh-rawat (`@pine/attachment-service`, `@pine/events`, `@pine/http-core`, `@pine/identity-service`, `@pine/issues-service`, `@pine/issues-web`, `@pine/mail-service`)
+- 444ae048: feat(identity): add session cookies with me and logout — sourabh-singh-rawat (`@pine/identity-service`, `@pine/identity-web`)
+- 03e5c353: feat(identity): move registration to REST and implement Kratos login — sourabh-singh-rawat (`@pine/api-gateway`, `@pine/attachment-service`, `@pine/identity-service`, `@pine/identity-web`, `@pine/issues-service`)
+
+### Packages
+
+- `@pine/api-gateway@0.2.0`
+- `@pine/attachment-service@0.2.0`
+- `@pine/events@0.1.0`
+- `@pine/http-core@0.2.0`
+- `@pine/identity-service@0.2.0`
+- `@pine/identity-web@0.2.0`
+- `@pine/inventory-web@0.2.0`
+- `@pine/issues-service@0.1.0`
+- `@pine/issues-web@0.1.0`
+- `@pine/mail-service@0.1.0`
+- `@pine/orm@0.0.2`
+- `@pine/security@0.0.2`
+
+## v2026.07.23.1
+
+### Minor
+
+- 36764cc5: feat(inventory-web): Add openapi & graphql codegen — sourabh-singh-rawat (`@pine/inventory-web`)
+
+### Packages
+
+- `@pine/api-gateway@0.1.0`
+- `@pine/attachment-service@0.1.0`
+- `@pine/comm@0.0.1`
+- `@pine/common@0.0.1`
+- `@pine/errors@0.1.0`
+- `@pine/event-bus@0.0.1`
+- `@pine/forms@0.0.1`
+- `@pine/graphql-core@0.0.1`
+- `@pine/identity-service@0.1.0`
+- `@pine/identity-web@0.1.0`
+- `@pine/inventory-web@0.1.0`
+- `@pine/issue-web@0.0.1`
+- `@pine/issues@0.0.1`
+- `@pine/mail@0.0.1`
+- `@pine/observability@0.1.0`
+- `@pine/orm@0.0.1`
+- `@pine/security@0.0.1`
+- `@pine/server-core@0.1.0`

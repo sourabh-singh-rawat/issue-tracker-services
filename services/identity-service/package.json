@@ -20,7 +20,7 @@
   },
   "main": "./src/main.ts",
   "scripts": {
-    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "clean": "node ../../tools/scripts/setup/rm-rf.mjs dist",
     "start": "tsx --env-file=../../.env src/main.ts",
     "dev": "tsx watch --env-file=../../.env src/main.ts",
     "build": "pnpm clean && tsc -p tsconfig.build.json",

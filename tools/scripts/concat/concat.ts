@@ -145,7 +145,7 @@ function main(): void {
 
   if (positional.length === 0) {
     console.log(
-      "Usage: npx tsx tools/scripts/concat.ts <target_directory_path> [output_file_path] [-e extension1,extension2,...]",
+      "Usage: npx tsx tools/scripts/concat/concat.ts <target_directory_path> [output_file_path] [-e extension1,extension2,...]",
     );
     process.exit(1);
   }
@@ -157,7 +157,7 @@ function main(): void {
   }
 
   // Default output is "combined_output.txt" in the monorepo root
-  const defaultOutputDir = path.resolve(__dirname, "../..");
+  const defaultOutputDir = path.resolve(__dirname, "../../..");
   const defaultOutputFile = path.join(defaultOutputDir, "combined_output.txt");
   const outputFile = positional[1] ? path.resolve(positional[1]) : defaultOutputFile;
 
@@ -239,7 +239,7 @@ function main(): void {
 
   // Auto-add to .gitignore if not present
   try {
-    const gitignorePath = path.resolve(__dirname, "../../.gitignore");
+    const gitignorePath = path.resolve(__dirname, "../../../.gitignore");
     if (fs.existsSync(gitignorePath)) {
       const gitignoreContent = fs.readFileSync(gitignorePath, "utf8");
       const relOutputFile = path

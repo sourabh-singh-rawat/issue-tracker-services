@@ -35,4 +35,4 @@ jobs:
         run: |
           set -euo pipefail
           node --no-warnings --experimental-strip-types \
-            tools/scripts/release-branch-check.ts "$RELEASE_BRANCH"
+            tools/scripts/release/release-branch-check.ts "$RELEASE_BRANCH"

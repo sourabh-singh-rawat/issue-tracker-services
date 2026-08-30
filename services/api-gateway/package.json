@@ -8,7 +8,7 @@
   "author": "",
   "main": "src/main.ts",
   "scripts": {
-    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "clean": "node ../../tools/scripts/setup/rm-rf.mjs dist",
     "dev": "tsx watch --use-system-ca --env-file=../../.env src/main.ts"
   },
   "dependencies": {
