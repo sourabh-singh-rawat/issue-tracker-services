@@ -1,6 +1,6 @@
-export type ErpAppId = "issues" | "inventory" | "catalog";
+export type ErpAppId = "issues";
 
-export type ErpAppPath = "/home" | "/inventory" | "/catalog";
+export type ErpAppPath = "/home";
 
 export type ErpApp = {
   id: ErpAppId;
@@ -16,18 +16,6 @@ export const ERP_APPS: readonly ErpApp[] = [
     to: "/home",
     isActive: (pathname) =>
       pathname === "/home" || pathname.startsWith("/i/") || pathname.startsWith("/v/"),
-  },
-  {
-    id: "inventory",
-    label: "Inventory",
-    to: "/inventory",
-    isActive: (pathname) => pathname === "/inventory" || pathname.startsWith("/inventory/"),
-  },
-  {
-    id: "catalog",
-    label: "Catalog",
-    to: "/catalog",
-    isActive: (pathname) => pathname === "/catalog" || pathname.startsWith("/catalog/"),
   },
 ];
 

@@ -22,8 +22,6 @@ const main = async () => {
   console.log(`   Swagger:  ${env.API_GATEWAY_URL}/docs`);
   console.log(`   Proxy → identity:   ${env.IDENTITY_SERVICE_URL}  (/identity)`);
   console.log(`   Proxy → attachment: ${env.ATTACHMENT_SERVICE_URL}  (/attachments)`);
-  console.log(`   Proxy → inventory:  ${env.INVENTORY_SERVICE_URL}  (/inventory)`);
-  console.log(`   Proxy → product:    ${env.PRODUCT_SERVICE_URL}  (/products)`);
 };
 
 main().catch((err) => {

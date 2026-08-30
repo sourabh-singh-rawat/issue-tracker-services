@@ -19,8 +19,6 @@
         "notification-service",
         "attachment-service",
         "attachment-scanner-service",
-        "product-service",
-        "inventory-service",
         "issues-service",
         "platform-service",
         "authorization-service",
@@ -46,8 +44,6 @@
         "notification-service",
         "attachment-service",
         "attachment-scanner-service",
-        "product-service",
-        "inventory-service",
         "issues-service",
         "platform-service",
         "authorization-service",
@@ -73,8 +69,6 @@
         "notification-service",
         "attachment-service",
         "attachment-scanner-service",
-        "product-service",
-        "inventory-service",
         "issues-service",
         "platform-service",
         "authorization-service",
@@ -120,42 +114,6 @@
       "presentation": { "group": "1-services", "order": 2 }
     },
     {
-      "name": "inventory-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["inventory-service"],
-      "console": "integratedTerminal",
-      "outFiles": [],
-      "sourceMaps": true,
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/services/**",
-        "${workspaceFolder}/packages/**",
-        "!**/node_modules/**"
-      ],
-      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 3 }
-    },
-    {
-      "name": "product-service",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["product-service"],
-      "console": "integratedTerminal",
-      "outFiles": [],
-      "sourceMaps": true,
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/services/**",
-        "${workspaceFolder}/packages/**",
-        "!**/node_modules/**"
-      ],
-      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 4 }
-    },
-    {
       "name": "attachment-service",
       "type": "node",
       "request": "launch",
@@ -171,7 +129,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 5 }
+      "presentation": { "group": "1-services", "order": 3 }
     },
     {
       "name": "attachment-scanner-service",
@@ -189,7 +147,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 6 }
+      "presentation": { "group": "1-services", "order": 4 }
     },
     {
       "name": "notification-service",
@@ -207,7 +165,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 6 }
+      "presentation": { "group": "1-services", "order": 5 }
     },
     {
       "name": "platform-service",
@@ -225,7 +183,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 7 }
+      "presentation": { "group": "1-services", "order": 6 }
     },
     {
       "name": "authorization-service",
@@ -243,7 +201,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 8 }
+      "presentation": { "group": "1-services", "order": 7 }
     },
     {
       "name": "api-gateway",
@@ -261,7 +219,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 9 }
+      "presentation": { "group": "1-services", "order": 8 }
     },
     {
       "name": "data-gateway",
@@ -279,7 +237,7 @@
         "!**/node_modules/**"
       ],
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-      "presentation": { "group": "1-services", "order": 10 }
+      "presentation": { "group": "1-services", "order": 9 }
     },
     {
       "name": "identity-web",

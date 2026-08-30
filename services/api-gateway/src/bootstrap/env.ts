@@ -12,8 +12,6 @@ export const EnvSchema = Type.Object({
   VITE_PLATFORM_WEB_URL: Type.String({ default: "https://localhost:3002" }),
   IDENTITY_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5000" }),
   ATTACHMENT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5003" }),
-  INVENTORY_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5002" }),
-  PRODUCT_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5004" }),
   AUTHORIZATION_SERVICE_URL: Type.String({ default: "https://127.0.0.1:5006" }),
   OTEL_EXPORTER_OTLP_ENDPOINT: Type.String({ default: "http://127.0.0.1:4317" }),
 });

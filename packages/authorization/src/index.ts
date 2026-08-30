@@ -8,8 +8,6 @@ export type {
   PlatformPermission,
   TenantPermission,
   OrganizationPermission,
-  ProductPermission,
-  BrandPermission,
   RolePermission,
   PermissionGrantPermission,
 } from "./permissions";
@@ -21,8 +19,6 @@ export {
   PLATFORM_PERMISSIONS,
   TENANT_PERMISSIONS,
   ORGANIZATION_PERMISSIONS,
-  PRODUCT_PERMISSIONS,
-  BRAND_PERMISSIONS,
   ROLE_PERMISSIONS,
   PERMISSION_GRANT_PERMISSIONS,
   ALL_PERMISSIONS,
@@ -56,14 +52,12 @@ export { GRAPH_NAMESPACES, isGraphNamespace } from "./types";
 export { IDENTITY, PROFILE } from "./identities";
 export {
   ADMIN,
-  BRAND_PRODUCT,
   MEMBER,
   ORGANIZATION_TENANT,
   OWNER,
   PERMISSION_HAS,
   PLATFORM_OBJECT_ID,
   PLATFORM_TENANT,
-  PRODUCT_ORGANIZATION,
   ROLE_MEMBER,
   TENANT_PLATFORM,
   organizationAdminRelationship,

@@ -1,4 +1,3 @@
-/* oxlint-disable max-lines */
 import { Context, Namespace } from "@ory/keto-namespace-types";
 
 export class identity implements Namespace {} // NOSONAR typescript:S101
@@ -97,47 +96,9 @@ export class organization implements Namespace { // NOSONAR typescript:S101
       this.related.admin.includes(ctx.subject) ||
       this.related.owner.includes(ctx.subject) ||
       this.related.tenant.traverse((item) => item.permits.administer(ctx)),
-    create_product: (ctx: Context): boolean =>
-      this.related.admin.includes(ctx.subject) ||
-      this.related.owner.includes(ctx.subject) ||
-      this.related.tenant.traverse((item) => item.permits.administer(ctx)),
     delete: (ctx: Context): boolean =>
       this.related.owner.includes(ctx.subject) ||
       this.related.tenant.traverse((item) => item.related.owner.includes(ctx.subject)),
-  };
-}
-
-export class product implements Namespace { // NOSONAR typescript:S101
-  related: {
-    organization: organization[];
-  };
-
-  permits = {
-    read: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.read(ctx)),
-    update: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.update(ctx)),
-    delete: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.update(ctx)),
-    create_brand: (ctx: Context): boolean =>
-      this.related.organization.traverse((item) => item.permits.create_product(ctx)),
-  };
-}
-
-export class brand implements Namespace { // NOSONAR typescript:S101
-  related: {
-    product: product[];
-  };
-
-  permits = {
-    read: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.read(ctx)),
-    create: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.update(ctx)),
-    update: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.update(ctx)),
-    delete: (ctx: Context): boolean =>
-      this.related.product.traverse((item) => item.permits.create_brand(ctx)),
   };
 }
 

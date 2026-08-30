@@ -6,8 +6,8 @@ import { describe, expect, it } from "vitest";
 
 describe("parsePermission", () => {
   it("returns namespace and permission from a permission key", () => {
-    expect(parsePermission("brand:read")).toEqual({
-      namespace: "brand",
+    expect(parsePermission("organization:read")).toEqual({
+      namespace: "organization",
       permission: "read",
     });
     expect(parsePermission("platform:create_tenant")).toEqual({
@@ -17,9 +17,9 @@ describe("parsePermission", () => {
   });
 
   it("rejects keys that are not namespace:permission", () => {
-    expect(() => parsePermission("brand")).toThrow(InvalidPermissionKeyError);
-    expect(() => parsePermission("brand:")).toThrow(InvalidPermissionKeyError);
+    expect(() => parsePermission("organization")).toThrow(InvalidPermissionKeyError);
+    expect(() => parsePermission("organization:")).toThrow(InvalidPermissionKeyError);
     expect(() => parsePermission(":read")).toThrow(InvalidPermissionKeyError);
-    expect(() => parsePermission("product:brand:create")).toThrow(InvalidPermissionKeyError);
+    expect(() => parsePermission("organization:role:create")).toThrow(InvalidPermissionKeyError);
   });
 });
