@@ -3,14 +3,14 @@
  * Create the next calver release branch: release/YYYY.MM.DD.N
  *
  * Picks N by scanning local + remote release branches and v* tags for today
- * (or --date). Branches from development by default.
+ * (or --date). Ensures checkout of the base branch (default: dev) first.
  *
  * Usage:
- *   pnpm create-release-branch
- *   pnpm create-release-branch --push
- *   pnpm create-release-branch --base main --dry-run
- *   pnpm create-release-branch --date 2026.07.23
- *   pnpm create-release-branch release/2026.07.23.2
+ *   pnpm branch:release
+ *   pnpm branch:release --push
+ *   pnpm branch:release --base main --dry-run
+ *   pnpm branch:release --date 2026.07.23
+ *   pnpm branch:release release/2026.07.23.2
  */
 
 import { execFile } from "node:child_process";
@@ -72,24 +72,24 @@ type CliOptions = {
 };
 
 function printHelp(): void {
-  console.log(`Usage: create-release-branch [options] [release/YYYY.MM.DD.N]
+  console.log(`Usage: branch:release [options] [release/YYYY.MM.DD.N]
 
 Creates the next product release branch (calver):
   ${formatReleaseBranchExample()}  → tag ${formatReleaseTagExample()}
 
 Options:
-  --base <branch>   Branch point (default: development)
+  --base <branch>   Branch point (default: dev); switches onto it before creating
   --date YYYY.MM.DD Use this calendar day instead of today (sequence still auto)
   --push            Push the new branch and set upstream
   --dry-run         Print planned branch without creating it
   -h, --help        Show this help
 
 Examples:
-  pnpm create-release-branch
-  pnpm create-release-branch --push
-  pnpm create-release-branch --base main --dry-run
-  pnpm create-release-branch --date 2026.07.23
-  pnpm create-release-branch release/2026.07.23.2 --push
+  pnpm branch:release
+  pnpm branch:release --push
+  pnpm branch:release --base main --dry-run
+  pnpm branch:release --date 2026.07.23
+  pnpm branch:release release/2026.07.23.2 --push
 `);
 }
 
@@ -97,7 +97,7 @@ function parseArgs(argv: readonly string[]): CliOptions | { error: string } {
   let help = false;
   let dryRun = false;
   let push = false;
-  let base = "development";
+  let base = "dev";
   let explicit: string | null = null;
   let date: string | null = null;
 
@@ -240,6 +240,29 @@ async function resolveBaseRef(cwd: string, base: string): Promise<string | null>
   return null;
 }
 
+async function currentBranch(cwd: string): Promise<string> {
+  return git(["branch", "--show-current"], cwd);
+}
+
+async function ensureOnBase(cwd: string, base: string, baseRef: string): Promise<void> {
+  const current = await currentBranch(cwd);
+  if (current === base) {
+    return;
+  }
+
+  if (await refExists(cwd, `refs/heads/${base}`)) {
+    await git(["switch", base], cwd);
+    return;
+  }
+
+  if (baseRef === `origin/${base}` || baseRef === `refs/remotes/origin/${base}`) {
+    await git(["switch", "-c", base, "--track", `origin/${base}`], cwd);
+    return;
+  }
+
+  await git(["switch", "-c", base, baseRef], cwd);
+}
+
 export async function main(argv: readonly string[] = process.argv.slice(2)): Promise<number> {
   const parsed = parseArgs(argv);
   if ("error" in parsed) {
@@ -310,7 +333,15 @@ export async function main(argv: readonly string[] = process.argv.slice(2)): Pro
     return 0;
   }
 
-  await git(["switch", "-c", branch, baseRef], cwd);
+  await ensureOnBase(cwd, parsed.base, baseRef);
+  const onBase = await currentBranch(cwd);
+  if (onBase !== parsed.base) {
+    console.error(`Expected to be on ${parsed.base}, but current branch is: ${onBase || "(detached)"}`);
+    return 1;
+  }
+  console.log(`On base branch: ${parsed.base}`);
+
+  await git(["switch", "-c", branch], cwd);
   console.log(`Created and switched to ${branch}`);
 
   if (parsed.push) {
@@ -318,7 +349,7 @@ export async function main(argv: readonly string[] = process.argv.slice(2)): Pro
     console.log(`Pushed origin/${branch}`);
   } else {
     console.log(`Next: git push -u origin ${branch}`);
-    console.log(`Then open a PR into main (not development). Merge creates tag ${tag}.`);
+    console.log(`Then open a PR into main (not ${parsed.base}). Merge creates tag ${tag}.`);
   }
 
   return 0;
