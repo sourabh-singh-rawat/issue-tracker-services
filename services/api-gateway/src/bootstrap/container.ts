@@ -71,8 +71,6 @@ container.bind<IHttpServer>(TYPES.HttpServer).toConstantValue(
       routes: [
         { prefix: "/identity", upstream: env.IDENTITY_SERVICE_URL, proxyPayloads: true },
         { prefix: "/attachments", upstream: env.ATTACHMENT_SERVICE_URL, proxyPayloads: true },
-        { prefix: "/inventory", upstream: env.INVENTORY_SERVICE_URL, proxyPayloads: true },
-        { prefix: "/products", upstream: env.PRODUCT_SERVICE_URL, proxyPayloads: true },
         { prefix: "/authorization", upstream: env.AUTHORIZATION_SERVICE_URL, proxyPayloads: true },
       ],
     },

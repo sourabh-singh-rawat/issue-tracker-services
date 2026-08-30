@@ -4,5 +4,4 @@ export enum Streams {
   IDENTITY = "identity",
   ISSUES = "issues",
   PLATFORM = "platform",
-  PRODUCT = "product",
 }

@@ -13,9 +13,7 @@ import { Route as CallbackRouteImport } from './../routes/callback'
 import { Route as AuthenticatedRouteImport } from './../routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './../routes/_authenticated/index'
 import { Route as AuthenticatedMeRouteImport } from './../routes/_authenticated/me'
-import { Route as AuthenticatedInventoryRouteImport } from './../routes/_authenticated/inventory'
 import { Route as AuthenticatedHomeRouteImport } from './../routes/_authenticated/home'
-import { Route as AuthenticatedCatalogRouteImport } from './../routes/_authenticated/catalog'
 import { Route as noAuthEmailVerificationRouteImport } from './../routes/(no-auth)/email-verification'
 import { Route as AuthenticatedIIssueIdRouteImport } from './../routes/_authenticated/i.$issueId'
 import { Route as AuthenticatedVLViewIdRouteImport } from './../routes/_authenticated/v.l.$viewId'
@@ -40,19 +38,9 @@ const AuthenticatedMeRoute = AuthenticatedMeRouteImport.update({
   path: '/me',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedInventoryRoute = AuthenticatedInventoryRouteImport.update({
-  id: '/inventory',
-  path: '/inventory',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/home',
   path: '/home',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedCatalogRoute = AuthenticatedCatalogRouteImport.update({
-  id: '/catalog',
-  path: '/catalog',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const noAuthEmailVerificationRoute = noAuthEmailVerificationRouteImport.update({
@@ -80,9 +68,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/callback': typeof CallbackRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
-  '/catalog': typeof AuthenticatedCatalogRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/inventory': typeof AuthenticatedInventoryRoute
   '/me': typeof AuthenticatedMeRoute
   '/i/$issueId': typeof AuthenticatedIIssueIdRoute
   '/v/b/$viewId': typeof AuthenticatedVBViewIdRoute
@@ -91,9 +77,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/callback': typeof CallbackRoute
   '/email-verification': typeof noAuthEmailVerificationRoute
-  '/catalog': typeof AuthenticatedCatalogRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/inventory': typeof AuthenticatedInventoryRoute
   '/me': typeof AuthenticatedMeRoute
   '/': typeof AuthenticatedIndexRoute
   '/i/$issueId': typeof AuthenticatedIIssueIdRoute
@@ -105,9 +89,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/callback': typeof CallbackRoute
   '/(no-auth)/email-verification': typeof noAuthEmailVerificationRoute
-  '/_authenticated/catalog': typeof AuthenticatedCatalogRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
-  '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/i/$issueId': typeof AuthenticatedIIssueIdRoute
@@ -120,9 +102,7 @@ export interface FileRouteTypes {
     | '/'
     | '/callback'
     | '/email-verification'
-    | '/catalog'
     | '/home'
-    | '/inventory'
     | '/me'
     | '/i/$issueId'
     | '/v/b/$viewId'
@@ -131,9 +111,7 @@ export interface FileRouteTypes {
   to:
     | '/callback'
     | '/email-verification'
-    | '/catalog'
     | '/home'
-    | '/inventory'
     | '/me'
     | '/'
     | '/i/$issueId'
@@ -144,9 +122,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/callback'
     | '/(no-auth)/email-verification'
-    | '/_authenticated/catalog'
     | '/_authenticated/home'
-    | '/_authenticated/inventory'
     | '/_authenticated/me'
     | '/_authenticated/'
     | '/_authenticated/i/$issueId'
@@ -190,25 +166,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/inventory': {
-      id: '/_authenticated/inventory'
-      path: '/inventory'
-      fullPath: '/inventory'
-      preLoaderRoute: typeof AuthenticatedInventoryRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/home': {
       id: '/_authenticated/home'
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/catalog': {
-      id: '/_authenticated/catalog'
-      path: '/catalog'
-      fullPath: '/catalog'
-      preLoaderRoute: typeof AuthenticatedCatalogRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/(no-auth)/email-verification': {
@@ -243,9 +205,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedCatalogRoute: typeof AuthenticatedCatalogRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
-  AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedIIssueIdRoute: typeof AuthenticatedIIssueIdRoute
@@ -254,9 +214,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedCatalogRoute: AuthenticatedCatalogRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
-  AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedIIssueIdRoute: AuthenticatedIIssueIdRoute,

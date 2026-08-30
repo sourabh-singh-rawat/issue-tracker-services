@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CheckRelationshipData, CheckRelationshipResponses, CreateUploadTargetData, CreateUploadTargetResponses, DeleteRelationshipData, DeleteRelationshipResponses, EnsureRelationshipData, EnsureRelationshipResponses, ExchangeTokenData, ExchangeTokenResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponses, GetIdentityFromSessionData, GetIdentityFromSessionResponses, ListRelationshipsData, ListRelationshipsResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, UploadToTargetData, UploadToTargetResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponses, AuthorizeData, CheckRelationshipData, CheckRelationshipResponses, CreateUploadTargetData, CreateUploadTargetResponses, DeleteRelationshipData, DeleteRelationshipResponses, EnsureRelationshipData, EnsureRelationshipResponses, ExchangeTokenData, ExchangeTokenResponses, GetAttachmentContentData, GetAttachmentContentResponses, GetAttachmentVersionContentData, GetAttachmentVersionContentResponses, GetConsentChallengeData, GetConsentChallengeResponses, GetCurrentUserData, GetCurrentUserResponses, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponses, GetIdentityFromSessionData, GetIdentityFromSessionResponses, ListRelationshipsData, ListRelationshipsResponses, LogoutData, LogoutResponses, RegisterData, RegisterResponses, RejectConsentChallengeData, RejectConsentChallengeResponses, ResendVerificationEmailData, ResendVerificationEmailResponses, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponses, UploadToTargetData, UploadToTargetResponses, VerifyEmailData, VerifyEmailResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -181,6 +181,20 @@ export const resendVerificationEmail = <ThrowOnError extends boolean = false>(op
         ...options.headers
     }
 });
+
+/**
+ * Get attachment content stream
+ *
+ * Download raw current version content for an attachment
+ */
+export const getAttachmentContent = <ThrowOnError extends boolean = false>(options: Options<GetAttachmentContentData, ThrowOnError>): RequestResult<GetAttachmentContentResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetAttachmentContentResponses, unknown, ThrowOnError>({ url: '/attachments/{attachmentId}', ...options });
+
+/**
+ * Get attachment version content stream
+ *
+ * Download raw attachment version content
+ */
+export const getAttachmentVersionContent = <ThrowOnError extends boolean = false>(options: Options<GetAttachmentVersionContentData, ThrowOnError>): RequestResult<GetAttachmentVersionContentResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetAttachmentVersionContentResponses, unknown, ThrowOnError>({ url: '/internal/attachments/{attachmentId}/versions/{versionId}/content', ...options });
 
 /**
  * Create upload target

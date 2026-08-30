@@ -1,9 +1,7 @@
 import {
-  BRAND_PERMISSIONS,
   ORGANIZATION_PERMISSIONS,
   PERMISSION_GRANT_PERMISSIONS,
   PLATFORM_PERMISSIONS,
-  PRODUCT_PERMISSIONS,
   ROLE_PERMISSIONS,
   TENANT_PERMISSIONS,
 } from "../permissions";
@@ -87,15 +85,12 @@ export const ORGANIZATION_ROLES: Record<string, RoleDefinition> = {
     id: "01900000-0000-7000-8000-000000000002",
     key: "organization.owner",
     name: "Organization Owner",
-    description:
-      "Full control of an organization, including roles, grants, products, and brands",
+    description: "Full control of an organization, including roles and grants",
     relation: "owner",
     permissionKeys: [
       ...permissionKeys("organization", ORGANIZATION_PERMISSIONS),
       ...permissionKeys("role", ROLE_PERMISSIONS),
       ...permissionKeys("permission", PERMISSION_GRANT_PERMISSIONS),
-      ...permissionKeys("product", PRODUCT_PERMISSIONS),
-      ...permissionKeys("brand", BRAND_PERMISSIONS),
     ],
   },
   ORGANIZATION_ADMIN: {
@@ -103,7 +98,7 @@ export const ORGANIZATION_ROLES: Record<string, RoleDefinition> = {
     key: "organization.admin",
     name: "Organization Admin",
     description:
-      "Manages organization settings, grants, products, and brands without deleting the organization or defining roles",
+      "Manages organization settings and grants without deleting the organization or defining roles",
     relation: "admin",
     permissionKeys: [
       ...permissionKeys(
@@ -112,20 +107,16 @@ export const ORGANIZATION_ROLES: Record<string, RoleDefinition> = {
       ),
       ...permissionKeys("role", ["read"]),
       ...permissionKeys("permission", PERMISSION_GRANT_PERMISSIONS),
-      ...permissionKeys("product", PRODUCT_PERMISSIONS),
-      ...permissionKeys("brand", BRAND_PERMISSIONS),
     ],
   },
   ORGANIZATION_MEMBER: {
     id: "01900000-0000-7000-8000-000000000004",
     key: "organization.member",
     name: "Organization Member",
-    description: "Read access to organization resources, products, brands, and roles",
+    description: "Read access to organization resources and roles",
     relation: "member",
     permissionKeys: [
       ...permissionKeys("organization", ["read"]),
-      ...permissionKeys("product", ["read"]),
-      ...permissionKeys("brand", ["read"]),
       ...permissionKeys("role", ["read"]),
     ],
   },

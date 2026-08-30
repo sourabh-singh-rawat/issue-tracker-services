@@ -4,8 +4,8 @@ import { type DefaultError, queryOptions, useMutation, type UseMutationOptions, 
 import type { AxiosError } from 'axios';
 
 import { client } from '../client.gen';
-import { acceptConsentChallenge, authorize, checkRelationship, createUploadTarget, deleteRelationship, ensureRelationship, exchangeToken, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, uploadToTarget, verifyEmail } from '../sdk.gen';
-import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateUploadTargetData, CreateUploadTargetResponse, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, UploadToTargetData, UploadToTargetResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
+import { acceptConsentChallenge, authorize, checkRelationship, createUploadTarget, deleteRelationship, ensureRelationship, exchangeToken, getAttachmentContent, getAttachmentVersionContent, getConsentChallenge, getCurrentUser, getIdentityFromAccessToken, getIdentityFromSession, listRelationships, logout, type Options, register, rejectConsentChallenge, resendVerificationEmail, signInWithEmailAndPassword, uploadToTarget, verifyEmail } from '../sdk.gen';
+import type { AcceptConsentChallengeData, AcceptConsentChallengeResponse, AuthorizeData, CheckRelationshipData, CheckRelationshipResponse, CreateUploadTargetData, CreateUploadTargetResponse, DeleteRelationshipData, DeleteRelationshipResponse, EnsureRelationshipData, EnsureRelationshipResponse, ExchangeTokenData, ExchangeTokenResponse, GetAttachmentContentData, GetAttachmentVersionContentData, GetConsentChallengeData, GetConsentChallengeResponse, GetCurrentUserData, GetCurrentUserResponse, GetIdentityFromAccessTokenData, GetIdentityFromAccessTokenResponse, GetIdentityFromSessionData, GetIdentityFromSessionResponse, ListRelationshipsData, ListRelationshipsResponse, LogoutData, LogoutResponse, RegisterData, RegisterResponse, RejectConsentChallengeData, RejectConsentChallengeResponse, ResendVerificationEmailData, ResendVerificationEmailResponse, SignInWithEmailAndPasswordData, SignInWithEmailAndPasswordResponse, UploadToTargetData, UploadToTargetResponse, VerifyEmailData, VerifyEmailResponse } from '../types.gen';
 
 /**
  * Sign in with email and password
@@ -383,6 +383,60 @@ export const resendVerificationEmailMutation = (options?: Partial<Options<Resend
  * Request a new email verification code. Always returns success to avoid revealing whether the email is registered.
  */
 export const useResendVerificationEmailMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<ResendVerificationEmailResponse, AxiosError<DefaultError>, Options<ResendVerificationEmailData>>, 'mutationFn'>>) => useMutation({ ...resendVerificationEmailMutation(), ...mutationOptions });
+
+export const getAttachmentContentQueryKey = (options: Options<GetAttachmentContentData>) => createQueryKey('getAttachmentContent', options);
+
+/**
+ * Get attachment content stream
+ *
+ * Download raw current version content for an attachment
+ */
+export const getAttachmentContentOptions = (options: Options<GetAttachmentContentData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getAttachmentContentQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getAttachmentContent({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getAttachmentContentQueryKey(options)
+});
+
+/**
+ * Get attachment content stream
+ *
+ * Download raw current version content for an attachment
+ */
+export const useGetAttachmentContentQuery = (options: Options<GetAttachmentContentData>) => useQuery(getAttachmentContentOptions(options));
+
+export const getAttachmentVersionContentQueryKey = (options: Options<GetAttachmentVersionContentData>) => createQueryKey('getAttachmentVersionContent', options);
+
+/**
+ * Get attachment version content stream
+ *
+ * Download raw attachment version content
+ */
+export const getAttachmentVersionContentOptions = (options: Options<GetAttachmentVersionContentData>) => queryOptions<unknown, AxiosError<DefaultError>, unknown, ReturnType<typeof getAttachmentVersionContentQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getAttachmentVersionContent({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getAttachmentVersionContentQueryKey(options)
+});
+
+/**
+ * Get attachment version content stream
+ *
+ * Download raw attachment version content
+ */
+export const useGetAttachmentVersionContentQuery = (options: Options<GetAttachmentVersionContentData>) => useQuery(getAttachmentVersionContentOptions(options));
 
 /**
  * Create upload target

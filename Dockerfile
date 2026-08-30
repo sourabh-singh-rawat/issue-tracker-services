@@ -28,7 +28,6 @@ RUN pnpm exec turbo run build \
     --filter=@pine/attachment-service \
     --filter=@pine/notification-service \
     --filter=@pine/identity-service \
-    --filter=@pine/inventory-service \
     --filter=@pine/platform-service \
     --filter=@pine/authorization-service \
     --filter=@pine/issues-service \
@@ -61,14 +60,6 @@ COPY --from=build /usr/src/app /usr/src/app
 USER node
 EXPOSE 4000
 CMD pnpm -F @pine/identity-service start
-
-
-# Stage 3: Inventory Service
-FROM base AS inventory-service
-COPY --from=build /usr/src/app /usr/src/app
-USER node
-EXPOSE 4000
-CMD pnpm -F @pine/inventory-service start
 
 
 # Stage 3: Platform Service

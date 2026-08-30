@@ -19,12 +19,7 @@ export type OrganizationPermission =
   | "read"
   | "update"
   | "manage_members"
-  | "create_product"
   | "delete";
-
-export type ProductPermission = "read" | "update" | "delete";
-
-export type BrandPermission = "read" | "create" | "update" | "delete";
 
 export type RolePermission = "read" | "create" | "update" | "delete";
 
@@ -35,8 +30,6 @@ export type Permission =
   | PlatformPermission
   | TenantPermission
   | OrganizationPermission
-  | ProductPermission
-  | BrandPermission
   | RolePermission
   | PermissionGrantPermission;
 
@@ -45,8 +38,6 @@ export type PermissionKey =
   | `platform:${PlatformPermission}`
   | `tenant:${TenantPermission}`
   | `organization:${OrganizationPermission}`
-  | `product:${ProductPermission}`
-  | `brand:${BrandPermission}`
   | `role:${RolePermission}`
   | `permission:${PermissionGrantPermission}`;
 
@@ -74,16 +65,6 @@ export const ORGANIZATION_PERMISSIONS: readonly OrganizationPermission[] = [
   "read",
   "update",
   "manage_members",
-  "create_product",
-  "delete",
-];
-
-export const PRODUCT_PERMISSIONS: readonly ProductPermission[] = ["read", "update", "delete"];
-
-export const BRAND_PERMISSIONS: readonly BrandPermission[] = [
-  "read",
-  "create",
-  "update",
   "delete",
 ];
 
@@ -107,8 +88,6 @@ export const ALL_PERMISSIONS = [
   ...catalog("platform", PLATFORM_PERMISSIONS),
   ...catalog("tenant", TENANT_PERMISSIONS),
   ...catalog("organization", ORGANIZATION_PERMISSIONS),
-  ...catalog("product", PRODUCT_PERMISSIONS),
-  ...catalog("brand", BRAND_PERMISSIONS),
   ...catalog("role", ROLE_PERMISSIONS),
   ...catalog("permission", PERMISSION_GRANT_PERMISSIONS),
 ];
