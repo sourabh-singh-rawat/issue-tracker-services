@@ -6,13 +6,13 @@ const execFileAsync = promisify(execFile);
 
 const IGNORED = new Set([".changeset/README.md", ".changeset/config.json"]);
 
-export const EXPECTED_CHANGESET_COUNT = 1;
+export const MAX_CHANGESET_COUNT = 1;
 
 export type ChangesetCountVerdict =
   | { readonly ok: true; readonly files: readonly string[] }
   | {
       readonly ok: false;
-      readonly reason: "none" | "multiple";
+      readonly reason: "multiple" | "release-nonempty";
       readonly files: readonly string[];
     };
 
@@ -21,12 +21,19 @@ export const isReleaseBranch = (ref: string): boolean => {
   return normalized.startsWith("release/");
 };
 
-export const evaluateChangesetCount = (files: readonly string[]): ChangesetCountVerdict => {
-  if (files.length === EXPECTED_CHANGESET_COUNT) {
-    return { ok: true, files };
+export const evaluateChangesetCount = (
+  files: readonly string[],
+  options: { readonly releaseBranch: boolean } = { releaseBranch: false },
+): ChangesetCountVerdict => {
+  if (options.releaseBranch) {
+    if (files.length === 0) {
+      return { ok: true, files };
+    }
+    return { ok: false, reason: "release-nonempty", files };
   }
-  if (files.length === 0) {
-    return { ok: false, reason: "none", files };
+
+  if (files.length <= MAX_CHANGESET_COUNT) {
+    return { ok: true, files };
   }
   return { ok: false, reason: "multiple", files };
 };
@@ -56,10 +63,10 @@ export const main = async (argv: readonly string[] = process.argv.slice(2)): Pro
       Usage: changeset-required [base-ref]
       Default base-ref: origin/dev
 
-      Exits 0 when HEAD adds exactly one new .changeset/*.md file since the base.
-      Exits 1 when there are zero or more than one.
+      Exits 0 when HEAD adds at most one new .changeset/*.md file since the base (zero is allowed).
+      Exits 1 when there is more than one.
 
-      Skipped automatically on release/* branches (no changeset expected).
+      On release/* branches: exits 0 only when there are zero new changesets.
       Skip in CI: add the PR label "skip-changeset".
 `);
     return 0;
@@ -68,12 +75,10 @@ export const main = async (argv: readonly string[] = process.argv.slice(2)): Pro
   const baseRef = argv[0] ?? "origin/dev";
   const cwd = process.cwd();
 
+  let releaseBranch = false;
   try {
     const headRef = await resolveHeadRef(cwd);
-    if (isReleaseBranch(headRef)) {
-      console.log(`Skipping changeset check on release branch: ${headRef}`);
-      return 0;
-    }
+    releaseBranch = isReleaseBranch(headRef);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`Failed to resolve HEAD ref: ${message}`);
@@ -99,14 +104,24 @@ export const main = async (argv: readonly string[] = process.argv.slice(2)): Pro
     }
 
     const files = await listNewChangesets(cwd, baseRef);
-    const verdict = evaluateChangesetCount(files);
+    const verdict = evaluateChangesetCount(files, { releaseBranch });
 
     if (!verdict.ok) {
       console.error(formatFailure(baseRef, verdict));
       return 1;
     }
 
-    console.log(`OK: exactly ${EXPECTED_CHANGESET_COUNT} new changeset since ${baseRef}:`);
+    if (releaseBranch) {
+      console.log(`OK: release branch has no new changesets since ${baseRef}`);
+      return 0;
+    }
+
+    if (verdict.files.length === 0) {
+      console.log(`OK: no new changesets since ${baseRef} (0–${MAX_CHANGESET_COUNT} allowed)`);
+      return 0;
+    }
+
+    console.log(`OK: ${verdict.files.length} new changeset since ${baseRef}:`);
     for (const file of verdict.files) {
       console.log(`  - ${file}`);
     }
@@ -131,22 +146,22 @@ const formatFailure = (
   baseRef: string,
   verdict: Extract<ChangesetCountVerdict, { ok: false }>,
 ): string => {
-  if (verdict.reason === "none") {
+  const listed = verdict.files.map((f) => `  - ${f}`).join("\n");
+
+  if (verdict.reason === "release-nonempty") {
     return (
-      `Expected exactly ${EXPECTED_CHANGESET_COUNT} new Changeset file since ${baseRef}, found 0.\n\n` +
-      `Add one:\n` +
-      `  pnpm changeset\n` +
-      `  git add .changeset && git commit -m "chore: add changeset"\n\n` +
-      `Or mark the PR with label "skip-changeset" if no release notes are needed.`
+      `Release branches must not add Changeset files (found ${verdict.files.length} since ${baseRef}).\n\n` +
+      `New changeset files:\n${listed}\n\n` +
+      `Remove them:\n` +
+      `  git rm .changeset/<name>.md\n`
     );
   }
 
-  const listed = verdict.files.map((f) => `  - ${f}`).join("\n");
   return (
-    `Expected exactly ${EXPECTED_CHANGESET_COUNT} new Changeset file since ${baseRef}, ` +
+    `Expected at most ${MAX_CHANGESET_COUNT} new Changeset file since ${baseRef}, ` +
     `found ${verdict.files.length}.\n\n` +
     `New changeset files:\n${listed}\n\n` +
-    `One PR / feature should have a single changeset.\n` +
+    `One PR / feature should have at most one changeset.\n` +
     `Keep one file and remove extras:\n` +
     `  git rm .changeset/<extra-name>.md\n`
   );
