@@ -35,7 +35,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const root = path.resolve(__dirname, "../..");
+const root = path.resolve(__dirname, "../../..");
 const require = createRequire(import.meta.url);
 
 /** Resolve a package bin entry to an absolute JS path (no shell / .cmd shims). */

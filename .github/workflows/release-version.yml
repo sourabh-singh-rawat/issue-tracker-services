@@ -1,0 +1,100 @@
+# On push to release/YYYY.MM.DD.N: consume pending changesets, bump packages,
+# write root CHANGELOG.md, and commit back to the same branch.
+#
+# Idempotent: a second run with no pending changesets (and an existing
+# ## vYYYY.MM.DD.N section) exits without committing.
+name: release-version
+
+on:
+  push:
+    branches: ["release/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-version-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-version:
+    name: release-version
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Version packages and write root CHANGELOG
+        id: version
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$BRANCH" =~ ^release/[0-9]{4}\.[0-9]{2}\.[0-9]{2}\.[0-9]+$ ]]; then
+            echo "::error::Expected release/YYYY.MM.DD.N, got: $BRANCH"
+            exit 1
+          fi
+
+          TAG="v${BRANCH#release/}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+          pending=0
+          if [ -d .changeset ]; then
+            pending="$(find .changeset -maxdepth 1 -type f -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')"
+          fi
+          echo "Pending changeset files: $pending"
+
+          has_section=0
+          if [ -f CHANGELOG.md ] && grep -qE "^## ${TAG//./\\.}([[:space:]]|$)" CHANGELOG.md; then
+            has_section=1
+          fi
+          echo "CHANGELOG section for $TAG present: $has_section"
+
+          if [ "$pending" -gt 0 ]; then
+            echo "Running pnpm changeset:version (bumps + changelog:root)…"
+            pnpm changeset:version
+          elif [ "$has_section" -eq 0 ]; then
+            echo "No pending changesets; generating missing root CHANGELOG section…"
+            pnpm changelog:root --tag "$TAG"
+          else
+            echo "Nothing to do: no pending changesets and $TAG already in CHANGELOG.md."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Working tree clean after version/changelog; nothing to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git commit -m "chore(release): ${TAG}"
+          git push origin "HEAD:${BRANCH}"
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+          echo "Committed and pushed chore(release): ${TAG}"

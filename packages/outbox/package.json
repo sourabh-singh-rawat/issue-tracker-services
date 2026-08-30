@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "clean": "node ../../tools/scripts/setup/rm-rf.mjs dist",
     "build": "pnpm clean && tsc",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts"

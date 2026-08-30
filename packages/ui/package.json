@@ -23,7 +23,7 @@
     }
   },
   "scripts": {
-    "clean": "node ../../tools/scripts/rm-rf.mjs dist",
+    "clean": "node ../../tools/scripts/setup/rm-rf.mjs dist",
     "build": "pnpm clean && tsc"
   },
   "devDependencies": {

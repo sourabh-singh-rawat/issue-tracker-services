@@ -4,10 +4,10 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const isWindows = process.platform === "win32";
 const infraDataDir = path.join(rootDir, "infra", "data");
-const rmRfScript = path.join(rootDir, "tools", "scripts", "rm-rf.mjs");
+const rmRfScript = path.join(rootDir, "tools", "scripts", "setup", "rm-rf.mjs");
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

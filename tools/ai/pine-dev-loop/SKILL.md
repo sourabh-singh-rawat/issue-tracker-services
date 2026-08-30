@@ -19,7 +19,7 @@ pnpm schemas:compose    # or schemas:watch
 pnpm dev:apps
 ```
 
-`pnpm setup` / `pnpm setup:restart` run `tools/scripts/setup.ts --restart` (compose down, wipe `infra/data`, compose up). `pnpm setup:skip-docker` skips those docker steps. Seed path needs infra reachable and `BOOTSTRAP_ADMIN_*` in root `.env`.
+`pnpm setup` / `pnpm setup:restart` run `tools/scripts/setup/setup.ts --restart` (compose down, wipe `infra/data`, compose up). `pnpm setup:skip-docker` skips those docker steps. Seed path needs infra reachable and `BOOTSTRAP_ADMIN_*` in root `.env`.
 
 | Infra variant           | Script                                 |
 | ----------------------- | -------------------------------------- |

@@ -3,7 +3,7 @@
  * Validate a release/* branch before merging into main.
  *
  * Checks:
- * - Branch name is release/{YYYY.MM.DD.N} (optional leading v on the version)
+ * - Branch name is release/{YYYY.MM.DD.N}
  * - No unconsumed Changeset files remain under .changeset/
  *
  * Usage: release-branch-check [release/2026.08.01.1]
@@ -56,13 +56,14 @@ export type ValidationResult =
 export function validateReleaseBranch(cwd: string, releaseBranch: string): ValidationResult {
   const errors: string[] = [];
 
-  const tag = parseReleaseBranch(releaseBranch);
-  if (tag === null) {
+  const version = parseReleaseBranch(releaseBranch);
+  if (version === null) {
     errors.push(
       `Branch must be release/{YYYY.MM.DD.N} (e.g. ${formatReleaseBranchExample()} → tag ${formatReleaseTagExample()}). Got: ${releaseBranch}`,
     );
     return { ok: false, errors };
   }
+  const tag = `v${version}`;
 
   const pending = listPendingChangesets(cwd);
   if (pending.length > 0) {
@@ -123,12 +124,12 @@ function isMainModule(): boolean {
   try {
     return import.meta.url === pathToFileURL(entry).href;
   } catch {
-    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/release-branch-check.ts");
+    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/release/release-branch-check.ts");
   }
 }
 
 if (isMainModule()) {
-  main().then((code) => {
+  void main().then((code) => {
     process.exitCode = code;
   });
 }

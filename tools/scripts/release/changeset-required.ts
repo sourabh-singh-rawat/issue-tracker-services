@@ -183,7 +183,7 @@ const isMainModule = (): boolean => {
   try {
     return import.meta.url === pathToFileURL(entry).href;
   } catch {
-    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/changeset-required.ts");
+    return entry.replace(/\\/g, "/").endsWith("/tools/scripts/release/changeset-required.ts");
   }
 };
 
