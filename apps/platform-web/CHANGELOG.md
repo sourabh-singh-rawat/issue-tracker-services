@@ -1,5 +1,23 @@
 # @pine/platform-web
 
+## 0.4.0
+
+### Minor Changes
+
+- bee71c3: feat(platform): add identity relations page and graph
+- 8773588: feat(platform): add organization relations and authorization sync
+
+### Patch Changes
+
+- d01fc4c: feat(identity): implement profile photo upload flow and dev tls support
+- c2b64b6: feat(platform): rename members to relations and publish relation created via outbox
+- Updated dependencies [bfaca3c]
+- Updated dependencies [d01fc4c]
+- Updated dependencies [77b700a]
+- Updated dependencies [8773588]
+- Updated dependencies [baef746]
+  - @pine/authorization@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes
