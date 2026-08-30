@@ -3,7 +3,7 @@ name: changeset-required
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
-    branches: [development]
+    branches: [dev]
 
 permissions:
   contents: read
@@ -24,10 +24,14 @@ jobs:
         id: skip
         env:
           LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+          HEAD_REF: ${{ github.head_ref }}
         run: |
           if echo ",$LABELS," | grep -q ",skip-changeset,"; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "PR has label 'skip-changeset' — changeset not required."
+          elif [[ "$HEAD_REF" == release/* ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "PR head is a release/* branch — changeset not required."
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
